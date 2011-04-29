@@ -53,6 +53,12 @@ class cmb_Meta_Box_Validate {
 }
 
 
+/*
+ * Script url to load local resources.
+ */
+
+define( CMB_META_BOX_URL, trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname(__FILE__) ) ) );
+
 /**
  * Create meta boxes
  */
@@ -325,7 +331,7 @@ class cmb_Meta_Box {
 
 function cmb_scripts( $hook ) {
   	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
-		wp_register_script( 'cmb-scripts', get_bloginfo('stylesheet_directory').'/lib/metabox/jquery.cmbScripts.js', array('jquery','media-upload','thickbox'));
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL.'jquery.cmbScripts.js', array('jquery','media-upload','thickbox'));
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' ); // Make sure and use elements form the 1.7.3 UI - not 1.8.9
 		wp_enqueue_script( 'media-upload' );
@@ -370,7 +376,7 @@ function cmb_editor_footer_scripts() { ?>
 add_action('admin_print_footer_scripts','cmb_editor_footer_scripts',99);
 
 function cmb_styles_inline() { 
-	echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo('stylesheet_directory') . '/lib/metabox/style.css" />';
+	echo '<link rel="stylesheet" type="text/css" href="' . CMB_META_BOX_URL.'style.css" />';
 	// For some reason this script doesn't like to register
 	?>	
 	<style type="text/css">
