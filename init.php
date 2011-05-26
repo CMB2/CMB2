@@ -2,8 +2,8 @@
 /*
 Script Name: 	Custom Metaboxes and Fields
 Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
-				Jared Atchison (@jaredatch / jaredatchison.com)
-				Bill Erickson (@billerickson / billerickson.net)
+		Jared Atchison (@jaredatch / jaredatchison.com)
+		Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
 Version: 		0.4
 */
@@ -404,10 +404,9 @@ function cmb_styles_inline() {
 		table.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}
 		table.cmb_metabox .cmb_upload_status .img_status {  position: relative; }
 		table.cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
-		table.cmb_metabox .cmb_upload_status .img_status .remove_file_button { text-indent: -9999px; background: url(<?php bloginfo('stylesheet_directory'); ?>/lib/metabox/images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
+		table.cmb_metabox .cmb_upload_status .img_status .remove_file_button { text-indent: -9999px; background: url(<?php echo CMB_META_BOX_URL ?>images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
 	</style>
 	<?php
 }
 
 // End. That's it, folks! //
-
