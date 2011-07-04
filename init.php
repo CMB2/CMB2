@@ -2,10 +2,10 @@
 /*
 Script Name: 	Custom Metaboxes and Fields
 Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
-		Jared Atchison (@jaredatch / jaredatchison.com)
-		Bill Erickson (@billerickson / billerickson.net)
+				Jared Atchison (@jaredatch / jaredatchison.com)
+				Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.4
+Version: 		0.5
 */
 
 /**
@@ -33,9 +33,8 @@ Version: 		0.4
 *************************************************************************/
 
 foreach ( $meta_boxes as $meta_box ) {
-	$my_box = new cmb_Meta_Box($meta_box);
+	$my_box = new cmb_Meta_Box( $meta_box );
 }
-
 
 /**
  * Validate value of meta fields
@@ -51,7 +50,6 @@ class cmb_Meta_Box_Validate {
 		return true;
 	}
 }
-
 
 /*
  * url to load local resources.
@@ -82,7 +80,7 @@ class cmb_Meta_Box {
 		$current_page = substr(strrchr($_SERVER['PHP_SELF'], '/'), 1, -4);
 		
 		if ( $upload && ( $current_page == 'page' || $current_page == 'page-new' || $current_page == 'post' || $current_page == 'post-new' ) ) {
-			add_action('admin_head', array(&$this, 'add_post_enctype'));
+			add_action( 'admin_head', array(&$this, 'add_post_enctype') );
 		}
 
 		add_action( 'admin_menu', array(&$this, 'add') );
@@ -99,12 +97,12 @@ class cmb_Meta_Box {
 		</script>';
 	}
 
-	/// Add metaboxes
+	// Add metaboxes
 	function add() {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
-		foreach ($this->_meta_box['pages'] as $page) {
-			add_meta_box($this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']);
+		foreach ( $this->_meta_box['pages'] as $page ) {
+			add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
 		}
 	}
 
@@ -113,7 +111,7 @@ class cmb_Meta_Box {
 		global $post;
 
 		// Use nonce for verification
-		echo '<input type="hidden" name="wp_meta_box_nonce" value="', wp_create_nonce(basename(__FILE__)), '" />';
+		echo '<input type="hidden" name="wp_meta_box_nonce" value="', wp_create_nonce( basename(__FILE__) ), '" />';
 		echo '<table class="form-table cmb_metabox">';
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
@@ -136,8 +134,7 @@ class cmb_Meta_Box {
 			
 			switch ( $field['type'] ) {
 				case 'text':
-					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" style="width:97%" />',
-						'<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" style="width:97%" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'text_small':
 					echo '<input class="cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -148,16 +145,17 @@ class cmb_Meta_Box {
 				case 'text_date':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+				case 'text_date_timestamp':
+					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					break;
 				case 'text_money':
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
-					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>',
-						'<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'textarea_small':
-					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>',
-						'<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'select':
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
@@ -201,16 +199,36 @@ class cmb_Meta_Box {
 					break;
 				case 'wysiwyg':
 					echo '<div id="poststuff" class="meta_mce">';
-					echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? $meta : '', '</textarea></div>';
-                    echo '</div>';
+					echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? wpautop($meta, true) : '', '</textarea></div>';
+					echo '</div>';
 			        echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
-				break;
-/*
-				case 'wysiwyg':
-					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" class="theEditor" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>';
-					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';	
 					break;
-*/
+				case 'taxonomy_select':
+					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+					$names= wp_get_object_terms( $post->ID, $field['taxonomy'] );
+					$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+					foreach ( $terms as $term ) {
+						if (!is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) ) {
+							echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
+						} else {
+							echo '<option value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name . '</option>';
+						}
+					}
+					echo '</select>';
+					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;
+				case 'taxonomy_radio':
+					$names= wp_get_object_terms( $post->ID, $field['taxonomy'] );
+					$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+					foreach ( $terms as $term ) {
+						if ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) ) {
+							echo '<p><input type="radio" name="', $field['id'], '" value="'. $term->slug . '" checked>' . $term->name . '</p>';
+						} else {
+							echo '<p><input type="radio" name="', $field['id'], '" value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name .'</p>';
+						}
+					}
+					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;
 				case 'file_list':
 					echo '<input id="upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
 					echo '<input class="upload_button button" type="button" value="Upload File" />';
@@ -264,12 +282,12 @@ class cmb_Meta_Box {
 	// Save data from metabox
 	function save( $post_id)  {
 		// verify nonce
-		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce($_POST['wp_meta_box_nonce'], basename(__FILE__))) {
+		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) ) ) {
 			return $post_id;
 		}
 
 		// check autosave
-		if ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE) {
+		if ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
 		}
 
@@ -290,14 +308,26 @@ class cmb_Meta_Box {
 			if ( $field['type'] == 'wysiwyg' ) {
 				$new = wpautop($new);
 			}
+			
+			if ( $field['type'] == 'taxonomy_select' )  {	
+				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );	
+			}
+			
+			if ( $field['type'] == 'taxonomy_radio' )  {		
+				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
+			}
 
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
-				$new = htmlspecialchars($new);
+				$new = htmlspecialchars( $new );
+			}
+			
+			if ( $field['type'] == 'text_date_timestamp' ) {
+				$new = strtotime( $new );
 			}
 
 			// validate meta value
-			if ( isset($field['validate_func']) ) {
-				$ok = call_user_func(array('cmb_Meta_Box_Validate', $field['validate_func']), $new);
+			if ( isset( $field['validate_func']) ) {
+				$ok = call_user_func( array( 'cmb_Meta_Box_Validate', $field['validate_func']), $new );
 				if ( $ok === false ) { // pass away when meta value is invalid
 					continue;
 				}
@@ -315,15 +345,14 @@ class cmb_Meta_Box {
 				foreach ( $aOldToDelete as $oldToDelete ) {
 					delete_post_meta( $post_id, $name, $oldToDelete );
 				}
-			} elseif ($new && $new != $old) {
-				update_post_meta($post_id, $name, $new);
-			} elseif ('' == $new && $old && $field['type'] != 'file') {
-				delete_post_meta($post_id, $name, $old);
+			} elseif ( $new && $new != $old ) {
+				update_post_meta( $post_id, $name, $new );
+			} elseif ( '' == $new && $old && $field['type'] != 'file' ) {
+				delete_post_meta( $post_id, $name, $old );
 			}
 		}
 	}
 }
-
 
 /**
  * Adding scripts and styles
@@ -331,7 +360,7 @@ class cmb_Meta_Box {
 
 function cmb_scripts( $hook ) {
   	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL.'jquery.cmbScripts.js', array('jquery','media-upload','thickbox'));
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL.'jquery.cmbScripts.js', array( 'jquery','media-upload','thickbox' ) );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' ); // Make sure and use elements form the 1.7.3 UI - not 1.8.9
 		wp_enqueue_script( 'media-upload' );
@@ -342,21 +371,24 @@ function cmb_scripts( $hook ) {
 		add_action( 'admin_head', 'cmb_styles_inline' );
   	}
 }
-add_action( 'admin_enqueue_scripts', 'cmb_scripts',10,1 );
+add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10, 1 );
 
 function editor_admin_init() {
-  wp_enqueue_script('word-count');
-  wp_enqueue_script('post');
-  wp_enqueue_script('editor');
+	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
+		wp_enqueue_script( 'word-count' );
+		wp_enqueue_script( 'post' );
+		wp_enqueue_script( 'editor' );
+	}
 }
 
 function editor_admin_head() {
-  wp_tiny_mce();
+	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
+  		wp_tiny_mce();
+	}
 }
 
-
-add_action('admin_init', 'editor_admin_init');
-add_action('admin_head', 'editor_admin_head');
+add_action( 'admin_init', 'editor_admin_init' );
+add_action( 'admin_head', 'editor_admin_head' );
 
 function cmb_editor_footer_scripts() { ?>
 		<script type="text/javascript">/* <![CDATA[ */
@@ -373,14 +405,13 @@ function cmb_editor_footer_scripts() { ?>
 		});
 	/* ]]> */</script>
 	<?php }
-add_action('admin_print_footer_scripts','cmb_editor_footer_scripts',99);
+add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
 
 function cmb_styles_inline() { 
 	echo '<link rel="stylesheet" type="text/css" href="' . CMB_META_BOX_URL.'style.css" />';
-	// For some reason this script doesn't like to register
 	?>	
 	<style type="text/css">
-		table.cmb_metabox td, table.cmb_metabox th { border-bottom: 1px solid #f5f5f5; /* Optional borders between fields */ } 
+		table.cmb_metabox td, table.cmb_metabox th { border-bottom: 1px solid #E9E9E9; }
 		table.cmb_metabox th { text-align: right; font-weight:bold;}
 		table.cmb_metabox th label { margin-top:6px; display:block;}
 		p.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 !important;}
@@ -399,6 +430,7 @@ function cmb_styles_inline() {
 		table.cmb_metabox input[type="radio"] { margin-right:3px;}
 		table.cmb_metabox input[type="checkbox"] { margin-right:6px;}
 		table.cmb_metabox .mceLayout {border:1px solid #DFDFDF !important;}
+		table.cmb_metabox .mceIframeContainer {background:#FFF;}
 		table.cmb_metabox .meta_mce {width:97%;}
 		table.cmb_metabox .meta_mce textarea {width:100%;}
 		table.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}

@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
 	
 	$('.upload_button').live('click', function() {
 		formfield = $(this).prev('input').attr('name');
-		tb_show('', 'media-upload.php?post_id=' + pID + 'type=image&cbm_setting=cbm_value&TB_iframe=true');
+		tb_show('', 'media-upload.php?post_id=' + pID + '&type=image&cbm_setting=cbm_value&TB_iframe=true');
 		return false;
 	});
 	
@@ -43,15 +43,7 @@ jQuery(document).ready(function($) {
 		$(this).parent().remove();
 		return false;
 	});
-	
-	/*
-	$( 'div#gallery-settings' ).hide();
-	$( '.savesend input.button[value*="Insert into Post"], .media-item #go_button' ).attr( 'value', 'Use this File' );
-	$( '.savesend a.wp-post-thumbnail' ).hide();
-	$( '#media-items .align' ).hide();
-	$( '#media-items .url' ).hide();
-	*/
-	
+
 	window.original_send_to_editor = window.send_to_editor;
     window.send_to_editor = function(html) {
 		if (formfield) {

@@ -1,7 +1,6 @@
 <?php
-
 // Include & setup custom metabox and fields
-$prefix = 'cmb_';
+$prefix = '_cmb_'; // start with an underscore to hide fields from custom fields list
 $meta_boxes = array();
 
 $meta_boxes[] = array(
@@ -60,15 +59,15 @@ $meta_boxes[] = array(
 	        'type' => 'title'
 	    ),
 		array(
-		       'name' => 'Test Select',
-		       'desc' => 'field description (optional)',
-		       'id' => $prefix . 'test_select',
-		       'type' => 'select',
-				'options' => array(
-					array('name' => 'Option One', 'value' => 'standard'),
-					array('name' => 'Option Two', 'value' => 'custom'),
-					array('name' => 'Option Three', 'value' => 'none')				
-				)
+	       'name' => 'Test Select',
+	       'desc' => 'field description (optional)',
+	       'id' => $prefix . 'test_select',
+	       'type' => 'select',
+			'options' => array(
+				array('name' => 'Option One', 'value' => 'standard'),
+				array('name' => 'Option Two', 'value' => 'custom'),
+				array('name' => 'Option Three', 'value' => 'none')				
+			)
 		),
 		array(
 	        'name' => 'Test Radio inline',
@@ -92,6 +91,20 @@ $meta_boxes[] = array(
 				array('name' => 'Option Three', 'value' => 'none')				
 			)
 	    ),
+		array(
+			'name' => 'Test Taxonomy Radio',
+			'desc' => 'Description Goes Here',
+			'id' => $prefix . 'text_taxonomy_radio',
+			'taxonomy' => '', //Enter Taxonomy Slug
+			'type' => 'taxonomy_radio',	
+		),
+		array(
+			'name' => 'Test Taxonomy Select',
+			'desc' => 'Description Goes Here',
+			'id' => $prefix . 'text_taxonomy_select',
+			'taxonomy' => '', //Enter Taxonomy Slug
+			'type' => 'taxonomy_select',	
+		),
 		array(
 	        'name' => 'Test Checkbox',
 	        'desc' => 'field description (optional)',
@@ -124,4 +137,4 @@ $meta_boxes[] = array(
     )
 );
 
-require_once('metabox/init.php');
+require_once( 'metabox/init.php' );
