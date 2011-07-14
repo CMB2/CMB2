@@ -373,7 +373,7 @@ function cmb_scripts( $hook ) {
 }
 add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10, 1 );
 
-function editor_admin_init() {
+function editor_admin_init( $hook ) {
 	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
 		wp_enqueue_script( 'word-count' );
 		wp_enqueue_script( 'post' );
@@ -381,7 +381,7 @@ function editor_admin_init() {
 	}
 }
 
-function editor_admin_head() {
+function editor_admin_head( $hook ) {
 	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
   		wp_tiny_mce();
 	}
