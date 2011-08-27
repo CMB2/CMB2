@@ -133,8 +133,9 @@ class cmb_Meta_Box {
 				}			
 				echo '<td>';
 			}		
-			
+						
 			switch ( $field['type'] ) {
+
 				case 'text':
 					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" style="width:97%" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
@@ -275,7 +276,9 @@ class cmb_Meta_Box {
 						}
 					echo '</div>'; 
 				break;
+				
 			}
+			
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
@@ -326,7 +329,7 @@ class cmb_Meta_Box {
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
-
+			
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
 				$ok = call_user_func( array( 'cmb_Meta_Box_Validate', $field['validate_func']), $new );
@@ -349,7 +352,7 @@ class cmb_Meta_Box {
 				}
 			} elseif ( $new && $new != $old ) {
 				update_post_meta( $post_id, $name, $new );
-			} elseif ( '' == $new && $old && $field['type'] != 'file' ) {
+			} elseif ( '' == $new && $old ) {
 				delete_post_meta( $post_id, $name, $old );
 			}
 		}
