@@ -5,7 +5,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.5
+Version: 		0.6
 */
 
 /**
@@ -104,10 +104,23 @@ class cmb_Meta_Box {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
 		foreach ( $this->_meta_box['pages'] as $page ) {
-			add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+			if( !isset( $this->_meta_box['show_on'] ) ) {
+				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+			} else {
+				if ( 'id' == $this->_meta_box['show_on']['key'] ) {
+
+					// If we're showing it based on ID, get the current ID					
+					if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
+					elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
+
+					// If current page id is in the included array, display the metabox
+					if ( isset( $post_id) && in_array( $post_id, $this->_meta_box['show_on']['value'] ) )
+						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+				}
+			}
 		}
 	}
-
+	
 	// Show fields
 	function show() {
 		global $post;

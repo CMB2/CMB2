@@ -137,9 +137,28 @@ function be_sample_metaboxes( $meta_boxes ) {
 	    )
 	);
 	
+	$meta_boxes[] = array(
+	    'id' => 'about_page_metabox',
+	    'title' => 'About Page Metabox',
+	    'pages' => array('page'), // post type
+	    'show_on' => array( 'key' => 'id', 'value' => array( 2 ) ), // specific post ids to display this metabox
+		'context' => 'normal',
+		'priority' => 'high',
+		'show_names' => true, // Show field names on the left
+	    'fields' => array(
+	        array(
+	            'name' => 'Test Text',
+	            'desc' => 'field description (optional)',
+	            'id' => $prefix . 'test_text',
+	            'type' => 'text'
+	        ),
+		)
+	);
 	return $meta_boxes;
 }
 
+
+// Initialize the metabox class
 add_action('init','be_initialize_cmb_meta_boxes',9999);
 function be_initialize_cmb_meta_boxes() {
     if (!class_exists('cmb_Meta_Box')) {

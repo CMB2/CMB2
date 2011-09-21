@@ -2,7 +2,7 @@
 Contributors:	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
-Version: 0.5
+Version: 0.6
 Requires at least: 3.0
 Tested up to: 3.2
  
@@ -29,6 +29,9 @@ Coming soon.
 * File handling improvement and fixes
 
 == Changelog ==
+
+= 0.6 =
+* Added the ability to limit metaboxes to certain posts by id. props @billerickson
 
 = 0.5 =
 * Fixed define to prevent notices. props @destos 
