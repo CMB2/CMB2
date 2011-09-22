@@ -5,7 +5,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.5
+Version: 		0.6
 */
 
 /**
@@ -31,6 +31,8 @@ Version: 		0.5
 /************************************************************************
 		You should not edit the code below or things might explode!
 *************************************************************************/
+
+$meta_boxes = array();
 $meta_boxes = apply_filters ( 'cmb_meta_boxes' , $meta_boxes );
 foreach ( $meta_boxes as $meta_box ) {
 	$my_box = new cmb_Meta_Box( $meta_box );
@@ -102,10 +104,23 @@ class cmb_Meta_Box {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
 		foreach ( $this->_meta_box['pages'] as $page ) {
-			add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+			if( !isset( $this->_meta_box['show_on'] ) ) {
+				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+			} else {
+				if ( 'id' == $this->_meta_box['show_on']['key'] ) {
+
+					// If we're showing it based on ID, get the current ID					
+					if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
+					elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
+
+					// If current page id is in the included array, display the metabox
+					if ( isset( $post_id) && in_array( $post_id, $this->_meta_box['show_on']['value'] ) )
+						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+				}
+			}
 		}
 	}
-
+	
 	// Show fields
 	function show() {
 		global $post;
@@ -131,8 +146,9 @@ class cmb_Meta_Box {
 				}			
 				echo '<td>';
 			}		
-			
+						
 			switch ( $field['type'] ) {
+
 				case 'text':
 					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" style="width:97%" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
@@ -273,7 +289,9 @@ class cmb_Meta_Box {
 						}
 					echo '</div>'; 
 				break;
+				
 			}
+			
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
@@ -324,7 +342,7 @@ class cmb_Meta_Box {
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
-
+			
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
 				$ok = call_user_func( array( 'cmb_Meta_Box_Validate', $field['validate_func']), $new );
@@ -347,7 +365,7 @@ class cmb_Meta_Box {
 				}
 			} elseif ( $new && $new != $old ) {
 				update_post_meta( $post_id, $name, $new );
-			} elseif ( '' == $new && $old && $field['type'] != 'file' ) {
+			} elseif ( '' == $new && $old ) {
 				delete_post_meta( $post_id, $name, $old );
 			}
 		}
