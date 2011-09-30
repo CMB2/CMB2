@@ -289,7 +289,8 @@ class cmb_Meta_Box {
 						}
 					echo '</div>'; 
 				break;
-				
+				default:
+					do_action('cmb_render_' . $field['type'] , $field, $meta);
 			}
 			
 			echo '</td>','</tr>';
@@ -342,6 +343,8 @@ class cmb_Meta_Box {
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
+			
+			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);			
 			
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
