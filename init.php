@@ -116,6 +116,20 @@ class cmb_Meta_Box {
 					// If current page id is in the included array, display the metabox
 					if ( isset( $post_id) && in_array( $post_id, $this->_meta_box['show_on']['value'] ) )
 						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
+						
+				} elseif( 'page-template' == $this->_meta_box['show_on']['key'] )  {
+
+					// Get the current ID
+					if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
+					elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
+					if( !( isset( $post_id ) || is_page() ) ) return;
+					
+					// Get current template
+					$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+					
+					// See if there's a match
+					if( $current_template == $this->_meta_box['show_on']['value'] )
+						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
 				}
 			}
 		}
@@ -289,6 +303,8 @@ class cmb_Meta_Box {
 						}
 					echo '</div>'; 
 				break;
+				default:
+					do_action( 'cmb_render_' . $field['type'], $field, $meta );
 				
 			}
 			
@@ -342,6 +358,8 @@ class cmb_Meta_Box {
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
+			
+			$new = apply_filters( 'cmb_validate_' . $field['type'], $new, $post_id, $field );
 			
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
@@ -459,4 +477,4 @@ function cmb_styles_inline() {
 	<?php
 }
 
-// End. That's it, folks! //
+// End. That's it, folks! //asdf
