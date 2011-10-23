@@ -30,6 +30,9 @@ Coming soon.
 
 == Changelog ==
 
+= 0.6.1 =
+* Enabled the ability to define your own custom field types (issue #28). props @randyhoyt
+
 = 0.6 =
 * Added the ability to limit metaboxes to certain posts by id. props @billerickson
 
