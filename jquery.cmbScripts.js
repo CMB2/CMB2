@@ -31,15 +31,22 @@ jQuery(document).ready(function($) {
 	var formfield;
 	var uploadStatus = true;
 	
+	$('.upload_file').change(function() {
+		formfield = $(this).attr('name');
+		$('#' + formfield + '_id').val("");
+	});
+
 	$('.upload_button').live('click', function() {
 		formfield = $(this).prev('input').attr('name');
-		tb_show('', 'media-upload.php?post_id=' + pID + '&type=image&cbm_setting=cbm_value&TB_iframe=true');
+		buttonLabel = "Use as " + $('label[for=' + formfield + ']').text();
+		tb_show('', 'media-upload.php?post_id=' + pID + '&type=image&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&cbm_setting=cbm_value&TB_iframe=true');
 		return false;
 	});
 	
 	$('.remove_file_button').live('click', function() {
 		formfield = $(this).attr('rel');
-		$('input.' + formfield).val('');
+		$('input#' + formfield).val('');
+		$('input#' + formfield + '_id').val('');
 		$(this).parent().remove();
 		return false;
 	});
@@ -47,9 +54,13 @@ jQuery(document).ready(function($) {
 	window.original_send_to_editor = window.send_to_editor;
     window.send_to_editor = function(html) {
 		if (formfield) {
-			
+					 			
 	        if ( $(html).html(html).find('img').length > 0 ) {
 	        	itemurl = $(html).html(html).find('img').attr('src'); // Use the URL to the size selected.
+				itemclass = $(html).html(html).find('img').attr('class'); // Extract the ID from the returned class name.
+				var itemClassBits = itemclass.split(" ");
+				var itemid = itemClassBits[itemClassBits.length-1];
+				itemid = itemid.replace( 'wp-image-', '' );
 	        } else {
 	        	// It's not an image. Get the URL to the file instead.
 	        	var htmlBits = html.split("'"); // jQuery seems to strip out XHTML when assigning the string to an object. Use alternate method.
@@ -57,6 +68,7 @@ jQuery(document).ready(function($) {
 	        	var itemtitle = htmlBits[2];
 	        	itemtitle = itemtitle.replace( '>', '' );
 	        	itemtitle = itemtitle.replace( '</a>', '' );
+	        	var itemid = ""; // TO DO: Get ID for non-image attachments.
 	        }
          
 			var image = /(^.*\.jpg|jpeg|png|gif|ico*)/gi;
@@ -73,8 +85,9 @@ jQuery(document).ready(function($) {
 				uploadStatus = '<div class="no_image"><span class="file_link">'+html+'</span>&nbsp;&nbsp;&nbsp;<a href="#" class="remove_file_button" rel="' + formfield + '">Remove</a></div>';
 			}
 
-			$('.' + formfield).val(itemurl);
-			$('.' + formfield).siblings('.cmb_upload_status').slideDown().html(uploadStatus);
+			$('#' + formfield).val(itemurl);
+			$('#' + formfield + '_id').val(itemid);			
+			$('#' + formfield).siblings('.cmb_upload_status').slideDown().html(uploadStatus);
 			tb_remove();
         
 		} else {

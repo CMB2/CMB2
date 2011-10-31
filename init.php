@@ -144,10 +144,13 @@ class cmb_Meta_Box {
 		echo '<table class="form-table cmb_metabox">';
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
-			// Set up blank values for empty ones
-			if ( !isset($field['desc']) ) $field['desc'] = '';
-			if ( !isset($field['std']) ) $field['std'] = '';
-			
+			// Set up blank or default values for empty ones
+			if ( !isset( $field['name'] ) ) $field['name'] = '';
+			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
+			if ( !isset( $field['std'] ) ) $field['std'] = '';
+			if ( 'file' == $field['type'] && !isset( $field['allow'] ) ) $field['allow'] = array( 'url', 'attachment' );
+			if ( 'file' == $field['type'] && !isset( $field['save'] ) )  $field['save']  = array( 'url' );
+						
 			$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
 			echo '<tr>';
@@ -282,8 +285,12 @@ class cmb_Meta_Box {
 							}
 						break;
 				case 'file':
-					echo '<input id="upload_file" type="text" size="45" class="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
+					$input_type_url = "hidden";
+					if ( 'url' == $field['allow'] || ( is_array( $field['allow'] ) && in_array( 'url', $field['allow'] ) ) )
+						$input_type_url="text";
+					echo '<input class="upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
 					echo '<input class="upload_button button" type="button" value="Upload File" />';
+					echo '<input class="upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';					
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_upload_status">';	
 						if ( $meta != '' ) { 
@@ -385,6 +392,22 @@ class cmb_Meta_Box {
 			} elseif ( '' == $new && $old ) {
 				delete_post_meta( $post_id, $name, $old );
 			}
+			
+			if ( 'file' == $field['type'] ) {
+				$name = $field['id'] . "_id";
+				$old = get_post_meta( $post_id, $name, 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
+				if ( isset( $field['save'] ) && is_array($field['save']) && in_array('id',$field['save'] )) {
+					$new = isset( $_POST[$name] ) ? $_POST[$name] : null;
+				} else {
+					$new = "";
+				}
+
+				if ( $new && $new != $old ) {
+					update_post_meta( $post_id, $name, $new );
+				} elseif ( '' == $new && $old ) {
+					delete_post_meta( $post_id, $name, $old );
+				}
+			}			
 		}
 	}
 }
@@ -439,7 +462,16 @@ function cmb_editor_footer_scripts() { ?>
  			});
 		});
 	/* ]]> */</script>
-	<?php }
+	<?php if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) { 
+		$label = $_GET['cmb_send_label']; 
+		if ( empty( $label ) ) $label="Select File";?>	
+	<script type="text/javascript">
+		jQuery(function($) {
+			$('td.savesend input').val('<?php echo $label; ?>');
+		});
+	</script>
+	<?php } ?>	
+<?php }
 add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
 
 function cmb_styles_inline() { 
@@ -474,6 +506,59 @@ function cmb_styles_inline() {
 		table.cmb_metabox .cmb_upload_status .img_status .remove_file_button { text-indent: -9999px; background: url(<?php echo CMB_META_BOX_URL ?>images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
 	</style>
 	<?php
+}
+
+// Force 'Insert into Post' button from Media Library 
+add_filter( 'get_media_item_args', 'cmb_force_send' );
+function cmb_force_send( $args ) {
+		
+	// if the Gallery tab is opened from a custom meta box field, add Insert Into Post button	
+	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] )
+		$args['send'] = true;
+	
+	// if the From Computer tab is opened AT ALL, add Insert Into Post button after an image is uploaded	
+	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
+		
+		$args['send'] = true;		
+
+		// TO DO: Are there any conditions in which we don't want the Insert Into Post 
+		// button added? For example, if a post type supports thumbnails, does not support
+		// the editor, and does not have any cmb file inputs? If so, here's the first
+		// bits of code needed to check all that.
+		// $attachment_ancestors = get_post_ancestors( $_POST["attachment_id"] );
+		// $attachment_parent_post_type = get_post_type( $attachment_ancestors[0] );
+		// $post_type_object = get_post_type_object( $attachment_parent_post_type );
+
+	}		
+	
+	// change the label of the button on the From Computer tab
+	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
+
+		echo '
+			<script type="text/javascript">
+				function cmbGetParameterByNameInline(name) {
+					name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+					var regexS = "[\\?&]" + name + "=([^&#]*)";
+					var regex = new RegExp(regexS);
+					var results = regex.exec(window.location.href);
+					if(results == null)
+						return "";
+					else
+						return decodeURIComponent(results[1].replace(/\+/g, " "));
+				}
+							
+				jQuery(function($) {
+					if (cmbGetParameterByNameInline("cmb_force_send")=="true") {
+						var cmb_send_label = cmbGetParameterByNameInline("cmb_send_label");
+						$("td.savesend input").val(cmb_send_label);
+					}
+				});
+			</script>
+		';
+	}
+	 
+    return $args;
+
 }
 
 // End. That's it, folks! //
