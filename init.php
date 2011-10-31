@@ -87,6 +87,9 @@ class cmb_Meta_Box {
 
 		add_action( 'admin_menu', array(&$this, 'add') );
 		add_action( 'save_post', array(&$this, 'save') );
+
+		add_filter( 'cmb_show_on', array(&$this, 'add_for_id' ), 10, 2 );
+		add_filter( 'cmb_show_on', array(&$this, 'add_for_page_template' ), 10, 2 );
 	}
 
 	function add_post_enctype() {
@@ -103,36 +106,57 @@ class cmb_Meta_Box {
 	function add() {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
+		$this->_meta_box['show_on'] = empty( $this->_meta_box['show_on'] ) ? array('key' => false, 'value' => false) : $this->_meta_box['show_on'];
+		
 		foreach ( $this->_meta_box['pages'] as $page ) {
-			if( !isset( $this->_meta_box['show_on'] ) ) {
+			if( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
-			} else {
-				if ( 'id' == $this->_meta_box['show_on']['key'] ) {
-
-					// If we're showing it based on ID, get the current ID					
-					if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
-					elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
-
-					// If current page id is in the included array, display the metabox
-					if ( isset( $post_id) && in_array( $post_id, $this->_meta_box['show_on']['value'] ) )
-						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
-						
-				} elseif( 'page-template' == $this->_meta_box['show_on']['key'] )  {
-
-					// Get the current ID
-					if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
-					elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
-					if( !( isset( $post_id ) || is_page() ) ) return;
-					
-					// Get current template
-					$current_template = get_post_meta( $post_id, '_wp_page_template', true );
-					
-					// See if there's a match
-					if( $current_template == $this->_meta_box['show_on']['value'] )
-						add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
-				}
-			}
 		}
+	}
+	
+	/**
+	 * Show On Filters
+	 * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
+	 * Below you can limit it by ID and page template
+	 */
+	 
+	// Add for ID 
+	function add_for_id( $default, $meta_box ) {
+		if ( 'id' !== $meta_box['show_on']['key'] )
+			return $default;
+
+		// If we're showing it based on ID, get the current ID					
+		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
+		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
+		if( !isset( $post_id ) )
+			return $default;
+	
+		// If current page id is in the included array, display the metabox
+		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
+		if ( in_array( $post_id, $meta_box['show_on']['value'] ) )
+			return true;
+		else
+			return false;
+	}
+	
+	// Add for Page Template
+	function add_for_page_template( $default, $meta_box ) {
+		if( 'page-template' !== $meta_box['show_on']['key'] )
+			return $default;
+			
+		// Get the current ID
+		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
+		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
+		if( !( isset( $post_id ) || is_page() ) ) return $default;
+			
+		// Get current template
+		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+		
+		// See if there's a match
+		if( $current_template == $meta_box['show_on']['value'] )
+			return true;
+		else
+			return false;
 	}
 	
 	// Show fields
