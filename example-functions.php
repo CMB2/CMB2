@@ -56,7 +56,8 @@ function be_sample_metaboxes( $meta_boxes ) {
 			array(
 		        'name' => 'Test Title Weeeee',
 		        'desc' => 'This is a title description',
-		        'type' => 'title'
+		        'type' => 'title',
+		        'id' => $prefix . 'test_title'
 		    ),
 			array(
 		       'name' => 'Test Select',
