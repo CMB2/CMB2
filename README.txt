@@ -2,9 +2,9 @@
 Contributors:	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
-Version: 0.6
+Version: 0.7
 Requires at least: 3.0
-Tested up to: 3.2
+Tested up to: 3.3 Beta 2
  
 == Description ==
 
@@ -29,6 +29,13 @@ Coming soon.
 * File handling improvement and fixes
 
 == Changelog ==
+
+= 0.7 =
+* Created 'cmb_show_on' filter to define your own Show On Filters, props @billerickson
+* Added page template show_on filter, props @billerickson
+* Improvements to the 'file' field type, props @randyhoyt
+* Allow for default values on 'radio' and 'radio_inline' field types, props @billerickson
+
 
 = 0.6.1 =
 * Enabled the ability to define your own custom field types (issue #28). props @randyhoyt
