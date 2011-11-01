@@ -167,7 +167,8 @@ class cmb_Meta_Box {
 	
 	// Show fields
 	function show() {
-		global $post;
+	// $wp_version used for compatibility with new wp_editor() function
+		global $post, $wp_version;
 
 		// Use nonce for verification
 		echo '<input type="hidden" name="wp_meta_box_nonce" value="', wp_create_nonce( basename(__FILE__) ), '" />';
@@ -263,10 +264,16 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'wysiwyg':
-					echo '<div id="poststuff" class="meta_mce">';
-					echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? wpautop($meta, true) : '', '</textarea></div>';
-					echo '</div>';
-			        echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					/* Make sure that the new wp_editor() function is available.
+					 * Otherwise, use the "old" version of the WYSIWYG editor */
+					if( function_exists( 'wp_editor' ) {
+						wp_editor( $meta ? $meta : $field['std'], $field['id'] );
+					} else {
+						echo '<div id="poststuff" class="meta_mce">';
+						echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? wpautop($meta, true) : '', '</textarea></div>';
+						echo '</div>';
+					}
+			        	echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'taxonomy_select':
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
@@ -353,6 +360,7 @@ class cmb_Meta_Box {
 
 	// Save data from metabox
 	function save( $post_id)  {
+		global $wp_version;
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) ) ) {
 			return $post_id;
@@ -377,7 +385,8 @@ class cmb_Meta_Box {
 			$old = get_post_meta( $post_id, $name, 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
 
-			if ( $field['type'] == 'wysiwyg' ) {
+			// wpautop() should not be needed with version 3.3 and later
+			if ( $field['type'] == 'wysiwyg' && !function_exists( 'wp_editor' ) {
 				$new = wpautop($new);
 			}
 			
@@ -521,7 +530,7 @@ function cmb_styles_inline() {
 		table.cmb_metabox input, table.cmb_metabox textarea { font-size:11px; padding: 5px;}
 		table.cmb_metabox li { font-size:11px; }
 		table.cmb_metabox ul { padding-top:5px; }
-		table.cmb_metabox select { font-size:11px; padding: 5px 10px;}
+		table.cmb_metabox select { font-size:11px;}
 		table.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
 		.cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
 		.cmb_radio_inline { padding: 4px 0 0 0;}

@@ -31,6 +31,7 @@ Coming soon.
 == Changelog ==
 
 = 0.7 =
+* Added the new wp_editor() function for the WYSIWYG dialog box, props @jcpry
 * Created 'cmb_show_on' filter to define your own Show On Filters, props @billerickson
 * Added page template show_on filter, props @billerickson
 * Improvements to the 'file' field type, props @randyhoyt
