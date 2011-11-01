@@ -229,6 +229,7 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'radio_inline':
+					if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 					echo '<div class="cmb_radio_inline">';
 					foreach ($field['options'] as $option) {
 						echo '<div class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' />', $option['name'], '</div>';
@@ -237,6 +238,7 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'radio':
+					if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 					foreach ($field['options'] as $option) {
 						echo '<p><input type="radio" name="', $field['id'], '" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' />', $option['name'].'</p>';
 					}
