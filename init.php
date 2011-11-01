@@ -121,15 +121,15 @@ class cmb_Meta_Box {
 	 */
 	 
 	// Add for ID 
-	function add_for_id( $default, $meta_box ) {
+	function add_for_id( $display, $meta_box ) {
 		if ( 'id' !== $meta_box['show_on']['key'] )
-			return $default;
+			return $display;
 
 		// If we're showing it based on ID, get the current ID					
 		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
 		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
 		if( !isset( $post_id ) )
-			return $default;
+			return $display;
 	
 		// If current page id is in the included array, display the metabox
 		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
@@ -140,14 +140,14 @@ class cmb_Meta_Box {
 	}
 	
 	// Add for Page Template
-	function add_for_page_template( $default, $meta_box ) {
+	function add_for_page_template( $display, $meta_box ) {
 		if( 'page-template' !== $meta_box['show_on']['key'] )
-			return $default;
+			return $display;
 			
 		// Get the current ID
 		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
 		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
-		if( !( isset( $post_id ) || is_page() ) ) return $default;
+		if( !( isset( $post_id ) || is_page() ) ) return $display;
 			
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
