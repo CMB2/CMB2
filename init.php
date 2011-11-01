@@ -130,9 +130,12 @@ class cmb_Meta_Box {
 		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
 		if( !isset( $post_id ) )
 			return $display;
-	
-		// If current page id is in the included array, display the metabox
+		
+		// If value isn't an array, turn it into one	
 		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
+		
+		// If current page id is in the included array, display the metabox
+
 		if ( in_array( $post_id, $meta_box['show_on']['value'] ) )
 			return true;
 		else
@@ -152,8 +155,11 @@ class cmb_Meta_Box {
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
 		
+		// If value isn't an array, turn it into one	
+		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
+
 		// See if there's a match
-		if( $current_template == $meta_box['show_on']['value'] )
+		if( in_array( $current_template, $meta_box['show_on']['value'] ) )
 			return true;
 		else
 			return false;
