@@ -301,6 +301,18 @@ class cmb_Meta_Box {
 					}
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
+				case 'taxonomy_multicheck':
+					echo '<ul>';
+					$names = wp_get_object_terms( $post->ID, $field['taxonomy'] );
+					$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+					foreach ($terms as $term) {
+						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name , '"'; 
+						foreach ($names as $name) {
+							if ( $term->slug == $name->slug ){ echo ' checked="checked" ';};
+						}
+						echo' /><label>', $term->name , '</label></li>';
+					}
+				break;
 				case 'file_list':
 					echo '<input id="upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
 					echo '<input class="upload_button button" type="button" value="Upload File" />';
@@ -390,14 +402,10 @@ class cmb_Meta_Box {
 				$new = wpautop($new);
 			}
 			
-			if ( $field['type'] == 'taxonomy_select' )  {	
+			if ( in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {	
 				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );	
 			}
 			
-			if ( $field['type'] == 'taxonomy_radio' )  {		
-				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
-			}
-
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
 				$new = htmlspecialchars( $new );
 			}
