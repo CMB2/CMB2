@@ -180,7 +180,7 @@ class cmb_Meta_Box {
 			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
 			if ( !isset( $field['std'] ) ) $field['std'] = '';
 			if ( 'file' == $field['type'] && !isset( $field['allow'] ) ) $field['allow'] = array( 'url', 'attachment' );
-			if ( 'file' == $field['type'] && !isset( $field['save'] ) )  $field['save']  = array( 'url' );
+			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
 						
 			$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
@@ -445,7 +445,7 @@ class cmb_Meta_Box {
 			if ( 'file' == $field['type'] ) {
 				$name = $field['id'] . "_id";
 				$old = get_post_meta( $post_id, $name, 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
-				if ( isset( $field['save'] ) && is_array($field['save']) && in_array('id',$field['save'] )) {
+				if ( $field['save_id'] ) {
 					$new = isset( $_POST[$name] ) ? $_POST[$name] : null;
 				} else {
 					$new = "";
