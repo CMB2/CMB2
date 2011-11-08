@@ -267,7 +267,7 @@ class cmb_Meta_Box {
 					/* Make sure that the new wp_editor() function is available.
 					 * Otherwise, use the "old" version of the WYSIWYG editor */
 					if( function_exists( 'wp_editor' ) ) {
-						wp_editor( $meta ? $meta : $field['std'], $field['id'] );
+						wp_editor( $meta ? $meta : $field['std'], $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
 					} else {
 						echo '<div id="poststuff" class="meta_mce">';
 						echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? wpautop($meta, true) : '', '</textarea></div>';

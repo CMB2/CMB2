@@ -128,7 +128,10 @@ function be_sample_metaboxes( $meta_boxes ) {
 				'name' => 'Test wysiwyg',
 				'desc' => 'field description (optional)',
 				'id' => $prefix . 'test_wysiwyg',
-				'type' => 'wysiwyg'
+				'type' => 'wysiwyg',
+				'options' => array(
+					'textarea_rows' => 5,
+				)
 			),
 			array(
 				'name' => 'Test Image',
