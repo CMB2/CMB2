@@ -24,7 +24,6 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 Coming soon.
 
 == TODO ==
-* Add media upload to WYSIWYG option
 * Security & best practices audit
 * File handling improvement and fixes
 
