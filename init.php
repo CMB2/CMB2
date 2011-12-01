@@ -5,7 +5,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.7
+Version: 		0.8
 */
 
 /**
@@ -212,6 +212,9 @@ class cmb_Meta_Box {
 				case 'text_date_timestamp':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+				case 'text_time':
+					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					break;					
 				case 'text_money':
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
@@ -221,6 +224,9 @@ class cmb_Meta_Box {
 				case 'textarea_small':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
+				case 'textarea_code':
+					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;					
 				case 'select':
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 					foreach ($field['options'] as $option) {
@@ -409,6 +415,10 @@ class cmb_Meta_Box {
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
 				$new = htmlspecialchars( $new );
 			}
+
+			if ( ($field['type'] == 'textarea_code') ) {
+				$new = htmlspecialchars_decode( $new );
+			}
 			
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
@@ -533,6 +543,7 @@ function cmb_styles_inline() {
 		p.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 !important;}
 		span.cmb_metabox_description { color: #AAA; font-style: italic;}
 		input.cmb_text_small { width: 100px; margin-right: 15px;}
+		input.cmb_text_time { width: 40px; margin-right: 15px;}
 		input.cmb_text_money { width: 90px; margin-right: 15px;}
 		input.cmb_text_medium { width: 230px; margin-right: 15px;}
 		table.cmb_metabox input, table.cmb_metabox textarea { font-size:11px; padding: 5px;}
