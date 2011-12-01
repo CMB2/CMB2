@@ -2,9 +2,9 @@
 Contributors:	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
-Version: 0.7
+Version: 0.8
 Requires at least: 3.0
-Tested up to: 3.3 Beta 2
+Tested up to: 3.3 RC1
  
 == Description ==
 
@@ -28,6 +28,12 @@ Coming soon.
 * File handling improvement and fixes
 
 == Changelog ==
+
+= 0.8 =
+* Added jQuery timepicker, props @norcross
+* Added 'raw' textarea to convert special HTML entities back to characters, props @norcross
+* Added missing examples on example-functions.php, props @norcross
+
 
 = 0.7 =
 * Added the new wp_editor() function for the WYSIWYG dialog box, props @jcpry
