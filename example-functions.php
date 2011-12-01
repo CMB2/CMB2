@@ -37,6 +37,18 @@ function be_sample_metaboxes( $meta_boxes ) {
 				'type' => 'text_date'
 			),
 			array(
+				'name' => 'Test Date Picker (UNIX timestamp)',
+				'desc' => 'field description (optional)',
+				'id' => $prefix . 'test_textdate_timestamp',
+				'type' => 'text_date_timestamp'
+			),			
+			array(
+	            'name' => 'Test Time',
+	            'desc' => 'field description (optional)',
+	            'id' => $prefix . 'test_time',
+	            'type' => 'text_time'
+	        ),			
+			array(
 				'name' => 'Test Money',
 				'desc' => 'field description (optional)',
 				'id' => $prefix . 'test_textmoney',
@@ -53,6 +65,12 @@ function be_sample_metaboxes( $meta_boxes ) {
 				'desc' => 'field description (optional)',
 				'id' => $prefix . 'test_textareasmall',
 				'type' => 'textarea_small'
+			),
+			array(
+				'name' => 'Test Text Area Code',
+				'desc' => 'field description (optional)',
+				'id' => $prefix . 'test_textarea_code',
+				'type' => 'textarea_code'
 			),
 			array(
 				'name' => 'Test Title Weeeee',
