@@ -27,10 +27,10 @@ jQuery(document).ready(function($) {
 	// time / formatting options available and code at https://github.com/perifer/timePicker
 	$('.cmb_timepicker').each(function (){
 		$('#' + jQuery(this).attr('id')).timePicker({
-			startTime: "07.00",
-			endTime: "22.00",
+			startTime: "07:00",
+			endTime: "22:00",
 			show24Hours: false,
-			separator: '.',
+			separator: ':',
 			step: 30
   		});
 	});	
