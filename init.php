@@ -455,7 +455,7 @@ class cmb_Meta_Box {
 			if ( 'file' == $field['type'] ) {
 				$name = $field['id'] . "_id";
 				$old = get_post_meta( $post_id, $name, 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
-				if ( $field['save_id'] ) {
+				if ( isset( $field['save_id'] ) && $field['save_id'] ) {
 					$new = isset( $_POST[$name] ) ? $_POST[$name] : null;
 				} else {
 					$new = "";
