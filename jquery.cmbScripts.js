@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
 	$('.upload_button').live('click', function() {
 		formfield = $(this).prev('input').attr('name');
 		buttonLabel = "Use as " + $('label[for=' + formfield + ']').text();
-		tb_show('', 'media-upload.php?post_id=' + pID + '&type=image&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&cbm_setting=cbm_value&TB_iframe=true');
+		tb_show('', 'media-upload.php?post_id=' + pID + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&cbm_setting=cbm_value&TB_iframe=true');
 		return false;
 	});
 	
