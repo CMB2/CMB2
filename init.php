@@ -362,7 +362,7 @@ class cmb_Meta_Box {
 								for( $i = 0; $i < sizeof( $parts ); ++$i ) {
 									$title = $parts[$i];
 								} 
-								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="# class="remove_file_button" rel="', $field['id'], '">Remove</a>)';
+								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="remove_file_button" rel="', $field['id'], '">Remove</a>)';
 							}	
 						}
 					echo '</div>'; 
