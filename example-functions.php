@@ -7,7 +7,7 @@ function be_sample_metaboxes( $meta_boxes ) {
 	$meta_boxes[] = array(
 		'id' => 'test_metabox',
 		'title' => 'Test Metabox',
-		'pages' => array('page'), // post type
+		'pages' => array( 'page' ), // post type
 		'context' => 'normal',
 		'priority' => 'high',
 		'show_names' => true, // Show field names on the left
@@ -163,7 +163,7 @@ function be_sample_metaboxes( $meta_boxes ) {
 	$meta_boxes[] = array(
 		'id' => 'about_page_metabox',
 		'title' => 'About Page Metabox',
-		'pages' => array('page'), // post type
+		'pages' => array( 'page' ), // post type
 		'show_on' => array( 'key' => 'id', 'value' => array( 2 ) ), // specific post ids to display this metabox
 		'context' => 'normal',
 		'priority' => 'high',

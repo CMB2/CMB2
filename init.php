@@ -217,7 +217,7 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;					
 				case 'text_money':
-					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					echo apply_filters('cmb_money_type', '$') . ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
@@ -271,16 +271,8 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'wysiwyg':
-					/* Make sure that the new wp_editor() function is available.
-					 * Otherwise, use the "old" version of the WYSIWYG editor */
-					if( function_exists( 'wp_editor' ) ) {
-						wp_editor( $meta ? $meta : $field['std'], $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
-					} else {
-						echo '<div id="poststuff" class="meta_mce">';
-						echo '<div class="customEditor"><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="7" style="width:97%">', $meta ? wpautop($meta, true) : '', '</textarea></div>';
-						echo '</div>';
-					}
-			        	echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					wp_editor( $meta ? $meta : $field['std'], $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
+			        echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'taxonomy_select':
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
@@ -443,7 +435,7 @@ class cmb_Meta_Box {
 				$aNewToAdd = array_diff( $new, $old );
 				$aOldToDelete = array_diff( $old, $new );
 				foreach ( $aNewToAdd as $newToAdd ) {
-					if ($newToAdd!="") add_post_meta( $post_id, $name, $newToAdd, false );
+					if ( $newToAdd != "" ) add_post_meta( $post_id, $name, $newToAdd, false );
 				}
 				foreach ( $aOldToDelete as $oldToDelete ) {
 					delete_post_meta( $post_id, $name, $oldToDelete );
@@ -478,99 +470,31 @@ class cmb_Meta_Box {
  */
 
 function cmb_scripts( $hook ) {
-  	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL.'jquery.cmbScripts.js', array( 'jquery','media-upload','thickbox' ) );
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-core' ); // Make sure and use elements form the 1.7.3 UI - not 1.8.9
-		wp_enqueue_script( 'media-upload' );
-		wp_enqueue_script( 'thickbox' );
+  	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'jquery.cmbScripts.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox' ) );
 		wp_enqueue_script( 'cmb-scripts' );
-		wp_enqueue_style( 'thickbox' );
-		wp_enqueue_style( 'jquery-custom-ui' );
-		add_action( 'admin_head', 'cmb_styles_inline' );
+		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css' );
+		wp_enqueue_style( 'cmb-styles' );
   	}
 }
-add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10, 1 );
-
-function editor_admin_init( $hook ) {
-	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
-		wp_enqueue_script( 'word-count' );
-		wp_enqueue_script( 'post' );
-		wp_enqueue_script( 'editor' );
-	}
-}
-
-function editor_admin_head( $hook ) {
-	if ( $hook == 'post.php' OR $hook == 'post-new.php' OR $hook == 'page-new.php' OR $hook == 'page.php' ) {
-  		wp_tiny_mce();
-	}
-}
-
-add_action( 'admin_init', 'editor_admin_init' );
-add_action( 'admin_head', 'editor_admin_head' );
+add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10 );
 
 function cmb_editor_footer_scripts() { ?>
-	<script type="text/javascript">
-	/* <![CDATA[ */
-	jQuery(function($) {
-		var i=1;
-		$('.customEditor textarea').each(function(e) {
-			var id = $(this).attr('id');
-			if (!id) {
-				id = 'customEditor-' + i++;
-				$(this).attr('id',id);
-			}
-			tinyMCE.execCommand('mceAddControl', false, id);
-		});
-	});
-	/* ]]> */
-	</script>
-	<?php if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) { 
+	<?php
+	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) { 
 		$label = $_GET['cmb_send_label']; 
-		if ( empty( $label ) ) $label="Select File";?>	
-	<script type="text/javascript">
+		if ( empty( $label ) ) $label="Select File";
+		?>	
+		<script type="text/javascript">
 		jQuery(function($) {
 			$('td.savesend input').val('<?php echo $label; ?>');
 		});
-	</script>
-	<?php } ?>	
-<?php }
+		</script>
+		<?php 
+	}
+}
 add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
 
-function cmb_styles_inline() { 
-	echo '<link rel="stylesheet" type="text/css" href="' . CMB_META_BOX_URL.'style.css" />';
-	?>	
-	<style type="text/css">
-		table.cmb_metabox td, table.cmb_metabox th { border-bottom: 1px solid #E9E9E9; }
-		table.cmb_metabox th { text-align: right; font-weight:bold;}
-		table.cmb_metabox th label { margin-top:6px; display:block;}
-		p.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 !important;}
-		span.cmb_metabox_description { color: #AAA; font-style: italic;}
-		input.cmb_text_small { width: 100px; margin-right: 15px;}
-		input.cmb_text_time { width: 40px; margin-right: 15px;}
-		input.cmb_text_money { width: 90px; margin-right: 15px;}
-		input.cmb_text_medium { width: 230px; margin-right: 15px;}
-		table.cmb_metabox input, table.cmb_metabox textarea { font-size:11px; padding: 5px;}
-		table.cmb_metabox li { font-size:11px; }
-		table.cmb_metabox ul { padding-top:5px; }
-		table.cmb_metabox select { font-size:11px;}
-		table.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
-		.cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
-		.cmb_radio_inline { padding: 4px 0 0 0;}
-		.cmb_radio_inline_option {display: inline; padding-right: 18px;}
-		table.cmb_metabox input[type="radio"] { margin-right:3px;}
-		table.cmb_metabox input[type="checkbox"] { margin-right:6px;}
-		table.cmb_metabox .mceLayout {border:1px solid #DFDFDF !important;}
-		table.cmb_metabox .mceIframeContainer {background:#FFF;}
-		table.cmb_metabox .meta_mce {width:97%;}
-		table.cmb_metabox .meta_mce textarea {width:100%;}
-		table.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}
-		table.cmb_metabox .cmb_upload_status .img_status {  position: relative; }
-		table.cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
-		table.cmb_metabox .cmb_upload_status .img_status .remove_file_button { text-indent: -9999px; background: url(<?php echo CMB_META_BOX_URL ?>images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
-	</style>
-	<?php
-}
 
 // Force 'Insert into Post' button from Media Library 
 add_filter( 'get_media_item_args', 'cmb_force_send' );
