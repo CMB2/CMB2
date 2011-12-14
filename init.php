@@ -401,7 +401,7 @@ class cmb_Meta_Box {
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
 			$name = $field['id'];			
-			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;      
+			if ( 'multicheck' == $field['type'] ? $field['multiple'] = true : $field['multiple'] = false );      
 			$old = get_post_meta( $post_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
 
