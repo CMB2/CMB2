@@ -6,7 +6,7 @@
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@norcorss](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 
-**Version**: 0.8 trunk 
+**Version**: 0.8 trunk   
 **Requires at least**: 3.3  
 **Tested up to**: 3.3  
 **License**: GPLv2  
@@ -67,7 +67,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 ## Changelog
 
 ### ?.?
-* ** Note: This release requires WordPress 3.3+ **
+* __Note: This release requires WordPress 3.3+__
 * Use jQuery UI datepicker packaged with 3.3 core, props @jaredatch
 * Fixed bug where datepicker triggers extra space after footer in Firefox (issue #14), props @jaredatch
 * Tweaked CSS, removed inline styles, now all in style.css, props @jaredatch
