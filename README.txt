@@ -2,9 +2,9 @@
 
 **Contributors**:
 
-* Andrew Norcross ( [@norcorss](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
+* Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
-* Bill Erickson ( [@norcorss](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
+* Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 
 **Version**: 0.8 trunk 
 **Requires at least**: 3.3  
