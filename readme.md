@@ -54,7 +54,6 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 ## Known Issues
 
 * Problem inserting file url inside field for image with caption (issue #50)
-* Multicheck saves new values incorrectly (issue #48)
 * `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31)
 * Metabox container WYSIWYG editor cannot be moved
 
@@ -74,7 +73,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Clean up scripts being queued. props @jaredatch
 * Added ability to filter the money type with text_money, props @jaredatch
 * Added readme.md markdown file, props @jaredatch
-* Multicheck fixes and tweaks, props @randyhoyt
+* Fixed multicheck issues (issue #48), props @jaredatch
+* Use $pagenow istead of custom $current_page, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

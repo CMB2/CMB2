@@ -79,9 +79,8 @@ class cmb_Meta_Box {
 			}
 		}
 		
-		$current_page = substr(strrchr($_SERVER['PHP_SELF'], '/'), 1, -4);
-		
-		if ( $upload && ( $current_page == 'page' || $current_page == 'page-new' || $current_page == 'post' || $current_page == 'post-new' ) ) {
+		global $pagenow;		
+		if ( $upload && ( $pagenow == 'page.php' || $pagenow == 'page-new.php' || $pagenow == 'post.php' || $pagenow == 'post-new.php' ) ) {
 			add_action( 'admin_head', array(&$this, 'add_post_enctype') );
 		}
 
@@ -167,8 +166,8 @@ class cmb_Meta_Box {
 	
 	// Show fields
 	function show() {
-		// $wp_version used for compatibility with new wp_editor() function
-		global $post, $wp_version;
+
+		global $post;
 
 		// Use nonce for verification
 		echo '<input type="hidden" name="wp_meta_box_nonce" value="', wp_create_nonce( basename(__FILE__) ), '" />';
@@ -371,7 +370,7 @@ class cmb_Meta_Box {
 
 	// Save data from metabox
 	function save( $post_id)  {
-		global $wp_version;
+
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) ) ) {
 			return $post_id;
@@ -396,11 +395,6 @@ class cmb_Meta_Box {
 			if ( 'multicheck' == $field['type'] ? $field['multiple'] = true : $field['multiple'] = false );      
 			$old = get_post_meta( $post_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
-
-			// wpautop() should not be needed with version 3.3 and later
-			if ( $field['type'] == 'wysiwyg' && !function_exists( 'wp_editor' ) ) {
-				$new = wpautop($new);
-			}
 			
 			if ( in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {	
 				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );	
@@ -427,19 +421,14 @@ class cmb_Meta_Box {
 					continue;
 				}
 			} elseif ( $field['multiple'] ) {
-				// Do the saving in two steps: first get everything we don't have yet
-				// Then get everything we should not have anymore
-				if ( empty( $new ) ) {
-					$new = array();
+				// Wow this is a shit-ton easier than what we did before.
+				delete_post_meta( $post_id, $name );	
+				if ( !empty( $new ) ) {
+					foreach ( $new as $add_new ) {
+						add_post_meta( $post_id, $name, $add_new, false );
+					}
 				}
-				$aNewToAdd = array_diff( $new, $old );
-				$aOldToDelete = array_diff( $old, $new );
-				foreach ( $aNewToAdd as $newToAdd ) {
-					if ( $newToAdd != "" ) add_post_meta( $post_id, $name, $newToAdd, false );
-				}
-				foreach ( $aOldToDelete as $oldToDelete ) {
-					delete_post_meta( $post_id, $name, $oldToDelete );
-				}
+				
 			} elseif ( $new && $new != $old ) {
 				update_post_meta( $post_id, $name, $new );
 			} elseif ( '' == $new && $old ) {
@@ -495,7 +484,6 @@ function cmb_editor_footer_scripts() { ?>
 }
 add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
 
-
 // Force 'Insert into Post' button from Media Library 
 add_filter( 'get_media_item_args', 'cmb_force_send' );
 function cmb_force_send( $args ) {
@@ -516,7 +504,6 @@ function cmb_force_send( $args ) {
 		// $attachment_ancestors = get_post_ancestors( $_POST["attachment_id"] );
 		// $attachment_parent_post_type = get_post_type( $attachment_ancestors[0] );
 		// $post_type_object = get_post_type_object( $attachment_parent_post_type );
-
 	}		
 	
 	// change the label of the button on the From Computer tab
