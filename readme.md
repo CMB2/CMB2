@@ -75,6 +75,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Added readme.md markdown file, props @jaredatch
 * Fixed multicheck issues (issue #48), props @jaredatch
 * Use $pagenow istead of custom $current_page, props @jaredatch
+* Fixed jQuery UP datepicker CSS conflicting with WordPress UI elements, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross
