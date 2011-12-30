@@ -27,7 +27,7 @@ table.cmb_metabox .meta_mce textarea {width:100%;}
 table.cmb_metabox .cmb_upload_status {  margin: 10px 0 0 0;}
 table.cmb_metabox .cmb_upload_status .img_status {  position: relative; }
 table.cmb_metabox .cmb_upload_status .img_status img { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
-table.cmb_metabox .cmb_upload_status .img_status .remove_file_button { text-indent: -9999px; background: url(images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
+table.cmb_metabox .cmb_upload_status .img_status .cmb_remove_file_button { text-indent: -9999px; background: url(images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
 
 /**
  * Timepicker

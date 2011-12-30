@@ -6,7 +6,7 @@
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 
-**Version**: 0.8 trunk 
+**Version**: 0.9 trunk   
 **Requires at least**: 3.3  
 **Tested up to**: 3.3  
 **License**: GPLv2  
@@ -16,8 +16,8 @@
 Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
 
 ##### Links
-* [Github project page](github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress)
-* [Documentation (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
+* [Github project page](http://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress)
+* [Documentation (GitHub wiki)](http://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
 
 ##### Field Types:
 * text
@@ -54,25 +54,31 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 ## Known Issues
 
 * Problem inserting file url inside field for image with caption (issue #50)
-* Multicheck saves new values incorrectly (issue #48)
 * `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31)
-* Metabox container WYSIWYG editor cannot be moved
+* Metabox container WYSIWYG editor cannot be moved (this is a TinyMCE issue)
 
 ## To-do
 * Fix known issues (above)
+* datepicker timepicker combo field type
 * improve inline documentation
+* clean up code
+* add ability to mark fields as required
+* support for multiple configurable timepickers
+* move timepicker and datepicker jQuery inline
+* look at possiblity of tabs
 
 ## Changelog
 
-### ?.?
-* ** Note: This release requires WordPress 3.3+ **
+### 0.9
+* __Note: This release requires WordPress 3.3+__
 * Use jQuery UI datepicker packaged with 3.3 core, props @jaredatch
 * Fixed bug where datepicker triggers extra space after footer in Firefox (issue #14), props @jaredatch
 * Tweaked CSS, removed inline styles, now all in style.css, props @jaredatch
 * Clean up scripts being queued. props @jaredatch
-* Added ability to filter the money type with text_money, props @jaredatch
 * Added readme.md markdown file, props @jaredatch
-* Multicheck fixes and tweaks, props @randyhoyt
+* Fixed multicheck issues (issue #48), props @jaredatch
+* Use $pagenow instead of custom $current_page, props @jaredatch
+* Fixed jQuery UI datepicker CSS conflicting with WordPress UI elements, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

@@ -41,19 +41,19 @@ jQuery(document).ready(function($) {
 	var formfield;
 	var uploadStatus = true;
 	
-	$('.upload_file').change(function() {
+	$('.cmb_upload_file').change(function() {
 		formfield = $(this).attr('name');
 		$('#' + formfield + '_id').val("");
 	});
 
-	$('.upload_button').live('click', function() {
+	$('.cmb_upload_button').live('click', function() {
 		formfield = $(this).prev('input').attr('name');
 		buttonLabel = "Use as " + $('label[for=' + formfield + ']').text();
 		tb_show('', 'media-upload.php?post_id=' + pID + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
 		return false;
 	});
 	
-	$('.remove_file_button').live('click', function() {
+	$('.cmb_remove_file_button').live('click', function() {
 		formfield = $(this).attr('rel');
 		$('input#' + formfield).val('');
 		$('input#' + formfield + '_id').val('');
@@ -87,12 +87,12 @@ jQuery(document).ready(function($) {
 			var video = /(^.*\.mp4|m4v|mov|wmv|avi|mpg|ogv|3gp|3g2*)/gi;
         
 			if (itemurl.match(image)) {
-			 	uploadStatus = '<div class="img_status"><img src="'+itemurl+'" alt="" /><a href="#" class="remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
+			 	uploadStatus = '<div class="img_status"><img src="'+itemurl+'" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
 			} else {
 				// No output preview if it's not an image
 				// Standard generic output if it's not an image.
 				html = '<a href="'+itemurl+'" target="_blank" rel="external">View File</a>';
-				uploadStatus = '<div class="no_image"><span class="file_link">'+html+'</span>&nbsp;&nbsp;&nbsp;<a href="#" class="remove_file_button" rel="' + formfield + '">Remove</a></div>';
+				uploadStatus = '<div class="no_image"><span class="file_link">'+html+'</span>&nbsp;&nbsp;&nbsp;<a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove</a></div>';
 			}
 
 			$('#' + formfield).val(itemurl);

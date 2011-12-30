@@ -216,7 +216,7 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;					
 				case 'text_money':
-					echo apply_filters('cmb_money_type', '$') . ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					echo '<input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" style="width:97%">', $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
@@ -313,7 +313,7 @@ class cmb_Meta_Box {
 				break;
 				case 'file_list':
 					echo '<input id="upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
-					echo '<input class="upload_button button" type="button" value="Upload File" />';
+					echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 						$args = array(
 								'post_type' => 'attachment',
@@ -337,8 +337,8 @@ class cmb_Meta_Box {
 					$input_type_url = "hidden";
 					if ( 'url' == $field['allow'] || ( is_array( $field['allow'] ) && in_array( 'url', $field['allow'] ) ) )
 						$input_type_url="text";
-					echo '<input class="upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
-					echo '<input class="upload_button button" type="button" value="Upload File" />';
+					echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
+					echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
 					echo '<input class="upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';					
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_upload_status">';	
@@ -347,14 +347,14 @@ class cmb_Meta_Box {
 							if ( $check_image ) {
 								echo '<div class="img_status">';
 								echo '<img src="', $meta, '" alt="" />';
-								echo '<a href="#" class="remove_file_button" rel="', $field['id'], '">Remove Image</a>';
+								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
 								echo '</div>';
 							} else {
 								$parts = explode( "/", $meta );
 								for( $i = 0; $i < sizeof( $parts ); ++$i ) {
 									$title = $parts[$i];
 								} 
-								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="remove_file_button" rel="', $field['id'], '">Remove</a>)';
+								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove</a>)';
 							}	
 						}
 					echo '</div>'; 
