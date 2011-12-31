@@ -62,6 +62,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * datepicker timepicker combo field type
 * improve inline documentation
 * clean up code
+* add ability to save fields in a single custom field
 * add ability to mark fields as required
 * support for multiple configurable timepickers
 * move timepicker and datepicker jQuery inline
