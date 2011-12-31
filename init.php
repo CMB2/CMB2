@@ -80,15 +80,15 @@ class cmb_Meta_Box {
 		}
 		
 		global $pagenow;		
-		if ( $upload && ( $pagenow == 'page.php' || $pagenow == 'page-new.php' || $pagenow == 'post.php' || $pagenow == 'post-new.php' ) ) {
-			add_action( 'admin_head', array(&$this, 'add_post_enctype') );
+		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) ) {
+			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
 		}
 
-		add_action( 'admin_menu', array(&$this, 'add') );
-		add_action( 'save_post', array(&$this, 'save') );
+		add_action( 'admin_menu', array( &$this, 'add' ) );
+		add_action( 'save_post', array( &$this, 'save' ) );
 
-		add_filter( 'cmb_show_on', array(&$this, 'add_for_id' ), 10, 2 );
-		add_filter( 'cmb_show_on', array(&$this, 'add_for_page_template' ), 10, 2 );
+		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
+		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
 	}
 
 	function add_post_enctype() {
@@ -339,7 +339,7 @@ class cmb_Meta_Box {
 						$input_type_url="text";
 					echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
 					echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
-					echo '<input class="upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';					
+					echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';					
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_upload_status">';	
 						if ( $meta != '' ) { 
@@ -350,8 +350,8 @@ class cmb_Meta_Box {
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
 								echo '</div>';
 							} else {
-								$parts = explode( "/", $meta );
-								for( $i = 0; $i < sizeof( $parts ); ++$i ) {
+								$parts = explode( '/', $meta );
+								for( $i = 0; $i < count( $parts ); ++$i ) {
 									$title = $parts[$i];
 								} 
 								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove</a>)';
@@ -421,14 +421,12 @@ class cmb_Meta_Box {
 					continue;
 				}
 			} elseif ( $field['multiple'] ) {
-				// Wow this is a shit-ton easier than what we did before.
 				delete_post_meta( $post_id, $name );	
 				if ( !empty( $new ) ) {
 					foreach ( $new as $add_new ) {
 						add_post_meta( $post_id, $name, $add_new, false );
 					}
-				}
-				
+				}			
 			} elseif ( $new && $new != $old ) {
 				update_post_meta( $post_id, $name, $new );
 			} elseif ( '' == $new && $old ) {
@@ -537,5 +535,4 @@ function cmb_force_send( $args ) {
     return $args;
 
 }
-
 // End. That's it, folks! //

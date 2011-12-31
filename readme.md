@@ -55,7 +55,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 * Problem inserting file url inside field for image with caption (issue #50)
 * `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31)
-* Metabox container WYSIWYG editor cannot be moved (this is a TinyMCE issue)
+* Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
 
 ## To-do
 * Fix known issues (above)

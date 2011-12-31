@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
 
 	$('.cmb_upload_button').live('click', function() {
 		formfield = $(this).prev('input').attr('name');
-		buttonLabel = "Use as " + $('label[for=' + formfield + ']').text();
+		buttonLabel = 'Use as ' + $('label[for=' + formfield + ']').text();
 		tb_show('', 'media-upload.php?post_id=' + pID + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
 		return false;
 	});
@@ -75,11 +75,8 @@ jQuery(document).ready(function($) {
 	        }
          
 			var image = /(^.*\.jpg|jpeg|png|gif|ico*)/gi;
-			var document = /(^.*\.pdf|doc|docx|ppt|pptx|odt|psd|eps|ai*)/gi;
-			var audio = /(^.*\.mp3|m4a|ogg|wav*)/gi;
-			var video = /(^.*\.mp4|m4v|mov|wmv|avi|mpg|ogv|3gp|3g2*)/gi;
         
-			if (itemurl.match(image)) {
+			if ( itemurl.match( image ) ) {
 			 	uploadStatus = '<div class="img_status"><img src="'+itemurl+'" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
 			} else {
 				// No output preview if it's not an image
