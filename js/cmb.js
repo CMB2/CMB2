@@ -83,7 +83,7 @@ jQuery(document).ready(function ($) {
 				itemid = ""; // TO DO: Get ID for non-image attachments.
 			}
 
-			image = /(^.*\.jpg|jpeg|png|gif|ico*)/gi;
+			image = /(jpe?g|png|gif|ico)$/gi;
 
 			if (itemurl.match(image)) {
 				uploadStatus = '<div class="img_status"><img src="' + itemurl + '" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
