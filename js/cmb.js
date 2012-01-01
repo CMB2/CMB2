@@ -1,4 +1,13 @@
-/*jslint browser: true, devel: true, indent: 4, maxerr: 100, sub: true */
+/**
+ * Controls the behaviours of custom metabox fields.
+ *
+ * @author Andrew Norcross
+ * @author Jared Atchison
+ * @author Bill Erickson
+ * @see    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+ */
+
+/*jslint browser: true, devel: true, indent: 4, maxerr: 50, sub: true */
 /*global jQuery, tb_show, tb_remove */
 
 /**
@@ -7,9 +16,7 @@
 jQuery(document).ready(function ($) {
 	'use strict';
 
-	var formfield,
-		pID = $('#post_ID').val(),
-		uploadStatus = true;
+	var formfield;
 
 	/**
 	 * Initialize timepicker (this will be moved inline in a future release)
@@ -48,7 +55,7 @@ jQuery(document).ready(function ($) {
 		var buttonLabel, tb_show;
 		formfield = $(this).prev('input').attr('name');
 		buttonLabel = 'Use as ' + $('label[for=' + formfield + ']').text();
-		tb_show('', 'media-upload.php?post_id=' + pID + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
+		tb_show('', 'media-upload.php?post_id=' + $('#post_ID').val() + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
 		return false;
 	});
 
@@ -63,7 +70,7 @@ jQuery(document).ready(function ($) {
 	window.original_send_to_editor = window.send_to_editor;
     window.send_to_editor = function (html) {
 		var itemurl, itemclass, itemClassBits, itemid, htmlBits, itemtitle,
-			image;
+			image, uploadStatus = true;
 
 		if (formfield) {
 
