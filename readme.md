@@ -66,6 +66,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * add ability to mark fields as required
 * support for multiple configurable timepickers
 * move timepicker and datepicker jQuery inline
+* repeatable fields
 * look at possiblity of tabs
 
 ## Changelog
@@ -80,6 +81,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Fixed multicheck issues (issue #48), props @jaredatch
 * Use $pagenow instead of custom $current_page, props @jaredatch
 * Fixed jQuery UI datepicker CSS conflicting with WordPress UI elements, props @jaredatch
+* Fixed zeros not saving in fields, props @GaryJones
+* jQuery clean-up and reoganization, props @GaryJones
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

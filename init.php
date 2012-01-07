@@ -427,7 +427,7 @@ class cmb_Meta_Box {
 						add_post_meta( $post_id, $name, $add_new, false );
 					}
 				}			
-			} elseif ( $new && $new != $old ) {
+			} elseif ( '' !== $new && $new != $old  ) {
 				update_post_meta( $post_id, $name, $new );
 			} elseif ( '' == $new && $old ) {
 				delete_post_meta( $post_id, $name, $old );
