@@ -198,7 +198,7 @@ class cmb_Meta_Box {
 			switch ( $field['type'] ) {
 
 				case 'text':
-					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" style="width:97%" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta != '' ? $meta : $field['std'], '" style="width:97%" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'text_small':
 					echo '<input class="cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -429,7 +429,7 @@ class cmb_Meta_Box {
 				}			
 			} elseif ( '' !== $new && $new != $old  ) {
 				update_post_meta( $post_id, $name, $new );
-			} elseif ( '' == $new && $old ) {
+			} elseif ( '' == $new ) {
 				delete_post_meta( $post_id, $name, $old );
 			}
 			
