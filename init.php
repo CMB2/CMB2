@@ -346,7 +346,7 @@ class cmb_Meta_Box {
 							$check_image = preg_match( '/(^.*\.jpg|jpeg|png|gif|ico*)/i', $meta );
 							if ( $check_image ) {
 								echo '<div class="img_status">';
-								echo '<img src="', $meta, '" alt="" />';
+								echo '<img src="', $meta, '" style="max-width: 100%" alt="" />';
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
 								echo '</div>';
 							} else {
