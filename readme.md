@@ -60,6 +60,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 ## To-do
 * Fix known issues (above)
 * datepicker timepicker combo field type
+* preserve taxonomy hierarchies
 * improve inline documentation
 * clean up code
 * add ability to save fields in a single custom field
@@ -83,6 +84,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Fixed jQuery UI datepicker CSS conflicting with WordPress UI elements, props @jaredatch
 * Fixed zeros not saving in fields, props @GaryJones
 * jQuery clean-up and reoganization, props @GaryJones
+* Fixed improper labels on radio and multicheck fields, props @jaredatch
+* Fixed fields not rendering properly when in sidebar, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

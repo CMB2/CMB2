@@ -108,7 +108,7 @@ function be_sample_metaboxes( array $meta_boxes ) {
 			array(
 				'name'    => 'Test Radio inline',
 				'desc'    => 'field description (optional)',
-				'id'      => $prefix . 'test_radio',
+				'id'      => $prefix . 'test_radio_inline',
 				'type'    => 'radio_inline',
 				'options' => array(
 					array( 'name' => 'Option One', 'value' => 'standard', ),
