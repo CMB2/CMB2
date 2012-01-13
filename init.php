@@ -43,7 +43,6 @@ foreach ( $meta_boxes as $meta_box ) {
  * Define ALL validation methods inside this class and use the names of these 
  * methods in the definition of meta boxes (key 'validate_func' of each field)
  */
-
 class cmb_Meta_Box_Validate {
 	function check_text( $text ) {
 		if ($text != 'hello') {
@@ -53,17 +52,19 @@ class cmb_Meta_Box_Validate {
 	}
 }
 
-/*
- * url to load local resources.
+/**
+ * CMB_META_BOX_URL
+ *
+ * Defines the url to which is used to load local resources.
+ * This may need to be filtered for local Window installtions.
+ * If resources to not load, please check the wiki for details.
  */
-
-define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( _FILE_ ) ) ) ) );
+define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( __FILE__ ) ) ) ) );
 
 
 /**
  * Create meta boxes
  */
-
 class cmb_Meta_Box {
 	protected $_meta_box;
 
@@ -477,7 +478,6 @@ class cmb_Meta_Box {
 /**
  * Adding scripts and styles
  */
-
 function cmb_scripts( $hook ) {
   	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
