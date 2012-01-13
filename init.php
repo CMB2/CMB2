@@ -212,6 +212,12 @@ class cmb_Meta_Box {
 				case 'text_date_timestamp':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+
+				case 'text_datetime_timestamp':
+					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '[date]" id="', $field['id'], '_date" value="', '' !== $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" />';
+					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '[time]" id="', $field['id'], '_time" value="', '' !== $meta ? date( 'h:i A', $meta ) : $field['std'], '" /><span class="cmb_metabox_description" >', $field['desc'], '</span>';
+					break;
+
 				case 'text_time':
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;					
@@ -356,7 +362,7 @@ class cmb_Meta_Box {
 							$check_image = preg_match( '/(^.*\.jpg|jpeg|png|gif|ico*)/i', $meta );
 							if ( $check_image ) {
 								echo '<div class="img_status">';
-								echo '<img src="', $meta, '" style="max-width: 100%" alt="" />';
+								echo '<img src="', $meta, '" alt="" />';
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
 								echo '</div>';
 							} else {
@@ -420,6 +426,11 @@ class cmb_Meta_Box {
 			
 			if ( $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
+			}
+
+			if ( $field['type'] == 'text_datetime_timestamp' ) {
+				$string = $new['date'] . ' ' . $new['time'];
+				$new = strtotime( $string );
 			}
 			
 			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);			

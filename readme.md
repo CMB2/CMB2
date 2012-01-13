@@ -25,7 +25,8 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * text medium
 * text money
 * date picker
-* date picker timestamp
+* date picker (unix timestamp)
+* date time picker combo (unix timestamp)
 * time picker
 * textarea
 * textarea small
@@ -59,8 +60,6 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## To-do
 * Fix known issues (above)
-* datepicker timepicker combo field type
-* preserve taxonomy hierarchies
 * improve inline documentation
 * clean up code
 * add ability to save fields in a single custom field
@@ -69,6 +68,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * move timepicker and datepicker jQuery inline
 * repeatable fields
 * look at possiblity of tabs
+* preserve taxonomy hierarchies
 
 ## Changelog
 
@@ -86,6 +86,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * jQuery clean-up and reoganization, props @GaryJones
 * Fixed improper labels on radio and multicheck fields, props @jaredatch
 * Fixed fields not rendering properly when in sidebar, props @jaredatch
+* Added date time combo picker, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

@@ -59,6 +59,12 @@ function be_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_date_timestamp',
 			),
 			array(
+				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_datetime_timestamp',
+				'type' => 'text_datetime_timestamp',
+			),
+			array(
 	            'name' => 'Test Time',
 	            'desc' => 'field description (optional)',
 	            'id'   => $prefix . 'test_time',
