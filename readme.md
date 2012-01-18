@@ -28,6 +28,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * date picker (unix timestamp)
 * date time picker combo (unix timestamp)
 * time picker
+* color picker
 * textarea
 * textarea small
 * textarea code
@@ -87,6 +88,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Fixed improper labels on radio and multicheck fields, props @jaredatch
 * Fixed fields not rendering properly when in sidebar, props @jaredatch
 * Added date time combo picker, props @jaredatch
+* Added color picker, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross

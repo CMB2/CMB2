@@ -62,7 +62,7 @@ function be_sample_metaboxes( array $meta_boxes ) {
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_datetime_timestamp',
-				'type' => 'text_datetime_timestamp',
+				'type' => 'text_datetime',
 			),
 			array(
 	            'name' => 'Test Time',
@@ -76,6 +76,13 @@ function be_sample_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'test_textmoney',
 				'type' => 'text_money',
 			),
+			array(
+	            'name' => 'Test Color Picker',
+	            'desc' => 'field description (optional)',
+	            'id'   => $prefix . 'test_colorpicker',
+	            'type' => 'colorpicker',
+				'std'  => '#ffffff'
+	        ),
 			array(
 				'name' => 'Test Text Area',
 				'desc' => 'field description (optional)',

@@ -53,14 +53,11 @@ class cmb_Meta_Box_Validate {
 }
 
 /**
- * CMB_META_BOX_URL
- *
  * Defines the url to which is used to load local resources.
- * This may need to be filtered for local Window installtions.
+ * This may need to be filtered for local Window installations.
  * If resources to not load, please check the wiki for details.
  */
 define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( __FILE__ ) ) ) ) );
-
 
 /**
  * Create meta boxes
@@ -219,12 +216,14 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '[date]" id="', $field['id'], '_date" value="', '' !== $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" />';
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '[time]" id="', $field['id'], '_time" value="', '' !== $meta ? date( 'h:i A', $meta ) : $field['std'], '" /><span class="cmb_metabox_description" >', $field['desc'], '</span>';
 					break;
-
 				case 'text_time':
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;					
 				case 'text_money':
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					break;
+				case 'text_colorpicker':
+					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10">', '' !== $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
@@ -481,10 +480,10 @@ class cmb_Meta_Box {
 function cmb_scripts( $hook ) {
   	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox' ) );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'farbtastic' ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );
-		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', array( 'thickbox' ) );
+		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', array( 'thickbox', 'farbtastic' ) );
 		wp_enqueue_style( 'cmb-styles' );
   	}
 }
