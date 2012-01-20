@@ -61,35 +61,35 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## To-do
 * Fix known issues (above)
-* improve inline documentation
 * clean up code
+* improve inline documentation
+* move timepicker and datepicker jQuery inline
+* support for multiple configurable timepickers/datepickers
 * add ability to save fields in a single custom field
 * add ability to mark fields as required
-* support for multiple configurable timepickers
-* move timepicker and datepicker jQuery inline
+* add ability to define `placeholder` text
 * repeatable fields
 * look at possiblity of tabs
-* preserve taxonomy hierarchies
-* add ability to define `placeholder` text
+* look at preserving taxonomy hierarchies
 
 ## Changelog
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
-* Use jQuery UI datepicker packaged with 3.3 core, props @jaredatch
-* Fixed bug where datepicker triggers extra space after footer in Firefox (issue #14), props @jaredatch
-* Tweaked CSS, removed inline styles, now all in style.css, props @jaredatch
-* Clean up scripts being queued. props @jaredatch
-* Added readme.md markdown file, props @jaredatch
-* Fixed multicheck issues (issue #48), props @jaredatch
+* Cleaned up scripts being queued. props @jaredatch
+* Cleaned up and reoganized jQuery, props @GaryJones
 * Use $pagenow instead of custom $current_page, props @jaredatch
+* Fixed CSS, removed inline styles, now all in style.css, props @jaredatch
+* Fixed multicheck issues (issue #48), props @jaredatch
 * Fixed jQuery UI datepicker CSS conflicting with WordPress UI elements, props @jaredatch
 * Fixed zeros not saving in fields, props @GaryJones
-* jQuery clean-up and reoganization, props @GaryJones
 * Fixed improper labels on radio and multicheck fields, props @jaredatch
 * Fixed fields not rendering properly when in sidebar, props @jaredatch
+* Fixed bug where datepicker triggers extra space after footer in Firefox (issue #14), props @jaredatch
+* Added jQuery UI datepicker packaged with 3.3 core, props @jaredatch
 * Added date time combo picker, props @jaredatch
 * Added color picker, props @jaredatch
+* Added readme.md markdown file, props @jaredatch
 
 ### 0.8
 * Added jQuery timepicker, props @norcross
