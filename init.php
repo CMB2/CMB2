@@ -5,7 +5,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.8
+Version: 		0.9
 */
 
 /**
