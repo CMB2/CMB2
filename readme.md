@@ -74,6 +74,9 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.0
+* 
+
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
 * Cleaned up scripts being queued, props @jaredatch

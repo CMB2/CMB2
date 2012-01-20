@@ -107,7 +107,7 @@ class cmb_Meta_Box {
 		$this->_meta_box['show_on'] = empty( $this->_meta_box['show_on'] ) ? array('key' => false, 'value' => false) : $this->_meta_box['show_on'];
 		
 		foreach ( $this->_meta_box['pages'] as $page ) {
-			if( apply_filters( 'cmb_show_on', false, $this->_meta_box ) )
+			if( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
 		}
 	}
