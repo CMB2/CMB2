@@ -70,6 +70,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * repeatable fields
 * look at possiblity of tabs
 * preserve taxonomy hierarchies
+* add ability to define `placeholder` text
 
 ## Changelog
 
