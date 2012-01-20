@@ -6,7 +6,7 @@
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 
-**Version**: 0.9   
+**Version**: 1.0 trunk   
 **Requires at least**: 3.3  
 **Tested up to**: 3.3  
 **License**: GPLv2  
