@@ -6,7 +6,7 @@
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 
-**Version**: 0.9 trunk   
+**Version**: 0.9   
 **Requires at least**: 3.3  
 **Tested up to**: 3.3  
 **License**: GPLv2  
@@ -76,8 +76,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
-* Cleaned up scripts being queued. props @jaredatch
-* Cleaned up and reoganized jQuery, props @GaryJones
+* Cleaned up scripts being queued, props @jaredatch
+* Cleaned up and reorganized jQuery, props @GaryJones
 * Use $pagenow instead of custom $current_page, props @jaredatch
 * Fixed CSS, removed inline styles, now all in style.css, props @jaredatch
 * Fixed multicheck issues (issue #48), props @jaredatch
