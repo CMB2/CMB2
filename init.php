@@ -55,7 +55,7 @@ class cmb_Meta_Box_Validate {
 /**
  * Defines the url to which is used to load local resources.
  * This may need to be filtered for local Window installations.
- * If resources to not load, please check the wiki for details.
+ * If resources do not load, please check the wiki for details.
  */
 define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( __FILE__ ) ) ) ) );
 
