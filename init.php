@@ -223,7 +223,24 @@ class cmb_Meta_Box {
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'colorpicker':
-					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					if( '' !== $meta ) {
+						if( preg_match('/^(([a-fA-F0-9]){3}){1,2}$/i', $meta ) ){
+							$meta = '#' . $meta;
+						} elseif( preg_match('/^#(([a-fA-F0-9]){3}){1,2}$/i', $meta ) ) {
+						
+						} else {
+							$meta = "#";
+						}
+					} else {
+						if( preg_match('/^(([a-fA-F0-9]){3}){1,2}$/i', $field['std'] ) ){
+							$meta = '#' . $field['std'];
+						} elseif( preg_match('/^#(([a-fA-F0-9]){3}){1,2}$/i', $field['std'] ) ) {
+							$meta = $field['std'];
+						} else {
+							$meta = "#";
+						}
+					}
+					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10">', '' !== $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
