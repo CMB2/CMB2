@@ -223,23 +223,12 @@ class cmb_Meta_Box {
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'colorpicker':
-					if( '' !== $meta ) {
-						if( preg_match('/^(([a-fA-F0-9]){3}){1,2}$/i', $meta ) ){
-							$meta = '#' . $meta;
-						} elseif( preg_match('/^#(([a-fA-F0-9]){3}){1,2}$/i', $meta ) ) {
-						
-						} else {
-							$meta = "#";
-						}
-					} else {
-						if( preg_match('/^(([a-fA-F0-9]){3}){1,2}$/i', $field['std'] ) ){
-							$meta = '#' . $field['std'];
-						} elseif( preg_match('/^#(([a-fA-F0-9]){3}){1,2}$/i', $field['std'] ) ) {
-							$meta = $field['std'];
-						} else {
-							$meta = "#";
-						}
-					}
+					$meta = '' !== $meta ? $meta : $field['std'];
+					$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
+					if ( preg_match( '/^' . $hex_color . '/i', $meta ) ) // Value is just 123abc, so prepend #.
+						$meta = '#' . $meta;
+					elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta ) ) // Value doesn't match #123abc, so sanitize to just #.
+						$meta = "#";
 					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
