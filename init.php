@@ -241,6 +241,7 @@ class cmb_Meta_Box {
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" class="cmb_textarea_code">', '' !== $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;					
 				case 'select':
+					if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 					foreach ($field['options'] as $option) {
 						echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
