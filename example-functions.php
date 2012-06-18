@@ -62,7 +62,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_datetime_timestamp',
-				'type' => 'text_datetime',
+				'type' => 'text_datetime_timestamp',
 			),
 			array(
 	            'name' => 'Test Time',
