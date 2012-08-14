@@ -334,6 +334,8 @@ class cmb_Meta_Box {
 						}
 						echo' /><label>', $term->name , '</label></li>';
 					}
+					echo '</ul>';
+					echo '<span class="cmb_metabox_description">', $field['desc'], '</span>';
 				break;
 				case 'file_list':
 					echo '<input class="cmb_upload_file" type="text" size="36" name="', $field['id'], '" value="" />';

@@ -155,6 +155,13 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'taxonomy' => '', // Taxonomy Slug
 			),
 			array(
+				'name'		=> 'Test Taxonomy Multi Checkbox',
+				'desc'		=> 'field description (optional)',
+				'id'		=> $prefix . 'test_multitaxonomy',
+				'type'		=> 'taxonomy_multicheck',
+				'taxonomy'	=> '', // Taxonomy Slug
+			),
+			array(
 				'name' => 'Test Checkbox',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_checkbox',
