@@ -49,7 +49,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 This script is easy to install. If you can't figure it out you probably shouldn't be using it.
 
 1. Place `metabox` directory inside of your (activated) theme. E.g. inside `/themes/twentyten/lib/metabox/`.
-2. Include `init.php`.
+2. Include `init.php` (preferably on the 'init' WordPress hook).
 3. See `example-functions.php` for further guidance.
 4. Profit.
 
