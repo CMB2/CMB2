@@ -4,6 +4,7 @@
  * @author Andrew Norcross
  * @author Jared Atchison
  * @author Bill Erickson
+ * @author Justin Sternberg
  * @see    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
@@ -187,8 +188,6 @@ jQuery(document).ready(function ($) {
 							'cmb_ajax_nonce': window.cmb_ajax_data.ajax_nonce
 						},
 						success: function (response) {
-							console.log('response');
-							console.log(response);
 							// if we have a response id
 							if (typeof response.id !== 'undefined') {
 								// hide our spinner
