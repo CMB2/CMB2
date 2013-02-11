@@ -4,8 +4,9 @@ Script Name: 	Custom Metaboxes and Fields
 Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
+				Justin Sternberg (@jtsternberg / about.me/jtsternberg)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9
+Version: 		0.9.1
 */
 
 /**
@@ -601,7 +602,6 @@ function cmb_oembed_ajax_results() {
 	// sanitize our search string
 	$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
 
-	// if there is no search string, bail here
 	if ( empty( $oembed_string ) ) {
 		$return = '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>';
 		$found = 'not found';
@@ -610,19 +610,20 @@ function cmb_oembed_ajax_results() {
 		if ( isset( $_REQUEST['post_id'] ) )
 			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
 
-		$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. esc_url( $oembed_string ) .'[/embed]' );
+		$oembed_string = esc_url( $oembed_string );
 
-		if ( $check_embed ) {
-			$return = '<div class="embed_status">';
-			$return .= $check_embed;
-			$return .= '<a href="#" class="cmb_remove_file_button" rel="'. $_REQUEST['field_id'] .'">Remove Embed</a>';
-			$return .= '</div>';
+		$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. $oembed_string .'[/embed]' );
+		// no oEmbed fallback
+		$fallback = '<a href="' . $oembed_string . '">' . esc_html( $oembed_string ) . '</a>';
+
+		if ( $check_embed && $check_embed != $fallback ) {
+			$return = '<div class="embed_status">'. $check_embed .'<a href="#" class="cmb_remove_file_button" rel="'. $_REQUEST['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></div>';
 			// set our response id
 			$found = 'found';
 
 		} else {
-			// send back error info if no posts were found\
-			$return = '<p class="ui-state-error-text">'. __( 'No Results Found', 'cmb' ) .'</p>';
+			// send back error info when no oEmbeds were found
+			$return = '<p class="ui-state-error-text">'.sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
 			$found = 'not found';
 		}
 	}
