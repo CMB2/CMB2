@@ -42,6 +42,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * multicheck
 * WYSIWYG/TinyMCE
 * Image/file upload
+* oEmbed
 
 [More on field types (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
