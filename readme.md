@@ -5,7 +5,7 @@
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
-* Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [about.me/jtsternberg](http://about.me/jtsternberg) )
+* Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
 **Version**: 0.9.1
 **Requires at least**: 3.3
