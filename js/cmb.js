@@ -4,6 +4,7 @@
  * @author Andrew Norcross
  * @author Jared Atchison
  * @author Bill Erickson
+ * @author Justin Sternberg
  * @see    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
@@ -41,7 +42,7 @@ jQuery(document).ready(function ($) {
 	});
 	// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 	$("#ui-datepicker-div").wrap('<div class="cmb_element" />');
-	
+
 	/**
 	 * Initialize color picker
 	 */
@@ -116,7 +117,7 @@ jQuery(document).ready(function ($) {
 
 			$('#' + formfield).val(itemurl);
 			$('#' + formfield + '_id').val(itemid);
-			$('#' + formfield).siblings('.cmb_upload_status').slideDown().html(uploadStatus);
+			$('#' + formfield).siblings('.cmb_media_status').slideDown().html(uploadStatus);
 			tb_remove();
 
 		} else {
@@ -125,4 +126,80 @@ jQuery(document).ready(function ($) {
 
 		formfield = '';
 	};
+
+	/**
+	 * Ajax oEmbed display
+	 */
+
+	// ajax on paste
+	$('.cmb_oembed').bind('paste', function (e) {
+		var pasteitem = $(this);
+		// paste event is fired before the value is filled, so wait a bit
+		setTimeout(function () {
+			// fire our ajax function
+			doCMBajax(pasteitem, 'paste');
+		}, 100);
+	}).blur(function () {
+		// when leaving the input
+		setTimeout(function () {
+			// if it's been 2 seconds, hide our spinner
+			$('.postbox table.cmb_metabox .cmb-spinner').hide();
+		}, 2000);
+	});
+
+	// ajax when typing
+	$('.cmb_metabox').on('keyup', '.cmb_oembed', function (event) {
+		// fire our ajax function
+		doCMBajax($(this), event);
+	});
+
+	// function for running our ajax
+	function doCMBajax(obj, e) {
+		// get typed value
+		var oembed_url = obj.val();
+		// only proceed if the field contains more than 6 characters
+		if (oembed_url.length < 6)
+			return;
+
+		// only proceed if the user has pasted, pressed a number, letter, or whitelisted characters
+		if (e === 'paste' || e.which <= 90 && e.which >= 48 || e.which >= 96 && e.which <= 111 || e.which == 8 || e.which == 9 || e.which == 187 || e.which == 190) {
+
+			// get field id
+			var field_id = obj.attr('id');
+			// get our inputs context for pinpointing
+			var context = obj.parents('.cmb_metabox tr td');
+			// show our spinner
+			$('.cmb-spinner', context).show();
+			// clear out previous results
+			$('.embed_wrap', context).html('');
+			// and run our ajax function
+			setTimeout(function () {
+				// if they haven't typed in 500 ms
+				if ($('.cmb_oembed:focus').val() == oembed_url) {
+					$.ajax({
+						type : 'post',
+						dataType : 'json',
+						url : window.ajaxurl,
+						data : {
+							'action': 'cmb_oembed_handler',
+							'oembed_url': oembed_url,
+							'field_id': field_id,
+							'post_id': window.cmb_ajax_data.post_id,
+							'cmb_ajax_nonce': window.cmb_ajax_data.ajax_nonce
+						},
+						success: function (response) {
+							// if we have a response id
+							if (typeof response.id !== 'undefined') {
+								// hide our spinner
+								$('.cmb-spinner', context).hide();
+								// and populate our results from ajax response
+								$('.embed_wrap', context).html(response.result);
+							}
+						}
+					});
+				}
+			}, 500);
+		}
+	}
+
 });

@@ -191,6 +191,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'test_image',
 				'type' => 'file',
 			),
+			array(
+				'name' => 'oEmbed',
+				'desc' => 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.',
+				'id'   => $prefix . 'test_embed',
+				'type' => 'oembed',
+			),
 		),
 	);
 
