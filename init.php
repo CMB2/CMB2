@@ -511,7 +511,7 @@ class cmb_Meta_Box {
 function cmb_scripts( $hook ) {
   	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'farbtastic' ) );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'farbtastic' ), '0.9.1' );
 		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => get_the_ID() ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );
@@ -607,23 +607,25 @@ function cmb_oembed_ajax_results() {
 		$found = 'not found';
 	} else {
 
+		$oembed_url = esc_url( $oembed_string );
+		// Post ID is needed to check for embeds
 		if ( isset( $_REQUEST['post_id'] ) )
 			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
-
-		$oembed_string = esc_url( $oembed_string );
-
-		$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. $oembed_string .'[/embed]' );
-		// no oEmbed fallback
-		$fallback = '<a href="' . $oembed_string . '">' . esc_html( $oembed_string ) . '</a>';
+		// ping WordPress for an embed
+		$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
+		// fallback that WordPress creates when no oEmbed was found
+		$fallback = '<a href="' . $oembed_url . '">' . esc_html( $oembed_url ) . '</a>';
 
 		if ( $check_embed && $check_embed != $fallback ) {
+			// Embed data
 			$return = '<div class="embed_status">'. $check_embed .'<a href="#" class="cmb_remove_file_button" rel="'. $_REQUEST['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></div>';
 			// set our response id
 			$found = 'found';
 
 		} else {
-			// send back error info when no oEmbeds were found
+			// error info when no oEmbeds were found
 			$return = '<p class="ui-state-error-text">'.sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
+			// set our response id
 			$found = 'not found';
 		}
 	}
