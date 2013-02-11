@@ -7,9 +7,9 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [about.me/jtsternberg](http://about.me/jtsternberg) )
 
-**Version**: 0.9
+**Version**: 0.9.1
 **Requires at least**: 3.3
-**Tested up to**: 3.3
+**Tested up to**: 3.5
 **License**: GPLv2
 
 ## Description
@@ -75,6 +75,9 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * look at preserving taxonomy hierarchies
 
 ## Changelog
+
+### 0.9.1
+* Added 'oEmbed' field type with ajax display, props @jtsternberg
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
