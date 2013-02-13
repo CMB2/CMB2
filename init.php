@@ -607,14 +607,16 @@ function cmb_oembed_ajax_results() {
 		$found = 'not found';
 	} else {
 
+		global $wp_embed;
+
 		$oembed_url = esc_url( $oembed_string );
 		// Post ID is needed to check for embeds
 		if ( isset( $_REQUEST['post_id'] ) )
 			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
 		// ping WordPress for an embed
-		$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
+		$check_embed = $wp_embed->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
 		// fallback that WordPress creates when no oEmbed was found
-		$fallback = '<a href="' . $oembed_url . '">' . esc_html( $oembed_url ) . '</a>';
+		$fallback = $wp_embed->maybe_make_link( $oembed_url );
 
 		if ( $check_embed && $check_embed != $fallback ) {
 			// Embed data
