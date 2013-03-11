@@ -37,6 +37,12 @@ table.cmb_metabox .cmb_media_status .img_status .cmb_remove_file_button, table.c
 .inner-sidebar table.cmb_metabox .cmb_media_status .img_status img, .inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img { width: 90%; }
 .postbox table.cmb_metabox .cmb-spinner { float: left; }
 /**
+ * Color picker
+ */
+table.cmb_metabox .wp-color-result, table.cmb_metabox .wp-picker-input-wrap { vertical-align: middle; }
+table.cmb_metabox .wp-color-result, table.cmb_metabox .wp-picker-container { margin: 0 10px 0 0; }
+
+/**
  * Timepicker
  */
 div.time-picker { position: absolute; height: 191px; width:6em; /* needed for IE */overflow: auto; background: #fff; border: 1px solid #aaa; z-index: 99; margin: 0;}
