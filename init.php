@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.1
+Version: 		0.9.2
 */
 
 /**
@@ -441,6 +441,12 @@ class cmb_Meta_Box {
 			return $post_id;
 		}
 
+		// get the post types applied to the metabox group
+		// and compare it to the post type of the content
+		$post_type = get_post_type($post_id);
+		$meta_type = $this->_meta_box['pages'];
+		$type_comp = in_array($post_type, $meta_type) ? true : false;
+
 		foreach ( $this->_meta_box['fields'] as $field ) {
 			$name = $field['id'];
 
@@ -450,7 +456,7 @@ class cmb_Meta_Box {
 			$old = get_post_meta( $post_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
 
-			if ( in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {
+			if ( $type_comp == true && in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {
 				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
 			}
 
@@ -462,11 +468,11 @@ class cmb_Meta_Box {
 				$new = htmlspecialchars_decode( $new );
 			}
 
-			if ( $field['type'] == 'text_date_timestamp' ) {
+			if ( $type_comp == true && $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
 
-			if ( $field['type'] == 'text_datetime_timestamp' ) {
+			if ( $type_comp == true && $field['type'] == 'text_datetime_timestamp' ) {
 				$string = $new['date'] . ' ' . $new['time'];
 				$new = strtotime( $string );
 			}
