@@ -1,6 +1,9 @@
 /**
  * CMB Styling
  */
+#side-sortables table.cmb_metabox { display: block; width: 100% }
+#side-sortables table.cmb_metabox input.cmb_text_medium { width: 100%; }
+
 table.cmb_metabox td, table.cmb_metabox th { border-bottom: 1px solid #E9E9E9; }
 table.cmb_metabox th { text-align: right; font-weight:bold;}
 table.cmb_metabox th label { margin-top:5px; display:block;}
