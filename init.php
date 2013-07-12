@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.2
+Version: 		0.9.3
 */
 
 /**
@@ -190,7 +190,7 @@ class cmb_Meta_Box {
 
 			$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
-			echo '<tr>';
+			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) .'">';
 
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
