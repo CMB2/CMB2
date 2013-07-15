@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.3
+Version: 		0.9.4
 */
 
 /**
@@ -201,6 +201,8 @@ class cmb_Meta_Box {
 				echo '<td>';
 			}
 
+			echo empty( $field['before'] ) ? '' : $field['before'];
+
 			switch ( $field['type'] ) {
 
 				case 'text':
@@ -227,7 +229,7 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'text_money':
-					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'colorpicker':
 					$meta = '' !== $meta ? $meta : $field['std'];
@@ -413,6 +415,8 @@ class cmb_Meta_Box {
 				default:
 					do_action('cmb_render_' . $field['type'] , $field, $meta);
 			}
+
+			echo empty( $field['after'] ) ? '' : $field['after'];
 
 			echo '</td>','</tr>';
 		}

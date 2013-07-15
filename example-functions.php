@@ -71,10 +71,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	            'type' => 'text_time',
 	        ),
 			array(
-				'name' => 'Test Money',
-				'desc' => 'field description (optional)',
-				'id'   => $prefix . 'test_textmoney',
-				'type' => 'text_money',
+				'name'   => 'Test Money',
+				'desc'   => 'field description (optional)',
+				'id'     => $prefix . 'test_textmoney',
+				'type'   => 'text_money',
+				// 'before' => '£'; // override '$' symbol if needed
 			),
 			array(
 	            'name' => 'Test Color Picker',
