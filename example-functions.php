@@ -62,7 +62,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_datetime_timestamp',
-				'type' => 'text_datetime',
+				'type' => 'text_datetime_timestamp',
 			),
 			array(
 	            'name' => 'Test Time',
@@ -155,6 +155,13 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'taxonomy' => '', // Taxonomy Slug
 			),
 			array(
+				'name'		=> 'Test Taxonomy Multi Checkbox',
+				'desc'		=> 'field description (optional)',
+				'id'		=> $prefix . 'test_multitaxonomy',
+				'type'		=> 'taxonomy_multicheck',
+				'taxonomy'	=> '', // Taxonomy Slug
+			),
+			array(
 				'name' => 'Test Checkbox',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_checkbox',
@@ -183,6 +190,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'Upload an image or enter an URL.',
 				'id'   => $prefix . 'test_image',
 				'type' => 'file',
+			),
+			array(
+				'name' => 'oEmbed',
+				'desc' => 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.',
+				'id'   => $prefix . 'test_embed',
+				'type' => 'oembed',
 			),
 		),
 	);

@@ -5,11 +5,12 @@
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
+* Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
-**Version**: 1.0 trunk   
-**Requires at least**: 3.3  
-**Tested up to**: 3.3  
-**License**: GPLv2  
+**Version**: 0.9.3
+**Requires at least**: 3.3
+**Tested up to**: 3.6
+**License**: GPLv2
 
 ## Description
 
@@ -33,7 +34,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * textarea small
 * textarea code
 * select
-* radio 
+* radio
 * radio inline
 * taxonomy radio
 * taxonomy select
@@ -41,15 +42,16 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * multicheck
 * WYSIWYG/TinyMCE
 * Image/file upload
+* oEmbed
 
-[More on field types (GitHub wiki)](github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
+[More on field types (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
 ## Installation
 
 This script is easy to install. If you can't figure it out you probably shouldn't be using it.
 
 1. Place `metabox` directory inside of your (activated) theme. E.g. inside `/themes/twentyten/lib/metabox/`.
-2. Include `init.php`.
+2. Include `init.php` (preferably on the 'init' WordPress hook).
 3. See `example-functions.php` for further guidance.
 4. Profit.
 
@@ -74,8 +76,14 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
-### 1.0
-* 
+### 0.9.3
+* Added field type and field id classes to each cmb table row, props @jtsternberg
+
+### 0.9.2
+* Added post type comparison to prevent storing null values for taxonomy selectors, props @norcross
+
+### 0.9.1
+* Added 'oEmbed' field type with ajax display, props @jtsternberg
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
@@ -113,12 +121,12 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Added the ability to limit metaboxes to certain posts by id. props @billerickson
 
 ### 0.5
-* Fixed define to prevent notices. props @destos 
-* Added text_date_timestap option. props @andrewyno 
-* Fixed WYSIWYG paragraph breaking/spacing bug. props @wpsmith 
+* Fixed define to prevent notices. props @destos
+* Added text_date_timestap option. props @andrewyno
+* Fixed WYSIWYG paragraph breaking/spacing bug. props @wpsmith
 * Added taxonomy_radio and taxonomies_select options. props @c3mdigital
 * Fixed script causing the dashboard widgets to not be collapsible.
-* Fixed various spacing and whitespace inconsistencies 
+* Fixed various spacing and whitespace inconsistencies
 
 ### 0.4
-* Think we have a release that is mostly working. We'll say the initial release :) 
+* Think we have a release that is mostly working. We'll say the initial release :)

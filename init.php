@@ -4,8 +4,9 @@ Script Name: 	Custom Metaboxes and Fields
 Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Jared Atchison (@jaredatch / jaredatchison.com)
 				Bill Erickson (@billerickson / billerickson.net)
+				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.8
+Version: 		0.9.3
 */
 
 /**
@@ -20,7 +21,7 @@ Version: 		0.8
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,7 +41,7 @@ foreach ( $meta_boxes as $meta_box ) {
 
 /**
  * Validate value of meta fields
- * Define ALL validation methods inside this class and use the names of these 
+ * Define ALL validation methods inside this class and use the names of these
  * methods in the definition of meta boxes (key 'validate_func' of each field)
  */
 class cmb_Meta_Box_Validate {
@@ -55,9 +56,15 @@ class cmb_Meta_Box_Validate {
 /**
  * Defines the url to which is used to load local resources.
  * This may need to be filtered for local Window installations.
- * If resources to not load, please check the wiki for details.
+ * If resources do not load, please check the wiki for details.
  */
-define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( __FILE__ ) ) ) ) );
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+       //winblows
+    define( 'CMB_META_BOX_URL', trailingslashit( str_replace( DIRECTORY_SEPARATOR, '/', str_replace( str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR ), WP_CONTENT_URL, dirname(__FILE__) ) ) ) );
+
+} else {
+    define( 'CMB_META_BOX_URL', apply_filters( 'cmb_meta_box_url', trailingslashit( str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, dirname( __FILE__ ) ) ) ) );
+}
 
 /**
  * Create meta boxes
@@ -77,8 +84,8 @@ class cmb_Meta_Box {
 				break;
 			}
 		}
-		
-		global $pagenow;		
+
+		global $pagenow;
 		if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) ) {
 			add_action( 'admin_head', array( &$this, 'add_post_enctype' ) );
 		}
@@ -105,33 +112,33 @@ class cmb_Meta_Box {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
 		$this->_meta_box['show_on'] = empty( $this->_meta_box['show_on'] ) ? array('key' => false, 'value' => false) : $this->_meta_box['show_on'];
-		
+
 		foreach ( $this->_meta_box['pages'] as $page ) {
 			if( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
 		}
 	}
-	
+
 	/**
 	 * Show On Filters
 	 * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
 	 * Below you can limit it by ID and page template
 	 */
-	 
-	// Add for ID 
+
+	// Add for ID
 	function add_for_id( $display, $meta_box ) {
 		if ( 'id' !== $meta_box['show_on']['key'] )
 			return $display;
 
-		// If we're showing it based on ID, get the current ID					
+		// If we're showing it based on ID, get the current ID
 		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
 		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
 		if( !isset( $post_id ) )
 			return false;
-		
-		// If value isn't an array, turn it into one	
+
+		// If value isn't an array, turn it into one
 		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
-		
+
 		// If current page id is in the included array, display the metabox
 
 		if ( in_array( $post_id, $meta_box['show_on']['value'] ) )
@@ -139,21 +146,21 @@ class cmb_Meta_Box {
 		else
 			return false;
 	}
-	
+
 	// Add for Page Template
 	function add_for_page_template( $display, $meta_box ) {
 		if( 'page-template' !== $meta_box['show_on']['key'] )
 			return $display;
-			
+
 		// Get the current ID
 		if( isset( $_GET['post'] ) ) $post_id = $_GET['post'];
 		elseif( isset( $_POST['post_ID'] ) ) $post_id = $_POST['post_ID'];
 		if( !( isset( $post_id ) || is_page() ) ) return false;
-			
+
 		// Get current template
 		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
-		
-		// If value isn't an array, turn it into one	
+
+		// If value isn't an array, turn it into one
 		$meta_box['show_on']['value'] = !is_array( $meta_box['show_on']['value'] ) ? array( $meta_box['show_on']['value'] ) : $meta_box['show_on']['value'];
 
 		// See if there's a match
@@ -162,7 +169,7 @@ class cmb_Meta_Box {
 		else
 			return false;
 	}
-	
+
 	// Show fields
 	function show() {
 
@@ -179,21 +186,21 @@ class cmb_Meta_Box {
 			if ( !isset( $field['std'] ) ) $field['std'] = '';
 			if ( 'file' == $field['type'] && !isset( $field['allow'] ) ) $field['allow'] = array( 'url', 'attachment' );
 			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
-			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;  
-						
+			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;
+
 			$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
-			echo '<tr>';
-	
+			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) .'">';
+
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
 			} else {
 				if( $this->_meta_box['show_names'] == true ) {
 					echo '<th style="width:18%"><label for="', $field['id'], '">', $field['name'], '</label></th>';
-				}			
+				}
 				echo '<td>';
-			}		
-						
+			}
+
 			switch ( $field['type'] ) {
 
 				case 'text':
@@ -218,12 +225,18 @@ class cmb_Meta_Box {
 					break;
 				case 'text_time':
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
-					break;					
+					break;
 				case 'text_money':
 					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'colorpicker':
-					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					$meta = '' !== $meta ? $meta : $field['std'];
+					$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
+					if ( preg_match( '/^' . $hex_color . '/i', $meta ) ) // Value is just 123abc, so prepend #.
+						$meta = '#' . $meta;
+					elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta ) ) // Value doesn't match #123abc, so sanitize to just #.
+						$meta = "#";
+					echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'textarea':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10">', '' !== $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
@@ -233,8 +246,9 @@ class cmb_Meta_Box {
 					break;
 				case 'textarea_code':
 					echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" class="cmb_textarea_code">', '' !== $meta ? $meta : $field['std'], '</textarea>','<p class="cmb_metabox_description">', $field['desc'], '</p>';
-					break;					
+					break;
 				case 'select':
+					if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 					foreach ($field['options'] as $option) {
 						echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
@@ -274,12 +288,12 @@ class cmb_Meta_Box {
 					foreach ( $field['options'] as $value => $name ) {
 						// Append `[]` to the name to get multiple values
 						// Use in_array() to check whether the current option should be checked
-						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '"', in_array( $value, $meta ) ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $name, '</label></li>';	
+						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '"', in_array( $value, $meta ) ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $name, '</label></li>';
 						$i++;
 					}
 					echo '</ul>';
-					echo '<span class="cmb_metabox_description">', $field['desc'], '</span>';					
-					break;		
+					echo '<span class="cmb_metabox_description">', $field['desc'], '</span>';
+					break;
 				case 'title':
 					echo '<h5 class="cmb_metabox_title">', $field['name'], '</h5>';
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
@@ -321,12 +335,14 @@ class cmb_Meta_Box {
 					$names = wp_get_object_terms( $post->ID, $field['taxonomy'] );
 					$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 					foreach ($terms as $term) {
-						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name , '"'; 
+						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name , '"';
 						foreach ($names as $name) {
 							if ( $term->slug == $name->slug ){ echo ' checked="checked" ';};
 						}
 						echo' /><label>', $term->name , '</label></li>';
 					}
+					echo '</ul>';
+					echo '<span class="cmb_metabox_description">', $field['desc'], '</span>';
 				break;
 				case 'file_list':
 					echo '<input class="cmb_upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
@@ -356,10 +372,10 @@ class cmb_Meta_Box {
 						$input_type_url="text";
 					echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
 					echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
-					echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';					
+					echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
-					echo '<div id="', $field['id'], '_status" class="cmb_upload_status">';	
-						if ( $meta != '' ) { 
+					echo '<div id="', $field['id'], '_status" class="cmb_media_status">';
+						if ( $meta != '' ) {
 							$check_image = preg_match( '/(^.*\.jpg|jpeg|png|gif|ico*)/i', $meta );
 							if ( $check_image ) {
 								echo '<div class="img_status">';
@@ -370,16 +386,34 @@ class cmb_Meta_Box {
 								$parts = explode( '/', $meta );
 								for( $i = 0; $i < count( $parts ); ++$i ) {
 									$title = $parts[$i];
-								} 
+								}
 								echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove</a>)';
-							}	
+							}
 						}
-					echo '</div>'; 
+					echo '</div>';
 				break;
+				case 'oembed':
+					echo '<input class="cmb_oembed" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<p class="cmb-spinner spinner"></p>';
+					echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
+						if ( $meta != '' ) {
+							$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. esc_url( $meta ) .'[/embed]' );
+							if ( $check_embed ) {
+								echo '<div class="embed_status">';
+								echo $check_embed;
+								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Embed</a>';
+								echo '</div>';
+							} else {
+								echo 'URL is not a valid oEmbed URL.';
+							}
+						}
+					echo '</div>';
+					break;
+
 				default:
 					do_action('cmb_render_' . $field['type'] , $field, $meta);
 			}
-			
+
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
@@ -407,16 +441,25 @@ class cmb_Meta_Box {
 			return $post_id;
 		}
 
+		// get the post types applied to the metabox group
+		// and compare it to the post type of the content
+		$post_type = get_post_type($post_id);
+		$meta_type = $this->_meta_box['pages'];
+		$type_comp = in_array($post_type, $meta_type) ? true : false;
+
 		foreach ( $this->_meta_box['fields'] as $field ) {
-			$name = $field['id'];			
-			if ( 'multicheck' == $field['type'] ? $field['multiple'] = true : $field['multiple'] = false );      
+			$name = $field['id'];
+
+			if ( ! isset( $field['multiple'] ) )
+				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
+
 			$old = get_post_meta( $post_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
-			
-			if ( in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {	
-				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );	
+
+			if ( $type_comp == true && in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {
+				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
 			}
-			
+
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
 				$new = htmlspecialchars( $new );
 			}
@@ -424,18 +467,18 @@ class cmb_Meta_Box {
 			if ( ($field['type'] == 'textarea_code') ) {
 				$new = htmlspecialchars_decode( $new );
 			}
-			
-			if ( $field['type'] == 'text_date_timestamp' ) {
+
+			if ( $type_comp == true && $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
 			}
 
-			if ( $field['type'] == 'text_datetime_timestamp' ) {
+			if ( $type_comp == true && $field['type'] == 'text_datetime_timestamp' ) {
 				$string = $new['date'] . ' ' . $new['time'];
 				$new = strtotime( $string );
 			}
-			
-			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);			
-			
+
+			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);
+
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
 				$ok = call_user_func( array( 'cmb_Meta_Box_Validate', $field['validate_func']), $new );
@@ -443,18 +486,18 @@ class cmb_Meta_Box {
 					continue;
 				}
 			} elseif ( $field['multiple'] ) {
-				delete_post_meta( $post_id, $name );	
+				delete_post_meta( $post_id, $name );
 				if ( !empty( $new ) ) {
 					foreach ( $new as $add_new ) {
 						add_post_meta( $post_id, $name, $add_new, false );
 					}
-				}			
+				}
 			} elseif ( '' !== $new && $new != $old  ) {
 				update_post_meta( $post_id, $name, $new );
 			} elseif ( '' == $new ) {
 				delete_post_meta( $post_id, $name );
 			}
-			
+
 			if ( 'file' == $field['type'] ) {
 				$name = $field['id'] . "_id";
 				$old = get_post_meta( $post_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
@@ -469,7 +512,7 @@ class cmb_Meta_Box {
 				} elseif ( '' == $new && $old ) {
 					delete_post_meta( $post_id, $name, $old );
 				}
-			}			
+			}
 		}
 	}
 }
@@ -478,55 +521,71 @@ class cmb_Meta_Box {
  * Adding scripts and styles
  */
 function cmb_scripts( $hook ) {
-  	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
+	global $wp_version;
+	// only enqueue our scripts/styles on the proper pages
+	if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
+		// scripts required for cmb
+		$cmb_script_array = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox' );
+		// styles required for cmb
+		$cmb_style_array = array( 'thickbox' );
+		// if we're 3.5 or later, user wp-color-picker
+		if ( 3.5 <= $wp_version ) {
+			$cmb_script_array[] = 'wp-color-picker';
+			$cmb_style_array[] = 'wp-color-picker';
+		} else {
+			// otherwise use the older 'farbtastic'
+			$cmb_script_array[] = 'farbtastic';
+			$cmb_style_array[] = 'farbtastic';
+		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'farbtastic' ) );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.1' );
+		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => get_the_ID() ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );
-		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', array( 'thickbox', 'farbtastic' ) );
+		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', $cmb_style_array );
 		wp_enqueue_style( 'cmb-styles' );
-  	}
+	}
 }
 add_action( 'admin_enqueue_scripts', 'cmb_scripts', 10 );
 
 function cmb_editor_footer_scripts() { ?>
 	<?php
-	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) { 
-		$label = $_GET['cmb_send_label']; 
+	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) {
+		$label = $_GET['cmb_send_label'];
 		if ( empty( $label ) ) $label="Select File";
-		?>	
+		?>
 		<script type="text/javascript">
 		jQuery(function($) {
 			$('td.savesend input').val('<?php echo $label; ?>');
 		});
 		</script>
-		<?php 
+		<?php
 	}
 }
 add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
 
-// Force 'Insert into Post' button from Media Library 
+// Force 'Insert into Post' button from Media Library
 add_filter( 'get_media_item_args', 'cmb_force_send' );
 function cmb_force_send( $args ) {
-		
-	// if the Gallery tab is opened from a custom meta box field, add Insert Into Post button	
+
+	// if the Gallery tab is opened from a custom meta box field, add Insert Into Post button
 	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] )
 		$args['send'] = true;
-	
-	// if the From Computer tab is opened AT ALL, add Insert Into Post button after an image is uploaded	
-	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
-		
-		$args['send'] = true;		
 
-		// TO DO: Are there any conditions in which we don't want the Insert Into Post 
+	// if the From Computer tab is opened AT ALL, add Insert Into Post button after an image is uploaded
+	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
+
+		$args['send'] = true;
+
+		// TO DO: Are there any conditions in which we don't want the Insert Into Post
 		// button added? For example, if a post type supports thumbnails, does not support
 		// the editor, and does not have any cmb file inputs? If so, here's the first
 		// bits of code needed to check all that.
 		// $attachment_ancestors = get_post_ancestors( $_POST["attachment_id"] );
 		// $attachment_parent_post_type = get_post_type( $attachment_ancestors[0] );
 		// $post_type_object = get_post_type_object( $attachment_parent_post_type );
-	}		
-	
+	}
+
 	// change the label of the button on the From Computer tab
 	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
 
@@ -542,7 +601,7 @@ function cmb_force_send( $args ) {
 					else
 						return decodeURIComponent(results[1].replace(/\+/g, " "));
 				}
-							
+
 				jQuery(function($) {
 					if (cmbGetParameterByNameInline("cmb_force_send")=="true") {
 						var cmb_send_label = cmbGetParameterByNameInline("cmb_send_label");
@@ -552,8 +611,57 @@ function cmb_force_send( $args ) {
 			</script>
 		';
 	}
-	 
+
     return $args;
 
 }
+
+add_action( 'wp_ajax_cmb_oembed_handler', 'cmb_oembed_ajax_results' );
+/**
+ * Handles our oEmbed ajax request
+ */
+function cmb_oembed_ajax_results() {
+
+	// verify our nonce
+	if ( ! ( isset( $_REQUEST['cmb_ajax_nonce'], $_REQUEST['oembed_url'] ) && wp_verify_nonce( $_REQUEST['cmb_ajax_nonce'], 'ajax_nonce' ) ) )
+		die();
+
+	// sanitize our search string
+	$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
+
+	if ( empty( $oembed_string ) ) {
+		$return = '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>';
+		$found = 'not found';
+	} else {
+
+		global $wp_embed;
+
+		$oembed_url = esc_url( $oembed_string );
+		// Post ID is needed to check for embeds
+		if ( isset( $_REQUEST['post_id'] ) )
+			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
+		// ping WordPress for an embed
+		$check_embed = $wp_embed->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
+		// fallback that WordPress creates when no oEmbed was found
+		$fallback = $wp_embed->maybe_make_link( $oembed_url );
+
+		if ( $check_embed && $check_embed != $fallback ) {
+			// Embed data
+			$return = '<div class="embed_status">'. $check_embed .'<a href="#" class="cmb_remove_file_button" rel="'. $_REQUEST['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></div>';
+			// set our response id
+			$found = 'found';
+
+		} else {
+			// error info when no oEmbeds were found
+			$return = '<p class="ui-state-error-text">'.sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
+			// set our response id
+			$found = 'not found';
+		}
+	}
+
+	// send back our encoded data
+	echo json_encode( array( 'result' => $return, 'id' => $found ) );
+	die();
+}
+
 // End. That's it, folks! //
