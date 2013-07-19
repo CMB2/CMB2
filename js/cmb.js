@@ -187,6 +187,7 @@ jQuery(document).ready(function ($) {
 						data : {
 							'action': 'cmb_oembed_handler',
 							'oembed_url': oembed_url,
+							'oembed_width': obj.width(),
 							'field_id': field_id,
 							'post_id': window.cmb_ajax_data.post_id,
 							'cmb_ajax_nonce': window.cmb_ajax_data.ajax_nonce
@@ -205,5 +206,28 @@ jQuery(document).ready(function ($) {
 			}, 500);
 		}
 	}
+
+	/**
+	 * Resize oEmbed videos to fit in their respective metaboxes
+	 */
+	function resizeoEmbeds() {
+		$('table.cmb_metabox').each(function( index ) {
+			var self = $(this);
+			var tWidth = self.parents('.inside').width();
+			var newWidth = Math.round((tWidth * 0.82)*0.97) - 30;
+			if ( newWidth < 640 ) {
+				var iframe = $('.cmb-type-oembed .embed_status iframe', self);
+				var iwidth = iframe.width();
+				var iheight = iframe.height();
+				var newHeight = Math.round((newWidth * iheight)/iwidth);
+				iframe.width(newWidth).height(newHeight);
+			}
+
+		});
+	}
+	// on pageload
+	setTimeout( resizeoEmbeds, 500);
+	// and on window resize
+	$(window).on( 'resize', resizeoEmbeds );
 
 });

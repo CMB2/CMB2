@@ -546,7 +546,7 @@ function cmb_scripts( $hook ) {
 			$cmb_style_array[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.1' );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.4' );
 		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => get_the_ID() ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );
@@ -648,8 +648,10 @@ function cmb_oembed_ajax_results() {
 		// Post ID is needed to check for embeds
 		if ( isset( $_REQUEST['post_id'] ) )
 			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
+		// Set width of embed
+		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? intval( $_REQUEST['oembed_width'] ) : '640';
 		// ping WordPress for an embed
-		$check_embed = $wp_embed->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
+		$check_embed = $wp_embed->run_shortcode( '[embed width="'. $embed_width .'"]'. $oembed_url .'[/embed]' );
 		// fallback that WordPress creates when no oEmbed was found
 		$fallback = $wp_embed->maybe_make_link( $oembed_url );
 
