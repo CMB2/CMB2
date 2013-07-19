@@ -378,8 +378,10 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_media_status">';
 						if ( $meta != '' ) {
-							$check_image = preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png|icon?)\b$/i', $meta );
-							if ( $check_image ) {
+
+							$file_ext = strtolower( pathinfo( parse_url( $meta, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+
+							if ( in_array( $file_ext, array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) ) ) {
 								echo '<div class="img_status">';
 								echo '<img src="', $meta, '" alt="" />';
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
