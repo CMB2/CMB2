@@ -377,11 +377,13 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_media_status">';
-						if ( $meta != '' ) {
+						if ( ! empty( $meta ) ) {
 
-							$file_ext = strtolower( pathinfo( parse_url( $meta, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+							$parsed = @parse_url( $meta, PHP_URL_PATH );
+							$file_ext = $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
+							$valid = (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
 
-							if ( in_array( $file_ext, array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) ) ) {
+							if ( $file_ext && in_array( $file_ext, $valid ) ) {
 								echo '<div class="img_status">';
 								echo '<img src="', $meta, '" alt="" />';
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
