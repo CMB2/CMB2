@@ -378,7 +378,7 @@ class cmb_Meta_Box {
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_media_status">';
 						if ( $meta != '' ) {
-							$check_image = preg_match( '/\.(jpg|jpeg|png|gif|ico|icon)$/i', $meta );
+							$check_image = preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png|ico|icon)\b/i', $meta );
 							if ( $check_image ) {
 								echo '<div class="img_status">';
 								echo '<img src="', $meta, '" alt="" />';
