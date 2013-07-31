@@ -197,6 +197,8 @@ class cmb_Meta_Box {
 			} else {
 				if( $this->_meta_box['show_names'] == true ) {
 					echo '<th style="width:18%"><label for="', $field['id'], '">', $field['name'], '</label></th>';
+				} else {
+					echo '<label style="display:none;" for="', $field['id'], '">', $field['name'], '</label></th>';
 				}
 				echo '<td>';
 			}
@@ -428,7 +430,7 @@ class cmb_Meta_Box {
 	}
 
 	// Save data from metabox
-	function save( $post_id)  {
+	function save( $post_id, $post )  {
 
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) ) ) {
@@ -451,7 +453,7 @@ class cmb_Meta_Box {
 
 		// get the post types applied to the metabox group
 		// and compare it to the post type of the content
-		$post_type = get_post_type($post_id);
+		$post_type = $post->post_type;
 		$meta_type = $this->_meta_box['pages'];
 		$type_comp = in_array($post_type, $meta_type) ? true : false;
 
