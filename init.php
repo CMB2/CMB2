@@ -91,7 +91,7 @@ class cmb_Meta_Box {
 		}
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
-		add_action( 'save_post', array( &$this, 'save' ) );
+		add_action( 'save_post', array( &$this, 'save' ), 10, 2 );
 
 		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
 		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
