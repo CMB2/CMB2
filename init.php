@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.4
+Version: 		0.9.5
 */
 
 /**
@@ -554,7 +554,7 @@ function cmb_scripts( $hook ) {
 			$cmb_style_array[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.4' );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.5' );
 		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => get_the_ID() ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );

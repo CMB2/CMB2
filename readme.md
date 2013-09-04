@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
-**Version**: 0.9.4
+**Version**: 0.9.5
 **Requires at least**: 3.3
 **Tested up to**: 3.6
 **License**: GPLv2
@@ -75,6 +75,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * look at preserving taxonomy hierarchies
 
 ## Changelog
+
+### 0.9.5
 
 ### 0.9.4
 * Added field "before" and "after" options for each field. Solves issue with '$' not being the desired text_money monetary symbol, props [@GaryJones](https://github.com/GaryJones)
