@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.3
+Version: 		0.9.4
 */
 
 /**
@@ -97,7 +97,7 @@ class cmb_Meta_Box {
 		}
 
 		add_action( 'admin_menu', array( &$this, 'add' ) );
-		add_action( 'save_post', array( &$this, 'save' ) );
+		add_action( 'save_post', array( &$this, 'save' ), 10, 2 );
 
 		add_filter( 'cmb_show_on', array( &$this, 'add_for_id' ), 10, 2 );
 		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
@@ -189,7 +189,7 @@ class cmb_Meta_Box {
 			// Set up blank or default values for empty ones
 			if ( !isset( $field['name'] ) ) $field['name'] = '';
 			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( !isset( $field['std'] ) ) $field['std'] = '';
+			$field['std'] = apply_filters( 'cmb_std_filter', ( isset( $field['std'] ) ? $field['std'] : '' ), $field );
 			if ( 'file' == $field['type'] && !isset( $field['allow'] ) ) $field['allow'] = array( 'url', 'attachment' );
 			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
 			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;
@@ -203,9 +203,13 @@ class cmb_Meta_Box {
 			} else {
 				if( $this->_meta_box['show_names'] == true ) {
 					echo '<th style="width:18%"><label for="', $field['id'], '">', $field['name'], '</label></th>';
+				} else {
+					echo '<label style="display:none;" for="', $field['id'], '">', $field['name'], '</label></th>';
 				}
 				echo '<td>';
 			}
+
+			echo empty( $field['before'] ) ? '' : $field['before'];
 
 			switch ( $field['type'] ) {
 
@@ -233,7 +237,7 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'text_money':
-					echo '$ <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'colorpicker':
 					$meta = '' !== $meta ? $meta : $field['std'];
@@ -381,9 +385,13 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', get_post_meta( $post->ID, $field['id'] . "_id",true), '" />';
 					echo '<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					echo '<div id="', $field['id'], '_status" class="cmb_media_status">';
-						if ( $meta != '' ) {
-							$check_image = preg_match( '/(^.*\.jpg|jpeg|png|gif|ico*)/i', $meta );
-							if ( $check_image ) {
+						if ( ! empty( $meta ) ) {
+
+							$parsed = @parse_url( $meta, PHP_URL_PATH );
+							$file_ext = $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
+							$valid = (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
+
+							if ( $file_ext && in_array( $file_ext, $valid ) ) {
 								echo '<div class="img_status">';
 								echo '<img src="', $meta, '" alt="" />';
 								echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
@@ -420,13 +428,15 @@ class cmb_Meta_Box {
 					do_action('cmb_render_' . $field['type'] , $field, $meta);
 			}
 
+			echo empty( $field['after'] ) ? '' : $field['after'];
+
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
 	}
 
 	// Save data from metabox
-	function save( $post_id)  {
+	function save( $post_id, $post )  {
 
 		// verify nonce
 		if ( ! isset( $_POST['wp_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) ) ) {
@@ -449,7 +459,7 @@ class cmb_Meta_Box {
 
 		// get the post types applied to the metabox group
 		// and compare it to the post type of the content
-		$post_type = get_post_type($post_id);
+		$post_type = $post->post_type;
 		$meta_type = $this->_meta_box['pages'];
 		$type_comp = in_array($post_type, $meta_type) ? true : false;
 
@@ -544,7 +554,7 @@ function cmb_scripts( $hook ) {
 			$cmb_style_array[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.1' );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $cmb_script_array, '0.9.4' );
 		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => get_the_ID() ) );
 		wp_enqueue_script( 'cmb-timepicker' );
 		wp_enqueue_script( 'cmb-scripts' );
@@ -646,8 +656,10 @@ function cmb_oembed_ajax_results() {
 		// Post ID is needed to check for embeds
 		if ( isset( $_REQUEST['post_id'] ) )
 			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
+		// Set width of embed
+		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? intval( $_REQUEST['oembed_width'] ) : '640';
 		// ping WordPress for an embed
-		$check_embed = $wp_embed->run_shortcode( '[embed]'. $oembed_url .'[/embed]' );
+		$check_embed = $wp_embed->run_shortcode( '[embed width="'. $embed_width .'"]'. $oembed_url .'[/embed]' );
 		// fallback that WordPress creates when no oEmbed was found
 		$fallback = $wp_embed->maybe_make_link( $oembed_url );
 
