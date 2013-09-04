@@ -78,20 +78,20 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ### 0.9.4
 * Added field "before" and "after" options for each field. Solves issue with '$' not being the desired text_money monetary symbol, props [@GaryJones](https://github.com/GaryJones)
-* Added filter for 'std' default fallback value, props [@messenlehner](https:github.com/messenlehner)
-* Ensure oEmbed videos fit in their respective metaboxes, props [@jtsternberg](https:github.com/jtsternberg)
-* Fixed issue where an upload field with 'show_names' disabled wouldn't have the correct button label, props [@jtsternberg](https:github.com/jtsternberg)
-* Better file-extension check for images, props [@GhostToast](https:github.com/GhostToast)
-* New filter, `cmb_valid_img_types`, for whitelisted image file-extensions, props [@jtsternberg](https:github.com/jtsternberg)
+* Added filter for 'std' default fallback value, props [@messenlehner](https://github.com/messenlehner)
+* Ensure oEmbed videos fit in their respective metaboxes, props [@jtsternberg](https://github.com/jtsternberg)
+* Fixed issue where an upload field with 'show_names' disabled wouldn't have the correct button label, props [@jtsternberg](https://github.com/jtsternberg)
+* Better file-extension check for images, props [@GhostToast](https://github.com/GhostToast)
+* New filter, `cmb_valid_img_types`, for whitelisted image file-extensions, props [@jtsternberg](https://github.com/jtsternberg)
 
 ### 0.9.3
-* Added field type and field id classes to each cmb table row, props [@jtsternberg](https:github.com/jtsternberg)
+* Added field type and field id classes to each cmb table row, props [@jtsternberg](https://github.com/jtsternberg)
 
 ### 0.9.2
-* Added post type comparison to prevent storing null values for taxonomy selectors, props [@norcross](https:github.com/norcross)
+* Added post type comparison to prevent storing null values for taxonomy selectors, props [@norcross](https://github.com/norcross)
 
 ### 0.9.1
-* Added 'oEmbed' field type with ajax display, props [@jtsternberg](https:github.com/jtsternberg)
+* Added 'oEmbed' field type with ajax display, props [@jtsternberg](https://github.com/jtsternberg)
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__
