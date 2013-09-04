@@ -183,7 +183,7 @@ class cmb_Meta_Box {
 			// Set up blank or default values for empty ones
 			if ( !isset( $field['name'] ) ) $field['name'] = '';
 			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( !isset( $field['std'] ) ) $field['std'] = '';
+			$field['std'] = apply_filters( 'cmb_std_filter', ( isset( $field['std'] ) ? $field['std'] : '' ), $field );
 			if ( 'file' == $field['type'] && !isset( $field['allow'] ) ) $field['allow'] = array( 'url', 'attachment' );
 			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
 			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;
