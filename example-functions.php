@@ -57,6 +57,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textdate_timestamp',
 				'type' => 'text_date_timestamp',
+				// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified here
 			),
 			array(
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
