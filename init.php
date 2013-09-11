@@ -78,8 +78,14 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 class cmb_Meta_Box {
 	protected $_meta_box;
 
-	function __construct( $meta_box ) {
-		if ( !is_admin() ) return;
+	function __construct( $meta_box, $args = null ) {
+
+		$args = wp_parse_args( $args, array(
+			'allow_frontend' => apply_filters('cmb_allow_frontend', false),
+		) );
+		extract($args);
+
+		if ( !is_admin() && !$allow_frontend ) return;
 
 		$this->_meta_box = $meta_box;
 
@@ -178,6 +184,8 @@ class cmb_Meta_Box {
 
 	// Show fields
 	function show() {
+
+		if (!$this->_meta_box) return;
 
 		global $post;
 
@@ -680,6 +688,20 @@ function cmb_oembed_ajax_results() {
 	// send back our encoded data
 	echo json_encode( array( 'result' => $return, 'id' => $found ) );
 	die();
+}
+
+function cmb_print_metaboxes($metaboxes, $args = null) {
+	foreach ((array)$metaboxes as $mb) {
+		cmb_print_metabox($mb, $args);
+	}
+}
+
+function cmb_print_metabox($metabox, $args = null) {
+	$cmb = new cmb_Meta_Box( $metabox, $args );
+
+	if ($cmb) {
+		$cmb->show();
+	}
 }
 
 // End. That's it, folks! //
