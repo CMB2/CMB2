@@ -433,6 +433,7 @@ class cmb_Meta_Box {
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
+		do_action( 'cmb_after_table', $post, $this->_meta_box );
 	}
 
 	// Save data from metabox
