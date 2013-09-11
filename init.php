@@ -78,16 +78,20 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 class cmb_Meta_Box {
 	protected $_meta_box;
 	protected $_override_data;
+	protected $field = array();
 
+	/**
+	 * Get started
+	 */
 	function __construct( $meta_box, $args = null ) {
 
 		$args = wp_parse_args( $args, array(
-			'allow_frontend' => apply_filters('cmb_allow_frontend', false),
+			'allow_frontend' => apply_filters( 'cmb_allow_frontend', false ),
 			'override_data' => array(),
 		) );
-		extract($args);
+		extract( $args );
 
-		if ( !is_admin() && !$allow_frontend ) return;
+		if ( ! is_admin() && ! $allow_frontend ) return;
 
 		$this->_meta_box = $meta_box;
 
@@ -111,6 +115,9 @@ class cmb_Meta_Box {
 		add_filter( 'cmb_show_on', array( &$this, 'add_for_page_template' ), 10, 2 );
 	}
 
+	/**
+	 * Add encoding attribute
+	 */
 	function add_post_enctype() {
 		echo '
 		<script type="text/javascript">
@@ -121,14 +128,16 @@ class cmb_Meta_Box {
 		</script>';
 	}
 
-	// Add metaboxes
+	/**
+	 * Add metaboxes
+	 */
 	function add() {
 		$this->_meta_box['context'] = empty($this->_meta_box['context']) ? 'normal' : $this->_meta_box['context'];
 		$this->_meta_box['priority'] = empty($this->_meta_box['priority']) ? 'high' : $this->_meta_box['priority'];
 		$this->_meta_box['show_on'] = empty( $this->_meta_box['show_on'] ) ? array('key' => false, 'value' => false) : $this->_meta_box['show_on'];
 
 		foreach ( $this->_meta_box['pages'] as $page ) {
-			if( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
+			if ( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array(&$this, 'show'), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
 		}
 	}
@@ -139,7 +148,9 @@ class cmb_Meta_Box {
 	 * Below you can limit it by ID and page template
 	 */
 
-	// Add for ID
+	/**
+	 * Add for ID
+	 */
 	function add_for_id( $display, $meta_box ) {
 		if ( 'id' !== $meta_box['show_on']['key'] )
 			return $display;
@@ -161,7 +172,9 @@ class cmb_Meta_Box {
 			return false;
 	}
 
-	// Add for Page Template
+	/**
+	 * Add for Page Template
+	 */
 	function add_for_page_template( $display, $meta_box ) {
 		if( 'page-template' !== $meta_box['show_on']['key'] )
 			return $display;
@@ -184,10 +197,12 @@ class cmb_Meta_Box {
 			return false;
 	}
 
-	// Show fields
+	/**
+	 * Display fields
+	 */
 	function show() {
 
-		if (!$this->_meta_box) return;
+		if ( ! $this->_meta_box ) return;
 
 		global $post;
 
@@ -196,6 +211,9 @@ class cmb_Meta_Box {
 		echo '<table class="form-table cmb_metabox">';
 
 		foreach ( $this->_meta_box['fields'] as $field ) {
+
+			$this->field =& $field;
+
 			// Set up blank or default values for empty ones
 			if ( !isset( $field['name'] ) ) $field['name'] = '';
 			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
@@ -204,7 +222,7 @@ class cmb_Meta_Box {
 			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
 			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;
 
-			if ($this->_override_data && count($this->_override_data)) {
+			if ( $this->_override_data && count( $this->_override_data ) ) {
 				$meta = $this->override_data[$field['id']];
 			} else {
 				$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
@@ -246,8 +264,8 @@ class cmb_Meta_Box {
 				case 'text_datetime_timestamp':
 
 					// This will be used if there is a select_timezone set for this field
-					$tz_offset = cmb_field_timezone_offset($field, $post->ID);
-					if (!empty($tz_offset)) {
+					$tz_offset = $this->field_timezone_offset( $post->ID );
+					if ( !empty( $tz_offset ) ) {
 						$meta -= $tz_offset;
 					}
 
@@ -283,7 +301,7 @@ class cmb_Meta_Box {
 				case 'select_timezone':
 					$meta = '' !== $meta ? $meta : $field['std'];
 					if ('' === $meta) {
-						$meta = cmb_timezone_string();
+						$meta = $this->timezone_string();
 					}
 
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
@@ -489,7 +507,9 @@ class cmb_Meta_Box {
 		echo '</table>';
 	}
 
-	// Save data from metabox
+	/**
+	 * Save data from metabox
+	 */
 	function save( $post_id, $post )  {
 
 		// verify nonce
@@ -546,8 +566,8 @@ class cmb_Meta_Box {
 				$string = $new['date'] . ' ' . $new['time'];
 				$new = strtotime( $string );
 
-				$tz_offset = cmb_field_timezone_offset($field, $post_id);
-				if (!empty($tz_offset)) {
+				$tz_offset = $this->field_timezone_offset( $post_id );
+				if ( ! empty( $tz_offset ) ) {
 					$new += $tz_offset;
 				}
 			}
@@ -555,25 +575,25 @@ class cmb_Meta_Box {
 			if ( $type_comp == true && $field['type'] == 'text_datetime_timestamp_timezone' ) {
 				$string = $new['date'] . ' ' . $new['time'];
 				$tzstring = null;
-				if (array_key_exists('timezone', $new)) {
+				if ( array_key_exists( 'timezone', $new ) ) {
 					$tzstring = $new['timezone'];
 				}
 
-				if (empty($tzstring)) {
-					$tzstring = cmb_timezone_string();
+				if ( empty( $tzstring ) ) {
+					$tzstring = $this->timezone_string();
 				}
 
-				$offset = cmb_timezone_offset($tzstring);
+				$offset = $this->timezone_offset( $tzstring );
 
-				if (substr($tzstring, 0, 3) === 'UTC') {
-					$tzstring = timezone_name_from_abbr("", $offset, 0);
+				if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
+					$tzstring = timezone_name_from_abbr( "", $offset, 0 );
 				}
 
-				$new = new DateTime($string, new DateTimeZone($tzstring));
-				$new = serialize($new);
+				$new = new DateTime( $string, new DateTimeZone( $tzstring ) );
+				$new = serialize( $new );
 			}
 
-			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);
+			$new = apply_filters(' cmb_validate_' . $field['type'], $new, $post_id, $field );
 
 			// validate meta value
 			if ( isset( $field['validate_func']) ) {
@@ -611,6 +631,93 @@ class cmb_Meta_Box {
 			}
 		}
 	}
+
+	/**
+	 * Returns a timezone string representing the default timezone for the site.
+	 *
+	 * Roughly copied from WordPress, as get_option('timezone_string') will return
+	 * and empty string if no value has beens set on the options page.
+	 * A timezone string is required by the wp_timezone_choice() used by the
+	 * select_timezone field.
+	 *
+	 * @since  0.9.5
+	 * @return string Timezone string
+	 */
+	function timezone_string() {
+		$current_offset = get_option( 'gmt_offset' );
+		$tzstring       = get_option( 'timezone_string' );
+
+		if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
+			if ( 0 == $current_offset )
+				$tzstring = 'UTC+0';
+			elseif ( $current_offset < 0 )
+				$tzstring = 'UTC' . $current_offset;
+			else
+				$tzstring = 'UTC+' . $current_offset;
+		}
+
+		return $tzstring;
+	}
+
+	/**
+	 * Returns time string offset by timezone
+	 * @since  0.9.5
+	 * @param  string $tzstring Time string
+	 * @return string           Offset time string
+	 */
+	function timezone_offset( $tzstring ) {
+		if ( !empty( $tzstring ) ) {
+
+			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
+				$tzstring = str_replace( array( ':15',':30',':45' ), array( '.25','.5','.75' ), $tzstring );
+				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
+			}
+
+			$date_time_zone_selected = new DateTimeZone( $tzstring );
+			$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+
+			return $tz_offset;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Offset a time value based on timezone
+	 * @since  0.9.5
+	 * @param  integer $post_id Post ID
+	 * @return string           Offset time string
+	 */
+	function field_timezone_offset( $post_id = 0 ) {
+
+		$post_id = $post_id ? $post_id : $GLOBALS['post']->ID;
+		$tzstring = $this->field_timezone( $post_id );
+
+		return $this->timezone_offset( $tzstring );
+	}
+
+	/**
+	 * Return timezone string
+	 * @since  0.9.5
+	 * @param  integer $post_id Post ID
+	 * @return string           Timezone string
+	 */
+	function field_timezone( $post_id = 0 ) {
+		$post_id = $post_id ? $post_id : $GLOBALS['post']->ID;
+		$tzstring = null;
+		if ( array_key_exists( 'timezone', $this->field ) && $this->field['timezone'] ) {
+			$tzstring = $this->field['timezone'];
+		} else if ( array_key_exists( 'timezone_meta_key', $this->field ) && $this->field['timezone_meta_key'] ) {
+			$timezone_meta_key = $this->field['timezone_meta_key'];
+
+			$tzstring = get_post_meta( $post_id, $timezone_meta_key, true );
+
+			return $tzstring;
+		}
+
+		return false;
+	}
+
 }
 
 /**
@@ -762,81 +869,29 @@ function cmb_oembed_ajax_results() {
 	die();
 }
 
-function cmb_print_metaboxes($metaboxes, $args = null) {
-	foreach ((array)$metaboxes as $mb) {
-		cmb_print_metabox($mb, $args);
-	}
-}
-
-function cmb_print_metabox($metabox, $args = null) {
-	$cmb = new cmb_Meta_Box( $metabox, $args );
-
-	if ($cmb) {
-		$cmb->show();
-	}
-}
-
-/*
- * Returns a timezone string representing the default timezone for the site.
- *
- * Roughly copied from WordPress, as get_option('timezone_string') will return
- * and empty string if no value has beens set on the options page.
- * A timezone string is required by the wp_timezone_choice() used by the
- * select_timezone field.
+/**
+ * call metaboxes on the front-end
+ * @since  0.9.5
+ * @param  array  $meta_boxes Array of metabox info
+ * @param  array  $args      CMB config arguments
  */
-function cmb_timezone_string() {
-	$current_offset = get_option('gmt_offset');
-	$tzstring = get_option('timezone_string');
-
-	if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
-		if ( 0 == $current_offset )
-			$tzstring = 'UTC+0';
-		elseif ($current_offset < 0)
-			$tzstring = 'UTC' . $current_offset;
-		else
-			$tzstring = 'UTC+' . $current_offset;
+function cmb_print_metaboxes( $meta_boxes, $args = null ) {
+	foreach ( (array) $meta_boxes as $meta_box ) {
+		cmb_print_metabox( $meta_box, $args );
 	}
-
-	return $tzstring;
 }
 
-function cmb_timezone_offset($tzstring) {
-	if (!empty($tzstring)) {
+/**
+ * call metaboxes on the front-end
+ * @since  0.9.5
+ * @param  array  $meta_box Metabox config array
+ * @param  array  $args    CMB config arguments
+ */
+function cmb_print_metabox( $meta_box, $args = null ) {
+	$cmb = new cmb_Meta_Box( $meta_box, $args );
 
-		if (substr($tzstring, 0, 3) === 'UTC') {
-			$tzstring = str_replace(array(':15',':30',':45'), array('.25','.5','.75'), $tzstring);
-			return intval(floatval(substr($tzstring, 3)) * HOUR_IN_SECONDS);
-		}
-
-		$date_time_zone_selected = new DateTimeZone($tzstring);
-		$tz_offset = timezone_offset_get($date_time_zone_selected, date_create());
-
-		return $tz_offset;
-	}
-
-	return 0;
-}
-
-function cmb_field_timezone_offset($field, $post_id) {
-
-	$tzstring = cmb_field_timezone($field, $post_id);
-
-	return cmb_timezone_offset($tzstring);
-}
-
-function cmb_field_timezone($field, $post_id) {
-	$tzstring = null;
-	if (array_key_exists('timezone', $field) && $field['timezone']) {
-		$tzstring = $field['timezone'];
-	} else if (array_key_exists('timezone_meta_key', $field) && $field['timezone_meta_key']) {
-		$timezone_meta_key = $field['timezone_meta_key'];
-
-		$tzstring = get_post_meta( $post_id, $timezone_meta_key, true );
-
-		return $tzstring;
-	}
-
-	return false;
+	if ( $cmb )
+		$cmb->show();
 }
 
 // End. That's it, folks! //
