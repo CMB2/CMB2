@@ -664,4 +664,68 @@ function cmb_oembed_ajax_results() {
 	die();
 }
 
+
+/*
+ * Returns a timezone string representing the default timezone for the site.
+ *
+ * Roughly copied from WordPress, as get_option('timezone_string') will return
+ * and empty string if no value has beens set on the options page.
+ * A timezone string is required by the wp_timezone_choice() used by the
+ * select_timezone field.
+ */
+function cmb_timezone_string() {
+	$current_offset = get_option('gmt_offset');
+	$tzstring = get_option('timezone_string');
+
+	if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
+		if ( 0 == $current_offset )
+			$tzstring = 'UTC+0';
+		elseif ($current_offset < 0)
+			$tzstring = 'UTC' . $current_offset;
+		else
+			$tzstring = 'UTC+' . $current_offset;
+	}
+
+	return $tzstring;
+}
+
+function cmb_timezone_offset($tzstring) {
+	if (!empty($tzstring)) {
+
+		if (substr($tzstring, 0, 3) === 'UTC') {
+			$tzstring = str_replace(array(':15',':30',':45'), array('.25','.5','.75'), $tzstring);
+			return intval(floatval(substr($tzstring, 3)) * HOUR_IN_SECONDS);
+		}
+
+		$date_time_zone_selected = new DateTimeZone($tzstring);
+		$tz_offset = timezone_offset_get($date_time_zone_selected, date_create());
+
+		return $tz_offset;
+	}
+
+	return 0;
+}
+
+function cmb_field_timezone_offset($field, $post_id) {
+
+	$tzstring = cmb_field_timezone($field, $post_id);
+
+	return cmb_timezone_offset($tzstring);
+}
+
+function cmb_field_timezone($field, $post_id) {
+	$tzstring = null;
+	if (array_key_exists('timezone', $field) && $field['timezone']) {
+		$tzstring = $field['timezone'];
+	} else if (array_key_exists('timezone_meta_key', $field) && $field['timezone_meta_key']) {
+		$timezone_meta_key = $field['timezone_meta_key'];
+
+		$tzstring = get_post_meta( $post_id, $timezone_meta_key, true );
+
+		return $tzstring;
+	}
+
+	return false;
+}
+
 // End. That's it, folks! //
