@@ -230,11 +230,28 @@ class cmb_Meta_Box {
 					break;
 
 				case 'text_datetime_timestamp':
+
+					// This will be used if there is a select_timezone set for this field
+					$tz_offset = cmb_field_timezone_offset($field, $post->ID);
+					if (!empty($tz_offset)) {
+						$meta -= $tz_offset;
+					}
+
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '[date]" id="', $field['id'], '_date" value="', '' !== $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" />';
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '[time]" id="', $field['id'], '_time" value="', '' !== $meta ? date( 'h:i A', $meta ) : $field['std'], '" /><span class="cmb_metabox_description" >', $field['desc'], '</span>';
 					break;
 				case 'text_time':
 					echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
+					break;
+				case 'select_timezone':
+					$meta = '' !== $meta ? $meta : $field['std'];
+					if ('' === $meta) {
+						$meta = cmb_timezone_string();
+					}
+
+					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+					echo wp_timezone_choice( $meta );
+					echo '</select>';
 					break;
 				case 'text_money':
 					echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -491,6 +508,11 @@ class cmb_Meta_Box {
 			if ( $type_comp == true && $field['type'] == 'text_datetime_timestamp' ) {
 				$string = $new['date'] . ' ' . $new['time'];
 				$new = strtotime( $string );
+
+				$tz_offset = cmb_field_timezone_offset($field, $post_id);
+				if (!empty($tz_offset)) {
+					$new += $tz_offset;
+				}
 			}
 
 			$new = apply_filters('cmb_validate_' . $field['type'], $new, $post_id, $field);
