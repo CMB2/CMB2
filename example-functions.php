@@ -47,6 +47,18 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_medium',
 			),
 			array(
+				'name' => 'Test Time',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_time',
+				'type' => 'text_time',
+			),
+			array(
+				'name' => 'Time zone',
+				'desc' => 'Time zone'
+				'id'   => $prefix . 'timezone',
+				'type' => 'select_timezone',
+			),
+			array(
 				'name' => 'Test Date Picker',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textdate',
@@ -57,7 +69,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textdate_timestamp',
 				'type' => 'text_date_timestamp',
-				// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified here
+				// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified above
 			),
 			array(
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
@@ -66,23 +78,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_datetime_timestamp',
 			),
 			array(
-			    'name' => 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)',
-			    'desc' => 'field description (optional)',
-			    'id'   => $prefix . 'test_datetime_timestamp_timezone',
-			    'type' => 'text_datetime_timestamp_timezone',
+				'name' => 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_datetime_timestamp_timezone',
+				'type' => 'text_datetime_timestamp_timezone',
 			),
-			array(
-	            'name' => 'Test Time',
-	            'desc' => 'field description (optional)',
-	            'id'   => $prefix . 'test_time',
-	            'type' => 'text_time',
-	        ),
-	        array(
-	            'name' => 'Time zone',
-	            'desc' => 'Time zone'
-	            'id'   => $prefix . 'timezone',
-	            'type' => 'select_timezone',
-	        ),
 			array(
 				'name'   => 'Test Money',
 				'desc'   => 'field description (optional)',
@@ -91,12 +91,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				// 'before' => '£'; // override '$' symbol if needed
 			),
 			array(
-	            'name' => 'Test Color Picker',
-	            'desc' => 'field description (optional)',
-	            'id'   => $prefix . 'test_colorpicker',
-	            'type' => 'colorpicker',
+				'name' => 'Test Color Picker',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_colorpicker',
+				'type' => 'colorpicker',
 				'std'  => '#ffffff'
-	        ),
+			),
 			array(
 				'name' => 'Test Text Area',
 				'desc' => 'field description (optional)',

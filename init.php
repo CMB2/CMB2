@@ -34,7 +34,7 @@ Version: 		0.9.5
 *************************************************************************/
 
 $meta_boxes = array();
-$meta_boxes = apply_filters ( 'cmb_meta_boxes' , $meta_boxes );
+$meta_boxes = apply_filters( 'cmb_meta_boxes' , $meta_boxes );
 foreach ( $meta_boxes as $meta_box ) {
 	$my_box = new cmb_Meta_Box( $meta_box );
 }
