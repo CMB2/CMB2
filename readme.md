@@ -29,6 +29,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * date picker (unix timestamp)
 * date time picker combo (unix timestamp)
 * date time picker with time zone combo (serialized DateTime object)
+* time zone dropdown
 * time picker
 * color picker
 * textarea

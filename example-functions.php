@@ -76,6 +76,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	            'id'   => $prefix . 'test_time',
 	            'type' => 'text_time',
 	        ),
+	        array(
+	            'name' => 'Time zone',
+	            'desc' => 'Time zone'
+	            'id'   => $prefix . 'timezone',
+	            'type' => 'select_timezone',
+	        ),
 			array(
 				'name'   => 'Test Money',
 				'desc'   => 'field description (optional)',
