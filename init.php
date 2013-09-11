@@ -77,11 +77,13 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
  */
 class cmb_Meta_Box {
 	protected $_meta_box;
+	protected $_override_data;
 
 	function __construct( $meta_box, $args = null ) {
 
 		$args = wp_parse_args( $args, array(
 			'allow_frontend' => apply_filters('cmb_allow_frontend', false),
+			'override_data' => array(),
 		) );
 		extract($args);
 
@@ -202,7 +204,11 @@ class cmb_Meta_Box {
 			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )  $field['save_id']  = false;
 			if ( 'multicheck' == $field['type'] ) $field['multiple'] = true;
 
-			$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
+			if ($this->_override_data && count($this->_override_data)) {
+				$meta = $this->override_data[$field['id']];
+			} else {
+				$meta = get_post_meta( $post->ID, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
+			}
 
 			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) .'">';
 
