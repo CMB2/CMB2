@@ -561,7 +561,7 @@ class cmb_Meta_Box {
 					$new = "http://$new";
 				}
 
-				if ( isset($field['require_valid']) && $field['require_valid'] === true ) {
+				if ( !isset($field['require_valid']) || $field['require_valid'] !== false ) {
 					$new = filter_var($new, FILTER_VALIDATE_URL);
 				}
 			}
