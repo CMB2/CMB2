@@ -25,6 +25,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * text small
 * text medium
 * text money
+* text url
 * date picker
 * date picker (unix timestamp)
 * date time picker combo (unix timestamp)

@@ -254,6 +254,9 @@ class cmb_Meta_Box {
 				case 'text_medium':
 					echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+				case 'text_url':
+					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;
 				case 'text_date':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
@@ -549,6 +552,18 @@ class cmb_Meta_Box {
 
 			if ( $type_comp == true && in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {
 				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
+			}
+
+			if ( ($field['type'] == 'text_url') ) {
+				$has_protocol = preg_match('/^([a-z]+\:\/\/)/i', $new);
+
+				if (!$has_protocol && !empty($new)) {
+					$new = "http://$new";
+				}
+
+				if ( isset($field['require_valid']) && $field['require_valid'] === true ) {
+					$new = filter_var($new, FILTER_VALIDATE_URL);
+				}
 			}
 
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
