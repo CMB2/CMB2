@@ -255,7 +255,10 @@ class cmb_Meta_Box {
 					echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
 				case 'text_url':
-					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					$val = !empty($meta) ? $meta : $field['std'];
+					$val = $val ? esc_url( $val ) : '';
+
+					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'text_date':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -557,12 +560,16 @@ class cmb_Meta_Box {
 			if ( ($field['type'] == 'text_url') ) {
 				$has_protocol = preg_match('/^([a-z]+\:\/\/)/i', $new);
 
-				if (!$has_protocol && !empty($new)) {
+				if ( !$has_protocol && !empty($new) ) {
 					$new = "http://$new";
 				}
 
 				if ( !isset($field['require_valid']) || $field['require_valid'] !== false ) {
 					$new = filter_var($new, FILTER_VALIDATE_URL);
+				}
+
+				if ( !empty($new) ) {
+					$new = esc_url_raw( $new );
 				}
 			}
 
