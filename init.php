@@ -558,16 +558,6 @@ class cmb_Meta_Box {
 			}
 
 			if ( ($field['type'] == 'text_url') ) {
-				$has_protocol = preg_match('/^([a-z]+\:\/\/)/i', $new);
-
-				if ( !$has_protocol && !empty($new) ) {
-					$new = "http://$new";
-				}
-
-				if ( !isset($field['require_valid']) || $field['require_valid'] !== false ) {
-					$new = filter_var($new, FILTER_VALIDATE_URL);
-				}
-
 				if ( !empty($new) ) {
 					$new = esc_url_raw( $new );
 				}
