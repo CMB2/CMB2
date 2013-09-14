@@ -256,7 +256,8 @@ class cmb_Meta_Box {
 					break;
 				case 'text_url':
 					$val = !empty($meta) ? $meta : $field['std'];
-					$val = $val ? esc_url( $val ) : '';
+					$protocols = isset( $field['protocols'] ) ? (array)$field['protocols'] : null;
+					$val = $val ? esc_url( $val, $protocols ) : '';
 
 					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
@@ -559,7 +560,8 @@ class cmb_Meta_Box {
 
 			if ( ($field['type'] == 'text_url') ) {
 				if ( !empty($new) ) {
-					$new = esc_url_raw( $new );
+					$protocols = isset( $field['protocols'] ) ? (array)$field['protocols'] : null;
+					$new = esc_url_raw( $new, $protocols );
 				}
 			}
 

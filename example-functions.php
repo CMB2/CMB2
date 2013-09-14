@@ -50,8 +50,8 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			    'name' => 'Website',
 			    'desc' => 'field description (optional)',
 			    'id'   => $prefix . 'website',
-			    'type' => 'text_url', // Will ensure entered values begin with http://
-			    'require_valid' => true, // Will clear input if invalid
+			    'type' => 'text_url', // Will ensure entered values begin with http:// (or other valid protocol)
+			    // 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
 			),
 			array(
 				'name' => 'Test Time',
