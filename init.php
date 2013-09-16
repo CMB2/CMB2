@@ -254,6 +254,13 @@ class cmb_Meta_Box {
 				case 'text_medium':
 					echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+				case 'text_url':
+					$val = !empty($meta) ? $meta : $field['std'];
+					$protocols = isset( $field['protocols'] ) ? (array)$field['protocols'] : null;
+					$val = $val ? esc_url( $val, $protocols ) : '';
+
+					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;
 				case 'text_date':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
@@ -549,6 +556,13 @@ class cmb_Meta_Box {
 
 			if ( $type_comp == true && in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) ) )  {
 				$new = wp_set_object_terms( $post_id, $new, $field['taxonomy'] );
+			}
+
+			if ( ($field['type'] == 'text_url') ) {
+				if ( !empty($new) ) {
+					$protocols = isset( $field['protocols'] ) ? (array)$field['protocols'] : null;
+					$new = esc_url_raw( $new, $protocols );
+				}
 			}
 
 			if ( ($field['type'] == 'textarea') || ($field['type'] == 'textarea_small') ) {
