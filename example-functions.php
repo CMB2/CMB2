@@ -58,7 +58,6 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'email',
 				'type' => 'text_email',
-				// 'require_valid' => true, // Will ensure entered value is a valid email adress
 			),
 			array(
 				'name' => 'Test Time',

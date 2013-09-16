@@ -562,7 +562,7 @@ class cmb_Meta_Box {
 			}
 
 			if ( $field['type'] == 'text_url' ) {
-				if ( !empty($new) ) {
+				if ( ! empty( $new ) ) {
 					$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
 					$new = esc_url_raw( $new, $protocols );
 				}
@@ -576,8 +576,7 @@ class cmb_Meta_Box {
 				$new = htmlspecialchars_decode( $new );
 			}
 
-			if ( $field['type'] == 'text_email' && ( ! isset( $field['require_valid'] ) || false !== $field['require_valid'] ) ) {
-
+			if ( $field['type'] == 'text_email' ) {
 				$new = trim( $new );
 				$new = is_email( $new ) ? $new : '';
 			}
