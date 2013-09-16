@@ -47,19 +47,19 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_medium',
 			),
 			array(
-			    'name' => 'Website URL',
-			    'desc' => 'field description (optional)',
-			    'id'   => $prefix . 'url',
-			    'type' => 'text_url',
-			    // 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
+				'name' => 'Website URL',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'url',
+				'type' => 'text_url',
+				// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
 			),
-            array(
-                'name' => 'Test Text Email',
-                'desc' => 'field description (optional)',
-                'id'   => $prefix . 'email',
-                'type' => 'text_email',
-                // 'require_valid' => true, // Will ensure entered value is a valid email adress
-            ),
+			array(
+				'name' => 'Test Text Email',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'email',
+				'type' => 'text_email',
+				// 'require_valid' => true, // Will ensure entered value is a valid email adress
+			),
 			array(
 				'name' => 'Test Time',
 				'desc' => 'field description (optional)',
