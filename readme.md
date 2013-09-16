@@ -82,6 +82,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 ### 0.9.5
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
 * Added `select_timezone` type, a standalone time zone select dropdown. The time zone select can be used with standalone `text_datetime_timestamp` if desired. Props [@dessibelle](https://github.com/dessibelle)
+* Added `text_url` type, a basic url field. Props [@dessibelle](https://github.com/dessibelle)
 * Added ability to display metabox fields in frontend. Default is false, but can be overriden using the `cmb_allow_frontend filter`. If set to true, fields can be output with the `cmb_print_metaboxes()` and `cmb_print_metabox()` functions. Props [@dessibelle](https://github.com/dessibelle)
 * Added hook `cmb_after_table` after all metabox output. Props [@wpsmith](https://github.com/wpsmith)
 

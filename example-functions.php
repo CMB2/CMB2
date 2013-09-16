@@ -47,10 +47,10 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_medium',
 			),
 			array(
-			    'name' => 'Website',
+			    'name' => 'Website URL',
 			    'desc' => 'field description (optional)',
-			    'id'   => $prefix . 'website',
-			    'type' => 'text_url', // Will ensure entered values begin with http:// (or other valid protocol)
+			    'id'   => $prefix . 'url',
+			    'type' => 'text_url',
 			    // 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
 			),
 			array(
