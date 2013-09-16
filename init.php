@@ -254,6 +254,9 @@ class cmb_Meta_Box {
 				case 'text_medium':
 					echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
+                case 'text_email':
+                    echo '<input class="cmb_text_email" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+                    break;
 				case 'text_url':
 					$val = ! empty( $meta ) ? $meta : $field['std'];
 					$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
@@ -572,6 +575,13 @@ class cmb_Meta_Box {
 			if ( ($field['type'] == 'textarea_code') ) {
 				$new = htmlspecialchars_decode( $new );
 			}
+
+            if ( ($field['type'] == 'text_email') ) {
+                if ( !isset($field['require_valid']) || $field['require_valid'] !== false ) {
+                    $new = trim($new);
+                    $new = is_email($new) ? $new : '';
+                }
+            }
 
 			if ( $type_comp == true && $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
