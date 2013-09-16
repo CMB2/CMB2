@@ -254,15 +254,15 @@ class cmb_Meta_Box {
 				case 'text_medium':
 					echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
 					break;
-                case 'text_email':
-                    echo '<input class="cmb_text_email" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
-                    break;
+				case 'text_email':
+					echo '<input class="cmb_text_email cmb_text_medium" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					break;
 				case 'text_url':
 					$val = ! empty( $meta ) ? $meta : $field['std'];
 					$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
 					$val = $val ? esc_url( $val, $protocols ) : '';
 
-					echo '<input class=""cmb_text_url type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
+					echo '<input class="cmb_text_url cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />','<p class="cmb_metabox_description">', $field['desc'], '</p>';
 					break;
 				case 'text_date':
 					echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" /><span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -576,12 +576,11 @@ class cmb_Meta_Box {
 				$new = htmlspecialchars_decode( $new );
 			}
 
-            if ( ($field['type'] == 'text_email') ) {
-                if ( !isset($field['require_valid']) || $field['require_valid'] !== false ) {
-                    $new = trim($new);
-                    $new = is_email($new) ? $new : '';
-                }
-            }
+			if ( $field['type'] == 'text_email' && ( ! isset( $field['require_valid'] ) || false !== $field['require_valid'] ) ) {
+
+				$new = trim( $new );
+				$new = is_email( $new ) ? $new : '';
+			}
 
 			if ( $type_comp == true && $field['type'] == 'text_date_timestamp' ) {
 				$new = strtotime( $new );
