@@ -7,7 +7,7 @@ table.cmb_metabox th label { margin-top:5px; display:block;}
 p.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 !important;}
 span.cmb_metabox_description { color: #AAA; font-style: italic;}
 table.cmb_metabox input, table.cmb_metabox textarea { font-size:12px; padding: 5px; }
-table.cmb_metabox input[type=text], table.cmb_metabox input[type=email], table.cmb_metabox textarea { width: 97%; }
+table.cmb_metabox input[type=text], table.cmb_metabox textarea { width: 97%; }
 table.cmb_metabox textarea.cmb_textarea_code { font-family: Consolas,Monaco,monospace; line-height: 16px; }
 table.cmb_metabox input.cmb_text_small { width: 100px; margin-right: 15px;}
 table.cmb_metabox input.cmb_timepicker { width: 100px; margin-right: 15px;}
