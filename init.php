@@ -548,7 +548,17 @@ class cmb_Meta_Box {
 		$meta_type = $this->_meta_box['pages'];
 		$type_comp = in_array($post_type, $meta_type) ? true : false;
 
-		foreach ( $this->_meta_box['fields'] as $field ) {
+		$this->save_fields( $this->_meta_box['fields'], $post_id );
+	}
+
+	/**
+	 * Loops through and saves field data
+	 * @since  0.9.5
+	 * @param  array $fields  Array of fields to save
+	 * @param  int   $post_id Post ID
+	 */
+	public function save_fields( $fields, $post_id ) {
+		foreach ( $fields as $field ) {
 			$name = $field['id'];
 
 			if ( ! isset( $field['multiple'] ) )
