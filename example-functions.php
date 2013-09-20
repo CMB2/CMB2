@@ -123,7 +123,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'textarea_small',
 			),
 			array(
-				'name' => 'Test Text Area Code',
+				'name' => 'Test Text Area for Code',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textarea_code',
 				'type' => 'textarea_code',
