@@ -144,13 +144,13 @@ class cmb_Meta_Box_types {
 
 	public static function radio_inline( $field, $meta ) {
 		if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
-		echo '<div class="cmb_radio_inline">';
+		echo '<ul class="cmb_radio_inline">';
 		$i = 1;
 		foreach ($field['options'] as $option) {
-			echo '<div class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i, '" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'], '</label></div>';
+			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i, '" value="', $option['value'], '"', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'], '</label></li>';
 			$i++;
 		}
-		echo '</div>', self::desc( $field['desc'], true );
+		echo '</ul>', self::desc( $field['desc'], true );
 	}
 
 	public static function radio( $field, $meta ) {
@@ -158,23 +158,21 @@ class cmb_Meta_Box_types {
 		echo '<ul>';
 		$i = 1;
 		foreach ($field['options'] as $option) {
-			echo '<li><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'], true );
 	}
 
 	public static function checkbox( $field, $meta ) {
-		echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' />', self::desc( $field['desc'] );
+		echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' /> <label for="', $field['id'], '">', self::desc( $field['desc'] ) ,'</label>';
 	}
 
 	public static function multicheck( $field, $meta ) {
 		echo '<ul>';
 		$i = 1;
 		foreach ( $field['options'] as $value => $name ) {
-			// Append `[]` to the name to get multiple values
-			// Use in_array() to check whether the current option should be checked
-			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '"', in_array( $value, $meta ) ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $name, '</label></li>';
+			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $value . '" ', checked( in_array( $value, $meta ) ), ' /> <label for="', $field['id'], $i, '">' . $name . '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'] );
@@ -210,12 +208,12 @@ class cmb_Meta_Box_types {
 		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		echo '<ul>';
+		$i = 1;
 		foreach ( $terms as $term ) {
-			if ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) ) {
-				echo '<li><input type="radio" name="', $field['id'], '" value="'. $term->slug . '" checked>' . $term->name . '</li>';
-			} else {
-				echo '<li><input type="radio" name="', $field['id'], '" value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name .'</li>';
-			}
+			$checked = ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) );
+
+			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ', checked( $checked ), ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
+			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'], true );
 	}
@@ -225,12 +223,18 @@ class cmb_Meta_Box_types {
 		echo '<ul>';
 		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
-		foreach ($terms as $term) {
-			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name , '"';
+
+		$i = 1;
+		foreach ( $terms as $term ) {
+			$checked = ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) );
+
+			echo '<li class="cmb_radio_inline_option"><input type="checkbox" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
 			foreach ($names as $name) {
 				if ( $term->slug == $name->slug ){ echo ' checked="checked" ';};
 			}
-			echo' /><label>', $term->name , '</label></li>';
+
+			echo ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
+			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'] );
 	}
@@ -265,9 +269,11 @@ class cmb_Meta_Box_types {
 		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
 		echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
 
-		$_id_meta = get_metadata( $object_type, $object_id, $field['id'] .'_id', ( ! isset( $field['multiple'] ) || ! $field['multiple'] ) );
+		$_id_name = $field['id'] .'_id';
 
-		echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', $_id_meta, '" />',
+		$_id_meta = get_metadata( $object_type, $object_id, $_id_name, ( ! isset( $field['multiple'] ) || ! $field['multiple'] ) );
+
+		echo '<input class="cmb_upload_file_id" type="hidden" id="', $_id_name, '" name="', $_id_name, '" value="', $_id_meta, '" />',
 		self::desc( $field['desc'], true ),
 		'<div id="', $field['id'], '_status" class="cmb_media_status">';
 			if ( ! empty( $meta ) ) {
