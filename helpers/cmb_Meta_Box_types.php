@@ -265,7 +265,7 @@ class cmb_Meta_Box_types {
 		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
 		echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
 
-		$_id_meta = get_metadata( $object_type, $object_id, $field['id'] .'_id', !$field['multiple'] );
+		$_id_meta = get_metadata( $object_type, $object_id, $field['id'] .'_id', ( ! isset( $field['multiple'] ) || ! $field['multiple'] ) );
 
 		echo '<input class="cmb_upload_file_id" type="hidden" id="', $field['id'], '_id" name="', $field['id'], '_id" value="', $_id_meta, '" />',
 		self::desc( $field['desc'], true ),

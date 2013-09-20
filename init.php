@@ -156,7 +156,7 @@ class cmb_Meta_Box {
 	/**
 	 * Autoloads files with classes when needed
 	 * @since  0.9.5
-	 * @param  string $class_name Name of the class being
+	 * @param  string $class_name Name of the class being requested
 	 */
 	public static function autoload_helpers( $class_name ) {
 		if ( class_exists( $class_name, false ) )
@@ -818,14 +818,5 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	}
 
 }
-
-/**
- * Save a metabox's fields
- * @since  0.9.5
- * @param  array  $meta_box Metabox config array
- */
-// function cmb_save_meta_data( $meta_box, $object_id ) {
-// 	cmb_Meta_Box::save_fields( $meta_box, $object_id, cmb_Meta_Box::set_object_type( $meta_box ) );
-// }
 
 // End. That's it, folks! //
