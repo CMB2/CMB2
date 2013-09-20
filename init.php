@@ -474,15 +474,15 @@ class cmb_Meta_Box {
 					$_id_old = get_metadata( $object_type, $object_id, $_id_name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 
 					if ( isset( $field['save_id'] ) && $field['save_id'] ) {
-						$new = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
+						$_new_id = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
 					} else {
-						$new = '';
+						$_new_id = '';
 					}
 
-					if ( $new && $new != $_id_old ) {
-						update_metadata( $object_type, $object_id, $_id_name, $new );
+					if ( $_new_id && $_new_id != $_id_old ) {
+						update_metadata( $object_type, $object_id, $_id_name, $_new_id );
 
-					} elseif ( '' == $new && $_id_old ) {
+					} elseif ( '' == $_new_id && $_id_old ) {
 						delete_metadata( $object_type, $object_id, $_id_name, $old );
 					}
 					break;
