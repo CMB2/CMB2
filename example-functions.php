@@ -245,6 +245,21 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		)
 	);
 
+	$meta_boxes[] = array(
+		'id'             => 'user_data_metabox',
+		'title'          => 'User Data Metabox',
+		'pages'          => array( 'user', ), // Show for users edit page
+		'show_names'     => true, // Show field names on the left
+		'fields'         => array(
+			array(
+				'name' => 'User Field',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'user_text_field',
+				'type' => 'text',
+			),
+		)
+	);
+
 	// Add other metaboxes as needed
 
 	return $meta_boxes;
