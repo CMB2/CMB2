@@ -214,7 +214,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => 'Test Image',
-				'desc' => 'Upload an image or enter an URL.',
+				'desc' => 'Upload an image or enter a URL.',
 				'id'   => $prefix . 'test_image',
 				'type' => 'file',
 			),
