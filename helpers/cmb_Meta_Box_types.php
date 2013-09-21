@@ -98,9 +98,8 @@ class cmb_Meta_Box_types {
 
 	public static function select_timezone( $field, $meta ) {
 		$meta = '' !== $meta ? $meta : $field['std'];
-		if ('' === $meta) {
+		if ( '' === $meta )
 			$meta = cmb_Meta_Box::timezone_string();
-		}
 
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 		echo wp_timezone_choice( $meta );
@@ -241,7 +240,7 @@ class cmb_Meta_Box_types {
 
 	public static function file_list( $field, $meta, $object_id ) {
 		echo '<input class="cmb_upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
-		echo '<input class="cmb_upload_button button" type="button" value="Upload File" />', self::desc( $field['desc'], true );
+		echo '<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( $field['desc'], true );
 		$args = array(
 			'post_type' => 'attachment',
 			'numberposts' => null,
@@ -252,7 +251,7 @@ class cmb_Meta_Box_types {
 		if ( $attachments ) {
 			echo '<ul class="attach_list">';
 			foreach ( $attachments as $attachment ) {
-				echo '<li>'. wp_get_attachment_link( $attachment->ID, 'thumbnail', 0, 0, 'Download' );
+				echo '<li>'. wp_get_attachment_link( $attachment->ID, 'thumbnail', 0, 0, __( 'Download', 'cmb' ) );
 				echo '<span>';
 				echo apply_filters( 'the_title', '&nbsp;'. $attachment->post_title );
 				echo '</span></li>';
@@ -267,7 +266,7 @@ class cmb_Meta_Box_types {
 		if ( 'url' == $field['allow'] || ( is_array( $field['allow'] ) && in_array( 'url', $field['allow'] ) ) )
 			$input_type_url = 'text';
 		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
-		echo '<input class="cmb_upload_button button" type="button" value="Upload File" />';
+		echo '<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />';
 
 		$_id_name = $field['id'] .'_id';
 
@@ -284,15 +283,15 @@ class cmb_Meta_Box_types {
 
 				if ( $file_ext && in_array( $file_ext, $valid ) ) {
 					echo '<div class="img_status">';
-					echo '<img src="', $meta, '" alt="" />';
-					echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Image</a>';
+					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta, '" alt="" />';
+					echo '<p><a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove Image', 'cmb' ) .'</a></p>';
 					echo '</div>';
 				} else {
 					$parts = explode( '/', $meta );
 					for ( $i = 0; $i < count( $parts ); ++$i ) {
 						$title = $parts[$i];
 					}
-					echo 'File: <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">Download</a> / <a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove</a>)';
+					echo __( 'File:', 'cmb' ), ' <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta, '" target="_blank" rel="external">'. __( 'Download', 'cmb' ) .'</a> / <a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove', 'cmb' ) .'</a>)';
 				}
 			}
 		echo '</div>';
@@ -307,10 +306,10 @@ class cmb_Meta_Box_types {
 				if ( $check_embed ) {
 					echo '<div class="embed_status">';
 					echo $check_embed;
-					echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">Remove Embed</a>';
+					echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove Embed', 'cmb' ) .'</a>';
 					echo '</div>';
 				} else {
-					echo 'URL is not a valid oEmbed URL.';
+					_e( 'URL is not a valid oEmbed URL.', 'cmb' );
 				}
 			}
 		echo '</div>';
@@ -324,7 +323,7 @@ class cmb_Meta_Box_types {
 	/**
 	 * Default fallback. Allows rendering fields via "cmb_render_$name" hook
 	 * @since  0.9.5
-	 * @param  string $name      Non-existente method name
+	 * @param  string $name      Non-existent method name
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
