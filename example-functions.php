@@ -75,7 +75,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc'   => 'field description (optional)',
 				'id'     => $prefix . 'test_textmoney',
 				'type'   => 'text_money',
-				// 'before' => '£'; // override '$' symbol if needed
+				// 'before' => '£', // override '$' symbol if needed
 			),
 			array(
 	            'name' => 'Test Color Picker',
