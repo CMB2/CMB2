@@ -175,9 +175,9 @@ class cmb_Meta_Box {
 
 		global $wp_version;
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'thickbox', 'cmb-timepicker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'cmb-timepicker' );
 		// styles required for cmb
-		$styles = array( 'thickbox' );
+		$styles = array();
 
 		// if we're 3.5 or later, user wp-color-picker
 		if ( 3.5 <= $wp_version ) {
@@ -196,7 +196,15 @@ class cmb_Meta_Box {
 		self::$object_id = $object_id ? $object_id : 0;
 
 		// @todo test oembed on user profile page
-		wp_localize_script( 'cmb-scripts', 'cmb_ajax_data', array( 'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ), 'post_id' => $object_id ) );
+		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
+			'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ),
+			'post_id' => $object_id,
+			'upload_file' => 'Use this file',
+			'remove_image' => 'Remove Image',
+			'remove_file' => 'Remove',
+			'file' => 'File:',
+			'download' => 'Download',
+		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', $styles );
 	}
@@ -296,6 +304,9 @@ class cmb_Meta_Box {
 		echo '<table class="form-table cmb_metabox">';
 
 		foreach ( $_meta_box['fields'] as $field ) {
+
+			if ( isset( $field['on_front'] ) && $field['on_front'] == false )
+				continue;
 
 			self::$field =& $field;
 
@@ -473,10 +484,12 @@ class cmb_Meta_Box {
 					// get _id old value
 					$_id_old = get_metadata( $object_type, $object_id, $_id_name, !$field['multiple'] /* If multicheck this can be multiple values */ );
 
-					if ( isset( $field['save_id'] ) && $field['save_id'] ) {
-						$_new_id = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
-					} else {
+					// If specified NOT to save the file ID
+					if ( isset( $field['save_id'] ) && ! $field['save_id'] ) {
 						$_new_id = '';
+					} else {
+						// otherwise get the file ID
+						$_new_id = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
 					}
 
 					if ( $_new_id && $_new_id != $_id_old ) {
@@ -662,76 +675,6 @@ class cmb_Meta_Box {
 
 }
 
-function cmb_editor_footer_scripts() {
-	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] ) {
-
-		$label = isset( $_GET['cmb_send_label'] ) && $_GET['cmb_send_label'] ? $_GET['cmb_send_label'] : false;
-		if ( ! $label )
-			$label = 'Select File';
-		?>
-		<script type="text/javascript">
-		jQuery(function($) {
-			$('td.savesend input').val('<?php echo $label; ?>');
-		});
-		</script>
-		<?php
-	}
-}
-add_action( 'admin_print_footer_scripts', 'cmb_editor_footer_scripts', 99 );
-
-// Force 'Insert into Post' button from Media Library
-add_filter( 'get_media_item_args', 'cmb_force_send' );
-function cmb_force_send( $args ) {
-
-	// if the Gallery tab is opened from a custom meta box field, add Insert Into Post button
-	if ( isset( $_GET['cmb_force_send'] ) && 'true' == $_GET['cmb_force_send'] )
-		$args['send'] = true;
-
-	// if the From Computer tab is opened AT ALL, add Insert Into Post button after an image is uploaded
-	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
-
-		$args['send'] = true;
-
-		// TO DO: Are there any conditions in which we don't want the Insert Into Post
-		// button added? For example, if a post type supports thumbnails, does not support
-		// the editor, and does not have any cmb file inputs? If so, here's the first
-		// bits of code needed to check all that.
-		// $attachment_ancestors = get_post_ancestors( $_POST["attachment_id"] );
-		// $attachment_parent_post_type = get_post_type( $attachment_ancestors[0] );
-		// $post_type_object = get_post_type_object( $attachment_parent_post_type );
-	}
-
-	// change the label of the button on the From Computer tab
-	if ( isset( $_POST['attachment_id'] ) && '' != $_POST["attachment_id"] ) {
-
-		echo '
-			<script type="text/javascript">
-				function cmbGetParameterByNameInline(name) {
-					name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-					var regexS = "[\\?&]" + name + "=([^&#]*)";
-					var regex = new RegExp(regexS);
-					var results = regex.exec(window.location.href);
-					if(results == null)
-						return "";
-					else
-						return decodeURIComponent(results[1].replace(/\+/g, " "));
-				}
-
-				jQuery(function($) {
-					if (cmbGetParameterByNameInline("cmb_force_send")=="true") {
-						var cmb_send_label = cmbGetParameterByNameInline("cmb_send_label");
-						$("td.savesend input").val(cmb_send_label);
-					}
-				});
-			</script>
-		';
-	}
-
-    return $args;
-
-}
-
-add_action( 'wp_ajax_cmb_oembed_handler', 'cmb_oembed_ajax_results' );
 /**
  * Handles our oEmbed ajax request
  */
@@ -746,7 +689,7 @@ function cmb_oembed_ajax_results() {
 
 	if ( empty( $oembed_string ) ) {
 		$return = '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>';
-		$found = 'not found';
+		$found = __( 'not found', 'cmb' );
 	} else {
 
 		global $wp_embed;
@@ -780,6 +723,7 @@ function cmb_oembed_ajax_results() {
 	echo json_encode( array( 'result' => $return, 'id' => $found ) );
 	die();
 }
+add_action( 'wp_ajax_cmb_oembed_handler', 'cmb_oembed_ajax_results' );
 
 /**
  * Loop and output multiple metaboxes
