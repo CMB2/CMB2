@@ -171,6 +171,15 @@ jQuery(document).ready(function ($) {
 			var field_id = obj.attr('id');
 			// get our inputs context for pinpointing
 			var context = obj.parents('.cmb_metabox tr td');
+
+			var embed_container = $('.embed_status', context);
+			var oembed_width = obj.width();
+			var child_el = $(':first-child', embed_container);
+
+			oembed_width = ( embed_container.length && child_el.length )
+				? child_el.width()
+				: obj.width();
+
 			// show our spinner
 			$('.cmb-spinner', context).show();
 			// clear out previous results
@@ -178,31 +187,33 @@ jQuery(document).ready(function ($) {
 			// and run our ajax function
 			setTimeout(function () {
 				// if they haven't typed in 500 ms
-				if ($('.cmb_oembed:focus').val() == oembed_url) {
-					$.ajax({
-						type : 'post',
-						dataType : 'json',
-						url : window.ajaxurl,
-						data : {
-							'action': 'cmb_oembed_handler',
-							'oembed_url': oembed_url,
-							'oembed_width': obj.width(),
-							'field_id': field_id,
-							'object_id': window.cmb_l10.object_id,
-							'object_type': window.cmb_l10.object_type,
-							'cmb_ajax_nonce': window.cmb_l10.ajax_nonce
-						},
-						success: function (response) {
-							// if we have a response id
-							if (typeof response.id !== 'undefined') {
-								// hide our spinner
-								$('.cmb-spinner', context).hide();
-								// and populate our results from ajax response
-								$('.embed_wrap', context).html(response.result);
-							}
-						}
-					});
-				}
+				if ($('.cmb_oembed:focus').val() != oembed_url)
+					return;
+				$.ajax({
+					type : 'post',
+					dataType : 'json',
+					url : window.ajaxurl, // @todo make sure ajaxurl is available on frontend
+					data : {
+						'action': 'cmb_oembed_handler',
+						'oembed_url': oembed_url,
+						'oembed_width': oembed_width > 300 ? oembed_width : 300,
+						'field_id': field_id,
+						'object_id': window.cmb_l10.object_id,
+						'object_type': window.cmb_l10.object_type,
+						'cmb_ajax_nonce': window.cmb_l10.ajax_nonce
+					},
+					success: function (response) {
+						// Make sure we have a response id
+						if (typeof response.id === 'undefined')
+							return;
+
+						// hide our spinner
+						$('.cmb-spinner', context).hide();
+						// and populate our results from ajax response
+						$('.embed_wrap', context).html(response.result);
+					}
+				});
+
 			}, 500);
 		}
 	}
@@ -213,18 +224,24 @@ jQuery(document).ready(function ($) {
 	function resizeoEmbeds() {
 		$('table.cmb_metabox').each(function( index ) {
 			var self = $(this);
-			var tWidth = self.parents('.inside').width();
+			var parents = self.parents('.inside');
+			if ( ! ( parents.length > 0 ) )
+				return true; // continue
+
+			var tWidth = parents.width();
 			var newWidth = Math.round((tWidth * 0.82)*0.97) - 30;
-			if ( newWidth < 640 ) {
-				var iframe = $('.cmb-type-oembed .embed_status iframe', self);
-				var iwidth = iframe.width();
-				var iheight = iframe.height();
-				var newHeight = Math.round((newWidth * iheight)/iwidth);
-				iframe.width(newWidth).height(newHeight);
-			}
+			if ( newWidth > 639 )
+				return true; // continue
+
+			var child_el = $('.cmb-type-oembed .embed_status', self).children().first();;
+			var iwidth = child_el.width();
+			var iheight = child_el.height();
+			var newHeight = Math.round((newWidth * iheight)/iwidth);
+			child_el.width(newWidth).height(newHeight);
 
 		});
 	}
+
 	// on pageload
 	setTimeout( resizeoEmbeds, 500);
 	// and on window resize

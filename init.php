@@ -173,7 +173,7 @@ class cmb_Meta_Box {
 	 */
 	function register_scripts() {
 
-		global $wp_version;
+		global $wp_version, $user_ID, $post;
 		// scripts required for cmb
 		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'media-upload', 'cmb-timepicker' );
 		// styles required for cmb
@@ -190,20 +190,28 @@ class cmb_Meta_Box {
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
 		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL . 'js/cmb.js', $scripts, '0.9.5' );
+		wp_enqueue_media();
 
-		$object_id = self::$object_id ? self::$object_id : @get_the_ID();
+		if ( self::$object_id )
+			$object_id = self::$object_id;
+		elseif ( self::$object_type == 'user' && ! empty( $user_ID ) )
+			$object_id = $user_ID;
+		elseif ( self::$object_type == 'post' && ! empty( $post->ID ) )
+			$object_id = $post->ID;
+
 		// reset to id or 0
 		self::$object_id = $object_id ? $object_id : 0;
 
 		// @todo test oembed on user profile page
 		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
-			'ajax_nonce' => wp_create_nonce( 'ajax_nonce' ),
-			'post_id' => $object_id,
-			'upload_file' => 'Use this file',
+			'ajax_nonce'   => wp_create_nonce( 'ajax_nonce' ),
+			'object_id'    => self::$object_id,
+			'object_type'  => self::$object_type,
+			'upload_file'  => 'Use this file',
 			'remove_image' => 'Remove Image',
-			'remove_file' => 'Remove',
-			'file' => 'File:',
-			'download' => 'Download',
+			'remove_file'  => 'Remove',
+			'file'         => 'File:',
+			'download'     => 'Download',
 		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', $styles );
@@ -675,55 +683,9 @@ class cmb_Meta_Box {
 
 }
 
-/**
- * Handles our oEmbed ajax request
- */
-function cmb_oembed_ajax_results() {
-
-	// verify our nonce
-	if ( ! ( isset( $_REQUEST['cmb_ajax_nonce'], $_REQUEST['oembed_url'] ) && wp_verify_nonce( $_REQUEST['cmb_ajax_nonce'], 'ajax_nonce' ) ) )
-		die();
-
-	// sanitize our search string
-	$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
-
-	if ( empty( $oembed_string ) ) {
-		$return = '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>';
-		$found = __( 'not found', 'cmb' );
-	} else {
-
-		global $wp_embed;
-
-		$oembed_url = esc_url( $oembed_string );
-		// Post ID is needed to check for embeds
-		if ( isset( $_REQUEST['post_id'] ) )
-			$GLOBALS['post'] = get_post( $_REQUEST['post_id'] );
-		// Set width of embed
-		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? intval( $_REQUEST['oembed_width'] ) : '640';
-		// ping WordPress for an embed
-		$check_embed = $wp_embed->run_shortcode( '[embed width="'. $embed_width .'"]'. $oembed_url .'[/embed]' );
-		// fallback that WordPress creates when no oEmbed was found
-		$fallback = $wp_embed->maybe_make_link( $oembed_url );
-
-		if ( $check_embed && $check_embed != $fallback ) {
-			// Embed data
-			$return = '<div class="embed_status">'. $check_embed .'<a href="#" class="cmb_remove_file_button" rel="'. $_REQUEST['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></div>';
-			// set our response id
-			$found = 'found';
-
-		} else {
-			// error info when no oEmbeds were found
-			$return = '<p class="ui-state-error-text">'.sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
-			// set our response id
-			$found = 'not found';
-		}
-	}
-
-	// send back our encoded data
-	echo json_encode( array( 'result' => $return, 'id' => $found ) );
-	die();
-}
-add_action( 'wp_ajax_cmb_oembed_handler', 'cmb_oembed_ajax_results' );
+// Handle oembed Ajax
+add_action( 'wp_ajax_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oembed_handler' ) );
+add_action( 'wp_ajax_nopriv_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oembed_handler' ) );
 
 /**
  * Loop and output multiple metaboxes
@@ -748,6 +710,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	if ( $cmb ) {
 
 		$cmb::$object_id = $object_id;
+		$cmb::set_object_type( $meta_box );
 
 		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) ) {
 			$cmb->register_scripts();
@@ -758,7 +721,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 		if ( ! isset( $meta_box['cmb_styles'] ) || $meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
-		$cmb::show_form( $meta_box, $object_id, $cmb::set_object_type( $meta_box ) );
+		$cmb::show_form( $meta_box, $object_id, $cmb::$object_type );
 	}
 
 }

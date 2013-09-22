@@ -297,20 +297,18 @@ class cmb_Meta_Box_types {
 		echo '</div>';
 	}
 
-	public static function oembed( $field, $meta ) {
+	public static function oembed( $field, $meta, $object_id, $object_type ) {
 		echo '<input class="cmb_oembed" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
 		echo '<p class="cmb-spinner spinner"></p>';
 		echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
 			if ( $meta != '' ) {
-				$check_embed = $GLOBALS['wp_embed']->run_shortcode( '[embed]'. esc_url( $meta ) .'[/embed]' );
-				if ( $check_embed ) {
-					echo '<div class="embed_status">';
-					echo $check_embed;
-					echo '<a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove Embed', 'cmb' ) .'</a>';
-					echo '</div>';
-				} else {
-					_e( 'URL is not a valid oEmbed URL.', 'cmb' );
-				}
+
+				$check_embed = cmb_Meta_Box_ajax::get_oembed( $meta, $object_id, array(
+					'object_type' => $object_type,
+					'oembed_args' => array( 'width' => '640' ),
+				) );
+				echo cmb_Meta_Box_ajax::oembed_markup( $check_embed, $field['id'] );
+
 			}
 		echo '</div>';
 	}
