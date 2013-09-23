@@ -114,7 +114,7 @@ class cmb_Meta_Box {
 		// register our scripts and styles for cmb
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ), 8 );
 
-		if ( self::$object_type == 'post' ) {
+		if ( self::get_object_type() == 'post' ) {
 			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
@@ -129,7 +129,7 @@ class cmb_Meta_Box {
 			}
 
 		}
-		if ( self::$object_type == 'user' ) {
+		if ( self::get_object_type() == 'user' ) {
 
 			$priority = 10;
 			if ( isset( $meta_box['priority'] ) ) {
@@ -194,19 +194,18 @@ class cmb_Meta_Box {
 
 		if ( self::$object_id )
 			$object_id = self::$object_id;
-		elseif ( self::$object_type == 'user' && ! empty( $user_ID ) )
+		elseif ( self::get_object_type() == 'user' && ! empty( $user_ID ) )
 			$object_id = $user_ID;
-		elseif ( self::$object_type == 'post' && ! empty( $post->ID ) )
+		elseif ( self::get_object_type() == 'post' && ! empty( $post->ID ) )
 			$object_id = $post->ID;
 
 		// reset to id or 0
 		self::$object_id = $object_id ? $object_id : 0;
 
-		// @todo test oembed on user profile page
 		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
 			'ajax_nonce'   => wp_create_nonce( 'ajax_nonce' ),
 			'object_id'    => self::$object_id,
-			'object_type'  => self::$object_type,
+			'object_type'  => self::get_object_type(),
 			'upload_file'  => 'Use this file',
 			'remove_image' => 'Remove Image',
 			'remove_file'  => 'Remove',
@@ -307,7 +306,7 @@ class cmb_Meta_Box {
 
 		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
-		wp_nonce_field( basename(__FILE__), 'wp_meta_box_nonce', false, true );
+		wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
 		do_action( 'cmb_before_table', $_meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
@@ -377,7 +376,7 @@ class cmb_Meta_Box {
 		if (
 			// check nonce
 			! isset( $_POST['wp_meta_box_nonce'] )
-			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) )
+			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], self::nonce() )
 			// check if autosave
 			|| defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE
 			// check user editing permissions
@@ -401,7 +400,7 @@ class cmb_Meta_Box {
 		if (
 			// check nonce
 			! isset( $_POST['wp_meta_box_nonce'] )
-			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], basename(__FILE__) )
+			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], self::nonce() )
 		)
 			return $user_id;
 
@@ -615,7 +614,7 @@ class cmb_Meta_Box {
 		} else if ( array_key_exists( 'timezone_meta_key', self::$field ) && self::$field['timezone_meta_key'] ) {
 			$timezone_meta_key = self::$field['timezone_meta_key'];
 
-			$tzstring = get_metadata( self::$object_type, $object_id, $timezone_meta_key, true );
+			$tzstring = get_metadata( self::get_object_type(), $object_id, $timezone_meta_key, true );
 
 			return $tzstring;
 		}
@@ -634,7 +633,7 @@ class cmb_Meta_Box {
 			return $object_id;
 
 		// Try to get our object ID from the global space
-		switch ( self::$object_type ) {
+		switch ( self::get_object_type() ) {
 			case 'user':
 				$object_id = isset( $GLOBALS['user_id'] ) ? $GLOBALS['user_id'] : $object_id;
 				break;
@@ -648,15 +647,14 @@ class cmb_Meta_Box {
 	}
 
 	/**
-	 * Get object id from global space if no id is provided
-	 * @since  0.9.5
-	 * @param  integer $object_id Object ID
-	 * @return integer $object_id Object ID
+	 * Sets the $object_type based on metabox settings
+	 * @since 0.9.5
+	 * @param array $meta_box Metabox config array
 	 */
 	public static function set_object_type( $meta_box ) {
 
 		if ( ! isset( $meta_box['pages'] ) )
-			return self::$object_type;
+			return self::get_object_type();
 
 
 		$type = false;
@@ -668,7 +666,7 @@ class cmb_Meta_Box {
 			$type = is_string( end( $meta_box['pages'] ) ) ? end( $meta_box['pages'] ) : false;
 
 		if ( !$type )
-			return self::$object_type;
+			return self::get_object_type();
 
 		// Get our object type
 		if ( 'user' == $type )
@@ -678,7 +676,25 @@ class cmb_Meta_Box {
 		else
 			self::$object_type = 'post';
 
+		return self::get_object_type();
+	}
+
+	/**
+	 * Returns the object type
+	 * @since  0.9.5
+	 * @return string Object type
+	 */
+	public static function get_object_type() {
 		return self::$object_type;
+	}
+
+	/**
+	 * Returns the nonce value for wp_meta_box_nonce
+	 * @since  0.9.5
+	 * @return string Nonce value
+	 */
+	public static function nonce() {
+		return basename( __FILE__ );
 	}
 
 }
@@ -721,7 +737,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 		if ( ! isset( $meta_box['cmb_styles'] ) || $meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
-		$cmb::show_form( $meta_box, $object_id, $cmb::$object_type );
+		$cmb::show_form( $meta_box, $object_id, $cmb::get_object_type() );
 	}
 
 }
