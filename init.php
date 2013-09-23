@@ -742,4 +742,52 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 
 }
 
+/**
+ * Saves a particular metabox's fields
+ * @since 0.9.5
+ * @param array $meta_box  Metabox config array
+ * @param int   $object_id Object ID
+ */
+function cmb_save_metabox_fields( $meta_box, $object_id ) {
+	cmb_Meta_Box::set_object_type( $meta_box );
+	cmb_Meta_Box::save_fields( $meta_box['fields'], $object_id, cmb_Meta_Box::get_object_type() );
+}
+
+/**
+ * Display a metabox form & save it on submission
+ * @since  0.9.5
+ * @param  array   $meta_box  Metabox config array
+ * @param  int     $object_id Object ID
+ * @param  boolean $return    Whether to return or echo form
+ * @return string             CMB html form markup
+ */
+function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
+
+	// Save the metabox if it's been submitted
+	// check permissions
+	// @todo more hardening?
+	if (
+		// check nonce
+		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST['wp_meta_box_nonce'] )
+		&& wp_verify_nonce( $_POST['wp_meta_box_nonce'], cmb_Meta_Box::nonce() )
+		&& $_POST['object_id'] == $object_id
+	)
+		cmb_save_metabox_fields( $meta_box, $object_id );
+
+	// Show specific metabox form
+	$form = '
+	<form class="cmb-form" method="post" id="'. $meta_box['id'] .'" enctype="multipart/form-data" encoding="multipart/form-data">
+		'. cmb_print_metabox( $meta_box, $object_id ) . '
+		<input type="hidden" name="object_id" value="'. $object_id .'">
+		<input type="submit" name="submit-cmb" value="'. __( 'Save', 'cmb' ) .'">
+		<a href="'. remove_query_arg( 'edit' ) .'">'. __( 'Cancel', 'cmb' ) .'</a>
+	</form>
+	';
+
+	if ( $echo )
+		echo $form
+
+	return $form;
+}
+
 // End. That's it, folks! //
