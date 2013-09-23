@@ -301,15 +301,14 @@ class cmb_Meta_Box_types {
 		echo '<input class="cmb_oembed" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
 		echo '<p class="cmb-spinner spinner"></p>';
 		echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
-			if ( $meta != '' ) {
 
-				$check_embed = cmb_Meta_Box_ajax::get_oembed( $meta, $object_id, array(
+			if ( $meta != '' )
+				echo cmb_Meta_Box_ajax::get_oembed( $meta, $object_id, array(
 					'object_type' => $object_type,
 					'oembed_args' => array( 'width' => '640' ),
+					'field_id'    => $field['id'],
 				) );
-				echo cmb_Meta_Box_ajax::oembed_markup( $check_embed, $field['id'] );
 
-			}
 		echo '</div>';
 	}
 
