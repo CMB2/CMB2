@@ -785,7 +785,7 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 	';
 
 	if ( $echo )
-		echo $form
+		echo $form;
 
 	return $form;
 }
