@@ -299,7 +299,7 @@ class cmb_Meta_Box_types {
 
 	public static function oembed( $field, $meta, $object_id, $object_type ) {
 		echo '<input class="cmb_oembed" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
-		echo '<p class="cmb-spinner spinner"></p>';
+		echo '<p class="cmb-spinner spinner" style="display:none;"><img src="'. admin_url( '/images/wpspin_light.gif' ) .'" alt="spinner"/></p>';
 		echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
 
 			if ( $meta != '' )
