@@ -181,7 +181,6 @@ jQuery(document).ready(function ($) {
 				: obj.width();
 
 			// show our spinner
-			// @todo bring our spinner to the frontend
 			$('.cmb-spinner', context).show();
 			// clear out previous results
 			$('.embed_wrap', context).html('');
@@ -193,7 +192,7 @@ jQuery(document).ready(function ($) {
 				$.ajax({
 					type : 'post',
 					dataType : 'json',
-					url : window.ajaxurl, // @todo make sure ajaxurl is available on frontend
+					url : window.cmb_l10.ajaxurl,
 					data : {
 						'action': 'cmb_oembed_handler',
 						'oembed_url': oembed_url,

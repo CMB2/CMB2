@@ -223,6 +223,7 @@ class cmb_Meta_Box {
 			'remove_file'  => 'Remove',
 			'file'         => 'File:',
 			'download'     => 'Download',
+			'ajaxurl'		=> admin_url( '/admin-ajax.php' ),
 		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', $styles );
