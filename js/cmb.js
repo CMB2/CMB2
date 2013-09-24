@@ -181,6 +181,7 @@ jQuery(document).ready(function ($) {
 				: obj.width();
 
 			// show our spinner
+			// @todo bring our spinner to the frontend
 			$('.cmb-spinner', context).show();
 			// clear out previous results
 			$('.embed_wrap', context).html('');

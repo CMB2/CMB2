@@ -187,12 +187,12 @@ class cmb_Meta_Box {
 				// we need to register colorpicker on the front-end
 			   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), '0.9.5' );
 		   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), '0.9.5' );
-				$colorpicker_l10n = array(
+				wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
 					'clear' => __( 'Clear' ),
 					'defaultString' => __( 'Default' ),
-					'pick' => __( 'Select Color' )
-				);
-				wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
+					'pick' => __( 'Select Color' ),
+					'current' => __( 'Current Color' ),
+				) );
 			}
 		} else {
 			// otherwise use the older 'farbtastic'
@@ -789,10 +789,13 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 	// Show specific metabox form
 	$form = '
 	<form class="cmb-form" method="post" id="'. $meta_box['id'] .'" enctype="multipart/form-data" encoding="multipart/form-data">
-		'. cmb_print_metabox( $meta_box, $object_id ) . '
-		<input type="hidden" name="object_id" value="'. $object_id .'">
-		<input type="submit" name="submit-cmb" value="'. __( 'Save', 'cmb' ) .'">
-		<a href="'. remove_query_arg( 'edit' ) .'">'. __( 'Cancel', 'cmb' ) .'</a>
+		<input type="hidden" name="object_id" value="'. $object_id .'">'."\n";
+		ob_start();
+		cmb_print_metabox( $meta_box, $object_id );
+		$form .= ob_get_contents();
+		ob_end_clean();
+		$form .= "\n".'<input type="submit" name="submit-cmb" value="'. __( 'Save', 'cmb' ) .'">
+		<!-- <a href="'. remove_query_arg( 'edit' ) .'">'. __( 'Cancel', 'cmb' ) .'</a> -->
 	</form>
 	';
 
