@@ -91,6 +91,7 @@ class cmb_Meta_Box {
 	public    static $object_id   = 0;
 	// Type of object being saved. (e.g., post, user, or comment)
 	protected static $object_type = 'post';
+	const CMB_VERSION             = '0.9.5';
 
 	/**
 	 * Get started
@@ -185,8 +186,8 @@ class cmb_Meta_Box {
 			$styles[] = 'wp-color-picker';
 			if ( ! is_admin() ) {
 				// we need to register colorpicker on the front-end
-			   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), '0.9.5' );
-		   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), '0.9.5' );
+			   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB_VERSION );
+		   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB_VERSION );
 				wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
 					'clear' => __( 'Clear' ),
 					'defaultString' => __( 'Default' ),
@@ -200,7 +201,7 @@ class cmb_Meta_Box {
 			$styles[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb.js', $scripts, '0.9.5' );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb.js', $scripts, CMB_VERSION );
 
 		wp_enqueue_media();
 
