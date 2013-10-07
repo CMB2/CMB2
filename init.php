@@ -86,12 +86,13 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
  */
 class cmb_Meta_Box {
 	protected        $_meta_box;
-	protected        $form_id     = 'post';
-	protected static $field       = array();
-	public    static $object_id   = 0;
+	protected        $form_id        = 'post';
+	protected static $field          = array();
+	public    static $object_id      = 0;
 	// Type of object being saved. (e.g., post, user, or comment)
-	protected static $object_type = 'post';
-	const CMB_VERSION             = '0.9.5';
+	protected static $object_type    = false;
+	protected static $mb_object_type = 'post';
+	const CMB_VERSION                = '0.9.5';
 
 	/**
 	 * Get started
@@ -105,12 +106,17 @@ class cmb_Meta_Box {
 
 		$this->_meta_box = $meta_box;
 
-		self::set_object_type( $meta_box );
+		self::set_mb_type( $meta_box );
 
 		$types = wp_list_pluck( $meta_box['fields'], 'type' );
 		$upload = in_array( 'file', $types ) || in_array( 'file_list', $types );
 
 		global $pagenow;
+
+		$show_filters = 'cmb_Meta_Box_Show_Filters';
+		foreach ( get_class_methods( $show_filters ) as $filter ) {
+			add_filter( 'cmb_show_on', array( $show_filters, $filter ), 10, 2 );
+		}
 
 		// register our scripts and styles for cmb
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ), 8 );
@@ -119,11 +125,6 @@ class cmb_Meta_Box {
 			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
-
-			$show_filters = 'cmb_Meta_Box_Show_Filters';
-			foreach ( get_class_methods( $show_filters ) as $filter ) {
-				add_filter( 'cmb_show_on', array( $show_filters, $filter ), 10, 2 );
-			}
 
 			if ( $upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) ) {
 				add_action( 'admin_head', array( $this, 'add_post_enctype' ) );
@@ -174,7 +175,7 @@ class cmb_Meta_Box {
 	 */
 	function register_scripts() {
 
-		global $wp_version, $user_ID, $post;
+		global $wp_version;
 		// scripts required for cmb
 		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', /*'media-upload', */'cmb-timepicker' );
 		// styles required for cmb
@@ -205,19 +206,9 @@ class cmb_Meta_Box {
 
 		wp_enqueue_media();
 
-		if ( self::$object_id )
-			$object_id = self::$object_id;
-		elseif ( self::get_object_type() == 'user' && ! empty( $user_ID ) )
-			$object_id = $user_ID;
-		elseif ( self::get_object_type() == 'post' && ! empty( $post->ID ) )
-			$object_id = $post->ID;
-
-		// reset to id or 0
-		self::$object_id = $object_id ? $object_id : 0;
-
 		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
 			'ajax_nonce'   => wp_create_nonce( 'ajax_nonce' ),
-			'object_id'    => self::$object_id,
+			'object_id'    => self::get_object_id(),
 			'object_type'  => self::get_object_type(),
 			'upload_file'  => 'Use this file',
 			'remove_image' => 'Remove Image',
@@ -292,10 +283,8 @@ class cmb_Meta_Box {
 		if ( ! $this->_meta_box )
 			return;
 
-		if ( 'user' != self::set_object_type( $this->_meta_box ) )
+		if ( 'user' != self::set_mb_type( $this->_meta_box ) )
 			return;
-
-		global $user_ID;
 
 		wp_enqueue_script( 'cmb-scripts' );
 
@@ -303,17 +292,27 @@ class cmb_Meta_Box {
 		if ( isset( $this->_meta_box['cmb_styles'] ) && $this->_meta_box['cmb_styles'] == true  )
 			wp_enqueue_style( 'cmb-styles' );
 
-		self::show_form( $this->_meta_box, $user_ID, 'user' );
+		self::show_form( $this->_meta_box );
 
 	}
 
 	/**
-	 * Display fields
+	 * Loops through and displays fields
+	 * @since  0.9.5
+	 * @param  array  $meta_box    Metabox config array
+	 * @param  int    $object_id   Object ID
+	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
-	public static function show_form( $_meta_box, $object_id, $object_type = 'post' ) {
+	public static function show_form( $meta_box, $object_id = 0, $object_type = '' ) {
 
-		self::$object_id =& $object_id;
-		self::$object_type =& $object_type;
+		// Set/get type
+		self::$object_type = $object_type = $object_type
+			? $object_type
+			: self::set_mb_type( $meta_box );
+		// Set/get ID
+		self::$object_id = $object_id = $object_id
+			? $object_id
+			: self::get_object_id();
 
 		// get box types
 		$types = cmb_Meta_Box_types::get();
@@ -321,10 +320,10 @@ class cmb_Meta_Box {
 		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
 		wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
-		do_action( 'cmb_before_table', $_meta_box, $object_id, $object_type );
+		do_action( 'cmb_before_table', $meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
-		foreach ( $_meta_box['fields'] as $field ) {
+		foreach ( $meta_box['fields'] as $field ) {
 
 			if ( isset( $field['on_front'] ) && $field['on_front'] == false )
 				continue;
@@ -358,7 +357,7 @@ class cmb_Meta_Box {
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
 			} else {
-				if( $_meta_box['show_names'] == true ) {
+				if( $meta_box['show_names'] == true ) {
 					$style = $object_type == 'post' ? ' style="width:18%"' : '';
 					echo '<th'. $style .'><label for="', $field['id'], '">', $field['name'], '</label></th>';
 				} else {
@@ -376,7 +375,7 @@ class cmb_Meta_Box {
 			echo '</td>','</tr>';
 		}
 		echo '</table>';
-		do_action( 'cmb_after_table', $_meta_box, $object_id, $object_type );
+		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
 		echo "\n<!-- End CMB Fields -->\n";
 
 	}
@@ -401,7 +400,7 @@ class cmb_Meta_Box {
 		)
 			return $post_id;
 
-		self::save_fields( $this->_meta_box['fields'], $post_id );
+		self::save_fields( $this->_meta_box, $post_id, 'post' );
 	}
 
 	/**
@@ -418,22 +417,33 @@ class cmb_Meta_Box {
 		)
 			return $user_id;
 
-		self::save_fields( $this->_meta_box['fields'], $user_id, 'user' );
+		self::save_fields( $this->_meta_box, $user_id, 'user' );
 	}
 
 	/**
 	 * Loops through and saves field data
 	 * @since  0.9.5
-	 * @param  array  $fields      Array of fields to save
+	 * @param array   $meta_box    Metabox config array
 	 * @param  int    $object_id   Object ID
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
-	public static function save_fields( $fields, $object_id, $object_type = 'post' ) {
+	public static function save_fields( $meta_box, $object_id, $object_type = '' ) {
+
+		$meta_box['show_on'] = empty( $meta_box['show_on'] ) ? array( 'key' => false, 'value' => false ) : $meta_box['show_on'];
+
+		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
+			return;
 
 		self::$object_id =& $object_id;
-		self::$object_type =& $object_type;
+		// Set/get type
+		$object_type = self::$object_type = $object_type
+			? $object_type
+			: self::set_mb_type( $meta_box );
 
-		foreach ( $fields as $field ) {
+		// save field ids of those that are updated
+		$updated = array();
+
+		foreach ( $meta_box['fields'] as $field ) {
 
 			self::$field =& $field;
 
@@ -514,6 +524,7 @@ class cmb_Meta_Box {
 					}
 
 					if ( $_new_id && $_new_id != $_id_old ) {
+						$updated[] = $_id_name;
 						update_metadata( $object_type, $object_id, $_id_name, $_new_id );
 
 					} elseif ( '' == $_new_id && $_id_old ) {
@@ -541,12 +552,16 @@ class cmb_Meta_Box {
 					}
 				}
 			} elseif ( '' !== $new && $new != $old  ) {
+				$updated[] = $name;
 				update_metadata( $object_type, $object_id, $name, $new );
 			} elseif ( '' == $new ) {
 				delete_metadata( $object_type, $object_id, $name );
 			}
 
 		}
+
+		do_action( "cmb_save_{$object_type}_fields", $object_id, $meta_box['id'], $updated, $meta_box );
+
 	}
 
 	/**
@@ -628,7 +643,7 @@ class cmb_Meta_Box {
 		} else if ( array_key_exists( 'timezone_meta_key', self::$field ) && self::$field['timezone_meta_key'] ) {
 			$timezone_meta_key = self::$field['timezone_meta_key'];
 
-			$tzstring = get_metadata( self::get_object_type(), $object_id, $timezone_meta_key, true );
+			$tzstring = get_metadata( self::get_mb_type(), $object_id, $timezone_meta_key, true );
 
 			return $tzstring;
 		}
@@ -646,10 +661,14 @@ class cmb_Meta_Box {
 		if ( $object_id )
 			return $object_id;
 
+		if ( self::$object_id )
+			return self::$object_id;
+
 		// Try to get our object ID from the global space
 		switch ( self::get_object_type() ) {
 			case 'user':
-				$object_id = isset( $GLOBALS['user_id'] ) ? $GLOBALS['user_id'] : $object_id;
+				$object_id = isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
 				break;
 
 			default:
@@ -657,19 +676,27 @@ class cmb_Meta_Box {
 				break;
 		}
 
-		return $object_id;
+		// reset to id or 0
+		self::$object_id = $object_id ? $object_id : 0;
+
+		return self::$object_id;
 	}
 
 	/**
 	 * Sets the $object_type based on metabox settings
-	 * @since 0.9.5
-	 * @param array $meta_box Metabox config array
+	 * @since  0.9.5
+	 * @param  array|string $meta_box Metabox config array or explicit setting
+	 * @return string       Object type
 	 */
-	public static function set_object_type( $meta_box ) {
+	public static function set_mb_type( $meta_box ) {
+
+		if ( is_string( $meta_box ) ) {
+			self::$mb_object_type = $meta_box;
+			return self::get_mb_type();
+		}
 
 		if ( ! isset( $meta_box['pages'] ) )
-			return self::get_object_type();
-
+			return self::get_mb_type();
 
 		$type = false;
 		// check if 'pages' is a string
@@ -680,17 +707,17 @@ class cmb_Meta_Box {
 			$type = is_string( end( $meta_box['pages'] ) ) ? end( $meta_box['pages'] ) : false;
 
 		if ( !$type )
-			return self::get_object_type();
+			return self::get_mb_type();
 
 		// Get our object type
 		if ( 'user' == $type )
-			self::$object_type = 'user';
+			self::$mb_object_type = 'user';
 		elseif ( 'comment' == $type )
-			self::$object_type = 'comment';
+			self::$mb_object_type = 'comment';
 		else
-			self::$object_type = 'post';
+			self::$mb_object_type = 'post';
 
-		return self::get_object_type();
+		return self::get_mb_type();
 	}
 
 	/**
@@ -699,7 +726,35 @@ class cmb_Meta_Box {
 	 * @return string Object type
 	 */
 	public static function get_object_type() {
+		if ( self::$object_type )
+			return self::$object_type;
+
+		global $pagenow;
+
+		if (
+			$pagenow == 'user-edit.php'
+			|| $pagenow == 'profile.php'
+		)
+			self::$object_type = 'user';
+
+		elseif (
+			$pagenow == 'edit-comments.php'
+			|| $pagenow == 'comment.php'
+		)
+			self::$object_type = 'comment';
+		else
+			self::$object_type = 'post';
+
 		return self::$object_type;
+	}
+
+	/**
+	 * Returns the object type
+	 * @since  0.9.5
+	 * @return string Object type
+	 */
+	public static function get_mb_type() {
+		return self::$mb_object_type;
 	}
 
 	/**
@@ -740,18 +795,17 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	if ( $cmb ) {
 
 		$cmb::$object_id = $object_id;
-		$cmb::set_object_type( $meta_box );
 
-		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) ) {
+		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) )
 			$cmb->register_scripts();
-		}
+
 		wp_enqueue_script( 'cmb-scripts' );
 
 		// default is to show cmb styles
 		if ( ! isset( $meta_box['cmb_styles'] ) || $meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
-		$cmb::show_form( $meta_box, $object_id, $cmb::get_object_type() );
+		$cmb::show_form( $meta_box );
 	}
 
 }
@@ -763,8 +817,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
  * @param int   $object_id Object ID
  */
 function cmb_save_metabox_fields( $meta_box, $object_id ) {
-	cmb_Meta_Box::set_object_type( $meta_box );
-	cmb_Meta_Box::save_fields( $meta_box['fields'], $object_id, cmb_Meta_Box::get_object_type() );
+	cmb_Meta_Box::save_fields( $meta_box, $object_id );
 }
 
 /**
@@ -776,6 +829,9 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
  * @return string             CMB html form markup
  */
 function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
+
+	// Make sure that our object type is explicitly set by the metabox config
+	cmb_Meta_Box::$object_type = cmb_Meta_Box::set_mb_type( $meta_box );
 
 	// Save the metabox if it's been submitted
 	// check permissions
