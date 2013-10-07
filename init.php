@@ -528,6 +528,7 @@ class cmb_Meta_Box {
 						update_metadata( $object_type, $object_id, $_id_name, $_new_id );
 
 					} elseif ( '' == $_new_id && $_id_old ) {
+						$updated[] = $_id_name;
 						delete_metadata( $object_type, $object_id, $_id_name, $old );
 					}
 					break;
@@ -545,6 +546,7 @@ class cmb_Meta_Box {
 
 			} elseif ( $field['multiple'] ) {
 
+				$updated[] = $name;
 				delete_metadata( $object_type, $object_id, $name );
 				if ( ! empty( $new ) ) {
 					foreach ( $new as $add_new ) {
@@ -555,6 +557,7 @@ class cmb_Meta_Box {
 				$updated[] = $name;
 				update_metadata( $object_type, $object_id, $name, $new );
 			} elseif ( '' == $new ) {
+				$updated[] = $name;
 				delete_metadata( $object_type, $object_id, $name );
 			}
 
