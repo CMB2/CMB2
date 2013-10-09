@@ -13,6 +13,10 @@ class cmb_Meta_Box_types {
 
 	// A single instance of this class.
 	public static $instance = null;
+	public static $iterator = 0;
+	public static $type     = 'text';
+	public static $field;
+	public static $meta;
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -30,16 +34,32 @@ class cmb_Meta_Box_types {
 		echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
 	}
 
+	public static function text_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta );
+	}
+
 	public static function text_small( $field, $meta ) {
 		echo '<input class="cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
+	}
+
+	public static function text_small_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_small' );
 	}
 
 	public static function text_medium( $field, $meta ) {
 		echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
 	}
 
+	public static function text_medium_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_medium' );
+	}
+
 	public static function text_email( $field, $meta ) {
 		echo '<input class="cmb_text_email cmb_text_medium" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
+	}
+
+	public static function text_email_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_email cmb_text_medium', 'email' );
 	}
 
 	public static function text_url( $field, $meta ) {
@@ -50,6 +70,13 @@ class cmb_Meta_Box_types {
 		echo '<input class="cmb_text_url cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />', self::desc( $field['desc'], true );
 	}
 
+	public static function text_url_repeat( $field, $meta ) {
+		$val = ! empty( $meta ) ? $meta : $field['std'];
+		$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
+		$val = $val ? esc_url( $val, $protocols ) : '';
+		self::repeat_text_field( $field, $val, 'cmb_text_url cmb_text_medium' );
+	}
+
 	public static function text_date( $field, $meta ) {
 		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
 	}
@@ -57,7 +84,6 @@ class cmb_Meta_Box_types {
 	public static function text_date_timestamp( $field, $meta ) {
 		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? date( 'm\/d\/Y', $meta ) : $field['std'], '" />', self::desc( $field['desc'] );
 	}
-
 
 	public static function text_datetime_timestamp( $field, $meta, $object_id ) {
 
@@ -108,6 +134,10 @@ class cmb_Meta_Box_types {
 
 	public static function text_money( $field, $meta ) {
 		echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
+	}
+
+	public static function text_money_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_money' );
 	}
 
 	public static function colorpicker( $field, $meta ) {
@@ -312,9 +342,65 @@ class cmb_Meta_Box_types {
 		echo '</div>';
 	}
 
-	public static function desc( $desc, $paragraph = false ) {
+	private static function desc( $desc, $paragraph = false ) {
 		$tag = $paragraph ? 'p' : 'span';
 		return "\n<$tag class=\"cmb_metabox_description\">$desc</$tag>\n";
+	}
+
+	private static function repeat_text_field( $field, $meta, $class = '', $type = 'text' ) {
+
+		self::$field = $field; self::$meta = $meta; self::$type = $type;
+
+		// check for default content
+		$std = isset( $field['std'] ) ? array( $field['std'] ) : false;
+		// check for saved data
+		$meta = !empty( $meta ) && array_filter( $meta ) ? $meta : $std;
+
+
+		self::repeat_table_open( $class );
+
+		$class = $class ? $class .' widefat' : 'widefat';
+
+		if ( !empty( $meta ) ) {
+			foreach ( (array) $meta as $val ) {
+				self::repeat_row( self::text_input( $class, $val ) );
+			}
+		} else {
+			self::repeat_row( self::text_input( $class ) );
+		}
+
+		self::empty_row( self::text_input( $class ) );
+		self::repeat_table_close();
+		// reset iterator
+		self::$iterator = 0;
+	}
+
+	private static function text_input( $class = '', $val = '' ) {
+		self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
+		$before = '';
+		if ( self::$field['type'] == 'text_money' )
+			$before = ! empty( self::$field['before'] ) ? ' ' : '$ ';
+		return $before . '<input type="'. self::$type .'" class="'. $class .'" name="'. self::$field['id'] .'[]" id="'. self::$field['id'] .'_'. self::$iterator .'" value="'. $val .'" data-id="'. self::$field['id'] .'" data-count="'. self::$iterator .'"/>';
+	}
+
+	private static function repeat_table_open( $class = '' ) {
+		echo self::desc( self::$field['desc'] ), '<table id="', self::$field['id'], '_repeat" class="cmb-repeat-table ', $class ,'"><tbody>';
+	}
+
+	private static function repeat_table_close() {
+		echo '</tbody></table><p class="add-row"><a data-selector="', self::$field['id'] ,'_repeat" class="add-row-button button" href="#">'. __( 'Add Row', 'cmb' ) .'</a></p>';
+	}
+
+	private static function repeat_row( $input ) {
+		echo '<tr class="repeat-row">', self::repeat_cell( $input ) ,'</tr>';
+	}
+
+	private static function empty_row( $input ) {
+		echo '<tr class="empty-row">', self::repeat_cell( $input ) ,'</tr>';
+	}
+
+	private static function repeat_cell( $input ) {
+		return '<td>'. $input .'</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
 	}
 
 	/**

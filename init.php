@@ -187,8 +187,8 @@ class cmb_Meta_Box {
 			$styles[] = 'wp-color-picker';
 			if ( ! is_admin() ) {
 				// we need to register colorpicker on the front-end
-			   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB_VERSION );
-		   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB_VERSION );
+			   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), self::CMB_VERSION );
+		   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), self::CMB_VERSION );
 				wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
 					'clear' => __( 'Clear' ),
 					'defaultString' => __( 'Default' ),
@@ -202,7 +202,7 @@ class cmb_Meta_Box {
 			$styles[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb.js', $scripts, CMB_VERSION );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb.js', $scripts, self::CMB_VERSION );
 
 		wp_enqueue_media();
 
@@ -351,8 +351,11 @@ class cmb_Meta_Box {
 			if ( $meta === 'cmb_override_val' )
 				$meta = get_metadata( $object_type, $object_id, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
+			$repeat = isset( $field['repeatable'] ) && $field['repeatable'];
+			$repeatclass = $repeat ? ' cmb-repeat' : '';
+			$repeatmethod = $repeat ? '_repeat' : '';
 
-			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) .'">';
+			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $repeatclass .'">';
 
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
@@ -368,7 +371,7 @@ class cmb_Meta_Box {
 
 			echo empty( $field['before'] ) ? '' : $field['before'];
 
-			call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
+			call_user_func( array( $types, $field['type'].$repeatmethod ), $field, $meta, $object_id, $object_type );
 
 			echo empty( $field['after'] ) ? '' : $field['after'];
 
@@ -463,6 +466,10 @@ class cmb_Meta_Box {
 				)
 					$new = wp_set_object_terms( $object_id, $new, $field['taxonomy'] );
 
+			}
+
+			if ( isset( $field['repeatable'] ) && $field['repeatable'] && is_array( $new ) ) {
+				$new = array_filter( $new );
 			}
 
 			switch ( $field['type'] ) {

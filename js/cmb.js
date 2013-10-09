@@ -20,6 +20,7 @@ jQuery(document).ready(function ($) {
 	var formfield;
 	// Uploading files
 	var file_frame = false;
+	var iterator = 0;
 
 	/**
 	 * Initialize timepicker (this will be moved inline in a future release)
@@ -128,6 +129,35 @@ jQuery(document).ready(function ($) {
 		$('input#' + formfield + '_id').val('');
 		container.html('');
 		return false;
+	})
+	.on( 'click', '.add-row-button', function(e) {
+
+		e.preventDefault();
+		self = $(this);
+
+		var tableselector = '#'+ self.data('selector');
+		var $table = $(tableselector);
+		var row = $('.empty-row', $table).clone(true);
+		row.removeClass('empty-row').addClass('repeat-row');
+		row.insertBefore( tableselector +' tbody>tr:last' );
+		var input = $('input.cmb_datepicker',row);
+		var id = input.attr('id');
+		input.attr('id', id + iterator );
+		iterator++;
+
+		// @todo Make a colorpicker field repeatable
+		// row.find('.wp-color-result').remove();
+		// row.find('input:text.cmb_colorpicker').wpColorPicker();
+
+	})
+	.on( 'click', '.remove-row-button', function(e) {
+		e.preventDefault();
+		var $self = $(this);
+		var $parent = $self.parents('.cmb-repeat-table');
+		console.log( 'number of tbodys', $parent.length );
+		console.log( 'number of trs', $('tr', $parent).length );
+		if ( $('tr', $parent).length > 2 )
+			$self.parents('.cmb-repeat-table tr').remove();
 	})
 
 	/**
