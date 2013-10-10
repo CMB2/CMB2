@@ -876,7 +876,6 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 		$form .= ob_get_contents();
 		ob_end_clean();
 		$form .= "\n".'<input type="submit" name="submit-cmb" value="'. __( 'Save', 'cmb' ) .'">
-		<!-- <a href="'. remove_query_arg( 'edit' ) .'">'. __( 'Cancel', 'cmb' ) .'</a> -->
 	</form>
 	';
 
