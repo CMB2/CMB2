@@ -88,7 +88,7 @@ class cmb_Meta_Box {
 	protected        $_meta_box;
 	protected        $form_id        = 'post';
 	protected static $field          = array();
-	public    static $object_id      = 0;
+	protected static $object_id      = 0;
 	// Type of object being saved. (e.g., post, user, or comment)
 	protected static $object_type    = false;
 	protected static $mb_object_type = 'post';
@@ -306,13 +306,9 @@ class cmb_Meta_Box {
 	public static function show_form( $meta_box, $object_id = 0, $object_type = '' ) {
 
 		// Set/get type
-		self::$object_type = $object_type = $object_type
-			? $object_type
-			: self::set_mb_type( $meta_box );
+		$object_type = self::set_object_type( $object_type ? $object_type : self::set_mb_type( $meta_box ) );
 		// Set/get ID
-		self::$object_id = $object_id = $object_id
-			? $object_id
-			: self::get_object_id();
+		$object_id = self::set_object_id( $object_id ? $object_id : self::get_object_id() );
 
 		// get box types
 		$types = cmb_Meta_Box_types::get();
@@ -437,11 +433,9 @@ class cmb_Meta_Box {
 		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
 			return;
 
-		self::$object_id =& $object_id;
+		self::set_object_id( $object_id );
 		// Set/get type
-		$object_type = self::$object_type = $object_type
-			? $object_type
-			: self::set_mb_type( $meta_box );
+		$object_type = self::set_object_type( $object_type ? $object_type	: self::set_mb_type( $meta_box ) );
 
 		// save field ids of those that are updated
 		$updated = array();
@@ -687,9 +681,19 @@ class cmb_Meta_Box {
 		}
 
 		// reset to id or 0
-		self::$object_id = $object_id ? $object_id : 0;
+		self::set_object_id( $object_id ? $object_id : 0 );
 
 		return self::$object_id;
+	}
+
+	/**
+	 * Explicitly Set object id
+	 * @since  0.9.5
+	 * @param  integer $object_id Object ID
+	 * @return integer $object_id Object ID
+	 */
+	public static function set_object_id( $object_id ) {
+		return self::$object_id = $object_id;
 	}
 
 	/**
@@ -745,17 +749,26 @@ class cmb_Meta_Box {
 			$pagenow == 'user-edit.php'
 			|| $pagenow == 'profile.php'
 		)
-			self::$object_type = 'user';
+			self::set_object_type( 'user' );
 
 		elseif (
 			$pagenow == 'edit-comments.php'
 			|| $pagenow == 'comment.php'
 		)
-			self::$object_type = 'comment';
+			self::set_object_type( 'comment' );
 		else
-			self::$object_type = 'post';
+			self::set_object_type( 'post' );
 
 		return self::$object_type;
+	}
+
+	/**
+	 * Sets the object type
+	 * @since  0.9.5
+	 * @return string Object type
+	 */
+	public static function set_object_type( $object_type ) {
+		return self::$object_type = $object_type;
 	}
 
 	/**
@@ -804,7 +817,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	$cmb = new cmb_Meta_Box( $meta_box );
 	if ( $cmb ) {
 
-		$cmb::$object_id = $object_id;
+		$cmb::set_object_id( $object_id );
 
 		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) )
 			$cmb->register_scripts();
@@ -841,7 +854,7 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
 function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 
 	// Make sure that our object type is explicitly set by the metabox config
-	cmb_Meta_Box::$object_type = cmb_Meta_Box::set_mb_type( $meta_box );
+	cmb_Meta_Box::set_object_type( cmb_Meta_Box::set_mb_type( $meta_box ) );
 
 	// Save the metabox if it's been submitted
 	// check permissions
