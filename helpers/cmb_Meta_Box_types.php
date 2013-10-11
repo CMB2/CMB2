@@ -201,7 +201,7 @@ class cmb_Meta_Box_types {
 		echo '<ul>';
 		$i = 1;
 		foreach ( $field['options'] as $value => $name ) {
-			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $value . '" ', checked( in_array( $value, $meta ) ), ' /> <label for="', $field['id'], $i, '">' . $name . '</label></li>';
+			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'] );
@@ -248,18 +248,14 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function taxonomy_multicheck( $field, $meta, $object_id ) {
-
 		echo '<ul>';
 		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
-
 		$i = 1;
 		foreach ( $terms as $term ) {
-			$checked = ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) );
-
-			echo '<li class="cmb_radio_inline_option"><input type="checkbox" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
+			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
 			foreach ($names as $name) {
-				if ( $term->slug == $name->slug ){ echo ' checked="checked" ';};
+				checked( $term->slug == $name->slug );
 			}
 
 			echo ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
