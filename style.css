@@ -1,7 +1,8 @@
 /**
  * CMB Styling
  */
-table.cmb_metabox td, table.cmb_metabox th { border-bottom: 1px solid #E9E9E9; }
+table.cmb_metabox tr:first-of-type td, table.cmb_metabox tr:first-of-type th { border:0; }
+table.cmb_metabox td, table.cmb_metabox th { border-top: 1px solid #E9E9E9; }
 table.cmb_metabox th { text-align: right; font-weight:bold;}
 table.cmb_metabox th label { margin-top:5px; display:block;}
 p.cmb_metabox_description { color: #AAA; font-style: italic; margin: 2px 0 !important;}
