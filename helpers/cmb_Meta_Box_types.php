@@ -14,6 +14,7 @@ class cmb_Meta_Box_types {
 	// A single instance of this class.
 	public static $instance = null;
 	public static $iterator = 0;
+	public static $valid    = false;
 	public static $type     = 'text';
 	public static $field;
 	public static $meta;
@@ -265,25 +266,38 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function file_list( $field, $meta, $object_id ) {
-		echo '<input class="cmb_upload_file" type="text" size="36" name="', $field['id'], '" value="" />';
-		echo '<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( $field['desc'], true );
-		$args = array(
-			'post_type' => 'attachment',
-			'numberposts' => null,
-			'post_status' => null,
-			'post_parent' => $object_id
-		);
-		$attachments = get_posts( $args );
-		if ( $attachments ) {
-			echo '<ul class="attach_list">';
-			foreach ( $attachments as $attachment ) {
-				echo '<li>'. wp_get_attachment_link( $attachment->ID, 'thumbnail', 0, 0, __( 'Download', 'cmb' ) );
-				echo '<span>';
-				echo apply_filters( 'the_title', '&nbsp;'. $attachment->post_title );
-				echo '</span></li>';
+
+		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
+		echo '<input class="cmb_upload_button button cmb_upload_list" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( $field['desc'], true );
+
+		echo '<ul id="', $field['id'], '_status" class="cmb_media_status attach_list">';
+
+		if ( $meta ) {
+
+			foreach ( $meta as $id => $fullurl ) {
+				if ( self::is_valid_img_ext( $fullurl ) ) {
+					echo
+					'<li class="img_status">',
+						wp_get_attachment_image( $id, array( 50, 50 ) ),
+						'<p><a href="#" class="cmb_remove_file_button">'. __( 'Remove Image', 'cmb' ) .'</a></p>
+						<input type="hidden" id="filelist-', $id ,'" name="', $field['id'] ,'[', $id ,']" value="', $fullurl ,'" />
+					</li>';
+
+				} else {
+					$parts = explode( '/', $fullurl );
+					for ( $i = 0; $i < count( $parts ); ++$i ) {
+						$title = $parts[$i];
+					}
+					echo
+					'<li>',
+						__( 'File:', 'cmb' ), ' <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl, '" target="_blank" rel="external">'. __( 'Download', 'cmb' ) .'</a> / <a href="#" class="cmb_remove_file_button">'. __( 'Remove', 'cmb' ) .'</a>)
+						<input type="hidden" id="filelist-', $id ,'" name="', $field['id'] ,'[', $id ,']" value="', $fullurl ,'" />
+					</li>';
+				}
 			}
-			echo '</ul>';
 		}
+
+		echo '</ul>';
 	}
 
 	public static function file( $field, $meta, $object_id, $object_type ) {
@@ -308,11 +322,9 @@ class cmb_Meta_Box_types {
 		'<div id="', $field['id'], '_status" class="cmb_media_status">';
 			if ( ! empty( $meta ) ) {
 
-				$parsed = @parse_url( $meta, PHP_URL_PATH );
-				$file_ext = $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
-				$valid = (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
+				$file_ext = self::get_file_ext( $meta );
 
-				if ( $file_ext && in_array( $file_ext, $valid ) ) {
+				if ( self::is_valid_img_ext( $meta ) ) {
 					echo '<div class="img_status">';
 					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta, '" alt="" />';
 					echo '<p><a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove Image', 'cmb' ) .'</a></p>';
@@ -402,6 +414,19 @@ class cmb_Meta_Box_types {
 
 	private static function repeat_cell( $input ) {
 		return '<td>'. $input .'</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
+	}
+
+	public static function get_file_ext( $file ) {
+		$parsed = @parse_url( $file, PHP_URL_PATH );
+		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
+	}
+
+	public static function is_valid_img_ext( $file ) {
+		$file_ext = self::get_file_ext( $file );
+
+		self::$valid = empty( self::$valid ) ? (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) ) : self::$valid;
+
+		return ( $file_ext && in_array( $file_ext, self::$valid ) );
 	}
 
 	/**

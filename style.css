@@ -33,6 +33,8 @@ table.cmb_metabox .cmb_media_status .img_status, table.cmb_metabox .cmb_media_st
 table.cmb_metabox .cmb_media_status .img_status img, table.cmb_metabox .cmb_media_status .embed_status { border:1px solid #DFDFDF; background: #FAFAFA; max-width:350px; padding: 5px; -moz-border-radius: 2px; border-radius: 2px;}
 table.cmb_metabox .cmb_media_status .embed_status { float: left; max-width:800px;}
 table.cmb_metabox .cmb_media_status .img_status .cmb_remove_file_button, table.cmb_metabox .cmb_media_status .embed_status .cmb_remove_file_button { text-indent: -9999px; background: url(images/ico-delete.png); width: 16px; height: 16px; position: absolute; top: -5px; left: -5px;}
+table.cmb_metabox .attach_list li { clear: both; display: inline-block; margin-bottom: 25px; width: 100%; }
+table.cmb_metabox .attach_list li img { float: left; margin-right: 10px; }
 /* Sidebar placement adjustments */
 .inner-sidebar table.cmb_metabox input[type=text], #side-sortables table.cmb_metabox input[type=text], table.cmb_metabox textarea { width: 95%; }
 .inner-sidebar table.cmb_metabox .cmb_media_status .img_status img, #side-sortables table.cmb_metabox .cmb_media_status .img_status img, .inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img, #side-sortables table.cmb_metabox .cmb_media_status .embed_status img { width: 90%; }
