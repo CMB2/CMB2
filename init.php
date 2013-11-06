@@ -522,6 +522,12 @@ class cmb_Meta_Box {
 					} else {
 						// otherwise get the file ID
 						$_new_id = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
+
+						// If there is no ID saved yet, try to get it from the url
+						if ( isset( $_POST[ $field['id'] ] ) && $_POST[ $field['id'] ] && ! $_new_id ) {
+							$_new_id = self::image_id_from_url( esc_url_raw( $_POST[ $field['id'] ] ) );
+						}
+
 					}
 
 					if ( $_new_id && $_new_id != $_id_old ) {
@@ -787,6 +793,30 @@ class cmb_Meta_Box {
 	 */
 	public static function nonce() {
 		return basename( __FILE__ );
+	}
+
+	/**
+	 * Utility method that attempts to get an attachment's ID by it's url
+	 * @since  0.9.5
+	 * @param  string  $img_url Attachment url
+	 * @return mixed            Attachment ID or false
+	 */
+	public static function image_id_from_url( $img_url ) {
+		global $wpdb;
+
+		// Get just the file name
+		if ( strpos( $img_url, '/' ) )
+			$img_url = end( explode( '/', $img_url ) );
+
+		// And search for a fuzzy match of the file name
+		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
+
+		// If we found an attachement ID, return it
+		if ( !empty( $attachment ) && is_array( $attachment ) )
+			return $attachment[0];
+
+		// No luck
+		return false;
 	}
 
 }

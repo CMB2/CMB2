@@ -298,6 +298,11 @@ class cmb_Meta_Box_types {
 
 		$_id_meta = get_metadata( $object_type, $object_id, $_id_name, ( ! isset( $field['multiple'] ) || ! $field['multiple'] ) );
 
+		// If there is no ID saved yet, try to get it from the url
+		if ( $meta && ! $_id_meta ) {
+			$_id_meta = cmb_Meta_Box::image_id_from_url( esc_url_raw( $meta ) );
+		}
+
 		echo '<input class="cmb_upload_file_id" type="hidden" id="', $_id_name, '" name="', $_id_name, '" value="', $_id_meta, '" />',
 		self::desc( $field['desc'], true ),
 		'<div id="', $field['id'], '_status" class="cmb_media_status">';
