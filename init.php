@@ -176,6 +176,9 @@ class cmb_Meta_Box {
 	function register_scripts() {
 
 		global $wp_version;
+		// Only use minified files if SCRIPT_DEBUG is off
+		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+
 		// scripts required for cmb
 		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', /*'media-upload', */'cmb-timepicker' );
 		// styles required for cmb
@@ -202,7 +205,7 @@ class cmb_Meta_Box {
 			$styles[] = 'farbtastic';
 		}
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
-		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb.js', $scripts, self::CMB_VERSION );
+		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb'. $min .'.js', $scripts, self::CMB_VERSION );
 
 		wp_enqueue_media();
 
@@ -218,7 +221,7 @@ class cmb_Meta_Box {
 			'ajaxurl'		=> admin_url( '/admin-ajax.php' ),
 		) );
 
-		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style.css', $styles );
+		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
 	}
 
 	/**
