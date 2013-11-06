@@ -219,6 +219,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'file',
 			),
 			array(
+				'name' => 'Multiple Files',
+				'desc' => 'Upload or add multiple images/attachments.',
+				'id'   => $prefix . 'test_file_list',
+				'type' => 'file_list',
+			),
+			array(
 				'name' => 'oEmbed',
 				'desc' => 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.',
 				'id'   => $prefix . 'test_embed',

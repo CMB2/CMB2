@@ -87,6 +87,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Added `text_email` type, a basic email field. Props [@dessibelle](https://github.com/dessibelle)
 * Added ability to display metabox fields in frontend. Default is false, but can be overriden using the `cmb_allow_frontend filter`. If set to true, fields can be output with the `cmb_print_metaboxes()` and `cmb_print_metabox()` functions. Props [@dessibelle](https://github.com/dessibelle)
 * Added hook `cmb_after_table` after all metabox output. Props [@wpsmith](https://github.com/wpsmith)
+* `file_list` now works like a repeatable field. Add as many files as you want. Props [@coreymcollins](https://github.com/coreymcollins)
 
 ### 0.9.4
 * Added field "before" and "after" options for each field. Solves issue with '$' not being the desired text_money monetary symbol, props [@GaryJones](https://github.com/GaryJones)
