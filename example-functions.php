@@ -259,12 +259,48 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		)
 	);
 
-	$meta_boxes[] = array(
-		'id'             => 'user_data_metabox',
-		'title'          => 'User Data Metabox',
-		'pages'          => array( 'user', ), // Show for users edit page
-		'show_names'     => true, // Show field names on the left
-		'fields'         => array(
+	/**
+	 * Metabox for the user profile screen
+	 */
+	$meta_boxes['user_edit'] = array(
+		'id'         => 'user_edit',
+		'title'      => '',
+		'pages'      => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'show_names' => true,
+		// 'cmb_styles' => true, // Show cmb bundled styles.. not needed on user profile page
+		'fields'     => array(
+			array(
+				'name' => __( 'Extra Info', 'cmb' ),
+				'id'   => $prefix . 'exta_info',
+				'type' => 'title',
+				'on_front' => false,
+			),
+			array(
+				'name' => __( 'Avatar', 'cmb' ),
+				'id'   => $prefix . 'avatar',
+				'type' => 'file',
+				'save_id' => true,
+			),
+			array(
+				'name' => __( 'Facebook URL', 'cmb' ),
+				'id'   => $prefix . 'facebookurl',
+				'type' => 'text_url',
+			),
+			array(
+				'name' => __( 'Twitter URL', 'cmb' ),
+				'id'   => $prefix . 'twitterurl',
+				'type' => 'text_url',
+			),
+			array(
+				'name' => __( 'Google+ URL', 'cmb' ),
+				'id'   => $prefix . 'googleplusurl',
+				'type' => 'text_url',
+			),
+			array(
+				'name' => __( 'Linkedin URL', 'cmb' ),
+				'id'   => $prefix . 'linkedinurl',
+				'type' => 'text_url',
+			),
 			array(
 				'name' => 'User Field',
 				'desc' => 'field description (optional)',
