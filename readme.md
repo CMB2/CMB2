@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
-**Version**: 0.9.5
+**Version**: 1.0.0
 **Requires at least**: 3.3
 **Tested up to**: 3.6
 **License**: GPLv2
@@ -16,17 +16,19 @@
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
 
+Now in version 1.0.0, bring your metaboxes to the frontend!
+
 ##### Links
 * [Github project page](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress)
 * [Documentation (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
 
 ##### Field Types:
-* text
-* text small
-* text medium
-* text money
-* text url
-* text email
+* text (optionally repeatable)
+* text small (optionally repeatable)
+* text medium (optionally repeatable)
+* text url (optionally repeatable)
+* text email (optionally repeatable)
+* text money (optionally repeatable)
 * date picker
 * date picker (unix timestamp)
 * date time picker combo (unix timestamp)
@@ -61,8 +63,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Known Issues
 
-* Problem inserting file url inside field for image with caption (issue #50)
-* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31)
+* Problem inserting file url inside field for image with caption (issue #50) May be fixed, needs testing.
+* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31) May be fixed, needs testing.
 * Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
 
 ## To-do
@@ -74,20 +76,21 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * add ability to save fields in a single custom field
 * add ability to mark fields as required
 * add ability to define `placeholder` text
-* repeatable fields
+* repeatable fields (halfway there)
 * look at possiblity of tabs
 * look at preserving taxonomy hierarchies
 
 ## Changelog
 
-### 0.9.5
+### 1.0.0
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
 * Added `select_timezone` type, a standalone time zone select dropdown. The time zone select can be used with standalone `text_datetime_timestamp` if desired. Props [@dessibelle](https://github.com/dessibelle)
 * Added `text_url` type, a basic url field. Props [@dessibelle](https://github.com/dessibelle)
 * Added `text_email` type, a basic email field. Props [@dessibelle](https://github.com/dessibelle)
-* Added ability to display metabox fields in frontend. Default is false, but can be overriden using the `cmb_allow_frontend filter`. If set to true, fields can be output with the `cmb_print_metaboxes()` and `cmb_print_metabox()` functions. Props [@dessibelle](https://github.com/dessibelle)
+* Added ability to display metabox fields in frontend. Default is true, but can be overriden using the `cmb_allow_frontend filter`. If set to true, an entire metabox form can be output with the `cmb_metabox_form( $meta_box, $object_id, $echo )` function. Props [@dessibelle](https://github.com/dessibelle) & [@jtsternberg](https://github.com/jtsternberg) & [@messenlehner](https://github.com/messenlehner)
 * Added hook `cmb_after_table` after all metabox output. Props [@wpsmith](https://github.com/wpsmith)
 * `file_list` now works like a repeatable field. Add as many files as you want. Props [@coreymcollins](https://github.com/coreymcollins)
+* `text`, `text_small`, `text_medium`, `text_url`, `text_email`, & `text_money` fields now all have the option to be repeatable. Props [@jtsternberg](https://github.com/jtsternberg)
 
 ### 0.9.4
 * Added field "before" and "after" options for each field. Solves issue with '$' not being the desired text_money monetary symbol, props [@GaryJones](https://github.com/GaryJones)
