@@ -6,60 +6,60 @@
  * Below you can limit it by ID and page template
  *
  * All methods in this class are automatically filtered
+ *
+ * @since  1.0.0
  */
 class cmb_Meta_Box_Show_Filters {
 
 	/**
-	 * Add for ID
+	 * Add metaboxes for an specific ID
+	 * @since  1.0.0
+	 * @param  bool  $display  To display or not
+	 * @param  array $meta_box Metabox config array
+	 * @return bool            Whether to display this metabox on the current page.
 	 */
 	public static function check_id( $display, $meta_box ) {
 
 		if ( ! isset( $meta_box['show_on']['key'] ) || 'id' !== $meta_box['show_on']['key'] )
 			return $display;
 
-		$post_id = false;
-		// If we're showing it based on ID, get the current ID
-		if ( isset( $_GET['post'] ) )
-			$post_id = $_GET['post'];
-		elseif ( isset( $_POST['post_ID'] ) )
-			$post_id = $_POST['post_ID'];
+		$object_id = cmb_Meta_Box::get_object_id();
 
-		if ( ! $post_id )
+		if ( ! $object_id )
 			return false;
 
 		// If current page id is in the included array, display the metabox
-		if ( in_array( $post_id, (array) $meta_box['show_on']['value'] ) )
+		if ( in_array( $object_id, (array) $meta_box['show_on']['value'] ) )
 			return true;
 
 		return false;
 	}
 
 	/**
-	 * Add for Page Template
+	 * Add metaboxes for an specific Page Template
+	 * @since  1.0.0
+	 * @param  bool  $display  To display or not
+	 * @param  array $meta_box Metabox config array
+	 * @return bool            Whether to display this metabox on the current page.
 	 */
 	public static function check_page_template( $display, $meta_box ) {
 
 		if ( ! isset( $meta_box['show_on']['key'] ) || 'page-template' !== $meta_box['show_on']['key'] )
 			return $display;
 
-		$post_id = false;
-		// If we're showing it based on ID, get the current ID
-		if ( isset( $_GET['post'] ) )
-			$post_id = $_GET['post'];
-		elseif ( isset( $_POST['post_ID'] ) )
-			$post_id = $_POST['post_ID'];
+		$object_id = cmb_Meta_Box::get_object_id();
 
-		if ( ! $post_id || is_page() )
+		if ( ! $object_id || cmb_Meta_Box::get_object_type() !== 'post' )
 			return false;
 
-
 		// Get current template
-		$current_template = get_post_meta( $post_id, '_wp_page_template', true );
+		$current_template = get_post_meta( $object_id, '_wp_page_template', true );
 
 		// See if there's a match
-		if ( in_array( $current_template, (array) $meta_box['show_on']['value'] ) )
+		if ( $current_template && in_array( $current_template, (array) $meta_box['show_on']['value'] ) )
 			return true;
 
 		return false;
 	}
+
 }
