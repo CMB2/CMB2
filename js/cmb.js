@@ -19,7 +19,7 @@ jQuery(document).ready( function($) {
 
 	var formfield;
 	// Uploading files
-	var file_frame = false;
+	var file_frames = {};
 	var iterator = 0;
 
 	/**
@@ -85,14 +85,15 @@ jQuery(document).ready( function($) {
 		var attachment = true;
 		var isList = $self.hasClass( 'cmb_upload_list' );
 
-		// If the media frame already exists, reopen it.
-		if ( file_frame ) {
-			file_frame.open();
+
+		// If this field's media frame already exists, reopen it.
+		if ( formfield in file_frames ) {
+			file_frames[formfield].open();
 			return;
 		}
 
 		// Create the media frame.
-		file_frame = wp.media.frames.file_frame = wp.media({
+		file_frames[formfield] = wp.media.frames.file_frame = wp.media({
 			title: $('label[for=' + formfield + ']').text(),
 			button: {
 				text: window.cmb_l10.upload_file
@@ -101,13 +102,13 @@ jQuery(document).ready( function($) {
 		});
 
 		// When an file is selected, run a callback.
-		file_frame.on( 'select', function() {
+		file_frames[formfield].on( 'select', function() {
 
 
 			if ( isList ) {
 
 				// Get all of our selected files
-				attachment = file_frame.state().get('selection').toJSON();
+				attachment = file_frames[formfield].state().get('selection').toJSON();
 
 				$formfield.val(attachment.url);
 				$('#'+ formfield +'_id').val(attachment.id);
@@ -145,7 +146,7 @@ jQuery(document).ready( function($) {
 			} else {
 
 				// Only get one file from the uploader
-				attachment = file_frame.state().get('selection').first().toJSON();
+				attachment = file_frames[formfield].state().get('selection').first().toJSON();
 
 				$formfield.val(attachment.url);
 				$('#'+ formfield +'_id').val(attachment.id);
@@ -164,7 +165,7 @@ jQuery(document).ready( function($) {
 		});
 
 		// Finally, open the modal
-		file_frame.open();
+		file_frames[formfield].open();
 	})
 	.on( 'click', '.cmb_remove_file_button', function(event) {
 		var $self        = $(this);
