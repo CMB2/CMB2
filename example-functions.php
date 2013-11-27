@@ -47,6 +47,31 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_medium',
 			),
 			array(
+				'name' => 'Website URL',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'url',
+				'type' => 'text_url',
+				// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
+			),
+			array(
+				'name' => 'Test Text Email',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'email',
+				'type' => 'text_email',
+			),
+			array(
+				'name' => 'Test Time',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_time',
+				'type' => 'text_time',
+			),
+			array(
+				'name' => 'Time zone',
+				'desc' => 'Time zone',
+				'id'   => $prefix . 'timezone',
+				'type' => 'select_timezone',
+			),
+			array(
 				'name' => 'Test Date Picker',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textdate',
@@ -57,6 +82,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textdate_timestamp',
 				'type' => 'text_date_timestamp',
+				// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified above
 			),
 			array(
 				'name' => 'Test Date/Time Picker Combo (UNIX timestamp)',
@@ -65,11 +91,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_datetime_timestamp',
 			),
 			array(
-	            'name' => 'Test Time',
-	            'desc' => 'field description (optional)',
-	            'id'   => $prefix . 'test_time',
-	            'type' => 'text_time',
-	        ),
+				'name' => 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_datetime_timestamp_timezone',
+				'type' => 'text_datetime_timestamp_timezone',
+			),
 			array(
 				'name'   => 'Test Money',
 				'desc'   => 'field description (optional)',
@@ -78,12 +104,12 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				// 'before' => '£', // override '$' symbol if needed
 			),
 			array(
-	            'name' => 'Test Color Picker',
-	            'desc' => 'field description (optional)',
-	            'id'   => $prefix . 'test_colorpicker',
-	            'type' => 'colorpicker',
+				'name' => 'Test Color Picker',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'test_colorpicker',
+				'type' => 'colorpicker',
 				'std'  => '#ffffff'
-	        ),
+			),
 			array(
 				'name' => 'Test Text Area',
 				'desc' => 'field description (optional)',
@@ -97,7 +123,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'textarea_small',
 			),
 			array(
-				'name' => 'Test Text Area Code',
+				'name' => 'Test Text Area for Code',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textarea_code',
 				'type' => 'textarea_code',
@@ -188,9 +214,15 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => 'Test Image',
-				'desc' => 'Upload an image or enter an URL.',
+				'desc' => 'Upload an image or enter a URL.',
 				'id'   => $prefix . 'test_image',
 				'type' => 'file',
+			),
+			array(
+				'name' => 'Multiple Files',
+				'desc' => 'Upload or add multiple images/attachments.',
+				'id'   => $prefix . 'test_file_list',
+				'type' => 'file_list',
 			),
 			array(
 				'name' => 'oEmbed',
@@ -214,6 +246,21 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'name' => 'Test Text',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_text',
+				'type' => 'text',
+			),
+		)
+	);
+
+	$meta_boxes[] = array(
+		'id'             => 'user_data_metabox',
+		'title'          => 'User Data Metabox',
+		'pages'          => array( 'user', ), // Show for users edit page
+		'show_names'     => true, // Show field names on the left
+		'fields'         => array(
+			array(
+				'name' => 'User Field',
+				'desc' => 'field description (optional)',
+				'id'   => $prefix . 'user_text_field',
 				'type' => 'text',
 			),
 		)

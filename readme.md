@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
-**Version**: 0.9.4
+**Version**: 0.9.5
 **Requires at least**: 3.3
 **Tested up to**: 3.6
 **License**: GPLv2
@@ -25,9 +25,13 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fi
 * text small
 * text medium
 * text money
+* text url
+* text email
 * date picker
 * date picker (unix timestamp)
 * date time picker combo (unix timestamp)
+* date time picker with time zone combo (serialized DateTime object)
+* time zone dropdown
 * time picker
 * color picker
 * textarea
@@ -76,6 +80,15 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 0.9.5
+* Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
+* Added `select_timezone` type, a standalone time zone select dropdown. The time zone select can be used with standalone `text_datetime_timestamp` if desired. Props [@dessibelle](https://github.com/dessibelle)
+* Added `text_url` type, a basic url field. Props [@dessibelle](https://github.com/dessibelle)
+* Added `text_email` type, a basic email field. Props [@dessibelle](https://github.com/dessibelle)
+* Added ability to display metabox fields in frontend. Default is false, but can be overriden using the `cmb_allow_frontend filter`. If set to true, fields can be output with the `cmb_print_metaboxes()` and `cmb_print_metabox()` functions. Props [@dessibelle](https://github.com/dessibelle)
+* Added hook `cmb_after_table` after all metabox output. Props [@wpsmith](https://github.com/wpsmith)
+* `file_list` now works like a repeatable field. Add as many files as you want. Props [@coreymcollins](https://github.com/coreymcollins)
+
 ### 0.9.4
 * Added field "before" and "after" options for each field. Solves issue with '$' not being the desired text_money monetary symbol, props [@GaryJones](https://github.com/GaryJones)
 * Added filter for 'std' default fallback value, props [@messenlehner](https://github.com/messenlehner)
@@ -91,7 +104,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Added post type comparison to prevent storing null values for taxonomy selectors, props [@norcross](https://github.com/norcross)
 
 ### 0.9.1
-* Added 'oEmbed' field type with ajax display, props [@jtsternberg](https://github.com/jtsternberg)
+* Added `oEmbed` field type with ajax display, props [@jtsternberg](https://github.com/jtsternberg)
 
 ### 0.9
 * __Note: This release requires WordPress 3.3+__

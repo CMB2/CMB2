@@ -14,15 +14,18 @@
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
-jQuery(document).ready(function ($) {
+jQuery(document).ready( function($) {
 	'use strict';
 
 	var formfield;
+	// Uploading files
+	var file_frame = false;
+	var iterator = 0;
 
 	/**
 	 * Initialize timepicker (this will be moved inline in a future release)
 	 */
-	$('.cmb_timepicker').each(function () {
+	$('.cmb_timepicker').each( function() {
 		$('#' + jQuery(this).attr('id')).timePicker({
 			startTime: "07:00",
 			endTime: "22:00",
@@ -35,7 +38,7 @@ jQuery(document).ready(function ($) {
 	/**
 	 * Initialize jQuery UI datepicker (this will be moved inline in a future release)
 	 */
-	$('.cmb_datepicker').each(function () {
+	$('.cmb_datepicker').each( function() {
 		$('#' + jQuery(this).attr('id')).datepicker();
 		// $('#' + jQuery(this).attr('id')).datepicker({ dateFormat: 'yy-mm-dd' });
 		// For more options see http://jqueryui.com/demos/datepicker/#option-dateFormat
@@ -49,14 +52,14 @@ jQuery(document).ready(function ($) {
 	if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
 		$('input:text.cmb_colorpicker').wpColorPicker();
 	} else {
-		$('input:text.cmb_colorpicker').each(function (i) {
+		$('input:text.cmb_colorpicker').each( function(i) {
 			$(this).after('<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>');
 			$('#picker-' + i).hide().farbtastic($(this));
 		})
-		.focus(function () {
+		.focus( function() {
 			$(this).next().show();
 		})
-		.blur(function () {
+		.blur( function() {
 			$(this).next().hide();
 		});
 	}
@@ -64,97 +67,177 @@ jQuery(document).ready(function ($) {
 	/**
 	 * File and image upload handling
 	 */
-	$('.cmb_upload_file').change(function () {
+
+
+	$('.cmb_metabox')
+	.on( 'change', '.cmb_upload_file', function() {
 		formfield = $(this).attr('name');
 		$('#' + formfield + '_id').val("");
-	});
+	})
+	.on( 'click', '.cmb_upload_button', function(event) {
 
-	$('.cmb_upload_button').live('click', function () {
-		var buttonLabel;
-		formfield = $(this).prev('input').attr('name');
-		buttonLabel = 'Use as ' + $('label[for=' + formfield + ']').text();
-		tb_show('', 'media-upload.php?post_id=' + $('#post_ID').val() + '&type=file&cmb_force_send=true&cmb_send_label=' + buttonLabel + '&TB_iframe=true');
-		return false;
-	});
+		event.preventDefault();
 
-	$('.cmb_remove_file_button').live('click', function () {
-		formfield = $(this).attr('rel');
-		$('input#' + formfield).val('');
-		$('input#' + formfield + '_id').val('');
-		$(this).parent().remove();
-		return false;
-	});
+		var $self = $(this);
+		formfield = $self.prev('input').attr('name');
+		var $formfield = $('#'+formfield);
+		var uploadStatus = true;
+		var attachment = true;
+		var isList = $self.hasClass( 'cmb_upload_list' );
 
-	window.original_send_to_editor = window.send_to_editor;
-    window.send_to_editor = function (html) {
-		var itemurl, itemclass, itemClassBits, itemid, htmlBits, itemtitle,
-			image, uploadStatus = true;
-
-		if (formfield) {
-
-	        if ($(html).html(html).find('img').length > 0) {
-				itemurl = $(html).html(html).find('img').attr('src'); // Use the URL to the size selected.
-				itemclass = $(html).html(html).find('img').attr('class'); // Extract the ID from the returned class name.
-				itemClassBits = itemclass.split(" ");
-				itemid = itemClassBits[itemClassBits.length - 1];
-				itemid = itemid.replace('wp-image-', '');
-	        } else {
-				// It's not an image. Get the URL to the file instead.
-				htmlBits = html.split("'"); // jQuery seems to strip out XHTML when assigning the string to an object. Use alternate method.
-				itemurl = htmlBits[1]; // Use the URL to the file.
-				itemtitle = htmlBits[2];
-				itemtitle = itemtitle.replace('>', '');
-				itemtitle = itemtitle.replace('</a>', '');
-				itemid = ""; // TO DO: Get ID for non-image attachments.
-			}
-
-			image = /(jpe?g|png|gif|ico)$/gi;
-
-			if (itemurl.match(image)) {
-				uploadStatus = '<div class="img_status"><img src="' + itemurl + '" alt="" /><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove Image</a></div>';
-			} else {
-				// No output preview if it's not an image
-				// Standard generic output if it's not an image.
-				html = '<a href="' + itemurl + '" target="_blank" rel="external">View File</a>';
-				uploadStatus = '<div class="no_image"><span class="file_link">' + html + '</span>&nbsp;&nbsp;&nbsp;<a href="#" class="cmb_remove_file_button" rel="' + formfield + '">Remove</a></div>';
-			}
-
-			$('#' + formfield).val(itemurl);
-			$('#' + formfield + '_id').val(itemid);
-			$('#' + formfield).siblings('.cmb_media_status').slideDown().html(uploadStatus);
-			tb_remove();
-
-		} else {
-			window.original_send_to_editor(html);
+		// If the media frame already exists, reopen it.
+		if ( file_frame ) {
+			file_frame.open();
+			return;
 		}
 
-		formfield = '';
-	};
+		// Create the media frame.
+		file_frame = wp.media.frames.file_frame = wp.media({
+			title: $('label[for=' + formfield + ']').text(),
+			button: {
+				text: window.cmb_l10.upload_file
+			},
+			multiple: isList ? true : false
+		});
+
+		// When an file is selected, run a callback.
+		file_frame.on( 'select', function() {
+
+
+			if ( isList ) {
+
+				// Get all of our selected files
+				attachment = file_frame.state().get('selection').toJSON();
+
+				$formfield.val(attachment.url);
+				$('#'+ formfield +'_id').val(attachment.id);
+
+				// Setup our fileGroup array
+				var fileGroup = [];
+
+				// Loop through each attachment
+				$( attachment ).each( function() {
+					if ( this.type && this.type === 'image' ) {
+						// image preview
+						uploadStatus = '<li class="img_status">'+
+							'<img width="50" height="50" src="' + this.url + '" class="attachment-50x50" alt="'+ this.filename +'">'+
+							'<p><a href="#" class="cmb_remove_file_button" rel="'+ formfield +'['+ this.id +']">'+ cmb_l10.remove_image +'</a></p>'+
+							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formfield +'['+ this.id +']" value="' + this.url + '">'+
+						'</li>';
+
+					} else {
+						// Standard generic output if it's not an image.
+						uploadStatus = '<li>'+ cmb_l10.file +' <strong>'+ this.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ cmb_l10.download +'</a> / <a href="#" class="cmb_remove_file_button" rel="'+ formfield +'['+ this.id +']">'+ cmb_l10.remove_file +'</a>)'+
+							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formfield +'['+ this.id +']" value="' + this.url + '">'+
+						'</li>';
+
+					}
+
+					// Add our file to our fileGroup array
+					fileGroup.push( uploadStatus );
+				});
+
+				// Append each item from our fileGroup array to .cmb_media_status
+				$( fileGroup ).each( function() {
+					$formfield.siblings('.cmb_media_status').slideDown().append(this);
+				});
+
+			} else {
+
+				// Only get one file from the uploader
+				attachment = file_frame.state().get('selection').first().toJSON();
+
+				$formfield.val(attachment.url);
+				$('#'+ formfield +'_id').val(attachment.id);
+
+				if ( attachment.type && attachment.type === 'image' ) {
+					// image preview
+					uploadStatus = '<div class="img_status"><img style="max-width: 350px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb_remove_file_button" rel="' + formfield + '">'+ cmb_l10.remove_image +'</a></p></div>';
+				} else {
+					// Standard generic output if it's not an image.
+					uploadStatus = cmb_l10.file +' <strong>'+ attachment.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ cmb_l10.download +'</a> / <a href="#" class="cmb_remove_file_button" rel="'+ formfield +'">'+ cmb_l10.remove_file +'</a>)';
+				}
+
+				// add/display our output
+				$formfield.siblings('.cmb_media_status').slideDown().html(uploadStatus);
+			}
+		});
+
+		// Finally, open the modal
+		file_frame.open();
+	})
+	.on( 'click', '.cmb_remove_file_button', function(event) {
+		var $self        = $(this);
+		if ( $self.is( '.attach_list .cmb_remove_file_button' ) ){
+			$self.parents('li').remove();
+			return false;
+		}
+		formfield    = $self.attr('rel');
+		var $container   = $self.parents('.img_status');
+
+		$('input#' + formfield).val('');
+		$('input#' + formfield + '_id').val('');
+		if ( ! $container.length ) {
+			$self.parents('.cmb_media_status').html('');
+		} else {
+			$container.html('');
+		}
+		return false;
+	})
+	.on( 'click', '.add-row-button', function(e) {
+
+		e.preventDefault();
+		self = $(this);
+
+		var tableselector = '#'+ self.data('selector');
+		var $table = $(tableselector);
+		var row = $('.empty-row', $table).clone(true);
+		row.removeClass('empty-row').addClass('repeat-row');
+		row.insertBefore( tableselector +' tbody>tr:last' );
+		var input = $('input.cmb_datepicker',row);
+		var id = input.attr('id');
+		input.attr('id', id + iterator );
+		iterator++;
+
+		// @todo Make a colorpicker field repeatable
+		// row.find('.wp-color-result').remove();
+		// row.find('input:text.cmb_colorpicker').wpColorPicker();
+
+	})
+	.on( 'click', '.remove-row-button', function(e) {
+		e.preventDefault();
+		var $self = $(this);
+		var $parent = $self.parents('.cmb-repeat-table');
+		console.log( 'number of tbodys', $parent.length );
+		console.log( 'number of trs', $('tr', $parent).length );
+		if ( $('tr', $parent).length > 2 )
+			$self.parents('.cmb-repeat-table tr').remove();
+	})
 
 	/**
 	 * Ajax oEmbed display
 	 */
 
+	// ajax when typing
+	.on( 'keyup', '.cmb_oembed', function(event) {
+		// fire our ajax function
+		doCMBajax($(this), event);
+	});
+
 	// ajax on paste
-	$('.cmb_oembed').bind('paste', function (e) {
+	$('.cmb_oembed').bind( 'paste', function(e) {
 		var pasteitem = $(this);
 		// paste event is fired before the value is filled, so wait a bit
-		setTimeout(function () {
+		setTimeout( function() {
 			// fire our ajax function
 			doCMBajax(pasteitem, 'paste');
 		}, 100);
-	}).blur(function () {
+	}).blur( function() {
 		// when leaving the input
-		setTimeout(function () {
+		setTimeout( function() {
 			// if it's been 2 seconds, hide our spinner
 			$('.postbox table.cmb_metabox .cmb-spinner').hide();
 		}, 2000);
-	});
-
-	// ajax when typing
-	$('.cmb_metabox').on('keyup', '.cmb_oembed', function (event) {
-		// fire our ajax function
-		doCMBajax($(this), event);
 	});
 
 	// function for running our ajax
@@ -172,37 +255,49 @@ jQuery(document).ready(function ($) {
 			var field_id = obj.attr('id');
 			// get our inputs context for pinpointing
 			var context = obj.parents('.cmb_metabox tr td');
+
+			var embed_container = $('.embed_status', context);
+			var oembed_width = obj.width();
+			var child_el = $(':first-child', embed_container);
+
+			oembed_width = ( embed_container.length && child_el.length )
+				? child_el.width()
+				: obj.width();
+
 			// show our spinner
 			$('.cmb-spinner', context).show();
 			// clear out previous results
 			$('.embed_wrap', context).html('');
 			// and run our ajax function
-			setTimeout(function () {
+			setTimeout( function() {
 				// if they haven't typed in 500 ms
-				if ($('.cmb_oembed:focus').val() == oembed_url) {
-					$.ajax({
-						type : 'post',
-						dataType : 'json',
-						url : window.ajaxurl,
-						data : {
-							'action': 'cmb_oembed_handler',
-							'oembed_url': oembed_url,
-							'oembed_width': obj.width(),
-							'field_id': field_id,
-							'post_id': window.cmb_ajax_data.post_id,
-							'cmb_ajax_nonce': window.cmb_ajax_data.ajax_nonce
-						},
-						success: function (response) {
-							// if we have a response id
-							if (typeof response.id !== 'undefined') {
-								// hide our spinner
-								$('.cmb-spinner', context).hide();
-								// and populate our results from ajax response
-								$('.embed_wrap', context).html(response.result);
-							}
-						}
-					});
-				}
+				if ($('.cmb_oembed:focus').val() != oembed_url)
+					return;
+				$.ajax({
+					type : 'post',
+					dataType : 'json',
+					url : window.cmb_l10.ajaxurl,
+					data : {
+						'action': 'cmb_oembed_handler',
+						'oembed_url': oembed_url,
+						'oembed_width': oembed_width > 300 ? oembed_width : 300,
+						'field_id': field_id,
+						'object_id': window.cmb_l10.object_id,
+						'object_type': window.cmb_l10.object_type,
+						'cmb_ajax_nonce': window.cmb_l10.ajax_nonce
+					},
+					success: function(response) {
+						// Make sure we have a response id
+						if (typeof response.id === 'undefined')
+							return;
+
+						// hide our spinner
+						$('.cmb-spinner', context).hide();
+						// and populate our results from ajax response
+						$('.embed_wrap', context).html(response.result);
+					}
+				});
+
 			}, 500);
 		}
 	}
@@ -211,20 +306,26 @@ jQuery(document).ready(function ($) {
 	 * Resize oEmbed videos to fit in their respective metaboxes
 	 */
 	function resizeoEmbeds() {
-		$('table.cmb_metabox').each(function( index ) {
+		$('table.cmb_metabox').each( function( index ) {
 			var self = $(this);
-			var tWidth = self.parents('.inside').width();
+			var parents = self.parents('.inside');
+			if ( ! parents.length )
+				return true; // continue
+
+			var tWidth = parents.width();
 			var newWidth = Math.round((tWidth * 0.82)*0.97) - 30;
-			if ( newWidth < 640 ) {
-				var iframe = $('.cmb-type-oembed .embed_status iframe', self);
-				var iwidth = iframe.width();
-				var iheight = iframe.height();
-				var newHeight = Math.round((newWidth * iheight)/iwidth);
-				iframe.width(newWidth).height(newHeight);
-			}
+			if ( newWidth > 639 )
+				return true; // continue
+
+			var child_el = $('.cmb-type-oembed .embed_status', self).children().first();
+			var iwidth = child_el.width();
+			var iheight = child_el.height();
+			var newHeight = Math.round((newWidth * iheight)/iwidth);
+			child_el.width(newWidth).height(newHeight);
 
 		});
 	}
+
 	// on pageload
 	setTimeout( resizeoEmbeds, 500);
 	// and on window resize
