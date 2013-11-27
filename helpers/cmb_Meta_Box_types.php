@@ -2,7 +2,7 @@
 
 /**
  * CMB field types
- * @since  0.9.5
+ * @since  1.0.0
  */
 class cmb_Meta_Box_types {
 
@@ -11,17 +11,45 @@ class cmb_Meta_Box_types {
 	 * @todo test all methods with non-post objects
 	 */
 
-	// A single instance of this class.
+	/**
+	 * A single instance of this class.
+	 * @var cmb_Meta_Box_types object
+	 */
 	public static $instance = null;
+
+	/**
+	 * An iterator value for repeatable fields
+	 * @var integer
+	 */
 	public static $iterator = 0;
-	public static $valid    = false;
+
+	/**
+	 * Holds cmb_valid_img_types
+	 * @var array
+	 */
+	public static $valid    = array();
+
+	/**
+	 * Current field type
+	 * @var string
+	 */
 	public static $type     = 'text';
+
+	/**
+	 * Current field
+	 * @var array
+	 */
 	public static $field;
+
+	/**
+	 * Current field meta value
+	 * @var mixed
+	 */
 	public static $meta;
 
 	/**
 	 * Creates or returns an instance of this class.
-	 * @since  0.1.0
+	 * @since  1.0.0
 	 * @return cmb_Meta_Box_types A single instance of this class.
 	 */
 	public static function get() {
@@ -30,6 +58,144 @@ class cmb_Meta_Box_types {
 
 		return self::$instance;
 	}
+
+	/**
+	 * Generates a field's description markup
+	 * @since  1.0.0
+	 * @param  string  $desc      Field's description
+	 * @param  boolean $paragraph Paragraph tag or span
+	 * @return strgin             Field's description markup
+	 */
+	private static function desc( $desc, $paragraph = false ) {
+		$tag = $paragraph ? 'p' : 'span';
+		return "\n<$tag class=\"cmb_metabox_description\">$desc</$tag>\n";
+	}
+
+	/**
+	 * Generates repeatable text fields
+	 * @since  1.0.0
+	 * @param  string  $field Metabox field
+	 * @param  mixed   $meta  Field's meta value
+	 * @param  string  $class Field's class attribute
+	 * @param  string  $type  Field Type
+	 */
+	private static function repeat_text_field( $field, $meta, $class = '', $type = 'text' ) {
+
+		self::$field = $field; self::$meta = $meta; self::$type = $type;
+
+		// check for default content
+		$std = isset( $field['std'] ) ? array( $field['std'] ) : false;
+		// check for saved data
+		$meta = !empty( $meta ) && array_filter( $meta ) ? $meta : $std;
+
+
+		self::repeat_table_open( $class );
+
+		$class = $class ? $class .' widefat' : 'widefat';
+
+		if ( !empty( $meta ) ) {
+			foreach ( (array) $meta as $val ) {
+				self::repeat_row( self::text_input( $class, $val ) );
+			}
+		} else {
+			self::repeat_row( self::text_input( $class ) );
+		}
+
+		self::empty_row( self::text_input( $class ) );
+		self::repeat_table_close();
+		// reset iterator
+		self::$iterator = 0;
+	}
+
+	/**
+	 * Text input field used by repeatable fields
+	 * @since  1.0.0
+	 * @param  string  $class Field's class attribute
+	 * @param  mixed   $val   Field's meta value
+	 * @return string         HTML text input
+	 */
+	private static function text_input( $class = '', $val = '' ) {
+		self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
+		$before = '';
+		if ( self::$field['type'] == 'text_money' )
+			$before = ! empty( self::$field['before'] ) ? ' ' : '$ ';
+		return $before . '<input type="'. self::$type .'" class="'. $class .'" name="'. self::$field['id'] .'[]" id="'. self::$field['id'] .'_'. self::$iterator .'" value="'. $val .'" data-id="'. self::$field['id'] .'" data-count="'. self::$iterator .'"/>';
+	}
+
+	/**
+	 * Generates repeatable field opening table markup for repeatable fields
+	 * @since  1.0.0
+	 * @param  string $class Field's class attribute
+	 */
+	private static function repeat_table_open( $class = '' ) {
+		echo self::desc( self::$field['desc'] ), '<table id="', self::$field['id'], '_repeat" class="cmb-repeat-table ', $class ,'"><tbody>';
+	}
+
+	/**
+	 * Generates repeatable feild closing table markup for repeatable fields
+	 * @since 1.0.0
+	 */
+	private static function repeat_table_close() {
+		echo '</tbody></table><p class="add-row"><a data-selector="', self::$field['id'] ,'_repeat" class="add-row-button button" href="#">'. __( 'Add Row', 'cmb' ) .'</a></p>';
+	}
+
+	/**
+	 * Generates table row markup for repeatable fields
+	 * @since 1.0.0
+	 * @param string $input Table cell markup
+	 */
+	private static function repeat_row( $input ) {
+		echo '<tr class="repeat-row">', self::repeat_cell( $input ) ,'</tr>';
+	}
+
+	/**
+	 * Generates the empty table row markup (for duplication) for repeatable fields
+	 * @since 1.0.0
+	 * @param string $input Table cell markup
+	 */
+	private static function empty_row( $input ) {
+		echo '<tr class="empty-row">', self::repeat_cell( $input ) ,'</tr>';
+	}
+
+	/**
+	 * Generates table cell markup for repeatable fields
+	 * @since  1.0.0
+	 * @param  string $input Text input field
+	 * @return string        HTML table cell markup
+	 */
+	private static function repeat_cell( $input ) {
+		return '<td>'. $input .'</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
+	}
+
+	/**
+	 * Determine a file's extension
+	 * @since  1.0.0
+	 * @param  string       $file File url
+	 * @return string|false       File extension or false
+	 */
+	public static function get_file_ext( $file ) {
+		$parsed = @parse_url( $file, PHP_URL_PATH );
+		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
+	}
+
+	/**
+	 * Determines if a file has a valid image extension
+	 * @since  1.0.0
+	 * @param  string $file File url
+	 * @return bool         Whether file has a valid image extension
+	 */
+	public static function is_valid_img_ext( $file ) {
+		$file_ext = self::get_file_ext( $file );
+
+		self::$valid = empty( self::$valid ) ? (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) ) : self::$valid;
+
+		return ( $file_ext && in_array( $file_ext, self::$valid ) );
+	}
+
+
+	/**
+	 * Begin Field Types
+	 */
 
 	public static function text( $field, $meta ) {
 		echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
@@ -322,14 +488,13 @@ class cmb_Meta_Box_types {
 		'<div id="', $field['id'], '_status" class="cmb_media_status">';
 			if ( ! empty( $meta ) ) {
 
-				$file_ext = self::get_file_ext( $meta );
-
 				if ( self::is_valid_img_ext( $meta ) ) {
 					echo '<div class="img_status">';
 					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta, '" alt="" />';
 					echo '<p><a href="#" class="cmb_remove_file_button" rel="', $field['id'], '">'. __( 'Remove Image', 'cmb' ) .'</a></p>';
 					echo '</div>';
 				} else {
+					// $file_ext = self::get_file_ext( $meta );
 					$parts = explode( '/', $meta );
 					for ( $i = 0; $i < count( $parts ); ++$i ) {
 						$title = $parts[$i];
@@ -355,89 +520,15 @@ class cmb_Meta_Box_types {
 		echo '</div>';
 	}
 
-	private static function desc( $desc, $paragraph = false ) {
-		$tag = $paragraph ? 'p' : 'span';
-		return "\n<$tag class=\"cmb_metabox_description\">$desc</$tag>\n";
-	}
-
-	private static function repeat_text_field( $field, $meta, $class = '', $type = 'text' ) {
-
-		self::$field = $field; self::$meta = $meta; self::$type = $type;
-
-		// check for default content
-		$std = isset( $field['std'] ) ? array( $field['std'] ) : false;
-		// check for saved data
-		$meta = !empty( $meta ) && array_filter( $meta ) ? $meta : $std;
-
-
-		self::repeat_table_open( $class );
-
-		$class = $class ? $class .' widefat' : 'widefat';
-
-		if ( !empty( $meta ) ) {
-			foreach ( (array) $meta as $val ) {
-				self::repeat_row( self::text_input( $class, $val ) );
-			}
-		} else {
-			self::repeat_row( self::text_input( $class ) );
-		}
-
-		self::empty_row( self::text_input( $class ) );
-		self::repeat_table_close();
-		// reset iterator
-		self::$iterator = 0;
-	}
-
-	private static function text_input( $class = '', $val = '' ) {
-		self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
-		$before = '';
-		if ( self::$field['type'] == 'text_money' )
-			$before = ! empty( self::$field['before'] ) ? ' ' : '$ ';
-		return $before . '<input type="'. self::$type .'" class="'. $class .'" name="'. self::$field['id'] .'[]" id="'. self::$field['id'] .'_'. self::$iterator .'" value="'. $val .'" data-id="'. self::$field['id'] .'" data-count="'. self::$iterator .'"/>';
-	}
-
-	private static function repeat_table_open( $class = '' ) {
-		echo self::desc( self::$field['desc'] ), '<table id="', self::$field['id'], '_repeat" class="cmb-repeat-table ', $class ,'"><tbody>';
-	}
-
-	private static function repeat_table_close() {
-		echo '</tbody></table><p class="add-row"><a data-selector="', self::$field['id'] ,'_repeat" class="add-row-button button" href="#">'. __( 'Add Row', 'cmb' ) .'</a></p>';
-	}
-
-	private static function repeat_row( $input ) {
-		echo '<tr class="repeat-row">', self::repeat_cell( $input ) ,'</tr>';
-	}
-
-	private static function empty_row( $input ) {
-		echo '<tr class="empty-row">', self::repeat_cell( $input ) ,'</tr>';
-	}
-
-	private static function repeat_cell( $input ) {
-		return '<td>'. $input .'</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
-	}
-
-	public static function get_file_ext( $file ) {
-		$parsed = @parse_url( $file, PHP_URL_PATH );
-		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
-	}
-
-	public static function is_valid_img_ext( $file ) {
-		$file_ext = self::get_file_ext( $file );
-
-		self::$valid = empty( self::$valid ) ? (array) apply_filters( 'cmb_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) ) : self::$valid;
-
-		return ( $file_ext && in_array( $file_ext, self::$valid ) );
-	}
-
 	/**
 	 * Default fallback. Allows rendering fields via "cmb_render_$name" hook
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  string $name      Non-existent method name
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
 		list( $field, $meta, $object_id, $object_type ) = $arguments;
-		// If a non-registered field is called, send it to an action
+		// When a non-registered field is called, send it through an action.
 		do_action( "cmb_render_$name", $field, $meta, $object_id, $object_type );
 	}
 
