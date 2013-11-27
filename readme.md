@@ -16,7 +16,9 @@
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
 
-Now in version 1.0.0, bring your metaboxes to the frontend!
+Now in version 1.0.0:
+* Bring your metaboxes to the frontend!
+* Create metaboxes to handle user meta and display them on user profile add/edit pages! Or even on the front-end!
 
 ##### Links
 * [Github project page](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress)
