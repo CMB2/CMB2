@@ -27,24 +27,29 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		'context'    => 'normal',
 		'priority'   => 'high',
 		'show_names' => true, // Show field names on the left
+		// 'cmb_styles' => true, // Enqueue the CMB stylesheet on the frontend
 		'fields'     => array(
 			array(
 				'name' => 'Test Text',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_text',
 				'type' => 'text',
+				// 'repeatable' => true,
+				// 'on_front' => false, // Optionally designate a field to wp-admin only
 			),
 			array(
 				'name' => 'Test Text Small',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textsmall',
 				'type' => 'text_small',
+				// 'repeatable' => true,
 			),
 			array(
 				'name' => 'Test Text Medium',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'test_textmedium',
 				'type' => 'text_medium',
+				// 'repeatable' => true,
 			),
 			array(
 				'name' => 'Website URL',
@@ -52,12 +57,14 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'url',
 				'type' => 'text_url',
 				// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
+				// 'repeatable' => true,
 			),
 			array(
 				'name' => 'Test Text Email',
 				'desc' => 'field description (optional)',
 				'id'   => $prefix . 'email',
 				'type' => 'text_email',
+				// 'repeatable' => true,
 			),
 			array(
 				'name' => 'Test Time',
@@ -102,6 +109,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'     => $prefix . 'test_textmoney',
 				'type'   => 'text_money',
 				// 'before' => '£', // override '$' symbol if needed
+				// 'repeatable' => true,
 			),
 			array(
 				'name' => 'Test Color Picker',
