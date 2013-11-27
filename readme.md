@@ -8,8 +8,8 @@
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
 
 **Version**: 1.0.0
-**Requires at least**: 3.3
-**Tested up to**: 3.6
+**Requires at least**: 3.5
+**Tested up to**: 3.8
 **License**: GPLv2
 
 ## Description
