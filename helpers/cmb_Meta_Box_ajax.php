@@ -103,7 +103,7 @@ class cmb_Meta_Box_ajax {
 		}
 
 		$embed_args = '';
-		foreach ( $args as $key => $val ) {
+		foreach ( $args['oembed_args'] as $key => $val ) {
 			$embed_args .= " $key=\"$val\"";
 		}
 
