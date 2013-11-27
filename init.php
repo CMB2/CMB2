@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		0.9.5
+Version: 		1.0.0
 */
 
 /**
@@ -41,7 +41,6 @@ if ( !defined( '__DIR__' ) ) {
 	define( '__DIR__', dirname( __FILE__ ) );
 }
 
-
 $meta_boxes = array();
 $meta_boxes = apply_filters( 'cmb_meta_boxes' , $meta_boxes );
 foreach ( $meta_boxes as $meta_box ) {
@@ -67,19 +66,26 @@ class cmb_Meta_Box_Validate {
  * This may need to be filtered for local Window installations.
  * If resources do not load, please check the wiki for details.
  */
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-       //winblows
-    define( 'CMB_META_BOX_URL', trailingslashit( str_replace( DIRECTORY_SEPARATOR, '/', str_replace( str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR ), WP_CONTENT_URL, dirname(__FILE__) ) ) ) );
+function get_cmb_meta_box_url() {
 
-} else {
-  define('CMB_META_BOX_URL', apply_filters('cmb_meta_box_url',
-    trailingslashit(str_replace(
-      array(WP_CONTENT_DIR, WP_PLUGIN_DIR),
-      array(WP_CONTENT_URL, WP_PLUGIN_URL),
-      dirname( __FILE__ )
-    ))
-  ));
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+		// Windows
+		$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
+		$content_url = str_replace( $content_dir, WP_CONTENT_URL, dirname(__FILE__) );
+		$cmb_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
+
+	} else {
+	  $cmb_url = str_replace(
+			array(WP_CONTENT_DIR, WP_PLUGIN_DIR),
+			array(WP_CONTENT_URL, WP_PLUGIN_URL),
+			dirname( __FILE__ )
+		);
+	}
+
+	return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
 }
+
+define( 'CMB_META_BOX_URL', get_cmb_meta_box_url() );
 
 /**
  * Create meta boxes
@@ -91,8 +97,9 @@ class cmb_Meta_Box {
 	protected static $object_id      = 0;
 	// Type of object being saved. (e.g., post, user, or comment)
 	protected static $object_type    = false;
+	protected static $is_enqueued    = false;
 	protected static $mb_object_type = 'post';
-	const CMB_VERSION                = '0.9.5';
+	const CMB_VERSION                = '1.0.0';
 
 	/**
 	 * Get started
@@ -157,7 +164,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Autoloads files with classes when needed
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  string $class_name Name of the class being requested
 	 */
 	public static function autoload_helpers( $class_name ) {
@@ -171,9 +178,13 @@ class cmb_Meta_Box {
 
 	/**
 	 * Registers scripts and styles for CMB
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 */
 	function register_scripts() {
+
+		// Should only be run once
+		if ( self::$is_enqueued )
+			return;
 
 		global $wp_version;
 		// Only use minified files if SCRIPT_DEBUG is off
@@ -222,11 +233,14 @@ class cmb_Meta_Box {
 		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
+
+		// Ok, we've enqueued our scripts/styles
+		self::$is_enqueued = true;
 	}
 
 	/**
 	 * Enqueues scripts and styles for CMB
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 */
 	function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
@@ -268,7 +282,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Display metaboxes for a post object
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 */
 	function post_metabox() {
 		if ( ! $this->_meta_box )
@@ -280,7 +294,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Display metaboxes for a user object
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 */
 	function user_metabox() {
 		if ( ! $this->_meta_box )
@@ -301,7 +315,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Loops through and displays fields
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  array  $meta_box    Metabox config array
 	 * @param  int    $object_id   Object ID
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
@@ -424,7 +438,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Loops through and saves field data
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param array   $meta_box    Metabox config array
 	 * @param  int    $object_id   Object ID
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
@@ -585,7 +599,7 @@ class cmb_Meta_Box {
 	 * A timezone string is required by the wp_timezone_choice() used by the
 	 * select_timezone field.
 	 *
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @return string Timezone string
 	 */
 	public static function timezone_string() {
@@ -606,7 +620,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Returns time string offset by timezone
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  string $tzstring Time string
 	 * @return string           Offset time string
 	 */
@@ -629,7 +643,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Offset a time value based on timezone
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  integer $object_id Object ID
 	 * @return string             Offset time string
 	 */
@@ -642,7 +656,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Return timezone string
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  integer $object_id Object ID
 	 * @return string             Timezone string
 	 */
@@ -666,7 +680,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Get object id from global space if no id is provided
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  integer $object_id Object ID
 	 * @return integer $object_id Object ID
 	 */
@@ -697,7 +711,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Explicitly Set object id
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  integer $object_id Object ID
 	 * @return integer $object_id Object ID
 	 */
@@ -707,7 +721,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Sets the $object_type based on metabox settings
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  array|string $meta_box Metabox config array or explicit setting
 	 * @return string       Object type
 	 */
@@ -745,7 +759,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Returns the object type
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @return string Object type
 	 */
 	public static function get_object_type() {
@@ -773,7 +787,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Sets the object type
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @return string Object type
 	 */
 	public static function set_object_type( $object_type ) {
@@ -782,7 +796,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Returns the object type
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @return string Object type
 	 */
 	public static function get_mb_type() {
@@ -791,7 +805,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Returns the nonce value for wp_meta_box_nonce
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @return string Nonce value
 	 */
 	public static function nonce() {
@@ -800,7 +814,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Utility method that attempts to get an attachment's ID by it's url
-	 * @since  0.9.5
+	 * @since  1.0.0
 	 * @param  string  $img_url Attachment url
 	 * @return mixed            Attachment ID or false
 	 */
@@ -830,7 +844,7 @@ add_action( 'wp_ajax_nopriv_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oe
 
 /**
  * Loop and output multiple metaboxes
- * @since 0.9.5
+ * @since 1.0.0
  * @param array $meta_boxes Metaboxes config array
  * @param int   $object_id  Object ID
  */
@@ -842,7 +856,7 @@ function cmb_print_metaboxes( $meta_boxes, $object_id ) {
 
 /**
  * Output a metabox
- * @since 0.9.5
+ * @since 1.0.0
  * @param array $meta_box  Metabox config array
  * @param int   $object_id Object ID
  */
@@ -868,7 +882,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 
 /**
  * Saves a particular metabox's fields
- * @since 0.9.5
+ * @since 1.0.0
  * @param array $meta_box  Metabox config array
  * @param int   $object_id Object ID
  */
@@ -878,7 +892,7 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
 
 /**
  * Display a metabox form & save it on submission
- * @since  0.9.5
+ * @since  1.0.0
  * @param  array   $meta_box  Metabox config array
  * @param  int     $object_id Object ID
  * @param  boolean $return    Whether to return or echo form
@@ -901,16 +915,16 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 		cmb_save_metabox_fields( $meta_box, $object_id );
 
 	// Show specific metabox form
-	$form = '
-	<form class="cmb-form" method="post" id="'. $meta_box['id'] .'" enctype="multipart/form-data" encoding="multipart/form-data">
-		<input type="hidden" name="object_id" value="'. $object_id .'">'."\n";
-		ob_start();
-		cmb_print_metabox( $meta_box, $object_id );
-		$form .= ob_get_contents();
-		ob_end_clean();
-		$form .= "\n".'<input type="submit" name="submit-cmb" value="'. __( 'Save', 'cmb' ) .'">
-	</form>
-	';
+
+	// Get cmb form
+	ob_start();
+	cmb_print_metabox( $meta_box, $object_id );
+	$form = ob_get_contents();
+	ob_end_clean();
+
+	$form_format = apply_filters( 'cmb_frontend_form_format', '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s"></form>', $object_id, $meta_box, $form );
+
+	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, __( 'Save', 'cmb' ) );
 
 	if ( $echo )
 		echo $form;
