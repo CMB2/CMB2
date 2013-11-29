@@ -822,7 +822,7 @@ class cmb_Meta_Box {
 		global $wpdb;
 
 		// Get just the file name
-		if ( strpos( $img_url, '/' ) ){
+		if ( false !== strpos( $img_url, '/' ) ) {
 			$explode = explode( '/', $img_url );
 			$img_url = end( $explode );
 		}
