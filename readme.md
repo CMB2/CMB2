@@ -89,7 +89,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Added `select_timezone` type, a standalone time zone select dropdown. The time zone select can be used with standalone `text_datetime_timestamp` if desired. Props [@dessibelle](https://github.com/dessibelle)
 * Added `text_url` type, a basic url field. Props [@dessibelle](https://github.com/dessibelle)
 * Added `text_email` type, a basic email field. Props [@dessibelle](https://github.com/dessibelle)
-* Added ability to display metabox fields in frontend. Default is true, but can be overriden using the `cmb_allow_frontend filter`. If set to true, an entire metabox form can be output with the `cmb_metabox_form( $meta_box, $object_id, $echo )` function. Props [@dessibelle](https://github.com/dessibelle) & [@jtsternberg](https://github.com/jtsternberg) & [@messenlehner](https://github.com/messenlehner)
+* Added ability to display metabox fields in frontend. Default is true, but can be overriden using the `cmb_allow_frontend filter`. If set to true, an entire metabox form can be output with the `cmb_metabox_form( $meta_box, $object_id, $echo )` function. Props [@dessibelle](https://github.com/dessibelle), [@messenlehner](https://github.com/messenlehner) & [@jtsternberg](https://github.com/jtsternberg).
 * Added hook `cmb_after_table` after all metabox output. Props [@wpsmith](https://github.com/wpsmith)
 * `file_list` now works like a repeatable field. Add as many files as you want. Props [@coreymcollins](https://github.com/coreymcollins)
 * `text`, `text_small`, `text_medium`, `text_url`, `text_email`, & `text_money` fields now all have the option to be repeatable. Props [@jtsternberg](https://github.com/jtsternberg)

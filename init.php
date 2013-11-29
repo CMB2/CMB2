@@ -303,6 +303,9 @@ class cmb_Meta_Box {
 		if ( 'user' != self::set_mb_type( $this->_meta_box ) )
 			return;
 
+		if ( ! apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
+			return;
+
 		wp_enqueue_script( 'cmb-scripts' );
 
 		// default is to NOT show cmb styles on user profile page
@@ -685,6 +688,7 @@ class cmb_Meta_Box {
 	 * @return integer $object_id Object ID
 	 */
 	public static function get_object_id( $object_id = 0 ) {
+
 		if ( $object_id )
 			return $object_id;
 
@@ -699,7 +703,10 @@ class cmb_Meta_Box {
 				break;
 
 			default:
+				$has_id = @get_the_id();
+				$object_id = $has_id ? $has_id : $object_id;
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? $_REQUEST['post'] : $object_id;
 				break;
 		}
 
