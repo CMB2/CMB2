@@ -822,8 +822,10 @@ class cmb_Meta_Box {
 		global $wpdb;
 
 		// Get just the file name
-		if ( strpos( $img_url, '/' ) )
-			$img_url = end( explode( '/', $img_url ) );
+		if ( strpos( $img_url, '/' ) ){
+			$explode = explode( '/', $img_url );
+			$img_url = end( $explode );
+		}
 
 		// And search for a fuzzy match of the file name
 		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
