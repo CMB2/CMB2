@@ -354,14 +354,14 @@ class cmb_Meta_Box_types {
 		echo '<ul>';
 		$i = 1;
 		foreach ($field['options'] as $option) {
-			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '" ', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'], true );
 	}
 
 	public static function checkbox( $field, $meta ) {
-		echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '"', $meta ? ' checked="checked"' : '', ' /> <label for="', $field['id'], '">', self::desc( $field['desc'] ) ,'</label>';
+		echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' /> <label for="', $field['id'], '">', self::desc( $field['desc'] ) ,'</label>';
 	}
 
 	public static function multicheck( $field, $meta ) {
