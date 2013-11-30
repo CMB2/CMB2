@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0.0
+Version: 		1.0.1
 */
 
 /**
@@ -367,11 +367,16 @@ class cmb_Meta_Box {
 			if ( $meta === 'cmb_override_val' )
 				$meta = get_metadata( $object_type, $object_id, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
+			$classes = '';
 			$repeat = isset( $field['repeatable'] ) && $field['repeatable'];
-			$repeatclass = $repeat ? ' cmb-repeat' : '';
-			$repeatmethod = $repeat ? '_repeat' : '';
+			$classes .= $repeat ? ' cmb-repeat' : '';
+			// 'inline' flag, or _inline in the field type, set to true
+			$inline = ( isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' ) );
+			$classes .= $inline ? ' cmb-inline' : '';
+			// cmb_Meta_Box_types repeatable field toggle
+			$types::repeat( $repeat );
 
-			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $repeatclass .'">';
+			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $classes .'">';
 
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
@@ -387,7 +392,7 @@ class cmb_Meta_Box {
 
 			echo empty( $field['before'] ) ? '' : $field['before'];
 
-			call_user_func( array( $types, $field['type'].$repeatmethod ), $field, $meta, $object_id, $object_type );
+			call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
 
 			echo empty( $field['after'] ) ? '' : $field['after'];
 

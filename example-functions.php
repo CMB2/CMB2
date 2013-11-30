@@ -181,6 +181,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'       => $prefix . 'text_taxonomy_radio',
 				'type'     => 'taxonomy_radio',
 				'taxonomy' => 'category', // Taxonomy Slug
+				// 'inline'  => true, // Toggles display to inline
 			),
 			array(
 				'name'     => __( 'Test Taxonomy Select', 'cmb' ),
@@ -195,6 +196,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'		=> $prefix . 'test_multitaxonomy',
 				'type'		=> 'taxonomy_multicheck',
 				'taxonomy'	=> 'post_tag', // Taxonomy Slug
+				// 'inline'  => true, // Toggles display to inline
 			),
 			array(
 				'name' => __( 'Test Checkbox', 'cmb' ),
@@ -212,6 +214,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 					'check2' => __( 'Check Two', 'cmb' ),
 					'check3' => __( 'Check Three', 'cmb' ),
 				),
+				// 'inline'  => true, // Toggles display to inline
 			),
 			array(
 				'name'    => __( 'Test wysiwyg', 'cmb' ),

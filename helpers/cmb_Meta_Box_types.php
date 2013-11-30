@@ -13,39 +13,52 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * A single instance of this class.
-	 * @var cmb_Meta_Box_types object
+	 * @var   cmb_Meta_Box_types object
+	 * @since 1.0.0
 	 */
 	public static $instance = null;
 
 	/**
 	 * An iterator value for repeatable fields
-	 * @var integer
+	 * @var   integer
+	 * @since 1.0.0
 	 */
 	public static $iterator = 0;
 
 	/**
 	 * Holds cmb_valid_img_types
-	 * @var array
+	 * @var   array
+	 * @since 1.0.0
 	 */
-	public static $valid    = array();
+	public static $valid = array();
 
 	/**
 	 * Current field type
-	 * @var string
+	 * @var   string
+	 * @since 1.0.0
 	 */
-	public static $type     = 'text';
+	public static $type = 'text';
 
 	/**
 	 * Current field
-	 * @var array
+	 * @var   array
+	 * @since 1.0.0
 	 */
 	public static $field;
 
 	/**
 	 * Current field meta value
-	 * @var mixed
+	 * @var   mixed
+	 * @since 1.0.0
 	 */
 	public static $meta;
+
+	/**
+	 * Toggle for repeatable fields
+	 * @var   boolean
+	 * @since 1.0.1
+	 */
+	public static $is_repeatable = false;
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -192,41 +205,58 @@ class cmb_Meta_Box_types {
 		return ( $file_ext && in_array( $file_ext, self::$valid ) );
 	}
 
+	/**
+	 * Sets whether field should be repeatable
+	 * @since  1.0.1
+	 * @param  boolean $is_repeatable If field is repeatable
+	 * @return boolean                If field is repeatable
+	 */
+	public static function repeat( $is_repeatable = false ) {
+		self::$is_repeatable = $is_repeatable;
+	}
+
+	/**
+	 * Returns repeatable toggle setting.
+	 * @since  1.0.1
+	 * @return boolean Repeatable toggle
+	 */
+	public static function is_repeatable() {
+		return self::$is_repeatable;
+	}
+
 
 	/**
 	 * Begin Field Types
 	 */
 
 	public static function text( $field, $meta ) {
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $meta );
+		}
+
 		echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
 	}
 
-	public static function text_repeat( $field, $meta ) {
-		self::repeat_text_field( $field, $meta );
-	}
-
 	public static function text_small( $field, $meta ) {
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $meta, 'cmb_text_small' );
+		}
+
 		echo '<input class="cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
 	}
 
-	public static function text_small_repeat( $field, $meta ) {
-		self::repeat_text_field( $field, $meta, 'cmb_text_small' );
-	}
-
 	public static function text_medium( $field, $meta ) {
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $meta, 'cmb_text_medium' );
+		}
 		echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
 	}
 
-	public static function text_medium_repeat( $field, $meta ) {
-		self::repeat_text_field( $field, $meta, 'cmb_text_medium' );
-	}
-
 	public static function text_email( $field, $meta ) {
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $meta, 'cmb_text_email cmb_text_medium', 'email' );
+		}
 		echo '<input class="cmb_text_email cmb_text_medium" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'], true );
-	}
-
-	public static function text_email_repeat( $field, $meta ) {
-		self::repeat_text_field( $field, $meta, 'cmb_text_email cmb_text_medium', 'email' );
 	}
 
 	public static function text_url( $field, $meta ) {
@@ -234,14 +264,11 @@ class cmb_Meta_Box_types {
 		$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
 		$val = $val ? esc_url( $val, $protocols ) : '';
 
-		echo '<input class="cmb_text_url cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />', self::desc( $field['desc'], true );
-	}
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $val, 'cmb_text_url cmb_text_medium' );
+		}
 
-	public static function text_url_repeat( $field, $meta ) {
-		$val = ! empty( $meta ) ? $meta : $field['std'];
-		$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
-		$val = $val ? esc_url( $val, $protocols ) : '';
-		self::repeat_text_field( $field, $val, 'cmb_text_url cmb_text_medium' );
+		echo '<input class="cmb_text_url cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $val, '" />', self::desc( $field['desc'], true );
 	}
 
 	public static function text_date( $field, $meta ) {
@@ -300,11 +327,11 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function text_money( $field, $meta ) {
-		echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
-	}
+		if ( self::is_repeatable() ) {
+			return self::repeat_text_field( $field, $meta, 'cmb_text_money' );
+		}
 
-	public static function text_money_repeat( $field, $meta ) {
-		self::repeat_text_field( $field, $meta, 'cmb_text_money' );
+		echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', '' !== $meta ? $meta : $field['std'], '" />', self::desc( $field['desc'] );
 	}
 
 	public static function colorpicker( $field, $meta ) {
@@ -338,40 +365,37 @@ class cmb_Meta_Box_types {
 		echo '</select>', self::desc( $field['desc'], true );
 	}
 
-	public static function radio_inline( $field, $meta ) {
-		if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
-		echo '<ul class="cmb_radio_inline">';
-		$i = 1;
-		foreach ($field['options'] as $option) {
-			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i, '" value="', $option['value'], '"', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'], '</label></li>';
-			$i++;
-		}
-		echo '</ul>', self::desc( $field['desc'], true );
-	}
-
 	public static function radio( $field, $meta ) {
 		if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 		echo '<ul>';
 		$i = 1;
 		foreach ($field['options'] as $option) {
-			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '" ', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '" ', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'], true );
 	}
 
+	public static function radio_inline( $field, $meta ) {
+		self::radio( $field, $meta );
+	}
+
 	public static function checkbox( $field, $meta ) {
-		echo '<input type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' /> <label for="', $field['id'], '">', self::desc( $field['desc'] ) ,'</label>';
+		echo '<input class="cmb_option" type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' /> <label for="', $field['id'], '">', self::desc( $field['desc'] ) ,'</label>';
 	}
 
 	public static function multicheck( $field, $meta ) {
 		echo '<ul>';
 		$i = 1;
 		foreach ( $field['options'] as $value => $name ) {
-			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
+			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'] );
+	}
+
+	public static function multicheck_inline( $field, $meta ) {
+		self::multicheck( $field, $meta );
 	}
 
 	public static function title( $field, $meta, $object_id, $object_type ) {
@@ -408,10 +432,14 @@ class cmb_Meta_Box_types {
 		foreach ( $terms as $term ) {
 			$checked = ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) );
 
-			echo '<li class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ', checked( $checked ), ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
+			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ', checked( $checked ), ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'], true );
+	}
+
+	public static function taxonomy_radio_inline( $field, $meta ) {
+		self::taxonomy_radio( $field, $meta );
 	}
 
 	public static function taxonomy_multicheck( $field, $meta, $object_id ) {
@@ -420,7 +448,7 @@ class cmb_Meta_Box_types {
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		$i = 1;
 		foreach ( $terms as $term ) {
-			echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
+			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
 			foreach ($names as $name) {
 				checked( $term->slug == $name->slug );
 			}
@@ -429,6 +457,10 @@ class cmb_Meta_Box_types {
 			$i++;
 		}
 		echo '</ul>', self::desc( $field['desc'] );
+	}
+
+	public static function taxonomy_multicheck_inline( $field, $meta ) {
+		self::taxonomy_multicheck( $field, $meta );
 	}
 
 	public static function file_list( $field, $meta, $object_id ) {
@@ -519,6 +551,33 @@ class cmb_Meta_Box_types {
 
 		echo '</div>';
 	}
+
+	/**
+	 * Deprecated methods. use cmb_Meta_Box_types::repeat( true/false ) to toggle repeatable
+	 */
+
+	public static function text_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta );
+	}
+	public static function text_small_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_small' );
+	}
+	public static function text_medium_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_medium' );
+	}
+	public static function text_email_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_email cmb_text_medium', 'email' );
+	}
+	public static function text_url_repeat( $field, $meta ) {
+		$val = ! empty( $meta ) ? $meta : $field['std'];
+		$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
+		$val = $val ? esc_url( $val, $protocols ) : '';
+		self::repeat_text_field( $field, $val, 'cmb_text_url cmb_text_medium' );
+	}
+	public static function text_money_repeat( $field, $meta ) {
+		self::repeat_text_field( $field, $meta, 'cmb_text_money' );
+	}
+
 
 	/**
 	 * Default fallback. Allows rendering fields via "cmb_render_$name" hook

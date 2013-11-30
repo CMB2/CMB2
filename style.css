@@ -20,8 +20,8 @@ table.cmb_metabox ul { padding-top:5px; margin: 0; }
 table.cmb_metabox select { font-size:12px; margin-top: 3px;}
 table.cmb_metabox input:focus, table.cmb_metabox textarea:focus { background: #fffff8;}
 .cmb_metabox_title { margin: 0 0 5px 0; padding: 5px 0 0 0; font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif;}
-.cmb_radio_inline { padding: 4px 0 0 0;}
-.cmb_radio_inline_option {display: inline; padding-right: 18px;}
+.cmb-inline ul { padding: 4px 0 0 0;}
+.cmb-inline li {display: inline-block; padding-right: 18px;}
 table.cmb_metabox input[type="radio"] { margin: 0 5px 0 0; padding: 0;}
 table.cmb_metabox input[type="checkbox"] { margin: 0 5px 0 0; padding: 0;}
 table.cmb_metabox .mceLayout {border:1px solid #DFDFDF !important;}
