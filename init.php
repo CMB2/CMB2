@@ -376,7 +376,7 @@ class cmb_Meta_Box {
 			if ( $field['type'] == "title" ) {
 				echo '<td colspan="2">';
 			} else {
-				if( $meta_box['show_names'] == true ) {
+				if ( isset( $meta_box['show_names'] ) && $meta_box['show_names'] == true ) {
 					$style = $object_type == 'post' ? ' style="width:18%"' : '';
 					echo '<th'. $style .'><label for="', $field['id'], '">', $field['name'], '</label></th>';
 				} else {
