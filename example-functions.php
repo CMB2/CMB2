@@ -20,7 +20,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_cmb_';
 
-	$meta_boxes[] = array(
+	$meta_boxes['test_metabox'] = array(
 		'id'         => 'test_metabox',
 		'title'      => __( 'Test Metabox', 'cmb' ),
 		'pages'      => array( 'page', ), // Post type
@@ -180,21 +180,21 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc'     => __( 'field description (optional)', 'cmb' ),
 				'id'       => $prefix . 'text_taxonomy_radio',
 				'type'     => 'taxonomy_radio',
-				'taxonomy' => '', // Taxonomy Slug
+				'taxonomy' => 'category', // Taxonomy Slug
 			),
 			array(
 				'name'     => __( 'Test Taxonomy Select', 'cmb' ),
 				'desc'     => __( 'field description (optional)', 'cmb' ),
 				'id'       => $prefix . 'text_taxonomy_select',
 				'type'     => 'taxonomy_select',
-				'taxonomy' => '', // Taxonomy Slug
+				'taxonomy' => 'category', // Taxonomy Slug
 			),
 			array(
 				'name'		=> __( 'Test Taxonomy Multi Checkbox', 'cmb' ),
 				'desc'		=> __( 'field description (optional)', 'cmb' ),
 				'id'		=> $prefix . 'test_multitaxonomy',
 				'type'		=> 'taxonomy_multicheck',
-				'taxonomy'	=> '', // Taxonomy Slug
+				'taxonomy'	=> 'post_tag', // Taxonomy Slug
 			),
 			array(
 				'name' => __( 'Test Checkbox', 'cmb' ),
@@ -241,7 +241,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 	);
 
-	$meta_boxes[] = array(
+	$meta_boxes['about_page_metabox'] = array(
 		'id'         => 'about_page_metabox',
 		'title'      => __( 'About Page Metabox', 'cmb' ),
 		'pages'      => array( 'page', ), // Post type
