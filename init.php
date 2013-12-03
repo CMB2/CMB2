@@ -91,15 +91,63 @@ define( 'CMB_META_BOX_URL', get_cmb_meta_box_url() );
  * Create meta boxes
  */
 class cmb_Meta_Box {
-	protected        $_meta_box;
-	protected        $form_id        = 'post';
-	protected static $field          = array();
-	protected static $object_id      = 0;
-	// Type of object being saved. (e.g., post, user, or comment)
-	protected static $object_type    = false;
-	protected static $is_enqueued    = false;
+
+	/**
+	 * Current version number
+	 * @var   string
+	 * @since 1.0.0
+	 */
+	const CMB_VERSION = '1.0.0';
+
+	/**
+	 * Metabox Config array
+	 * @var   array
+	 * @since 0.9.0
+	 */
+	protected $_meta_box;
+
+	/**
+	 * Metabox Form ID
+	 * @var   string
+	 * @since 0.9.4
+	 */
+	protected $form_id = 'post';
+
+	/**
+	 * Current field config array
+	 * @var   array
+	 * @since 1.0.0
+	 */
+	public static $field = array();
+
+	/**
+	 * Object ID for metabox meta retrieving/saving
+	 * @var   int
+	 * @since 1.0.0
+	 */
+	protected static $object_id = 0;
+
+	/**
+	 * Type of object being saved. (e.g., post, user, or comment)
+	 * @var   string
+	 * @since 1.0.0
+	 */
+	protected static $object_type = '';
+
+	/**
+	 * Whether scripts/styles have been enqueued yet
+	 * @var   bool
+	 * @since 1.0.0
+	 */
+	protected static $is_enqueued = false;
+
+	/**
+	 * Type of object specified by the metabox Config
+	 * @var   string
+	 * @since 1.0.0
+	 */
 	protected static $mb_object_type = 'post';
-	const CMB_VERSION                = '1.0.0';
+
 
 	/**
 	 * Get started
@@ -347,14 +395,19 @@ class cmb_Meta_Box {
 			self::$field =& $field;
 
 			// Set up blank or default values for empty ones
-			if ( !isset( $field['name'] ) ) $field['name'] = '';
-			if ( !isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( !isset( $field['std'] ) )  $field['std'] = '';
-			// filter default value
-			$field['std'] = apply_filters( 'cmb_std_filter', $field['std'], $field, $object_id, $object_type );
-			if ( 'file' == $field['type'] && !isset( $field['allow'] ) )
+			if ( ! isset( $field['name'] ) ) $field['name'] = '';
+			if ( ! isset( $field['desc'] ) ) $field['desc'] = '';
+			if ( ! isset( $field['default'] ) ) {
+				// Phase out 'std', and use 'default' instead
+				$field['default'] = isset( $field['std'] ) ? $field['std'] : '';
+			}
+			// Allow a filter override of the default value
+			$field['default'] = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
+			// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
+			$field['default'] = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
+			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
 				$field['allow'] = array( 'url', 'attachment' );
-			if ( 'file' == $field['type'] && !isset( $field['save_id'] ) )
+			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
 				$field['save_id'] = false;
 			if ( 'multicheck' == $field['type'] )
 				$field['multiple'] = true;
@@ -524,7 +577,7 @@ class cmb_Meta_Box {
 					break;
 				case 'textarea':
 				case 'textarea_small':
-					$new = htmlspecialchars( $new );
+					$new = esc_textarea( $new );
 					break;
 				case 'textarea_code':
 					$new = htmlspecialchars_decode( $new );
@@ -566,17 +619,7 @@ class cmb_Meta_Box {
 					break;
 			}
 
-			// Allow validation via filter
-			$new = apply_filters( 'cmb_validate_'. $field['type'], $new, $object_id, $field, $object_type );
-
-			// Allow validation via metabox flag
-			if ( isset( $field['validate_func'] ) ) {
-				$ok = call_user_func( array( 'cmb_Meta_Box_Validate', $field['validate_func'] ), $new );
-				// move along when meta value is invalid
-				if ( $ok === false )
-					continue;
-
-			} elseif ( $field['multiple'] ) {
+			if ( $field['multiple'] ) {
 
 				$updated[] = $name;
 				delete_metadata( $object_type, $object_id, $name );
@@ -913,6 +956,10 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
  * @return string             CMB html form markup
  */
 function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
+
+	// Make sure form should be shown
+	if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
+		return '';
 
 	// Make sure that our object type is explicitly set by the metabox config
 	cmb_Meta_Box::set_object_type( cmb_Meta_Box::set_mb_type( $meta_box ) );
