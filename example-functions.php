@@ -104,19 +104,19 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'text_datetime_timestamp_timezone',
 			),
 			array(
-				'name'   => __( 'Test Money', 'cmb' ),
-				'desc'   => __( 'field description (optional)', 'cmb' ),
-				'id'     => $prefix . 'test_textmoney',
-				'type'   => 'text_money',
-				// 'before' => '£', // override '$' symbol if needed
+				'name' => __( 'Test Money', 'cmb' ),
+				'desc' => __( 'field description (optional)', 'cmb' ),
+				'id'   => $prefix . 'test_textmoney',
+				'type' => 'text_money',
+				// 'before'     => '£', // override '$' symbol if needed
 				// 'repeatable' => true,
 			),
 			array(
-				'name' => __( 'Test Color Picker', 'cmb' ),
-				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'test_colorpicker',
-				'type' => 'colorpicker',
-				'std'  => '#ffffff'
+				'name'    => __( 'Test Color Picker', 'cmb' ),
+				'desc'    => __( 'field description (optional)', 'cmb' ),
+				'id'      => $prefix . 'test_colorpicker',
+				'type'    => 'colorpicker',
+				'default' => '#ffffff'
 			),
 			array(
 				'name' => __( 'Test Text Area', 'cmb' ),
@@ -191,11 +191,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'taxonomy' => 'category', // Taxonomy Slug
 			),
 			array(
-				'name'		=> __( 'Test Taxonomy Multi Checkbox', 'cmb' ),
-				'desc'		=> __( 'field description (optional)', 'cmb' ),
-				'id'		=> $prefix . 'test_multitaxonomy',
-				'type'		=> 'taxonomy_multicheck',
-				'taxonomy'	=> 'post_tag', // Taxonomy Slug
+				'name'     => __( 'Test Taxonomy Multi Checkbox', 'cmb' ),
+				'desc'     => __( 'field description (optional)', 'cmb' ),
+				'id'       => $prefix . 'test_multitaxonomy',
+				'type'     => 'taxonomy_multicheck',
+				'taxonomy' => 'post_tag', // Taxonomy Slug
 				// 'inline'  => true, // Toggles display to inline
 			),
 			array(
@@ -252,7 +252,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		'priority'   => 'high',
 		'show_names' => true, // Show field names on the left
 		'show_on'    => array( 'key' => 'id', 'value' => array( 2, ), ), // Specific post IDs to display this metabox
-		'fields' => array(
+		'fields'     => array(
 			array(
 				'name' => __( 'Test Text', 'cmb' ),
 				'desc' => __( 'field description (optional)', 'cmb' ),
@@ -266,24 +266,24 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	 * Metabox for the user profile screen
 	 */
 	$meta_boxes['user_edit'] = array(
-		'id'         => 'user_edit',
-		'title'      => __( 'User Profile Metabox', 'cmb' ),
-		'pages'      => array( 'user' ), // Tells CMB to use user_meta vs post_meta
-		'show_names' => true,
+		'id'            => 'user_edit',
+		'title'         => __( 'User Profile Metabox', 'cmb' ),
+		'pages'         => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'show_names'    => true,
 		// 'cmb_styles' => true, // Show cmb bundled styles.. not needed on user profile page
-		'fields'     => array(
+		'fields'        => array(
 			array(
-				'name' => __( 'Extra Info', 'cmb' ),
-				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'exta_info',
-				'type' => 'title',
+				'name'     => __( 'Extra Info', 'cmb' ),
+				'desc'     => __( 'field description (optional)', 'cmb' ),
+				'id'       => $prefix . 'exta_info',
+				'type'     => 'title',
 				'on_front' => false,
 			),
 			array(
-				'name' => __( 'Avatar', 'cmb' ),
-				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'avatar',
-				'type' => 'file',
+				'name'    => __( 'Avatar', 'cmb' ),
+				'desc'    => __( 'field description (optional)', 'cmb' ),
+				'id'      => $prefix . 'avatar',
+				'type'    => 'file',
 				'save_id' => true,
 			),
 			array(
