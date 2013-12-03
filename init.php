@@ -47,45 +47,7 @@ foreach ( $meta_boxes as $meta_box ) {
 	$my_box = new cmb_Meta_Box( $meta_box );
 }
 
-/**
- * Validate value of meta fields
- * Define ALL validation methods inside this class and use the names of these
- * methods in the definition of meta boxes (key 'validate_func' of each field)
- */
-class cmb_Meta_Box_Validate {
-	function check_text( $text ) {
-		if ($text != 'hello') {
-			return false;
-		}
-		return true;
-	}
-}
-
-/**
- * Defines the url to which is used to load local resources.
- * This may need to be filtered for local Window installations.
- * If resources do not load, please check the wiki for details.
- */
-function get_cmb_meta_box_url() {
-
-	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-		// Windows
-		$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
-		$content_url = str_replace( $content_dir, WP_CONTENT_URL, dirname(__FILE__) );
-		$cmb_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
-
-	} else {
-	  $cmb_url = str_replace(
-			array(WP_CONTENT_DIR, WP_PLUGIN_DIR),
-			array(WP_CONTENT_URL, WP_PLUGIN_URL),
-			dirname( __FILE__ )
-		);
-	}
-
-	return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
-}
-
-define( 'CMB_META_BOX_URL', get_cmb_meta_box_url() );
+define( 'CMB_META_BOX_URL', cmb_Meta_Box::get_meta_box_url() );
 
 /**
  * Create meta boxes
@@ -420,14 +382,15 @@ class cmb_Meta_Box {
 			if ( $meta === 'cmb_override_val' )
 				$meta = get_metadata( $object_type, $object_id, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
 
+			// Validate/sanitize value
+			$meta = self::sanitization_cb( $meta );
+
 			$classes = '';
-			$repeat = isset( $field['repeatable'] ) && $field['repeatable'];
-			$classes .= $repeat ? ' cmb-repeat' : '';
+			$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
+			$classes .= $field['repeatable'] ? ' cmb-repeat' : '';
 			// 'inline' flag, or _inline in the field type, set to true
 			$inline = ( isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' ) );
 			$classes .= $inline ? ' cmb-inline' : '';
-			// cmb_Meta_Box_types repeatable field toggle
-			$types::repeat( $repeat );
 
 			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $classes .'">';
 
@@ -521,7 +484,6 @@ class cmb_Meta_Box {
 		foreach ( $meta_box['fields'] as $field ) {
 
 			self::$field =& $field;
-
 			$name = $field['id'];
 
 			if ( ! isset( $field['multiple'] ) )
@@ -569,22 +531,12 @@ class cmb_Meta_Box {
 					$new = serialize( $new );
 
 					break;
-				case 'text_url':
-					if ( ! empty( $new ) ) {
-						$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
-						$new = esc_url_raw( $new, $protocols );
-					}
-					break;
 				case 'textarea':
 				case 'textarea_small':
 					$new = esc_textarea( $new );
 					break;
 				case 'textarea_code':
 					$new = htmlspecialchars_decode( $new );
-					break;
-				case 'text_email':
-					$new = trim( $new );
-					$new = is_email( $new ) ? $new : '';
 					break;
 				case 'text_date_timestamp':
 					$new = strtotime( $new );
@@ -617,10 +569,11 @@ class cmb_Meta_Box {
 						delete_metadata( $object_type, $object_id, $_id_name, $old );
 					}
 					break;
+				default:
+					// Check if this metabox field has a registered validation callback
+					$new = self::sanitization_cb( $new, true );
+					break;
 			}
-
-			// Allow validation via filter
-			$new = apply_filters( 'cmb_validate_'. $field['type'], $new, $object_id, $field, $object_type );
 
 			if ( $field['multiple'] ) {
 
@@ -894,6 +847,59 @@ class cmb_Meta_Box {
 
 		// No luck
 		return false;
+	}
+
+	/**
+	 * Checks if field has a registered validation callback
+	 * @since  1.0.1
+	 * @param  mixed $meta_value Meta value
+	 * @param  bool  $is_saving  Whether value is being saved or displayed
+	 * @return mixed             Possibly validated meta value
+	 */
+	public function sanitization_cb( $meta_value, $is_saving = false ) {
+		if ( empty( $meta_value ) )
+			return $meta_value;
+		// Check if the field has a registered validation callback
+		if ( isset( self::$field['sanitization_cb'] ) ) {
+			// Make sure the metabox isn't requesting NO validation
+			if ( false !== self::$field['sanitization_cb'] && is_string( self::$field['sanitization_cb'] ) && 'false' !== self::$field['sanitization_cb'] ) {
+				// Run the value through the validation callback
+				// Pass in the meta value, whether the field is saving, and the entire field array
+				$meta_value = call_user_func( self::$field['sanitization_cb'], $meta_value, $is_saving, self::$field );
+			}
+		} else {
+			// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
+			$meta_value = call_user_func( array( cmb_Meta_Box_Validate::get(), self::$field['type'] ), $meta_value, $is_saving, self::$field );
+		}
+
+		// Return modified value (unless 'sanitization_cb' => false)
+		return $meta_value;
+	}
+
+	/**
+	 * Defines the url which is used to load local resources.
+	 * This may need to be filtered for local Window installations.
+	 * If resources do not load, please check the wiki for details.
+	 * @since  1.0.1
+	 * @return string URL to CMB resources
+	 */
+	public static function get_meta_box_url() {
+
+		if ( strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN' ) {
+			// Windows
+			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
+			$content_url = str_replace( $content_dir, WP_CONTENT_URL, dirname(__FILE__) );
+			$cmb_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
+
+		} else {
+		  $cmb_url = str_replace(
+				array(WP_CONTENT_DIR, WP_PLUGIN_DIR),
+				array(WP_CONTENT_URL, WP_PLUGIN_URL),
+				dirname( __FILE__ )
+			);
+		}
+
+		return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
 	}
 
 }
