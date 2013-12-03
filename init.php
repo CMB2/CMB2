@@ -619,6 +619,9 @@ class cmb_Meta_Box {
 					break;
 			}
 
+			// Allow validation via filter
+			$new = apply_filters( 'cmb_validate_'. $field['type'], $new, $object_id, $field, $object_type );
+
 			if ( $field['multiple'] ) {
 
 				$updated[] = $name;
