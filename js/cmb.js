@@ -27,8 +27,8 @@ jQuery(document).ready( function($) {
 	 */
 	$('.cmb_timepicker').each( function() {
 		$('#' + jQuery(this).attr('id')).timePicker({
-			startTime: "07:00",
-			endTime: "22:00",
+			startTime: "00:00",
+			endTime: "23:59",
 			show24Hours: false,
 			separator: ':',
 			step: 30
