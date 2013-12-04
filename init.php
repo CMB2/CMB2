@@ -873,7 +873,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	$cmb = new cmb_Meta_Box( $meta_box );
 	if ( $cmb ) {
 
-		$cmb::set_object_id( $object_id );
+		cmb_Meta_Box::set_object_id( $object_id );
 
 		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) )
 			$cmb->register_scripts();
@@ -884,7 +884,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 		if ( ! isset( $meta_box['cmb_styles'] ) || $meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
-		$cmb::show_form( $meta_box );
+		cmb_Meta_Box::show_form( $meta_box );
 	}
 
 }
