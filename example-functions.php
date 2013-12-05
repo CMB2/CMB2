@@ -319,6 +319,24 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		)
 	);
 
+	/**
+	 * Metabox for an options page
+	 */
+	$meta_boxes['options_page'] = array(
+		'id'            => 'options_page',
+		'title'         => __( 'Theme Options Metabox', 'cmb' ),
+		'show_on'    => array( 'key' => 'options-page', 'value' => array( $prefix . 'theme_options', ), ),
+		'fields'        => array(
+			array(
+				'name'    => __( 'Site Background Color', 'cmb' ),
+				'desc'    => __( 'field description (optional)', 'cmb' ),
+				'id'      => $prefix . 'bg_color',
+				'type'    => 'colorpicker',
+				'default' => '#ffffff'
+			),
+		)
+	);
+
 	// Add other metaboxes as needed
 
 	return $meta_boxes;
