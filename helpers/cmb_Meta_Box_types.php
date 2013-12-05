@@ -93,8 +93,12 @@ class cmb_Meta_Box_types {
 		// check for default content
 		$default = isset( $field['default'] ) ? array( $field['default'] ) : false;
 		// check for saved data
-		$meta = !empty( $meta ) && array_filter( $meta ) ? $meta : $default;
-
+		if ( !empty( $meta ) ) {
+			$meta = is_array( $meta ) ? array_filter( $meta ) : $meta;
+			$meta = ! empty( $meta ) ? $meta : $default;
+		} else {
+			$meta = $default;
+		}
 
 		self::repeat_table_open( $class );
 
@@ -209,7 +213,7 @@ class cmb_Meta_Box_types {
 			return self::repeat_text_field( $meta );
 		}
 
-		echo '<input type="text" name="', $field['id'], '" id="', $field['id'], '" value="', ! empty( $meta ) ? $meta : $field['default'], '" />', self::desc( true );
+		echo '<input type="text" class="regular-text" name="', $field['id'], '" id="', $field['id'], '" value="', ! empty( $meta ) ? $meta : $field['default'], '" />', self::desc( true );
 	}
 
 	public static function text_small( $field, $meta ) {
@@ -240,7 +244,7 @@ class cmb_Meta_Box_types {
 			return self::repeat_text_field( $meta, 'cmb_text_url cmb_text_medium' );
 		}
 
-		echo '<input class="cmb_text_url cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" />', self::desc( true );
+		echo '<input class="cmb_text_url cmb_text_medium regular-text" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" />', self::desc( true );
 	}
 
 	public static function text_date( $field, $meta ) {
@@ -325,7 +329,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function textarea_code( $field, $meta ) {
-		echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" class="cmb_textarea_code">', ! empty( $meta ) ? $meta : $field['default'], '</textarea>', self::desc( true );
+		echo '<pre><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" class="cmb_textarea_code">', ! empty( $meta ) ? $meta : $field['default'], '</textarea></pre>', self::desc( true );
 	}
 
 	public static function select( $field, $meta ) {
@@ -360,7 +364,7 @@ class cmb_Meta_Box_types {
 		echo '<ul>';
 		$i = 1;
 		foreach ( $field['options'] as $value => $name ) {
-			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
+			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( is_array( $meta ) && in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc();
@@ -480,7 +484,7 @@ class cmb_Meta_Box_types {
 
 		$_id_name = $field['id'] .'_id';
 
-		$_id_meta = get_metadata( $object_type, $object_id, $_id_name, ( ! isset( $field['multiple'] ) || ! $field['multiple'] ) );
+		$_id_meta = cmb_Meta_Box::get_data( $_id_name );
 
 		// If there is no ID saved yet, try to get it from the url
 		if ( $meta && ! $_id_meta ) {
@@ -510,7 +514,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function oembed( $field, $meta, $object_id, $object_type ) {
-		echo '<input class="cmb_oembed" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', ! empty( $meta ) ? $meta : $field['default'], '" />', self::desc( true );
+		echo '<input class="cmb_oembed regular-text" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', ! empty( $meta ) ? $meta : $field['default'], '" data-objectid="', $object_id ,'" data-objecttype="', $object_type ,'" />', self::desc( true );
 		echo '<p class="cmb-spinner spinner" style="display:none;"><img src="'. admin_url( '/images/wpspin_light.gif' ) .'" alt="spinner"/></p>';
 		echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
 
