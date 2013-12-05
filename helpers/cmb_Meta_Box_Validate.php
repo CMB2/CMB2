@@ -54,6 +54,16 @@ class cmb_Meta_Box_Validate {
 	}
 
 	/**
+	 * Because we don't want oembed data passed through the cmb_validate_ filter
+	 * @since  1.0.1
+	 * @param  string  $meta oembed cached data
+	 * @return string        oembed cached data
+	 */
+	public static function oembed( $meta ) {
+		return $meta;
+	}
+
+	/**
 	 * Validate email in a meta value
 	 * @since  1.0.1
 	 * @param  string  $meta Meta value
@@ -91,6 +101,57 @@ class cmb_Meta_Box_Validate {
 
 		return $meta;
 	}
+
+	/**
+	 * Datetime to timestamp
+	 * @since  1.0.1
+	 * @param  string  $meta Meta value
+	 * @return string        Timestring
+	 */
+	public static function text_datetime_timestamp( $meta ) {
+
+		$test = is_array( $meta ) ? array_filter( $meta ) : '';
+		if ( empty( $test ) )
+			return '';
+
+		$meta = strtotime( $meta['date'] .' '. $meta['time'] );
+
+		if ( $tz_offset = cmb_Meta_Box::field_timezone_offset() )
+			$meta += $tz_offset;
+
+		return $meta;
+	}
+
+	/**
+	 * Datetime to imestamp with timezone
+	 * @since  1.0.1
+	 * @param  string  $meta Meta value
+	 * @return string        Timestring
+	 */
+	public static function text_datetime_timestamp_timezone( $meta ) {
+		$tzstring = null;
+
+		$test = is_array( $meta ) ? array_filter( $meta ) : '';
+		if ( empty( $test ) )
+			return '';
+
+		if ( is_array( $meta ) && array_key_exists( 'timezone', $meta ) )
+			$tzstring = $meta['timezone'];
+
+		if ( empty( $tzstring ) )
+			$tzstring = cmb_Meta_Box::timezone_string();
+
+		$offset = cmb_Meta_Box::timezone_offset( $tzstring, true );
+
+		if ( substr( $tzstring, 0, 3 ) === 'UTC' )
+			$tzstring = timezone_name_from_abbr( "", $offset, 0 );
+
+		$meta = new DateTime( $meta['date'] .' '. $meta['time'], new DateTimeZone( $tzstring ) );
+		$meta = serialize( $meta );
+
+		return $meta;
+	}
+
 
 	/**
 	 * Default fallback if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
