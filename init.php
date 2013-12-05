@@ -69,6 +69,23 @@ class cmb_Meta_Box {
 	protected $_meta_box;
 
 	/**
+	 * Metabox Defaults
+	 * @var   array
+	 * @since 1.0.1
+	 */
+	protected static $mb_defaults = array(
+		'id'         => '',
+		'title'      => '',
+		'pages'      => array(), // Post type
+		'context'    => 'normal',
+		'priority'   => 'high',
+		'show_names' => true, // Show field names on the left
+		'show_on'    => array( 'key' => false, 'value' => false ), // Specific post IDs or page templates to display this metabox
+		'cmb_styles' => true, // Include cmb bundled stylesheet
+		'fields'     => array(),
+	);
+
+	/**
 	 * Metabox Form ID
 	 * @var   string
 	 * @since 0.9.4
@@ -110,11 +127,20 @@ class cmb_Meta_Box {
 	 */
 	protected static $mb_object_type = 'post';
 
+	/**
+	 * Array of all options from manage-options metaboxes
+	 * @var   array
+	 * @since 1.0.0
+	 */
+	protected static $options = array();
+
 
 	/**
 	 * Get started
 	 */
 	function __construct( $meta_box ) {
+
+		$meta_box = self::set_mb_defaults( $meta_box );
 
 		$allow_frontend = apply_filters( 'cmb_allow_frontend', true, $meta_box );
 
@@ -231,15 +257,16 @@ class cmb_Meta_Box {
 		wp_enqueue_media();
 
 		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
-			'ajax_nonce'   => wp_create_nonce( 'ajax_nonce' ),
-			'object_id'    => self::get_object_id(),
-			'object_type'  => self::get_object_type(),
-			'upload_file'  => 'Use this file',
-			'remove_image' => 'Remove Image',
-			'remove_file'  => 'Remove',
-			'file'         => 'File:',
-			'download'     => 'Download',
-			'ajaxurl'		=> admin_url( '/admin-ajax.php' ),
+			'ajax_nonce'      => wp_create_nonce( 'ajax_nonce' ),
+			'script_debug'    => defined('SCRIPT_DEBUG') && SCRIPT_DEBUG,
+			'new_admin_style' => version_compare( $wp_version, '3.7', '>' ),
+			'object_type'     => self::get_object_type(),
+			'upload_file'     => 'Use this file',
+			'remove_image'    => 'Remove Image',
+			'remove_file'     => 'Remove',
+			'file'            => 'File:',
+			'download'        => 'Download',
+			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
 		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
@@ -258,7 +285,7 @@ class cmb_Meta_Box {
 			wp_enqueue_script( 'cmb-scripts' );
 
 			// default is to show cmb styles on post pages
-			if ( ! isset( $this->_meta_box['cmb_styles'] ) || $this->_meta_box['cmb_styles'] != false )
+			if ( $this->_meta_box['cmb_styles'] != false )
 				wp_enqueue_style( 'cmb-styles' );
 		}
 	}
@@ -280,9 +307,6 @@ class cmb_Meta_Box {
 	 * Add metaboxes (to 'post' object type)
 	 */
 	function add_metaboxes() {
-		$this->_meta_box['context']  = empty( $this->_meta_box['context'] ) ? 'normal' : $this->_meta_box['context'];
-		$this->_meta_box['priority'] = empty( $this->_meta_box['priority'] ) ? 'high' : $this->_meta_box['priority'];
-		$this->_meta_box['show_on']  = empty( $this->_meta_box['show_on'] ) ? array( 'key' => false, 'value' => false ) : $this->_meta_box['show_on'];
 
 		foreach ( $this->_meta_box['pages'] as $page ) {
 			if ( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
@@ -319,7 +343,7 @@ class cmb_Meta_Box {
 		wp_enqueue_script( 'cmb-scripts' );
 
 		// default is to NOT show cmb styles on user profile page
-		if ( isset( $this->_meta_box['cmb_styles'] ) && $this->_meta_box['cmb_styles'] == true  )
+		if ( $this->_meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
 		self::show_form( $this->_meta_box );
@@ -334,7 +358,7 @@ class cmb_Meta_Box {
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
 	public static function show_form( $meta_box, $object_id = 0, $object_type = '' ) {
-
+		$meta_box = self::set_mb_defaults( $meta_box );
 		// Set/get type
 		$object_type = self::set_object_type( $object_type ? $object_type : self::set_mb_type( $meta_box ) );
 		// Set/get ID
@@ -367,20 +391,17 @@ class cmb_Meta_Box {
 			$field['default'] = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
 			// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
 			$field['default'] = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
-			if ( 'file' == $field['type'] && ! isset( $field['allow'] ) )
-				$field['allow'] = array( 'url', 'attachment' );
-			if ( 'file' == $field['type'] && ! isset( $field['save_id'] ) )
-				$field['save_id'] = false;
-			if ( 'multicheck' == $field['type'] )
-				$field['multiple'] = true;
+			$field['allow'] = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
+			$field['save_id'] = 'file' == $field['type'] && ! isset( $field['save_id'] );
+			$field['multiple'] = 'multicheck' == $field['type'];
 
 			// Allow an override for the field's value
-			// (assuming no one would want to save 'cmb_override_val' as a value)
-			$meta = apply_filters( 'cmb_override_meta_value', 'cmb_override_val', $object_id, $field, $object_type );
+			// (assuming no one would want to save 'cmb_no_override_val' as a value)
+			$meta = apply_filters( 'cmb_override_meta_value', 'cmb_no_override_val', $object_id, $field, $object_type );
 
 			// If no override, get our meta
-			if ( $meta === 'cmb_override_val' )
-				$meta = get_metadata( $object_type, $object_id, $field['id'], 'multicheck' != $field['type'] /* If multicheck this can be multiple values */ );
+			if ( $meta === 'cmb_no_override_val' )
+				$meta = self::get_data();
 
 			// Validate/sanitize value
 			$meta = self::sanitization_cb( $meta );
@@ -468,6 +489,7 @@ class cmb_Meta_Box {
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
 	public static function save_fields( $meta_box, $object_id, $object_type = '' ) {
+		$meta_box = self::set_mb_defaults( $meta_box );
 
 		$meta_box['show_on'] = empty( $meta_box['show_on'] ) ? array( 'key' => false, 'value' => false ) : $meta_box['show_on'];
 
@@ -489,8 +511,8 @@ class cmb_Meta_Box {
 			if ( ! isset( $field['multiple'] ) )
 				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
 
-			$old = get_metadata( $object_type, $object_id, $name, !$field['multiple'] /* If multicheck this can be multiple values */ );
-			$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : null;
+			$old = self::get_data();
+			$new = isset( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : null;
 
 			if ( $object_type == 'post' ) {
 
@@ -507,36 +529,12 @@ class cmb_Meta_Box {
 			}
 
 			switch ( $field['type'] ) {
-				case 'text_datetime_timestamp':
-					$new = strtotime( $new['date'] .' '. $new['time'] );
-
-					if ( $tz_offset = self::field_timezone_offset( $object_id ) )
-						$new += $tz_offset;
-					break;
-				case 'text_datetime_timestamp_timezone':
-					$tzstring = null;
-
-					if ( array_key_exists( 'timezone', $new ) )
-						$tzstring = $new['timezone'];
-
-					if ( empty( $tzstring ) )
-						$tzstring = self::timezone_string();
-
-					$offset = self::timezone_offset( $tzstring );
-
-					if ( substr( $tzstring, 0, 3 ) === 'UTC' )
-						$tzstring = timezone_name_from_abbr( "", $offset, 0 );
-
-					$new = new DateTime( $new['date'] .' '. $new['time'], new DateTimeZone( $tzstring ) );
-					$new = serialize( $new );
-
-					break;
 				case 'textarea':
 				case 'textarea_small':
 					$new = esc_textarea( $new );
 					break;
 				case 'textarea_code':
-					$new = htmlspecialchars_decode( $new );
+					$new = htmlspecialchars_decode( stripslashes( $new ) );
 					break;
 				case 'text_date_timestamp':
 					$new = strtotime( $new );
@@ -544,14 +542,14 @@ class cmb_Meta_Box {
 				case 'file':
 					$_id_name = $field['id'] .'_id';
 					// get _id old value
-					$_id_old = get_metadata( $object_type, $object_id, $_id_name, !$field['multiple'] /* If multicheck this can be multiple values */ );
+					$_id_old = self::get_data( $_id_name );
 
 					// If specified NOT to save the file ID
 					if ( isset( $field['save_id'] ) && ! $field['save_id'] ) {
 						$_new_id = '';
 					} else {
 						// otherwise get the file ID
-						$_new_id = isset( $_POST[$_id_name] ) ? $_POST[$_id_name] : null;
+						$_new_id = isset( $_POST[ $_id_name ] ) ? $_POST[ $_id_name ] : null;
 
 						// If there is no ID saved yet, try to get it from the url
 						if ( isset( $_POST[ $field['id'] ] ) && $_POST[ $field['id'] ] && ! $_new_id ) {
@@ -562,11 +560,10 @@ class cmb_Meta_Box {
 
 					if ( $_new_id && $_new_id != $_id_old ) {
 						$updated[] = $_id_name;
-						update_metadata( $object_type, $object_id, $_id_name, $_new_id );
-
+						self::update_data( $_new_id, $_id_name );
 					} elseif ( '' == $_new_id && $_id_old ) {
 						$updated[] = $_id_name;
-						delete_metadata( $object_type, $object_id, $_id_name, $old );
+						self::remove_data( $_id_name, $old );
 					}
 					break;
 				default:
@@ -577,22 +574,27 @@ class cmb_Meta_Box {
 
 			if ( $field['multiple'] ) {
 
-				$updated[] = $name;
-				delete_metadata( $object_type, $object_id, $name );
+				self::remove_data( $name );
 				if ( ! empty( $new ) ) {
 					foreach ( $new as $add_new ) {
-						add_metadata( $object_type, $object_id, $name, $add_new, false );
+						$updated[] = $name;
+						self::update_data( $add_new, $name, true );
 					}
 				}
-			} elseif ( '' !== $new && $new != $old  ) {
+			} elseif ( ! empty( $new ) && $new != $old  ) {
 				$updated[] = $name;
-				update_metadata( $object_type, $object_id, $name, $new );
-			} elseif ( '' == $new ) {
-				$updated[] = $name;
-				delete_metadata( $object_type, $object_id, $name );
+				self::update_data( $new );
+			} elseif ( empty( $new ) ) {
+				if ( ! empty( $old ) )
+					$updated[] = $name;
+				self::remove_data( $name );
 			}
 
 		}
+
+		// If options page, save the updated options
+		if ( $object_type == 'options-page' )
+			self::save_option( $object_id );
 
 		do_action( "cmb_save_{$object_type}_fields", $object_id, $meta_box['id'], $updated, $meta_box );
 
@@ -675,9 +677,7 @@ class cmb_Meta_Box {
 		if ( array_key_exists( 'timezone', self::$field ) && self::$field['timezone'] ) {
 			$tzstring = self::$field['timezone'];
 		} else if ( array_key_exists( 'timezone_meta_key', self::$field ) && self::$field['timezone_meta_key'] ) {
-			$timezone_meta_key = self::$field['timezone_meta_key'];
-
-			$tzstring = get_metadata( self::get_mb_type(), $object_id, $timezone_meta_key, true );
+			$tzstring = self::get_data( self::$field['timezone_meta_key'] );
 
 			return $tzstring;
 		}
@@ -748,7 +748,10 @@ class cmb_Meta_Box {
 
 		$type = false;
 		// check if 'pages' is a string
-		if ( is_string( $meta_box['pages'] ) )
+		if ( self::is_options_page_mb( $meta_box ) )
+			$type = 'options-page';
+		// check if 'pages' is a string
+		elseif ( is_string( $meta_box['pages'] ) )
 			$type = $meta_box['pages'];
 		// if it's an array of one, extract it
 		elseif ( is_array( $meta_box['pages'] ) && count( $meta_box['pages'] === 1 ) )
@@ -762,10 +765,22 @@ class cmb_Meta_Box {
 			self::$mb_object_type = 'user';
 		elseif ( 'comment' == $type )
 			self::$mb_object_type = 'comment';
+		elseif ( 'options-page' == $type )
+			self::$mb_object_type = 'options-page';
 		else
 			self::$mb_object_type = 'post';
 
 		return self::get_mb_type();
+	}
+
+	/**
+	 * Determines if metabox is for an options page
+	 * @since  1.0.1
+	 * @param  array   $meta_box Metabox config array
+	 * @return boolean           True/False
+	 */
+	public static function is_options_page_mb( $meta_box ) {
+		return ( isset( $meta_box['show_on']['key'] ) && 'options-page' === $meta_box['show_on']['key'] );
 	}
 
 	/**
@@ -854,22 +869,25 @@ class cmb_Meta_Box {
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
 	 * @param  bool  $is_saving  Whether value is being saved or displayed
+	 * @param  array $field      Field config array
 	 * @return mixed             Possibly validated meta value
 	 */
-	public function sanitization_cb( $meta_value, $is_saving = false ) {
+	public function sanitization_cb( $meta_value, $is_saving = false, $field = array() ) {
 		if ( empty( $meta_value ) )
 			return $meta_value;
+
+		$field = $field !== array() ? $field : self::$field;
 		// Check if the field has a registered validation callback
-		if ( isset( self::$field['sanitization_cb'] ) ) {
+		if ( isset( $field['sanitization_cb'] ) ) {
 			// Make sure the metabox isn't requesting NO validation
-			if ( false !== self::$field['sanitization_cb'] && is_string( self::$field['sanitization_cb'] ) && 'false' !== self::$field['sanitization_cb'] ) {
+			if ( false !== $field['sanitization_cb'] && is_string( $field['sanitization_cb'] ) && 'false' !== $field['sanitization_cb'] ) {
 				// Run the value through the validation callback
 				// Pass in the meta value, whether the field is saving, and the entire field array
-				$meta_value = call_user_func( self::$field['sanitization_cb'], $meta_value, $is_saving, self::$field );
+				$meta_value = call_user_func( $field['sanitization_cb'], $meta_value, $is_saving, $field );
 			}
 		} else {
 			// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
-			$meta_value = call_user_func( array( cmb_Meta_Box_Validate::get(), self::$field['type'] ), $meta_value, $is_saving, self::$field );
+			$meta_value = call_user_func( array( cmb_Meta_Box_Validate::get(), $field['type'] ), $meta_value, $is_saving, $field );
 		}
 
 		// Return modified value (unless 'sanitization_cb' => false)
@@ -902,11 +920,163 @@ class cmb_Meta_Box {
 		return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
 	}
 
+	/**
+	 * Fills in empty metabox parameters with defaults
+	 * @since  1.0.1
+	 * @param  array $meta_box Metabox config array
+	 * @return array           Modified Metabox config array
+	 */
+	public static function set_mb_defaults( $meta_box ) {
+		return wp_parse_args( $meta_box, self::$mb_defaults );
+	}
+
+	/**
+	 * Retrieves metadata/option data
+	 * @since  1.0.1
+	 * @param  string  $field_id Meta key/Option array key
+	 * @return mixed             Meta/Option value
+	 */
+	public static function get_data( $field_id = '' ) {
+
+		$type     = self::get_object_type();
+		$id       = self::get_object_id();
+		$field_id = $field_id ? $field_id : self::$field['id'];
+
+		$data = 'options-page' === $type
+			? self::get_option( $id, $field_id )
+			: get_metadata( $type, $id, $field_id, !self::$field['multiple'] /* If multicheck this can be multiple values */ );
+
+		return $data;
+	}
+
+
+	/**
+	 * Updates metadata/option data
+	 * @since  1.0.1
+	 * @param  mixed   $value    Value to update data with
+	 * @param  string  $field_id Meta key/Option array key
+	 * @param  bool    $multiple Whether data is an array (add_metadata)
+	 */
+	public static function update_data( $value, $field_id = '', $multiple = false ) {
+
+		$type     = self::get_object_type();
+		$id       = self::get_object_id();
+		$field_id = $field_id ? $field_id : self::$field['id'];
+
+		if ( 'options-page' === $type ) {
+			self::update_option( $id, $field_id, $value );
+		} else {
+			if ( $multiple ) {
+				add_metadata( $object_type, $id, $field_id, $value, false );
+			} else {
+				update_metadata( $object_type, $id, $field_id, $value );
+			}
+		}
+	}
+
+	/**
+	 * Removes/updates metadata/option data
+	 * @since  1.0.1
+	 * @param  string  $field_id Meta key/Option array key
+	 * @param  string  $old      Old value
+	 */
+	public static function remove_data( $field_id = '', $old = '' ) {
+
+		$type     = self::get_object_type();
+		$id       = self::get_object_id();
+		$field_id = $field_id ? $field_id : self::$field['id'];
+
+		$data = 'options-page' === $type
+			? self::remove_option( $id, $field_id )
+			: delete_metadata( $type, $id, $field_id, $old );
+
+	}
+
+	/**
+	 * Removes an option from an option array
+	 * @since  1.0.1
+	 * @param  string  $option_key Option key
+	 * @param  string  $field_id   Option array field key
+	 * @return array               Modified options
+	 */
+	public static function remove_option( $option_key, $field_id ) {
+
+		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? get_option( $option_key ) : self::$options[ $option_key ];
+
+		unset( self::$options[ $option_key ][ $field_id ] );
+
+		return self::$options[ $option_key ];
+	}
+
+	/**
+	 * Retrieves an option from an option array
+	 * @since  1.0.1
+	 * @param  string  $option_key Option key
+	 * @param  string  $field_id   Option array field key
+	 * @return array               Options array or specific field
+	 */
+	public static function get_option( $option_key, $field_id = '' ) {
+
+		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? get_option( $option_key ) : self::$options[ $option_key ];
+
+		if ( $field_id ) {
+			return isset( self::$options[ $option_key ][ $field_id ] ) ? self::$options[ $option_key ][ $field_id ] : false;
+		}
+
+		return self::$options[ $option_key ];
+	}
+
+
+	/**
+	 * Updates Option data
+	 * @since  1.0.1
+	 * @param  string  $option_key Option key
+	 * @param  string  $field_id   Option array field key
+	 * @param  mixed   $value      Value to update data with
+	 * @param  array   $field      Optionally specify a field array
+	 * @return array               Modified options
+	 */
+	public static function update_option( $option_key, $field_id, $value, $field = array() ) {
+
+		$field = $field !== array() ? $field : self::$field;
+
+		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
+			// If multiple, add to array
+			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, true, $field );
+		} else {
+			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, true, $field );
+		}
+
+		return self::$options[ $option_key ];
+	}
+
+	/**
+	 * Saves the option array
+	 * Needs to be run after finished using remove/update_option
+	 * @since  1.0.1
+	 * @param  string  $option_key Option key
+	 * @return boolean             Success/Failure
+	 */
+	public static function save_option( $option_key ) {
+		return update_option( $option_key, self::get_option( $option_key ) );
+	}
+
 }
 
 // Handle oembed Ajax
 add_action( 'wp_ajax_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oembed_handler' ) );
 add_action( 'wp_ajax_nopriv_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oembed_handler' ) );
+
+/**
+ * A helper function to get an option from a CMB options array
+ * @since  1.0.1
+ * @param  string  $option_key Option key
+ * @param  string  $field_id   Option array field key
+ * @return array               Options array or specific field
+ */
+function cmb_get_option( $option_key, $field_id = '' ) {
+	cmb_Meta_Box::get_option( $option_key, $field_id );
+}
 
 /**
  * Loop and output multiple metaboxes
@@ -930,7 +1100,7 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 	$cmb = new cmb_Meta_Box( $meta_box );
 	if ( $cmb ) {
 
-		$cmb::set_object_id( $object_id );
+		cmb_Meta_Box::set_object_id( $object_id );
 
 		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) )
 			$cmb->register_scripts();
@@ -938,10 +1108,10 @@ function cmb_print_metabox( $meta_box, $object_id ) {
 		wp_enqueue_script( 'cmb-scripts' );
 
 		// default is to show cmb styles
-		if ( ! isset( $meta_box['cmb_styles'] ) || $meta_box['cmb_styles'] != false )
+		if ( $meta_box['cmb_styles'] != false )
 			wp_enqueue_style( 'cmb-styles' );
 
-		$cmb::show_form( $meta_box );
+		cmb_Meta_Box::show_form( $meta_box );
 	}
 
 }
@@ -965,6 +1135,8 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
  * @return string             CMB html form markup
  */
 function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
+
+	$meta_box = cmb_Meta_Box::set_mb_defaults( $meta_box );
 
 	// Make sure form should be shown
 	if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
@@ -992,7 +1164,7 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 	$form = ob_get_contents();
 	ob_end_clean();
 
-	$form_format = apply_filters( 'cmb_frontend_form_format', '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s"></form>', $object_id, $meta_box, $form );
+	$form_format = apply_filters( 'cmb_frontend_form_format', '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s" class="button-primary"></form>', $object_id, $meta_box, $form );
 
 	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, __( 'Save', 'cmb' ) );
 
