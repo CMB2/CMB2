@@ -59,4 +59,43 @@ class cmb_Meta_Box_Show_Filters {
 		return false;
 	}
 
+	/**
+	 * Add metaboxes for an specific Page Template
+	 * @since  1.0.0
+	 * @param  bool  $display  To display or not
+	 * @param  array $meta_box Metabox config array
+	 * @return bool            Whether to display this metabox on the current page.
+	 */
+	public static function check_admin_page( $display, $meta_box ) {
+
+		// check if this is a 'options-page' metabox
+		if ( ! isset( $meta_box['show_on']['key'] ) || 'options-page' !== $meta_box['show_on']['key'] )
+			return $display;
+
+		// Enforce 'show_on' filter in the admin
+		if ( is_admin() ) {
+
+			if ( ! isset( $meta_box['show_on']['value'], $_GET['page'] ) )
+				return false;
+
+			$pages = $meta_box['show_on']['value'];
+
+			if ( is_array( $pages ) ) {
+				foreach ( $pages as $page ) {
+					if ( $_GET['page'] == $page )
+						return true;
+				}
+			} else {
+				if ( $_GET['page'] == $pages )
+					return true;
+			}
+
+			return false;
+
+		}
+
+		// Allow options-page metaboxes to be displayed anywhere on the front-end
+		return true;
+	}
+
 }
