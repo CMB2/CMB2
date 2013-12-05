@@ -60,7 +60,7 @@ class cmb_Meta_Box_Show_Filters {
 	}
 
 	/**
-	 * Add metaboxes for an specific Page Template
+	 * Only show options-page metaboxes on their options page (but only enforce on the admin side)
 	 * @since  1.0.0
 	 * @param  bool  $display  To display or not
 	 * @param  array $meta_box Metabox config array
