@@ -967,9 +967,9 @@ class cmb_Meta_Box {
 			self::update_option( $id, $field_id, $value );
 		} else {
 			if ( $multiple ) {
-				add_metadata( $object_type, $id, $field_id, $value, false );
+				add_metadata( $type, $id, $field_id, $value, false );
 			} else {
-				update_metadata( $object_type, $id, $field_id, $value );
+				update_metadata( $type, $id, $field_id, $value );
 			}
 		}
 	}
