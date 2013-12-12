@@ -15,6 +15,7 @@ table.cmb_metabox input.cmb_timepicker { width: 100px; margin-right: 15px;}
 table.cmb_metabox input.cmb_text_money { width: 90px; margin-right: 15px;}
 table.cmb_metabox input.cmb_text_medium { width: 230px; margin-right: 15px;}
 table.cmb_metabox input.cmb_upload_file { width: 65%; }
+table.cmb_metabox input.ed_button { padding: 2px 4px; }
 table.cmb_metabox li { font-size:12px; margin: 1px 0 5px 0; line-height: 16px; }
 table.cmb_metabox ul { padding-top:5px; margin: 0; }
 table.cmb_metabox select { font-size:12px; margin-top: 3px;}
