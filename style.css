@@ -72,6 +72,10 @@ table.cmb_metabox input.cmb_upload_file {
 	width: 65%;
 }
 
+table.cmb_metabox input.ed_button{
+	padding:2px 4px
+}
+
 table.cmb_metabox li {
 	font-size:12px;
 	margin: 1px 0 5px 0;
