@@ -879,12 +879,23 @@ class cmb_Meta_Box {
 		$field = $field !== array() ? $field : self::$field;
 		// Check if the field has a registered validation callback
 		if ( isset( $field['sanitization_cb'] ) ) {
+
 			// Make sure the metabox isn't requesting NO validation
-			if ( false !== $field['sanitization_cb'] && is_string( $field['sanitization_cb'] ) && 'false' !== $field['sanitization_cb'] ) {
-				// Run the value through the validation callback
-				// Pass in the meta value, whether the field is saving, and the entire field array
-				$meta_value = call_user_func( $field['sanitization_cb'], $meta_value, $is_saving, $field );
-			}
+			$cb = false !== $field['sanitization_cb'] && 'false' !== $field['sanitization_cb'] ? $field['sanitization_cb'] : false;
+
+			if ( ! $cb )
+				return $meta_value;
+
+			// Run the value through the validation callback
+			// Pass in the meta value, whether the field is saving, and the entire field array
+
+			// Standard function
+			if ( is_string( $cb ) && function_exists( $cb ) )
+				return call_user_func( $cb, $meta_value, $is_saving, $field );
+			// Or Class method
+			elseif ( is_array( $cb ) && is_callable( $cb ) )
+				return call_user_func( $cb, $meta_value, $is_saving, $field );
+
 		} else {
 			// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
 			$meta_value = call_user_func( array( cmb_Meta_Box_Validate::get(), $field['type'] ), $meta_value, $is_saving, $field );
@@ -1026,7 +1037,6 @@ class cmb_Meta_Box {
 		return self::$options[ $option_key ];
 	}
 
-
 	/**
 	 * Updates Option data
 	 * @since  1.0.1
@@ -1075,7 +1085,7 @@ add_action( 'wp_ajax_nopriv_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oe
  * @return array               Options array or specific field
  */
 function cmb_get_option( $option_key, $field_id = '' ) {
-	cmb_Meta_Box::get_option( $option_key, $field_id );
+	return cmb_Meta_Box::get_option( $option_key, $field_id );
 }
 
 /**
