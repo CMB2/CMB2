@@ -152,6 +152,15 @@ class cmb_Meta_Box_Validate {
 		return $meta;
 	}
 
+	/**
+	 * Sanitize textareas and wysiwyg fields
+	 * @since  1.0.1
+	 * @param  string  $meta Meta value
+	 * @return string        Sanitized data
+	 */
+	public static function textarea( $meta ) {
+		return wp_kses_post( $meta );
+	}
 
 	/**
 	 * Default fallback if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
@@ -175,13 +184,22 @@ class cmb_Meta_Box_Validate {
 				$meta_value[ $key ] = $updated;
 			}
 		} else {
-			// Allow field type validation via filter
-			$updated = apply_filters( 'cmb_validate_'. $field['type'], $meta_value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type(), $is_saving );
-			if ( $updated === $meta_value ) {
-				// If nothing changed, we'll fallback to 'sanitize_text_field'
-				$updated = sanitize_text_field( $meta_value );
+
+			switch ( $field['type'] ) {
+				case 'wysiwyg':
+				case 'textarea_small':
+					return self::textarea( $meta_value );
+
+				default:
+					// Allow field type validation via filter
+					$updated = apply_filters( 'cmb_validate_'. $field['type'], $meta_value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type(), $is_saving );
+					if ( $updated === $meta_value ) {
+						// If nothing changed, we'll fallback to 'sanitize_text_field'
+						return sanitize_text_field( $meta_value );
+					}
+					return $updated;
 			}
-			$meta_value = $updated;
+
 		}
 
 		return $meta_value;
