@@ -97,6 +97,8 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'test_datetime_timestamp',
 				'type' => 'text_datetime_timestamp',
 			),
+			// This text_datetime_timestamp_timezone field type
+			// is only compatible with PHP versions 5.3 or above.
 			array(
 				'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb' ),
 				'desc' => __( 'field description (optional)', 'cmb' ),
