@@ -707,8 +707,6 @@ class cmb_Meta_Box {
 				break;
 
 			default:
-				$has_id = @get_the_id();
-				$object_id = $has_id ? $has_id : $object_id;
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
 				$object_id = isset( $_REQUEST['post'] ) ? $_REQUEST['post'] : $object_id;
 				break;
