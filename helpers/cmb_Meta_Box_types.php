@@ -357,7 +357,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function checkbox( $field, $meta ) {
-		echo '<input class="cmb_option" type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' /> <label for="', $field['id'], '">', self::desc() ,'</label>';
+		echo '<input class="cmb_option" type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' value="on"/> <label for="', $field['id'], '">', self::desc() ,'</label>';
 	}
 
 	public static function multicheck( $field, $meta ) {
