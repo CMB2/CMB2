@@ -219,8 +219,8 @@
 				e.preventDefault();
 				var $self = $(this);
 				var $parent = $self.parents('.cmb-repeat-table');
-				console.log( 'number of tbodys', $parent.length );
-				console.log( 'number of trs', $('tr', $parent).length );
+				CMB.log( 'number of tbodys', $parent.length );
+				CMB.log( 'number of trs', $('tr', $parent).length );
 				if ( $('tr', $parent).length > 2 )
 					$self.parents('.cmb-repeat-table tr').remove();
 			})
@@ -362,6 +362,6 @@
 
 	};
 
-	CMB.init();
+	$(CMB.init);
 
 })(window, document, jQuery);
