@@ -333,7 +333,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function select( $field, $meta ) {
-		if( empty( $meta ) && !empty( $field['default'] ) ) $meta = $field['default'];
+		if ( empty( $meta ) && !empty( $field['default'] ) ) $meta = $field['default'];
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 		foreach ($field['options'] as $option) {
 			echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
@@ -342,7 +342,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function radio( $field, $meta ) {
-		if( empty( $meta ) && !empty( $field['default'] ) ) $meta = $field['default'];
+		if ( empty( $meta ) && !empty( $field['default'] ) ) $meta = $field['default'];
 		echo '<ul>';
 		$i = 1;
 		foreach ($field['options'] as $option) {
