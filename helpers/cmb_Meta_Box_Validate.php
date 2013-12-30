@@ -34,6 +34,16 @@ class cmb_Meta_Box_Validate {
 	}
 
 	/**
+	 * Simple checkbox validation
+	 * @since  1.0.1
+	 * @param  mixed  $text 'on' or false
+	 * @return mixex        'on' or false
+	 */
+	public static function checkbox( $text ) {
+		return $text === 'on' ? 'on' : false;
+	}
+
+	/**
 	 * Validate url in a meta value
 	 * @since  1.0.1
 	 * @param  string  $meta Meta value
