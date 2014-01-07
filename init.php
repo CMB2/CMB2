@@ -216,7 +216,7 @@ class cmb_Meta_Box {
 	 * Registers scripts and styles for CMB
 	 * @since  1.0.0
 	 */
-	function register_scripts() {
+	public function register_scripts() {
 
 		// Should only be run once
 		if ( self::$is_enqueued )
@@ -279,7 +279,7 @@ class cmb_Meta_Box {
 	 * Enqueues scripts and styles for CMB
 	 * @since  1.0.0
 	 */
-	function do_scripts( $hook ) {
+	public function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
 		if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
 			wp_enqueue_script( 'cmb-scripts' );
@@ -293,7 +293,7 @@ class cmb_Meta_Box {
 	/**
 	 * Add encoding attribute
 	 */
-	function add_post_enctype() {
+	public function add_post_enctype() {
 		echo '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -306,7 +306,7 @@ class cmb_Meta_Box {
 	/**
 	 * Add metaboxes (to 'post' object type)
 	 */
-	function add_metaboxes() {
+	public function add_metaboxes() {
 
 		foreach ( $this->_meta_box['pages'] as $page ) {
 			if ( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
@@ -318,7 +318,7 @@ class cmb_Meta_Box {
 	 * Display metaboxes for a post object
 	 * @since  1.0.0
 	 */
-	function post_metabox() {
+	public function post_metabox() {
 		if ( ! $this->_meta_box )
 			return;
 
@@ -330,7 +330,7 @@ class cmb_Meta_Box {
 	 * Display metaboxes for a user object
 	 * @since  1.0.0
 	 */
-	function user_metabox() {
+	public function user_metabox() {
 		if ( ! $this->_meta_box )
 			return;
 
@@ -444,7 +444,7 @@ class cmb_Meta_Box {
 	/**
 	 * Save data from metabox
 	 */
-	function save_post( $post_id, $post )  {
+	public function save_post( $post_id, $post )  {
 
 		// check permissions
 		if (
@@ -467,7 +467,7 @@ class cmb_Meta_Box {
 	/**
 	 * Save data from metabox
 	 */
-	function save_user( $user_id )  {
+	public function save_user( $user_id )  {
 
 		// check permissions
 		// @todo more hardening?
@@ -870,7 +870,7 @@ class cmb_Meta_Box {
 	 * @param  array $field      Field config array
 	 * @return mixed             Possibly validated meta value
 	 */
-	public function sanitization_cb( $meta_value, $is_saving = false, $field = array() ) {
+	public static function sanitization_cb( $meta_value, $is_saving = false, $field = array() ) {
 		if ( empty( $meta_value ) )
 			return $meta_value;
 
