@@ -9,11 +9,11 @@ table.cmb_metabox tr:first-of-type td, table.cmb_metabox tr:first-of-type th {
 	border:0;
 }
 
-table.cmb_metabox td, table.cmb_metabox th {
+.post-php table.cmb_metabox td, .post-php table.cmb_metabox th {
 	border-top: 1px solid #E9E9E9;
 }
 
-table.cmb_metabox th {
+.post-php table.cmb_metabox th {
 	text-align: right;
 	font-weight:bold
 }
@@ -99,7 +99,10 @@ table.cmb_metabox input:focus, table.cmb_metabox textarea:focus {
 .cmb_metabox_title {
 	margin: 0 0 5px 0;
 	padding: 5px 0 0 0;
-	font: italic 24px/35px Georgia,"Times New Roman","Bitstream Charter",Times,serif
+}
+
+.edit-tags-php .cmb_metabox_title {
+	margin-left: -10px;
 }
 
 .cmb-inline ul {
