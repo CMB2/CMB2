@@ -1010,9 +1010,10 @@ class cmb_Meta_Box {
 	 */
 	public static function remove_option( $option_key, $field_id ) {
 
-		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? get_option( $option_key ) : self::$options[ $option_key ];
+		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? self::_get_option( $option_key ) : self::$options[ $option_key ];
 
-		unset( self::$options[ $option_key ][ $field_id ] );
+		if ( isset( self::$options[ $option_key ][ $field_id ] ) )
+			unset( self::$options[ $option_key ][ $field_id ] );
 
 		return self::$options[ $option_key ];
 	}
@@ -1026,7 +1027,7 @@ class cmb_Meta_Box {
 	 */
 	public static function get_option( $option_key, $field_id = '' ) {
 
-		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? get_option( $option_key ) : self::$options[ $option_key ];
+		self::$options[ $option_key ] = ! isset( self::$options[ $option_key ] ) || empty( self::$options[ $option_key ] ) ? self::_get_option( $option_key ) : self::$options[ $option_key ];
 
 		if ( $field_id ) {
 			return isset( self::$options[ $option_key ][ $field_id ] ) ? self::$options[ $option_key ][ $field_id ] : false;
@@ -1059,14 +1060,47 @@ class cmb_Meta_Box {
 	}
 
 	/**
+	 * Retrieve option value based on name of option.
+	 * @uses apply_filters() Calls 'cmb_override_option_get_$option_key' hook to allow
+	 * 	overwriting the option value to be retrieved.
+	 *
+	 * @since  1.0.1
+	 * @param  string $option  Name of option to retrieve. Expected to not be SQL-escaped.
+	 * @param  mixed  $default Optional. Default value to return if the option does not exist.
+	 * @return mixed           Value set for the option.
+	 */
+	public static function _get_option( $option_key, $default = false ) {
+
+		$test_get = apply_filters( "cmb_override_option_get_$option_key", 'cmb_no_override_option_get', $default );
+
+		if ( $test_get !== 'cmb_no_override_option_get' )
+			return $test_get;
+
+		// If no override, get the option
+		return get_option( $option_key, $default );
+	}
+
+	/**
 	 * Saves the option array
 	 * Needs to be run after finished using remove/update_option
+	 * @uses apply_filters() Calls 'cmb_override_option_save_$option_key' hook to allow
+	 * 	overwriting the option value to be stored.
+	 *
 	 * @since  1.0.1
 	 * @param  string  $option_key Option key
 	 * @return boolean             Success/Failure
 	 */
 	public static function save_option( $option_key ) {
-		return update_option( $option_key, self::get_option( $option_key ) );
+
+		$to_save = self::get_option( $option_key );
+
+		$test_save = apply_filters( "cmb_override_option_save_$option_key", 'cmb_no_override_option_save', $to_save );
+
+		if ( $test_save !== 'cmb_no_override_option_save' )
+			return $test_save;
+
+		// If no override, update the option
+		return update_option( $option_key, $to_save );
 	}
 
 }
