@@ -75,7 +75,11 @@ class cmb_Meta_Box_Show_Filters {
 		// Enforce 'show_on' filter in the admin
 		if ( is_admin() ) {
 
-			if ( ! isset( $meta_box['show_on']['value'], $_GET['page'] ) )
+			// If there is no 'page' query var, our filter isn't applicable
+			if ( ! isset( $_GET['page'] ) )
+				return $display;
+
+			if ( ! isset( $meta_box['show_on']['value'] ) )
 				return false;
 
 			$pages = $meta_box['show_on']['value'];
