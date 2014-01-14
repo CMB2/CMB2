@@ -35,7 +35,7 @@ span.cmb_metabox_description {
 }
 
 table.cmb_metabox input, table.cmb_metabox textarea {
-	font-size:12px;
+	font-size:14px;
 	padding: 5px;
 }
 
@@ -77,7 +77,7 @@ table.cmb_metabox input.ed_button{
 }
 
 table.cmb_metabox li {
-	font-size:12px;
+	font-size:14px;
 	margin: 1px 0 5px 0;
 	line-height: 16px;
 }
@@ -88,7 +88,7 @@ table.cmb_metabox ul {
 }
 
 table.cmb_metabox select {
-	font-size:12px;
+	font-size:14px;
 	margin-top: 3px
 }
 
@@ -101,7 +101,7 @@ table.cmb_metabox input:focus, table.cmb_metabox textarea:focus {
 	padding: 5px 0 0 0;
 }
 
-.edit-tags-php .cmb_metabox_title {
+.edit-tags-php .cmb_metabox_title, .profile-php .cmb_metabox_title, .user-edit-php .cmb_metabox_title {
 	margin-left: -10px;
 }
 
@@ -237,7 +237,7 @@ div.time-picker ul {
 div.time-picker li {
 	cursor: pointer;
 	height: 10px;
-	font: 12px/1 Helvetica, Arial, sans-serif;
+	font: 14px/1 Helvetica, Arial, sans-serif;
 	padding: 4px 3px;
 }
 
