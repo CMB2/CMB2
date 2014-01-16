@@ -143,6 +143,10 @@ table.cmb_metabox .cmb_media_status {
  margin: 10px 0 0 0
 }
 
+table.cmb_metabox .cmb_media_status .img_status {
+	display: inline-block;
+}
+
 table.cmb_metabox .cmb_media_status .img_status, table.cmb_metabox .cmb_media_status .embed_status {
 	position: relative;
 }
