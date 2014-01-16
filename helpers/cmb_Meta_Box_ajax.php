@@ -73,7 +73,7 @@ class cmb_Meta_Box_ajax {
 	 * @param  array  $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
-	public function get_oembed( $url, $object_id, $args = array() ) {
+	public static function get_oembed( $url, $object_id, $args = array() ) {
 		global $wp_embed;
 
 		$oembed_url = esc_url( $url );
@@ -145,7 +145,7 @@ class cmb_Meta_Box_ajax {
 	 * @param  string  $meta_key  Object metakey
 	 * @return mixed              Object's oEmbed cached data
 	 */
-	public function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
+	public static function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
 
 		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
@@ -169,7 +169,7 @@ class cmb_Meta_Box_ajax {
 	 * @param  mixed   $meta_value Value of the postmeta to be saved
 	 * @return boolean             Whether to continue setting
 	 */
-	public function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
+	public static function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
 		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
