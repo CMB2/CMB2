@@ -223,7 +223,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc'    => __( 'field description (optional)', 'cmb' ),
 				'id'      => $prefix . 'test_wysiwyg',
 				'type'    => 'wysiwyg',
-				'options' => array(	'textarea_rows' => 5, ),
+				'options' => array( 'textarea_rows' => 5, ),
 			),
 			array(
 				'name' => __( 'Test Image', 'cmb' ),
