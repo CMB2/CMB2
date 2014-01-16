@@ -403,9 +403,6 @@ class cmb_Meta_Box {
 			if ( $meta === 'cmb_no_override_val' )
 				$meta = self::get_data();
 
-			// Validate/sanitize value
-			$meta = self::sanitization_cb( $meta );
-
 			$classes = '';
 			$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 			$classes .= $field['repeatable'] ? ' cmb-repeat' : '';
@@ -514,6 +511,7 @@ class cmb_Meta_Box {
 			$old = self::get_data();
 			$new = isset( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : null;
 
+
 			if ( $object_type == 'post' ) {
 
 				if (
@@ -568,7 +566,7 @@ class cmb_Meta_Box {
 					break;
 				default:
 					// Check if this metabox field has a registered validation callback
-					$new = self::sanitization_cb( $new, true );
+					$new = self::sanitization_cb( $new );
 					break;
 			}
 
@@ -866,42 +864,58 @@ class cmb_Meta_Box {
 	 * Checks if field has a registered validation callback
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
-	 * @param  bool  $is_saving  Whether value is being saved or displayed
 	 * @param  array $field      Field config array
 	 * @return mixed             Possibly validated meta value
 	 */
-	public static function sanitization_cb( $meta_value, $is_saving = false, $field = array() ) {
+	public static function sanitization_cb( $meta_value, $field = array() ) {
 		if ( empty( $meta_value ) )
 			return $meta_value;
 
 		$field = $field !== array() ? $field : self::$field;
+
 		// Check if the field has a registered validation callback
-		if ( isset( $field['sanitization_cb'] ) ) {
-
-			// Make sure the metabox isn't requesting NO validation
-			$cb = false !== $field['sanitization_cb'] && 'false' !== $field['sanitization_cb'] ? $field['sanitization_cb'] : false;
-
-			if ( ! $cb )
-				return $meta_value;
-
-			// Run the value through the validation callback
-			// Pass in the meta value, whether the field is saving, and the entire field array
-
-			// Standard function
-			if ( is_string( $cb ) && function_exists( $cb ) )
-				return call_user_func( $cb, $meta_value, $is_saving, $field );
-			// Or Class method
-			elseif ( is_array( $cb ) && is_callable( $cb ) )
-				return call_user_func( $cb, $meta_value, $is_saving, $field );
-
-		} else {
-			// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
-			$meta_value = call_user_func( array( cmb_Meta_Box_Validate::get(), $field['type'] ), $meta_value, $is_saving, $field );
+		$cb = self::maybe_callback( $field, 'sanitization_cb' );
+		if ( false === $cb ) {
+			// If requestion NO validation, return meta value
+			return $meta_value;
+		} elseif ( $cb ) {
+			// Ok, callback is good, let's run it.
+			return call_user_func( $cb, $meta_value, $field );
 		}
 
-		// Return modified value (unless 'sanitization_cb' => false)
-		return $meta_value;
+		// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
+		return call_user_func( array( cmb_Meta_Box_Validate::get(), $field['type'] ), $meta_value, $field );
 	}
+
+	/**
+	 * Checks if field has a callback value
+	 * @since  1.0.1
+	 * @param  array   $field Field config array
+	 * @param  string  $cb    Callback string
+	 * @return mixed          NULL, false for NO validation, or $cb string if it exists. 
+	 */
+	public static function maybe_callback( $field, $cb ) {
+		if ( ! isset( $field[ $cb ] ) )
+			return;
+
+		// Check if metabox is requesting NO validation
+		$cb = false !== $field[ $cb ] && 'false' !== $field[ $cb ] ? $field[ $cb ] : false;
+
+		// If requestion NO validation, return false
+		if ( ! $cb )
+			return false;
+
+		if (
+			// Standard function
+			( is_string( $cb ) && function_exists( $cb ) )
+			// Or Class method
+			|| ( is_array( $cb ) && is_callable( $cb ) )
+		) {
+			return $cb;
+		}
+
+	}
+
 
 	/**
 	 * Defines the url which is used to load local resources.
@@ -1051,9 +1065,9 @@ class cmb_Meta_Box {
 
 		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
 			// If multiple, add to array
-			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, true, $field );
+			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, $field );
 		} else {
-			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, true, $field );
+			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, $field );
 		}
 
 		return self::$options[ $option_key ];
