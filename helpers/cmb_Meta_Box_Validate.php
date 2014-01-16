@@ -121,7 +121,7 @@ class cmb_Meta_Box_Validate {
 	public static function text_datetime_timestamp( $meta ) {
 
 		$test = is_array( $meta ) ? array_filter( $meta ) : '';
-		if ( empty( $test ) )
+		if ( empty( $test ) ) 
 			return '';
 
 		$meta = strtotime( $meta['date'] .' '. $meta['time'] );
@@ -139,11 +139,12 @@ class cmb_Meta_Box_Validate {
 	 * @return string        Timestring
 	 */
 	public static function text_datetime_timestamp_timezone( $meta ) {
-		$tzstring = null;
 
 		$test = is_array( $meta ) ? array_filter( $meta ) : '';
 		if ( empty( $test ) )
 			return '';
+	
+		$tzstring = null;
 
 		if ( is_array( $meta ) && array_key_exists( 'timezone', $meta ) )
 			$tzstring = $meta['timezone'];
@@ -154,7 +155,7 @@ class cmb_Meta_Box_Validate {
 		$offset = cmb_Meta_Box::timezone_offset( $tzstring, true );
 
 		if ( substr( $tzstring, 0, 3 ) === 'UTC' )
-			$tzstring = timezone_name_from_abbr( "", $offset, 0 );
+			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 
 		$meta = new DateTime( $meta['date'] .' '. $meta['time'], new DateTimeZone( $tzstring ) );
 		$meta = serialize( $meta );
@@ -179,13 +180,13 @@ class cmb_Meta_Box_Validate {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		list( $meta_value, $is_saving, $field ) = $arguments;
+		list( $meta_value, $field ) = $arguments;
 
 		// Handle repeatable fields array
 		if ( is_array( $meta_value ) ) {
 			foreach ( $meta_value as $key => $value ) {
 				// Allow field type validation via filter
-				$updated = apply_filters( 'cmb_validate_'. $field['type'], $value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type(), $is_saving );
+				$updated = apply_filters( 'cmb_validate_'. $field['type'], $value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type() );
 
 				if ( $updated === $value ) {
 					// If nothing changed, we'll fallback to 'sanitize_text_field'
@@ -202,7 +203,7 @@ class cmb_Meta_Box_Validate {
 
 				default:
 					// Allow field type validation via filter
-					$updated = apply_filters( 'cmb_validate_'. $field['type'], $meta_value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type(), $is_saving );
+					$updated = apply_filters( 'cmb_validate_'. $field['type'], $meta_value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type() );
 					if ( $updated === $meta_value ) {
 						// If nothing changed, we'll fallback to 'sanitize_text_field'
 						return sanitize_text_field( $meta_value );
