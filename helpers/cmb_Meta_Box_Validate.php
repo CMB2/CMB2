@@ -54,10 +54,10 @@ class cmb_Meta_Box_Validate {
 		$protocols = isset( cmb_Meta_Box::$field['protocols'] ) ? (array) cmb_Meta_Box::$field['protocols'] : null;
 		if ( is_array( $meta ) ) {
 			foreach ( $meta as $key => $value ) {
-				$meta[ $key ] = $value ? esc_url( $value, $protocols ) : cmb_Meta_Box::$field['default'];
+				$meta[ $key ] = $value ? esc_url_raw( $value, $protocols ) : cmb_Meta_Box::$field['default'];
 			}
 		} else {
-			$meta = $meta ? esc_url( $meta, $protocols ) : cmb_Meta_Box::$field['default'];
+			$meta = $meta ? esc_url_raw( $meta, $protocols ) : cmb_Meta_Box::$field['default'];
 		}
 
 		return $meta;
