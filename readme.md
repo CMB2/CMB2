@@ -21,8 +21,8 @@ Now in version 1.0.0:
 * Create metaboxes to handle user meta and display them on user profile add/edit pages! Or even on the front-end!
 
 ##### Links
-* [Github project page](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress)
-* [Documentation (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
+* [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
+* [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
 
 ##### Field Types:
 * text (optionally repeatable)
@@ -52,7 +52,7 @@ Now in version 1.0.0:
 * Image/file upload
 * oEmbed
 
-[More on field types (GitHub wiki)](https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
+[More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
 ## Installation
 

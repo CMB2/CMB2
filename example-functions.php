@@ -5,7 +5,7 @@
  * @category YourThemeOrPlugin
  * @package  Metaboxes
  * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
- * @link     https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+ * @link     https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
 add_filter( 'cmb_meta_boxes', 'cmb_sample_metaboxes' );
