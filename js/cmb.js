@@ -5,7 +5,7 @@
  * @author Jared Atchison
  * @author Bill Erickson
  * @author Justin Sternberg
- * @see    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+ * @see    https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
 /*jslint browser: true, devel: true, indent: 4, maxerr: 50, sub: true */
