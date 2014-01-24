@@ -85,8 +85,25 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ### 1.0.1
 
-* Test
-* Bug Fix: metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting.
+**Bug Fixes**
+
+* Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos)
+* A few php < 5.3 errors were addressed.
+* Fields with quotation marks no longer break the input/textarea fields.
+* metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting.
+* Occasionally fields wouldn't save because of the admin show_on filter.
+* Smaller images loaded to the file field type will no longer be blown up larger than their dimensions.
+
+**Enhancements**
+
+* Now works with option pages and site settings. ([view example in wiki](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page))
+* two filters to override the setting and getting of options, `cmb_override_option_get_$option_key` and `cmb_override_option_save_$option_key` respectively. Handy for using plugins like [WP Large Options](https://github.com/voceconnect/wp-large-options/) ([also here](http://vip.wordpress.com/plugins/wp-large-options/)).
+* Improved styling on taxonomy (\*tease\*) and options pages and for new 3.8 admin UI.
+* New sanitization class to sanitize data when saved.
+* New callback field parameter, `sanitization_cb`, for performing your own sanitization.
+* new `cmb_Meta_Box_types::esc()` method that handles escaping data for display.
+* New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
+
 
 ### 1.0.0
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
