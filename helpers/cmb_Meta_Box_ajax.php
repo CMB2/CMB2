@@ -73,24 +73,37 @@ class cmb_Meta_Box_ajax {
 	 * @param  array  $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
-	public function get_oembed( $url, $object_id, $args = array() ) {
+	public static function get_oembed( $url, $object_id, $args = array() ) {
 		global $wp_embed;
 
 		$oembed_url = esc_url( $url );
-		self::$object_id = absint( $object_id );
 
-		$args = self::$embed_args = wp_parse_args( $args, array(
+		// Sanitize object_id
+		self::$object_id = is_numeric( $object_id ) ? absint( $object_id ) : sanitize_text_field( $object_id );
+
+		$args = wp_parse_args( $args, array(
 			'object_type' => 'post',
 			'oembed_args' => self::$embed_args,
 			'field_id'    => false,
+			'cache_key'   => false,
 		) );
 
+		self::$embed_args =& $args;
+
 		// set the post_ID so oEmbed won't fail
+		// wp-includes/class-wp-embed.php, WP_Embed::shortcode(), line 162
 		$wp_embed->post_ID = self::$object_id;
 
 		// Special scenario if NOT a post object
 		if ( isset( $args['object_type'] ) && $args['object_type'] != 'post' ) {
 
+			if ( 'options-page' == $args['object_type'] ) {
+				// bogus id to pass some numeric checks
+				// Issue with a VERY large WP install?
+				$wp_embed->post_ID = 1987645321;
+				// Use our own cache key to correspond to this field (vs one cache key per url)
+				$args['cache_key'] = $args['field_id'] .'_cache';
+			}
 			// Ok, we need to hijack the oembed cache system
 			self::$hijack = true;
 			self::$object_type = $args['object_type'];
@@ -132,14 +145,17 @@ class cmb_Meta_Box_ajax {
 	 * @param  string  $meta_key  Object metakey
 	 * @return mixed              Object's oEmbed cached data
 	 */
-	public function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
+	public static function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
 
-		if ( ! self::$hijack || $object_id != self::$object_id )
+		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
 		// get cached data
-		return get_metadata( self::$object_type, $object_id, $meta_key, true );
+		$data = 'options-page' === self::$object_type
+			? cmb_Meta_Box::get_option( self::$object_id, self::$embed_args['cache_key'] )
+			: get_metadata( self::$object_type, self::$object_id, $meta_key, true );
 
+		return $data;
 	}
 
 	/**
@@ -153,12 +169,19 @@ class cmb_Meta_Box_ajax {
 	 * @param  mixed   $meta_value Value of the postmeta to be saved
 	 * @return boolean             Whether to continue setting
 	 */
-	public function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
-		if ( ! self::$hijack || $object_id != self::$object_id )
+	public static function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
+		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
 		// Cache the result to our metadata
-		update_metadata( self::$object_type, $object_id, $meta_key, $meta_value );
+		if ( 'options-page' === self::$object_type ) {
+			// Set the option
+			cmb_Meta_Box::update_option( self::$object_id, self::$embed_args['cache_key'], $meta_value, array( 'type' => 'oembed' ) );
+			// Save the option
+			cmb_Meta_Box::save_option( self::$object_id );
+		} else {
+			update_metadata( self::$object_type, self::$object_id, $meta_key, $meta_value );
+		}
 
 		// Anything other than `null` to cancel saving to postmeta
 		return true;
