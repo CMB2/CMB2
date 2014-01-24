@@ -34,8 +34,10 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc' => __( 'field description (optional)', 'cmb' ),
 				'id'   => $prefix . 'test_text',
 				'type' => 'text',
-				// 'repeatable' => true,
-				// 'on_front' => false, // Optionally designate a field to wp-admin only
+				// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
+				// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
+				// 'on_front'        => false, // Optionally designate a field to wp-admin only
+				// 'repeatable'      => true,
 			),
 			array(
 				'name' => __( 'Test Text Small', 'cmb' ),
