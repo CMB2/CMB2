@@ -887,8 +887,8 @@ class cmb_Meta_Box {
 			return call_user_func( $cb, $meta_value, $field );
 		}
 
-		// Validation via 'cmb_Meta_Box_Validate' (with fallback filter)
-		return call_user_func( array( cmb_Meta_Box_Validate::get(), $field['type'] ), $meta_value, $field );
+		// Validation via 'cmb_Meta_Box_Sanitize' (with fallback filter)
+		return call_user_func( array( cmb_Meta_Box_Sanitize::get(), $field['type'] ), $meta_value, $field );
 	}
 
 	/**

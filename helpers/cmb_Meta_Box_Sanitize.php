@@ -4,7 +4,7 @@
  * CMB field validation
  * @since  0.0.4
  */
-class cmb_Meta_Box_Validate {
+class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * A single instance of this class.
@@ -16,7 +16,7 @@ class cmb_Meta_Box_Validate {
 	/**
 	 * Creates or returns an instance of this class.
 	 * @since  1.0.0
-	 * @return cmb_Meta_Box_Validate A single instance of this class.
+	 * @return cmb_Meta_Box_Sanitize A single instance of this class.
 	 */
 	public static function get() {
 		if ( self::$instance === null )
