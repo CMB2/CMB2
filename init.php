@@ -166,6 +166,8 @@ class cmb_Meta_Box {
 
 		if ( self::get_object_type() == 'post' ) {
 			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
+			add_action( 'add_attachment', array( $this, 'save_post' ) );
+			add_action( 'edit_attachment', array( $this, 'save_post' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 
@@ -441,7 +443,9 @@ class cmb_Meta_Box {
 	/**
 	 * Save data from metabox
 	 */
-	public function save_post( $post_id, $post )  {
+	public function save_post( $post_id, $post = false )  {
+
+		$post_type = $post ? $post->post_type : get_post_type( $post_id );
 
 		// check permissions
 		if (
@@ -454,7 +458,7 @@ class cmb_Meta_Box {
 			|| ( 'page' == $_POST['post_type'] && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 			// get the metabox post_types & compare it to this post_type
-			|| ! in_array( $post->post_type, $this->_meta_box['pages'] )
+			|| ! in_array( $post_type, $this->_meta_box['pages'] )
 		)
 			return $post_id;
 
@@ -892,7 +896,7 @@ class cmb_Meta_Box {
 	 * @since  1.0.1
 	 * @param  array   $field Field config array
 	 * @param  string  $cb    Callback string
-	 * @return mixed          NULL, false for NO validation, or $cb string if it exists. 
+	 * @return mixed          NULL, false for NO validation, or $cb string if it exists.
 	 */
 	public static function maybe_callback( $field, $cb ) {
 		if ( ! isset( $field[ $cb ] ) )
