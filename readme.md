@@ -2,23 +2,24 @@
 
 **Contributors**:
 
-* Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
+* Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [webdevstudios.com](http://webdevstudios.com) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
-* Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [dsgnwrks.pro](http://dsgnwrks.pro) )
+* Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.0
-**Requires at least**: 3.5
-**Tested up to**: 3.8
-**License**: GPLv2
+**Version**: 1.0.1  
+**Requires at least**: 3.5  
+**Tested up to**: 3.8  
+**License**: GPLv2  
 
 ## Description
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
 
-Now in version 1.0.0:
-* Bring your metaboxes to the frontend!
-* Create metaboxes to handle user meta and display them on user profile add/edit pages! Or even on the front-end!
+New in version 1.0.0:
+
+* Bring your metaboxes to the frontend.
+* Create metaboxes to handle user meta and display them on user profile add/edit pages. Or even on the front-end.
 
 ##### Links
 * [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
@@ -71,18 +72,21 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## To-do
 * Fix known issues (above)
-* clean up code
-* improve inline documentation
 * move timepicker and datepicker jQuery inline
 * support for multiple configurable timepickers/datepickers
 * add ability to save fields in a single custom field
 * add ability to mark fields as required
-* add ability to define `placeholder` text
 * repeatable fields (halfway there)
 * look at possiblity of tabs
 * look at preserving taxonomy hierarchies
+* Add input attributes filter
 
 ## Changelog
+
+### 1.0.1
+
+* Test
+* Bug Fix: metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting.
 
 ### 1.0.0
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
