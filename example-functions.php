@@ -99,12 +99,13 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			),
 			// This text_datetime_timestamp_timezone field type
 			// is only compatible with PHP versions 5.3 or above.
-			array(
-				'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb' ),
-				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'test_datetime_timestamp_timezone',
-				'type' => 'text_datetime_timestamp_timezone',
-			),
+			// Feel free to uncomment and use if your server meets the requirement
+			// array(
+			// 	'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb' ),
+			// 	'desc' => __( 'field description (optional)', 'cmb' ),
+			// 	'id'   => $prefix . 'test_datetime_timestamp_timezone',
+			// 	'type' => 'text_datetime_timestamp_timezone',
+			// ),
 			array(
 				'name' => __( 'Test Money', 'cmb' ),
 				'desc' => __( 'field description (optional)', 'cmb' ),
