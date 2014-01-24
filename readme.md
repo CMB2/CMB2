@@ -80,6 +80,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * look at possiblity of tabs
 * look at preserving taxonomy hierarchies
 * Add input attributes filter
+* Always load newest version of CMB
 
 ## Changelog
 
