@@ -920,7 +920,6 @@ class cmb_Meta_Box {
 
 	}
 
-
 	/**
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
