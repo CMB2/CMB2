@@ -36,11 +36,6 @@ Version: 		1.0.2
 // Autoload helper classes
 spl_autoload_register('cmb_Meta_Box::autoload_helpers');
 
-// for PHP versions < 5.3
-if ( !defined( '__DIR__' ) ) {
-	define( '__DIR__', dirname( __FILE__ ) );
-}
-
 $meta_boxes = array();
 $meta_boxes = apply_filters( 'cmb_meta_boxes', $meta_boxes );
 foreach ( $meta_boxes as $meta_box ) {
@@ -209,7 +204,10 @@ class cmb_Meta_Box {
 		if ( class_exists( $class_name, false ) )
 			return;
 
-		$file = __DIR__ .'/helpers/'. $class_name .'.php';
+		// for PHP versions < 5.3
+		$dir = defined( '__DIR__' ) ? __DIR__ : dirname( __FILE__ );
+
+		$file = "$dir/helpers/$class_name.php";
 		if ( file_exists( $file ) )
 			@include( $file );
 	}
