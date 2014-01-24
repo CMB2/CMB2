@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.1  
+**Version**: 1.0.2  
 **Requires at least**: 3.5  
 **Tested up to**: 3.8  
 **License**: GPLv2  
@@ -83,6 +83,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Always load newest version of CMB
 
 ## Changelog
+
+### 1.0.2
 
 ### 1.0.1
 

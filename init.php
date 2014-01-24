@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0.1
+Version: 		1.0.2
 */
 
 /**
@@ -59,7 +59,7 @@ class cmb_Meta_Box {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	const CMB_VERSION = '1.0.1';
+	const CMB_VERSION = '1.0.2';
 
 	/**
 	 * Metabox Config array
