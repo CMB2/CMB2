@@ -362,6 +362,6 @@
 
 	};
 
-	$(CMB.init);
+	$(document).ready(CMB.init);
 
 })(window, document, jQuery);
