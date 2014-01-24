@@ -121,7 +121,7 @@ class cmb_Meta_Box_Validate {
 	public static function text_datetime_timestamp( $meta ) {
 
 		$test = is_array( $meta ) ? array_filter( $meta ) : '';
-		if ( empty( $test ) ) 
+		if ( empty( $test ) )
 			return '';
 
 		$meta = strtotime( $meta['date'] .' '. $meta['time'] );
@@ -143,7 +143,7 @@ class cmb_Meta_Box_Validate {
 		$test = is_array( $meta ) ? array_filter( $meta ) : '';
 		if ( empty( $test ) )
 			return '';
-	
+
 		$tzstring = null;
 
 		if ( is_array( $meta ) && array_key_exists( 'timezone', $meta ) )
