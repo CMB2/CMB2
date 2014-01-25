@@ -86,6 +86,10 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ### 1.0.2
 
+**Enhancements**
+
+* All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
+
 ### 1.0.1
 
 **Bug Fixes**

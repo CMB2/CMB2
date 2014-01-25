@@ -153,9 +153,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'      => $prefix . 'test_select',
 				'type'    => 'select',
 				'options' => array(
-					array( 'name' => __( 'Option One', 'cmb' ), 'value' => 'standard', ),
-					array( 'name' => __( 'Option Two', 'cmb' ), 'value' => 'custom', ),
-					array( 'name' => __( 'Option Three', 'cmb' ), 'value' => 'none', ),
+					'standard' => __( 'Option One', 'cmb' ),
+					'custom'   => __( 'Option Two', 'cmb' ),
+					'none'     => __( 'Option Three', 'cmb' ),
 				),
 			),
 			array(
@@ -164,9 +164,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'      => $prefix . 'test_radio_inline',
 				'type'    => 'radio_inline',
 				'options' => array(
-					array( 'name' => __( 'Option One', 'cmb' ), 'value' => 'standard', ),
-					array( 'name' => __( 'Option Two', 'cmb' ), 'value' => 'custom', ),
-					array( 'name' => __( 'Option Three', 'cmb' ), 'value' => 'none', ),
+					'standard' => __( 'Option One', 'cmb' ),
+					'custom'   => __( 'Option Two', 'cmb' ),
+					'none'     => __( 'Option Three', 'cmb' ),
 				),
 			),
 			array(
@@ -175,9 +175,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'id'      => $prefix . 'test_radio',
 				'type'    => 'radio',
 				'options' => array(
-					array( 'name' => __( 'Option One', 'cmb' ), 'value' => 'standard', ),
-					array( 'name' => __( 'Option Two', 'cmb' ), 'value' => 'custom', ),
-					array( 'name' => __( 'Option Three', 'cmb' ), 'value' => 'none', ),
+					'option1' => __( 'Option One', 'cmb' ),
+					'option2' => __( 'Option Two', 'cmb' ),
+					'option3' => __( 'Option Three', 'cmb' ),
 				),
 			),
 			array(

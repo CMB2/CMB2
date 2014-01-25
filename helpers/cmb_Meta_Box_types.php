@@ -367,8 +367,14 @@ class cmb_Meta_Box_types {
 	public static function select( $field, $meta ) {
 		$meta = self::esc( $meta );
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
-		foreach ($field['options'] as $option) {
-			echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
+		foreach ( $field['options'] as $option_key => $option ) {
+
+			// Check for the "old" way
+			$label = isset( $option['name'] ) ? $option['name'] : $option;
+			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
+
+			echo '<option value="', $value, '" ', selected( $meta == $value ) ,'>', $label, '</option>';
+
 		}
 		echo '</select>', self::desc( true );
 	}
@@ -377,8 +383,13 @@ class cmb_Meta_Box_types {
 		$meta = self::esc( $meta );
 		echo '<ul>';
 		$i = 1;
-		foreach ($field['options'] as $option) {
-			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '" ', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+		foreach ( $field['options'] as $option_key => $option ) {
+
+			// Check for the "old" way
+			$label = isset( $option['name'] ) ? $option['name'] : $option;
+			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
+
+			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $value, '" ', checked( $meta == $value ), ' /> <label for="', $field['id'], $i, '">', $label ,'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( true );
