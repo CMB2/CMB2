@@ -182,35 +182,33 @@ class cmb_Meta_Box_Sanitize {
 	public function __call( $name, $arguments ) {
 		list( $meta_value, $field ) = $arguments;
 
+		$object_type = cmb_Meta_Box::get_object_type();
+		$object_id   = cmb_Meta_Box::get_object_id();
+
+		// Allow field type validation via filter
+		$updated     = apply_filters( 'cmb_validate_'. $field['type'], null, $meta_value, $object_id, $field, $object_type );
+
+		if ( null != $updated ) {
+			return $updated;
+		}
+
+		// we'll fallback to 'sanitize_text_field', or 'wp_kses_post`
+		switch ( $field['type'] ) {
+			case 'wysiwyg':
+			case 'textarea_small':
+				$cb = array( 'cmb_Meta_Box_Sanitize', 'textarea' );
+
+			default:
+				$cb = 'sanitize_text_field';
+		}
+
 		// Handle repeatable fields array
 		if ( is_array( $meta_value ) ) {
 			foreach ( $meta_value as $key => $value ) {
-				// Allow field type validation via filter
-				$updated = apply_filters( 'cmb_validate_'. $field['type'], $value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type() );
-
-				if ( $updated === $value ) {
-					// If nothing changed, we'll fallback to 'sanitize_text_field'
-					$updated = sanitize_text_field( $value );
-				}
-				$meta_value[ $key ] = $updated;
+				$meta_value[ $key ] = call_user_func( $cb, $value );
 			}
 		} else {
-
-			switch ( $field['type'] ) {
-				case 'wysiwyg':
-				case 'textarea_small':
-					return self::textarea( $meta_value );
-
-				default:
-					// Allow field type validation via filter
-					$updated = apply_filters( 'cmb_validate_'. $field['type'], $meta_value, cmb_Meta_Box::get_object_id(), $field, cmb_Meta_Box::get_object_type() );
-					if ( $updated === $meta_value ) {
-						// If nothing changed, we'll fallback to 'sanitize_text_field'
-						return sanitize_text_field( $meta_value );
-					}
-					return $updated;
-			}
-
+			$meta_value = call_user_func( $cb, $meta_value );
 		}
 
 		return $meta_value;
