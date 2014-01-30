@@ -484,7 +484,7 @@ class cmb_Meta_Box_types {
 
 	public static function file_list( $field, $meta, $object_id ) {
 
-		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', self::esc( $meta, 'esc_url' ), '" />';
+		// echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', self::esc( $meta, 'esc_url' ), '" />';
 		echo '<input class="cmb_upload_button button cmb_upload_list" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( true );
 
 		echo '<ul id="', $field['id'], '_status" class="cmb_media_status attach_list">';
