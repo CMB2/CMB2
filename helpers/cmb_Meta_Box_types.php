@@ -204,6 +204,24 @@ class cmb_Meta_Box_types {
 	}
 
 	/**
+	 * Checks if we can get a post object, and if so, uses `get_the_terms` which utilizes caching
+	 * @since  1.0.2
+	 * @param  integer $object_id Object ID
+	 * @param  string  $taxonomy  Taxonomy terms to return
+	 * @return mixed              Array of terms on success
+	 */
+	public static function get_object_terms( $object_id, $taxonomy ) {
+
+		if ( ! $post = get_post( $object_id ) ) {
+			return wp_get_object_terms( $object_id, $taxonomy );
+		}
+
+		// WP caches internally so it's better to use
+		return get_the_terms( $post, $taxonomy );
+
+	}
+
+	/**
 	 * Escape the value before output. Defaults to 'esc_attr()'
 	 * @since  1.0.1
 	 * @param  mixed  $meta_value Meta value
@@ -430,7 +448,7 @@ class cmb_Meta_Box_types {
 	public static function taxonomy_select( $field, $meta, $object_id ) {
 
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
+		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		foreach ( $terms as $term ) {
 			if ( !is_wp_error( $names ) && !empty( $names ) && ! strcmp( $term->slug, $names[0]->slug ) ) {
@@ -444,7 +462,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_radio( $field, $meta, $object_id ) {
 
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
+		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		echo '<ul>';
 		$i = 1;
@@ -463,7 +481,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_multicheck( $field, $meta, $object_id ) {
 		echo '<ul>';
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
+		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		$i = 1;
 		foreach ( $terms as $term ) {
