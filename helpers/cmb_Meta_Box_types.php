@@ -213,7 +213,18 @@ class cmb_Meta_Box_types {
 	public static function get_object_terms( $object_id, $taxonomy ) {
 
 		if ( ! $post = get_post( $object_id ) ) {
-			return wp_get_object_terms( $object_id, $taxonomy );
+
+			$cache_key = 'cmb-cache-'. $taxonomy .'-'. $object_id;
+
+			// Check cache
+			$cached = $test = get_transient( $cache_key );
+			if ( $cached )
+				return $cached;
+
+			$cached = wp_get_object_terms( $object_id, $taxonomy );
+			// Do our own (minimal) caching. Long enough for a page-load.
+			$set = set_transient( $cache_key, $cached, 60 );
+			return $cached;
 		}
 
 		// WP caches internally so it's better to use
