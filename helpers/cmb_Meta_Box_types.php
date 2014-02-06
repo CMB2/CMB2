@@ -245,7 +245,7 @@ class cmb_Meta_Box_types {
 		// Check if the field has a registered escaping callback
 		$cb = cmb_Meta_Box::maybe_callback( $field, 'escape_cb' );
 		if ( false === $cb ) {
-			// If requestion NO escaping, return meta value
+			// If requesting NO escaping, return meta value
 			return $meta_value;
 		} elseif ( $cb ) {
 			// Ok, callback is good, let's run it.
@@ -452,7 +452,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function wysiwyg( $field, $meta ) {
-		wp_editor( self::esc( $meta, 'esc_textarea' ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
+		wp_editor( html_entity_decode( self::esc( $meta, 'esc_html' ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
 		echo self::desc( true );
 	}
 
@@ -513,7 +513,7 @@ class cmb_Meta_Box_types {
 
 	public static function file_list( $field, $meta, $object_id ) {
 
-		// echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', self::esc( $meta, 'esc_url' ), '" />';
+		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="" />';
 		echo '<input class="cmb_upload_button button cmb_upload_list" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( true );
 
 		echo '<ul id="', $field['id'], '_status" class="cmb_media_status attach_list">';

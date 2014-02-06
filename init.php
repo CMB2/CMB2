@@ -528,49 +528,8 @@ class cmb_Meta_Box {
 				$new = array_filter( $new );
 			}
 
-			switch ( $field['type'] ) {
-				case 'textarea':
-				case 'textarea_small':
-					$new = esc_textarea( $new );
-					break;
-				case 'textarea_code':
-					$new = htmlspecialchars_decode( stripslashes( $new ) );
-					break;
-				case 'text_date_timestamp':
-					$new = strtotime( $new );
-					break;
-				case 'file':
-					$_id_name = $field['id'] .'_id';
-					// get _id old value
-					$_id_old = self::get_data( $_id_name );
-
-					// If specified NOT to save the file ID
-					if ( isset( $field['save_id'] ) && ! $field['save_id'] ) {
-						$_new_id = '';
-					} else {
-						// otherwise get the file ID
-						$_new_id = isset( $_POST[ $_id_name ] ) ? $_POST[ $_id_name ] : null;
-
-						// If there is no ID saved yet, try to get it from the url
-						if ( isset( $_POST[ $field['id'] ] ) && $_POST[ $field['id'] ] && ! $_new_id ) {
-							$_new_id = self::image_id_from_url( esc_url_raw( $_POST[ $field['id'] ] ) );
-						}
-
-					}
-
-					if ( $_new_id && $_new_id != $_id_old ) {
-						$updated[] = $_id_name;
-						self::update_data( $_new_id, $_id_name );
-					} elseif ( '' == $_new_id && $_id_old ) {
-						$updated[] = $_id_name;
-						self::remove_data( $_id_name, $old );
-					}
-					break;
-				default:
-					// Check if this metabox field has a registered validation callback
-					$new = self::sanitization_cb( $new );
-					break;
-			}
+			// Check if this metabox field has a registered validation callback, or perform default sanitization
+			$new = self::sanitization_cb( $new );
 
 			if ( $field['multiple'] ) {
 
