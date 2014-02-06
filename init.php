@@ -492,12 +492,12 @@ class cmb_Meta_Box {
 
 		$meta_box['show_on'] = empty( $meta_box['show_on'] ) ? array( 'key' => false, 'value' => false ) : $meta_box['show_on'];
 
-		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
-			return;
-
 		self::set_object_id( $object_id );
 		// Set/get type
 		$object_type = self::set_object_type( $object_type ? $object_type	: self::set_mb_type( $meta_box ) );
+
+		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
+			return;
 
 		// save field ids of those that are updated
 		$updated = array();
