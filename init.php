@@ -227,7 +227,7 @@ class cmb_Meta_Box {
 		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', /*'media-upload', */'cmb-timepicker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'cmb-datepicker', /*'media-upload', */'cmb-timepicker' );
 		// styles required for cmb
 		$styles = array();
 
@@ -251,6 +251,7 @@ class cmb_Meta_Box {
 			$scripts[] = 'farbtastic';
 			$styles[] = 'farbtastic';
 		}
+		wp_register_script( 'cmb-datepicker', CMB_META_BOX_URL . 'js/jquery.datePicker.min.js' );
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
 		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb'. $min .'.js', $scripts, self::CMB_VERSION );
 
@@ -426,7 +427,11 @@ class cmb_Meta_Box {
 
 			echo empty( $field['before'] ) ? '' : $field['before'];
 
-			call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
+			if ( true == $field['repeatable'] ) {
+				call_user_func( array( $types, 'render_repeatable_field' ), $field, $meta, $object_id, $object_type );
+			} else {
+				call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
+			}
 
 			echo empty( $field['after'] ) ? '' : $field['after'];
 

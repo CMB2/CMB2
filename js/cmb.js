@@ -20,7 +20,7 @@
 	// Move CMB functionality to an object
 	window.CMB = {
 		formfield : '',
-		iterator: 0,
+		idNumber  : false,
 		file_frames: {},
 
 		init: function() {
@@ -32,56 +32,20 @@
 			}
 
 			/**
-			 * Initialize timepicker (this will be moved inline in a future release)
+			 * Initialize time/date/color pickers
 			 */
-			$('.cmb_timepicker').each( function() {
-				$('#' + jQuery(this).attr('id')).timePicker({
-					startTime: "07:00",
-					endTime: "22:00",
-					show24Hours: false,
-					separator: ':',
-					step: 30
-				});
-			});
+			CMB.initPickers();
 
-			/**
-			 * Initialize jQuery UI datepicker (this will be moved inline in a future release)
-			 */
-			$('.cmb_datepicker').each( function() {
-				$('#' + jQuery(this).attr('id')).datepicker();
-				// $('#' + jQuery(this).attr('id')).datepicker({ dateFormat: 'yy-mm-dd' });
-				// For more options see http://jqueryui.com/demos/datepicker/#option-dateFormat
-			});
 			// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 			$("#ui-datepicker-div").wrap('<div class="cmb_element" />');
-
-			/**
-			 * Initialize color picker
-			 */
-			if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
-				$('input:text.cmb_colorpicker').wpColorPicker();
-			} else {
-				$('input:text.cmb_colorpicker').each( function(i) {
-					$(this).after('<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>');
-					$('#picker-' + i).hide().farbtastic($(this));
-				})
-				.focus( function() {
-					$(this).next().show();
-				})
-				.blur( function() {
-					$(this).next().hide();
-				});
-			}
 
 
 			/**
 			 * File and image upload handling
 			 */
-
-
 			$('.cmb_metabox')
 			.on( 'change', '.cmb_upload_file', function() {
-				CMB.formfield = $(this).attr('name');
+				CMB.formfield = $(this).attr('id');
 				$('#' + CMB.formfield + '_id').val("");
 			})
 			.on( 'click', '.cmb_upload_button', function(event) {
@@ -89,7 +53,7 @@
 				event.preventDefault();
 
 				var $self = $(this);
-				CMB.formfield = $self.prev('input').attr('name');
+				CMB.formfield = $self.prev('input').attr('id');
 				var $formfield = $('#'+CMB.formfield);
 				var uploadStatus = true;
 				var attachment = true;
@@ -198,31 +162,39 @@
 			.on( 'click', '.add-row-button', function(e) {
 
 				e.preventDefault();
-				self = $(this);
 
-				var tableselector = '#'+ self.data('selector');
-				var $table = $(tableselector);
-				var row = $('.empty-row', $table).clone(true);
-				row.removeClass('empty-row').addClass('repeat-row');
-				row.insertBefore( tableselector +' tbody>tr:last' );
-				var input = $('input.cmb_datepicker',row);
-				var id = input.attr('id');
-				input.attr('id', id + CMB.iterator );
-				CMB.iterator++;
+				var $self         = $(this);
+				var tableselector = '#'+ $self.data('selector');
+				var inputselector = tableselector.slice(1,tableselector.lastIndexOf('repeat'));
+				var $table        = $(tableselector).data('numberels', CMB.idNumber );
+				var $emptyrow     = $table.find('.empty-row');
+				CMB.idNumber      = parseInt( $emptyrow.find('input').data('iterator') ) + 1;
+				var $row          = $emptyrow.clone();
+				var $newInput     = $row.find('input');
 
-				// @todo Make a colorpicker field repeatable
-				// row.find('.wp-color-result').remove();
-				// row.find('input:text.cmb_colorpicker').wpColorPicker();
+				CMB.log( $newInput.attr('id'), $newInput.data('iterator'));
 
+				$newInput.val('').attr( 'id', inputselector + (CMB.idNumber) ).attr('data-iterator', CMB.idNumber ).data('iterator', CMB.idNumber );
+				$emptyrow.removeClass('empty-row').addClass('repeat-row');
+				$emptyrow.after( $row );
+
+				// Init new timepicker and datepicker entries
+				CMB.initPickers();
 			})
 			.on( 'click', '.remove-row-button', function(e) {
 				e.preventDefault();
-				var $self = $(this);
-				var $parent = $self.parents('.cmb-repeat-table');
-				CMB.log( 'number of tbodys', $parent.length );
-				CMB.log( 'number of trs', $('tr', $parent).length );
-				if ( $('tr', $parent).length > 2 )
+				var $self   = $(this);
+				var $parent = $self.parents('tr');
+				var $table  = $self.parents('.cmb-repeat-table');
+
+				CMB.log( 'number of tbodys', $table.length );
+				CMB.log( 'number of trs', $('tr', $table).length );
+				if ( $('tr', $table).length > 1 ) {
+					if ( $parent.hasClass('empty-row') ) {
+						$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
+					}
 					$self.parents('.cmb-repeat-table tr').remove();
+				}
 			})
 
 			/**
@@ -256,6 +228,87 @@
 			// and on window resize
 			$(window).on( 'resize', CMB.resizeoEmbeds );
 
+		},
+
+		/**
+		 * @todo make work, always
+		 */
+		initPickers: function() {
+			// Initialize timepicker
+			CMB.initTimePickers();
+
+			// Initialize jQuery UI datepicker
+			CMB.initDatePickers();
+
+			// Initialize color picker
+			CMB.initColorPickers();
+		},
+
+		initTimePickers: function() {
+			$('input:text.cmb_timepicker').each( function() {
+				var $clone = $(this);
+				// var $picker = $('#' + $(this).attr('id'));
+				// var $clone = $picker.clone();
+				// $picker.after( $clone );
+				// $picker.remove();
+				CMB.initTimePicker( $clone );
+			});
+		},
+
+		initTimePicker: function($target) {
+			$('#' + $target.attr('id')).timePicker({
+				startTime: "00:00",
+				endTime: "23:59",
+				show24Hours: false,
+				separator: ':',
+				step: 30
+			});
+		},
+
+		initDatePickers: function() {
+			$('.cmb_datepicker').each( function() {
+				// var $picker = $('#' + $(this).attr('id'));
+				CMB.initDatePicker($(this));
+			});
+		},
+
+		initDatePicker: function($target) {
+			$target.datepicker( "destroy" );
+			$target.datepicker();
+			// $('#' + jQuery(this).attr('id')).datepicker({ dateFormat: 'yy-mm-dd' });
+			// For more options see http://jqueryui.com/demos/datepicker/#option-dateFormat
+		},
+
+		initColorPickers: function() {
+			if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
+
+				$('input:text.cmb_colorpicker').each( function() {
+					var $picker = $(this);
+					var $clone = $picker.clone();
+					$picker.after( $clone );
+					$picker.remove();
+					$clone.wpColorPicker();
+				});
+
+			} else {
+				$('input:text.cmb_colorpicker').each( function(i) {
+					$(this).after('<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>');
+					$('#picker-' + i).hide().farbtastic($(this));
+				})
+				.focus( function() {
+					$(this).next().show();
+				})
+				.blur( function() {
+					$(this).next().hide();
+				});
+			}
+		},
+
+		initColorPicker: function($target) {
+			$target.datepicker( "destroy" );
+			$target.datepicker();
+			// $('#' + jQuery(this).attr('id')).datepicker({ dateFormat: 'yy-mm-dd' });
+			// For more options see http://jqueryui.com/demos/datepicker/#option-dateFormat
 		},
 
 		/**

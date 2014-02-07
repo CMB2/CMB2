@@ -73,22 +73,25 @@ class cmb_Meta_Box_types {
 	 * @return strgin             Field's description markup
 	 */
 	private static function desc( $paragraph = false ) {
+		// Prevent description from printing multiple times for repeatable fields
+		if ( self::$iterator > 0 ) {
+			return '';
+		}
+
 		$tag = $paragraph ? 'p' : 'span';
 		$desc = cmb_Meta_Box::$field['desc'];
 		return "\n<$tag class=\"cmb_metabox_description\">$desc</$tag>\n";
 	}
 
 	/**
-	 * Generates repeatable text fields
+	 * Generates repeatable fields
 	 * @since  1.0.0
-	 * @param  string  $field Metabox field
+	 * @param  array   $field Metabox field
 	 * @param  mixed   $meta  Field's meta value
-	 * @param  string  $class Field's class attribute
-	 * @param  string  $type  Field Type
+	 * @param  int     $object_id Object ID
+	 * @param  string  $object_type  Object Type
 	 */
-	private static function repeat_text_field( $meta, $class = '', $type = 'text' ) {
-
-		$field = cmb_Meta_Box::$field; self::$meta = $meta; self::$type = $type;
+	public static function render_repeatable_field( $field, $meta, $object_id, $object_type ) {
 
 		// check for default content
 		$default = isset( $field['default'] ) ? array( $field['default'] ) : false;
@@ -100,37 +103,31 @@ class cmb_Meta_Box_types {
 			$meta = $default;
 		}
 
-		self::repeat_table_open( $class );
-
-		$class = $class ? $class .' widefat' : 'widefat';
+		$class = 'widefat';
+		self::repeat_table_open();
 
 		if ( !empty( $meta ) ) {
 			foreach ( (array) $meta as $val ) {
-				self::repeat_row( self::text_input( $class, $val ) );
+				self::open_repeat_row();
+				self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
+				call_user_func( array( __CLASS__, $field['type'] ), $field, $val, $object_id, $object_type );
+				self::close_repeat_row();
 			}
 		} else {
-			self::repeat_row( self::text_input( $class ) );
+			self::open_repeat_row();
+			self::$iterator = 1;
+			call_user_func( array( __CLASS__, $field['type'] ), $field, $meta, $object_id, $object_type );
+			self::close_repeat_row();
 		}
 
-		self::empty_row( self::text_input( $class ) );
+		self::open_empty_row();
+		self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
+		call_user_func( array( __CLASS__, $field['type'] ), $field, null, $object_id, $object_type );
+		self::close_repeat_row();
+
 		self::repeat_table_close();
 		// reset iterator
 		self::$iterator = 0;
-	}
-
-	/**
-	 * Text input field used by repeatable fields
-	 * @since  1.0.0
-	 * @param  string  $class Field's class attribute
-	 * @param  mixed   $val   Field's meta value
-	 * @return string         HTML text input
-	 */
-	private static function text_input( $class = '', $val = '' ) {
-		self::$iterator = self::$iterator ? self::$iterator + 1 : 1;
-		$before = '';
-		if ( cmb_Meta_Box::$field['type'] == 'text_money' )
-			$before = ! empty( cmb_Meta_Box::$field['before'] ) ? ' ' : '$ ';
-		return $before . '<input type="'. self::$type .'" class="'. $class .'" name="'. cmb_Meta_Box::$field['id'] .'[]" id="'. cmb_Meta_Box::$field['id'] .'_'. self::$iterator .'" value="'. self::esc( $val ) .'" data-id="'. cmb_Meta_Box::$field['id'] .'" data-count="'. self::$iterator .'"/>';
 	}
 
 	/**
@@ -150,32 +147,19 @@ class cmb_Meta_Box_types {
 		echo '</tbody></table><p class="add-row"><a data-selector="', cmb_Meta_Box::$field['id'] ,'_repeat" class="add-row-button button" href="#">'. __( 'Add Row', 'cmb' ) .'</a></p>';
 	}
 
-	/**
-	 * Generates table row markup for repeatable fields
-	 * @since 1.0.0
-	 * @param string $input Table cell markup
-	 */
-	private static function repeat_row( $input ) {
-		echo '<tr class="repeat-row">', self::repeat_cell( $input ) ,'</tr>';
+	private static function open_repeat_row() {
+		echo '<tr class="repeat-row">';
+		echo '<td>';
 	}
 
-	/**
-	 * Generates the empty table row markup (for duplication) for repeatable fields
-	 * @since 1.0.0
-	 * @param string $input Table cell markup
-	 */
-	private static function empty_row( $input ) {
-		echo '<tr class="empty-row">', self::repeat_cell( $input ) ,'</tr>';
+	private static function open_empty_row() {
+		echo '<tr class="empty-row">';
+		echo '<td>';
 	}
 
-	/**
-	 * Generates table cell markup for repeatable fields
-	 * @since  1.0.0
-	 * @param  string $input Text input field
-	 * @return string        HTML table cell markup
-	 */
-	private static function repeat_cell( $input ) {
-		return '<td>'. $input .'</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
+	private static function close_repeat_row() {
+		echo '</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
+		echo '</tr>';
 	}
 
 	/**
@@ -262,75 +246,77 @@ class cmb_Meta_Box_types {
 		$func       = is_string( $func ) && ! empty( $func ) ? $func : 'esc_attr';
 		$meta_value = ! empty( $meta_value ) ? $meta_value : $field['default'];
 
-		return call_user_func( $func, $meta_value );
+		if ( is_array( $meta_value ) ) {
+			foreach ( $meta_value as $key => $value ) {
+				$meta_value[ $key ] = call_user_func( $func, $value );
+			}
+		} else {
+			$meta_value = call_user_func( $func, $meta_value );
+		}
+
+		return $meta_value;
 	}
 
+	public static function _name( $suffix ) {
+		return cmb_Meta_Box::$field['id'] . $suffix . ( cmb_Meta_Box::$field['repeatable'] ? '[]' : '' );
+	}
+
+	public static function _id( $suffix = '' ) {
+		return cmb_Meta_Box::$field['id'] . $suffix . ( cmb_Meta_Box::$field['repeatable'] ? '_'. self::$iterator .'" data-iterator="'. self::$iterator : '' );
+	}
+
+	public static function _input( $meta, $args = array() ) {
+		$args = wp_parse_args( $args, array(
+			'classes' => 'regular-text',
+			'type' => 'text',
+		) );
+		return '<input type="'. $args['type'] .'" class="'. $args['classes'] .'" name="'. self::_name() .'" id="'. self::_id(). '" value="'. self::esc( $meta ). '" />' . self::desc( true );
+	}
 
 	/**
 	 * Begin Field Types
 	 */
 
 	public static function text( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta );
-		}
-
-		echo '<input type="text" class="regular-text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc( true );
+		echo '<input type="text" class="regular-text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc( true );
 	}
 
 	public static function text_small( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta, 'cmb_text_small' );
-		}
-
-		echo '<input class="cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc();
+		echo '<input class="cmb_text_small" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc();
 	}
 
 	public static function text_medium( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta, 'cmb_text_medium' );
-		}
-		echo '<input class="cmb_text_medium" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc();
+		echo '<input class="cmb_text_medium" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc();
 	}
 
 	public static function text_email( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta, 'cmb_text_email cmb_text_medium', 'email' );
-		}
-
-		echo '<input class="cmb_text_email cmb_text_medium" type="email" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc( true );
+		echo '<input class="cmb_text_email cmb_text_medium" type="email" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc( true );
 	}
 
 	public static function text_url( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta, 'cmb_text_url cmb_text_medium' );
-		}
-
-		echo '<input class="cmb_text_url cmb_text_medium regular-text" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta, 'esc_url' ), '" />', self::desc( true );
+		echo '<input class="cmb_text_url cmb_text_medium regular-text" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta, 'esc_url' ), '" />', self::desc( true );
 	}
 
 	public static function text_date( $field, $meta ) {
-		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc();
+		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc();
 	}
 
 	public static function text_date_timestamp( $field, $meta ) {
-		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />', self::desc();
+		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />', self::desc();
 	}
 
 	public static function text_datetime_timestamp( $field, $meta, $object_id ) {
-
 		// This will be used if there is a select_timezone set for this field
 		$tz_offset = cmb_Meta_Box::field_timezone_offset( $object_id );
 		if ( ! empty( $tz_offset ) ) {
 			$meta -= $tz_offset;
 		}
 
-		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '[date]" id="', $field['id'], '_date" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />';
-		echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '[time]" id="', $field['id'], '_time" value="', ! empty( $meta ) ? date( 'h:i A', $meta ) : $field['default'], '" />', self::desc();
+		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', self::_name( '[date]' ), '" id="', self::_id( '_date' ) ,'" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />';
+		echo '<input class="cmb_timepicker text_time" type="text" name="', self::_name( '[time]' ), '" id="', self::_id( '_time' ) ,'" value="', ! empty( $meta ) ? date( 'h:i A', $meta ) : $field['default'], '" />', self::desc();
 	}
 
 	public static function text_datetime_timestamp_timezone( $field, $meta ) {
-
 		$datetime = unserialize( $meta );
 		$meta = $tzstring = false;
 
@@ -341,16 +327,16 @@ class cmb_Meta_Box_types {
 			$meta = $datetime->getTimestamp() + $tz->getOffset( new DateTime('NOW') );
 		}
 
-		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', $field['id'], '[date]" id="', $field['id'], '_date" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />';
-		echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '[time]" id="', $field['id'], '_time" value="', ! empty( $meta ) ? date( 'h:i A', $meta ) : $field['default'], '" />';
+		echo '<input class="cmb_text_small cmb_datepicker" type="text" name="', self::_name( '[date]' ), '" id="', self::_id( '_date' ) ,'" value="', ! empty( $meta ) ? date( 'm\/d\/Y', $meta ) : $field['default'], '" />';
+		echo '<input class="cmb_timepicker text_time" type="text" name="', self::_name( '[time]' ), '" id="', self::_id( '_time' ) ,'" value="', ! empty( $meta ) ? date( 'h:i A', $meta ) : $field['default'], '" />';
 
-		echo '<select name="', $field['id'], '[timezone]" id="', $field['id'], '_timezone">';
+		echo '<select name="', self::_name( '[timezone]' ), '" id="', self::_id( '_timezone' ) ,'">';
 		echo wp_timezone_choice( $tzstring );
 		echo '</select>', self::desc();
 	}
 
 	public static function text_time( $field, $meta ) {
-		echo '<input class="cmb_timepicker text_time" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc();
+		echo '<input class="cmb_timepicker text_time" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc();
 	}
 
 	public static function select_timezone( $field, $meta ) {
@@ -358,17 +344,13 @@ class cmb_Meta_Box_types {
 		if ( '' === $meta )
 			$meta = cmb_Meta_Box::timezone_string();
 
-		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+		echo '<select name="', self::_name(), '" id="', self::_id(), '">';
 		echo wp_timezone_choice( $meta );
 		echo '</select>';
 	}
 
 	public static function text_money( $field, $meta ) {
-		if ( $field['repeatable'] ) {
-			return self::repeat_text_field( $meta, 'cmb_text_money' );
-		}
-
-		echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" />', self::desc();
+		echo ! empty( $field['before'] ) ? '' : '$', ' <input class="cmb_text_money" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" />', self::desc();
 	}
 
 	public static function colorpicker( $field, $meta ) {
@@ -378,31 +360,31 @@ class cmb_Meta_Box_types {
 			$meta = '#' . $meta;
 		elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta ) ) // Value doesn't match #123abc, so sanitize to just #.
 			$meta = "#";
-		echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', $meta, '" />', self::desc();
+		echo '<input class="cmb_colorpicker cmb_text_small" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', $meta, '" />', self::desc();
 	}
 
 	public static function textarea( $field, $meta ) {
-		echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10">', self::esc( $meta, 'esc_textarea' ), '</textarea>', self::desc( true );
+		echo '<textarea name="', self::_name(), '" id="', self::_id(), '" cols="60" rows="10">', self::esc( $meta, 'esc_textarea' ), '</textarea>', self::desc( true );
 	}
 
 	public static function textarea_small( $field, $meta ) {
-		echo '<textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="4">', self::esc( $meta, 'esc_textarea' ), '</textarea>', self::desc( true );
+		echo '<textarea name="', self::_name(), '" id="', self::_id(), '" cols="60" rows="4">', self::esc( $meta, 'esc_textarea' ), '</textarea>', self::desc( true );
 	}
 
 	public static function textarea_code( $field, $meta ) {
-		echo '<pre><textarea name="', $field['id'], '" id="', $field['id'], '" cols="60" rows="10" class="cmb_textarea_code">', ! empty( $meta ) ? $meta : $field['default'], '</textarea></pre>', self::desc( true );
+		echo '<pre><textarea name="', self::_name(), '" id="', self::_id(), '" cols="60" rows="10" class="cmb_textarea_code">', ! empty( $meta ) ? $meta : $field['default'], '</textarea></pre>', self::desc( true );
 	}
 
 	public static function select( $field, $meta ) {
 		$meta = self::esc( $meta );
-		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+		echo '<select name="', self::_name(), '" id="', self::_id(), '">';
 		foreach ( $field['options'] as $option_key => $option ) {
 
 			// Check for the "old" way
 			$label = isset( $option['name'] ) ? $option['name'] : $option;
 			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
 
-			echo '<option value="', $value, '" ', selected( $meta == $value ) ,'>', $label, '</option>';
+			echo '<option value="', $value, '" ', selected( $meta, $value ) ,'>', $label, '</option>';
 
 		}
 		echo '</select>', self::desc( true );
@@ -418,7 +400,7 @@ class cmb_Meta_Box_types {
 			$label = isset( $option['name'] ) ? $option['name'] : $option;
 			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
 
-			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $value, '" ', checked( $meta == $value ), ' /> <label for="', $field['id'], $i, '">', $label ,'</label></li>';
+			echo '<li class="cmb_option"><input type="radio" name="', self::_name() ,'" id="', self::_id( $i ) ,'" value="', $value, '" ', checked( $meta, $value ), ' /> <label for="', self::_id( $i ) ,'">', $label ,'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( true );
@@ -429,14 +411,14 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function checkbox( $field, $meta ) {
-		echo '<input class="cmb_option" type="checkbox" name="', $field['id'], '" id="', $field['id'], '" ', checked( ! empty( $meta ) ), ' value="on"/> <label for="', $field['id'], '">', self::desc() ,'</label>';
+		echo '<input class="cmb_option" type="checkbox" name="', self::_name(), '" id="', self::_id(), '" ', checked( ! empty( $meta ) ), ' value="on"/> <label for="', $field['id'], '">', self::desc() ,'</label>';
 	}
 
 	public static function multicheck( $field, $meta ) {
 		echo '<ul>';
 		$i = 1;
 		foreach ( $field['options'] as $value => $name ) {
-			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i, '" value="', $value, '" ', checked( is_array( $meta ) && in_array( $value, $meta ) ), '  /> <label for="', $field['id'], $i, '">', $name, '</label></li>';
+			echo '<li><input class="cmb_option" type="checkbox" name="', self::_name(), '[]" id="', self::_id( $i ) ,'" value="', $value, '" ', checked( is_array( $meta ) && in_array( $value, $meta ) ), '  /> <label for="', self::_id( $i ) ,'">', $name, '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc();
@@ -458,7 +440,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_select( $field, $meta, $object_id ) {
 
-		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+		echo '<select name="', self::_name(), '" id="', self::_id(), '">';
 		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		foreach ( $terms as $term ) {
@@ -472,15 +454,15 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function taxonomy_radio( $field, $meta, $object_id ) {
-
 		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+
 		echo '<ul>';
 		$i = 1;
 		foreach ( $terms as $term ) {
 			$checked = ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) );
 
-			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="'. $term->slug . '" ', checked( $checked ), ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
+			echo '<li class="cmb_option"><input type="radio" name="', self::_name(), '" id="', self::_id( $i ) ,'" value="'. $term->slug . '" ', checked( $checked ), ' /> <label for="', self::_id( $i ) , '">' . $term->name . '</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( true );
@@ -491,18 +473,24 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function taxonomy_multicheck( $field, $meta, $object_id ) {
-		echo '<ul>';
 		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
+		echo '<ul>';
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		$i = 1;
-		foreach ( $terms as $term ) {
-			echo '<li><input class="cmb_option" type="checkbox" name="', $field['id'], '[]" id="', $field['id'], $i,'" value="'. $term->slug . '" ';
-			foreach ($names as $name) {
-				checked( $term->slug == $name->slug );
-			}
+		if ( $names ) {
 
-			echo ' /> <label for="', $field['id'], $i, '">' . $term->name . '</label></li>';
-			$i++;
+			foreach ( $terms as $term ) {
+				echo '<li><input class="cmb_option" type="checkbox" name="', self::_name(), '[]" id="', self::_id( $i )  ,'" value="'. $term->slug . '" ';
+				foreach ($names as $name) {
+					checked( $term->slug == $name->slug );
+				}
+
+				echo ' /> <label for="', self::_id( $i )  ,'">' . $term->name . '</label></li>';
+				$i++;
+			}
+		} else {
+			echo '<li><label>'. __( 'No terms', 'cmb' ) .'</label></li>';
+
 		}
 		echo '</ul>', self::desc();
 	}
@@ -512,11 +500,10 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function file_list( $field, $meta, $object_id ) {
-
-		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="" />';
+		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', self::_id(), '" name="', self::_name() ,'" value="" />';
 		echo '<input class="cmb_upload_button button cmb_upload_list" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( true );
 
-		echo '<ul id="', $field['id'], '_status" class="cmb_media_status attach_list">';
+		echo '<ul id="', self::_id( '_status' ) ,'" class="cmb_media_status attach_list">';
 
 		if ( $meta ) {
 
@@ -547,14 +534,17 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function file( $field, $meta, $object_id, $object_type ) {
-
 		$input_type_url = 'hidden';
 		if ( 'url' == $field['allow'] || ( is_array( $field['allow'] ) && in_array( 'url', $field['allow'] ) ) )
 			$input_type_url = 'text';
-		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', $meta, '" />';
+		echo '<input class="cmb_upload_file" type="' . $input_type_url . '" size="45" id="', self::_id(), '" name="', self::_name(), '" value="', $meta, '" />';
 		echo '<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />';
 
-		$_id_name = $field['id'] .'_id';
+		$_id_name = $field['id'];
+		if ( $field['repeatable'] ) {
+			$_id_name .= '_' . self::$iterator;
+		}
+		$_id_name .= '_id';
 
 		$_id_meta = cmb_Meta_Box::get_data( $_id_name );
 
@@ -565,7 +555,7 @@ class cmb_Meta_Box_types {
 
 		echo '<input class="cmb_upload_file_id" type="hidden" id="', $_id_name, '" name="', $_id_name, '" value="', $_id_meta, '" />',
 		self::desc( true ),
-		'<div id="', $field['id'], '_status" class="cmb_media_status">';
+		'<div id="', self::_id( '_status' ) ,'" class="cmb_media_status">';
 			if ( ! empty( $meta ) ) {
 
 				if ( self::is_valid_img_ext( $meta ) ) {
@@ -586,44 +576,18 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function oembed( $field, $meta, $object_id, $object_type ) {
-		echo '<input class="cmb_oembed regular-text" type="text" name="', $field['id'], '" id="', $field['id'], '" value="', self::esc( $meta ), '" data-objectid="', $object_id ,'" data-objecttype="', $object_type ,'" />', self::desc( true );
+		echo '<input class="cmb_oembed regular-text" type="text" name="', self::_name(), '" id="', self::_id(), '" value="', self::esc( $meta ), '" data-objectid="', $object_id ,'" data-objecttype="', $object_type ,'" />', self::desc( true );
 		echo '<p class="cmb-spinner spinner" style="display:none;"><img src="'. admin_url( '/images/wpspin_light.gif' ) .'" alt="spinner"/></p>';
-		echo '<div id="', $field['id'], '_status" class="cmb_media_status ui-helper-clearfix embed_wrap">';
+		echo '<div id="',self::_id( '_status' ) ,'" class="cmb_media_status ui-helper-clearfix embed_wrap">';
 
 			if ( $meta != '' )
 				echo cmb_Meta_Box_ajax::get_oembed( $meta, $object_id, array(
 					'object_type' => $object_type,
 					'oembed_args' => array( 'width' => '640' ),
-					'field_id'    => $field['id'],
+					'field_id'    => self::_id(),
 				) );
 
 		echo '</div>';
-	}
-
-	/**
-	 * Deprecated methods. use cmb_Meta_Box_types::repeat( true/false ) to toggle repeatable
-	 */
-
-	public static function text_repeat( $field, $meta ) {
-		self::repeat_text_field( $meta );
-	}
-	public static function text_small_repeat( $field, $meta ) {
-		self::repeat_text_field( $meta, 'cmb_text_small' );
-	}
-	public static function text_medium_repeat( $field, $meta ) {
-		self::repeat_text_field( $meta, 'cmb_text_medium' );
-	}
-	public static function text_email_repeat( $field, $meta ) {
-		self::repeat_text_field( $meta, 'cmb_text_email cmb_text_medium', 'email' );
-	}
-	public static function text_url_repeat( $field, $meta ) {
-		$val = self::esc( $meta );
-		$protocols = isset( $field['protocols'] ) ? (array) $field['protocols'] : null;
-		$val = $val ? esc_url( $val, $protocols ) : '';
-		self::repeat_text_field( $val, 'cmb_text_url cmb_text_medium' );
-	}
-	public static function text_money_repeat( $field, $meta ) {
-		self::repeat_text_field( $meta, 'cmb_text_money' );
 	}
 
 
