@@ -198,7 +198,7 @@
 			.on( 'click', '.add-row-button', function(e) {
 
 				e.preventDefault();
-				self = $(this);
+				var self = $(this);
 
 				var tableselector = '#'+ self.data('selector');
 				var $table = $(tableselector);
