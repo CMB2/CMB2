@@ -505,7 +505,7 @@ class cmb_Meta_Box_types {
 
 		echo '<ul id="', self::_id( '_status' ) ,'" class="cmb_media_status attach_list">';
 
-		if ( $meta ) {
+		if ( $meta && is_array( $meta ) ) {
 
 			foreach ( $meta as $id => $fullurl ) {
 				if ( self::is_valid_img_ext( $fullurl ) ) {
