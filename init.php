@@ -1025,9 +1025,9 @@ class cmb_Meta_Box {
 
 		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
 			// If multiple, add to array
-			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ][] = $value;
 		} else {
-			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ] = $value;
 		}
 
 		return self::$options[ $option_key ];
