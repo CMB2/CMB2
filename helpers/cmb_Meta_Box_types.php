@@ -452,7 +452,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function wysiwyg( $field, $meta ) {
-		wp_editor( html_entity_decode( self::esc( $meta, 'esc_html' ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
+		wp_editor( stripslashes( html_entity_decode( self::esc( $meta, 'esc_html' ) ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
 		echo self::desc( true );
 	}
 
