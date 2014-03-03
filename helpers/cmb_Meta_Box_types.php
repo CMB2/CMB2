@@ -461,10 +461,17 @@ class cmb_Meta_Box_types {
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+		$taxonomyChosen = false;
+
 		foreach ( $terms as $term ) {
 			if ( !is_wp_error( $names ) && !empty( $names ) && ! strcmp( $term->slug, $names[0]->slug ) ) {
 				echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
-			} else {
+				$taxonomyChosen = true;
+			} 
+			else if ( $taxonomyChosen == false && $term->slug == $field['default']) {
+	            echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
+	        }
+			else {
 				echo '<option value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name . '</option>';
 			}
 		}
