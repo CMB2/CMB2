@@ -228,7 +228,8 @@ class cmb_Meta_Box_Sanitize {
 			cmb_Meta_Box::remove_data( $_id_name, $old );
 		}
 
-		return self::default_sanitization( $meta );
+		return self::default_sanitization( $meta, $field );
+
 	}
 
 	/**

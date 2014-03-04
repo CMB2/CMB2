@@ -205,7 +205,7 @@ class cmb_Meta_Box {
 			return;
 
 		// for PHP versions < 5.3
-		$dir = defined( '__DIR__' ) ? __DIR__ : dirname( __FILE__ );
+		$dir = dirname( __FILE__ );
 
 		$file = "$dir/helpers/$class_name.php";
 		if ( file_exists( $file ) )
@@ -286,7 +286,7 @@ class cmb_Meta_Box {
 			wp_enqueue_script( 'cmb-scripts' );
 
 			// default is to show cmb styles on post pages
-			if ( $this->_meta_box['cmb_styles'] != false )
+			if ( $this->_meta_box['cmb_styles'] )
 				wp_enqueue_style( 'cmb-styles' );
 		}
 	}
@@ -1030,9 +1030,9 @@ class cmb_Meta_Box {
 
 		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
 			// If multiple, add to array
-			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ][] = $value;
 		} else {
-			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ] = $value;
 		}
 
 		return self::$options[ $option_key ];

@@ -144,7 +144,18 @@ table.cmb_metabox .cmb_media_status {
 }
 
 table.cmb_metabox .cmb_media_status .img_status {
+	clear: none;
+	float: left;
 	display: inline-block;
+	margin-right: 10px;
+	width: auto;
+}
+
+table.cmb_metabox .cmb-type-file_list .cmb_media_status .img_status {
+	clear: none;
+	float: left;
+	margin-right: 10px;
+	width: auto;
 }
 
 table.cmb_metabox .cmb_media_status .img_status, table.cmb_metabox .cmb_media_status .embed_status {

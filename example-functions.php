@@ -235,10 +235,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type' => 'file',
 			),
 			array(
-				'name' => __( 'Multiple Files', 'cmb' ),
-				'desc' => __( 'Upload or add multiple images/attachments.', 'cmb' ),
-				'id'   => $prefix . 'test_file_list',
-				'type' => 'file_list',
+				'name'         => __( 'Multiple Files', 'cmb' ),
+				'desc'         => __( 'Upload or add multiple images/attachments.', 'cmb' ),
+				'id'           => $prefix . 'test_file_list',
+				'type'         => 'file_list',
+				'preview_size' => array( 100, 100 ), // Default: array( 50, 50 )
 			),
 			array(
 				'name' => __( 'oEmbed', 'cmb' ),

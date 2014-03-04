@@ -434,17 +434,23 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function wysiwyg( $field, $meta ) {
-		wp_editor( html_entity_decode( self::esc( $meta, 'esc_html' ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
+		wp_editor( stripslashes( html_entity_decode( self::esc( $meta, 'esc_html' ) ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
 		echo self::desc( true );
 	}
 
 	public static function taxonomy_select( $field, $meta, $object_id ) {
 
-		echo '<select name="', self::_name(), '" id="', self::_id(), '">';
-		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
-		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+		$names    = self::get_object_terms( $object_id, $field['taxonomy'] );
+		$terms    = get_terms( $field['taxonomy'], 'hide_empty=0' );
+		$has_term = false;
+
 		foreach ( $terms as $term ) {
 			if ( !is_wp_error( $names ) && !empty( $names ) && ! strcmp( $term->slug, $names[0]->slug ) ) {
+				echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
+				$has_term = true;
+			}
+			else if ( ! $has_term == false && $term->slug == $field['default'] ) {
 				echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
 			} else {
 				echo '<option value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name . '</option>';
@@ -507,11 +513,13 @@ class cmb_Meta_Box_types {
 
 		if ( $meta && is_array( $meta ) ) {
 
+			$preview_size = empty( $field['preview_size'] ) ? array( 50, 50 ) : $field['preview_size'];
+
 			foreach ( $meta as $id => $fullurl ) {
 				if ( self::is_valid_img_ext( $fullurl ) ) {
 					echo
 					'<li class="img_status">',
-						wp_get_attachment_image( $id, array( 50, 50 ) ),
+						wp_get_attachment_image( $id, $preview_size ),
 						'<p><a href="#" class="cmb_remove_file_button">'. __( 'Remove Image', 'cmb' ) .'</a></p>
 						<input type="hidden" id="filelist-', $id ,'" name="', $field['id'] ,'[', $id ,']" value="', $fullurl ,'" />
 					</li>';
