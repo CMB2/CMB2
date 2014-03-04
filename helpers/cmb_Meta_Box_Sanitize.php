@@ -8,7 +8,7 @@ class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * A single instance of this class.
-	 * @var   cmb_Meta_Box_types object
+	 * @var   cmb_Meta_Box_Sanitize object
 	 * @since 1.0.0
 	 */
 	public static $instance = null;

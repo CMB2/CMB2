@@ -19,7 +19,7 @@ class cmb_Meta_Box_ajax {
 	/**
 	 * Creates or returns an instance of this class.
 	 * @since  0.1.0
-	 * @return cmb_Meta_Box_types A single instance of this class.
+	 * @return cmb_Meta_Box_ajax A single instance of this class.
 	 */
 	public static function get() {
 		if ( self::$instance === null )
