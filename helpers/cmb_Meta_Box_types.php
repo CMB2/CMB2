@@ -458,7 +458,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_select( $field, $meta, $object_id ) {
 
-		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
+		echo '<select name="', self::_name(), '" id="', self::_id(), '">';
 		$names    = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms    = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		$has_term = false;
