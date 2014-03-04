@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0.1
+Version: 		1.0.2
 */
 
 /**
@@ -54,7 +54,7 @@ class cmb_Meta_Box {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	const CMB_VERSION = '1.0.1';
+	const CMB_VERSION = '1.0.2';
 
 	/**
 	 * Metabox Config array
@@ -205,7 +205,7 @@ class cmb_Meta_Box {
 			return;
 
 		// for PHP versions < 5.3
-		$dir = defined( '__DIR__' ) ? __DIR__ : dirname( __FILE__ );
+		$dir = dirname( __FILE__ );
 
 		$file = "$dir/helpers/$class_name.php";
 		if ( file_exists( $file ) )
@@ -493,12 +493,12 @@ class cmb_Meta_Box {
 
 		$meta_box['show_on'] = empty( $meta_box['show_on'] ) ? array( 'key' => false, 'value' => false ) : $meta_box['show_on'];
 
-		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
-			return;
-
 		self::set_object_id( $object_id );
 		// Set/get type
 		$object_type = self::set_object_type( $object_type ? $object_type	: self::set_mb_type( $meta_box ) );
+
+		if ( ! apply_filters( 'cmb_show_on', true, $meta_box ) )
+			return;
 
 		// save field ids of those that are updated
 		$updated = array();
@@ -529,49 +529,8 @@ class cmb_Meta_Box {
 				$new = array_filter( $new );
 			}
 
-			switch ( $field['type'] ) {
-				case 'textarea':
-				case 'textarea_small':
-					$new = esc_textarea( $new );
-					break;
-				case 'textarea_code':
-					$new = htmlspecialchars_decode( stripslashes( $new ) );
-					break;
-				case 'text_date_timestamp':
-					$new = strtotime( $new );
-					break;
-				case 'file':
-					$_id_name = $field['id'] .'_id';
-					// get _id old value
-					$_id_old = self::get_data( $_id_name );
-
-					// If specified NOT to save the file ID
-					if ( isset( $field['save_id'] ) && ! $field['save_id'] ) {
-						$_new_id = '';
-					} else {
-						// otherwise get the file ID
-						$_new_id = isset( $_POST[ $_id_name ] ) ? $_POST[ $_id_name ] : null;
-
-						// If there is no ID saved yet, try to get it from the url
-						if ( isset( $_POST[ $field['id'] ] ) && $_POST[ $field['id'] ] && ! $_new_id ) {
-							$_new_id = self::image_id_from_url( esc_url_raw( $_POST[ $field['id'] ] ) );
-						}
-
-					}
-
-					if ( $_new_id && $_new_id != $_id_old ) {
-						$updated[] = $_id_name;
-						self::update_data( $_new_id, $_id_name );
-					} elseif ( '' == $_new_id && $_id_old ) {
-						$updated[] = $_id_name;
-						self::remove_data( $_id_name, $old );
-					}
-					break;
-				default:
-					// Check if this metabox field has a registered validation callback
-					$new = self::sanitization_cb( $new );
-					break;
-			}
+			// Check if this metabox field has a registered validation callback, or perform default sanitization
+			$new = self::sanitization_cb( $new );
 
 			if ( $field['multiple'] ) {
 
@@ -1067,9 +1026,9 @@ class cmb_Meta_Box {
 
 		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
 			// If multiple, add to array
-			self::$options[ $option_key ][ $field_id ][] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ][] = $value;
 		} else {
-			self::$options[ $option_key ][ $field_id ] = self::sanitization_cb( $value, $field );
+			self::$options[ $option_key ][ $field_id ] = $value;
 		}
 
 		return self::$options[ $option_key ];

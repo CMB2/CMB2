@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.1  
+**Version**: 1.0.2  
 **Requires at least**: 3.5  
 **Tested up to**: 3.8  
 **License**: GPLv2  
@@ -71,6 +71,8 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
 
 ## To-do
+**Enhancements**
+
 * Fix known issues (above)
 * move timepicker and datepicker jQuery inline
 * support for multiple configurable timepickers/datepickers
@@ -83,6 +85,28 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Always load newest version of CMB
 
 ## Changelog
+
+### 1.0.2
+
+**Enhancements**
+
+* Change the way the `'cmb_validate_{$field['type']}'` filter works.
+It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
+* All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
+* Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc)
+* Added option to specify image preview size for `file_list` field type. props [@IgorCode](https://github.com/IgorCode)
+* Updated `file_list` images to be displayed horizontally instead of vertically. props [@IgorCode](https://github.com/IgorCode)
+* Use `get_the_terms` where possible since the data is cached.
+
+**Bug Fixes**
+
+* Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby)
+* Replaced `__DIR__`, as `dirname( __FILE__ )` is easier to maintain back-compatibility.
+* Fixed missing table styling on new posts. [@mustardBees](https://github.com/mustardBees)
+* Fix undeclared JS variable. [@veelen](https://github.com/veelen)
+* Fix `file_list` errors when removing all files and saving.
+* Set correct `object_id` to be used later in `cmb_show_on` filter. [@lauravaq](https://github.com/lauravaq)
+* Fix sanitization recursion memeory issues.
 
 ### 1.0.1
 

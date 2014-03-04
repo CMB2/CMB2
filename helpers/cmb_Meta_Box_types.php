@@ -204,6 +204,35 @@ class cmb_Meta_Box_types {
 	}
 
 	/**
+	 * Checks if we can get a post object, and if so, uses `get_the_terms` which utilizes caching
+	 * @since  1.0.2
+	 * @param  integer $object_id Object ID
+	 * @param  string  $taxonomy  Taxonomy terms to return
+	 * @return mixed              Array of terms on success
+	 */
+	public static function get_object_terms( $object_id, $taxonomy ) {
+
+		if ( ! $post = get_post( $object_id ) ) {
+
+			$cache_key = 'cmb-cache-'. $taxonomy .'-'. $object_id;
+
+			// Check cache
+			$cached = $test = get_transient( $cache_key );
+			if ( $cached )
+				return $cached;
+
+			$cached = wp_get_object_terms( $object_id, $taxonomy );
+			// Do our own (minimal) caching. Long enough for a page-load.
+			$set = set_transient( $cache_key, $cached, 60 );
+			return $cached;
+		}
+
+		// WP caches internally so it's better to use
+		return get_the_terms( $post, $taxonomy );
+
+	}
+
+	/**
 	 * Escape the value before output. Defaults to 'esc_attr()'
 	 * @since  1.0.1
 	 * @param  mixed  $meta_value Meta value
@@ -216,7 +245,7 @@ class cmb_Meta_Box_types {
 		// Check if the field has a registered escaping callback
 		$cb = cmb_Meta_Box::maybe_callback( $field, 'escape_cb' );
 		if ( false === $cb ) {
-			// If requestion NO escaping, return meta value
+			// If requesting NO escaping, return meta value
 			return $meta_value;
 		} elseif ( $cb ) {
 			// Ok, callback is good, let's run it.
@@ -367,8 +396,14 @@ class cmb_Meta_Box_types {
 	public static function select( $field, $meta ) {
 		$meta = self::esc( $meta );
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
-		foreach ($field['options'] as $option) {
-			echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
+		foreach ( $field['options'] as $option_key => $option ) {
+
+			// Check for the "old" way
+			$label = isset( $option['name'] ) ? $option['name'] : $option;
+			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
+
+			echo '<option value="', $value, '" ', selected( $meta == $value ) ,'>', $label, '</option>';
+
 		}
 		echo '</select>', self::desc( true );
 	}
@@ -377,8 +412,13 @@ class cmb_Meta_Box_types {
 		$meta = self::esc( $meta );
 		echo '<ul>';
 		$i = 1;
-		foreach ($field['options'] as $option) {
-			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '" ', checked( $meta == $option['value'] ), ' /> <label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+		foreach ( $field['options'] as $option_key => $option ) {
+
+			// Check for the "old" way
+			$label = isset( $option['name'] ) ? $option['name'] : $option;
+			$value = isset( $option['value'] ) ? $option['value'] : $option_key;
+
+			echo '<li class="cmb_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $value, '" ', checked( $meta == $value ), ' /> <label for="', $field['id'], $i, '">', $label ,'</label></li>';
 			$i++;
 		}
 		echo '</ul>', self::desc( true );
@@ -412,17 +452,23 @@ class cmb_Meta_Box_types {
 	}
 
 	public static function wysiwyg( $field, $meta ) {
-		wp_editor( self::esc( $meta, 'esc_textarea' ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
+		wp_editor( stripslashes( html_entity_decode( self::esc( $meta, 'esc_html' ) ) ), $field['id'], isset( $field['options'] ) ? $field['options'] : array() );
 		echo self::desc( true );
 	}
 
 	public static function taxonomy_select( $field, $meta, $object_id ) {
 
 		echo '<select name="', $field['id'], '" id="', $field['id'], '">';
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
-		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
+		$names    = self::get_object_terms( $object_id, $field['taxonomy'] );
+		$terms    = get_terms( $field['taxonomy'], 'hide_empty=0' );
+		$has_term = false;
+
 		foreach ( $terms as $term ) {
 			if ( !is_wp_error( $names ) && !empty( $names ) && ! strcmp( $term->slug, $names[0]->slug ) ) {
+				echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
+				$has_term = true;
+			}
+			else if ( ! $has_term == false && $term->slug == $field['default'] ) {
 				echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
 			} else {
 				echo '<option value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name . '</option>';
@@ -433,7 +479,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_radio( $field, $meta, $object_id ) {
 
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
+		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		echo '<ul>';
 		$i = 1;
@@ -452,7 +498,7 @@ class cmb_Meta_Box_types {
 
 	public static function taxonomy_multicheck( $field, $meta, $object_id ) {
 		echo '<ul>';
-		$names = wp_get_object_terms( $object_id, $field['taxonomy'] );
+		$names = self::get_object_terms( $object_id, $field['taxonomy'] );
 		$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 		$i = 1;
 		foreach ( $terms as $term ) {
@@ -473,18 +519,20 @@ class cmb_Meta_Box_types {
 
 	public static function file_list( $field, $meta, $object_id ) {
 
-		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="', self::esc( $meta, 'esc_url' ), '" />';
+		echo '<input class="cmb_upload_file cmb_upload_list" type="hidden" size="45" id="', $field['id'], '" name="', $field['id'], '" value="" />';
 		echo '<input class="cmb_upload_button button cmb_upload_list" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />', self::desc( true );
 
 		echo '<ul id="', $field['id'], '_status" class="cmb_media_status attach_list">';
 
-		if ( $meta ) {
+		if ( $meta && is_array( $meta ) ) {
+
+			$preview_size = empty( $field['preview_size'] ) ? array( 50, 50 ) : $field['preview_size'];
 
 			foreach ( $meta as $id => $fullurl ) {
 				if ( self::is_valid_img_ext( $fullurl ) ) {
 					echo
 					'<li class="img_status">',
-						wp_get_attachment_image( $id, array( 50, 50 ) ),
+						wp_get_attachment_image( $id, $preview_size ),
 						'<p><a href="#" class="cmb_remove_file_button">'. __( 'Remove Image', 'cmb' ) .'</a></p>
 						<input type="hidden" id="filelist-', $id ,'" name="', $field['id'] ,'[', $id ,']" value="', $fullurl ,'" />
 					</li>';
