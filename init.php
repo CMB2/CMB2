@@ -285,7 +285,7 @@ class cmb_Meta_Box {
 			wp_enqueue_script( 'cmb-scripts' );
 
 			// default is to show cmb styles on post pages
-			if ( $this->_meta_box['cmb_styles'] != false )
+			if ( $this->_meta_box['cmb_styles'] )
 				wp_enqueue_style( 'cmb-styles' );
 		}
 	}
