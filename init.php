@@ -379,8 +379,6 @@ class cmb_Meta_Box {
 				continue;
 
 			$field = self::set_field_defaults( $field );
-			if ( ! isset( $field['multiple'] ) )
-				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
 
 			// Allow an override for the field's value
 			// (assuming no one would want to save 'cmb_no_override_val' as a value)
@@ -912,7 +910,8 @@ class cmb_Meta_Box {
 		$field['default']    = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
 		$field['allow']      = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
 		$field['save_id']    = 'file' == $field['type'] && ! isset( $field['save_id'] );
-		$field['multiple']   = 'multicheck' == $field['type'];
+		if ( ! isset( $field['multiple'] ) )
+			$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
 		$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 		$field['inline']     = isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' );
 	}
