@@ -413,7 +413,7 @@ class cmb_Meta_Box {
 
 			echo $field['after'];
 
-			echo "\n<</td>\n</tr>";
+			echo "\n</td>\n</tr>";
 		}
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
