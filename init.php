@@ -413,7 +413,7 @@ class cmb_Meta_Box {
 
 			echo $field['after'];
 
-			echo "\n<</td>\n</tr>";
+			echo "\n</td>\n</tr>";
 		}
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
@@ -913,7 +913,10 @@ class cmb_Meta_Box {
 		$field['multiple']   = 'multicheck' == $field['type'];
 		$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 		$field['inline']     = isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' );
+
+		return $field;
 	}
+
 
 	/**
 	 * Fills in empty metabox parameters with defaults
