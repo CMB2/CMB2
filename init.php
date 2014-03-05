@@ -913,7 +913,10 @@ class cmb_Meta_Box {
 		$field['multiple']   = 'multicheck' == $field['type'];
 		$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 		$field['inline']     = isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' );
+
+		return $field;
 	}
+
 
 	/**
 	 * Fills in empty metabox parameters with defaults
