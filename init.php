@@ -285,7 +285,7 @@ class cmb_Meta_Box {
 			wp_enqueue_script( 'cmb-scripts' );
 
 			// default is to show cmb styles on post pages
-			if ( $this->_meta_box['cmb_styles'] != false )
+			if ( $this->_meta_box['cmb_styles'] )
 				wp_enqueue_style( 'cmb-styles' );
 		}
 	}
@@ -378,21 +378,7 @@ class cmb_Meta_Box {
 			if ( isset( $field['on_front'] ) && $field['on_front'] == false )
 				continue;
 
-			self::$field =& $field;
-
-			// Set up blank or default values for empty ones
-			if ( ! isset( $field['name'] ) ) $field['name'] = '';
-			if ( ! isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( ! isset( $field['default'] ) ) {
-				// Phase out 'std', and use 'default' instead
-				$field['default'] = isset( $field['std'] ) ? $field['std'] : '';
-			}
-			// Allow a filter override of the default value
-			$field['default'] = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
-			// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
-			$field['default'] = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
-			$field['allow'] = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
-			$field['save_id'] = 'file' == $field['type'] && ! isset( $field['save_id'] );
+			$field = self::set_field_defaults( $field );
 			if ( ! isset( $field['multiple'] ) )
 				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
 
@@ -405,16 +391,14 @@ class cmb_Meta_Box {
 				$meta = self::get_data();
 
 			$classes = '';
-			$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 			$classes .= $field['repeatable'] ? ' cmb-repeat' : '';
 			// 'inline' flag, or _inline in the field type, set to true
-			$inline = ( isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' ) );
-			$classes .= $inline ? ' cmb-inline' : '';
+			$classes .= $field['inline'] ? ' cmb-inline' : '';
 
 			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $classes .'">';
 
 			if ( $field['type'] == "title" ) {
-				echo '<td colspan="2">';
+				echo '<td colspan="2">'."\n";
 			} else {
 				if ( isset( $meta_box['show_names'] ) && $meta_box['show_names'] == true ) {
 					$style = $object_type == 'post' ? ' style="width:18%"' : '';
@@ -422,16 +406,16 @@ class cmb_Meta_Box {
 				} else {
 					echo '<label style="display:none;" for="', $field['id'], '">', $field['name'], '</label></th>';
 				}
-				echo '<td>';
+				echo "<td>\n";
 			}
 
-			echo empty( $field['before'] ) ? '' : $field['before'];
+			echo $field['before'];
 
 			call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
 
-			echo empty( $field['after'] ) ? '' : $field['after'];
+			echo $field['after'];
 
-			echo '</td>','</tr>';
+			echo "\n<</td>\n</tr>";
 		}
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
@@ -902,6 +886,35 @@ class cmb_Meta_Box {
 		}
 
 		return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
+	}
+
+	/**
+	 * Fills in empty field parameters with defaults
+	 * @since  1.0.3
+	 * @param  array $field Metabox field config array
+	 */
+	public static function set_field_defaults( $field ) {
+		self::$field =& $field;
+
+		// Set up blank or default values for empty ones
+		if ( ! isset( $field['name'] ) ) $field['name'] = '';
+		if ( ! isset( $field['desc'] ) ) $field['desc'] = '';
+		if ( ! isset( $field['before'] ) ) $field['before'] = '';
+		if ( ! isset( $field['after'] ) ) $field['after'] = '';
+		if ( ! isset( $field['default'] ) ) {
+			// Phase out 'std', and use 'default' instead
+			$field['default'] = isset( $field['std'] ) ? $field['std'] : '';
+		}
+		if ( ! isset( $field['preview_size'] ) ) $field['preview_size'] = array( 50, 50 );
+		// Allow a filter override of the default value
+		$field['default']    = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
+		// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
+		$field['default']    = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
+		$field['allow']      = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
+		$field['save_id']    = 'file' == $field['type'] && ! isset( $field['save_id'] );
+		$field['multiple']   = 'multicheck' == $field['type'];
+		$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
+		$field['inline']     = isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' );
 	}
 
 	/**
