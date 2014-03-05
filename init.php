@@ -910,7 +910,8 @@ class cmb_Meta_Box {
 		$field['default']    = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
 		$field['allow']      = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
 		$field['save_id']    = 'file' == $field['type'] && ! isset( $field['save_id'] );
-		$field['multiple']   = 'multicheck' == $field['type'];
+		if ( ! isset( $field['multiple'] ) )
+			$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
 		$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
 		$field['inline']     = isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' );
 
