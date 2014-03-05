@@ -21,6 +21,8 @@ New in version 1.0.0:
 * Bring your metaboxes to the frontend.
 * Create metaboxes to handle user meta and display them on user profile add/edit pages. Or even on the front-end.
 
+All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
+
 ##### Links
 * [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
