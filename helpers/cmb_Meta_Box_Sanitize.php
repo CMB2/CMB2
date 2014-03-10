@@ -113,10 +113,10 @@ class cmb_Meta_Box_Sanitize {
 		// for repeatable
 		if ( is_array( $value ) ) {
 			foreach ( $value as $key => $val ) {
-				$value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $value ), 2 );
+				$value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 			}
 		} else {
-			$value = number_format_i18n( (float) str_ireplace( $search, $replace, $meta ), 2 );
+			$value = number_format_i18n( (float) str_ireplace( $search, $replace, $value ), 2 );
 		}
 
 		return $value;
