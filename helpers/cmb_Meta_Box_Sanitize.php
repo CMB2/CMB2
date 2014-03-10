@@ -108,7 +108,7 @@ class cmb_Meta_Box_Sanitize {
 		global $wp_locale;
 		
 		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
-		$replace = array( '', $wp_locale->number_format['thousands_sep'] );
+		$replace = array( '', '.' );
 
 		// for repeatable
 		if ( is_array( $value ) ) {
