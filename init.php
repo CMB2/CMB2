@@ -71,6 +71,7 @@ class cmb_Meta_Box {
 	protected static $mb_defaults = array(
 		'id'         => '',
 		'title'      => '',
+		'type'       => '',
 		'pages'      => array(), // Post type
 		'context'    => 'normal',
 		'priority'   => 'high',
@@ -365,77 +366,49 @@ class cmb_Meta_Box {
 		// Set/get ID
 		$object_id = self::set_object_id( $object_id ? $object_id : self::get_object_id() );
 
-		// get box types
-		$types = cmb_Meta_Box_types::get();
-
 		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
 		wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
 		do_action( 'cmb_before_table', $meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
-		foreach ( $meta_box['fields'] as $field ) {
+		foreach ( $meta_box['fields'] as $field_args ) {
 
-			if ( isset( $field['on_front'] ) && $field['on_front'] == false )
-				continue;
+			$field = new cmb_Meta_Box_field( $field_args, $object_id, $object_type );
 
 			self::$field =& $field;
 
-			// Set up blank or default values for empty ones
-			if ( ! isset( $field['name'] ) ) $field['name'] = '';
-			if ( ! isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( ! isset( $field['default'] ) ) {
-				// Phase out 'std', and use 'default' instead
-				$field['default'] = isset( $field['std'] ) ? $field['std'] : '';
-			}
-			// Allow a filter override of the default value
-			$field['default'] = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
-			// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
-			$field['default'] = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
-			$field['allow'] = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
-			$field['save_id'] = 'file' == $field['type'] && ! isset( $field['save_id'] );
-			$field['multiple'] = 'multicheck' == $field['type'];
+			if ( ! $field->args( 'on_front' ) )
+				continue;
 
-			// Allow an override for the field's value
-			// (assuming no one would want to save 'cmb_no_override_val' as a value)
-			$meta = apply_filters( 'cmb_override_meta_value', 'cmb_no_override_val', $object_id, $field, $object_type );
-
-			// If no override, get our meta
-			if ( $meta === 'cmb_no_override_val' )
-				$meta = self::get_data();
-
+			$type    = $field->args( 'type' );
 			$classes = '';
-			$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
-			$classes .= $field['repeatable'] ? ' cmb-repeat' : '';
+			$classes .= $field->args( 'repeatable' ) ? ' cmb-repeat' : '';
 			// 'inline' flag, or _inline in the field type, set to true
-			$inline = ( isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' ) );
-			$classes .= $inline ? ' cmb-inline' : '';
+			$classes .= $field->args( 'inline' ) ? ' cmb-inline' : '';
 
-			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $classes .'">';
+			echo '<tr class="cmb-type-'. sanitize_html_class( $type ) .' cmb_id_'. sanitize_html_class( $field->args( 'id' ) ) . $classes .'">';
 
-			if ( $field['type'] == "title" ) {
-				echo '<td colspan="2">';
+			if ( $type == "title" ) {
+				echo '<td colspan="2">'."\n";
 			} else {
-				if ( isset( $meta_box['show_names'] ) && $meta_box['show_names'] == true ) {
+				if ( isset( $meta_box['show_names'] ) && $meta_box['show_names'] ) {
 					$style = $object_type == 'post' ? ' style="width:18%"' : '';
-					echo '<th'. $style .'><label for="', $field['id'], '">', $field['name'], '</label></th>';
+					echo '<th'. $style .'><label for="', $field->args( 'id' ), '">', $field->args( 'name' ), '</label></th>';
 				} else {
-					echo '<label style="display:none;" for="', $field['id'], '">', $field['name'], '</label></th>';
+					echo '<label style="display:none;" for="', $field->args( 'id' ), '">', $field->args( 'name' ), '</label></th>';
 				}
-				echo '<td>';
+				echo "<td>\n";
 			}
 
-			echo empty( $field['before'] ) ? '' : $field['before'];
+			echo $field->args( 'before' );
 
-			if ( true == $field['repeatable'] ) {
-				call_user_func( array( $types, 'render_repeatable_field' ), $field, $meta, $object_id, $object_type );
-			} else {
-				call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
-			}
+			$field_type = new cmb_Meta_Box_types( $field );
+			$field_type->render();
 
-			echo empty( $field['after'] ) ? '' : $field['after'];
+			echo $field->args( 'after' );
 
-			echo '</td>','</tr>';
+			echo "\n</td>\n</tr>";
 		}
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
@@ -507,37 +480,25 @@ class cmb_Meta_Box {
 		// save field ids of those that are updated
 		$updated = array();
 
-		foreach ( $meta_box['fields'] as $field ) {
+		foreach ( $meta_box['fields'] as $field_args ) {
+
+			$field = new cmb_Meta_Box_field( $field_args, $object_id, $object_type );
 
 			self::$field =& $field;
-			$name = $field['id'];
-
-			if ( ! isset( $field['multiple'] ) )
-				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
+			$name = $field->args( 'id' );
 
 			$old = self::get_data();
-			$new = isset( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : null;
+			$new = isset( $_POST[ $name ] ) ? $_POST[ $name ] : null;
 
-
-			if ( $object_type == 'post' ) {
-
-				if (
-					isset( $field['taxonomy'] )
-					&& in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) )
-				)
-					$new = wp_set_object_terms( $object_id, $new, $field['taxonomy'] );
-
-			}
-
-			if ( isset( $field['repeatable'] ) && $field['repeatable'] && is_array( $new ) ) {
+			if ( $field->args( 'repeatable' ) && is_array( $new ) ) {
+				// Remove empties
 				$new = array_filter( $new );
 			}
 
 			// Check if this metabox field has a registered validation callback, or perform default sanitization
 			$new = self::sanitization_cb( $new );
 
-			if ( $field['multiple'] ) {
-
+			if ( $field->args( 'multiple' ) && ! $field->args( 'repeatable' ) ) {
 				self::remove_data( $name );
 				if ( ! empty( $new ) ) {
 					foreach ( $new as $add_new ) {
@@ -598,8 +559,7 @@ class cmb_Meta_Box {
 	 * @return string           Offset time string
 	 */
 	public static function timezone_offset( $tzstring ) {
-		if ( !empty( $tzstring ) ) {
-
+		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
 			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
 				$tzstring = str_replace( array( ':15',':30',':45' ), array( '.25','.5','.75' ), $tzstring );
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
@@ -638,12 +598,10 @@ class cmb_Meta_Box {
 		if ( ! ( $object_id = self::get_object_id( $object_id ) ) )
 			return $tzstring;
 
-		if ( array_key_exists( 'timezone', self::$field ) && self::$field['timezone'] ) {
-			$tzstring = self::$field['timezone'];
-		} else if ( array_key_exists( 'timezone_meta_key', self::$field ) && self::$field['timezone_meta_key'] ) {
-			$tzstring = self::get_data( self::$field['timezone_meta_key'] );
-
-			return $tzstring;
+		if ( self::$field->args( 'timezone' ) ) {
+			return self::$field->args( 'timezone' );
+		} else if ( self::$field->args( 'timezone_meta_key' ) ) {
+			return self::$field->args( 'timezone_meta_key' );
 		}
 
 		return false;
@@ -830,55 +788,50 @@ class cmb_Meta_Box {
 	 * Checks if field has a registered validation callback
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
-	 * @param  array $field      Field config array
+	 * @param  null  $field      Field object
 	 * @return mixed             Possibly validated meta value
 	 */
-	public static function sanitization_cb( $meta_value, $field = array() ) {
+	public static function sanitization_cb( $meta_value, $field = null ) {
 		if ( empty( $meta_value ) )
 			return $meta_value;
 
-		$field = $field !== array() ? $field : self::$field;
+		$field = $field !== null ? $field : self::$field;
 
 		// Check if the field has a registered validation callback
-		$cb = self::maybe_callback( $field, 'sanitization_cb' );
+		$cb = self::maybe_callback( $field->args(), 'sanitization_cb' );
 		if ( false === $cb ) {
 			// If requestion NO validation, return meta value
 			return $meta_value;
 		} elseif ( $cb ) {
 			// Ok, callback is good, let's run it.
-			return call_user_func( $cb, $meta_value, $field );
+			return call_user_func( $cb, $meta_value, $field->args() );
 		}
 
+		$clean = new cmb_Meta_Box_Sanitize( $field, $meta_value );
 		// Validation via 'cmb_Meta_Box_Sanitize' (with fallback filter)
-		return call_user_func( array( cmb_Meta_Box_Sanitize::get(), $field['type'] ), $meta_value, $field );
+		return $clean->{$field->args( 'type' )}( $meta_value );
 	}
 
 	/**
 	 * Checks if field has a callback value
 	 * @since  1.0.1
-	 * @param  array   $field Field config array
+	 * @param  array  $field Field config array
 	 * @param  string  $cb    Callback string
 	 * @return mixed          NULL, false for NO validation, or $cb string if it exists.
 	 */
-	public static function maybe_callback( $field, $cb ) {
-		if ( ! isset( $field[ $cb ] ) )
+	public static function maybe_callback( $field_args, $cb ) {
+		if ( ! isset( $field_args[ $cb ] ) )
 			return;
 
 		// Check if metabox is requesting NO validation
-		$cb = false !== $field[ $cb ] && 'false' !== $field[ $cb ] ? $field[ $cb ] : false;
+		$cb = false !== $field_args[ $cb ] && 'false' !== $field_args[ $cb ] ? $field_args[ $cb ] : false;
 
 		// If requestion NO validation, return false
 		if ( ! $cb )
 			return false;
 
-		if (
-			// Standard function
-			( is_string( $cb ) && function_exists( $cb ) )
-			// Or Class method
-			|| ( is_array( $cb ) && is_callable( $cb ) )
-		) {
+		if ( is_callable( $cb ) )
 			return $cb;
-		}
 
 	}
 
@@ -928,11 +881,13 @@ class cmb_Meta_Box {
 
 		$type     = self::get_object_type();
 		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
+		$field_id = $field_id ? $field_id : self::$field->args( 'id' );
+		$single   = ! self::$field->args( 'multiple' );
+		$repeat   = self::$field->args( 'repeatable' );
 
 		$data = 'options-page' === $type
 			? self::get_option( $id, $field_id )
-			: get_metadata( $type, $id, $field_id, !self::$field['multiple'] /* If multicheck this can be multiple values */ );
+			: get_metadata( $type, $id, $field_id, ( $single || $repeat ) /* If multicheck this can be multiple values */ );
 
 		return $data;
 	}
@@ -947,17 +902,19 @@ class cmb_Meta_Box {
 	 */
 	public static function update_data( $value, $field_id = '', $multiple = false ) {
 
+		$repeat   = self::$field->args( 'repeatable' );
 		$type     = self::get_object_type();
 		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
+		$field_id = $field_id ? $field_id : self::$field->args( 'id' );
+		$value    = $repeat ? array_values( $value ) : $value;
 
 		if ( 'options-page' === $type ) {
-			self::update_option( $id, $field_id, $value );
+			return self::update_option( $id, $field_id, $value );
 		} else {
 			if ( $multiple ) {
-				add_metadata( $type, $id, $field_id, $value, false );
+				return add_metadata( $type, $id, $field_id, $value, false );
 			} else {
-				update_metadata( $type, $id, $field_id, $value );
+				return update_metadata( $type, $id, $field_id, $value );
 			}
 		}
 	}
@@ -972,7 +929,7 @@ class cmb_Meta_Box {
 
 		$type     = self::get_object_type();
 		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
+		$field_id = $field_id ? $field_id : self::$field->args( 'id' );
 
 		$data = 'options-page' === $type
 			? self::remove_option( $id, $field_id )
@@ -1021,14 +978,14 @@ class cmb_Meta_Box {
 	 * @param  string  $option_key Option key
 	 * @param  string  $field_id   Option array field key
 	 * @param  mixed   $value      Value to update data with
-	 * @param  array   $field      Optionally specify a field array
+	 * @param  object  $field      Optionally specify a field object
 	 * @return array               Modified options
 	 */
-	public static function update_option( $option_key, $field_id, $value, $field = array() ) {
+	public static function update_option( $option_key, $field_id, $value, $field = null ) {
 
-		$field = $field !== array() ? $field : self::$field;
+		$field = $field !== null ? $field : self::$field;
 
-		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
+		if ( $field->args( 'multiple' ) ) {
 			// If multiple, add to array
 			self::$options[ $option_key ][ $field_id ][] = $value;
 		} else {
