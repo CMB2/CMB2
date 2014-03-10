@@ -128,7 +128,7 @@ class cmb_Meta_Box_ajax {
 
 		// Send back our embed
 		if ( $check_embed && $check_embed != $fallback )
-			return '<div class="embed_status">'. $check_embed .'<p><a href="#" class="cmb_remove_file_button" rel="'. $args['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></p></div>';
+			return '<div class="embed_status">'. $check_embed .'<p class="cmb_remove_wrapper"><a href="#" class="cmb_remove_file_button" rel="'. $args['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></p></div>';
 
 		// Otherwise, send back error info that no oEmbeds were found
 		return '<p class="ui-state-error-text">'. sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
