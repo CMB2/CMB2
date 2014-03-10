@@ -104,13 +104,19 @@ class cmb_Meta_Box_Sanitize {
 	 * @return string       Empty string or validated money value
 	 */
 	public function text_money( $value ) {
+		
+		global $wp_locale;
+		
+		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
+		$replace = array( '', $wp_locale->number_format['thousands_sep'] );
+
 		// for repeatable
 		if ( is_array( $value ) ) {
 			foreach ( $value as $key => $val ) {
-				$value[ $key ] = number_format( (float) str_ireplace( ',', '', $val ), 2, '.', ',');
+				$value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $value ), 2 );
 			}
 		} else {
-			$value = number_format( (float) str_ireplace( ',', '', $value ), 2, '.', ',');
+			$value = number_format_i18n( (float) str_ireplace( $search, $replace, $meta ), 2 );
 		}
 
 		return $value;
