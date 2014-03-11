@@ -25,8 +25,59 @@ class cmb_Meta_Box_Sanitize {
 	 * @param mixed  $value Field value
 	 */
 	public function __construct( $field, $value ) {
-		$this->field = $field;
-		$this->value = $value;
+		$this->field       = $field;
+		$this->value       = $value;
+		$this->object_id   = cmb_Meta_Box::get_object_id();
+		$this->object_type = cmb_Meta_Box::get_object_type();
+	}
+
+	/**
+	 * Catchall method if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
+	 * @since  1.0.0
+	 * @param  string $name      Non-existent method name
+	 * @param  array  $arguments All arguments passed to the method
+	 */
+	public function __call( $name, $arguments ) {
+		list( $value ) = $arguments;
+		return $this->default_sanitization( $value );
+	}
+
+	/**
+	 * Default fallback sanitization method. Applies filters.
+	 * @since  1.0.2
+	 * @param  mixed $value Meta value
+	 */
+	public function default_sanitization( $value ) {
+
+		// Allow field type validation via filter
+		$updated = apply_filters( 'cmb_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
+
+		if ( null !== $updated )
+			return $updated;
+
+		switch ( $this->field->type() ) {
+			case 'wysiwyg':
+				// $value = wp_kses( $value );
+				// break;
+			case 'textarea_small':
+				return $this->textarea( $value );
+			case 'taxonomy_select':
+			case 'taxonomy_radio':
+			case 'taxonomy_multicheck':
+				if ( $this->field->args( 'taxonomy' ) ) {
+					return wp_set_object_terms( $this->object_id, $value, $this->field->args( 'taxonomy' ) );
+				}
+			case 'multicheck':
+			case 'file_list':
+			case 'oembed':
+				// no filtering
+				return $value;
+			default:
+				// Handle repeatable fields array
+				// We'll fallback to 'sanitize_text_field'
+				return is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : call_user_func( 'sanitize_text_field', $value );
+		}
+
 	}
 
 	/**
@@ -46,7 +97,6 @@ class cmb_Meta_Box_Sanitize {
 	 * @return string        Empty string or escaped url
 	 */
 	public function text_url( $value ) {
-
 		$protocols = $this->field->args( 'protocols' );
 		// for repeatable
 		if ( is_array( $value ) ) {
@@ -143,7 +193,7 @@ class cmb_Meta_Box_Sanitize {
 
 		$value = strtotime( $value['date'] .' '. $value['time'] );
 
-		if ( $tz_offset = cmb_Meta_Box::field_timezone_offset() )
+		if ( $tz_offset = $this->field->field_timezone_offset() )
 			$value += $tz_offset;
 
 		return $value;
@@ -214,10 +264,10 @@ class cmb_Meta_Box_Sanitize {
 	 */
 	public function file( $value ) {
 		$args = $this->field->args();
-		$id = $this->field->args( 'id' );
+		$id = $this->field->id();
 		$_id_name = $id .'_id';
 		// get _id old value
-		$_id_old = cmb_Meta_Box::get_data( $_id_name );
+		$_id_old = $this->field->get_data( $_id_name );
 
 		// If specified NOT to save the file ID
 		if ( isset( $args['save_id'] ) && ! $args['save_id'] ) {
@@ -240,60 +290,6 @@ class cmb_Meta_Box_Sanitize {
 		}
 
 		return $this->default_sanitization( $value );
-
-	}
-
-	/**
-	 * Catchall method if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
-	 * @since  1.0.0
-	 * @param  string $name      Non-existent method name
-	 * @param  array  $arguments All arguments passed to the method
-	 */
-	public function __call( $name, $arguments ) {
-		list( $value ) = $arguments;
-		return $this->default_sanitization( $value );
-	}
-
-	/**
-	 * Default fallback sanitization method. Applies filters.
-	 * @since  1.0.2
-	 * @param  mixed $value Meta value
-	 */
-	public function default_sanitization( $value ) {
-
-		$object_type = cmb_Meta_Box::get_object_type();
-		$object_id   = cmb_Meta_Box::get_object_id();
-		// Allow field type validation via filter
-		$updated     = apply_filters( 'cmb_validate_'. $this->field->args( 'type' ), null, $value, $object_id, $this->field->args(), $object_type, $this->field );
-
-		if ( null != $updated ) {
-			return $updated;
-		}
-
-		$pre = $value;
-
-		// we'll fallback to 'sanitize_text_field', or 'wp_kses_post`
-		switch ( $this->field->args( 'type' ) ) {
-			case 'wysiwyg':
-				// $value = wp_kses( $value );
-				// break;
-			case 'textarea_small':
-				return $this->textarea( $value );
-			case 'taxonomy_select':
-			case 'taxonomy_radio':
-			case 'taxonomy_multicheck':
-				if ( $this->field->args( 'taxonomy' ) ) {
-					return wp_set_object_terms( $object_id, $value, $this->field->args( 'taxonomy' ) );
-				}
-			case 'multicheck':
-			case 'file_list':
-			case 'oembed':
-				// no filtering
-				return $value;
-			default:
-				// Handle repeatable fields array
-				return is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : call_user_func( 'sanitize_text_field', $value );
-		}
 
 	}
 
