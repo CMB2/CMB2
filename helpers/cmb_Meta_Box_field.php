@@ -9,47 +9,53 @@ class cmb_Meta_Box_field {
 	/**
 	 * Metabox object id
 	 * @var   mixed
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	public $object_id;
 
 	/**
 	 * Metabox object type
 	 * @var   mixed
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	public $object_type;
 
 	/**
 	 * Field arguments
 	 * @var   mixed
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	public $args;
 
 	/**
-	 * Field meta value
+	 * Field group arguments
 	 * @var   mixed
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
-	public $meta;
+	public $group;
 
 	/**
-	 * An iterator value for repeatable fields
-	 * @var   integer
-	 * @since 1.0.0
+	 * Field meta value
+	 * @var   mixed
+	 * @since 1.0.3
 	 */
-	public $iterator = 0;
+	public $value;
 
-
-	public function __construct( $field_args, $object_id, $object_type ) {
-		$this->object_id   = $object_id;
-		$this->object_type = $object_type;
-		$this->args        = $this->set_field_defaults( $field_args );
+	/**
+	 * Constructs our field object
+	 * @since 1.0.3
+	 * @param array $field_args       Field arguments
+	 * @param array $group_field_args (optional) Group field arguments
+	 */
+	public function __construct( $field_args, $group_field_args = array() ) {
+		$this->object_id   = cmb_Meta_Box::get_object_id();
+		$this->object_type = cmb_Meta_Box::get_object_type();
+		$this->args        = $this->_set_field_defaults( $field_args );
+		$this->group       = ! empty( $group_field_args ) ? $group_field_args : false;
 
 		// Allow an override for the field's value
 		// (assuming no one would want to save 'cmb_no_override_val' as a value)
-		$this->value = apply_filters( 'cmb_override_meta_value', 'cmb_no_override_val', $object_id, $this->args(), $object_type, $this );
+		$this->value = apply_filters( 'cmb_override_meta_value', 'cmb_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
 
 		// If no override, get our meta
 		$this->value = 'cmb_no_override_val' === $this->value
@@ -57,14 +63,44 @@ class cmb_Meta_Box_field {
 			: $this->value;
 	}
 
+	/**
+	 * Non-existent methods fallback to checking for field arguments of the same name
+	 * @since  1.0.3
+	 * @param  string $name     Method name
+	 * @param  array  $arguments Array of passed-in arguments
+	 * @return mixed             Value of field argument
+	 */
+	public function __call( $name, $arguments ) {
+		return $this->args( $name );
+	}
+
+	/**
+	 * Get a field argument
+	 * @since  1.0.3
+	 * @param  string $key Argument to check
+	 * @return mixed       Argument value or false if non-existent
+	 */
 	public function args( $key = '' ) {
 		return $this->_data( 'args', $key );
 	}
 
+	/**
+	 * Get Field's value
+	 * @since  1.0.3
+	 * @param  string $key If value is an array, is used to get array key->value
+	 * @return mixed       Field value or false if non-existent
+	 */
 	public function value( $key = '' ) {
 		return $this->_data( 'value', $key );
 	}
 
+	/**
+	 * Retrieve a portion of a field property
+	 * @since  1.0.3
+	 * @param  string  $var Field property to check
+	 * @param  string  $key Field property array key to check
+	 * @return mixed        Queried property value or false
+	 */
 	public function _data( $var, $key = '' ) {
 		$vars = $this->$var;
 		if ( $key ) {
@@ -79,36 +115,149 @@ class cmb_Meta_Box_field {
 	 * @param  string  $field_id Meta key/Option array key
 	 * @return mixed             Meta/Option value
 	 */
-	public function get_data() {
-
-		$type     = $this->object_type;
-		$id       = $this->object_id;
-		$field_id = $this->args( 'id' );
-		$single   = ! $this->args( 'multiple' );
-		$repeat   = $this->args( 'repeatable' );
+	public function get_data( $field_id = '', $args = array() ) {
+		if ( $field_id ) {
+			$args['field_id'] = $field_id;
+		} else if ( $this->group ) {
+			$args['field_id'] = $this->group['id'];
+		}
+		extract( $this->data_args( $args ) );
 
 		$data = 'options-page' === $type
 			? cmb_Meta_Box::get_option( $id, $field_id )
 			: get_metadata( $type, $id, $field_id, ( $single || $repeat ) /* If multicheck this can be multiple values */ );
 
+		if ( $this->group ) {
+			$data = isset( $data[ $this->group['count'] ][ $this->args( '_id' ) ] )
+				? $data[ $this->group['count'] ][ $this->args( '_id' ) ]
+				: false;
+		}
 		return $data;
 	}
 
+	/**
+	 * Updates metadata/option data
+	 * @since  1.0.1
+	 * @param  mixed $value  Value to update data with
+	 * @param  bool  $single Whether data is an array (add_metadata)
+	 */
+	public function update_data( $new_value, $single = true ) {
+		extract( $this->data_args( array( 'new_value' => $new_value, 'single' => $single ) ) );
+
+		$new_value = $repeat ? array_values( $new_value ) : $new_value;
+
+		if ( 'options-page' === $type )
+			return cmb_Meta_Box::update_option( $id, $field_id, $new_value, $single );
+
+		if ( ! $single )
+			return add_metadata( $type, $id, $field_id, $new_value, false );
+
+		return update_metadata( $type, $id, $field_id, $new_value );
+	}
+
+	/**
+	 * Removes/updates metadata/option data
+	 * @since  1.0.1
+	 * @param  string $old Old value
+	 */
+	public function remove_data( $old = '' ) {
+		extract( $this->data_args() );
+
+		return 'options-page' === $type
+			? cmb_Meta_Box::remove_option( $id, $field_id )
+			: delete_metadata( $type, $id, $field_id, $old );
+	}
+
+	/**
+	 * data variables for get/set data methods
+	 * @since  1.0.3
+	 * @param  array $args Override arguments
+	 * @return array       Updated arguments
+	 */
+	public function data_args( $args = array() ) {
+		return wp_parse_args( $args, array(
+			'type'     => $this->object_type,
+			'id'       => $this->object_id,
+			'field_id' => $this->id(),
+			'repeat'   => $this->args( 'repeatable' ),
+			'single'   => ! $this->args( 'multiple' ),
+		) );
+	}
+
+	/**
+	 * Checks if field has a registered validation callback
+	 * @since  1.0.1
+	 * @param  mixed $meta_value Meta value
+	 * @return mixed             Possibly validated meta value
+	 */
+	public function sanitization_cb( $meta_value ) {
+		if ( empty( $meta_value ) )
+			return $meta_value;
+
+		// Check if the field has a registered validation callback
+		$cb = $this->maybe_callback( 'sanitization_cb' );
+		if ( false === $cb ) {
+			// If requestion NO validation, return meta value
+			return $meta_value;
+		} elseif ( $cb ) {
+			// Ok, callback is good, let's run it.
+			return call_user_func( $cb, $meta_value, $this->args(), $this );
+		}
+
+		$clean = new cmb_Meta_Box_Sanitize( $this, $meta_value );
+		// Validation via 'cmb_Meta_Box_Sanitize' (with fallback filter)
+		return $clean->{$this->type()}( $meta_value );
+	}
+
+	/**
+	 * Checks if field has a callback value
+	 * @since  1.0.1
+	 * @param  string $cb Callback string
+	 * @return mixed      NULL, false for NO validation, or $cb string if it exists.
+	 */
+	public function maybe_callback( $cb ) {
+		$field_args = $this->args();
+		if ( ! isset( $field_args[ $cb ] ) )
+			return;
+
+		// Check if metabox is requesting NO validation
+		$cb = false !== $field_args[ $cb ] && 'false' !== $field_args[ $cb ] ? $field_args[ $cb ] : false;
+
+		// If requestion NO validation, return false
+		if ( ! $cb )
+			return false;
+
+		if ( is_callable( $cb ) )
+			return $cb;
+	}
+
+	/**
+	 * Determine if current type is excempt from escaping
+	 * @since  1.0.3
+	 * @return bool  True if exempt
+	 */
 	public function escaping_exception() {
 		// These types cannot be escaped
-		return in_array( $this->args( 'type' ), array(
+		return in_array( $this->type(), array(
 			'file_list',
 			'multicheck',
 			'text_datetime_timestamp_timezone',
 		) );
 	}
 
+	/**
+	 * Determine if current type cannot be repeatable
+	 * @since  1.0.3
+	 * @param  string $type Field type to check
+	 * @return bool         True if type cannot be repeatable
+	 */
 	public function repeatable_exception( $type ) {
 		// These types cannot be escaped
 		return in_array( $type, array(
-			'title',
 			'file', // Use file_list
 			'radio',
+			'title',
+			'group',
 			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
 			'wysiwyg',
 			'checkbox',
@@ -133,7 +282,7 @@ class cmb_Meta_Box_field {
 
 		$meta_value = $meta_value ? $meta_value : $this->value();
 		// Check if the field has a registered escaping callback
-		$cb = cmb_Meta_Box::maybe_callback( $this->args(), 'escape_cb' );
+		$cb = $this->maybe_callback( 'escape_cb' );
 		if ( false === $cb || $this->escaping_exception() ) {
 			// If requesting NO escaping, return meta value
 			return $meta_value;
@@ -143,7 +292,7 @@ class cmb_Meta_Box_field {
 		}
 
 		// Or custom escaping filter can be used
-		$esc = apply_filters( 'cmb_types_esc_'. $this->args( 'type' ), null, $meta_value, $this->args(), $this );
+		$esc = apply_filters( 'cmb_types_esc_'. $this->type(), null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
 		}
@@ -165,11 +314,87 @@ class cmb_Meta_Box_field {
 	}
 
 	/**
-	 * Fills in empty field parameters with defaults
-	 * @since  1.0.3
-	 * @param  array $field Metabox field config array
+	 * Offset a time value based on timezone
+	 * @since  1.0.0
+	 * @return string Offset time string
 	 */
-	public function set_field_defaults( $args ) {
+	public function field_timezone_offset() {
+		return cmb_Meta_Box::timezone_offset( $this->field_timezone() );
+	}
+
+	/**
+	 * Return timezone string
+	 * @since  1.0.0
+	 * @return string Timezone string
+	 */
+	public function field_timezone() {
+
+		// Is timezone arg set?
+		if ( $this->args( 'timezone' ) ) {
+			return $this->args( 'timezone' ) ;
+		}
+		// Is there another meta key with a timezone stored as its value we should use?
+		else if ( $this->args( 'timezone_meta_key' ) ) {
+			return $this->get_data( $this->args( 'timezone_meta_key' ) );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Render a field row
+	 * @since 1.0.0
+	 * @param boolean $show_names Whether field names should be visible
+	 */
+	public function render_field( $show_names = true ) {
+
+		if ( ! $this->args( 'on_front' ) )
+			continue;
+		$classes = 'cmb-type-'. sanitize_html_class( $this->type() );
+		$classes .= ' cmb_id_'. sanitize_html_class( $this->id() );
+		$classes .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
+		// 'inline' flag, or _inline in the field type, set to true
+		$classes .= $this->args( 'inline' ) ? ' cmb-inline' : '';
+
+
+		printf( "<tr class=\"%s\">\n", $classes );
+
+		if ( 'title' == $this->type() || ! $show_names ) {
+			echo "\t<td colspan=\"2\">\n";
+			if ( ! $show_names ) {
+				printf( '<label style="display:none;" for="%s">%s</label>', $this->id(), $this->args( 'name' ) );
+			}
+		} else {
+
+			$style = 'post' == $this->object_type ? ' style="width:18%"' : '';
+			printf( '<th%s><label for="%s">%s</label></th>', $style, $this->id(), $this->args( 'name' ) );
+
+			echo "\n\t<td>\n";
+		}
+
+		echo $this->args( 'before' );
+
+		if ( isset( $_GET['jtdebug'] ) ) {
+			$val = $this->value();
+			if ( is_array( $val ) )
+				echo '<xmp>$val: '. print_r( $val, true ) .'</xmp>';
+			else
+				echo '<p>$val: '. $val .'</p>';
+		}
+		$this_type = new cmb_Meta_Box_types( $this );
+		$this_type->render();
+
+		echo $this->args( 'after' );
+
+		echo "\n\t</td>\n</tr>";
+	}
+
+	/**
+	 * Fills in empty field parameters with defaults
+	 * @since 1.0.3
+	 * @param array $args Metabox field config array
+	 */
+	public function _set_field_defaults( $args ) {
 
 		// Set up blank or default values for empty ones
 		if ( ! isset( $args['name'] ) ) $args['name'] = '';
@@ -177,6 +402,9 @@ class cmb_Meta_Box_field {
 		if ( ! isset( $args['before'] ) ) $args['before'] = '';
 		if ( ! isset( $args['after'] ) ) $args['after'] = '';
 		if ( ! isset( $args['protocols'] ) ) $args['protocols'] = null;
+		if ( ! isset( $args['description'] ) ) {
+			$args['description'] = isset( $args['desc'] ) ? $args['desc'] : '';
+		}
 		if ( ! isset( $args['default'] ) ) {
 			// Phase out 'std', and use 'default' instead
 			$args['default'] = isset( $args['std'] ) ? $args['std'] : '';
@@ -194,19 +422,25 @@ class cmb_Meta_Box_field {
 		$args['on_front']   = ! ( isset( $args['on_front'] ) && ! $args['on_front'] );
 		$args['attributes'] = isset( $args['attributes'] ) && is_array( $args['attributes'] ) ? $args['attributes'] : array();
 		$args['options']    = isset( $args['options'] ) && is_array( $args['options'] ) ? $args['options'] : array();
+		$args['_id']        = $args['id'];
+		$args['_name']      = $args['id'];
 
 		if ( 'wysiwyg' == $args['type'] ) {
 			$args['id'] = strtolower( str_ireplace( array( '-', '_' ), '', $args['id'] ) ) . 'wpeditor';
 		}
 
+		if ( $this->group ) {
+			$args['id'] = $this->group['id'] .'_'. $this->group['count'] .'_'. $args['id'];
+			$args['_name'] = $this->group['id'] .'['. $this->group['count'] .']['. $args['_name'] .']';
+		}
 
 		return $args;
 	}
 
 	/**
 	 * Updates attributes array values unless they exist from the field config array
-	 * @since  1.0.3
-	 * @param  array  $attrs Array of attributes to update
+	 * @since 1.0.3
+	 * @param array $attrs Array of attributes to update
 	 */
 	public function maybe_set_attributes( $attrs = array() ) {
 		return wp_parse_args( $attrs, $this->args['attributes'] );
