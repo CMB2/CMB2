@@ -63,7 +63,9 @@ window.CMB = (function(window, document, $, undefined){
 			.on( 'click', '.cmb_upload_button', cmb.handleMedia )
 			.on( 'click', '.cmb_remove_file_button', cmb.handleRemoveMedia )
 			// Repeatable content
+			.on( 'click', '.add-group-row', cmb.addGroupRow )
 			.on( 'click', '.add-row-button', cmb.addAjaxRow )
+			.on( 'click', '.remove-group-row', cmb.removeGroupRow )
 			.on( 'click', '.remove-row-button', cmb.removeAjaxRow )
 			// Ajax oEmbed display
 			.on( 'keyup paste focusout', '.cmb_oembed', cmb.maybeOembed );
@@ -173,6 +175,7 @@ window.CMB = (function(window, document, $, undefined){
 	}
 
 	cmb.handleRemoveMedia = function( event ) {
+		event.preventDefault();
 		var $self = $(this);
 		if ( $self.is( '.attach_list .cmb_remove_file_button' ) ){
 			$self.parents('li').remove();
@@ -181,8 +184,8 @@ window.CMB = (function(window, document, $, undefined){
 		cmb.formfield    = $self.attr('rel');
 		var $container   = $self.parents('.img_status');
 
-		$metabox.find('input#' + cmb.formfield).val('');
-		$metabox.find('input#' + cmb.formfield + '_id').val('');
+		cmb.metabox().find('input#' + cmb.formfield).val('');
+		cmb.metabox().find('input#' + cmb.formfield + '_id').val('');
 		if ( ! $container.length ) {
 			$self.parents('.cmb_media_status').html('');
 		} else {
@@ -191,26 +194,56 @@ window.CMB = (function(window, document, $, undefined){
 		return false;
 	}
 
-	cmb.addAjaxRow = function( event ) {
+	$.fn.cleanRow = function( prevNum, group ) {
+		var $self = $(this);
+		if ( group ) {
+			// Remove extra ajaxed rows
+			$self.find('.cmb-repeat-table .repeat-row:not(:first-child)').remove();
+		}
+		cmb.$focus = false;
+		$self.find('input:not([type="button"]),select,textarea,label').each( function(){
 
-		event.preventDefault();
+			var $newInput = $(this);
+			var oldFor    = $newInput.attr( 'for' );
+			var $next     = $newInput.next();
+			var attrs     = {}
+			if ( oldFor ) {
+				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) }
+			} else {
+				var oldName   = $newInput.attr( 'name' );
+				var newName   = oldName ? oldName.replace( prevNum, cmb.idNumber ) : '';
+				var oldID     = $newInput.attr( 'id' );
+				var newID     = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+				attrs = {
+					id: newID,
+					name: newName,
+					value: '',
+					'data-iterator': cmb.idNumber,
+				}
+			}
 
-		var $self         = $(this);
-		var tableselector = '#'+ $self.data('selector');
-		var inputselector = tableselector.slice(1,tableselector.lastIndexOf('repeat'));
-		var $table        = $(tableselector).data('numberels', cmb.idNumber );
-		var $emptyrow     = $table.find('.empty-row');
-		cmb.idNumber      = parseInt( $emptyrow.find('[data-iterator]').data('iterator') ) + 1;
-		var $row          = $emptyrow.clone();
-		var prevNum       = cmb.idNumber - 1;
-		var $colorPicker  = $row.find( '.wp-picker-container' );
-		var $list         = $row.find( '.cmb_media_status' );
-		var $newInput, $focusInput;
+			$newInput
+				.removeAttr( 'checked' )
+				.removeAttr( 'selected' )
+				.removeClass( 'hasDatepicker' )
+				.attr( attrs );
 
-		// Need to clean-up colorpicker before appending
+			cmb.$focus = cmb.$focus ? cmb.$focus : $newInput;
+		});
+		return this;
+	}
+
+	$.fn.newRowHousekeeping = function() {
+		var $row         = $(this);
+		var $colorPicker = $row.find( '.wp-picker-container' );
+		var $list        = $row.find( '.cmb_media_status' );
+
 		if ( $colorPicker.length ) {
-			var $td = $row.find( 'td:first-child' );
-			$td.html( $td.find( 'input:text.cmb_colorpicker' ) );
+			// Need to clean-up colorpicker before appending
+			$colorPicker.each( function() {
+				var $td = $(this).parent();
+				$td.html( $td.find( 'input:text.cmb_colorpicker' ).attr('style', '') );
+			})
 		}
 
 		// Need to clean-up colorpicker before appending
@@ -218,45 +251,83 @@ window.CMB = (function(window, document, $, undefined){
 			$list.empty();
 		}
 
-		var cleanRow = function() {
+		return this;
+	}
 
-			$newInput = $(this);
-			$focusInput = $focusInput ? $focusInput : $newInput;
-
-			var oldName = $newInput.attr( 'name' );
-			var newName = oldName ? oldName.replace( prevNum, cmb.idNumber ) : '';
-			var oldID = $newInput.attr( 'id' );
-			var newID = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
-			var $next = $newInput.next();
-
-			cmb.log( $newInput.prop('tagName'), oldName, newName, prevNum, cmb.idNumber );
-			$newInput
-				.val('')
-				.removeAttr( 'checked' )
-				.removeAttr( 'selected' )
-				.removeClass( 'hasDatepicker' )
-				.attr({
-				  id: newID,
-				  name: newName,
-				  'data-iterator': cmb.idNumber,
-				});
-			if ( $next.is('label') ) {
-				$next.attr( 'for', newID );
-			}
-		}
-
-		// cmb.log( $newInput.attr('id'), $newInput.data('iterator'));
-		$row.find('input:not([type="button"]),select,textarea').each( cleanRow );
-
-		$emptyrow.removeClass('empty-row').addClass('repeat-row');
-		$emptyrow.after( $row );
-		if ( $focusInput ) {
-			$focusInput.focus();
+	cmb.afterRowInsert = function( $row ) {
+		if ( cmb.$focus ) {
+			cmb.$focus.focus();
 		}
 
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input:text.cmb_timepicker'), $row.find('input:text.cmb_datepicker'), $row.find('input:text.cmb_colorpicker') );
+	}
 
+	cmb.addGroupRow = function( event ) {
+
+		event.preventDefault();
+
+		var $self    = $(this);
+		var $table   = $('#'+ $self.data('selector'));
+		var $oldRow  = $table.find('.repeatable-grouping').last();
+		var prevNum  = parseInt( $oldRow.data('iterator') );
+		cmb.idNumber = prevNum + 1;
+		var $row     = $oldRow.clone();
+
+		$row.newRowHousekeeping().cleanRow( prevNum, true );
+
+		// console.log( '$row.html()', $row.html() );
+		var $newRow = $( '<tr class="repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</tr>' );
+		$oldRow.after( $newRow );
+		// console.log( '$newRow.html()', $row.html() );
+
+		cmb.afterRowInsert( $newRow );
+
+		if ( $table.find('.repeatable-grouping').length <= 1 ) {
+			$table.find('.remove-group-row').prop('disabled', true);
+		} else {
+			$table.find('.remove-group-row').removeAttr( 'disabled' );
+		}
+
+	}
+
+	cmb.addAjaxRow = function( event ) {
+
+		event.preventDefault();
+
+		var $self         = $(this);
+		var tableselector = '#'+ $self.data('selector');
+		var $table        = $(tableselector);
+		var $emptyrow     = $table.find('.empty-row');
+		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
+		cmb.idNumber      = prevNum + 1;
+		var $row          = $emptyrow.clone();
+		var $colorPicker  = $row.find( '.wp-picker-container' );
+		var $list         = $row.find( '.cmb_media_status' );
+
+		$row.newRowHousekeeping().cleanRow( prevNum );
+
+		$emptyrow.removeClass('empty-row').addClass('repeat-row');
+		$emptyrow.after( $row );
+
+		cmb.afterRowInsert( $row );
+	}
+
+	cmb.removeGroupRow = function( event ) {
+		event.preventDefault();
+		var $self   = $(this);
+		var $table  = $('#'+ $self.data('selector'));
+		var $parent = $self.parents('.repeatable-grouping');
+		var noRows  = $table.find('.repeatable-grouping').length;
+
+		if ( noRows > 1 ) {
+			$parent.remove();
+			if ( noRows < 3 ) {
+				$table.find('.remove-group-row').prop('disabled', true);
+			} else {
+				$table.find('.remove-group-row').prop('disabled', false);
+			}
+		}
 	}
 
 	cmb.removeAjaxRow = function( event ) {
