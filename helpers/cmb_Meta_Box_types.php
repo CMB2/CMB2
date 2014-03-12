@@ -39,12 +39,24 @@ class cmb_Meta_Box_types {
 		do_action( "cmb_render_$name", $this->field->args(), $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
 	}
 
+	/**
+	 * Render a field (and handle repeatable)
+	 * @since  1.0.3
+	 */
 	public function render() {
 		if ( $this->field->args( 'repeatable' ) ) {
 			$this->render_repeatable_field();
 		} else {
-			echo $this->{$this->field->type()}();
+			$this->_render();
 		}
+	}
+
+	/**
+	 * Render a field type
+	 * @since  1.0.3
+	 */
+	protected function _render() {
+		echo $this->{$this->field->type()}();
 	}
 
 	/**
@@ -122,7 +134,7 @@ class cmb_Meta_Box_types {
 	 * @param  array  $attr_exclude Attributes that should NOT be concatenated
 	 * @return string               String of attributes for form element
 	 */
-	public function concat_attributes( $attrs, $attr_exclude = array() ) {
+	public function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			if ( ! in_array( $attr, (array) $attr_exclude, true ) )
@@ -196,7 +208,7 @@ class cmb_Meta_Box_types {
 			'label' => '',
 		) );
 
-		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attributes( $args, 'label' ), $this->_id( $i ), $args['label'] );
+		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $args, 'label' ), $args['id'], $args['label'] );
 	}
 
 	/**
@@ -216,95 +228,101 @@ class cmb_Meta_Box_types {
 	}
 
 	/**
-	 * Generates repeatable fields
+	 * Generates repeatable field table markup
 	 * @since  1.0.0
 	 */
 	public function render_repeatable_field() {
-		$meta_value = $this->field->escaped_value();
+		$table_id = $this->field->id() .'_repeat';
 
+		$this->_desc( true, true );
+		?>
+
+		<table id="<?php echo $table_id; ?>" class="cmb-repeat-table widefat">
+			<tbody>
+				<?php $this->repeatable_rows(); ?>
+			</tbody>
+		</table>
+		<p class="add-row">
+			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php _e( 'Add Row', 'cmb' ); ?></a>
+		</p>
+
+		<?php
+		// reset iterator
+		$this->iterator = 0;
+	}
+
+	/**
+	 * Generates repeatable field rows
+	 * @since  1.0.3
+	 */
+	public function repeatable_rows() {
+		$meta_value = $this->field->escaped_value();
 		// check for default content
-		$default = $this->field->args( 'default' );
+		$default    = $this->field->args( 'default' );
+
 		// check for saved data
-		if ( !empty( $meta_value ) ) {
+		if ( ! empty( $meta_value ) ) {
 			$meta_value = is_array( $meta_value ) ? array_filter( $meta_value ) : $meta_value;
 			$meta_value = ! empty( $meta_value ) ? $meta_value : $default;
 		} else {
 			$meta_value = $default;
 		}
 
-		$class = 'widefat';
-		$this->repeat_table_open();
-
-		if ( !empty( $meta_value ) ) {
+		// Loop value array and add a row
+		if ( ! empty( $meta_value ) ) {
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
-				$this->open_repeat_row();
-				echo call_user_func( array( $this, $this->field->type() ) );
-				$this->close_repeat_row();
+				$this->repeat_row();
 				$this->iterator++;
 			}
 		} else {
-			$this->open_repeat_row();
-			echo call_user_func( array( $this, $this->field->type() ) );
-			$this->close_repeat_row();
+			// Otherwise add one row
+			$this->repeat_row();
 		}
 
-		$this->open_empty_row();
+		// Then add an empty row
 		$this->field->escaped_value = '';
 		$this->iterator = $this->iterator ? $this->iterator : 1;
-		echo call_user_func( array( $this, $this->field->type() ) );
-		$this->close_repeat_row();
-
-		$this->repeat_table_close();
-		// reset iterator
-		$this->iterator = 0;
+		$this->repeat_row( 'empty-row' );
 	}
 
 	/**
-	 * Generates repeatable field opening table markup for repeatable fields
-	 * @since  1.0.0
-	 * @param  string $class Field's class attribute
+	 * Generates a repeatable row's markup
+	 * @since  1.0.3
+	 * @param  string  $class Repeatable table row's class
 	 */
-	protected function repeat_table_open( $class = '' ) {
-		echo $this->_desc(), '<table id="', $this->field->id(), '_repeat" class="cmb-repeat-table ', $class ,'"><tbody>';
-	}
+	protected function repeat_row( $class = 'repeat-row' ) {
+		?>
 
-	/**
-	 * Generates repeatable field closing table markup for repeatable fields
-	 * @since 1.0.0
-	 */
-	protected function repeat_table_close() {
-		echo '</tbody></table><p class="add-row"><a data-selector="', $this->field->id() ,'_repeat" class="add-row-button button" href="#">'. __( 'Add Row', 'cmb' ) .'</a></p>';
-	}
+		<tr class="<?php echo $class; ?>">
+			<td>
+				<?php $this->_render(); ?>
+			</td>
+			<td class="remove-row">
+				<a class="button remove-row-button" href="#"><?php _e( 'Remove', 'cmb' ); ?></a>
+			</td>
+		</tr>
 
-	protected function open_repeat_row() {
-		echo '<tr class="repeat-row">';
-		echo '<td>';
-	}
-
-	protected function open_empty_row() {
-		echo '<tr class="empty-row">';
-		echo '<td>';
-	}
-
-	protected function close_repeat_row() {
-		echo '</td><td class="remove-row"><a class="button remove-row-button" href="#">'. __( 'Remove', 'cmb' ) .'</a></td>';
-		echo '</tr>';
+		<?php
 	}
 
 	/**
 	 * Generates description markup
 	 * @since  1.0.0
 	 * @param  boolean $paragraph Paragraph tag or span
+	 * @param  boolean $echo      Whether to echo description or only return it
 	 * @return string             Field's description markup
 	 */
-	public function _desc( $paragraph = false ) {
+	public function _desc( $paragraph = false, $echo = false ) {
 		// Prevent description from printing multiple times for repeatable fields
 		if ( $this->field->args( 'repeatable' ) || $this->iterator > 0 ) {
 			return '';
 		}
 		$tag = $paragraph ? 'p' : 'span';
-		return "\n<$tag class=\"cmb_metabox_description\">{$this->field->args( 'description' )}</$tag>\n";
+		$desc = "\n<$tag class=\"cmb_metabox_description\">{$this->field->args( 'description' )}</$tag>\n";
+		if ( $echo )
+			echo $desc;
+		return $desc;
 	}
 
 	/**
@@ -343,7 +361,7 @@ class cmb_Meta_Box_types {
 			'desc'  => $this->_desc( true ),
 		) );
 
-		return sprintf( '<input%s/>%s', $this->concat_attributes( $args, 'desc' ), $args['desc'] );
+		return sprintf( '<input%s/>%s', $this->concat_attrs( $args, 'desc' ), $args['desc'] );
 	}
 
 	/**
@@ -362,7 +380,7 @@ class cmb_Meta_Box_types {
 			'value' => $this->field->escaped_value( 'esc_textarea' ),
 			'desc'  => $this->_desc( true ),
 		) );
-		return sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attributes( $args, array( 'desc', 'value' ) ), $args['value'], $args['desc'] );
+		return sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $args, array( 'desc', 'value' ) ), $args['value'], $args['desc'] );
 	}
 
 	/**
@@ -409,11 +427,16 @@ class cmb_Meta_Box_types {
 		return sprintf( '<pre>%s</pre>', $this->textarea( array( 'class' => 'cmb_textarea_code' )  ) );
 	}
 
-	public function wysiwyg() {
-		$saved_value = stripslashes( html_entity_decode( $this->field->escaped_value( 'esc_html' ) ) );
-		// $id = strtolower( str_ireplace( array( '-', '_' ), '', $this->_id() ) ) . 'wpeditor';
-		wp_editor( $saved_value, $this->_id(), $this->field->args( 'options' ) );
-		echo $this->_desc( true );
+	public function wysiwyg( $args = array() ) {
+		extract( $this->parse_args( $args, 'input', array(
+			'id'      => $this->_id(),
+			'value'   => stripslashes( html_entity_decode( $this->field->escaped_value( 'esc_html' ) ) ),
+			'desc'    => $this->_desc( true ),
+			'options' => $this->field->args( 'options' ),
+		) ) );
+
+		wp_editor( $value, $id, $options );
+		echo $desc;
 	}
 
 	public function text_date_timestamp() {
@@ -495,14 +518,14 @@ class cmb_Meta_Box_types {
 	}
 
 	public function title() {
-		$args = $this->parse_args( array(), 'title', array(
-			'class' => 'cmb_metabox_title',
+		extract( $this->parse_args( array(), 'title', array(
 			'tag'   => $this->field->object_type == 'post' ? 'h5' : 'h3',
+			'class' => 'cmb_metabox_title',
+			'name'  => $this->field->args( 'name' ),
 			'desc'  => $this->_desc( true ),
-		) );
+		) ) );
 
-		$attrs = $this->concat_attributes( $args, array( 'desc', 'tag' ) );
-		return sprintf( '<%1$s%2s">%3$s</%1$s>%4$s', $args['tag'], $attrs, $this->field->args( 'name' ), $args['desc'] );
+		return sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $tag, $class, $name, $desc );
 	}
 
 	public function select( $args = array() ) {
@@ -514,7 +537,7 @@ class cmb_Meta_Box_types {
 			'options' => $this->concat_options(),
 		) );
 
-		$attrs = $this->concat_attributes( $args, array( 'desc', 'options' ) );
+		$attrs = $this->concat_attrs( $args, array( 'desc', 'options' ) );
 		return sprintf( '<select%s>%s</select>%s', $attrs, $args['options'], $args['desc'] );
 	}
 
@@ -534,14 +557,13 @@ class cmb_Meta_Box_types {
 	}
 
 	public function radio( $args = array(), $type = 'radio' ) {
-		$args = $this->parse_args( $args, $type, array(
+		extract( $this->parse_args( $args, $type, array(
 			'class'   => 'cmb_radio_list',
-			'desc'    => $this->_desc( true ),
 			'options' => $this->concat_options( array( 'label' => 'test' ) ),
-		) );
+			'desc'    => $this->_desc( true ),
+		) ) );
 
-		$attrs = $this->concat_attributes( $args, array( 'desc', 'options' ) );
-		return sprintf( '<ul%s>%s</ul>%s', $attrs, $args['options'], $args['desc'] );
+		return sprintf( '<ul class="%s">%s</ul>%s', $class, $options, $desc );
 	}
 
 	public function radio_inline() {
@@ -656,11 +678,10 @@ class cmb_Meta_Box_types {
 			foreach ( $meta_value as $id => $fullurl ) {
 				$id_input = $this->input( array(
 					'type'  => 'hidden',
-					'class' => '',
-					'value'  => $fullurl,
+					'value' => $fullurl,
 					'name'  => $name .'['. $id .']',
-					'id'  => 'filelist-'. $id,
-					'desc' => '',
+					'id'    => 'filelist-'. $id,
+					'desc'  => '', 'class' => '',
 				) );
 
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
@@ -721,8 +742,8 @@ class cmb_Meta_Box_types {
 			'type'  => 'hidden',
 			'class' => 'cmb_upload_file_id',
 			'name'  => $_id_name,
-			'id'  => $_id_id,
-			'value'  => $_id_meta,
+			'id'    => $_id_id,
+			'value' => $_id_meta,
 		) ),
 		'<div id="', $this->_id( '_status' ) ,'" class="cmb_media_status">';
 			if ( ! empty( $meta_value ) ) {
