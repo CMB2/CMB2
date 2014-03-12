@@ -194,6 +194,30 @@ window.CMB = (function(window, document, $, undefined){
 		return false;
 	}
 
+	// src: http://www.benalman.com/projects/jquery-replacetext-plugin/
+	$.fn.replaceText = function(b, a, c) {
+		return this.each(function() {
+			var f = this.firstChild, g, e, d = [];
+			if (f) {
+				do {
+					if (f.nodeType === 3) {
+						g = f.nodeValue;
+						e = g.replace(b, a);
+						if (e !== g) {
+							if (!c && /</.test(e)) {
+								$(f).before(e);
+								d.push(f)
+							} else {
+								f.nodeValue = e
+							}
+						}
+					}
+				} while (f = f.nextSibling)
+			}
+			d.length && $(d).remove()
+		})
+	}
+
 	$.fn.cleanRow = function( prevNum, group ) {
 		var $self = $(this);
 		if ( group ) {
@@ -201,9 +225,11 @@ window.CMB = (function(window, document, $, undefined){
 			$self.find('.cmb-repeat-table .repeat-row:not(:first-child)').remove();
 		}
 		cmb.$focus = false;
+		cmb.neweditor_id = [];
 		$self.find('input:not([type="button"]),select,textarea,label').each( function(){
 
 			var $newInput = $(this);
+			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
 			var $next     = $newInput.next();
 			var attrs     = {}
@@ -217,16 +243,35 @@ window.CMB = (function(window, document, $, undefined){
 				attrs = {
 					id: newID,
 					name: newName,
-					value: '',
+					// value: '',
 					'data-iterator': cmb.idNumber,
 				}
 			}
 
 			$newInput
+				.val('')
 				.removeAttr( 'checked' )
 				.removeAttr( 'selected' )
 				.removeClass( 'hasDatepicker' )
 				.attr( attrs );
+
+			// wysiwyg field
+			if ( isEditor ) {
+				// Get new wysiwyg ID
+				newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
+				// Empty the contents
+				$newInput.html('');
+				// Get wysiwyg field
+				var $wysiwyg = $newInput.parents( '.cmb-type-wysiwyg' );
+				// Remove extra mce divs
+				$wysiwyg.find('.mce-tinymce:not(:first-child)').remove();
+				// Replace id instances
+				var html = $wysiwyg.html().replace( new RegExp( oldID, 'g' ), newID );
+				// Update field html
+				$wysiwyg.html( html );
+				// Save ids for later to re-init tinymce
+				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
+			}
 
 			cmb.$focus = cmb.$focus ? cmb.$focus : $newInput;
 		});
@@ -257,6 +302,33 @@ window.CMB = (function(window, document, $, undefined){
 	cmb.afterRowInsert = function( $row ) {
 		if ( cmb.$focus ) {
 			cmb.$focus.focus();
+		}
+		// Need to re-init wp_editor instances
+		if ( cmb.neweditor_id.length ) {
+			var i;
+			for ( i = cmb.neweditor_id.length - 1; i >= 0; i-- ) {
+				var id = cmb.neweditor_id[i].id;
+				var old = cmb.neweditor_id[i].old;
+
+				if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
+					var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ old ] );
+					for ( var prop in newSettings )
+						if ( 'string' === typeof( newSettings[prop] ) )
+							newSettings[prop] = newSettings[prop].replace( new RegExp( old, 'g' ), id );
+					tinyMCEPreInit.mceInit[ id ] = newSettings;
+				}
+				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
+					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
+					for ( var prop in newQTS )
+						if ( 'string' === typeof( newQTS[prop] ) )
+							newQTS[prop] = newQTS[prop].replace( new RegExp( old, 'g' ), id );
+					tinyMCEPreInit.qtInit[ id ] = newQTS;
+				}
+				tinyMCE.init({
+					id : tinyMCEPreInit.mceInit[ id ],
+				});
+
+			};
 		}
 
 		// Init pickers from new row
