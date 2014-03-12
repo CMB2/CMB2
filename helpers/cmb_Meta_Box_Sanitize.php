@@ -154,9 +154,9 @@ class cmb_Meta_Box_Sanitize {
 	 * @return string       Empty string or validated money value
 	 */
 	public function text_money( $value ) {
-		
+
 		global $wp_locale;
-		
+
 		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
 		$replace = array( '', '.' );
 
