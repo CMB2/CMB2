@@ -50,8 +50,8 @@ class cmb_Meta_Box_field {
 	public function __construct( $field_args, $group_field_args = array() ) {
 		$this->object_id   = cmb_Meta_Box::get_object_id();
 		$this->object_type = cmb_Meta_Box::get_object_type();
-		$this->args        = $this->_set_field_defaults( $field_args );
 		$this->group       = ! empty( $group_field_args ) ? $group_field_args : false;
+		$this->args        = $this->_set_field_defaults( $field_args );
 
 		// Allow an override for the field's value
 		// (assuming no one would want to save 'cmb_no_override_val' as a value)
@@ -72,6 +72,17 @@ class cmb_Meta_Box_field {
 	 */
 	public function __call( $name, $arguments ) {
 		return $this->args( $name );
+	}
+
+	/**
+	 * Retrieves the field id
+	 * @since  1.0.3
+	 * @param  boolean $raw Whether to retrieve pre-modidifed id
+	 * @return string       Field id
+	 */
+	public function id( $raw = false ) {
+		$id = $raw ? '_id' : 'id';
+		return $this->args( $id );
 	}
 
 	/**
@@ -425,13 +436,14 @@ class cmb_Meta_Box_field {
 		$args['_id']        = $args['id'];
 		$args['_name']      = $args['id'];
 
-		if ( 'wysiwyg' == $args['type'] ) {
-			$args['id'] = strtolower( str_ireplace( array( '-', '_' ), '', $args['id'] ) ) . 'wpeditor';
-		}
-
 		if ( $this->group ) {
 			$args['id'] = $this->group['id'] .'_'. $this->group['count'] .'_'. $args['id'];
 			$args['_name'] = $this->group['id'] .'['. $this->group['count'] .']['. $args['_name'] .']';
+		}
+
+		if ( 'wysiwyg' == $args['type'] ) {
+			$args['id'] = strtolower( str_ireplace( array( '-', '_' ), 'zx', $args['id'] ) ) . 'wpeditor';
+			$args['options']['textarea_name'] = $args['_name'];
 		}
 
 		return $args;
