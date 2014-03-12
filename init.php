@@ -409,7 +409,6 @@ class cmb_Meta_Box {
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
-		$remove_button   = '<tr></td><td class="remove-row" colspan="2"><button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. __( 'Remove Group', 'cmb' ) .'</button></td></tr>';
 
 		echo '<tr><td colspan="2"><table id="', $field_group->id(), '_repeat" class="repeatable-group" style="width:100%;">';
 		if ( $desc || $label ) {
@@ -421,26 +420,44 @@ class cmb_Meta_Box {
 			echo '</th></tr>';
 		}
 
-		foreach ( $group_val as $iterator => $field_id ) {
+		if ( ! empty( $group_val ) ) {
 
-			echo '<tr class="repeatable-grouping" data-iterator="0"><td>
-				<table class="cmb-nested-table" style="width: 100%;">';
-				// Render repeatable group fields
-				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
-					$field = new cmb_Meta_Box_field( $field_args, $field_group->args() );
-					$field->render_field( $meta_box['show_names'] );
-				}
-				echo $remove_button;
-				echo '</table></td>
-			</tr>';
-
-			$field_group->args['count']++;
+			foreach ( $group_val as $iterator => $field_id ) {
+				self::render_group_row( $field_group, $remove_disabled, $meta_box['show_names'] );
+			}
+		} else {
+			self::render_group_row( $field_group, $remove_disabled, $meta_box['show_names'] );
 		}
 
 		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. __( 'Add Group', 'cmb' ) .'</button></p></td></tr>';
 
 		echo '</table></td></tr>';
 
+	}
+
+	public static function render_group_row( $field_group, $remove_disabled, $show_names ) {
+
+		echo '
+		<tr class="repeatable-grouping" data-iterator="'. $field_group->count() .'">
+			<td>
+				<table class="cmb-nested-table" style="width: 100%;">';
+				// Render repeatable group fields
+				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
+					$field = new cmb_Meta_Box_field( $field_args, $field_group->args() );
+					$field->render_field( $show_names );
+				}
+				echo '
+					<tr>
+						<td class="remove-row" colspan="2">
+							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. __( 'Remove Group', 'cmb' ) .'</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		';
+
+		$field_group->args['count']++;
 	}
 
 	/**
@@ -541,9 +558,9 @@ class cmb_Meta_Box {
 		$saved       = array();
 		// $group_vals[0]['color'] = '333';
 
-		foreach ( array_values( $args['fields'] ) as $field_args ) {
+		foreach ( array_values( $field_group->fields() ) as $field_args ) {
 			$field = new cmb_Meta_Box_field( $field_args );
-			$sub_id = $field->id();
+			$sub_id = $field->id( true );
 
 			foreach ( (array) $group_vals as $key => $post_vals ) {
 				// Get value
@@ -567,7 +584,9 @@ class cmb_Meta_Box {
 				// Add to `$saved` array
 				$saved[ $key ][ $sub_id ] = $new_val;
 			}
+			$saved[ $key ] = array_filter( $saved[ $key ] );
 		}
+		$saved = array_filter( $saved );
 
 		$field_group->update_data( $saved, true );
 	}
@@ -576,7 +595,7 @@ class cmb_Meta_Box {
 
 		$new_value = null !== $new_value
 			? $new_value
-			: ( isset( $_POST[ $field->id() ] ) ? $_POST[ $field->id() ] : null );
+			: ( isset( $_POST[ $field->id( true ) ] ) ? $_POST[ $field->id() ] : null );
 
 		if ( $field->args( 'repeatable' ) && is_array( $new_value ) ) {
 			// Remove empties
