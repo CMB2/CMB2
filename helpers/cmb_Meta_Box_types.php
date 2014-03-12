@@ -237,7 +237,7 @@ class cmb_Meta_Box_types {
 		$this->_desc( true, true );
 		?>
 
-		<table id="<?php echo $table_id; ?>" class="cmb-repeat-table widefat">
+		<table id="<?php echo $table_id; ?>" class="cmb-repeat-table">
 			<tbody>
 				<?php $this->repeatable_rows(); ?>
 			</tbody>
