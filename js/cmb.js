@@ -79,6 +79,9 @@ window.CMB = (function(window, document, $, undefined){
 
 	cmb.handleMedia = function(event) {
 
+		if ( typeof wp === 'undefined' )
+			return;
+
 		event.preventDefault();
 
 		var $metabox     = cmb.metabox();
