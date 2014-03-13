@@ -401,7 +401,7 @@ class cmb_Meta_Box {
 	public static function render_group( $meta_box, $args ) {
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) )
 			return;
-		// delete_post_meta( self::get_object_id(), '_eworship_reports' );
+
 		$args['count']   = 0;
 		$field_group     = new cmb_Meta_Box_field( $args );
 		$desc            = $field_group->args( 'description' );
