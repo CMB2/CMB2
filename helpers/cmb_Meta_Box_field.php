@@ -71,7 +71,8 @@ class cmb_Meta_Box_field {
 	 * @return mixed             Value of field argument
 	 */
 	public function __call( $name, $arguments ) {
-		return $this->args( $name );
+		$key = isset( $arguments[0] ) ? $arguments[0] : false;
+		return $this->args( $name, $key );
 	}
 
 	/**
@@ -89,10 +90,15 @@ class cmb_Meta_Box_field {
 	 * Get a field argument
 	 * @since  1.0.3
 	 * @param  string $key Argument to check
+	 * @param  string $key Sub argument to check
 	 * @return mixed       Argument value or false if non-existent
 	 */
-	public function args( $key = '' ) {
-		return $this->_data( 'args', $key );
+	public function args( $key = '', $_key = '' ) {
+		$vars = $this->_data( 'args', $key );
+		if ( $_key ) {
+			return isset( $vars[ $_key ] ) ? $vars[ $_key ] : false;
+		}
+		return $vars;
 	}
 
 	/**
@@ -433,6 +439,12 @@ class cmb_Meta_Box_field {
 		$args['on_front']   = ! ( isset( $args['on_front'] ) && ! $args['on_front'] );
 		$args['attributes'] = isset( $args['attributes'] ) && is_array( $args['attributes'] ) ? $args['attributes'] : array();
 		$args['options']    = isset( $args['options'] ) && is_array( $args['options'] ) ? $args['options'] : array();
+
+		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
+			'add_button'    => __( 'Add Group', 'cmb' ),
+			'remove_button' => __( 'Remove Group', 'cmb' ),
+		) ) : $args['options'];
+
 		$args['_id']        = $args['id'];
 		$args['_name']      = $args['id'];
 
