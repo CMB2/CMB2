@@ -53,8 +53,7 @@ window.CMB = (function(window, document, $, undefined){
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 		$("#ui-datepicker-div").wrap('<div class="cmb_element" />');
 
-
-		$('.cmb_metabox')
+		$metabox
 			.on( 'change', '.cmb_upload_file', function() {
 				cmb.formfield = $(this).attr('id');
 				$('#' + cmb.formfield + '_id').val('');
