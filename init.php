@@ -429,7 +429,7 @@ class cmb_Meta_Box {
 			self::render_group_row( $field_group, $remove_disabled, $meta_box['show_names'] );
 		}
 
-		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. __( 'Add Group', 'cmb' ) .'</button></p></td></tr>';
+		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></td></tr>';
 
 		echo '</table></td></tr>';
 
@@ -449,7 +449,7 @@ class cmb_Meta_Box {
 				echo '
 					<tr>
 						<td class="remove-row" colspan="2">
-							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. __( 'Remove Group', 'cmb' ) .'</button>
+							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 						</td>
 					</tr>
 				</table>
