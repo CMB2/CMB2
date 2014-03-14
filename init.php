@@ -137,7 +137,6 @@ class cmb_Meta_Box {
 	 */
 	protected static $updated = array();
 
-
 	/**
 	 * Get started
 	 */
@@ -382,11 +381,17 @@ class cmb_Meta_Box {
 		foreach ( $meta_box['fields'] as $field_args ) {
 
 			if ( 'group' == $field_args['type'] ) {
-				self::render_group( $meta_box, $field_args );
+
+				if ( ! isset( $field_args['show_names'] ) ) {
+					$field_args['show_names'] = $meta_box['show_names'];
+				}
+				self::render_group( $field_args );
 			} else {
+
+				$field_args['show_names'] = $meta_box['show_names'];
 				// Render default fields
 				$field = new cmb_Meta_Box_field( $field_args );
-				$field->render_field( $meta_box['show_names'] );
+				$field->render_field();
 			}
 		}
 		echo '</table>';
@@ -398,7 +403,7 @@ class cmb_Meta_Box {
 	/**
 	 * Render a repeatable group
 	 */
-	public static function render_group( $meta_box, $args ) {
+	public static function render_group( $args ) {
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) )
 			return;
 
@@ -423,10 +428,10 @@ class cmb_Meta_Box {
 		if ( ! empty( $group_val ) ) {
 
 			foreach ( $group_val as $iterator => $field_id ) {
-				self::render_group_row( $field_group, $remove_disabled, $meta_box['show_names'] );
+				self::render_group_row( $field_group, $remove_disabled );
 			}
 		} else {
-			self::render_group_row( $field_group, $remove_disabled, $meta_box['show_names'] );
+			self::render_group_row( $field_group, $remove_disabled );
 		}
 
 		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></td></tr>';
@@ -435,7 +440,7 @@ class cmb_Meta_Box {
 
 	}
 
-	public static function render_group_row( $field_group, $remove_disabled, $show_names ) {
+	public static function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
 		<tr class="repeatable-grouping" data-iterator="'. $field_group->count() .'">
@@ -443,8 +448,9 @@ class cmb_Meta_Box {
 				<table class="cmb-nested-table" style="width: 100%;">';
 				// Render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
-					$field = new cmb_Meta_Box_field( $field_args, $field_group->args() );
-					$field->render_field( $show_names );
+					$field_args['show_names'] = $field_group->args( 'show_names' );
+					$field = new cmb_Meta_Box_field( $field_args, $field_group );
+					$field->render_field();
 				}
 				echo '
 					<tr>
@@ -551,43 +557,56 @@ class cmb_Meta_Box {
 		if ( ! isset( $args['id'], $args['fields'], $_POST[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
 			return;
 
-		$field_group = new cmb_Meta_Box_field( $args );
-		$main_id     = $field_group->id();
-		$old         = $field_group->get_data();
-		$group_vals  = $_POST[ $main_id ];
-		$saved       = array();
-		// $group_vals[0]['color'] = '333';
+		$field_group        = new cmb_Meta_Box_field( $args );
+		$base_id            = $field_group->id();
+		$old                = $field_group->get_data();
+		$group_vals         = $_POST[ $base_id ];
+		$saved              = array();
+		$is_updated         = false;
+		$field_group->index = 0;
 
+		// $group_vals[0]['color'] = '333';
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
-			$field = new cmb_Meta_Box_field( $field_args );
+			$field = new cmb_Meta_Box_field( $field_args, $field_group );
 			$sub_id = $field->id( true );
 
-			foreach ( (array) $group_vals as $key => $post_vals ) {
+			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
+
 				// Get value
-				$new_val = isset( $post_vals[ $sub_id ] )
-					? $post_vals[ $sub_id ]
-					: false;
-				// Sanitize
-				$new_val = self::sanitize_field( $field, $new_val );
-				// Get old value
-				$old_val = isset( $old[ $key ][ $sub_id ] )
-					? $old[ $key ][ $sub_id ]
+				$new_val = isset( $group_vals[ $field_group->index ][ $sub_id ] )
+					? $group_vals[ $field_group->index ][ $sub_id ]
 					: false;
 
+				// Sanitize
+				$new_val = self::sanitize_field( $field, $new_val, $field_group->index );
+
+				if ( 'file' == $field->type() && is_array( $new_val ) ) {
+					// Add image ID to the array stack
+					$saved[ $field_group->index ][ $new_val['field_id'] ] = $new_val['attach_id'];
+					// Reset var to url string
+					$new_val = $new_val['url'];
+				}
+
+				// Get old value
+				$old_val = isset( $old[ $field_group->index ][ $sub_id ] )
+					? $old[ $field_group->index ][ $sub_id ]
+					: false;
+
+				$is_updated = ( ! empty( $new_val ) && $new_val != $old_val );
+				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
 				// Compare values and add to `$updated` array
-				if (
-					( ! empty( $new_val ) && $new_val != $old_val )
-					|| ( empty( $new_val ) && ! empty( $old_val ) )
-				)
-					self::$updated[] = $main_id .'::'. $key .'::'. $sub_id;
+				if ( $is_updated || $is_removed )
+					self::$updated[] = $base_id .'::'. $field_group->index .'::'. $sub_id;
 
 				// Add to `$saved` array
-				$saved[ $key ][ $sub_id ] = $new_val;
+				$saved[ $field_group->index ][ $sub_id ] = $new_val;
+
 			}
-			$saved[ $key ] = array_filter( $saved[ $key ] );
+			$saved[ $field_group->index ] = array_filter( $saved[ $field_group->index ] );
 		}
 		$saved = array_filter( $saved );
 
+		// wp_die( '<xmp>'. print_r( $saved, true ) .'</xmp>' );
 		$field_group->update_data( $saved, true );
 	}
 
@@ -595,7 +614,7 @@ class cmb_Meta_Box {
 
 		$new_value = null !== $new_value
 			? $new_value
-			: ( isset( $_POST[ $field->id( true ) ] ) ? $_POST[ $field->id() ] : null );
+			: ( isset( $_POST[ $field->id( true ) ] ) ? $_POST[ $field->id( true ) ] : null );
 
 		if ( $field->args( 'repeatable' ) && is_array( $new_value ) ) {
 			// Remove empties
@@ -826,32 +845,6 @@ class cmb_Meta_Box {
 	 */
 	public static function nonce() {
 		return basename( __FILE__ );
-	}
-
-	/**
-	 * Utility method that attempts to get an attachment's ID by it's url
-	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
-	 * @return mixed            Attachment ID or false
-	 */
-	public static function image_id_from_url( $img_url ) {
-		global $wpdb;
-
-		// Get just the file name
-		if ( false !== strpos( $img_url, '/' ) ) {
-			$explode = explode( '/', $img_url );
-			$img_url = end( $explode );
-		}
-
-		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
-
-		// If we found an attachement ID, return it
-		if ( !empty( $attachment ) && is_array( $attachment ) )
-			return $attachment[0];
-
-		// No luck
-		return false;
 	}
 
 	/**
