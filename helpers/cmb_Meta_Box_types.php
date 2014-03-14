@@ -723,27 +723,27 @@ class cmb_Meta_Box_types {
 		) ),
 		'<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />';
 
-		$_id_id = $_id_name = $this->field->id();
-		$_id_name .= '_id';
-		if ( $this->field->args( 'repeatable' ) ) {
-			$_id_id .= '_' . $this->iterator;
-			$_id_name .= '['. $this->iterator .']';
-		}
-		$_id_id .= '_id';
+		// Reset field args for attachment ID
+		$args = $this->field->args();
+		$args['id'] = $args['_id'] . '_id';
+		unset( $args['_id'], $args['_name'] );
 
-		$_id_meta = $this->field->get_data( $_id_id );
+		// And get new field object
+		$this->field = new cmb_Meta_Box_field( $args, $this->field->group );
+
+		// Get ID value
+		$_id_value = $this->field->escaped_value( 'absint' );
 
 		// If there is no ID saved yet, try to get it from the url
-		if ( $meta_value && ! $_id_meta ) {
-			$_id_meta = cmb_Meta_Box::image_id_from_url( esc_url_raw( $meta_value ) );
+		if ( $meta_value && ! $_id_value ) {
+			$_id_value = cmb_Meta_Box::image_id_from_url( esc_url_raw( $meta_value ) );
 		}
 
 		echo $this->input( array(
 			'type'  => 'hidden',
 			'class' => 'cmb_upload_file_id',
-			'name'  => $_id_name,
-			'id'    => $_id_id,
-			'value' => $_id_meta,
+			'value' => $_id_value,
+			'desc'  => '',
 		) ),
 		'<div id="', $this->_id( '_status' ) ,'" class="cmb_media_status">';
 			if ( ! empty( $meta_value ) ) {
