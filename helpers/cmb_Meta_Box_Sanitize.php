@@ -77,7 +77,6 @@ class cmb_Meta_Box_Sanitize {
 				// We'll fallback to 'sanitize_text_field'
 				return is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : call_user_func( 'sanitize_text_field', $value );
 		}
-
 	}
 
 	/**
@@ -263,40 +262,67 @@ class cmb_Meta_Box_Sanitize {
 	}
 
 	/**
-	 * Sanitize code textareas
-	 * @since  1.0.2
-	 * @param  string $value  Meta value
-	 * @return string        Sanitized data
+	 * Peforms saving of `file` attachement's ID
+	 * @since  1.0.3
+	 * @param  string $value File url
+	 */
+	public function _save_file_id( $value ) {
+		$group      = $this->field->group;
+		$args       = $this->field->args();
+		$args['id'] = $args['_id'] . '_id';
+
+		unset( $args['_id'], $args['_name'] );
+		// And get new field object
+		$field      = new cmb_Meta_Box_field( $args, $group );
+		$id_key     = $field->_id();
+		$id_val_old = $field->escaped_value( 'absint' );
+
+		if ( $group ) {
+			// Check group $_POST data
+			$i       = $group->index;
+			$base_id = $group->_id();
+			$id_val  = isset( $_POST[ $base_id ][ $i ][ $id_key ] ) ? absint( $_POST[ $base_id ][ $i ][ $id_key ] ) : 0;
+
+		} else {
+			// Check standard $_POST data
+			$id_val = isset( $_POST[ $field->id() ] ) ? $_POST[ $field->id() ] : null;
+
+		}
+
+		// If there is no ID saved yet, try to get it from the url
+		if ( $value && ! $id_val ) {
+			$id_val = $this->_image_id_from_url( $value );
+		}
+
+		if ( $group ) {
+			return array(
+				'attach_id' => $id_val,
+				'field_id'  => $id_key
+			);
+		}
+
+		if ( $id_val && $id_val != $id_val_old ) {
+			return $field->update_data( $id_val );
+		} elseif ( empty( $id_val ) && $id_val_old ) {
+			return $field->remove_data( $old );
+		}
+	}
+
+	/**
+	 * Handles saving of attachment post ID and sanitizing file url
+	 * @since  1.0.3
+	 * @param  string $value File url
+	 * @return string        Sanitized url
 	 */
 	public function file( $value ) {
-		$args = $this->field->args();
-		$id = $this->field->id();
-		$_id_name = $id .'_id';
-		// get _id old value
-		$_id_old = $this->field->get_data( $_id_name );
-
-		// If specified NOT to save the file ID
-		if ( isset( $args['save_id'] ) && ! $args['save_id'] ) {
-			$_new_id = '';
-		} else {
-			// otherwise get the file ID
-			$_new_id = isset( $_POST[ $_id_name ] ) ? $_POST[ $_id_name ] : null;
-
-			// If there is no ID saved yet, try to get it from the url
-			if ( isset( $_POST[ $id ] ) && $_POST[ $id ] && ! $_new_id ) {
-				$_new_id = cmb_Meta_Box::image_id_from_url( esc_url_raw( $_POST[ $id ] ) );
-			}
-
+		// If NOT specified to NOT save the file ID
+		if ( $this->field->args( 'save_id' ) ) {
+			$id_value = $this->_save_file_id( $value );
 		}
+		$clean = $this->text_url( $value );
 
-		if ( $_new_id && $_new_id != $_id_old ) {
-			$updated = cmb_Meta_Box::update_data( $_new_id, $_id_name );
-		} elseif ( '' == $_new_id && $_id_old ) {
-			cmb_Meta_Box::remove_data( $_id_name, $old );
-		}
-
-		return $this->default_sanitization( $value );
-
+		// Return an array with url/id if saving a group field
+		return $this->field->group ? array_merge( array( 'url' => $clean), $id_value ) : $clean;
 	}
 
 	/**
@@ -315,6 +341,33 @@ class cmb_Meta_Box_Sanitize {
 			$new_value[] = $this->$method( $val, true );
 		}
 		return $new_value;
+	}
+
+	/**
+	 * Utility method that attempts to get an attachment's ID by it's url
+	 * @since  1.0.0
+	 * @param  string  $img_url Attachment url
+	 * @return mixed            Attachment ID or false
+	 */
+	public function _image_id_from_url( $img_url ) {
+		global $wpdb;
+
+		$img_url = esc_url_raw( $img_url );
+		// Get just the file name
+		if ( false !== strpos( $img_url, '/' ) ) {
+			$explode = explode( '/', $img_url );
+			$img_url = end( $explode );
+		}
+
+		// And search for a fuzzy match of the file name
+		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
+
+		// If we found an attachement ID, return it
+		if ( !empty( $attachment ) && is_array( $attachment ) )
+			return $attachment[0];
+
+		// No luck
+		return false;
 	}
 
 }
