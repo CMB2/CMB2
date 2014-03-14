@@ -606,7 +606,6 @@ class cmb_Meta_Box {
 		}
 		$saved = array_filter( $saved );
 
-		// wp_die( '<xmp>'. print_r( $saved, true ) .'</xmp>' );
 		$field_group->update_data( $saved, true );
 	}
 
