@@ -28,7 +28,7 @@ class cmb_Meta_Box_field {
 	public $args;
 
 	/**
-	 * Field group arguments
+	 * Field group object
 	 * @var   mixed
 	 * @since 1.0.3
 	 */
@@ -44,13 +44,13 @@ class cmb_Meta_Box_field {
 	/**
 	 * Constructs our field object
 	 * @since 1.0.3
-	 * @param array $field_args       Field arguments
-	 * @param array $group_field_args (optional) Group field arguments
+	 * @param array $field_args  Field arguments
+	 * @param array $group_field (optional) Group field object
 	 */
-	public function __construct( $field_args, $group_field_args = array() ) {
+	public function __construct( $field_args, $group_field = null ) {
 		$this->object_id   = cmb_Meta_Box::get_object_id();
 		$this->object_type = cmb_Meta_Box::get_object_type();
-		$this->group       = ! empty( $group_field_args ) ? $group_field_args : false;
+		$this->group       = ! empty( $group_field ) ? $group_field : false;
 		$this->args        = $this->_set_field_defaults( $field_args );
 
 		// Allow an override for the field's value
@@ -136,7 +136,7 @@ class cmb_Meta_Box_field {
 		if ( $field_id ) {
 			$args['field_id'] = $field_id;
 		} else if ( $this->group ) {
-			$args['field_id'] = $this->group['id'];
+			$args['field_id'] = $this->group->id();
 		}
 		extract( $this->data_args( $args ) );
 
@@ -145,8 +145,8 @@ class cmb_Meta_Box_field {
 			: get_metadata( $type, $id, $field_id, ( $single || $repeat ) /* If multicheck this can be multiple values */ );
 
 		if ( $this->group ) {
-			$data = isset( $data[ $this->group['count'] ][ $this->args( '_id' ) ] )
-				? $data[ $this->group['count'] ][ $this->args( '_id' ) ]
+			$data = isset( $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ] )
+				? $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ]
 				: false;
 		}
 		return $data;
@@ -361,25 +361,24 @@ class cmb_Meta_Box_field {
 	/**
 	 * Render a field row
 	 * @since 1.0.0
-	 * @param boolean $show_names Whether field names should be visible
 	 */
-	public function render_field( $show_names = true ) {
+	public function render_field() {
 
 		if ( ! $this->args( 'on_front' ) )
 			continue;
-		$classes = 'cmb-type-'. sanitize_html_class( $this->type() );
-		$classes .= ' cmb_id_'. sanitize_html_class( $this->id() );
-		$classes .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
-		// 'inline' flag, or _inline in the field type, set to true
-		$classes .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
+		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
+		$classes   .= ' cmb_id_'. sanitize_html_class( $this->id() );
+		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
+		// 'inline' flag, or _inline in the field type, set to true
+		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
 		printf( "<tr class=\"%s\">\n", $classes );
 
-		if ( 'title' == $this->type() || ! $show_names ) {
+		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
 			echo "\t<td colspan=\"2\">\n";
-			if ( ! $show_names ) {
-				printf( '<label style="display:none;" for="%s">%s</label>', $this->id(), $this->args( 'name' ) );
+			if ( ! $this->args( 'show_names' ) ) {
+				printf( "\n<label style=\"display:none;\" for=\"%s\">%s</label>\n", $this->id(), $this->args( 'name' ) );
 			}
 		} else {
 
@@ -432,7 +431,7 @@ class cmb_Meta_Box_field {
 		// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
 		$args['default']    = apply_filters( 'cmb_std_filter', $args['default'], $args, $this->object_type, $this->object_type );
 		$args['allow']      = 'file' == $args['type'] && ! isset( $args['allow'] ) ? array( 'url', 'attachment' ) : array();
-		$args['save_id']    = 'file' == $args['type'] && ! isset( $args['save_id'] );
+		$args['save_id']    = 'file' == $args['type'] && ! ( isset( $args['save_id'] ) && ! $args['save_id'] );
 		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
 		$args['repeatable'] = isset( $args['repeatable'] ) && $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = isset( $args['inline'] ) && $args['inline'] || false !== stripos( $args['type'], '_inline' );
@@ -449,8 +448,8 @@ class cmb_Meta_Box_field {
 		$args['_name']      = $args['id'];
 
 		if ( $this->group ) {
-			$args['id'] = $this->group['id'] .'_'. $this->group['count'] .'_'. $args['id'];
-			$args['_name'] = $this->group['id'] .'['. $this->group['count'] .']['. $args['_name'] .']';
+			$args['id'] = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
+			$args['_name'] = $this->group->args( 'id' ) .'['. $this->group->args( 'count' ) .']['. $args['_name'] .']';
 		}
 
 		if ( 'wysiwyg' == $args['type'] ) {
@@ -467,7 +466,7 @@ class cmb_Meta_Box_field {
 	 * @param array $attrs Array of attributes to update
 	 */
 	public function maybe_set_attributes( $attrs = array() ) {
-		return wp_parse_args( $attrs, $this->args['attributes'] );
+		return wp_parse_args( $this->args['attributes'], $attrs );
 	}
 
 }
