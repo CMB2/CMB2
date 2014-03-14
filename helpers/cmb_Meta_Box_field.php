@@ -192,13 +192,14 @@ class cmb_Meta_Box_field {
 	 * @return array       Updated arguments
 	 */
 	public function data_args( $args = array() ) {
-		return wp_parse_args( $args, array(
+		$args = wp_parse_args( $args, array(
 			'type'     => $this->object_type,
 			'id'       => $this->object_id,
-			'field_id' => $this->id(),
+			'field_id' => $this->id( true ),
 			'repeat'   => $this->args( 'repeatable' ),
 			'single'   => ! $this->args( 'multiple' ),
 		) );
+		return $args;
 	}
 
 	/**
