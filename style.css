@@ -7,6 +7,8 @@ table.cmb_metabox {
 
 table.cmb_metabox > tr:first-of-type > td,
 table.cmb_metabox > tr:first-of-type > th,
+table.cmb_metabox tbody > tr:first-of-type > td,
+table.cmb_metabox tbody > tr:first-of-type > th,
 .post-php table.cmb_metabox .cmb-nested-table td,
 .post-new-php table.cmb_metabox .cmb-nested-table td,
 .post-php table.cmb_metabox .repeatable-group th,
