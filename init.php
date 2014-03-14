@@ -380,6 +380,8 @@ class cmb_Meta_Box {
 
 		foreach ( $meta_box['fields'] as $field_args ) {
 
+			$field_args['context'] = $meta_box['context'];
+
 			if ( 'group' == $field_args['type'] ) {
 
 				if ( ! isset( $field_args['show_names'] ) ) {
@@ -449,6 +451,7 @@ class cmb_Meta_Box {
 				// Render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					$field_args['show_names'] = $field_group->args( 'show_names' );
+					$field_args['context'] = $field_group->args( 'context' );
 					$field = new cmb_Meta_Box_field( $field_args, $field_group );
 					$field->render_field();
 				}

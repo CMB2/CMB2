@@ -373,18 +373,23 @@ class cmb_Meta_Box_field {
 		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
 		// 'inline' flag, or _inline in the field type, set to true
 		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
+		$is_side    = 'side' === $this->args( 'context' );
 
 		printf( "<tr class=\"%s\">\n", $classes );
 
-		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
+		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) || $is_side ) {
 			echo "\t<td colspan=\"2\">\n";
-			if ( ! $this->args( 'show_names' ) ) {
-				printf( "\n<label style=\"display:none;\" for=\"%s\">%s</label>\n", $this->id(), $this->args( 'name' ) );
+
+			if ( ! $this->args( 'show_names' ) || $is_side ) {
+				$style = ! $is_side ? ' style="display:none;"' : '';
+				printf( "\n<label%s for=\"%s\">%s</label>\n", $style, $this->id(), $this->args( 'name' ) );
 			}
 		} else {
 
 			$style = 'post' == $this->object_type ? ' style="width:18%"' : '';
-			printf( '<th%s><label for="%s">%s</label></th>', $style, $this->id(), $this->args( 'name' ) );
+			// $tag   = 'side' !== $this->args( 'context' ) ? 'th' : 'p';
+			$tag   = 'th';
+			printf( '<%1$s%2$s><label for="%3$s">%4$s</label></%1$s>', $tag, $style, $this->id(), $this->args( 'name' ) );
 
 			echo "\n\t<td>\n";
 		}

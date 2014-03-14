@@ -233,12 +233,30 @@ table.cmb_metabox .attach_list li img {
 /**
  * Sidebar placement adjustments
  */
-.inner-sidebar table.cmb_metabox input[type=text], #side-sortables table.cmb_metabox input[type=text], table.cmb_metabox textarea {
+.inner-sidebar table.cmb_metabox input[type=text],
+#side-sortables table.cmb_metabox input[type=text],
+table.cmb_metabox textarea {
 	width: 95%;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_media_status .img_status img, #side-sortables table.cmb_metabox .cmb_media_status .img_status img, .inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img, #side-sortables table.cmb_metabox .cmb_media_status .embed_status img {
+.inner-sidebar table.cmb_metabox .cmb_media_status .img_status img,
+#side-sortables table.cmb_metabox .cmb_media_status .img_status img,
+.inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img,
+#side-sortables table.cmb_metabox .cmb_media_status .embed_status img {
 	width: 90%;
+}
+
+.inner-sidebar table.cmb_metabox label,
+#side-sortables table.cmb_metabox label {
+	display: block;
+	font-weight: bold;
+	padding: 0 0 5px;
+}
+
+.inner-sidebar table.cmb_metabox .cmb_metabox_description,
+#side-sortables table.cmb_metabox .cmb_metabox_description {
+	display: block;
+	padding: 7px 0 0;
 }
 
 .postbox table.cmb_metabox .cmb-spinner {
