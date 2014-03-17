@@ -259,6 +259,12 @@ table.cmb_metabox textarea {
 	padding: 7px 0 0;
 }
 
+.inner-sidebar table.cmb_metabox .cmb_metabox_title,
+#side-sortables table.cmb_metabox .cmb_metabox_title {
+	font-size: 1.2em;
+	font-style: italic;
+}
+
 .postbox table.cmb_metabox .cmb-spinner {
 	float: left;
 }

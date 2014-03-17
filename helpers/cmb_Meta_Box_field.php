@@ -381,7 +381,7 @@ class cmb_Meta_Box_field {
 			echo "\t<td colspan=\"2\">\n";
 
 			if ( ! $this->args( 'show_names' ) || $is_side ) {
-				$style = ! $is_side ? ' style="display:none;"' : '';
+				$style = ! $is_side || 'title' == $this->type() ? ' style="display:none;"' : '';
 				printf( "\n<label%s for=\"%s\">%s</label>\n", $style, $this->id(), $this->args( 'name' ) );
 			}
 		} else {
