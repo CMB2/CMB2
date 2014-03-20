@@ -25,6 +25,10 @@ New in version 1.0.0:
 * [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
 
+#### 3rd Party Resources
+* [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts): Custom field type for attaching posts to a page.
+
+
 ##### Field Types:
 * text (optionally repeatable)
 * text small (optionally repeatable)
