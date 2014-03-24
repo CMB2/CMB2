@@ -253,6 +253,12 @@ table.cmb_metabox textarea {
 	padding: 0 0 5px;
 }
 
+.inner-sidebar table.cmb_metabox .cmb_list label,
+#side-sortables table.cmb_metabox .cmb_list label {
+	display: inline;
+	font-weight: normal;
+}
+
 .inner-sidebar table.cmb_metabox .cmb_metabox_description,
 #side-sortables table.cmb_metabox .cmb_metabox_description {
 	display: block;

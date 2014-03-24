@@ -558,7 +558,7 @@ class cmb_Meta_Box_types {
 
 	public function radio( $args = array(), $type = 'radio' ) {
 		extract( $this->parse_args( $args, $type, array(
-			'class'   => 'cmb_radio_list',
+			'class'   => 'cmb_radio_list cmb_list',
 			'options' => $this->concat_options( array( 'label' => 'test' ) ),
 			'desc'    => $this->_desc( true ),
 		) ) );
@@ -571,7 +571,7 @@ class cmb_Meta_Box_types {
 	}
 
 	public function multicheck( $type = 'checkbox' ) {
-		return $this->radio( array( 'class' => 'cmb_checkbox_list', 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
+		return $this->radio( array( 'class' => 'cmb_checkbox_list cmb_list', 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
 	}
 
 	public function multicheck_inline() {
@@ -580,7 +580,7 @@ class cmb_Meta_Box_types {
 
 	public function checkbox() {
 		$meta_value = $this->field->escaped_value();
-		$args = array( 'type' => 'checkbox', 'class' => 'cmb_option', 'value' => 'on', 'desc' => '' );
+		$args = array( 'type' => 'checkbox', 'class' => 'cmb_option cmb_list', 'value' => 'on', 'desc' => '' );
 		if ( ! empty( $meta_value ) ) {
 			$args['checked'] = 'checked';
 		}
@@ -647,7 +647,7 @@ class cmb_Meta_Box_types {
 			}
 		}
 
-		return $this->radio( array( 'class' => 'cmb_checkbox_list', 'options' => $options ), 'taxonomy_multicheck' );
+		return $this->radio( array( 'class' => 'cmb_checkbox_list cmb_list', 'options' => $options ), 'taxonomy_multicheck' );
 	}
 
 	public function taxonomy_multicheck_inline() {
