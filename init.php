@@ -631,21 +631,22 @@ class cmb_Meta_Box {
 		$name = $field->id();
 		$old  = $field->get_data();
 
-		if ( $field->args( 'multiple' ) && ! $field->args( 'repeatable' ) && ! $field->group ) {
-			$field->remove_data();
-			if ( ! empty( $new_value ) ) {
-				foreach ( $new_value as $add_new ) {
-					self::$updated[] = $name;
-					$field->update_data( $add_new, $name, false );
-				}
-			}
-		} elseif ( ! empty( $new_value ) && $new_value != $old  ) {
+		// if ( $field->args( 'multiple' ) && ! $field->args( 'repeatable' ) && ! $field->group ) {
+		// 	$field->remove_data();
+		// 	if ( ! empty( $new_value ) ) {
+		// 		foreach ( $new_value as $add_new ) {
+		// 			self::$updated[] = $name;
+		// 			$field->update_data( $add_new, $name, false );
+		// 		}
+		// 	}
+		// } else
+		if ( ! empty( $new_value ) && $new_value != $old  ) {
 			self::$updated[] = $name;
-			$field->update_data( $new_value );
+			return $field->update_data( $new_value );
 		} elseif ( empty( $new_value ) ) {
 			if ( ! empty( $old ) )
 				self::$updated[] = $name;
-			$field->remove_data();
+			return $field->remove_data();
 		}
 	}
 

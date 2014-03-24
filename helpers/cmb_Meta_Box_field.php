@@ -438,7 +438,8 @@ class cmb_Meta_Box_field {
 		$args['default']    = apply_filters( 'cmb_std_filter', $args['default'], $args, $this->object_type, $this->object_type );
 		$args['allow']      = 'file' == $args['type'] && ! isset( $args['allow'] ) ? array( 'url', 'attachment' ) : array();
 		$args['save_id']    = 'file' == $args['type'] && ! ( isset( $args['save_id'] ) && ! $args['save_id'] );
-		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
+		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
+		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : false;
 		$args['repeatable'] = isset( $args['repeatable'] ) && $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = isset( $args['inline'] ) && $args['inline'] || false !== stripos( $args['type'], '_inline' );
 		$args['on_front']   = ! ( isset( $args['on_front'] ) && ! $args['on_front'] );
