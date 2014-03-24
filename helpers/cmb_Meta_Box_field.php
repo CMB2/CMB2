@@ -303,7 +303,7 @@ class cmb_Meta_Box_field {
 		$cb = $this->maybe_callback( 'escape_cb' );
 		if ( false === $cb || $this->escaping_exception() ) {
 			// If requesting NO escaping, return meta value
-			return $meta_value;
+			return ! empty( $meta_value ) ? $meta_value : $this->args( 'default' );
 		} elseif ( $cb ) {
 			// Ok, callback is good, let's run it.
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
