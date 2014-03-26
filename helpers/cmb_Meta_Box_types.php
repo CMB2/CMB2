@@ -172,8 +172,8 @@ class cmb_Meta_Box_types {
 		foreach ( $options as $option_key => $option ) {
 
 			// Check for the "old" way
-			$opt_label = isset( $option['name'] ) ? $option['name'] : $option;
-			$opt_value = isset( $option['value'] ) ? $option['value'] : $option_key;
+			$opt_label = is_array( $option ) && array_key_exists( 'name', $option ) ? $option['name'] : $option;
+			$opt_value = is_array( $option ) && array_key_exists( 'value', $option ) ? $option['value'] : $option_key;
 			$selected  = $value == $opt_value;
 
 			if ( ! empty( $args ) ) {
