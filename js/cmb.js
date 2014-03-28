@@ -363,6 +363,7 @@ window.CMB = (function(window, document, $, undefined){
 			$table.find('.remove-group-row').removeAttr( 'disabled' );
 		}
 
+		$table.trigger( 'cmb_add_row', $newRow );
 	}
 
 	cmb.addAjaxRow = function( event ) {
@@ -385,6 +386,7 @@ window.CMB = (function(window, document, $, undefined){
 		$emptyrow.after( $row );
 
 		cmb.afterRowInsert( $row );
+		$table.trigger( 'cmb_add_row', $row );
 	}
 
 	cmb.removeGroupRow = function( event ) {
@@ -401,6 +403,7 @@ window.CMB = (function(window, document, $, undefined){
 			} else {
 				$table.find('.remove-group-row').prop('disabled', false);
 			}
+			$table.trigger( 'cmb_remove_row' );
 		}
 	}
 
@@ -417,6 +420,7 @@ window.CMB = (function(window, document, $, undefined){
 				$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
 			}
 			$self.parents('.cmb-repeat-table tr').remove();
+			$table.trigger( 'cmb_remove_row' );
 		}
 	}
 
