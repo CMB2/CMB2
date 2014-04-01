@@ -33,6 +33,12 @@ table.cmb_metabox tbody > tr:first-of-type > th,
 	padding: 5px;
 }
 
+.repeatable-group .shift-rows {
+	text-decoration: none;
+	margin-right: 5px;
+	font-size: 1.2em;
+}
+
 .repeatable-group .cmb_upload_button {
 	float: right;
 }

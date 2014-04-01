@@ -275,6 +275,8 @@ class cmb_Meta_Box {
 			'file'            => 'File:',
 			'download'        => 'Download',
 			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
+			'up_arrow'        => '[ ↑ ]&nbsp;',
+			'down_arrow'      => '&nbsp;[ ↓ ]',
 		) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
@@ -413,11 +415,12 @@ class cmb_Meta_Box {
 		$field_group     = new cmb_Meta_Box_field( $args );
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
+		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : '';
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 
-		echo '<tr><td colspan="2"><table id="', $field_group->id(), '_repeat" class="repeatable-group" style="width:100%;">';
+		echo '<tr><td colspan="2"><table id="', $field_group->id(), '_repeat" class="repeatable-group'. $sortable .'" style="width:100%;">';
 		if ( $desc || $label ) {
 			echo '<tr><th>';
 				if ( $label )

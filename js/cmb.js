@@ -39,6 +39,7 @@ window.CMB = (function(window, document, $, undefined){
 		cmb.log( l10n );
 
 		var $metabox = cmb.metabox();
+		var $repeatGroup = $metabox.find('.repeatable-group');
 
 		// hide our spinner gif if we're on a MP6 dashboard
 		if ( l10n.new_admin_style ) {
@@ -68,6 +69,16 @@ window.CMB = (function(window, document, $, undefined){
 			.on( 'click', '.remove-row-button', cmb.removeAjaxRow )
 			// Ajax oEmbed display
 			.on( 'keyup paste focusout', '.cmb_oembed', cmb.maybeOembed );
+
+		if ( $repeatGroup.length ) {
+			$repeatGroup
+				.filter('.sortable').each( function() {
+					// Add sorting arrows
+					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.down_arrow +'</a>' )
+				})
+				.on( 'click', '.shift-rows', cmb.shiftRows )
+				.on( 'cmb_add_row', cmb.emptyValue );
+		}
 
 		// on pageload
 		setTimeout( cmb.resizeoEmbeds, 500);
@@ -222,14 +233,18 @@ window.CMB = (function(window, document, $, undefined){
 
 	$.fn.cleanRow = function( prevNum, group ) {
 		var $self = $(this);
+		var $inputs = $self.find('input:not([type="button"]), select, textarea, label');
 		if ( group ) {
 			// Remove extra ajaxed rows
 			$self.find('.cmb-repeat-table .repeat-row:not(:first-child)').remove();
 		}
 		cmb.$focus = false;
 		cmb.neweditor_id = [];
-		$self.find('input:not([type="button"]),select,textarea,label').each( function(){
 
+		$inputs.filter(':checked').removeAttr( 'checked' );
+		$inputs.filter(':selected').removeAttr( 'selected' );
+
+		$inputs.each( function(){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
@@ -251,11 +266,8 @@ window.CMB = (function(window, document, $, undefined){
 			}
 
 			$newInput
-				.val('')
-				.removeAttr( 'checked' )
-				.removeAttr( 'selected' )
 				.removeClass( 'hasDatepicker' )
-				.attr( attrs );
+				.attr( attrs ).val('');
 
 			// wysiwyg field
 			if ( isEditor ) {
@@ -277,6 +289,7 @@ window.CMB = (function(window, document, $, undefined){
 
 			cmb.$focus = cmb.$focus ? cmb.$focus : $newInput;
 		});
+
 		return this;
 	}
 
@@ -366,6 +379,10 @@ window.CMB = (function(window, document, $, undefined){
 		$table.trigger( 'cmb_add_row', $newRow );
 	}
 
+	cmb.emptyValue = function( event, row ) {
+		$('input:not([type="button"]), textarea', row).val('');
+	}
+
 	cmb.addAjaxRow = function( event ) {
 
 		event.preventDefault();
@@ -422,6 +439,68 @@ window.CMB = (function(window, document, $, undefined){
 			$self.parents('.cmb-repeat-table tr').remove();
 			$table.trigger( 'cmb_remove_row' );
 		}
+	}
+
+	cmb.shiftRows = function( event ) {
+
+		event.preventDefault();
+
+		var $self     = $(this);
+		var $parent   = $self.parents( '.repeatable-grouping' );
+		var toReplace = 'input:not([type="button"]),select,textarea,.cmb_media_status';
+		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.repeatable-grouping' ) : $parent.next( '.repeatable-grouping' );
+
+		if ( ! $goto.length )
+			return;
+
+		var inputVals = [];
+		// Loop this items fields
+		$parent.find( toReplace ).each( function( index ) {
+			var $element = $(this);
+			var val;
+			if ( $element.hasClass('cmb_media_status') ) {
+				// special case for image previews
+				val = $element.html()
+			} else if ( 'checkbox' === $element.attr('type') ) {
+				val = $element.is(':checked');
+				cmb.log( 'checked', val );
+			} else if ( 'select' === $element.prop('tagName') ) {
+				val = $element.is(':selected');
+				cmb.log( 'checked', val );
+			} else {
+				val = $element.val();
+			}
+			// Get all the current values per element
+			inputVals.push( { val: val, $: $element } );
+		});
+		// And swap them all
+		$goto.find( toReplace ).each( function( index ) {
+			var $element = $(this);
+			var val;
+
+			if ( $element.hasClass('cmb_media_status') ) {
+				// special case for image previews
+				val = $element.html();
+				$element.html( inputVals[ index ]['val'] )
+				inputVals[ index ]['$'].html( val );
+
+			}
+			// handle checkbox swapping
+			else if ( 'checkbox' === $element.attr('type') ) {
+				inputVals[ index ]['$'].prop( 'checked', $element.is(':checked') );
+				$element.prop( 'checked', inputVals[ index ]['val'] );
+			}
+			// handle select swapping
+			else if ( 'select' === $element.prop('tagName') ) {
+				inputVals[ index ]['$'].prop( 'selected', $element.is(':selected') );
+				$element.prop( 'selected', inputVals[ index ]['val'] );
+			}
+			// handle normal input swapping
+			else {
+				inputVals[ index ]['$'].val( $element.val() );
+				$element.val( inputVals[ index ]['val'] )
+			}
+		});
 	}
 
 	/**
