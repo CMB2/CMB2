@@ -16,10 +16,16 @@
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
 
-New in version 1.0.0:
+Features:
 
-* Bring your metaboxes to the frontend.
-* Create metaboxes to handle user meta and display them on user profile add/edit pages. Or even on the front-end.
+* Create metaboxes to be used on post edit screens.
+* Create forms to be used on options pages.
+* Create forms to handle user meta and display them on user profile add/edit pages.
+* Flexible API that allows you to use CMB forms almost anywhere, even on the front-end.
+* Several field types are included and are [listed below](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress#field-types).
+* Custom API hook that allows you to create your own field types.
+* There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
+* Repeatable fields for most field types are supported, as well as repeatable field groups.
 
 ##### Links
 * [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
@@ -33,7 +39,7 @@ New in version 1.0.0:
 
 	> 1. The `pw_select field` acts much like the default select field. However, it adds typeahead-style search allowing you to quickly make a selection from a large list
 	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
-
+* [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
 
 ##### Field Types:
 * text (optionally repeatable)
