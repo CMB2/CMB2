@@ -42,32 +42,43 @@ Features:
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
 
 ##### Field Types:
-* text (optionally repeatable)
-* text small (optionally repeatable)
-* text medium (optionally repeatable)
-* text url (optionally repeatable)
-* text email (optionally repeatable)
-* text money (optionally repeatable)
-* date picker
-* date picker (unix timestamp)
-* date time picker combo (unix timestamp)
-* date time picker with time zone combo (serialized DateTime object)
-* time zone dropdown
-* time picker
-* color picker
-* textarea
-* textarea small
-* textarea code
-* select
-* radio
-* radio inline
-* taxonomy radio
-* taxonomy select
-* checkbox
-* multicheck
-* WYSIWYG/TinyMCE
-* Image/file upload
-* oEmbed
+1. [`title`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#title) An arbitrary title field *
+1. [`text`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text)
+1. [`text_small`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_small)
+1. [`text_medium`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_medium)
+1. [`text_email`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_email)
+1. [`text_url`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_url)
+1. [`text_money`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_money)
+1. [`textarea`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea)
+1. [`textarea_small`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_small)
+1. [`textarea_code`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_code)
+1. [`text_date`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date) Date Picker
+1. [`text_time`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_time) Time picker
+1. [`select_timezone`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select_timezone) Time zone dropdown
+1. [`text_date_timestamp`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date_timestamp) Date Picker (UNIX timestamp)
+1. [`text_datetime_timestamp`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp) Test Date/Time Picker Combo (UNIX timestamp)
+1. [`text_datetime_timestamp_timezone`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp_timezone) Test Date/Time Picker/Time zone Combo (serialized DateTime object)
+1. [`colorpicker`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#colorpicker) Color picker
+1. [`radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio)
+1. [`radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio_inline)
+1. [`taxonomy_radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio)
+1. [`taxonomy_radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio_inline)
+1. [`select`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select)
+1. [`taxonomy_select`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_select)
+1. [`checkbox`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#checkbox)
+1. [`multicheck`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#multicheck)
+1. [`taxonomy_multicheck`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck)
+1. [`taxonomy_multicheck_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck_inline)
+1. [`wysiwyg`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#wysiwyg) (TinyMCE) **
+1. [`file`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file) Image/File upload *†
+1. [`file_list`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file_list) Image/File list upload
+1. [`oembed`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#oembed) Converts oembed urls (instagram, twitter, youtube, etc. [oEmbed in the Codex](https://codex.wordpress.org/Embeds))
+1. [`group`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
+1. [Create your own custom field type](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#Custom)
+
+\* Not available as a repeatable field
+\** Repeatable field support is in beta
+† Use `file_list`
 
 [More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
@@ -99,6 +110,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * look at preserving taxonomy hierarchies
 * Add input attributes filter
 * Always load newest version of CMB
+* Helper function to easily get oembed from stored oEmbed field
 
 ## Changelog
 
