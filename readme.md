@@ -7,9 +7,9 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.2  
+**Version**: 1.0.3  
 **Requires at least**: 3.5  
-**Tested up to**: 3.8  
+**Tested up to**: 3.9-alpha  
 **License**: GPLv2  
 
 ## Description
@@ -22,7 +22,7 @@ Features:
 * Create forms to be used on options pages.
 * Create forms to handle user meta and display them on user profile add/edit pages.
 * Flexible API that allows you to use CMB forms almost anywhere, even on the front-end.
-* Several field types are included and are [listed below](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress#field-types).
+* Several field types are included and are [listed below](#field-types).
 * Custom API hook that allows you to create your own field types.
 * There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
