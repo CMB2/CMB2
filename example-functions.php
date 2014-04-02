@@ -20,6 +20,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_cmb_';
 
+	/**
+	 * Sample metabox to demonstrate each field type included
+	 */
 	$meta_boxes['test_metabox'] = array(
 		'id'         => 'test_metabox',
 		'title'      => __( 'Test Metabox', 'cmb' ),
@@ -250,6 +253,9 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		),
 	);
 
+	/**
+	 * Metabox to be displayed on a single page ID
+	 */
 	$meta_boxes['about_page_metabox'] = array(
 		'id'         => 'about_page_metabox',
 		'title'      => __( 'About Page Metabox', 'cmb' ),
@@ -269,15 +275,61 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	);
 
 	/**
+	 * Repeatable Field Groups
+	 */
+	$meta_boxes['field_group'] = array(
+		'id'         => 'field_group',
+		'title'      => __( 'Repeating Field Group', 'cmb' ),
+		'pages'      => array( 'page', ),
+		'fields'     => array(
+			array(
+				'id'          => $prefix . 'repeat_group',
+				'type'        => 'group',
+				'description' => __( 'Generates reusable form entries', 'cmb' ),
+				'options'     => array(
+					'add_button'    => __( 'Add Another Entry', 'cmb' ),
+					'remove_button' => __( 'Remove Entry', 'cmb' ),
+					'sortable'      => true, // beta
+				),
+				// Fields array works the same, except id's only need to be unique for this group. Prefix is not needed.
+				'fields'      => array(
+					array(
+						'name' => 'Entry Title',
+						'id'   => 'title',
+						'type' => 'text',
+						// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
+					),
+					array(
+						'name' => 'Description',
+						'description' => 'Write a short description for this entry',
+						'id'   => 'description',
+						'type' => 'textarea_small',
+					),
+					array(
+						'name' => 'Entry Image',
+						'id'   => 'image',
+						'type' => 'file',
+					),
+					array(
+						'name' => 'Image Caption',
+						'id'   => 'image_caption',
+						'type' => 'text',
+					),
+				),
+			),
+		),
+	);
+
+	/**
 	 * Metabox for the user profile screen
 	 */
 	$meta_boxes['user_edit'] = array(
-		'id'            => 'user_edit',
-		'title'         => __( 'User Profile Metabox', 'cmb' ),
-		'pages'         => array( 'user' ), // Tells CMB to use user_meta vs post_meta
-		'show_names'    => true,
-		// 'cmb_styles' => true, // Show cmb bundled styles.. not needed on user profile page
-		'fields'        => array(
+		'id'         => 'user_edit',
+		'title'      => __( 'User Profile Metabox', 'cmb' ),
+		'pages'      => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'show_names' => true,
+		'cmb_styles' => false, // Show cmb bundled styles.. not needed on user profile page
+		'fields'     => array(
 			array(
 				'name'     => __( 'Extra Info', 'cmb' ),
 				'desc'     => __( 'field description (optional)', 'cmb' ),
@@ -326,13 +378,14 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	);
 
 	/**
-	 * Metabox for an options page
+	 * Metabox for an options page. Will not be added automatically, but needs to be called with
+	 * the `cmb_metabox_form` helper function. See wiki for more info.
 	 */
 	$meta_boxes['options_page'] = array(
-		'id'            => 'options_page',
-		'title'         => __( 'Theme Options Metabox', 'cmb' ),
-		'show_on'    => array( 'key' => 'options-page', 'value' => array( $prefix . 'theme_options', ), ),
-		'fields'        => array(
+		'id'      => 'options_page',
+		'title'   => __( 'Theme Options Metabox', 'cmb' ),
+		'show_on' => array( 'key' => 'options-page', 'value' => array( $prefix . 'theme_options', ), ),
+		'fields'  => array(
 			array(
 				'name'    => __( 'Site Background Color', 'cmb' ),
 				'desc'    => __( 'field description (optional)', 'cmb' ),

@@ -5,17 +5,55 @@ table.cmb_metabox {
 	clear: both;
 }
 
-table.cmb_metabox tr:first-of-type td, table.cmb_metabox tr:first-of-type th {
-	border:0;
+table.cmb_metabox > tr:first-of-type > td,
+table.cmb_metabox > tr:first-of-type > th,
+table.cmb_metabox tbody > tr:first-of-type > td,
+table.cmb_metabox tbody > tr:first-of-type > th,
+.post-php table.cmb_metabox .cmb-nested-table td,
+.post-new-php table.cmb_metabox .cmb-nested-table td,
+.post-php table.cmb_metabox .repeatable-group th,
+.post-new-php table.cmb_metabox .repeatable-group th,
+.post-php table.cmb_metabox .repeatable-group:first-of-type,
+.post-new-php table.cmb_metabox .repeatable-group:first-of-type {
+	border: 0;
 }
 
-.post-php table.cmb_metabox td, .post-new-php table.cmb_metabox td, .post-php table.cmb_metabox th, .post-new-php table.cmb_metabox th {
+.post-php table.cmb_metabox td,
+.post-new-php table.cmb_metabox td,
+.post-php table.cmb_metabox th,
+.post-new-php table.cmb_metabox th,
+.post-php table.cmb_metabox .repeatable-group,
+.post-new-php table.cmb_metabox .repeatable-group,
+.post-php table.cmb_metabox .repeatable-group,
+.post-new-php table.cmb_metabox .repeatable-group {
 	border-top: 1px solid #E9E9E9;
+}
+
+.repeatable-group th {
+	padding: 5px;
+}
+
+.repeatable-group .shift-rows {
+	text-decoration: none;
+	margin-right: 5px;
+	font-size: 1.2em;
+}
+
+.repeatable-group .cmb_upload_button {
+	float: right;
+}
+
+#poststuff .repeatable-group h2 {
+	margin: 0;
 }
 
 .post-php table.cmb_metabox th, .post-new-php table.cmb_metabox th {
 	text-align: right;
-	font-weight:bold
+	font-weight:bold;
+}
+
+.post-php table.cmb_metabox table th, .post-new-php table.cmb_metabox table th {
+	text-align: left;
 }
 
 table.cmb_metabox th label {
@@ -201,12 +239,42 @@ table.cmb_metabox .attach_list li img {
 /**
  * Sidebar placement adjustments
  */
-.inner-sidebar table.cmb_metabox input[type=text], #side-sortables table.cmb_metabox input[type=text], table.cmb_metabox textarea {
+.inner-sidebar table.cmb_metabox input[type=text],
+#side-sortables table.cmb_metabox input[type=text],
+table.cmb_metabox textarea {
 	width: 95%;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_media_status .img_status img, #side-sortables table.cmb_metabox .cmb_media_status .img_status img, .inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img, #side-sortables table.cmb_metabox .cmb_media_status .embed_status img {
+.inner-sidebar table.cmb_metabox .cmb_media_status .img_status img,
+#side-sortables table.cmb_metabox .cmb_media_status .img_status img,
+.inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img,
+#side-sortables table.cmb_metabox .cmb_media_status .embed_status img {
 	width: 90%;
+}
+
+.inner-sidebar table.cmb_metabox label,
+#side-sortables table.cmb_metabox label {
+	display: block;
+	font-weight: bold;
+	padding: 0 0 5px;
+}
+
+.inner-sidebar table.cmb_metabox .cmb_list label,
+#side-sortables table.cmb_metabox .cmb_list label {
+	display: inline;
+	font-weight: normal;
+}
+
+.inner-sidebar table.cmb_metabox .cmb_metabox_description,
+#side-sortables table.cmb_metabox .cmb_metabox_description {
+	display: block;
+	padding: 7px 0 0;
+}
+
+.inner-sidebar table.cmb_metabox .cmb_metabox_title,
+#side-sortables table.cmb_metabox .cmb_metabox_title {
+	font-size: 1.2em;
+	font-style: italic;
 }
 
 .postbox table.cmb_metabox .cmb-spinner {

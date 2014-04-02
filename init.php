@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0.2
+Version: 		1.1.0
 */
 
 /**
@@ -54,7 +54,7 @@ class cmb_Meta_Box {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	const CMB_VERSION = '1.0.2';
+	const CMB_VERSION = '1.1.0';
 
 	/**
 	 * Metabox Config array
@@ -71,6 +71,7 @@ class cmb_Meta_Box {
 	protected static $mb_defaults = array(
 		'id'         => '',
 		'title'      => '',
+		'type'       => '',
 		'pages'      => array(), // Post type
 		'context'    => 'normal',
 		'priority'   => 'high',
@@ -129,6 +130,12 @@ class cmb_Meta_Box {
 	 */
 	protected static $options = array();
 
+	/**
+	 * List of fields that are changed/updated on save
+	 * @var   array
+	 * @since 1.1.0
+	 */
+	protected static $updated = array();
 
 	/**
 	 * Get started
@@ -227,7 +234,7 @@ class cmb_Meta_Box {
 		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', /*'media-upload', */'cmb-timepicker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'cmb-datepicker', /*'media-upload', */'cmb-timepicker' );
 		// styles required for cmb
 		$styles = array();
 
@@ -251,12 +258,13 @@ class cmb_Meta_Box {
 			$scripts[] = 'farbtastic';
 			$styles[] = 'farbtastic';
 		}
+		wp_register_script( 'cmb-datepicker', CMB_META_BOX_URL . 'js/jquery.datePicker.min.js' );
 		wp_register_script( 'cmb-timepicker', CMB_META_BOX_URL . 'js/jquery.timePicker.min.js' );
 		wp_register_script( 'cmb-scripts', CMB_META_BOX_URL .'js/cmb'. $min .'.js', $scripts, self::CMB_VERSION );
 
 		wp_enqueue_media();
 
-		wp_localize_script( 'cmb-scripts', 'cmb_l10', array(
+		wp_localize_script( 'cmb-scripts', 'cmb_l10', apply_filters( 'cmb_localized_data', array(
 			'ajax_nonce'      => wp_create_nonce( 'ajax_nonce' ),
 			'script_debug'    => defined('SCRIPT_DEBUG') && SCRIPT_DEBUG,
 			'new_admin_style' => version_compare( $wp_version, '3.7', '>' ),
@@ -267,7 +275,9 @@ class cmb_Meta_Box {
 			'file'            => 'File:',
 			'download'        => 'Download',
 			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
-		) );
+			'up_arrow'        => '[ ↑ ]&nbsp;',
+			'down_arrow'      => '&nbsp;[ ↓ ]',
+		) ) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
 
@@ -285,7 +295,7 @@ class cmb_Meta_Box {
 			wp_enqueue_script( 'cmb-scripts' );
 
 			// default is to show cmb styles on post pages
-			if ( $this->_meta_box['cmb_styles'] != false )
+			if ( $this->_meta_box['cmb_styles'] )
 				wp_enqueue_style( 'cmb-styles' );
 		}
 	}
@@ -364,73 +374,29 @@ class cmb_Meta_Box {
 		// Set/get ID
 		$object_id = self::set_object_id( $object_id ? $object_id : self::get_object_id() );
 
-		// get box types
-		$types = cmb_Meta_Box_types::get();
-
 		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
 		wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
 		do_action( 'cmb_before_table', $meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
-		foreach ( $meta_box['fields'] as $field ) {
+		foreach ( $meta_box['fields'] as $field_args ) {
 
-			if ( isset( $field['on_front'] ) && $field['on_front'] == false )
-				continue;
+			$field_args['context'] = $meta_box['context'];
 
-			self::$field =& $field;
+			if ( 'group' == $field_args['type'] ) {
 
-			// Set up blank or default values for empty ones
-			if ( ! isset( $field['name'] ) ) $field['name'] = '';
-			if ( ! isset( $field['desc'] ) ) $field['desc'] = '';
-			if ( ! isset( $field['default'] ) ) {
-				// Phase out 'std', and use 'default' instead
-				$field['default'] = isset( $field['std'] ) ? $field['std'] : '';
-			}
-			// Allow a filter override of the default value
-			$field['default'] = apply_filters( 'cmb_default_filter', $field['default'], $field, $object_id, $object_type );
-			// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
-			$field['default'] = apply_filters( 'cmb_std_filter', $field['default'], $field, $object_id, $object_type );
-			$field['allow'] = 'file' == $field['type'] && ! isset( $field['allow'] ) ? array( 'url', 'attachment' ) : array();
-			$field['save_id'] = 'file' == $field['type'] && ! isset( $field['save_id'] );
-			$field['multiple'] = 'multicheck' == $field['type'];
-
-			// Allow an override for the field's value
-			// (assuming no one would want to save 'cmb_no_override_val' as a value)
-			$meta = apply_filters( 'cmb_override_meta_value', 'cmb_no_override_val', $object_id, $field, $object_type );
-
-			// If no override, get our meta
-			if ( $meta === 'cmb_no_override_val' )
-				$meta = self::get_data();
-
-			$classes = '';
-			$field['repeatable'] = isset( $field['repeatable'] ) && $field['repeatable'];
-			$classes .= $field['repeatable'] ? ' cmb-repeat' : '';
-			// 'inline' flag, or _inline in the field type, set to true
-			$inline = ( isset( $field['inline'] ) && $field['inline'] || false !== stripos( $field['type'], '_inline' ) );
-			$classes .= $inline ? ' cmb-inline' : '';
-
-			echo '<tr class="cmb-type-'. sanitize_html_class( $field['type'] ) .' cmb_id_'. sanitize_html_class( $field['id'] ) . $classes .'">';
-
-			if ( $field['type'] == "title" ) {
-				echo '<td colspan="2">';
-			} else {
-				if ( isset( $meta_box['show_names'] ) && $meta_box['show_names'] == true ) {
-					$style = $object_type == 'post' ? ' style="width:18%"' : '';
-					echo '<th'. $style .'><label for="', $field['id'], '">', $field['name'], '</label></th>';
-				} else {
-					echo '<label style="display:none;" for="', $field['id'], '">', $field['name'], '</label></th>';
+				if ( ! isset( $field_args['show_names'] ) ) {
+					$field_args['show_names'] = $meta_box['show_names'];
 				}
-				echo '<td>';
+				self::render_group( $field_args );
+			} else {
+
+				$field_args['show_names'] = $meta_box['show_names'];
+				// Render default fields
+				$field = new cmb_Meta_Box_field( $field_args );
+				$field->render_field();
 			}
-
-			echo empty( $field['before'] ) ? '' : $field['before'];
-
-			call_user_func( array( $types, $field['type'] ), $field, $meta, $object_id, $object_type );
-
-			echo empty( $field['after'] ) ? '' : $field['after'];
-
-			echo '</td>','</tr>';
 		}
 		echo '</table>';
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
@@ -439,9 +405,77 @@ class cmb_Meta_Box {
 	}
 
 	/**
+	 * Render a repeatable group
+	 */
+	public static function render_group( $args ) {
+		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) )
+			return;
+
+		$args['count']   = 0;
+		$field_group     = new cmb_Meta_Box_field( $args );
+		$desc            = $field_group->args( 'description' );
+		$label           = $field_group->args( 'name' );
+		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : '';
+		$group_val       = (array) $field_group->value();
+		$nrows           = count( $group_val );
+		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
+
+		echo '<tr><td colspan="2"><table id="', $field_group->id(), '_repeat" class="repeatable-group'. $sortable .'" style="width:100%;">';
+		if ( $desc || $label ) {
+			echo '<tr><th>';
+				if ( $label )
+					echo '<h2 class="cmb-group-name">'. $label .'</h2>';
+				if ( $desc )
+					echo '<p class="cmb_metabox_description">'. $desc .'</p>';
+			echo '</th></tr>';
+		}
+
+		if ( ! empty( $group_val ) ) {
+
+			foreach ( $group_val as $iterator => $field_id ) {
+				self::render_group_row( $field_group, $remove_disabled );
+			}
+		} else {
+			self::render_group_row( $field_group, $remove_disabled );
+		}
+
+		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></td></tr>';
+
+		echo '</table></td></tr>';
+
+	}
+
+	public static function render_group_row( $field_group, $remove_disabled ) {
+
+		echo '
+		<tr class="repeatable-grouping" data-iterator="'. $field_group->count() .'">
+			<td>
+				<table class="cmb-nested-table" style="width: 100%;">';
+				// Render repeatable group fields
+				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
+					$field_args['show_names'] = $field_group->args( 'show_names' );
+					$field_args['context'] = $field_group->args( 'context' );
+					$field = new cmb_Meta_Box_field( $field_args, $field_group );
+					$field->render_field();
+				}
+				echo '
+					<tr>
+						<td class="remove-row" colspan="2">
+							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		';
+
+		$field_group->args['count']++;
+	}
+
+	/**
 	 * Save data from metabox
 	 */
-	public function save_post( $post_id, $post = false )  {
+	public function save_post( $post_id, $post = false ) {
 
 		$post_type = $post ? $post->post_type : get_post_type( $post_id );
 
@@ -500,53 +534,16 @@ class cmb_Meta_Box {
 			return;
 
 		// save field ids of those that are updated
-		$updated = array();
+		self::$updated = array();
 
-		foreach ( $meta_box['fields'] as $field ) {
+		foreach ( $meta_box['fields'] as $field_args ) {
 
-			self::$field =& $field;
-			$name = $field['id'];
-
-			if ( ! isset( $field['multiple'] ) )
-				$field['multiple'] = ( 'multicheck' == $field['type'] ) ? true : false;
-
-			$old = self::get_data();
-			$new = isset( $_POST[ $field['id'] ] ) ? $_POST[ $field['id'] ] : null;
-
-
-			if ( $object_type == 'post' ) {
-
-				if (
-					isset( $field['taxonomy'] )
-					&& in_array( $field['type'], array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_multicheck' ) )
-				)
-					$new = wp_set_object_terms( $object_id, $new, $field['taxonomy'] );
-
-			}
-
-			if ( isset( $field['repeatable'] ) && $field['repeatable'] && is_array( $new ) ) {
-				$new = array_filter( $new );
-			}
-
-			// Check if this metabox field has a registered validation callback, or perform default sanitization
-			$new = self::sanitization_cb( $new );
-
-			if ( $field['multiple'] ) {
-
-				self::remove_data( $name );
-				if ( ! empty( $new ) ) {
-					foreach ( $new as $add_new ) {
-						$updated[] = $name;
-						self::update_data( $add_new, $name, true );
-					}
-				}
-			} elseif ( ! empty( $new ) && $new != $old  ) {
-				$updated[] = $name;
-				self::update_data( $new );
-			} elseif ( empty( $new ) ) {
-				if ( ! empty( $old ) )
-					$updated[] = $name;
-				self::remove_data( $name );
+			if ( 'group' == $field_args['type'] ) {
+				self::save_group( $field_args );
+			} else {
+				// Save default fields
+				$field = new cmb_Meta_Box_field( $field_args );
+				self::save_field( self::sanitize_field( $field ), $field );
 			}
 
 		}
@@ -555,8 +552,105 @@ class cmb_Meta_Box {
 		if ( $object_type == 'options-page' )
 			self::save_option( $object_id );
 
-		do_action( "cmb_save_{$object_type}_fields", $object_id, $meta_box['id'], $updated, $meta_box );
+		do_action( "cmb_save_{$object_type}_fields", $object_id, $meta_box['id'], self::$updated, $meta_box );
 
+	}
+
+	/**
+	 * Save a repeatable group
+	 */
+	public static function save_group( $args ) {
+		if ( ! isset( $args['id'], $args['fields'], $_POST[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
+			return;
+
+		$field_group        = new cmb_Meta_Box_field( $args );
+		$base_id            = $field_group->id();
+		$old                = $field_group->get_data();
+		$group_vals         = $_POST[ $base_id ];
+		$saved              = array();
+		$is_updated         = false;
+		$field_group->index = 0;
+
+		// $group_vals[0]['color'] = '333';
+		foreach ( array_values( $field_group->fields() ) as $field_args ) {
+			$field = new cmb_Meta_Box_field( $field_args, $field_group );
+			$sub_id = $field->id( true );
+
+			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
+
+				// Get value
+				$new_val = isset( $group_vals[ $field_group->index ][ $sub_id ] )
+					? $group_vals[ $field_group->index ][ $sub_id ]
+					: false;
+
+				// Sanitize
+				$new_val = self::sanitize_field( $field, $new_val, $field_group->index );
+
+				if ( 'file' == $field->type() && is_array( $new_val ) ) {
+					// Add image ID to the array stack
+					$saved[ $field_group->index ][ $new_val['field_id'] ] = $new_val['attach_id'];
+					// Reset var to url string
+					$new_val = $new_val['url'];
+				}
+
+				// Get old value
+				$old_val = isset( $old[ $field_group->index ][ $sub_id ] )
+					? $old[ $field_group->index ][ $sub_id ]
+					: false;
+
+				$is_updated = ( ! empty( $new_val ) && $new_val != $old_val );
+				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
+				// Compare values and add to `$updated` array
+				if ( $is_updated || $is_removed )
+					self::$updated[] = $base_id .'::'. $field_group->index .'::'. $sub_id;
+
+				// Add to `$saved` array
+				$saved[ $field_group->index ][ $sub_id ] = $new_val;
+
+			}
+			$saved[ $field_group->index ] = array_filter( $saved[ $field_group->index ] );
+		}
+		$saved = array_filter( $saved );
+
+		$field_group->update_data( $saved, true );
+	}
+
+	public static function sanitize_field( $field, $new_value = null ) {
+
+		$new_value = null !== $new_value
+			? $new_value
+			: ( isset( $_POST[ $field->id( true ) ] ) ? $_POST[ $field->id( true ) ] : null );
+
+		if ( $field->args( 'repeatable' ) && is_array( $new_value ) ) {
+			// Remove empties
+			$new_value = array_filter( $new_value );
+		}
+
+		// Check if this metabox field has a registered validation callback, or perform default sanitization
+		return $field->sanitization_cb( $new_value );
+	}
+
+	public static function save_field( $new_value, $field ) {
+		$name = $field->id();
+		$old  = $field->get_data();
+
+		// if ( $field->args( 'multiple' ) && ! $field->args( 'repeatable' ) && ! $field->group ) {
+		// 	$field->remove_data();
+		// 	if ( ! empty( $new_value ) ) {
+		// 		foreach ( $new_value as $add_new ) {
+		// 			self::$updated[] = $name;
+		// 			$field->update_data( $add_new, $name, false );
+		// 		}
+		// 	}
+		// } else
+		if ( ! empty( $new_value ) && $new_value != $old  ) {
+			self::$updated[] = $name;
+			return $field->update_data( $new_value );
+		} elseif ( empty( $new_value ) ) {
+			if ( ! empty( $old ) )
+				self::$updated[] = $name;
+			return $field->remove_data();
+		}
 	}
 
 	/**
@@ -593,8 +687,7 @@ class cmb_Meta_Box {
 	 * @return string           Offset time string
 	 */
 	public static function timezone_offset( $tzstring ) {
-		if ( !empty( $tzstring ) ) {
-
+		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
 			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
 				$tzstring = str_replace( array( ':15',':30',':45' ), array( '.25','.5','.75' ), $tzstring );
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
@@ -607,41 +700,6 @@ class cmb_Meta_Box {
 		}
 
 		return 0;
-	}
-
-	/**
-	 * Offset a time value based on timezone
-	 * @since  1.0.0
-	 * @param  integer $object_id Object ID
-	 * @return string             Offset time string
-	 */
-	public static function field_timezone_offset( $object_id = 0 ) {
-
-		$tzstring = self::field_timezone( $object_id );
-
-		return self::timezone_offset( $tzstring );
-	}
-
-	/**
-	 * Return timezone string
-	 * @since  1.0.0
-	 * @param  integer $object_id Object ID
-	 * @return string             Timezone string
-	 */
-	public static function field_timezone( $object_id = 0 ) {
-		$tzstring = null;
-		if ( ! ( $object_id = self::get_object_id( $object_id ) ) )
-			return $tzstring;
-
-		if ( array_key_exists( 'timezone', self::$field ) && self::$field['timezone'] ) {
-			$tzstring = self::$field['timezone'];
-		} else if ( array_key_exists( 'timezone_meta_key', self::$field ) && self::$field['timezone_meta_key'] ) {
-			$tzstring = self::get_data( self::$field['timezone_meta_key'] );
-
-			return $tzstring;
-		}
-
-		return false;
 	}
 
 	/**
@@ -796,88 +854,6 @@ class cmb_Meta_Box {
 	}
 
 	/**
-	 * Utility method that attempts to get an attachment's ID by it's url
-	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
-	 * @return mixed            Attachment ID or false
-	 */
-	public static function image_id_from_url( $img_url ) {
-		global $wpdb;
-
-		// Get just the file name
-		if ( false !== strpos( $img_url, '/' ) ) {
-			$explode = explode( '/', $img_url );
-			$img_url = end( $explode );
-		}
-
-		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
-
-		// If we found an attachement ID, return it
-		if ( !empty( $attachment ) && is_array( $attachment ) )
-			return $attachment[0];
-
-		// No luck
-		return false;
-	}
-
-	/**
-	 * Checks if field has a registered validation callback
-	 * @since  1.0.1
-	 * @param  mixed $meta_value Meta value
-	 * @param  array $field      Field config array
-	 * @return mixed             Possibly validated meta value
-	 */
-	public static function sanitization_cb( $meta_value, $field = array() ) {
-		if ( empty( $meta_value ) )
-			return $meta_value;
-
-		$field = $field !== array() ? $field : self::$field;
-
-		// Check if the field has a registered validation callback
-		$cb = self::maybe_callback( $field, 'sanitization_cb' );
-		if ( false === $cb ) {
-			// If requestion NO validation, return meta value
-			return $meta_value;
-		} elseif ( $cb ) {
-			// Ok, callback is good, let's run it.
-			return call_user_func( $cb, $meta_value, $field );
-		}
-
-		// Validation via 'cmb_Meta_Box_Sanitize' (with fallback filter)
-		return call_user_func( array( cmb_Meta_Box_Sanitize::get(), $field['type'] ), $meta_value, $field );
-	}
-
-	/**
-	 * Checks if field has a callback value
-	 * @since  1.0.1
-	 * @param  array   $field Field config array
-	 * @param  string  $cb    Callback string
-	 * @return mixed          NULL, false for NO validation, or $cb string if it exists.
-	 */
-	public static function maybe_callback( $field, $cb ) {
-		if ( ! isset( $field[ $cb ] ) )
-			return;
-
-		// Check if metabox is requesting NO validation
-		$cb = false !== $field[ $cb ] && 'false' !== $field[ $cb ] ? $field[ $cb ] : false;
-
-		// If requestion NO validation, return false
-		if ( ! $cb )
-			return false;
-
-		if (
-			// Standard function
-			( is_string( $cb ) && function_exists( $cb ) )
-			// Or Class method
-			|| ( is_array( $cb ) && is_callable( $cb ) )
-		) {
-			return $cb;
-		}
-
-	}
-
-	/**
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
@@ -911,68 +887,6 @@ class cmb_Meta_Box {
 	 */
 	public static function set_mb_defaults( $meta_box ) {
 		return wp_parse_args( $meta_box, self::$mb_defaults );
-	}
-
-	/**
-	 * Retrieves metadata/option data
-	 * @since  1.0.1
-	 * @param  string  $field_id Meta key/Option array key
-	 * @return mixed             Meta/Option value
-	 */
-	public static function get_data( $field_id = '' ) {
-
-		$type     = self::get_object_type();
-		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
-
-		$data = 'options-page' === $type
-			? self::get_option( $id, $field_id )
-			: get_metadata( $type, $id, $field_id, !self::$field['multiple'] /* If multicheck this can be multiple values */ );
-
-		return $data;
-	}
-
-
-	/**
-	 * Updates metadata/option data
-	 * @since  1.0.1
-	 * @param  mixed   $value    Value to update data with
-	 * @param  string  $field_id Meta key/Option array key
-	 * @param  bool    $multiple Whether data is an array (add_metadata)
-	 */
-	public static function update_data( $value, $field_id = '', $multiple = false ) {
-
-		$type     = self::get_object_type();
-		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
-
-		if ( 'options-page' === $type ) {
-			self::update_option( $id, $field_id, $value );
-		} else {
-			if ( $multiple ) {
-				add_metadata( $type, $id, $field_id, $value, false );
-			} else {
-				update_metadata( $type, $id, $field_id, $value );
-			}
-		}
-	}
-
-	/**
-	 * Removes/updates metadata/option data
-	 * @since  1.0.1
-	 * @param  string  $field_id Meta key/Option array key
-	 * @param  string  $old      Old value
-	 */
-	public static function remove_data( $field_id = '', $old = '' ) {
-
-		$type     = self::get_object_type();
-		$id       = self::get_object_id();
-		$field_id = $field_id ? $field_id : self::$field['id'];
-
-		$data = 'options-page' === $type
-			? self::remove_option( $id, $field_id )
-			: delete_metadata( $type, $id, $field_id, $old );
-
 	}
 
 	/**
@@ -1016,14 +930,12 @@ class cmb_Meta_Box {
 	 * @param  string  $option_key Option key
 	 * @param  string  $field_id   Option array field key
 	 * @param  mixed   $value      Value to update data with
-	 * @param  array   $field      Optionally specify a field array
+	 * @param  bool    $single     Whether data should be an array
 	 * @return array               Modified options
 	 */
-	public static function update_option( $option_key, $field_id, $value, $field = array() ) {
+	public static function update_option( $option_key, $field_id, $value, $single = true ) {
 
-		$field = $field !== array() ? $field : self::$field;
-
-		if ( isset( $field['multiple'] ) && $field['multiple'] ) {
+		if ( ! $single ) {
 			// If multiple, add to array
 			self::$options[ $option_key ][ $field_id ][] = $value;
 		} else {
@@ -1092,6 +1004,36 @@ add_action( 'wp_ajax_nopriv_cmb_oembed_handler', array( 'cmb_Meta_Box_ajax', 'oe
  */
 function cmb_get_option( $option_key, $field_id = '' ) {
 	return cmb_Meta_Box::get_option( $option_key, $field_id );
+}
+
+/**
+ * Get a CMB field object.
+ * @since  1.1.0
+ * @param  array  $field_args  Field arguments
+ * @param  int    $object_id   Object ID
+ * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
+ * @return object              cmb_Meta_Box_field object
+ */
+function cmb_get_field( $field_args, $object_id = 0, $object_type = 'post' ) {
+	// Default to the loop post ID
+	$object_id = $object_id ? $object_id : get_the_ID();
+	cmb_Meta_Box::set_object_id( $object_id );
+	cmb_Meta_Box::set_object_type( $object_type );
+	// Send back field object
+	return new cmb_Meta_Box_field( $field_args );
+}
+
+/**
+ * Get a field's value.
+ * @since  1.1.0
+ * @param  array  $field_args  Field arguments
+ * @param  int    $object_id   Object ID
+ * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
+ * @return mixed               Maybe escaped value
+ */
+function cmb_get_field_value( $field_args, $object_id = 0, $object_type = 'post' ) {
+	$field = cmb_get_field( $object_id, $field_args, $object_type );
+	return $field->escaped_value();
 }
 
 /**
