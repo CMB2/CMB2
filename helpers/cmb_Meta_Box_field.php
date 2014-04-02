@@ -365,8 +365,9 @@ class cmb_Meta_Box_field {
 	 */
 	public function render_field() {
 
-		if ( ! $this->args( 'on_front' ) )
-			continue;
+		// If field is requesting to not be shown on the front-end
+		if ( ! is_admin() && ! $this->args( 'on_front' ) )
+			return;
 
 		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
 		$classes   .= ' cmb_id_'. sanitize_html_class( $this->id() );
