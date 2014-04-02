@@ -1024,7 +1024,7 @@ function cmb_get_field( $field_args, $object_id = 0, $object_type = 'post' ) {
 }
 
 /**
- * Get a field's (optionally escaped) value.
+ * Get a field's value.
  * @since  1.0.3
  * @param  array  $field_args  Field arguments
  * @param  int    $object_id   Object ID
