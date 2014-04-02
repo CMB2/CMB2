@@ -1029,14 +1029,11 @@ function cmb_get_field( $field_args, $object_id = 0, $object_type = 'post' ) {
  * @param  array  $field_args  Field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
- * @param  mixed $func         Escaping function (if not esc_attr()) or false for no escaping
  * @return mixed               Maybe escaped value
  */
-function cmb_get_field_value( $field_args, $object_id = 0, $object_type = 'post', $escape_cb = 'esc_attr' ) {
+function cmb_get_field_value( $field_args, $object_id = 0, $object_type = 'post' ) {
 	$field = cmb_get_field( $object_id, $field_args, $object_type );
-	if ( false === $escape_cb )
-		return $field->value();
-	return $field->escaped_value( $escape_cb );
+	return $field->escaped_value();
 }
 
 /**
