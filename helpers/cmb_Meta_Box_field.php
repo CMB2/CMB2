@@ -434,8 +434,6 @@ class cmb_Meta_Box_field {
 		if ( ! isset( $args['preview_size'] ) ) $args['preview_size'] = array( 50, 50 );
 		// Allow a filter override of the default value
 		$args['default']    = apply_filters( 'cmb_default_filter', $args['default'], $args, $this->object_type, $this->object_type );
-		// 'cmb_std_filter' deprectated, use 'cmb_default_filter' instead
-		$args['default']    = apply_filters( 'cmb_std_filter', $args['default'], $args, $this->object_type, $this->object_type );
 		$args['allow']      = 'file' == $args['type'] && ! isset( $args['allow'] ) ? array( 'url', 'attachment' ) : array();
 		$args['save_id']    = 'file' == $args['type'] && ! ( isset( $args['save_id'] ) && ! $args['save_id'] );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
