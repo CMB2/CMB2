@@ -100,7 +100,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 **Enhancements**
 
-* Repeatable groups
+* [Repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group)
 * Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields, etc.
 * Codebase has been revamped to be more modular and object-oriented. 
 * New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
