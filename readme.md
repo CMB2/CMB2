@@ -121,7 +121,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields.
 * Codebase has been revamped to be more modular and object-oriented. 
 * New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
-* Every field now supports an `attributes` parameter that takes an array of attributes.
+* Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
 * Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
 
 **Bug Fixes**
