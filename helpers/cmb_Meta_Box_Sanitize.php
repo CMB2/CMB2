@@ -20,7 +20,7 @@ class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * Setup our class vars
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 * @param object $field A CMB field object
 	 * @param mixed  $value Field value
 	 */
@@ -263,7 +263,7 @@ class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * Peforms saving of `file` attachement's ID
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $value File url
 	 */
 	public function _save_file_id( $value ) {
@@ -310,7 +310,7 @@ class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * Handles saving of attachment post ID and sanitizing file url
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $value File url
 	 * @return string        Sanitized url
 	 */
@@ -327,7 +327,7 @@ class cmb_Meta_Box_Sanitize {
 
 	/**
 	 * If repeating, loop through and re-apply sanitization method
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  mixed  $value  Meta value
 	 * @param  string $method Class method
 	 * @param  bool   $repeat Whether repeating or not

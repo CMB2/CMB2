@@ -7,7 +7,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.3  
+**Version**: 1.1.0  
 **Requires at least**: 3.5  
 **Tested up to**: 3.9-alpha  
 **License**: GPLv2  
@@ -113,18 +113,24 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
-### 1.0.3
+### 1.1.0
 
 **Enhancements**
 
 * Repeatable groups
-* Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields.
+* Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields, etc.
 * Codebase has been revamped to be more modular and object-oriented. 
 * New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
 * Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
 * Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
+* Better handling of labels in sidebar. They are now placed on top of the input rather than adjacent.
+* Added i18n compatibility to text_money. props [@ArchCarrier](https://github.com/ArchCarrier)
+* New helper functions: `cmb_get_field` and `cmb_get_field_value` for getting access to CMB's field object and/or value.
+* New JavaScript events, `cmb_add_row` and `cmb_remove_row` for hooking in and manipulating the new row's data.
+* New filter, `cmb_localized_data`, for modifiying localized data passed to the CMB JS.
 
 **Bug Fixes**
+* Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees)
 
 
 ### 1.0.2
@@ -143,7 +149,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 * Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby)
 * Replaced `__DIR__`, as `dirname( __FILE__ )` is easier to maintain back-compatibility.
-* Fixed missing table styling on new posts. [@mustardBees](https://github.com/mustardBees)
+* Fixed missing table styling on new posts. props [@mustardBees](https://github.com/mustardBees)
 * Fix undeclared JS variable. [@veelen](https://github.com/veelen)
 * Fix `file_list` errors when removing all files and saving.
 * Set correct `object_id` to be used later in `cmb_show_on` filter. [@lauravaq](https://github.com/lauravaq)

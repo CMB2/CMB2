@@ -41,7 +41,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Render a field (and handle repeatable)
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 */
 	public function render() {
 		if ( $this->field->args( 'repeatable' ) ) {
@@ -53,7 +53,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Render a field type
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 */
 	protected function _render() {
 		echo $this->{$this->field->type()}();
@@ -117,7 +117,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Handles parsing and filtering attributes while preserving any passed in via field config.
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $args     Override arguments
 	 * @param  string $element  Element for filter
 	 * @param  array  $defaults Default arguments
@@ -129,7 +129,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Combines attributes into a string for a form element
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $attrs        Attributes to concatenate
 	 * @param  array  $attr_exclude Attributes that should NOT be concatenated
 	 * @return string               String of attributes for form element
@@ -145,7 +145,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates html for an option element
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string  $opt_label Option label
 	 * @param  string  $opt_value Option value
 	 * @param  mixed   $selected  Selected attribute if option is selected
@@ -157,7 +157,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates options html
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array   $args   Optional arguments
 	 * @param  string  $method Method to generate individual option item
 	 * @return string          Concatenated html options
@@ -193,7 +193,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates html for list item with input
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $args Override arguments
 	 * @param  int    $i    Iterator value
 	 * @return string       Gnerated list item html
@@ -213,7 +213,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates html for list item with checkbox input
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $args Override arguments
 	 * @param  int    $i    Iterator value
 	 * @return string       Gnerated list item html
@@ -253,7 +253,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates repeatable field rows
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 */
 	public function repeatable_rows() {
 		$meta_value = $this->field->escaped_value();
@@ -288,7 +288,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generates a repeatable row's markup
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string  $class Repeatable table row's class
 	 */
 	protected function repeat_row( $class = 'repeat-row' ) {
@@ -327,7 +327,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generate field name attribute
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string  $suffix For multi-part fields
 	 * @return string          Name attribute
 	 */
@@ -337,7 +337,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Generate field id attribute
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string  $suffix For multi-part fields
 	 * @return string          Id attribute
 	 */
@@ -347,7 +347,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Handles outputting an 'input' element
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $args Override arguments
 	 * @return string       Form input element
 	 */
@@ -366,7 +366,7 @@ class cmb_Meta_Box_types {
 
 	/**
 	 * Handles outputting an 'textarea' element
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array  $args Override arguments
 	 * @return string       Form textarea element
 	 */

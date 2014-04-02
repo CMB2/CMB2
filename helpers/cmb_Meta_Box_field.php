@@ -2,48 +2,48 @@
 
 /**
  * CMB field class
- * @since  1.0.3
+ * @since  1.1.0
  */
 class cmb_Meta_Box_field {
 
 	/**
 	 * Metabox object id
 	 * @var   mixed
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	public $object_id;
 
 	/**
 	 * Metabox object type
 	 * @var   mixed
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	public $object_type;
 
 	/**
 	 * Field arguments
 	 * @var   mixed
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	public $args;
 
 	/**
 	 * Field group object
 	 * @var   mixed
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	public $group;
 
 	/**
 	 * Field meta value
 	 * @var   mixed
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	public $value;
 
 	/**
 	 * Constructs our field object
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 * @param array $field_args  Field arguments
 	 * @param array $group_field (optional) Group field object
 	 */
@@ -65,7 +65,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Non-existent methods fallback to checking for field arguments of the same name
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $name     Method name
 	 * @param  array  $arguments Array of passed-in arguments
 	 * @return mixed             Value of field argument
@@ -77,7 +77,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Retrieves the field id
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  boolean $raw Whether to retrieve pre-modidifed id
 	 * @return string       Field id
 	 */
@@ -88,7 +88,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Get a field argument
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $key Argument to check
 	 * @param  string $key Sub argument to check
 	 * @return mixed       Argument value or false if non-existent
@@ -103,7 +103,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Get Field's value
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $key If value is an array, is used to get array key->value
 	 * @return mixed       Field value or false if non-existent
 	 */
@@ -113,7 +113,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Retrieve a portion of a field property
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string  $var Field property to check
 	 * @param  string  $key Field property array key to check
 	 * @return mixed        Queried property value or false
@@ -187,7 +187,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * data variables for get/set data methods
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  array $args Override arguments
 	 * @return array       Updated arguments
 	 */
@@ -251,7 +251,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Determine if current type is excempt from escaping
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @return bool  True if exempt
 	 */
 	public function escaping_exception() {
@@ -265,7 +265,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Determine if current type cannot be repeatable
-	 * @since  1.0.3
+	 * @since  1.1.0
 	 * @param  string $type Field type to check
 	 * @return bool         True if type cannot be repeatable
 	 */
@@ -414,7 +414,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Fills in empty field parameters with defaults
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 * @param array $args Metabox field config array
 	 */
 	public function _set_field_defaults( $args ) {
@@ -468,7 +468,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Updates attributes array values unless they exist from the field config array
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 * @param array $attrs Array of attributes to update
 	 */
 	public function maybe_set_attributes( $attrs = array() ) {

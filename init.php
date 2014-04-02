@@ -6,7 +6,7 @@ Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
 				Bill Erickson (@billerickson / billerickson.net)
 				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
 Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.0.3
+Version: 		1.1.0
 */
 
 /**
@@ -54,7 +54,7 @@ class cmb_Meta_Box {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	const CMB_VERSION = '1.0.3';
+	const CMB_VERSION = '1.1.0';
 
 	/**
 	 * Metabox Config array
@@ -133,7 +133,7 @@ class cmb_Meta_Box {
 	/**
 	 * List of fields that are changed/updated on save
 	 * @var   array
-	 * @since 1.0.3
+	 * @since 1.1.0
 	 */
 	protected static $updated = array();
 
@@ -1008,7 +1008,7 @@ function cmb_get_option( $option_key, $field_id = '' ) {
 
 /**
  * Get a CMB field object.
- * @since  1.0.3
+ * @since  1.1.0
  * @param  array  $field_args  Field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
@@ -1025,7 +1025,7 @@ function cmb_get_field( $field_args, $object_id = 0, $object_type = 'post' ) {
 
 /**
  * Get a field's value.
- * @since  1.0.3
+ * @since  1.1.0
  * @param  array  $field_args  Field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
