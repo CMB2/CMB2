@@ -59,26 +59,25 @@ Features:
 1. [`text_datetime_timestamp`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp) Test Date/Time Picker Combo (UNIX timestamp)
 1. [`text_datetime_timestamp_timezone`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp_timezone) Test Date/Time Picker/Time zone Combo (serialized DateTime object)
 1. [`colorpicker`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#colorpicker) Color picker
-1. [`radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio)
-1. [`radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio_inline)
-1. [`taxonomy_radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio)
-1. [`taxonomy_radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio_inline)
+1. [`radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio) *
+1. [`radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio_inline) *
+1. [`taxonomy_radio`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio) *
+1. [`taxonomy_radio_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio_inline) *
 1. [`select`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select)
-1. [`taxonomy_select`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_select)
-1. [`checkbox`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#checkbox)
+1. [`taxonomy_select`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_select) *
+1. [`checkbox`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#checkbox) *
 1. [`multicheck`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#multicheck)
-1. [`taxonomy_multicheck`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck)
+1. [`taxonomy_multicheck`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck) *
 1. [`taxonomy_multicheck_inline`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck_inline)
-1. [`wysiwyg`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#wysiwyg) (TinyMCE) **
+1. [`wysiwyg`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#wysiwyg) (TinyMCE) *
 1. [`file`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file) Image/File upload *†
 1. [`file_list`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file_list) Image/File list upload
 1. [`oembed`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#oembed) Converts oembed urls (instagram, twitter, youtube, etc. [oEmbed in the Codex](https://codex.wordpress.org/Embeds))
 1. [`group`](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
 1. [Create your own custom field type](/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#Custom)
 
-\* Not available as a repeatable field
-\** Repeatable field support is in beta
-† Use `file_list`
+\* Not available as a repeatable field  
+† Use `file_list` for repeatable  
 
 [More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
@@ -87,7 +86,7 @@ Features:
 This script is easy to install. If you can't figure it out you probably shouldn't be using it.
 
 1. Place `metabox` directory inside of your (activated) theme. E.g. inside `/themes/twentyten/lib/metabox/`.
-2. Include `init.php` (preferably on the 'init' WordPress hook).
+2. Include `init.php` (no earlier than on the `init` WordPress hook, preferably at a late priority).
 3. See `example-functions.php` for further guidance.
 4. Profit.
 
@@ -114,6 +113,20 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.0.3
+
+**Enhancements**
+
+* Repeatable groups
+* Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields.
+* Codebase has been revamped to be more modular and object-oriented. 
+* New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
+* Every field now supports an `attributes` parameter that takes an array of attributes.
+* Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
+
+**Bug Fixes**
+
+
 ### 1.0.2
 
 **Enhancements**
@@ -122,7 +135,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
 * All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
 * Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc)
-* Added option to specify image preview size for `file_list` field type. props [@IgorCode](https://github.com/IgorCode)
+* Added `preview_size` parameter for `file_list` field type. props [@IgorCode](https://github.com/IgorCode)
 * Updated `file_list` images to be displayed horizontally instead of vertically. props [@IgorCode](https://github.com/IgorCode)
 * Use `get_the_terms` where possible since the data is cached.
 
