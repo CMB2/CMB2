@@ -14,9 +14,9 @@
 
 ## Description
 
-Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
+Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with custom fields that will blow your mind.
 
-Features:
+##### Features:
 
 * Create metaboxes to be used on post edit screens.
 * Create forms to be used on options pages.
@@ -26,22 +26,6 @@ Features:
 * Custom API hook that allows you to create your own field types.
 * There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
-
-All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
-
-##### Links
-* [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
-* [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
-
-#### 3rd Party Resources
-* [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): Custom field type for attaching posts to a page.
-* [CMB Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
-	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
-* [CMB Field Type: Select2](https://github.com/mustardBees/cmb-field-select2) from [mustardBees](https://github.com/mustardBees): Custom field types which use the [Select2](http://ivaynberg.github.io/select2/) script:
-
-	> 1. The `pw_select field` acts much like the default select field. However, it adds typeahead-style search allowing you to quickly make a selection from a large list
-	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
-* [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
 
 ##### Field Types:
 1. [`title`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#title) An arbitrary title field *
@@ -83,6 +67,24 @@ All contributions welcome. If you would like to submit a pull request, please ch
 
 [More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
+##### 3rd Party Resources
+* [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): Custom field type for attaching posts to a page.
+* [CMB Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
+	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
+* [CMB Field Type: Select2](https://github.com/mustardBees/cmb-field-select2) from [mustardBees](https://github.com/mustardBees): Custom field types which use the [Select2](http://ivaynberg.github.io/select2/) script:
+
+	> 1. The `pw_select field` acts much like the default select field. However, it adds typeahead-style search allowing you to quickly make a selection from a large list
+	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
+* [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
+
+##### Contribution
+All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
+
+##### Links
+* [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
+* [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
+
+
 ## Installation
 
 This script is easy to install. If you can't figure it out you probably shouldn't be using it.
@@ -91,27 +93,6 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 2. Include `init.php` (no earlier than on the `init` WordPress hook, preferably at a late priority).
 3. See `example-functions.php` for further guidance.
 4. Profit.
-
-## Known Issues
-
-* Problem inserting file url inside field for image with caption (issue #50) May be fixed, needs testing.
-* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31) May be fixed, needs testing.
-* Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
-
-## To-do
-**Enhancements**
-
-* Fix known issues (above)
-* move timepicker and datepicker jQuery inline
-* support for multiple configurable timepickers/datepickers
-* add ability to save fields in a single custom field
-* add ability to mark fields as required
-* repeatable fields (halfway there)
-* look at possiblity of tabs
-* look at preserving taxonomy hierarchies
-* Add input attributes filter
-* Always load newest version of CMB
-* Helper function to easily get oembed from stored oEmbed field
 
 ## Changelog
 
@@ -252,3 +233,25 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 ### 0.4
 * Think we have a release that is mostly working. We'll say the initial release :)
+
+## Known Issues
+
+* Problem inserting file url inside field for image with caption (issue #50) May be fixed, needs testing.
+* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31) May be fixed, needs testing.
+* Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
+
+## To-do
+**Enhancements**
+
+* Fix known issues (above)
+* move timepicker and datepicker jQuery inline
+* support for multiple configurable timepickers/datepickers
+* add ability to save fields in a single custom field
+* add ability to mark fields as required
+* repeatable fields (halfway there)
+* look at possiblity of tabs
+* look at preserving taxonomy hierarchies
+* Add input attributes filter
+* Always load newest version of CMB
+* Helper function to easily get oembed from stored oEmbed field
+
