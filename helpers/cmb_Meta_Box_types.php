@@ -172,19 +172,22 @@ class cmb_Meta_Box_types {
 		foreach ( $options as $option_key => $option ) {
 
 			// Check for the "old" way
-			$opt_label = is_array( $option ) && array_key_exists( 'name', $option ) ? $option['name'] : $option;
-			$opt_value = is_array( $option ) && array_key_exists( 'value', $option ) ? $option['value'] : $option_key;
-			$selected  = $value == $opt_value;
+			$opt_label  = is_array( $option ) && array_key_exists( 'name', $option ) ? $option['name'] : $option;
+			$opt_value  = is_array( $option ) && array_key_exists( 'value', $option ) ? $option['value'] : $option_key;
+			// Check if this option is the value of the input
+			$is_current = $value == $opt_value;
 
 			if ( ! empty( $args ) ) {
-				$args['value'] = $opt_value;
-				$args['label'] = $opt_label;
-				if ( $selected )
-					$args['selected'] = 'selected';
+				// Clone args & modify for just this item
+				$this_args = $args;
+				$this_args['value'] = $opt_value;
+				$this_args['label'] = $opt_label;
+				if ( $is_current )
+					$this_args['checked'] = 'checked';
 
-				$_options .= $this->$method( $args, $i );
+				$_options .= $this->$method( $this_args, $i );
 			} else {
-				$_options .= $this->option( $opt_label, $opt_value, $selected );
+				$_options .= $this->option( $opt_label, $opt_value, $is_current );
 			}
 			$i++;
 		}
