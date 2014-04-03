@@ -2,6 +2,7 @@
 
 **Contributors**:
 
+* WebDevStudios ( [@webdevstudios](http://twitter.com/jtsternberg ) / [webdevstudios.com](http://webdevstudios.com) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [webdevstudios.com](http://webdevstudios.com) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
