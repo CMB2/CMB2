@@ -1,12 +1,13 @@
 <?php
 /*
-Script Name: 	Custom Metaboxes and Fields
-Contributors: 	Andrew Norcross (@norcross / andrewnorcross.com)
-				Jared Atchison (@jaredatch / jaredatchison.com)
-				Bill Erickson (@billerickson / billerickson.net)
-				Justin Sternberg (@jtsternberg / dsgnwrks.pro)
-Description: 	This will create metaboxes with custom fields that will blow your mind.
-Version: 		1.1.1
+Script Name:  Custom Metaboxes and Fields
+Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
+              Justin Sternberg (@jtsternberg / dsgnwrks.pro)
+              Jared Atchison (@jaredatch / jaredatchison.com)
+              Bill Erickson (@billerickson / billerickson.net)
+              Andrew Norcross (@norcross / andrewnorcross.com)
+Description:  This will create metaboxes with custom fields that will blow your mind.
+Version:      1.1.2
 */
 
 /**
@@ -54,7 +55,7 @@ class cmb_Meta_Box {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	const CMB_VERSION = '1.1.1';
+	const CMB_VERSION = '1.1.2';
 
 	/**
 	 * Metabox Config array
