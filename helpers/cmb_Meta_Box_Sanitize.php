@@ -291,7 +291,7 @@ class cmb_Meta_Box_Sanitize {
 
 		// If there is no ID saved yet, try to get it from the url
 		if ( $value && ! $id_val ) {
-			$id_val = $this->_image_id_from_url( $value );
+			$id_val = cmb_Meta_Box::image_id_from_url( $value );
 		}
 
 		if ( $group ) {
@@ -341,33 +341,6 @@ class cmb_Meta_Box_Sanitize {
 			$new_value[] = $this->$method( $val, true );
 		}
 		return $new_value;
-	}
-
-	/**
-	 * Utility method that attempts to get an attachment's ID by it's url
-	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
-	 * @return mixed            Attachment ID or false
-	 */
-	public function _image_id_from_url( $img_url ) {
-		global $wpdb;
-
-		$img_url = esc_url_raw( $img_url );
-		// Get just the file name
-		if ( false !== strpos( $img_url, '/' ) ) {
-			$explode = explode( '/', $img_url );
-			$img_url = end( $explode );
-		}
-
-		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
-
-		// If we found an attachement ID, return it
-		if ( !empty( $attachment ) && is_array( $attachment ) )
-			return $attachment[0];
-
-		// No luck
-		return false;
 	}
 
 }
