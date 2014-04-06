@@ -8,7 +8,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.1.1  
+**Version**: 1.1.2  
 **Requires at least**: 3.5  
 **Tested up to**: 3.9-alpha  
 **License**: GPLv2  
@@ -97,9 +97,17 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.1.2
+
+**Bug Fixes**  
+
+* Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`.
+
+
 ### 1.1.1
 
 **Bug Fixes**
+
 * Radio button values were not showing saved value.
 
 ### 1.1.0
