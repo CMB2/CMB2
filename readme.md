@@ -97,6 +97,11 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.1.3
+**Bug Fixes**  
+
+* Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
+
 ### 1.1.2
 
 **Bug Fixes**  
