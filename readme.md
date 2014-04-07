@@ -101,6 +101,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 **Bug Fixes**  
 
 * Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
+* Fix repeating fields not working correctly if meta key or prefix contained an integer.
 
 ### 1.1.2
 
