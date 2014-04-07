@@ -97,6 +97,10 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.1.4
+
+* Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent).
+
 ### 1.1.3
 **Bug Fixes**  
 
