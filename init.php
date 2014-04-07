@@ -1056,11 +1056,11 @@ function cmb_get_field( $field_args, $object_id = 0, $object_type = 'post' ) {
  * @since  1.1.0
  * @param  array  $field_args  Field arguments
  * @param  int    $object_id   Object ID
- * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
+ * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
  * @return mixed               Maybe escaped value
  */
 function cmb_get_field_value( $field_args, $object_id = 0, $object_type = 'post' ) {
-	$field = cmb_get_field( $object_id, $field_args, $object_type );
+	$field = cmb_get_field( $field_args, $object_id, $object_type );
 	return $field->escaped_value();
 }
 
