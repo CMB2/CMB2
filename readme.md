@@ -8,7 +8,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.1.2  
+**Version**: 1.1.3  
 **Requires at least**: 3.5  
 **Tested up to**: 3.9-alpha  
 **License**: GPLv2  
