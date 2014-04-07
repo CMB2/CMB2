@@ -36,7 +36,6 @@ window.CMB = (function(window, document, $, undefined){
 	}
 
 	cmb.init = function() {
-		cmb.log( l10n );
 
 		var $metabox = cmb.metabox();
 		var $repeatGroup = $metabox.find('.repeatable-group');
@@ -254,7 +253,7 @@ window.CMB = (function(window, document, $, undefined){
 				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) }
 			} else {
 				var oldName   = $newInput.attr( 'name' );
-				var newName   = oldName ? oldName.replace( prevNum, cmb.idNumber ) : '';
+				var newName   = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
 				var oldID     = $newInput.attr( 'id' );
 				var newID     = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				attrs = {
