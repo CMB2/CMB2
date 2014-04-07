@@ -5,6 +5,7 @@
  *
  * @todo test taxonomy methods with non-post objects
  * @todo test all methods with non-post objects
+ * @todo Date/Time fields should store date format as data attribute for JS
  *
  * @since  1.0.0
  */
