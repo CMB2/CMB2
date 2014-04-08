@@ -996,7 +996,7 @@ class cmb_Meta_Box {
 	 * @param  string  $img_url Attachment url
 	 * @return mixed            Attachment ID or false
 	 */
-	public function image_id_from_url( $img_url ) {
+	public static function image_id_from_url( $img_url ) {
 		global $wpdb;
 
 		$img_url = esc_url_raw( $img_url );
