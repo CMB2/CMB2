@@ -397,13 +397,6 @@ class cmb_Meta_Box_field {
 
 		echo $this->args( 'before' );
 
-		if ( isset( $_GET['jtdebug'] ) ) {
-			$val = $this->value();
-			if ( is_array( $val ) )
-				echo '<xmp>$val: '. print_r( $val, true ) .'</xmp>';
-			else
-				echo '<p>$val: '. $val .'</p>';
-		}
 		$this_type = new cmb_Meta_Box_types( $this );
 		$this_type->render();
 
