@@ -101,27 +101,32 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 **Enhancements**
  
-* Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent).
+* Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent). ([#506](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/506))
+
+**Bug Fixes**  
+
+* Fixed issue where remove file button wouldn't clear the url field. ([#514](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/514))
+
 
 
 ### 1.1.3
 **Bug Fixes**  
 
 * Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
-* Fix repeating fields not working correctly if meta key or prefix contained an integer.
+* Fix repeating fields not working correctly if meta key or prefix contained an integer. ([#503](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/503))
 
 ### 1.1.2
 
 **Bug Fixes**  
 
-* Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`.
+* Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`. ([#502](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/502))
 
 
 ### 1.1.1
 
 **Bug Fixes**
 
-* Radio button values were not showing saved value.
+* Radio button values were not showing saved value. ([#500](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/500))
 
 ### 1.1.0
 
@@ -134,13 +139,13 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
 * Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
 * Better handling of labels in sidebar. They are now placed on top of the input rather than adjacent.
-* Added i18n compatibility to text_money. props [@ArchCarrier](https://github.com/ArchCarrier)
+* Added i18n compatibility to text_money. props [@ArchCarrier](https://github.com/ArchCarrier), ([#485](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/485))
 * New helper functions: `cmb_get_field` and `cmb_get_field_value` for getting access to CMB's field object and/or value.
 * New JavaScript events, `cmb_add_row` and `cmb_remove_row` for hooking in and manipulating the new row's data.
 * New filter, `cmb_localized_data`, for modifiying localized data passed to the CMB JS.
 
 **Bug Fixes**
-* Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees)
+* Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees), ([#486](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/486))
 
 
 ### 1.0.2
@@ -150,31 +155,22 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * Change the way the `'cmb_validate_{$field['type']}'` filter works.
 It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
 * All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
-* Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc)
-* Added `preview_size` parameter for `file_list` field type. props [@IgorCode](https://github.com/IgorCode)
-* Updated `file_list` images to be displayed horizontally instead of vertically. props [@IgorCode](https://github.com/IgorCode)
+* Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc), ([#473](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/473))
+* Added `preview_size` parameter for `file_list` field type. props [@IgorCode](https://github.com/IgorCode), ([#471](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/471))
+* Updated `file_list` images to be displayed horizontally instead of vertically. props [@IgorCode](https://github.com/IgorCode), ([#467](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/467))
 * Use `get_the_terms` where possible since the data is cached.
 
 **Bug Fixes**
 
-* Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby)
+* Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby), ([#465](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/465))
 * Replaced `__DIR__`, as `dirname( __FILE__ )` is easier to maintain back-compatibility.
-* Fixed missing table styling on new posts. props [@mustardBees](https://github.com/mustardBees)
-* Fix undeclared JS variable. [@veelen](https://github.com/veelen)
+* Fixed missing table styling on new posts. props [@mustardBees](https://github.com/mustardBees), ([#438](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/438))
+* Fix undeclared JS variable. [@veelen](https://github.com/veelen), ([#451](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/451))
 * Fix `file_list` errors when removing all files and saving.
-* Set correct `object_id` to be used later in `cmb_show_on` filter. [@lauravaq](https://github.com/lauravaq)
+* Set correct `object_id` to be used later in `cmb_show_on` filter. [@lauravaq](https://github.com/lauravaq), ([#445](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/445))
 * Fix sanitization recursion memeory issues.
 
 ### 1.0.1
-
-**Bug Fixes**
-
-* Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos)
-* A few php < 5.3 errors were addressed.
-* Fields with quotation marks no longer break the input/textarea fields.
-* metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting.
-* Occasionally fields wouldn't save because of the admin show_on filter.
-* Smaller images loaded to the file field type will no longer be blown up larger than their dimensions.
 
 **Enhancements**
 
@@ -186,6 +182,14 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * new `cmb_Meta_Box_types::esc()` method that handles escaping data for display.
 * New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
 
+**Bug Fixes**
+
+* Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos), ([#391](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/391))
+* A few php < 5.3 errors were addressed.
+* Fields with quotation marks no longer break the input/textarea fields.
+* metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting. ([#412](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/412))
+* Occasionally fields wouldn't save because of the admin show_on filter.
+* Smaller images loaded to the file field type will no longer be blown up larger than their dimensions.
 
 ### 1.0.0
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
