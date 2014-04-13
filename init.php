@@ -118,6 +118,13 @@ class cmb_Meta_Box {
 	protected static $is_enqueued = false;
 
 	/**
+	 * Whether CMB nonce has been added to the page. (oly add once)
+	 * @var   bool
+	 * @since 1.1.4
+	 */
+	protected static $nonce_added = false;
+
+	/**
 	 * Type of object specified by the metabox Config
 	 * @var   string
 	 * @since 1.0.0
@@ -375,9 +382,14 @@ class cmb_Meta_Box {
 		// Set/get ID
 		$object_id = self::set_object_id( $object_id ? $object_id : self::get_object_id() );
 
+		// Add nonce only once per page.
+		if ( ! self::$nonce_added ) {
+			wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
+			self::$nonce_addedf = true;
+		}
+
 		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
-		wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
 		do_action( 'cmb_before_table', $meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
