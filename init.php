@@ -385,7 +385,7 @@ class cmb_Meta_Box {
 		// Add nonce only once per page.
 		if ( ! self::$nonce_added ) {
 			wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
-			self::$nonce_addedf = true;
+			self::$nonce_added = true;
 		}
 
 		// Use nonce for verification
