@@ -454,7 +454,7 @@ class cmb_Meta_Box_field {
 		}
 
 		if ( 'wysiwyg' == $args['type'] ) {
-			$args['id'] = strtolower( str_ireplace( array( '-', '_' ), 'zx', $args['id'] ) ) . 'wpeditor';
+			$args['id'] = strtolower( str_ireplace( '-', '_', $args['id'] ) );
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
