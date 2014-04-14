@@ -103,6 +103,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
  
 * Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent). ([#506](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/506))
 * Simplify `wysiwyg` escaping and allow it to be overridden via the `escape_cb` parameter. ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/491))
+* Add a 'Select/Deselect all' button for the `multicheck` field type.
 
 **Bug Fixes**  
 
