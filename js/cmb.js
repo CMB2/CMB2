@@ -53,12 +53,16 @@ window.CMB = (function(window, document, $, undefined){
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 		$("#ui-datepicker-div").wrap('<div class="cmb_element" />');
 
+		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
+		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.check_toggle + '</span></p>' ).insertBefore( 'ul.cmb_checkbox_list' );
+
 		$metabox
 			.on( 'change', '.cmb_upload_file', function() {
 				cmb.formfield = $(this).attr('id');
 				$('#' + cmb.formfield + '_id').val('');
 			})
 			// Media/file management
+			.on( 'click', '.cmb-multicheck-toggle', cmb.toggleCheckBoxes )
 			.on( 'click', '.cmb_upload_button', cmb.handleMedia )
 			.on( 'click', '.cmb_remove_file_button', cmb.handleRemoveMedia )
 			// Repeatable content
@@ -84,6 +88,24 @@ window.CMB = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
+	}
+
+	cmb.toggleCheckBoxes = function( event ) {
+		event.preventDefault();
+		var $self = $(this);
+		var $multicheck = $self.parents( 'td' ).find( 'input[type=checkbox]' );
+
+		// If the button has already been clicked once...
+		if ( $self.data( 'checked' ) ) {
+			// clear the checkboxes and remove the flag
+			$multicheck.prop( 'checked', false );
+			$self.data( 'checked', false );
+		}
+		// Otherwise mark the checkboxes and add a flag
+		else {
+			$multicheck.prop( 'checked', true );
+			$self.data( 'checked', true );
+		}
 	}
 
 	cmb.handleMedia = function(event) {
