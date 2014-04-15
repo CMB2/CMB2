@@ -458,6 +458,14 @@ class cmb_Meta_Box_field {
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
+		$option_types = array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' );
+		if ( in_array( $args['type'], $option_types, true ) ) {
+
+			$args['show_option_all'] = isset( $args['show_option_all'] ) && ! $args['show_option_all'] ? false : true;
+			$args['show_option_none'] = isset( $args['show_option_none'] ) && ! $args['show_option_none'] ? false : true;
+
+		}
+
 		return $args;
 	}
 
