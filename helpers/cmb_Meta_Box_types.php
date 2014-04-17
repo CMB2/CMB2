@@ -643,7 +643,7 @@ class cmb_Meta_Box_types {
 					'name' => $name,
 				);
 
-				if ( in_array( $term->slug, $saved_terms ) ) {
+				if ( is_array( $saved_terms ) && in_array( $term->slug, $saved_terms ) ) {
 					$args['checked'] = 'checked';
 				}
 				$options .= $this->list_input( $args, $i );
