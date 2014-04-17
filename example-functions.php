@@ -268,7 +268,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 			array(
 				'name' => __( 'Test Text', 'cmb' ),
 				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'test_text',
+				'id'   => $prefix . '_about_test_text',
 				'type' => 'text',
 			),
 		)
