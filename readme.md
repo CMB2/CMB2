@@ -92,7 +92,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 1. Place `metabox` directory inside of your (activated) theme. E.g. inside `/themes/twentyten/lib/metabox/`.
 2. Include `init.php` (no earlier than on the `init` WordPress hook, preferably at a late priority).
-3. See `example-functions.php` for further guidance.
+3. For best results, copy (and rename if desired) `example-functions.php` into a folder *above* the CMB directory and edit to only include the fields you need. CMB directory should be left unedited in order to easily update the library.
 4. Profit.
 
 ## Changelog
