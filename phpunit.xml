@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	bootstrap                   = "tests/phpunit/includes/bootstrap.php"
+	backupGlobals               = "false"
+	colors                      = "true"
+	convertErrorsToExceptions   = "true"
+	convertNoticesToExceptions  = "true"
+	convertWarningsToExceptions = "true"
+	syntaxCheck                 = "false"
+	verbose                     = "true"
+	>
+	<testsuites>
+		<!-- Default test suite to run all tests -->
+		<testsuite name="BadgeOS Test Suite">
+			<directory suffix=".php">./tests/phpunit/tests</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
