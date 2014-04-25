@@ -1,8 +1,8 @@
 <?php
 /**
- * BadgeOS Unit Test Bootstrap
+ * CMB Unit Test Bootstrap
  *
- * @package BadgeOS
+ * @package CMB
  * @subpackage Tests
  * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0

@@ -8,9 +8,6 @@
  * @see    https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
-/*jslint browser: true, devel: true, indent: 4, maxerr: 50, sub: true */
-/*global jQuery, tb_show, tb_remove */
-
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
@@ -19,13 +16,14 @@ window.CMB = (function(window, document, $, undefined){
 
 	// localization strings
 	var l10n = window.cmb_l10;
+	var setTimeout = window.setTimeout;
 
 	// CMB functionality object
 	var cmb = {
 		formfield : '',
 		idNumber  : false,
 		file_frames: {},
-	}
+	};
 
 	cmb.metabox = function() {
 		if ( cmb.$metabox ) {
@@ -33,7 +31,7 @@ window.CMB = (function(window, document, $, undefined){
 		}
 		cmb.$metabox = $('table.cmb_metabox');
 		return cmb.$metabox;
-	}
+	};
 
 	cmb.init = function() {
 
@@ -77,7 +75,7 @@ window.CMB = (function(window, document, $, undefined){
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.down_arrow +'</a>' )
+					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.down_arrow +'</a>' );
 				})
 				.on( 'click', '.shift-rows', cmb.shiftRows )
 				.on( 'cmb_add_row', cmb.emptyValue );
@@ -88,7 +86,7 @@ window.CMB = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
-	}
+	};
 
 	cmb.toggleCheckBoxes = function( event ) {
 		event.preventDefault();
@@ -106,12 +104,13 @@ window.CMB = (function(window, document, $, undefined){
 			$multicheck.prop( 'checked', true );
 			$self.data( 'checked', true );
 		}
-	}
+	};
 
 	cmb.handleMedia = function(event) {
 
-		if ( typeof wp === 'undefined' )
+		if ( ! wp ) {
 			return;
+		}
 
 		event.preventDefault();
 
@@ -195,7 +194,7 @@ window.CMB = (function(window, document, $, undefined){
 				// add/display our output
 				$formfield.siblings('.cmb_media_status').slideDown().html(uploadStatus);
 			}
-		}
+		};
 
 		// When an file is selected, run a callback.
 		cmb.file_frames[cmb.formfield].on( 'select', function() {
@@ -206,7 +205,7 @@ window.CMB = (function(window, document, $, undefined){
 
 		// Finally, open the modal
 		cmb.file_frames[cmb.formfield].open();
-	}
+	};
 
 	cmb.handleRemoveMedia = function( event ) {
 		event.preventDefault();
@@ -226,7 +225,7 @@ window.CMB = (function(window, document, $, undefined){
 			$container.html('');
 		}
 		return false;
-	}
+	};
 
 	// src: http://www.benalman.com/projects/jquery-replacetext-plugin/
 	$.fn.replaceText = function(b, a, c) {
@@ -240,17 +239,17 @@ window.CMB = (function(window, document, $, undefined){
 						if (e !== g) {
 							if (!c && /</.test(e)) {
 								$(f).before(e);
-								d.push(f)
+								d.push(f);
 							} else {
-								f.nodeValue = e
+								f.nodeValue = e;
 							}
 						}
 					}
-				} while (f = f.nextSibling)
+				} while (f = f.nextSibling);
 			}
-			d.length && $(d).remove()
-		})
-	}
+			if ( d.length ) { $(d).remove(); }
+		});
+	};
 
 	$.fn.cleanRow = function( prevNum, group ) {
 		var $self = $(this);
@@ -269,22 +268,23 @@ window.CMB = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
-			var $next     = $newInput.next();
-			var attrs     = {}
+			// var $next     = $newInput.next();
+			var attrs     = {};
+			var newID, oldID;
 			if ( oldFor ) {
-				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) }
+				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
 			} else {
-				var oldName   = $newInput.attr( 'name' );
+				var oldName = $newInput.attr( 'name' );
 				// Replace 'name' attribute key
-				var newName   = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
-				var oldID     = $newInput.attr( 'id' );
-				var newID     = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
-				attrs = {
+				var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+				oldID       = $newInput.attr( 'id' );
+				newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+				attrs       = {
 					id: newID,
 					name: newName,
 					// value: '',
 					'data-iterator': cmb.idNumber,
-				}
+				};
 			}
 
 			$newInput
@@ -313,7 +313,7 @@ window.CMB = (function(window, document, $, undefined){
 		});
 
 		return this;
-	}
+	};
 
 	$.fn.newRowHousekeeping = function() {
 		var $row         = $(this);
@@ -325,7 +325,7 @@ window.CMB = (function(window, document, $, undefined){
 			$colorPicker.each( function() {
 				var $td = $(this).parent();
 				$td.html( $td.find( 'input:text.cmb_colorpicker' ).attr('style', '') );
-			})
+			});
 		}
 
 		// Need to clean-up colorpicker before appending
@@ -334,12 +334,15 @@ window.CMB = (function(window, document, $, undefined){
 		}
 
 		return this;
-	}
+	};
 
 	cmb.afterRowInsert = function( $row ) {
 		if ( cmb.$focus ) {
 			cmb.$focus.focus();
 		}
+
+		var _prop;
+
 		// Need to re-init wp_editor instances
 		if ( cmb.neweditor_id.length ) {
 			var i;
@@ -349,28 +352,33 @@ window.CMB = (function(window, document, $, undefined){
 
 				if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
 					var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ old ] );
-					for ( var prop in newSettings )
-						if ( 'string' === typeof( newSettings[prop] ) )
-							newSettings[prop] = newSettings[prop].replace( new RegExp( old, 'g' ), id );
+
+					for ( _prop in newSettings ) {
+						if ( 'string' === typeof( newSettings[_prop] ) ) {
+							newSettings[_prop] = newSettings[_prop].replace( new RegExp( old, 'g' ), id );
+						}
+					}
 					tinyMCEPreInit.mceInit[ id ] = newSettings;
 				}
 				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
 					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
-					for ( var prop in newQTS )
-						if ( 'string' === typeof( newQTS[prop] ) )
-							newQTS[prop] = newQTS[prop].replace( new RegExp( old, 'g' ), id );
+					for ( _prop in newQTS ) {
+						if ( 'string' === typeof( newQTS[_prop] ) ) {
+							newQTS[_prop] = newQTS[_prop].replace( new RegExp( old, 'g' ), id );
+						}
+					}
 					tinyMCEPreInit.qtInit[ id ] = newQTS;
 				}
 				tinyMCE.init({
 					id : tinyMCEPreInit.mceInit[ id ],
 				});
 
-			};
+			}
 		}
 
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input:text.cmb_timepicker'), $row.find('input:text.cmb_datepicker'), $row.find('input:text.cmb_colorpicker') );
-	}
+	};
 
 	cmb.addGroupRow = function( event ) {
 
@@ -399,11 +407,11 @@ window.CMB = (function(window, document, $, undefined){
 		}
 
 		$table.trigger( 'cmb_add_row', $newRow );
-	}
+	};
 
 	cmb.emptyValue = function( event, row ) {
 		$('input:not([type="button"]), textarea', row).val('');
-	}
+	};
 
 	cmb.addAjaxRow = function( event ) {
 
@@ -416,8 +424,6 @@ window.CMB = (function(window, document, $, undefined){
 		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
 		cmb.idNumber      = prevNum + 1;
 		var $row          = $emptyrow.clone();
-		var $colorPicker  = $row.find( '.wp-picker-container' );
-		var $list         = $row.find( '.cmb_media_status' );
 
 		$row.newRowHousekeeping().cleanRow( prevNum );
 
@@ -426,7 +432,7 @@ window.CMB = (function(window, document, $, undefined){
 
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb_add_row', $row );
-	}
+	};
 
 	cmb.removeGroupRow = function( event ) {
 		event.preventDefault();
@@ -444,7 +450,7 @@ window.CMB = (function(window, document, $, undefined){
 			}
 			$table.trigger( 'cmb_remove_row' );
 		}
-	}
+	};
 
 	cmb.removeAjaxRow = function( event ) {
 		event.preventDefault();
@@ -461,7 +467,7 @@ window.CMB = (function(window, document, $, undefined){
 			$self.parents('.cmb-repeat-table tr').remove();
 			$table.trigger( 'cmb_remove_row' );
 		}
-	}
+	};
 
 	cmb.shiftRows = function( event ) {
 
@@ -472,17 +478,18 @@ window.CMB = (function(window, document, $, undefined){
 		var toReplace = 'input:not([type="button"]),select,textarea,.cmb_media_status';
 		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.repeatable-grouping' ) : $parent.next( '.repeatable-grouping' );
 
-		if ( ! $goto.length )
+		if ( ! $goto.length ) {
 			return;
+		}
 
 		var inputVals = [];
 		// Loop this items fields
-		$parent.find( toReplace ).each( function( index ) {
+		$parent.find( toReplace ).each( function() {
 			var $element = $(this);
 			var val;
 			if ( $element.hasClass('cmb_media_status') ) {
 				// special case for image previews
-				val = $element.html()
+				val = $element.html();
 			} else if ( 'checkbox' === $element.attr('type') ) {
 				val = $element.is(':checked');
 				cmb.log( 'checked', val );
@@ -503,7 +510,7 @@ window.CMB = (function(window, document, $, undefined){
 			if ( $element.hasClass('cmb_media_status') ) {
 				// special case for image previews
 				val = $element.html();
-				$element.html( inputVals[ index ]['val'] )
+				$element.html( inputVals[ index ]['val'] );
 				inputVals[ index ]['$'].html( val );
 
 			}
@@ -520,10 +527,10 @@ window.CMB = (function(window, document, $, undefined){
 			// handle normal input swapping
 			else {
 				inputVals[ index ]['$'].val( $element.val() );
-				$element.val( inputVals[ index ]['val'] )
+				$element.val( inputVals[ index ]['val'] );
 			}
 		});
-	}
+	};
 
 	/**
 	 * @todo make work, always
@@ -537,11 +544,12 @@ window.CMB = (function(window, document, $, undefined){
 
 		// Initialize color picker
 		cmb.initColorPickers( $colorPickers );
-	}
+	};
 
 	cmb.initTimePickers = function( $selector ) {
-		if ( ! $selector.length )
+		if ( ! $selector.length ) {
 			return;
+		}
 
 		$selector.timePicker({
 			startTime: "00:00",
@@ -550,19 +558,21 @@ window.CMB = (function(window, document, $, undefined){
 			separator: ':',
 			step: 30
 		});
-	}
+	};
 
 	cmb.initDatePickers = function( $selector ) {
-		if ( ! $selector.length )
+		if ( ! $selector.length ) {
 			return;
+		}
 
 		$selector.datepicker( "destroy" );
 		$selector.datepicker();
-	}
+	};
 
 	cmb.initColorPickers = function( $selector ) {
-		if ( ! $selector.length )
+		if ( ! $selector.length ) {
 			return;
+		}
 		if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
 
 			$selector.wpColorPicker();
@@ -579,7 +589,7 @@ window.CMB = (function(window, document, $, undefined){
 				$(this).next().hide();
 			});
 		}
-	}
+	};
 
 	cmb.maybeOembed = function( evt ) {
 		var $self = $(this);
@@ -593,9 +603,11 @@ window.CMB = (function(window, document, $, undefined){
 				}, 2000);
 			},
 			keyup : function() {
-				var betw = function( min, max ) { return evt.which <= max && evt.which >= min; }
+				var betw = function( min, max ) {
+					return ( evt.which <= max && evt.which >= min );
+				};
 				// Only Ajax on normal keystrokes
-				if ( betw( 48, 90 ) || betw( 96, 111 ) || betw( 8, 9 ) || evt.which == 187 || evt.which == 190 ) {
+				if ( betw( 48, 90 ) || betw( 96, 111 ) || betw( 8, 9 ) || evt.which === 187 || evt.which === 190 ) {
 					// fire our ajax function
 					cmb.doAjax( $self, evt);
 				}
@@ -604,10 +616,10 @@ window.CMB = (function(window, document, $, undefined){
 				// paste event is fired before the value is filled, so wait a bit
 				setTimeout( function() { cmb.doAjax( $self ); }, 100);
 			}
-		}
+		};
 		m[type]();
 
-	}
+	};
 
 	/**
 	 * Resize oEmbed videos to fit in their respective metaboxes
@@ -616,18 +628,21 @@ window.CMB = (function(window, document, $, undefined){
 		cmb.metabox().each( function() {
 			var $self      = $(this);
 			var $tableWrap = $self.parents('.inside');
-			if ( ! $tableWrap.length )
+			if ( ! $tableWrap.length )  {
 				return true; // continue
+			}
 
 			// Calculate new width
 			var newWidth = Math.round(($tableWrap.width() * 0.82)*0.97) - 30;
-			if ( newWidth > 639 )
+			if ( newWidth > 639 ) {
 				return true; // continue
+			}
 
 			var $embeds   = $self.find('.cmb-type-oembed .embed_status');
 			var $children = $embeds.children().not('.cmb_remove_wrapper');
-			if ( ! $children.length )
+			if ( ! $children.length ) {
 				return true; // continue
+			}
 
 			$children.each( function() {
 				var $self     = $(this);
@@ -644,7 +659,7 @@ window.CMB = (function(window, document, $, undefined){
 			});
 
 		});
-	}
+	};
 
 	/**
 	 * Safely log things if query var is set
@@ -654,22 +669,25 @@ window.CMB = (function(window, document, $, undefined){
 		if ( l10n.script_debug && console && typeof console.log === 'function' ) {
 			console.log.apply(console, arguments);
 		}
-	}
+	};
 
 	cmb.spinner = function( $context, hide ) {
-		if ( hide )
+		if ( hide ) {
 			$('.cmb-spinner', $context ).hide();
-		else
+		}
+		else {
 			$('.cmb-spinner', $context ).show();
-	}
+		}
+	};
 
 	// function for running our ajax
-	cmb.doAjax = function($obj, e) {
+	cmb.doAjax = function($obj) {
 		// get typed value
 		var oembed_url = $obj.val();
 		// only proceed if the field contains more than 6 characters
-		if (oembed_url.length < 6)
+		if ( oembed_url.length < 6 ) {
 			return;
+		}
 
 		// only proceed if the user has pasted, pressed a number, letter, or whitelisted characters
 
@@ -694,8 +712,9 @@ window.CMB = (function(window, document, $, undefined){
 			// and run our ajax function
 			setTimeout( function() {
 				// if they haven't typed in 500 ms
-				if ($('.cmb_oembed:focus').val() != oembed_url)
+				if ( $('.cmb_oembed:focus').val() !== oembed_url ) {
 					return;
+				}
 				$.ajax({
 					type : 'post',
 					dataType : 'json',
@@ -712,8 +731,9 @@ window.CMB = (function(window, document, $, undefined){
 					success: function(response) {
 						cmb.log( response );
 						// Make sure we have a response id
-						if (typeof response.id === 'undefined')
+						if ( typeof response.id === 'undefined' ) {
 							return;
+						}
 
 						// hide our spinner
 						cmb.spinner( $context, true );
@@ -723,7 +743,7 @@ window.CMB = (function(window, document, $, undefined){
 				});
 
 			}, 500);
-	}
+	};
 
 	$(document).ready(cmb.init);
 
