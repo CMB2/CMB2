@@ -725,7 +725,8 @@ class cmb_Meta_Box_types {
 			'size'  => 45,
 			'desc'  => '',
 		) ),
-		'<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />';
+		'<input class="cmb_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb' ) .'" />',
+		$this->_desc( true );
 
 		$cached_id = $this->_id();
 		// Reset field args for attachment ID
