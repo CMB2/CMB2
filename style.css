@@ -48,6 +48,12 @@ table.cmb_metabox tbody > tr:first-of-type > th,
 	margin: 0;
 }
 
+.cmb-group-title h4 {
+	font-size: 1.2em;
+	font-weight: 500;
+	border-bottom: 1px solid #ddd;
+}
+
 .post-php table.cmb_metabox th, .post-new-php table.cmb_metabox th {
 	text-align: right;
 	font-weight:bold;

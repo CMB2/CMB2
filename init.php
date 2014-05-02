@@ -453,7 +453,7 @@ class cmb_Meta_Box {
 			self::render_group_row( $field_group, $remove_disabled );
 		}
 
-		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></td></tr>';
+		echo '<tr><td><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" data-grouptitle="', $field_group->options( 'group_title' ) ,'" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></td></tr>';
 
 		echo '</table></td></tr>';
 
@@ -465,6 +465,15 @@ class cmb_Meta_Box {
 		<tr class="repeatable-grouping" data-iterator="'. $field_group->count() .'">
 			<td>
 				<table class="cmb-nested-table" style="width: 100%;">';
+				if ( $field_group->options( 'group_title' ) ) {
+					echo '
+					<tr class="cmb-group-title">
+						<th colspan="2">
+							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
+						<th>
+					</tr>
+					';
+				}
 				// Render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					$field_args['show_names'] = $field_group->args( 'show_names' );

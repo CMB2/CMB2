@@ -406,6 +406,17 @@ class cmb_Meta_Box_field {
 	}
 
 	/**
+	 * Replaces a hash key - {#} - with the repeatable count
+	 * @since  1.1.4
+	 * @param  string $value Value to update
+	 * @return string        Updated value
+	 */
+	public function replace_hash( $value ) {
+		// Replace hash with 1 based count
+		return str_ireplace( '{#}', ( $this->count() + 1 ), $value );
+	}
+
+	/**
 	 * Fills in empty field parameters with defaults
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array

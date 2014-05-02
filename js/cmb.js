@@ -69,7 +69,9 @@ window.CMB = (function(window, document, $, undefined){
 			.on( 'click', '.remove-group-row', cmb.removeGroupRow )
 			.on( 'click', '.remove-row-button', cmb.removeAjaxRow )
 			// Ajax oEmbed display
-			.on( 'keyup paste focusout', '.cmb_oembed', cmb.maybeOembed );
+			.on( 'keyup paste focusout', '.cmb_oembed', cmb.maybeOembed )
+			// Reset titles when removing a row
+			.on( 'cmb_remove_row', '.repeatable-group', cmb.resetTitlesAndIterator );
 
 		if ( $repeatGroup.length ) {
 			$repeatGroup
@@ -86,6 +88,21 @@ window.CMB = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
+	};
+
+	cmb.resetTitlesAndIterator = function() {
+		// Loop repeatable group tables
+		$( '.repeatable-group' ).each( function() {
+			var $table = $(this);
+			// Loop repeatable group table rows
+			$table.find( '.repeatable-grouping' ).each( function( rowindex ) {
+				var $row = $(this);
+				// Reset rows iterator
+				$row.data( 'iterator', rowindex );
+				// Reset rows title
+				$row.find( '.cmb-group-title h4' ).text( $table.find( '.add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
+			});
+		});
 	};
 
 	cmb.toggleCheckBoxes = function( event ) {
@@ -264,6 +281,10 @@ window.CMB = (function(window, document, $, undefined){
 		$inputs.filter(':checked').removeAttr( 'checked' );
 		$inputs.filter(':selected').removeAttr( 'selected' );
 
+		if ( $self.find('.cmb-group-title') ) {
+			$self.find( '.cmb-group-title h4' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
+		}
+
 		$inputs.each( function(){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
@@ -391,7 +412,7 @@ window.CMB = (function(window, document, $, undefined){
 		cmb.idNumber = prevNum + 1;
 		var $row     = $oldRow.clone();
 
-		$row.newRowHousekeeping().cleanRow( prevNum, true );
+		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
 		// console.log( '$row.html()', $row.html() );
 		var $newRow = $( '<tr class="repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</tr>' );
