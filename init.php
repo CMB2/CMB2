@@ -595,9 +595,10 @@ class cmb_Meta_Box {
 				}
 
 				// Get old value
-				$old_val = isset( $old[ $field_group->index ][ $sub_id ] )
-					? $old[ $field_group->index ][ $sub_id ]
-					: false;
+				$old_val = false;
+				if( is_array($old) && isset($old[ $field_group->index ][ $sub_id ]) ) {
+					$old_val = $old[ $field_group->index ][ $sub_id ];
+				}
 
 				$is_updated = ( ! empty( $new_val ) && $new_val != $old_val );
 				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
