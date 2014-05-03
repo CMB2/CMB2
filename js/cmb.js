@@ -412,6 +412,7 @@ window.CMB = (function(window, document, $, undefined){
 		var $table  = $('#'+ $self.data('selector'));
 		var $parent = $self.parents('.repeatable-grouping');
 		var noRows  = $table.find('.repeatable-grouping').length;
+		var toFind = 'input:not([type="button"]),select,textarea,.cmb_media_status';
 
 		//Update field name attributes so data is not orphaned when a row is removed and post is saved
 		//when a group is removed loop through all next groups and update fields names
