@@ -426,7 +426,7 @@ window.CMB = (function(window, document, $, undefined){
 			var $newName = $thisName.replace( "[" + $thisID + "]", "[" + $newID + "]" ); //New name with replaced ID
 			$( this ).attr( 'name', $newName ); //set new name
 		} );
-		
+
 		if ( noRows > 1 ) {
 			$parent.remove();
 			if ( noRows < 3 ) {
