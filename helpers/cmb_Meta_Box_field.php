@@ -369,6 +369,10 @@ class cmb_Meta_Box_field {
 		if ( ! is_admin() && ! $this->args( 'on_front' ) )
 			return;
 
+		// If field is requesting to be conditionally shown
+		if ( is_callable( $this->args( 'show_on_cb' ) ) && ! call_user_func( $this->args( 'show_on_cb' ), $this ) )
+			return;
+
 		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
 		$classes   .= ' cmb_id_'. sanitize_html_class( $this->id() );
 		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';

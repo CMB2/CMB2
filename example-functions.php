@@ -33,10 +33,11 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 		// 'cmb_styles' => true, // Enqueue the CMB stylesheet on the frontend
 		'fields'     => array(
 			array(
-				'name' => __( 'Test Text', 'cmb' ),
-				'desc' => __( 'field description (optional)', 'cmb' ),
-				'id'   => $prefix . 'test_text',
-				'type' => 'text',
+				'name'       => __( 'Test Text', 'cmb' ),
+				'desc'       => __( 'field description (optional)', 'cmb' ),
+				'id'         => $prefix . 'test_text',
+				'type'       => 'text',
+				'show_on_cb' => 'cmb_test_text_show_on_cb', // function should return a bool value
 				// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
 				// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 				// 'on_front'        => false, // Optionally designate a field to wp-admin only
