@@ -617,7 +617,7 @@ class cmb_Meta_Box {
 				}
 
 				// Get old value
-				$old_val = isset( $old[ $field_group->index ][ $sub_id ] )
+				$old_val = is_array( $old ) && isset( $old[ $field_group->index ][ $sub_id ] )
 					? $old[ $field_group->index ][ $sub_id ]
 					: false;
 
