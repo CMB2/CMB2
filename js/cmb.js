@@ -20,9 +20,10 @@ window.CMB = (function(window, document, $, undefined){
 
 	// CMB functionality object
 	var cmb = {
-		formfield : '',
-		idNumber  : false,
-		file_frames: {},
+		formfield   : '',
+		idNumber    : false,
+		file_frames : {},
+		repeatEls   : 'input:not([type="button"]),select,textarea,.cmb_media_status'
 	};
 
 	cmb.metabox = function() {
@@ -401,6 +402,31 @@ window.CMB = (function(window, document, $, undefined){
 		cmb.initPickers( $row.find('input:text.cmb_timepicker'), $row.find('input:text.cmb_datepicker'), $row.find('input:text.cmb_colorpicker') );
 	};
 
+	cmb.updateNameAttr = function () {
+
+		var $this = $(this);
+		var name  = $this.attr( 'name' ); // get current name
+
+		// No name? bail
+		if ( typeof name === 'undefined' ) {
+			return false;
+		}
+
+		var prevNum = parseInt( $this.parents( '.repeatable-grouping' ).data( 'iterator' ) );
+		var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
+
+		// Update field name attributes so data is not orphaned when a row is removed and post is saved
+		var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
+
+		// New name with replaced iterator
+		$this.attr( 'name', $newName );
+
+	};
+
+	cmb.emptyValue = function( event, row ) {
+		$('input:not([type="button"]), textarea', row).val('');
+	};
+
 	cmb.addGroupRow = function( event ) {
 
 		event.preventDefault();
@@ -430,10 +456,6 @@ window.CMB = (function(window, document, $, undefined){
 		$table.trigger( 'cmb_add_row', $newRow );
 	};
 
-	cmb.emptyValue = function( event, row ) {
-		$('input:not([type="button"]), textarea', row).val('');
-	};
-
 	cmb.addAjaxRow = function( event ) {
 
 		event.preventDefault();
@@ -461,21 +483,9 @@ window.CMB = (function(window, document, $, undefined){
 		var $table  = $('#'+ $self.data('selector'));
 		var $parent = $self.parents('.repeatable-grouping');
 		var noRows  = $table.find('.repeatable-grouping').length;
-		var toFind = 'input:not([type="button"]),select,textarea,.cmb_media_status';
 
-		//Update field name attributes so data is not orphaned when a row is removed and post is saved
-		//when a group is removed loop through all next groups and update fields names
-		$parent.nextAll( '.repeatable-grouping' ).find( toFind ).each( function () {
-			var $thisID = $( this ).parents( '.repeatable-grouping' ).data( 'iterator' ); //Get this group ID
-			var $newID = $thisID - 1; //Subtract 1 to get new ID
-			var $thisName = $( this ).attr( 'name' ); //get current name
-
-			if ( typeof $thisName === 'undefined' )
-				return false;
-
-			var $newName = $thisName.replace( "[" + $thisID + "]", "[" + $newID + "]" ); //New name with replaced ID
-			$( this ).attr( 'name', $newName ); //set new name
-		} );
+		// when a group is removed loop through all next groups and update fields names
+		$parent.nextAll( '.repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 		if ( noRows > 1 ) {
 			$parent.remove();
@@ -511,7 +521,6 @@ window.CMB = (function(window, document, $, undefined){
 
 		var $self     = $(this);
 		var $parent   = $self.parents( '.repeatable-grouping' );
-		var toReplace = 'input:not([type="button"]),select,textarea,.cmb_media_status';
 		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.repeatable-grouping' ) : $parent.next( '.repeatable-grouping' );
 
 		if ( ! $goto.length ) {
@@ -520,7 +529,7 @@ window.CMB = (function(window, document, $, undefined){
 
 		var inputVals = [];
 		// Loop this items fields
-		$parent.find( toReplace ).each( function() {
+		$parent.find( cmb.repeatEls ).each( function() {
 			var $element = $(this);
 			var val;
 			if ( $element.hasClass('cmb_media_status') ) {
@@ -539,7 +548,7 @@ window.CMB = (function(window, document, $, undefined){
 			inputVals.push( { val: val, $: $element } );
 		});
 		// And swap them all
-		$goto.find( toReplace ).each( function( index ) {
+		$goto.find( cmb.repeatEls ).each( function( index ) {
 			var $element = $(this);
 			var val;
 
