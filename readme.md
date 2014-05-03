@@ -8,7 +8,7 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.1.4  
+**Version**: 1.2.0 
 **Requires at least**: 3.5  
 **Tested up to**: 3.9  
 **License**: GPLv2  
@@ -97,7 +97,7 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
-### 1.1.4
+### 1.2.0
 
 **Enhancements**
  

@@ -411,7 +411,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Replaces a hash key - {#} - with the repeatable count
-	 * @since  1.1.4
+	 * @since  1.2.0
 	 * @param  string $value Value to update
 	 * @return string        Updated value
 	 */
