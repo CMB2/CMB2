@@ -288,7 +288,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'type'        => 'group',
 				'description' => __( 'Generates reusable form entries', 'cmb' ),
 				'options'     => array(
-					'group_title'   => __( 'Entry #{#}', 'cmb' ), // {#} gets replaced by row number
+					'group_title'   => __( 'Entry {#}', 'cmb' ), // {#} gets replaced by row number
 					'add_button'    => __( 'Add Another Entry', 'cmb' ),
 					'remove_button' => __( 'Remove Entry', 'cmb' ),
 					'sortable'      => true, // beta
