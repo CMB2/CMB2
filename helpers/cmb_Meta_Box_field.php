@@ -144,7 +144,7 @@ class cmb_Meta_Box_field {
 			? cmb_Meta_Box::get_option( $id, $field_id )
 			: get_metadata( $type, $id, $field_id, ( $single || $repeat ) /* If multicheck this can be multiple values */ );
 
-		if ( $this->group ) {
+		if ( $this->group && $data ) {
 			$data = isset( $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ] )
 				? $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ]
 				: false;

@@ -461,6 +461,21 @@ window.CMB = (function(window, document, $, undefined){
 		var $table  = $('#'+ $self.data('selector'));
 		var $parent = $self.parents('.repeatable-grouping');
 		var noRows  = $table.find('.repeatable-grouping').length;
+		var toFind = 'input:not([type="button"]),select,textarea,.cmb_media_status';
+
+		//Update field name attributes so data is not orphaned when a row is removed and post is saved
+		//when a group is removed loop through all next groups and update fields names
+		$parent.nextAll( '.repeatable-grouping' ).find( toFind ).each( function () {
+			var $thisID = $( this ).parents( '.repeatable-grouping' ).data( 'iterator' ); //Get this group ID
+			var $newID = $thisID - 1; //Subtract 1 to get new ID
+			var $thisName = $( this ).attr( 'name' ); //get current name
+
+			if ( typeof $thisName === 'undefined' )
+				return false;
+
+			var $newName = $thisName.replace( "[" + $thisID + "]", "[" + $newID + "]" ); //New name with replaced ID
+			$( this ).attr( 'name', $newName ); //set new name
+		} );
 
 		if ( noRows > 1 ) {
 			$parent.remove();
