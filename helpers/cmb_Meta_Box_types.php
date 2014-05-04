@@ -36,8 +36,16 @@ class cmb_Meta_Box_types {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
+
+		// Give our action some explicit variables
+		$field_type    = $this;
+		$field_args    = $field_type->field->args();
+		$escaped_value = $field_type->field->escaped_value();
+		$object_id     = $field_type->field->object_id;
+		$object_type   = $field_type->field->object_type;
+
 		// When a non-registered field is called, send it through an action.
-		do_action( "cmb_render_$name", $this->field->args(), $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
+		do_action( "cmb_render_$name", $field_args, $escaped_value, $object_id, $object_type, $this );
 	}
 
 	/**
@@ -138,8 +146,9 @@ class cmb_Meta_Box_types {
 	public function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
-			if ( ! in_array( $attr, (array) $attr_exclude, true ) )
+			if ( ! in_array( $attr, (array) $attr_exclude, true ) ) {
 				$attributes .= sprintf( ' %s="%s"', $attr, $val );
+			}
 		}
 		return $attributes;
 	}
