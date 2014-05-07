@@ -385,12 +385,21 @@ class cmb_Meta_Box {
 
 		// Add nonce only once per page.
 		if ( ! self::$nonce_added ) {
+			// Use nonce for verification
 			wp_nonce_field( self::nonce(), 'wp_meta_box_nonce', false, true );
 			self::$nonce_added = true;
 		}
 
-		// Use nonce for verification
 		echo "\n<!-- Begin CMB Fields -->\n";
+		/**
+		 * Hook before form table begins
+		 *
+		 * @param array  $meta_box    Metabox config array
+		 * @param int    $object_id   The ID of the current object
+		 * @param string $object_type The type of object you are working with.
+		 *	                           Usually `post` (this applies to all post-types).
+		 *	                           Could also be `comment`, `user` or `options-page`.
+		 */
 		do_action( 'cmb_before_table', $meta_box, $object_id, $object_type );
 		echo '<table class="form-table cmb_metabox">';
 
@@ -413,6 +422,15 @@ class cmb_Meta_Box {
 			}
 		}
 		echo '</table>';
+		/**
+		 * Hook after form table has been rendered
+		 *
+		 * @param array  $meta_box    Metabox config array
+		 * @param int    $object_id   The ID of the current object
+		 * @param string $object_type The type of object you are working with.
+		 *	                           Usually `post` (this applies to all post-types).
+		 *	                           Could also be `comment`, `user` or `options-page`.
+		 */
 		do_action( 'cmb_after_table', $meta_box, $object_id, $object_type );
 		echo "\n<!-- End CMB Fields -->\n";
 
@@ -575,6 +593,19 @@ class cmb_Meta_Box {
 		if ( $object_type == 'options-page' )
 			self::save_option( $object_id );
 
+		/**
+		 * Fires after all fields have been saved.
+		 *
+		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
+		 * 	Usually `post` (this applies to all post-types).
+		 *  	Could also be `comment`, `user` or `options-page`.
+		 *
+		 * @param int    $object_id   The ID of the current object
+		 * @param array  $meta_box_id Metabox's id parameter
+		 * @param string $updated     All fields that were updated.
+		 *                            Will only include fields that had values change.
+		 * @param string $meta_box    The metabox config array.
+		 */
 		do_action( "cmb_save_{$object_type}_fields", $object_id, $meta_box['id'], self::$updated, $meta_box );
 
 	}
@@ -850,7 +881,12 @@ class cmb_Meta_Box {
 			);
 		}
 
-		return trailingslashit( apply_filters('cmb_meta_box_url', $cmb_url ) );
+		/**
+		 * Filter the CMB location url
+		 *
+		 * @param string $cmb_url Currently registered url
+		 */
+		return trailingslashit( apply_filters( 'cmb_meta_box_url', $cmb_url ) );
 	}
 
 	/**
