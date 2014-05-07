@@ -57,7 +57,7 @@ class cmb_Meta_Box_Sanitize {
 		 * Passing a non-null value to the filter will short-circuit saving
 		 * the field value, saving the passed value instead.
 		 *
-		 * @param bool|mixed $override_value Sanitization/Validation 0verride value to return.
+		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
 		 *                                   Default false to skip it.
 		 * @param mixed      $value      The value to be saved to this field.
 		 * @param int        $object_id  The ID of the object where the value will be saved
