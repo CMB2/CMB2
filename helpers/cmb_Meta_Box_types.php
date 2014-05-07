@@ -36,16 +36,23 @@ class cmb_Meta_Box_types {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-
-		// Give our action some explicit variables
-		$field_type    = $this;
-		$field_args    = $field_type->field->args();
-		$escaped_value = $field_type->field->escaped_value();
-		$object_id     = $field_type->field->object_id;
-		$object_type   = $field_type->field->object_type;
-
-		// When a non-registered field is called, send it through an action.
-		do_action( "cmb_render_$name", $field_args, $escaped_value, $object_id, $object_type, $this );
+		/**
+		 * Pass non-existent field types through an action
+		 *
+		 * The dynamic portion of the hook name, $name, refers to the field type.
+		 *
+		 * @param array  $field_args         The passed in field arguments augmented with defaults
+		 * @param mixed  $escaped_value      The value of this field escaped.
+		 *                                   It defaults to `sanitize_text_field`.
+		 *                                   If you need the unescaped value, you can access it
+		 *                                   via `$field_type_object->value()`
+		 * @param int    $object_id          The ID of the current object
+		 * @param string $object_type        The type of object you are working with.
+		 *                                   Most commonly, `post` (this applies to all post-types),
+		 *                                   but could also be `comment`, `user` or `options-page`.
+		 * @param object $field_type_object  This `cmb_Meta_Box_types` object
+		 */
+		do_action( "cmb_render_$name", $this->field->args(), $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
 	}
 
 	/**

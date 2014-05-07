@@ -49,10 +49,24 @@ class cmb_Meta_Box_Sanitize {
 	 */
 	public function default_sanitization( $value ) {
 
-		// Allow field type validation via filter
-		$updated = apply_filters( 'cmb_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
+		/**
+		 * Filter the value before it is saved.
+		 *
+		 * The dynamic portion of the hook name, $this->field->type(), refers to the field type.
+		 *
+		 * Passing a non-null value to the filter will short-circuit saving
+		 * the field value, saving the passed value instead.
+		 *
+		 * @param bool|mixed $override_value Sanitization/Validation 0verride value to return.
+		 *                                   Default false to skip it.
+		 * @param mixed      $value      The value to be saved to this field.
+		 * @param int        $object_id  The ID of the object where the value will be saved
+		 * @param array      $field_args The current field's arguments
+		 * @param object     $sanitizer  This `cmb_Meta_Box_Sanitize` object
+		 */
+		$override_value = apply_filters( 'cmb_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
 
-		if ( null !== $updated )
+		if ( null !== $override_value )
 			return $updated;
 
 		switch ( $this->field->type() ) {
