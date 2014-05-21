@@ -274,18 +274,29 @@ class cmb_Meta_Box {
 
 		wp_localize_script( 'cmb-scripts', 'cmb_l10', apply_filters( 'cmb_localized_data', array(
 			'ajax_nonce'      => wp_create_nonce( 'ajax_nonce' ),
+			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
 			'script_debug'    => defined('SCRIPT_DEBUG') && SCRIPT_DEBUG,
 			'new_admin_style' => version_compare( $wp_version, '3.7', '>' ),
 			'object_type'     => self::get_object_type(),
-			'upload_file'     => 'Use this file',
-			'remove_image'    => 'Remove Image',
-			'remove_file'     => 'Remove',
-			'file'            => 'File:',
-			'download'        => 'Download',
-			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
-			'up_arrow'        => '[ ↑ ]&nbsp;',
-			'down_arrow'      => '&nbsp;[ ↓ ]',
+			'upload_file'     => __( 'Use this file', 'cmb' ),
+			'remove_image'    => __( 'Remove Image', 'cmb' ),
+			'remove_file'     => __( 'Remove', 'cmb' ),
+			'file'            => __( 'File:', 'cmb' ),
+			'download'        => __( 'Download', 'cmb' ),
+			'up_arrow'        => __( '[ ↑ ]&nbsp;', 'cmb' ),
+			'down_arrow'      => __( '&nbsp;[ ↓ ]', 'cmb' ),
 			'check_toggle'    => __( 'Select / Deselect All', 'cmb' ),
+			'defaults'        => array(
+				'date_picker'  => false,
+				'color_picker' => false,
+				'time_picker'  => array(
+					'startTime'   => '00:00',
+					'endTime'     => '23:59',
+					'show24Hours' => false,
+					'separator'   => ':',
+					'step'        => 30
+				),
+			),
 		) ) );
 
 		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
