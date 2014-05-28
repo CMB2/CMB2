@@ -29,7 +29,7 @@ class cmb_Meta_Box_field {
 
 	/**
 	 * Field group object
-	 * @var   mixed
+	 * @var   array
 	 * @since 1.1.0
 	 */
 	public $group;
