@@ -660,13 +660,13 @@ class cmb_Meta_Box_types {
 
 	public function taxonomy_multicheck() {
 
-		$names   = $this->get_object_terms();
-		$saved_terms   = is_wp_error( $names ) || empty( $names )
+		$names       = $this->get_object_terms();
+		$saved_terms = is_wp_error( $names ) || empty( $names )
 			? $this->field->args( 'default' )
 			: wp_list_pluck( $names, 'slug' );
-		$terms   = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
-		$name    = $this->_name() .'[]';
-		$options = ''; $i = 1;
+		$terms       = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
+		$name        = $this->_name() .'[]';
+		$options     = ''; $i = 1;
 
 		if ( ! $terms ) {
 			$options .= '<li><label>'. __( 'No terms', 'cmb' ) .'</label></li>';
