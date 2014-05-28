@@ -568,6 +568,13 @@ class cmb_Meta_Box_types {
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = '';
 
+		$option_none  = $this->field->args( 'show_option_none' );
+		if( ! empty( $option_none ) ) {
+			$option_none_value = apply_filters( "cmb_taxonomy_select_{$this->_id()}_default_value", apply_filters( 'cmb_taxonomy_select_default_value', '' ) );
+			$selected = $saved_term == $option_none_value;
+			$options .= $this->option( $option_none, $option_none_value, $selected );
+		}
+
 		foreach ( $terms as $term ) {
 			$selected = $saved_term == $term->slug;
 			$options .= $this->option( $term->name, $term->slug, $selected );
@@ -616,6 +623,20 @@ class cmb_Meta_Box_types {
 		if ( ! $terms ) {
 			$options .= '<li><label>'. __( 'No terms', 'cmb' ) .'</label></li>';
 		} else {
+			$option_none  = $this->field->args( 'show_option_none' );
+			if( ! empty( $option_none ) ) {
+				$option_none_value = apply_filters( "cmb_taxonomy_radio_{$this->_id()}_default_value", apply_filters( 'cmb_taxonomy_radio_default_value', '' ) );
+				$args = array(
+					'value' => $option_none_value,
+					'label' => $option_none,
+				);
+				if( $saved_term == $option_none_value ) {
+					$args['checked'] = 'checked';
+				}
+				$options .= $this->list_input( $args, $i );
+				$i++;
+			}
+
 			foreach ( $terms as $term ) {
 				$args = array(
 					'value' => $term->slug,
