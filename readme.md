@@ -97,6 +97,12 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ## Changelog
 
+### 1.3.1
+
+**Enhancements**
+ 
+* Change third parameter for 'cmb_metabox_form' to be an args array. Optional arguments include `echo`, `form_format`, and `save_button`.
+
 ### 1.3.0
 
 **Enhancements**
