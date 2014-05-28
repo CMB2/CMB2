@@ -1186,10 +1186,16 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
  * @since  1.0.0
  * @param  array   $meta_box  Metabox config array
  * @param  int     $object_id Object ID
+ * @param  array   $args      Optional arguments array
  * @param  boolean $return    Whether to return or echo form
  * @return string             CMB html form markup
  */
 function cmb_metabox_form( $meta_box, $object_id, $args = array() ) {
+
+	// Backwards compatibility
+	if ( is_bool( $args ) ) {
+		$args = array( 'echo' => $args );
+	}
 
 	$args = wp_parse_args( $args, array(
 		'echo'        => true,
