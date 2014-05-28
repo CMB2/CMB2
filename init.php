@@ -1189,7 +1189,13 @@ function cmb_save_metabox_fields( $meta_box, $object_id ) {
  * @param  boolean $return    Whether to return or echo form
  * @return string             CMB html form markup
  */
-function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
+function cmb_metabox_form( $meta_box, $object_id, $args = array() ) {
+
+	$args = wp_parse_args( $args, array(
+		'echo'        => true,
+		'form_format' => '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s" class="button-primary"></form>',
+		'save_button' => __( 'Save' ),
+	) );
 
 	$meta_box = cmb_Meta_Box::set_mb_defaults( $meta_box );
 
@@ -1219,9 +1225,9 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 	$form = ob_get_contents();
 	ob_end_clean();
 
-	$form_format = apply_filters( 'cmb_frontend_form_format', '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s" class="button-primary"></form>', $object_id, $meta_box, $form );
+	$form_format = apply_filters( 'cmb_frontend_form_format', $args['form_format'], $object_id, $meta_box, $form );
 
-	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, __( 'Save' ) );
+	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, $args['save_button'] );
 
 	if ( $echo )
 		echo $form;
