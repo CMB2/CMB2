@@ -1235,7 +1235,7 @@ function cmb_metabox_form( $meta_box, $object_id, $args = array() ) {
 
 	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, $args['save_button'] );
 
-	if ( $echo )
+	if ( $args['echo'] )
 		echo $form;
 
 	return $form;
