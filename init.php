@@ -601,8 +601,9 @@ class cmb_Meta_Box {
 		}
 
 		// If options page, save the updated options
-		if ( $object_type == 'options-page' )
+		if ( $object_type == 'options-page' ) {
 			self::save_option( $object_id );
+		}
 
 		/**
 		 * Fires after all fields have been saved.
@@ -968,7 +969,7 @@ class cmb_Meta_Box {
 
 	/**
 	 * Retrieve option value based on name of option.
-	 * @uses apply_filters() Calls 'cmb_override_option_get_$option_key' hook to allow
+	 * @uses apply_filters() Calls 'cmb_override_option_get_{$option_key}' hook to allow
 	 * 	overwriting the option value to be retrieved.
 	 *
 	 * @since  1.0.1
@@ -978,7 +979,7 @@ class cmb_Meta_Box {
 	 */
 	public static function _get_option( $option_key, $default = false ) {
 
-		$test_get = apply_filters( "cmb_override_option_get_$option_key", 'cmb_no_override_option_get', $default );
+		$test_get = apply_filters( "cmb_override_option_get_{$option_key}", 'cmb_no_override_option_get', $default );
 
 		if ( $test_get !== 'cmb_no_override_option_get' )
 			return $test_get;
@@ -990,7 +991,7 @@ class cmb_Meta_Box {
 	/**
 	 * Saves the option array
 	 * Needs to be run after finished using remove/update_option
-	 * @uses apply_filters() Calls 'cmb_override_option_save_$option_key' hook to allow
+	 * @uses apply_filters() Calls 'cmb_override_option_save_{$option_key}' hook to allow
 	 * 	overwriting the option value to be stored.
 	 *
 	 * @since  1.0.1
@@ -1001,7 +1002,7 @@ class cmb_Meta_Box {
 
 		$to_save = self::get_option( $option_key );
 
-		$test_save = apply_filters( "cmb_override_option_save_$option_key", 'cmb_no_override_option_save', $to_save );
+		$test_save = apply_filters( "cmb_override_option_save_{$option_key}", 'cmb_no_override_option_save', $to_save );
 
 		if ( $test_save !== 'cmb_no_override_option_save' )
 			return $test_save;
