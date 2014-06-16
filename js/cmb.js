@@ -475,7 +475,7 @@ window.CMB = (function(window, document, $, undefined){
 
 		$row.newRowHousekeeping().cleanRow( prevNum );
 
-		$emptyrow.removeClass('empty-row').addClass('repeat-row');
+		$emptyrow.removeClass('empty-row hidden').addClass('repeat-row');
 		$emptyrow.after( $row );
 
 		cmb.afterRowInsert( $row );
@@ -511,7 +511,7 @@ window.CMB = (function(window, document, $, undefined){
 
 		// cmb.log( 'number of tbodys', $table.length );
 		// cmb.log( 'number of trs', $('tr', $table).length );
-		if ( $table.find('tr').length > 1 ) {
+		if ( $table.find('tr').length > 2 ) {
 			if ( $parent.hasClass('empty-row') ) {
 				$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
 			}

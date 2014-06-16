@@ -303,7 +303,7 @@ class cmb_Meta_Box_types {
 		// Then add an empty row
 		$this->field->escaped_value = '';
 		$this->iterator = $this->iterator ? $this->iterator : 1;
-		$this->repeat_row( 'empty-row' );
+		$this->repeat_row( 'empty-row hidden' );
 	}
 
 	/**
