@@ -287,7 +287,7 @@ window.CMB = (function(window, document, $, undefined){
 		$inputs.filter(':checked').removeAttr( 'checked' );
 		$inputs.filter(':selected').removeAttr( 'selected' );
 
-		if ( $self.find('.cmb-group-title') ) {
+		if ( $self.find('.cmb-group-title').length ) {
 			$self.find( '.cmb-group-title h4' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
 
