@@ -36,9 +36,20 @@ module.exports = function(grunt) {
 			},
 			minify: {
 				expand: true,
-				src: ['style.css'],
+				src: ['css/style.css'],
 				// dest: '',
 				ext: '.min.css'
+			}
+		},
+		sass: {
+			dist: {
+				options: {
+					style: 'expanded',
+					lineNumbers: true
+				},
+				files: {
+				  'css/style.css': 'css/style.scss',
+				}
 			}
 		},
 		jshint: {
@@ -82,11 +93,10 @@ module.exports = function(grunt) {
 		},
 		watch:  {
 
-			css: {
-				files: ['style.css'],
-				tasks: ['cssmin']
+			sass: {
+				files: ['**/*.scss'],
+				tasks: ['sass', 'cssmin']
 			},
-
 			scripts: {
 				files: ['js/cmb.js'],
 				tasks: ['jshint', 'uglify'],
@@ -105,8 +115,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-sass');
 	// grunt.loadNpmTasks('grunt-contrib-concat');
 
-	grunt.registerTask('default', ['jshint', 'cssmin', 'uglify', 'phpunit']);
+	grunt.registerTask('default', ['jshint', 'sass', 'cssmin', 'uglify', 'phpunit']);
 	grunt.registerTask('tests', ['jshint', 'phpunit']);
 };

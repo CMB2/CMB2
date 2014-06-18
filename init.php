@@ -299,7 +299,7 @@ class cmb_Meta_Box {
 			),
 		) ) );
 
-		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'style'. $min .'.css', $styles );
+		wp_register_style( 'cmb-styles', CMB_META_BOX_URL . 'css/style'. $min .'.css', $styles );
 
 		// Ok, we've enqueued our scripts/styles
 		self::$is_enqueued = true;
