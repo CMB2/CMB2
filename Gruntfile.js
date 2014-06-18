@@ -76,6 +76,15 @@ module.exports = function(grunt) {
 				predef  :['document','window','jQuery','cmb_l10','wp','tinyMCEPreInit','tinyMCE','console']
 			}
 		},
+		asciify: {
+			banner: {
+				text    : 'CMB!',
+				options : {
+					font : 'isometric2',
+					log  : true
+				}
+			}
+		},
 		uglify: {
 			all: {
 				files: {
@@ -92,14 +101,13 @@ module.exports = function(grunt) {
 			}
 		},
 		watch:  {
-
 			sass: {
 				files: ['**/*.scss'],
 				tasks: ['sass', 'cssmin']
 			},
 			scripts: {
 				files: ['js/cmb.js'],
-				tasks: ['jshint', 'uglify'],
+				tasks: ['js'],
 				options: {
 					debounceDelay: 500
 				}
@@ -116,8 +124,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-sass');
+	grunt.loadNpmTasks('grunt-asciify');
 	// grunt.loadNpmTasks('grunt-contrib-concat');
 
-	grunt.registerTask('default', ['jshint', 'sass', 'cssmin', 'uglify', 'phpunit']);
+	grunt.registerTask('default', ['asciify', 'jshint', 'sass', 'cssmin', 'uglify', 'phpunit']);
+	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['jshint', 'phpunit']);
 };
