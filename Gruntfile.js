@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-asciify');
 	// grunt.loadNpmTasks('grunt-contrib-concat');
 
-	grunt.registerTask('default', ['asciify', 'jshint', 'sass', 'cssmin', 'uglify', 'phpunit']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
-	grunt.registerTask('tests', ['jshint', 'phpunit']);
+	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
+	grunt.registerTask('default', ['js', 'sass', 'cssmin', 'phpunit']);
 };
