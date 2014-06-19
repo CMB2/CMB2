@@ -1,5 +1,4 @@
-# CMB Test Suite
-
+# CMB Test Suite [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
 
 The CMB Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
