@@ -1,9 +1,13 @@
 module.exports = function(grunt) {
+
 	grunt.initConfig({
+
 		pkg: grunt.file.readJSON('package.json'),
+
 		phpunit: {
 			classes: {}
 		},
+
 		githooks: {
 			all: {
 				'pre-commit': 'default'
@@ -26,6 +30,7 @@ module.exports = function(grunt) {
 		// 		dest: 'assets/js/{%= dir_name %}.js'
 		// 	}
 		// },
+
 		cssmin: {
 			options: {
 				// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -41,6 +46,7 @@ module.exports = function(grunt) {
 				ext: '.min.css'
 			}
 		},
+
 		sass: {
 			dist: {
 				options: {
@@ -52,6 +58,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 		jshint: {
 			all: [
 				'Gruntfile.js',
@@ -76,6 +83,7 @@ module.exports = function(grunt) {
 				predef  :['document','window','jQuery','cmb_l10','wp','tinyMCEPreInit','tinyMCE','console']
 			}
 		},
+
 		asciify: {
 			banner: {
 				text    : 'CMB!',
@@ -85,6 +93,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 		uglify: {
 			all: {
 				files: {
@@ -100,6 +109,7 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 		watch:  {
 			sass: {
 				files: ['**/*.scss'],
@@ -113,7 +123,6 @@ module.exports = function(grunt) {
 				}
 			}
 		}
-
 
 	});
 
