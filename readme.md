@@ -1,4 +1,4 @@
-# Custom Metaboxes and Fields for WordPress
+# Custom Metaboxes and Fields for WordPress [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
 
 **Contributors**:
 
