@@ -241,6 +241,7 @@ table.cmb_metabox .attach_list li {
 table.cmb_metabox .attach_list li img {
 	float: left;
 	margin-right: 10px;
+	cursor: move;
 }
 
 /**
