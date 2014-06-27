@@ -713,7 +713,7 @@ class cmb_Meta_Box_types {
 		echo '</ul>';
 		echo '<script>
 			jQuery(document).ready(function($) {
-				$( "#', $this->_id( '_status' ) ,'" ).sortable();
+				$( "#', $this->_id( '_status' ) ,'" ).sortable({ cursor: "move" });
 				$( "#', $this->_id( '_status' ) ,'" ).disableSelection();
 			});
 		      </script>';
