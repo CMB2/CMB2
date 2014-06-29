@@ -78,6 +78,8 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with
 	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
 
+* [CMB Field Type: Gallery](https://github.com/mustardBees/cmb-field-gallery) from [mustardBees](https://github.com/mustardBees): Adds a WordPress gallery field.
+
 ##### Contribution
 All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
 
