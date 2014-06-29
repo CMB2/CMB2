@@ -60,6 +60,9 @@ window.CMB = (function(window, document, $, undefined){
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
 		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.check_toggle + '</span></p>' ).insertBefore( 'ul.cmb_checkbox_list' );
 
+		// Make File List drag/drop sortable:
+		cmb.makeListSortable();
+
 		$metabox
 			.on( 'change', '.cmb_upload_file', function() {
 				cmb.formfield = $(this).attr('id');
@@ -635,6 +638,10 @@ window.CMB = (function(window, document, $, undefined){
 				$(this).next().hide();
 			});
 		}
+	};
+
+	cmb.makeListSortable = function() {
+		cmb.metabox().find( '.cmb_media_status.attach_list' ).sortable({ cursor: "move" }).disableSelection();
 	};
 
 	cmb.maybeOembed = function( evt ) {
