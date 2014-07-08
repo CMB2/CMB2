@@ -499,7 +499,7 @@ class cmb_Meta_Box {
 					<tr class="cmb-group-title">
 						<th colspan="2">
 							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
-						<th>
+						</th>
 					</tr>
 					';
 				}
