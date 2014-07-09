@@ -709,7 +709,7 @@ class cmb_Meta_Box {
 		// 		}
 		// 	}
 		// } else
-		if ( ! empty( $new_value ) && $new_value != $old  ) {
+		if ( ! empty( $new_value ) && $new_value !== $old  ) {
 			self::$updated[] = $name;
 			return $field->update_data( $new_value );
 		} elseif ( empty( $new_value ) ) {
