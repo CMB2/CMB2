@@ -15,6 +15,7 @@ class cmb_Meta_Box_ajax {
 	public static $object_id   = 0;
 	public static $embed_args  = array();
 	public static $object_type = 'post';
+	public static $ajax_update = false;
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -53,6 +54,8 @@ class cmb_Meta_Box_ajax {
 		$oembed_url = esc_url( $oembed_string );
 		// set args
 		$embed_args = array( 'width' => $embed_width );
+
+		self::$ajax_update = true;
 
 		// Get embed code (or fallback link)
 		$html = self::get_oembed( $oembed_url, $_REQUEST['object_id'], array(
@@ -150,6 +153,10 @@ class cmb_Meta_Box_ajax {
 		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
+		if ( self::$ajax_update ) {
+			return false;
+		}
+
 		// get cached data
 		$data = 'options-page' === self::$object_type
 			? cmb_Meta_Box::get_option( self::$object_id, self::$embed_args['cache_key'] )
@@ -173,6 +180,20 @@ class cmb_Meta_Box_ajax {
 		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
+		self::oembed_cache_set( $meta_key, $meta_value );
+
+		// Anything other than `null` to cancel saving to postmeta
+		return true;
+	}
+
+	/**
+	 * Saves the cached oEmbed value to relevant object metadata (vs postmeta)
+	 *
+	 * @since  1.3.0
+	 * @param  string  $meta_key   Postmeta's key
+	 * @param  mixed   $meta_value Value of the postmeta to be saved
+	 */
+	public static function oembed_cache_set( $meta_key, $meta_value ) {
 		// Cache the result to our metadata
 		if ( 'options-page' === self::$object_type ) {
 			// Set the option
@@ -182,9 +203,6 @@ class cmb_Meta_Box_ajax {
 		} else {
 			update_metadata( self::$object_type, self::$object_id, $meta_key, $meta_value );
 		}
-
-		// Anything other than `null` to cancel saving to postmeta
-		return true;
 	}
 
 	/**
