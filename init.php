@@ -199,10 +199,12 @@ class cmb_Meta_Box {
 			}
 			add_action( 'show_user_profile', array( $this, 'user_metabox' ), $priority );
 			add_action( 'edit_user_profile', array( $this, 'user_metabox' ), $priority );
+			add_action( 'user_new_form', array( $this, 'user_metabox' ), $priority );
 
 			add_action( 'personal_options_update', array( $this, 'save_user' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
-			if ( $upload && in_array( $pagenow, array( 'profile.php', 'user-edit.php' ) ) ) {
+			add_action( 'user_register', array( $this, 'save_user' ) );
+			if ( $upload && in_array( $pagenow, array( 'profile.php', 'user-edit.php', 'user-add.php' ) ) ) {
 				$this->form_id = 'your-profile';
 				add_action( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
@@ -829,6 +831,7 @@ class cmb_Meta_Box {
 		if (
 			$pagenow == 'user-edit.php'
 			|| $pagenow == 'profile.php'
+			|| $pagenow == 'user-new.php'
 		)
 			self::set_object_type( 'user' );
 
