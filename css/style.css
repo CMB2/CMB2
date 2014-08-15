@@ -6,7 +6,7 @@ table.cmb_metabox {
   clear: both;
 }
 
-/* line 18, style.scss */
+/* line 9, style.scss */
 table.cmb_metabox > tr:first-of-type > td,
 table.cmb_metabox > tr:first-of-type > th,
 table.cmb_metabox tbody > tr:first-of-type > td,
@@ -20,7 +20,7 @@ table.cmb_metabox tbody > tr:first-of-type > th,
   border: 0;
 }
 
-/* line 29, style.scss */
+/* line 22, style.scss */
 .post-php table.cmb_metabox td,
 .post-new-php table.cmb_metabox td,
 .post-php table.cmb_metabox th,
@@ -257,7 +257,7 @@ table.cmb_metabox .cmb_media_status .embed_status {
 /* line 235, style.scss */
 table.cmb_metabox .cmb_media_status .img_status .cmb_remove_file_button, table.cmb_metabox .cmb_media_status .embed_status .cmb_remove_file_button {
   text-indent: -9999px;
-  background: url(images/ico-delete.png);
+  background: url(../images/ico-delete.png);
   width: 16px;
   height: 16px;
   position: absolute;
@@ -283,14 +283,14 @@ table.cmb_metabox .attach_list li img {
 /**
  * Sidebar placement adjustments
  */
-/* line 263, style.scss */
+/* line 261, style.scss */
 .inner-sidebar table.cmb_metabox input[type=text],
 #side-sortables table.cmb_metabox input[type=text],
 table.cmb_metabox textarea {
   width: 95%;
 }
 
-/* line 270, style.scss */
+/* line 267, style.scss */
 .inner-sidebar table.cmb_metabox .cmb_media_status .img_status img,
 #side-sortables table.cmb_metabox .cmb_media_status .img_status img,
 .inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img,
@@ -298,7 +298,7 @@ table.cmb_metabox textarea {
   width: 90%;
 }
 
-/* line 275, style.scss */
+/* line 274, style.scss */
 .inner-sidebar table.cmb_metabox label,
 #side-sortables table.cmb_metabox label {
   display: block;
@@ -306,21 +306,21 @@ table.cmb_metabox textarea {
   padding: 0 0 5px;
 }
 
-/* line 282, style.scss */
+/* line 281, style.scss */
 .inner-sidebar table.cmb_metabox .cmb_list label,
 #side-sortables table.cmb_metabox .cmb_list label {
   display: inline;
   font-weight: normal;
 }
 
-/* line 288, style.scss */
+/* line 287, style.scss */
 .inner-sidebar table.cmb_metabox .cmb_metabox_description,
 #side-sortables table.cmb_metabox .cmb_metabox_description {
   display: block;
   padding: 7px 0 0;
 }
 
-/* line 294, style.scss */
+/* line 293, style.scss */
 .inner-sidebar table.cmb_metabox .cmb_metabox_title,
 #side-sortables table.cmb_metabox .cmb_metabox_title {
   font-size: 1.2em;
@@ -484,7 +484,7 @@ div.time-picker li.selected {
 /* line 377, style.scss */
 .cmb_element .ui-widget-content {
   border: 1px solid #aaaaaa;
-  background: white url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+  background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
   color: #222222;
 }
 /* line 378, style.scss */
@@ -494,7 +494,7 @@ div.time-picker li.selected {
 /* line 379, style.scss */
 .cmb_element .ui-widget-header {
   border: 1px solid #aaaaaa;
-  background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
+  background: #cccccc url(../images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
   color: #222222;
   font-weight: bold;
 }
@@ -505,7 +505,7 @@ div.time-picker li.selected {
 /* line 381, style.scss */
 .cmb_element .ui-state-default, .cmb_element .ui-widget-content .ui-state-default, .cmb_element .ui-widget-header .ui-state-default {
   border: 1px solid #d3d3d3;
-  background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
+  background: #e6e6e6 url(../images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #555555;
 }
@@ -517,7 +517,7 @@ div.time-picker li.selected {
 /* line 383, style.scss */
 .cmb_element .ui-state-hover, .cmb_element .ui-widget-content .ui-state-hover, .cmb_element .ui-widget-header .ui-state-hover, .cmb_element .ui-state-focus, .cmb_element .ui-widget-content .ui-state-focus, .cmb_element .ui-widget-header .ui-state-focus {
   border: 1px solid #999999;
-  background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+  background: #dadada url(../images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -529,7 +529,7 @@ div.time-picker li.selected {
 /* line 385, style.scss */
 .cmb_element .ui-state-active, .cmb_element .ui-widget-content .ui-state-active, .cmb_element .ui-widget-header .ui-state-active {
   border: 1px solid #aaaaaa;
-  background: white url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+  background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -545,7 +545,7 @@ div.time-picker li.selected {
 /* line 388, style.scss */
 .cmb_element .ui-state-highlight, .cmb_element .ui-widget-content .ui-state-highlight, .cmb_element .ui-widget-header .ui-state-highlight {
   border: 1px solid #fcefa1;
-  background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
+  background: #fbf9ee url(../images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
   color: #363636;
 }
 /* line 389, style.scss */
@@ -555,7 +555,7 @@ div.time-picker li.selected {
 /* line 390, style.scss */
 .cmb_element .ui-state-error, .cmb_element .ui-widget-content .ui-state-error, .cmb_element .ui-widget-header .ui-state-error {
   border: 1px solid #cd0a0a;
-  background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
+  background: #fef1ec url(../images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
   color: #cd0a0a;
 }
 /* line 391, style.scss */
@@ -586,35 +586,35 @@ div.time-picker li.selected {
 .cmb_element .ui-icon {
   width: 16px;
   height: 16px;
-  background-image: url(images/ui-icons_222222_256x240.png);
+  background-image: url(../images/ui-icons_222222_256x240.png);
 }
 /* line 397, style.scss */
 .cmb_element .ui-widget-content .ui-icon {
-  background-image: url(images/ui-icons_222222_256x240.png);
+  background-image: url(../images/ui-icons_222222_256x240.png);
 }
 /* line 398, style.scss */
 .cmb_element .ui-widget-header .ui-icon {
-  background-image: url(images/ui-icons_222222_256x240.png);
+  background-image: url(../images/ui-icons_222222_256x240.png);
 }
 /* line 399, style.scss */
 .cmb_element .ui-state-default .ui-icon {
-  background-image: url(images/ui-icons_888888_256x240.png);
+  background-image: url(../images/ui-icons_888888_256x240.png);
 }
 /* line 400, style.scss */
 .cmb_element .ui-state-hover .ui-icon, .cmb_element .ui-state-focus .ui-icon {
-  background-image: url(images/ui-icons_454545_256x240.png);
+  background-image: url(../images/ui-icons_454545_256x240.png);
 }
 /* line 401, style.scss */
 .cmb_element .ui-state-active .ui-icon {
-  background-image: url(images/ui-icons_454545_256x240.png);
+  background-image: url(../images/ui-icons_454545_256x240.png);
 }
 /* line 402, style.scss */
 .cmb_element .ui-state-highlight .ui-icon {
-  background-image: url(images/ui-icons_2e83ff_256x240.png);
+  background-image: url(../images/ui-icons_2e83ff_256x240.png);
 }
 /* line 403, style.scss */
 .cmb_element .ui-state-error .ui-icon, .cmb_element .ui-state-error-text .ui-icon {
-  background-image: url(images/ui-icons_cd0a0a_256x240.png);
+  background-image: url(../images/ui-icons_cd0a0a_256x240.png);
 }
 /* line 404, style.scss */
 .cmb_element .ui-icon-carat-1-n {
@@ -1342,7 +1342,7 @@ div.time-picker li.selected {
 }
 /* line 582, style.scss */
 .cmb_element .ui-widget-overlay {
-  background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+  background: #aaaaaa url(../images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
   opacity: .30;
   filter: Alpha(Opacity=30);
 }
@@ -1350,7 +1350,7 @@ div.time-picker li.selected {
 .cmb_element .ui-widget-shadow {
   margin: -8px 0 0 -8px;
   padding: 8px;
-  background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
+  background: #aaaaaa url(../images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
   opacity: .30;
   filter: Alpha(Opacity=30);
   -moz-border-radius: 8px;
@@ -1420,7 +1420,7 @@ div.time-picker li.selected {
 .cmb_element .ui-datepicker select.ui-datepicker-month-year {
   width: 100%;
 }
-/* line 597, style.scss */
+/* line 596, style.scss */
 .cmb_element .ui-datepicker select.ui-datepicker-month,
 .cmb_element .ui-datepicker select.ui-datepicker-year {
   width: 49%;
