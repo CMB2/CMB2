@@ -541,7 +541,7 @@ class cmb_Meta_Box {
 			// check if autosave
 			|| defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE
 			// check user editing permissions
-			|| ( 'page' == $_POST['post_type'] && ! current_user_can( 'edit_page', $post_id ) )
+			|| ( 'page' ==  $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 			// get the metabox post_types & compare it to this post_type
 			|| ! in_array( $post_type, $this->_meta_box['pages'] )
