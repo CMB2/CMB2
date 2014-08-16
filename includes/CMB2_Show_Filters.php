@@ -2,14 +2,14 @@
 
 /**
  * Show On Filters
- * Use the 'cmb_show_on' filter to further refine the conditions under which a metabox is displayed.
+ * Use the 'cmb2_show_on' filter to further refine the conditions under which a metabox is displayed.
  * Below you can limit it by ID and page template
  *
  * All methods in this class are automatically filtered
  *
  * @since  1.0.0
  */
-class cmb_Meta_Box_Show_Filters {
+class CMB2_Show_Filters {
 
 	/**
 	 * Add metaboxes for an specific ID
@@ -23,7 +23,7 @@ class cmb_Meta_Box_Show_Filters {
 		if ( ! isset( $meta_box['show_on']['key'] ) || 'id' !== $meta_box['show_on']['key'] )
 			return $display;
 
-		$object_id = is_admin() ? cmb_Meta_Box::get_object_id() : @get_the_id();
+		$object_id = is_admin() ? CMB2::get_object_id() : @get_the_id();
 
 		if ( ! $object_id )
 			return false;
@@ -44,9 +44,9 @@ class cmb_Meta_Box_Show_Filters {
 		if ( ! isset( $meta_box['show_on']['key'] ) || 'page-template' !== $meta_box['show_on']['key'] )
 			return $display;
 
-		$object_id = cmb_Meta_Box::get_object_id();
+		$object_id = CMB2::get_object_id();
 
-		if ( ! $object_id || cmb_Meta_Box::get_object_type() !== 'post' )
+		if ( ! $object_id || CMB2::get_object_type() !== 'post' )
 			return false;
 
 		// Get current template

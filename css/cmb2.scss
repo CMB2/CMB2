@@ -2,31 +2,31 @@
  * CMB Styling
  */
 
-table.cmb_metabox {
+table.cmb2_metabox {
 	clear: both;
 }
 
-table.cmb_metabox > tr:first-of-type > td,
-table.cmb_metabox > tr:first-of-type > th,
-table.cmb_metabox tbody > tr:first-of-type > td,
-table.cmb_metabox tbody > tr:first-of-type > th,
-.post-php table.cmb_metabox .cmb-nested-table td,
-.post-new-php table.cmb_metabox .cmb-nested-table td,
-.post-php table.cmb_metabox .repeatable-group th,
-.post-new-php table.cmb_metabox .repeatable-group th,
-.post-php table.cmb_metabox .repeatable-group:first-of-type,
-.post-new-php table.cmb_metabox .repeatable-group:first-of-type {
+table.cmb2_metabox > tr:first-of-type > td,
+table.cmb2_metabox > tr:first-of-type > th,
+table.cmb2_metabox tbody > tr:first-of-type > td,
+table.cmb2_metabox tbody > tr:first-of-type > th,
+.post-php table.cmb2_metabox .cmb-nested-table td,
+.post-new-php table.cmb2_metabox .cmb-nested-table td,
+.post-php table.cmb2_metabox .repeatable-group th,
+.post-new-php table.cmb2_metabox .repeatable-group th,
+.post-php table.cmb2_metabox .repeatable-group:first-of-type,
+.post-new-php table.cmb2_metabox .repeatable-group:first-of-type {
 	border: 0;
 }
 
-.post-php table.cmb_metabox td,
-.post-new-php table.cmb_metabox td,
-.post-php table.cmb_metabox th,
-.post-new-php table.cmb_metabox th,
-.post-php table.cmb_metabox .repeatable-group,
-.post-new-php table.cmb_metabox .repeatable-group,
-.post-php table.cmb_metabox .repeatable-group,
-.post-new-php table.cmb_metabox .repeatable-group {
+.post-php table.cmb2_metabox td,
+.post-new-php table.cmb2_metabox td,
+.post-php table.cmb2_metabox th,
+.post-new-php table.cmb2_metabox th,
+.post-php table.cmb2_metabox .repeatable-group,
+.post-new-php table.cmb2_metabox .repeatable-group,
+.post-php table.cmb2_metabox .repeatable-group,
+.post-new-php table.cmb2_metabox .repeatable-group {
 	border-top: 1px solid #E9E9E9;
 }
 
@@ -46,7 +46,7 @@ table.cmb_metabox tbody > tr:first-of-type > th,
 		font-size: 1.2em;
 	}
 
-	.cmb_upload_button {
+	.cmb2_upload_button {
 		float: right;
 	}
 
@@ -61,32 +61,32 @@ table.cmb_metabox tbody > tr:first-of-type > th,
 	border-bottom: 1px solid #ddd;
 }
 
-.post-php table.cmb_metabox th, .post-new-php table.cmb_metabox th {
+.post-php table.cmb2_metabox th, .post-new-php table.cmb2_metabox th {
 	text-align: right;
 	font-weight:bold;
 }
 
-.post-php table.cmb_metabox table th, .post-new-php table.cmb_metabox table th {
+.post-php table.cmb2_metabox table th, .post-new-php table.cmb2_metabox table th {
 	text-align: left;
 }
 
-table.cmb_metabox th label {
+table.cmb2_metabox th label {
 	margin-top:5px;
 	display:block
 }
 
-p.cmb_metabox_description {
+p.cmb2_metabox_description {
 	color: #AAA;
 	font-style: italic;
 	margin: 2px 0 !important
 }
 
-span.cmb_metabox_description {
+span.cmb2_metabox_description {
 	color: #AAA;
 	font-style: italic
 }
 
-table.cmb_metabox {
+table.cmb2_metabox {
 
 	input, textarea {
 		font-size:14px;
@@ -97,32 +97,32 @@ table.cmb_metabox {
 		width: 97%;
 	}
 
-	textarea.cmb_textarea_code {
+	textarea.cmb2_textarea_code {
 		font-family: Consolas,Monaco,monospace;
 		line-height: 16px;
 	}
 
-	input.cmb_text_small {
+	input.cmb2_text_small {
 		width: 100px;
 		margin-right: 15px
 	}
 
-	input.cmb_timepicker {
+	input.cmb2_timepicker {
 		width: 100px;
 		margin-right: 15px
 	}
 
-	input.cmb_text_money {
+	input.cmb2_text_money {
 		width: 90px;
 		margin-right: 15px
 	}
 
-	input.cmb_text_medium {
+	input.cmb2_text_medium {
 		width: 230px;
 		margin-right: 15px
 	}
 
-	input.cmb_upload_file {
+	input.cmb2_upload_file {
 		width: 65%;
 	}
 
@@ -152,12 +152,12 @@ table.cmb_metabox {
 
 }
 
-.cmb_metabox_title {
+.cmb2_metabox_title {
 	margin: 0 0 5px 0;
 	padding: 5px 0 0 0;
 }
 
-.edit-tags-php .cmb_metabox_title, .profile-php .cmb_metabox_title, .user-edit-php .cmb_metabox_title {
+.edit-tags-php .cmb2_metabox_title, .profile-php .cmb2_metabox_title, .user-edit-php .cmb2_metabox_title {
 	margin-left: -10px;
 }
 
@@ -169,37 +169,37 @@ table.cmb_metabox {
 	padding-right: 18px
 }
 
-table.cmb_metabox input[type="radio"] {
+table.cmb2_metabox input[type="radio"] {
 	margin: 0 5px 0 0;
 	padding: 0
 }
 
-table.cmb_metabox input[type="checkbox"] {
+table.cmb2_metabox input[type="checkbox"] {
 	margin: 0 5px 0 0;
 	padding: 0
 }
 
-table.cmb_metabox .mceLayout {
+table.cmb2_metabox .mceLayout {
 	border:1px solid #DFDFDF !important
 }
 
-table.cmb_metabox .mceIframeContainer {
+table.cmb2_metabox .mceIframeContainer {
 	background:#FFF
 }
 
-table.cmb_metabox .meta_mce {
+table.cmb2_metabox .meta_mce {
 	width:97%
 }
 
-table.cmb_metabox .meta_mce textarea {
+table.cmb2_metabox .meta_mce textarea {
 	width:100%
 }
 
-table.cmb_metabox .cmb_media_status {
+table.cmb2_metabox .cmb2_media_status {
  margin: 10px 0 0 0
 }
 
-table.cmb_metabox .cmb_media_status .img_status {
+table.cmb2_metabox .cmb2_media_status .img_status {
 	clear: none;
 	float: left;
 	display: inline-block;
@@ -207,18 +207,18 @@ table.cmb_metabox .cmb_media_status .img_status {
 	width: auto;
 }
 
-table.cmb_metabox .cmb-type-file_list .cmb_media_status .img_status {
+table.cmb2_metabox .cmb-type-file_list .cmb2_media_status .img_status {
 	clear: none;
 	float: left;
 	margin-right: 10px;
 	width: auto;
 }
 
-table.cmb_metabox .cmb_media_status .img_status, table.cmb_metabox .cmb_media_status .embed_status {
+table.cmb2_metabox .cmb2_media_status .img_status, table.cmb2_metabox .cmb2_media_status .embed_status {
 	position: relative;
 }
 
-table.cmb_metabox .cmb_media_status .img_status img, table.cmb_metabox .cmb_media_status .embed_status {
+table.cmb2_metabox .cmb2_media_status .img_status img, table.cmb2_metabox .cmb2_media_status .embed_status {
 	border:1px solid #DFDFDF;
 	background: #FAFAFA;
 	max-width:350px;
@@ -227,12 +227,12 @@ table.cmb_metabox .cmb_media_status .img_status img, table.cmb_metabox .cmb_medi
 	border-radius: 2px
 }
 
-table.cmb_metabox .cmb_media_status .embed_status {
+table.cmb2_metabox .cmb2_media_status .embed_status {
 	float: left;
 	max-width:800px
 }
 
-table.cmb_metabox .cmb_media_status .img_status .cmb_remove_file_button, table.cmb_metabox .cmb_media_status .embed_status .cmb_remove_file_button {
+table.cmb2_metabox .cmb2_media_status .img_status .cmb2_remove_file_button, table.cmb2_metabox .cmb2_media_status .embed_status .cmb2_remove_file_button {
 	text-indent: -9999px;
 	background: url(../images/ico-delete.png);
 	width: 16px;
@@ -242,14 +242,14 @@ table.cmb_metabox .cmb_media_status .img_status .cmb_remove_file_button, table.c
 	left: -5px
 }
 
-table.cmb_metabox .attach_list li {
+table.cmb2_metabox .attach_list li {
 	clear: both;
 	display: inline-block;
 	margin-bottom: 25px;
 	width: 100%;
 }
 
-table.cmb_metabox .attach_list li img {
+table.cmb2_metabox .attach_list li img {
 	float: left;
 	margin-right: 10px;
 	cursor: move;
@@ -258,56 +258,56 @@ table.cmb_metabox .attach_list li img {
 /**
  * Sidebar placement adjustments
  */
-.inner-sidebar table.cmb_metabox input[type=text],
-#side-sortables table.cmb_metabox input[type=text],
-table.cmb_metabox textarea {
+.inner-sidebar table.cmb2_metabox input[type=text],
+#side-sortables table.cmb2_metabox input[type=text],
+table.cmb2_metabox textarea {
 	width: 95%;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_media_status .img_status img,
-#side-sortables table.cmb_metabox .cmb_media_status .img_status img,
-.inner-sidebar table.cmb_metabox .cmb_media_status .embed_status img,
-#side-sortables table.cmb_metabox .cmb_media_status .embed_status img {
+.inner-sidebar table.cmb2_metabox .cmb2_media_status .img_status img,
+#side-sortables table.cmb2_metabox .cmb2_media_status .img_status img,
+.inner-sidebar table.cmb2_metabox .cmb2_media_status .embed_status img,
+#side-sortables table.cmb2_metabox .cmb2_media_status .embed_status img {
 	width: 90%;
 }
 
-.inner-sidebar table.cmb_metabox label,
-#side-sortables table.cmb_metabox label {
+.inner-sidebar table.cmb2_metabox label,
+#side-sortables table.cmb2_metabox label {
 	display: block;
 	font-weight: bold;
 	padding: 0 0 5px;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_list label,
-#side-sortables table.cmb_metabox .cmb_list label {
+.inner-sidebar table.cmb2_metabox .cmb2_list label,
+#side-sortables table.cmb2_metabox .cmb2_list label {
 	display: inline;
 	font-weight: normal;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_metabox_description,
-#side-sortables table.cmb_metabox .cmb_metabox_description {
+.inner-sidebar table.cmb2_metabox .cmb2_metabox_description,
+#side-sortables table.cmb2_metabox .cmb2_metabox_description {
 	display: block;
 	padding: 7px 0 0;
 }
 
-.inner-sidebar table.cmb_metabox .cmb_metabox_title,
-#side-sortables table.cmb_metabox .cmb_metabox_title {
+.inner-sidebar table.cmb2_metabox .cmb2_metabox_title,
+#side-sortables table.cmb2_metabox .cmb2_metabox_title {
 	font-size: 1.2em;
 	font-style: italic;
 }
 
-.postbox table.cmb_metabox .cmb-spinner {
+.postbox table.cmb2_metabox .cmb-spinner {
 	float: left;
 }
 
 /**
  * Color picker
  */
-table.cmb_metabox .wp-color-result, table.cmb_metabox .wp-picker-input-wrap {
+table.cmb2_metabox .wp-color-result, table.cmb2_metabox .wp-picker-input-wrap {
 	vertical-align: middle;
 }
 
-table.cmb_metabox .wp-color-result, table.cmb_metabox .wp-picker-container {
+table.cmb2_metabox .wp-color-result, table.cmb2_metabox .wp-picker-container {
 	margin: 0 10px 0 0;
 }
 
@@ -357,7 +357,7 @@ div.time-picker li.selected {
  *
  * http://docs.jquery.com/UI/Theming/API
  */
-.cmb_element {
+.cmb2_element {
 	.ui-helper-hidden { display: none; }
 	.ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
 	.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }

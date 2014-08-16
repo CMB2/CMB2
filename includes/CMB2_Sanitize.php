@@ -4,11 +4,11 @@
  * CMB field validation
  * @since  0.0.4
  */
-class cmb_Meta_Box_Sanitize {
+class CMB2_Sanitize {
 
 	/**
 	 * A CMB field object
-	 * @var cmb_Meta_Box_field object
+	 * @var CMB2_Field object
 	 */
 	public $field;
 
@@ -24,11 +24,11 @@ class cmb_Meta_Box_Sanitize {
 	 * @param object $field A CMB field object
 	 * @param mixed  $value Field value
 	 */
-	public function __construct( $field, $value ) {
+	public function __construct( CMB2_Field $field, $value ) {
 		$this->field       = $field;
 		$this->value       = $value;
-		$this->object_id   = cmb_Meta_Box::get_object_id();
-		$this->object_type = cmb_Meta_Box::get_object_type();
+		$this->object_id   = CMB2::get_object_id();
+		$this->object_type = CMB2::get_object_type();
 	}
 
 	/**
@@ -62,9 +62,9 @@ class cmb_Meta_Box_Sanitize {
 		 * @param mixed      $value      The value to be saved to this field.
 		 * @param int        $object_id  The ID of the object where the value will be saved
 		 * @param array      $field_args The current field's arguments
-		 * @param object     $sanitizer  This `cmb_Meta_Box_Sanitize` object
+		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( 'cmb_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value )
 			return $updated;
@@ -239,9 +239,9 @@ class cmb_Meta_Box_Sanitize {
 			$tzstring = $value['timezone'];
 
 		if ( empty( $tzstring ) )
-			$tzstring = cmb_Meta_Box::timezone_string();
+			$tzstring = cmb2_utils()->timezone_string();
 
-		$offset = cmb_Meta_Box::timezone_offset( $tzstring, true );
+		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
 
 		if ( substr( $tzstring, 0, 3 ) === 'UTC' )
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
@@ -287,7 +287,7 @@ class cmb_Meta_Box_Sanitize {
 
 		unset( $args['_id'], $args['_name'] );
 		// And get new field object
-		$field      = new cmb_Meta_Box_field( $args, $group );
+		$field      = new CMB2_Field( $args, $group );
 		$id_key     = $field->_id();
 		$id_val_old = $field->escaped_value( 'absint' );
 
@@ -305,7 +305,7 @@ class cmb_Meta_Box_Sanitize {
 
 		// If there is no ID saved yet, try to get it from the url
 		if ( $value && ! $id_val ) {
-			$id_val = cmb_Meta_Box::image_id_from_url( $value );
+			$id_val = cmb2_utils()->image_id_from_url( $value );
 		}
 
 		if ( $group ) {

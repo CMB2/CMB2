@@ -1,6 +1,6 @@
 <?php
 /**
- * Include and setup custom metaboxes and fields.
+ * Include and setup custom metaboxes and fields. (make sure you copy this file to outside the CMB directory)
  *
  * @category YourThemeOrPlugin
  * @package  Metaboxes
@@ -8,17 +8,32 @@
  * @link     https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
  */
 
-add_filter( 'cmb_meta_boxes', 'cmb_sample_metaboxes' );
+/**
+ * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
+ *
+ * @param  CMB2_Field object $field Field object
+ *
+ * @return bool                     True if metabox should show
+ */
+function cmb2_hide_if_no_cats( $field ) {
+	// Don't show this field if not in the cats category
+	if ( ! has_tag( 'cats', $field->object_id ) ) {
+		return false;
+	}
+	return true;
+}
+
+add_filter( 'cmb2_meta_boxes', 'cmb2_sample_metaboxes' );
 /**
  * Define the metabox and field configurations.
  *
  * @param  array $meta_boxes
  * @return array
  */
-function cmb_sample_metaboxes( array $meta_boxes ) {
+function cmb2_sample_metaboxes( array $meta_boxes ) {
 
 	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_cmb_';
+	$prefix = '_cmb2_';
 
 	/**
 	 * Sample metabox to demonstrate each field type included
@@ -37,7 +52,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 				'desc'       => __( 'field description (optional)', 'cmb' ),
 				'id'         => $prefix . 'test_text',
 				'type'       => 'text',
-				'show_on_cb' => 'cmb_test_text_show_on_cb', // function should return a bool value
+				'show_on_cb' => 'cmb2_hide_if_no_cats', // function should return a bool value
 				// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
 				// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 				// 'on_front'        => false, // Optionally designate a field to wp-admin only
@@ -381,7 +396,7 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 
 	/**
 	 * Metabox for an options page. Will not be added automatically, but needs to be called with
-	 * the `cmb_metabox_form` helper function. See wiki for more info.
+	 * the `cmb2_metabox_form` helper function. See wiki for more info.
 	 */
 	$meta_boxes['options_page'] = array(
 		'id'      => 'options_page',
@@ -403,13 +418,13 @@ function cmb_sample_metaboxes( array $meta_boxes ) {
 	return $meta_boxes;
 }
 
-add_action( 'init', 'cmb_initialize_cmb_meta_boxes', 9999 );
+add_action( 'init', 'cmb2_initialize_meta_boxes', 9999 );
 /**
  * Initialize the metabox class.
  */
-function cmb_initialize_cmb_meta_boxes() {
+function cmb2_initialize_meta_boxes() {
 
-	if ( ! class_exists( 'cmb_Meta_Box' ) )
-		require_once 'init.php';
+	if ( ! class_exists( 'CMB2' ) )
+		require_once 'cmb/init.php';
 
 }

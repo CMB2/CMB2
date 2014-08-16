@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 		// 	},
 		// 	'': {
 		// 		src: [
-		// 			'js/cmb.js',
-		// 			'js/cmb.js',
+		// 			'js/cmb2.js',
+		// 			'js/cmb2.js',
 		// 		],
 		// 		dest: 'assets/js/{%= dir_name %}.js'
 		// 	}
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 			},
 			minify: {
 				expand: true,
-				src: ['css/style.css'],
+				src: ['css/cmb2.css'],
 				// dest: '',
 				ext: '.min.css'
 			}
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 					lineNumbers: true
 				},
 				files: {
-				  'css/style.css': 'css/style.scss',
+				  'css/cmb2.css': 'css/cmb2.scss',
 				}
 			}
 		},
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 		jshint: {
 			all: [
 				'Gruntfile.js',
-				'js/cmb.js'
+				'js/cmb2.js'
 			],
 			options: {
 				curly   : true,
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','jQuery','cmb_l10','wp','tinyMCEPreInit','tinyMCE','console']
+				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console']
 			}
 		},
 
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
 		uglify: {
 			all: {
 				files: {
-					'js/cmb.min.js': ['js/cmb.js']
+					'js/cmb2.min.js': ['js/cmb2.js']
 				},
 				options: {
 					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -116,7 +116,7 @@ module.exports = function(grunt) {
 				tasks: ['sass', 'cssmin']
 			},
 			scripts: {
-				files: ['js/cmb.js'],
+				files: ['js/cmb2.js'],
 				tasks: ['js'],
 				options: {
 					debounceDelay: 500
