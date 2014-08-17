@@ -4,7 +4,6 @@
  * Retrieves an instance of CMB2_Option based on the option key
  */
 class CMB2_Options {
-
 	/**
 	 * Array of all CMB2_Option instances
 	 * @var   array
@@ -12,7 +11,7 @@ class CMB2_Options {
 	 */
 	protected static $option_sets = array();
 
-	public function get( $option_key ) {
+	public static function get( $option_key ) {
 
 		if ( empty( self::$option_sets ) || empty( self::$option_sets[ $option_key ] ) ) {
 			self::$option_sets[ $option_key ] = new CMB2_Option( $option_key );

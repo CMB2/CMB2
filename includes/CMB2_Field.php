@@ -44,21 +44,28 @@ class CMB2_Field {
 	/**
 	 * Constructs our field object
 	 * @since 1.1.0
-	 * @param array $field_args  Field arguments
-	 * @param array $group_field (optional) Group field object
+	 * @param array $args  Field arguments
 	 */
-	public function __construct( $field_args, $group_field = null ) {
-		$this->object_id   = CMB2::get_object_id();
-		$this->object_type = CMB2::get_object_type();
-		$this->group       = ! empty( $group_field ) ? $group_field : false;
-		$this->args        = $this->_set_field_defaults( $field_args );
+	public function __construct( $args ) {
+
+		$this->args = $this->_set_field_defaults( $args['field_args'] );
+
+		if ( ! empty( $args['group_field'] ) ) {
+			$this->group       = $args['group_field'];
+			$this->object_id   = $this->group->object_id;
+			$this->object_type = $this->group->object_type;
+		} else {
+			$this->object_id   = $args['object_id'];
+			$this->object_type = $args['object_type'];
+			$this->group       = false;
+		}
 
 		// Allow an override for the field's value
-		// (assuming no one would want to save 'cmb2_no_override_val' as a value)
-		$this->value = apply_filters( 'cmb2_override_meta_value', 'cmb2_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
+		// (assuming no one would want to save 'cmb2_field_no_override_val' as a value)
+		$this->value = apply_filters( 'cmb2_override_meta_value', 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
 
 		// If no override, get our meta
-		$this->value = 'cmb2_no_override_val' === $this->value
+		$this->value = 'cmb2_field_no_override_val' === $this->value
 			? $this->get_data()
 			: $this->value;
 	}
@@ -206,28 +213,70 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Checks if field has a registered validation callback
+	 * Checks if field has a registered sanitization callback
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
 	 * @return mixed             Possibly validated meta value
 	 */
 	public function sanitization_cb( $meta_value ) {
-		if ( empty( $meta_value ) )
-			return $meta_value;
+
+		if ( $this->args( 'repeatable' ) && is_array( $meta_value ) ) {
+			// Remove empties
+			$meta_value = array_filter( $meta_value );
+		}
 
 		// Check if the field has a registered validation callback
 		$cb = $this->maybe_callback( 'sanitization_cb' );
 		if ( false === $cb ) {
-			// If requestion NO validation, return meta value
+			// If requesting NO validation, return meta value
 			return $meta_value;
 		} elseif ( $cb ) {
 			// Ok, callback is good, let's run it.
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
 
+		if ( empty( $meta_value ) ) {
+			return $meta_value;
+		}
+
 		$clean = new CMB2_Sanitize( $this, $meta_value );
 		// Validation via 'CMB2_Sanitize' (with fallback filter)
 		return $clean->{$this->type()}( $meta_value );
+	}
+
+	/**
+	 * Process $_POST data to save this field's value
+	 * @since  2.0.0
+	 * @param  array $data_to_save $_POST data to check
+	 * @return bool                Result of save
+	 */
+	public function save_field( $data_to_save ) {
+
+		$meta_value = isset( $data_to_save[ $this->id( true ) ] )
+			? $data_to_save[ $this->id( true ) ]
+			: null;
+
+		$new_value = $this->sanitization_cb( $meta_value );
+		$name      = $field->id();
+		$old       = $this->get_data();
+
+		// if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
+		// 	$this->remove_data();
+		// 	if ( ! empty( $new_value ) ) {
+		// 		foreach ( $new_value as $add_new ) {
+		// 			$this->updated[] = $name;
+		// 			$this->update_data( $add_new, $name, false );
+		// 		}
+		// 	}
+		// } else
+		if ( ! empty( $new_value ) && $new_value !== $old  ) {
+			$this->updated[] = $name;
+			return $this->update_data( $new_value );
+		} elseif ( empty( $new_value ) ) {
+			if ( ! empty( $old ) )
+				$this->updated[] = $name;
+			return $this->remove_data();
+		}
 	}
 
 	/**
@@ -238,18 +287,21 @@ class CMB2_Field {
 	 */
 	public function maybe_callback( $cb ) {
 		$field_args = $this->args();
-		if ( ! isset( $field_args[ $cb ] ) )
+		if ( ! isset( $field_args[ $cb ] ) ) {
 			return;
+		}
 
 		// Check if metabox is requesting NO validation
 		$cb = false !== $field_args[ $cb ] && 'false' !== $field_args[ $cb ] ? $field_args[ $cb ] : false;
 
 		// If requestion NO validation, return false
-		if ( ! $cb )
+		if ( ! $cb ) {
 			return false;
+		}
 
-		if ( is_callable( $cb ) )
+		if ( is_callable( $cb ) ) {
 			return $cb;
+		}
 	}
 
 	/**
@@ -383,10 +435,10 @@ class CMB2_Field {
 		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 		$is_side    = 'side' === $this->args( 'context' );
 
-		printf( "<tr class=\"%s\">\n", $classes );
+		printf( "<li class=\"cmb-row %s\">\n", $classes );
 
 		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) || $is_side ) {
-			echo "\t<td colspan=\"2\">\n";
+			echo "\t<div class=\"cmb-td\">\n";
 
 			if ( ! $this->args( 'show_names' ) || $is_side ) {
 				$style = ! $is_side || 'title' == $this->type() ? ' style="display:none;"' : '';
@@ -396,10 +448,10 @@ class CMB2_Field {
 
 			$style = 'post' == $this->object_type ? ' style="width:18%"' : '';
 			// $tag   = 'side' !== $this->args( 'context' ) ? 'th' : 'p';
-			$tag   = 'th';
-			printf( '<%1$s%2$s><label for="%3$s">%4$s</label></%1$s>', $tag, $style, $this->id(), $this->args( 'name' ) );
 
-			echo "\n\t<td>\n";
+			printf( '<div class="cmb-th"%2$s><label for="%3$s">%4$s</label></div>', $tag, $style, $this->id(), $this->args( 'name' ) );
+
+			echo "\n\t<div class=\"cmb-td\">\n";
 		}
 
 		echo $this->args( 'before' );
@@ -409,7 +461,7 @@ class CMB2_Field {
 
 		echo $this->args( 'after' );
 
-		echo "\n\t</td>\n</tr>";
+		echo "\n\t</div>\n</li>";
 	}
 
 	/**

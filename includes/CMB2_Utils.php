@@ -14,18 +14,6 @@ class CMB2_Utils {
 	protected $url = '';
 
 	/**
-	 * Conditionally includes CMB styles unless metabox explicitly requests not to
-	 * @since  2.0.0
-	 * @param  array   $meta_box Metabox config array
-	 */
-	public function enqueue_cmb_css( $meta_box = array() ) {
-		if ( isset( $meta_box['cmb_styles'] ) && $meta_box['cmb_styles'] ) {
-			wp_enqueue_style( 'cmb-styles' );
-		}
-
-	}
-
-	/**
 	 * Utility method that attempts to get an attachment's ID by it's url
 	 * @since  1.0.0
 	 * @param  string  $img_url Attachment url

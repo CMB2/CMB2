@@ -58,7 +58,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		$("#ui-datepicker-div").wrap('<div class="cmb2_element" />');
 
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
-		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.check_toggle + '</span></p>' ).insertBefore( 'ul.cmb2_checkbox_list' );
+		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( 'ul.cmb2_checkbox_list' );
 
 		// Make File List drag/drop sortable:
 		cmb.makeListSortable();
@@ -86,7 +86,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.down_arrow +'</a>' );
+					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.strings.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.strings.down_arrow +'</a>' );
 				})
 				.on( 'click', '.shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
@@ -117,7 +117,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.toggleCheckBoxes = function( event ) {
 		event.preventDefault();
 		var $self = $(this);
-		var $multicheck = $self.parents( 'td' ).find( 'input[type=checkbox]' );
+		var $multicheck = $self.parents( '.cmb-td' ).find( 'input[type=checkbox]' );
 
 		// If the button has already been clicked once...
 		if ( $self.data( 'checked' ) ) {
@@ -159,7 +159,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.file_frames[cmb.formfield] = wp.media.frames.file_frame = wp.media({
 			title: $metabox.find('label[for=' + cmb.formfield + ']').text(),
 			button: {
-				text: l10n.upload_file
+				text: l10n.strings.upload_file
 			},
 			multiple: isList ? true : false
 		});
@@ -181,13 +181,13 @@ window.CMB2 = (function(window, document, $, undefined){
 						// image preview
 						uploadStatus = '<li class="img_status">'+
 							'<img width="50" height="50" src="' + this.url + '" class="attachment-50x50" alt="'+ this.filename +'">'+
-							'<p><a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.remove_image +'</a></p>'+
+							'<p><a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
 							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
 						'</li>';
 
 					} else {
 						// Standard generic output if it's not an image.
-						uploadStatus = '<li>'+ l10n.file +' <strong>'+ this.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.download +'</a> / <a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.remove_file +'</a>)'+
+						uploadStatus = '<li>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
 							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
 						'</li>';
 
@@ -211,10 +211,10 @@ window.CMB2 = (function(window, document, $, undefined){
 
 				if ( attachment.type && attachment.type === 'image' ) {
 					// image preview
-					uploadStatus = '<div class="img_status"><img style="max-width: 350px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2_remove_file_button" rel="' + cmb.formfield + '">'+ l10n.remove_image +'</a></p></div>';
+					uploadStatus = '<div class="img_status"><img style="max-width: 350px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2_remove_file_button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
 				} else {
 					// Standard generic output if it's not an image.
-					uploadStatus = l10n.file +' <strong>'+ attachment.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.download +'</a> / <a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'">'+ l10n.remove_file +'</a>)';
+					uploadStatus = l10n.strings.file +' <strong>'+ attachment.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2_remove_file_button" rel="'+ cmb.formfield +'">'+ l10n.strings.remove_file +'</a>)';
 				}
 
 				// add/display our output
@@ -449,7 +449,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
 		// console.log( '$row.html()', $row.html() );
-		var $newRow = $( '<tr class="repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</tr>' );
+		var $newRow = $( '<div class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 		// console.log( '$newRow.html()', $row.html() );
 
@@ -509,16 +509,16 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.removeAjaxRow = function( event ) {
 		event.preventDefault();
 		var $self   = $(this);
-		var $parent = $self.parents('tr');
+		var $parent = $self.parents('.cmb-row');
 		var $table  = $self.parents('.cmb-repeat-table');
 
 		// cmb.log( 'number of tbodys', $table.length );
 		// cmb.log( 'number of trs', $('tr', $table).length );
-		if ( $table.find('tr').length > 2 ) {
+		if ( $table.find('.cmb-row').length > 2 ) {
 			if ( $parent.hasClass('empty-row') ) {
 				$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
 			}
-			$self.parents('.cmb-repeat-table tr').remove();
+			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			$table.trigger( 'cmb2_remove_row' );
 		}
 	};
@@ -747,8 +747,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			// get field id
 			var field_id = $obj.attr('id');
 			// get our inputs $context for pinpointing
-			var $context = $obj.parents('.cmb-repeat-table  tr td');
-			$context = $context.length ? $context : $obj.parents('.cmb2_metabox tr td');
+			var $context = $obj.parents('.cmb-repeat-table  .cmb-row .cmb-td');
+			$context = $context.length ? $context : $obj.parents('.cmb2_metabox .cmb-row .cmb-td');
 
 			var embed_container = $('.embed_status', $context);
 			var oembed_width = $obj.width();
@@ -783,15 +783,10 @@ window.CMB2 = (function(window, document, $, undefined){
 					},
 					success: function(response) {
 						cmb.log( response );
-						// Make sure we have a response id
-						if ( typeof response.id === 'undefined' ) {
-							return;
-						}
-
 						// hide our spinner
 						cmb.spinner( $context, true );
 						// and populate our results from ajax response
-						$('.embed_wrap', $context).html(response.result);
+						$('.embed_wrap', $context).html(response.data);
 					}
 				});
 

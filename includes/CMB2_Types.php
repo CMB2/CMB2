@@ -257,11 +257,11 @@ class CMB2_Types {
 		$this->_desc( true, true );
 		?>
 
-		<table id="<?php echo $table_id; ?>" class="cmb-repeat-table">
-			<tbody>
+		<div id="<?php echo $table_id; ?>" class="cmb-repeat-table cmb-nested">
+			<div class="cmb-tbody">
 				<?php $this->repeatable_rows(); ?>
-			</tbody>
-		</table>
+			</div>
+		</div>
 		<p class="add-row">
 			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php _e( 'Add Row', 'cmb' ); ?></a>
 		</p>
@@ -314,14 +314,14 @@ class CMB2_Types {
 	protected function repeat_row( $class = 'repeat-row' ) {
 		?>
 
-		<tr class="<?php echo $class; ?>">
+		<div class="cmb-row <?php echo $class; ?>">
 			<td>
 				<?php $this->_render(); ?>
 			</td>
 			<td class="remove-row">
 				<a class="button remove-row-button" href="#"><?php _e( 'Remove', 'cmb' ); ?></a>
 			</td>
-		</tr>
+		</div>
 
 		<?php
 	}
@@ -775,7 +775,12 @@ class CMB2_Types {
 		unset( $args['_id'], $args['_name'] );
 
 		// And get new field object
-		$this->field = new CMB2_Field( $args, $this->field->group );
+		$this->field = new CMB2_Field( array(
+			'field_args'  => $args,
+			'group_field' => $this->field->group,
+			'object_type' => $this->field->object_type(),
+			'object_id'   => $this->field->object_id(),
+		) );
 
 		// Get ID value
 		$_id_value = $this->field->escaped_value( 'absint' );
@@ -821,7 +826,9 @@ class CMB2_Types {
 		'<div id="',$this->_id( '_status' ) ,'" class="cmb2_media_status ui-helper-clearfix embed_wrap">';
 
 			if ( $meta_value = $this->field->escaped_value() ) {
-				echo CMB2_Ajax::get_oembed( $meta_value, $this->field->object_id, array(
+				echo cmb2_get_oembed( array(
+					'url'         => $meta_value,
+					'object_id'   => $this->field->object_id,
 					'object_type' => $this->field->object_type,
 					'oembed_args' => array( 'width' => '640' ),
 					'field_id'    => $this->_id(),

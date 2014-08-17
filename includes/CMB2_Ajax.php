@@ -8,26 +8,12 @@
  */
 class CMB2_Ajax {
 
-	// A single instance of this class.
-	public static $instance    = null;
 	// Whether to hijack the oembed cache system
-	public static $hijack      = false;
-	public static $object_id   = 0;
-	public static $embed_args  = array();
-	public static $object_type = 'post';
-	public static $ajax_update = false;
-
-	/**
-	 * Creates or returns an instance of this class.
-	 * @since  0.1.0
-	 * @return CMB2_Ajax A single instance of this class.
-	 */
-	public static function get() {
-		if ( self::$instance === null )
-			self::$instance = new self();
-
-		return self::$instance;
-	}
+	protected $hijack      = false;
+	protected $object_id   = 0;
+	protected $embed_args  = array();
+	protected $object_type = 'post';
+	protected $ajax_update = false;
 
 	/**
 	 * Handles our oEmbed ajax request
@@ -44,8 +30,9 @@ class CMB2_Ajax {
 		$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
 
 		// send back error if empty
-		if ( empty( $oembed_string ) )
-			self::send_result( '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>', false );
+		if ( empty( $oembed_string ) ) {
+			wp_send_json_error( '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>' );
+		}
 
 		// Set width of embed
 		$embed_width = isset( $_REQUEST['oembed_width'] ) && intval( $_REQUEST['oembed_width'] ) < 640 ? intval( $_REQUEST['oembed_width'] ) : '640';
@@ -55,47 +42,46 @@ class CMB2_Ajax {
 		// set args
 		$embed_args = array( 'width' => $embed_width );
 
-		self::$ajax_update = true;
+		$this->ajax_update = true;
 
 		// Get embed code (or fallback link)
-		$html = self::get_oembed( $oembed_url, $_REQUEST['object_id'], array(
+		$html = $this->get_oembed( array(
+			'url'         => $oembed_url,
+			'object_id'   => $_REQUEST['object_id'],
 			'object_type' => isset( $_REQUEST['object_type'] ) ? $_REQUEST['object_type'] : 'post',
 			'oembed_args' => $embed_args,
-			'field_id' => $_REQUEST['field_id'],
+			'field_id'    => $_REQUEST['field_id'],
 		) );
 
-		self::send_result( $html );
-
+		wp_send_json_success( $html );
 	}
 
 	/**
 	 * Retrieves oEmbed from url/object ID
 	 * @since  0.9.5
-	 * @param  string $url       URL to retrieve oEmbed
-	 * @param  int    $object_id Object ID
 	 * @param  array  $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
-	public static function get_oembed( $url, $object_id, $args = array() ) {
+	public function get_oembed( $args ) {
 		global $wp_embed;
 
-		$oembed_url = esc_url( $url );
+		$oembed_url = esc_url( $args['url'] );
 
 		// Sanitize object_id
-		self::$object_id = is_numeric( $object_id ) ? absint( $object_id ) : sanitize_text_field( $object_id );
+		$this->object_id = is_numeric( $args['object_id'] ) ? absint( $args['object_id'] ) : sanitize_text_field( $args['object_id'] );
 
 		$args = wp_parse_args( $args, array(
 			'object_type' => 'post',
-			'oembed_args' => self::$embed_args,
+			'oembed_args' => $this->embed_args,
 			'field_id'    => false,
 			'cache_key'   => false,
 		) );
 
-		self::$embed_args =& $args;
+		$this->embed_args =& $args;
 
 		// set the post_ID so oEmbed won't fail
 		// wp-includes/class-wp-embed.php, WP_Embed::shortcode(), line 162
-		$wp_embed->post_ID = self::$object_id;
+		$wp_embed->post_ID = $this->object_id;
 
 		// Special scenario if NOT a post object
 		if ( isset( $args['object_type'] ) && $args['object_type'] != 'post' ) {
@@ -108,8 +94,8 @@ class CMB2_Ajax {
 				$args['cache_key'] = $args['field_id'] .'_cache';
 			}
 			// Ok, we need to hijack the oembed cache system
-			self::$hijack = true;
-			self::$object_type = $args['object_type'];
+			$this->hijack = true;
+			$this->object_type = $args['object_type'];
 
 			// Gets ombed cache from our object's meta (vs postmeta)
 			add_filter( 'get_post_metadata', array( 'CMB2_Ajax', 'hijack_oembed_cache_get' ), 10, 3 );
@@ -148,19 +134,19 @@ class CMB2_Ajax {
 	 * @param  string  $meta_key  Object metakey
 	 * @return mixed              Object's oEmbed cached data
 	 */
-	public static function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
+	public function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
 
-		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
+		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
-		if ( self::$ajax_update ) {
+		if ( $this->ajax_update ) {
 			return false;
 		}
 
 		// get cached data
-		$data = 'options-page' === self::$object_type
-			? cmb2_options( self::$object_id )->get( self::$embed_args['cache_key'] )
-			: get_metadata( self::$object_type, self::$object_id, $meta_key, true );
+		$data = 'options-page' === $this->object_type
+			? cmb2_options( $this->object_id )->get( $this->embed_args['cache_key'] )
+			: get_metadata( $this->object_type, $this->object_id, $meta_key, true );
 
 		return $data;
 	}
@@ -176,11 +162,11 @@ class CMB2_Ajax {
 	 * @param  mixed   $meta_value Value of the postmeta to be saved
 	 * @return boolean             Whether to continue setting
 	 */
-	public static function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
-		if ( ! self::$hijack || ( self::$object_id != $object_id && 1987645321 !== $object_id ) )
+	public function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
+		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) )
 			return $check;
 
-		self::oembed_cache_set( $meta_key, $meta_value );
+		$this->oembed_cache_set( $meta_key, $meta_value );
 
 		// Anything other than `null` to cancel saving to postmeta
 		return true;
@@ -193,27 +179,14 @@ class CMB2_Ajax {
 	 * @param  string  $meta_key   Postmeta's key
 	 * @param  mixed   $meta_value Value of the postmeta to be saved
 	 */
-	public static function oembed_cache_set( $meta_key, $meta_value ) {
+	public function oembed_cache_set( $meta_key, $meta_value ) {
 		// Cache the result to our metadata
-		if ( 'options-page' !== self::$object_type ) {
-			update_metadata( self::$object_type, self::$object_id, $meta_key, $meta_value );
+		if ( 'options-page' !== $this->object_type ) {
+			update_metadata( $this->object_type, $this->object_id, $meta_key, $meta_value );
 		} else {
 			// or site option
-			cmb2_options( self::$object_id )->update( self::$embed_args['cache_key'], $meta_value, true );
+			cmb2_options( $this->object_id )->update( $this->embed_args['cache_key'], $meta_value, true );
 		}
-	}
-
-	/**
-	 * Helper to send json encoded response to ajax
-	 * @since  0.9.5
-	 * @param  string  $data    Data to be shown via ajax
-	 * @param  boolean $success Success or fail
-	 */
-	public static function send_result( $data, $success = true ) {
-		$found = $success ? 'found' : 'not found';
-		// send back our encoded data
-		echo json_encode( array( 'result' => $data, 'id' => $found ) );
-		die();
 	}
 
 }

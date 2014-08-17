@@ -1,14 +1,15 @@
 <?php
-/*
-Script Name:  Custom Metaboxes and Fields
-Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
-              Justin Sternberg (@jtsternberg / dsgnwrks.pro)
-              Jared Atchison (@jaredatch / jaredatchison.com)
-              Bill Erickson (@billerickson / billerickson.net)
-              Andrew Norcross (@norcross / andrewnorcross.com)
-Description:  This will create metaboxes with custom fields that will blow your mind.
-Version:      2.0.0
-*/
+/**
+ * Script Name:  Custom Metaboxes and Fields
+ * Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
+ *               Justin Sternberg (@jtsternberg / dsgnwrks.pro)
+ *               Jared Atchison (@jaredatch / jaredatchison.com)
+ *               Bill Erickson (@billerickson / billerickson.net)
+ *               Andrew Norcross (@norcross / andrewnorcross.com)
+ * Description:  This will create metaboxes with custom fields that will blow your mind.
+ * Version:      2.0.0
+ *
+ */
 
 /**
  * Released under the GPL license
@@ -31,7 +32,9 @@ Version:      2.0.0
  */
 
 /************************************************************************
-		You should not edit the code below or things might explode!
+                   You should not edit the code below
+                   (or any code in the included files)
+                   or things might explode!
 *************************************************************************/
 
 /**

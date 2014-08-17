@@ -25,10 +25,8 @@ class CMB2_Sanitize {
 	 * @param mixed  $value Field value
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
-		$this->field       = $field;
-		$this->value       = $value;
-		$this->object_id   = CMB2::get_object_id();
-		$this->object_type = CMB2::get_object_type();
+		$this->field = $field;
+		$this->value = $value;
 	}
 
 	/**
@@ -64,7 +62,7 @@ class CMB2_Sanitize {
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value )
 			return $updated;
@@ -79,7 +77,7 @@ class CMB2_Sanitize {
 			case 'taxonomy_radio':
 			case 'taxonomy_multicheck':
 				if ( $this->field->args( 'taxonomy' ) ) {
-					return wp_set_object_terms( $this->object_id, $value, $this->field->args( 'taxonomy' ) );
+					return wp_set_object_terms( $this->field->object_id, $value, $this->field->args( 'taxonomy' ) );
 				}
 			case 'multicheck':
 			case 'file_list':
@@ -287,7 +285,10 @@ class CMB2_Sanitize {
 
 		unset( $args['_id'], $args['_name'] );
 		// And get new field object
-		$field      = new CMB2_Field( $args, $group );
+		$field      = new CMB2_Field( array(
+			'field_args'  => $args,
+			'group_field' => $group,
+		) );
 		$id_key     = $field->_id();
 		$id_val_old = $field->escaped_value( 'absint' );
 

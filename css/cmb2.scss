@@ -2,31 +2,31 @@
  * CMB Styling
  */
 
-table.cmb2_metabox {
+.cmb2_metabox {
 	clear: both;
 }
 
-table.cmb2_metabox > tr:first-of-type > td,
-table.cmb2_metabox > tr:first-of-type > th,
-table.cmb2_metabox tbody > tr:first-of-type > td,
-table.cmb2_metabox tbody > tr:first-of-type > th,
-.post-php table.cmb2_metabox .cmb-nested-table td,
-.post-new-php table.cmb2_metabox .cmb-nested-table td,
-.post-php table.cmb2_metabox .repeatable-group th,
-.post-new-php table.cmb2_metabox .repeatable-group th,
-.post-php table.cmb2_metabox .repeatable-group:first-of-type,
-.post-new-php table.cmb2_metabox .repeatable-group:first-of-type {
+.cmb2_metabox > .cmb-row:first-of-type > .cmb-td,
+.cmb2_metabox > .cmb-row:first-of-type > .cmb-th,
+.cmb2_metabox tbody > .cmb-row:first-of-type > .cmb-td,
+.cmb2_metabox tbody > .cmb-row:first-of-type > .cmb-th,
+.post-php .cmb2_metabox .cmb-nested .cmb-td,
+.post-new-php .cmb2_metabox .cmb-nested .cmb-td,
+.post-php .cmb2_metabox .repeatable-group .cmb-th,
+.post-new-php .cmb2_metabox .repeatable-group .cmb-th,
+.post-php .cmb2_metabox .repeatable-group:first-of-type,
+.post-new-php .cmb2_metabox .repeatable-group:first-of-type {
 	border: 0;
 }
 
-.post-php table.cmb2_metabox td,
-.post-new-php table.cmb2_metabox td,
-.post-php table.cmb2_metabox th,
-.post-new-php table.cmb2_metabox th,
-.post-php table.cmb2_metabox .repeatable-group,
-.post-new-php table.cmb2_metabox .repeatable-group,
-.post-php table.cmb2_metabox .repeatable-group,
-.post-new-php table.cmb2_metabox .repeatable-group {
+.post-php .cmb2_metabox .cmb-td,
+.post-new-php .cmb2_metabox .cmb-td,
+.post-php .cmb2_metabox .cmb-th,
+.post-new-php .cmb2_metabox .cmb-th,
+.post-php .cmb2_metabox .repeatable-group,
+.post-new-php .cmb2_metabox .repeatable-group,
+.post-php .cmb2_metabox .repeatable-group,
+.post-new-php .cmb2_metabox .repeatable-group {
 	border-top: 1px solid #E9E9E9;
 }
 
@@ -36,7 +36,7 @@ table.cmb2_metabox tbody > tr:first-of-type > th,
 
 .repeatable-group {
 
-	th {
+	.cmb-th {
 		padding: 5px;
 	}
 
@@ -61,16 +61,16 @@ table.cmb2_metabox tbody > tr:first-of-type > th,
 	border-bottom: 1px solid #ddd;
 }
 
-.post-php table.cmb2_metabox th, .post-new-php table.cmb2_metabox th {
+.post-php .cmb2_metabox .cmb-th, .post-new-php .cmb2_metabox .cmb-th {
 	text-align: right;
 	font-weight:bold;
 }
 
-.post-php table.cmb2_metabox table th, .post-new-php table.cmb2_metabox table th {
+.post-php .cmb2_metabox .child-cmb2 .cmb-th, .post-new-php .cmb2_metabox .child-cmb2 .cmb-th {
 	text-align: left;
 }
 
-table.cmb2_metabox th label {
+.cmb2_metabox .cmb-th label {
 	margin-top:5px;
 	display:block
 }
@@ -86,7 +86,7 @@ span.cmb2_metabox_description {
 	font-style: italic
 }
 
-table.cmb2_metabox {
+.cmb2_metabox {
 
 	input, textarea {
 		font-size:14px;
@@ -169,37 +169,37 @@ table.cmb2_metabox {
 	padding-right: 18px
 }
 
-table.cmb2_metabox input[type="radio"] {
+.cmb2_metabox input[type="radio"] {
 	margin: 0 5px 0 0;
 	padding: 0
 }
 
-table.cmb2_metabox input[type="checkbox"] {
+.cmb2_metabox input[type="checkbox"] {
 	margin: 0 5px 0 0;
 	padding: 0
 }
 
-table.cmb2_metabox .mceLayout {
+.cmb2_metabox .mceLayout {
 	border:1px solid #DFDFDF !important
 }
 
-table.cmb2_metabox .mceIframeContainer {
+.cmb2_metabox .mceIframeContainer {
 	background:#FFF
 }
 
-table.cmb2_metabox .meta_mce {
+.cmb2_metabox .meta_mce {
 	width:97%
 }
 
-table.cmb2_metabox .meta_mce textarea {
+.cmb2_metabox .meta_mce textarea {
 	width:100%
 }
 
-table.cmb2_metabox .cmb2_media_status {
+.cmb2_metabox .cmb2_media_status {
  margin: 10px 0 0 0
 }
 
-table.cmb2_metabox .cmb2_media_status .img_status {
+.cmb2_metabox .cmb2_media_status .img_status {
 	clear: none;
 	float: left;
 	display: inline-block;
@@ -207,18 +207,18 @@ table.cmb2_metabox .cmb2_media_status .img_status {
 	width: auto;
 }
 
-table.cmb2_metabox .cmb-type-file_list .cmb2_media_status .img_status {
+.cmb2_metabox .cmb-type-file_list .cmb2_media_status .img_status {
 	clear: none;
 	float: left;
 	margin-right: 10px;
 	width: auto;
 }
 
-table.cmb2_metabox .cmb2_media_status .img_status, table.cmb2_metabox .cmb2_media_status .embed_status {
+.cmb2_metabox .cmb2_media_status .img_status, .cmb2_metabox .cmb2_media_status .embed_status {
 	position: relative;
 }
 
-table.cmb2_metabox .cmb2_media_status .img_status img, table.cmb2_metabox .cmb2_media_status .embed_status {
+.cmb2_metabox .cmb2_media_status .img_status img, .cmb2_metabox .cmb2_media_status .embed_status {
 	border:1px solid #DFDFDF;
 	background: #FAFAFA;
 	max-width:350px;
@@ -227,12 +227,12 @@ table.cmb2_metabox .cmb2_media_status .img_status img, table.cmb2_metabox .cmb2_
 	border-radius: 2px
 }
 
-table.cmb2_metabox .cmb2_media_status .embed_status {
+.cmb2_metabox .cmb2_media_status .embed_status {
 	float: left;
 	max-width:800px
 }
 
-table.cmb2_metabox .cmb2_media_status .img_status .cmb2_remove_file_button, table.cmb2_metabox .cmb2_media_status .embed_status .cmb2_remove_file_button {
+.cmb2_metabox .cmb2_media_status .img_status .cmb2_remove_file_button, .cmb2_metabox .cmb2_media_status .embed_status .cmb2_remove_file_button {
 	text-indent: -9999px;
 	background: url(../images/ico-delete.png);
 	width: 16px;
@@ -242,14 +242,14 @@ table.cmb2_metabox .cmb2_media_status .img_status .cmb2_remove_file_button, tabl
 	left: -5px
 }
 
-table.cmb2_metabox .attach_list li {
+.cmb2_metabox .attach_list li {
 	clear: both;
 	display: inline-block;
 	margin-bottom: 25px;
 	width: 100%;
 }
 
-table.cmb2_metabox .attach_list li img {
+.cmb2_metabox .attach_list li img {
 	float: left;
 	margin-right: 10px;
 	cursor: move;
@@ -258,56 +258,56 @@ table.cmb2_metabox .attach_list li img {
 /**
  * Sidebar placement adjustments
  */
-.inner-sidebar table.cmb2_metabox input[type=text],
-#side-sortables table.cmb2_metabox input[type=text],
-table.cmb2_metabox textarea {
+.inner-sidebar .cmb2_metabox input[type=text],
+#side-sortables .cmb2_metabox input[type=text],
+.cmb2_metabox textarea {
 	width: 95%;
 }
 
-.inner-sidebar table.cmb2_metabox .cmb2_media_status .img_status img,
-#side-sortables table.cmb2_metabox .cmb2_media_status .img_status img,
-.inner-sidebar table.cmb2_metabox .cmb2_media_status .embed_status img,
-#side-sortables table.cmb2_metabox .cmb2_media_status .embed_status img {
+.inner-sidebar .cmb2_metabox .cmb2_media_status .img_status img,
+#side-sortables .cmb2_metabox .cmb2_media_status .img_status img,
+.inner-sidebar .cmb2_metabox .cmb2_media_status .embed_status img,
+#side-sortables .cmb2_metabox .cmb2_media_status .embed_status img {
 	width: 90%;
 }
 
-.inner-sidebar table.cmb2_metabox label,
-#side-sortables table.cmb2_metabox label {
+.inner-sidebar .cmb2_metabox label,
+#side-sortables .cmb2_metabox label {
 	display: block;
 	font-weight: bold;
 	padding: 0 0 5px;
 }
 
-.inner-sidebar table.cmb2_metabox .cmb2_list label,
-#side-sortables table.cmb2_metabox .cmb2_list label {
+.inner-sidebar .cmb2_metabox .cmb2_list label,
+#side-sortables .cmb2_metabox .cmb2_list label {
 	display: inline;
 	font-weight: normal;
 }
 
-.inner-sidebar table.cmb2_metabox .cmb2_metabox_description,
-#side-sortables table.cmb2_metabox .cmb2_metabox_description {
+.inner-sidebar .cmb2_metabox .cmb2_metabox_description,
+#side-sortables .cmb2_metabox .cmb2_metabox_description {
 	display: block;
 	padding: 7px 0 0;
 }
 
-.inner-sidebar table.cmb2_metabox .cmb2_metabox_title,
-#side-sortables table.cmb2_metabox .cmb2_metabox_title {
+.inner-sidebar .cmb2_metabox .cmb2_metabox_title,
+#side-sortables .cmb2_metabox .cmb2_metabox_title {
 	font-size: 1.2em;
 	font-style: italic;
 }
 
-.postbox table.cmb2_metabox .cmb-spinner {
+.postbox .cmb2_metabox .cmb-spinner {
 	float: left;
 }
 
 /**
  * Color picker
  */
-table.cmb2_metabox .wp-color-result, table.cmb2_metabox .wp-picker-input-wrap {
+.cmb2_metabox .wp-color-result, .cmb2_metabox .wp-picker-input-wrap {
 	vertical-align: middle;
 }
 
-table.cmb2_metabox .wp-color-result, table.cmb2_metabox .wp-picker-container {
+.cmb2_metabox .wp-color-result, .cmb2_metabox .wp-picker-container {
 	margin: 0 10px 0 0;
 }
 
