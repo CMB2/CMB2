@@ -53,7 +53,7 @@ class CMB2_hookup {
 		// register our scripts and styles for cmb
 		$this->once( 'admin_enqueue_scripts', array( $this, '_register_scripts' ), 8 );
 
-		$type = $this->cmb->object_type();
+		$type = $this->cmb->mb_object_type();
 		if ( 'post' == $type ) {
 			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
 			add_action( 'add_attachment', array( $this, 'save_post' ) );
@@ -69,7 +69,7 @@ class CMB2_hookup {
 		}
 		elseif ( 'user' == $type ) {
 
-			$priority = $this->cmb->props( 'priority' );
+			$priority = $this->cmb->prop( 'priority' );
 
 			if ( ! is_numeric( $priority ) ) {
 				if ( $priority == 'high' ) {
@@ -83,7 +83,7 @@ class CMB2_hookup {
 
 			add_action( 'show_user_profile', array( $this, 'user_metabox' ), $priority );
 			add_action( 'edit_user_profile', array( $this, 'user_metabox' ), $priority );
-			add_action( 'user_new_form', array( $this, 'user_metabox' ), $priority );
+			add_action( 'user_new_form', array( $this, 'user_new_metabox' ), $priority );
 
 			add_action( 'personal_options_update', array( $this, 'save_user' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
@@ -107,7 +107,7 @@ class CMB2_hookup {
 	 * Registers scripts and styles for CMB
 	 * @since  1.0.0
 	 */
-	public function register_scripts( $object_type = 'post' ) {
+	public static function register_scripts() {
 		if ( self::$registration_done ) {
 			return;
 		}
@@ -147,7 +147,6 @@ class CMB2_hookup {
 			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
 			'script_debug'    => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
 			'new_admin_style' => version_compare( $wp_version, '3.7', '>' ),
-			'object_type'     => $object_type,
 			'strings'         => array(
 				'upload_file'  => __( 'Use this file', 'cmb' ),
 				'remove_image' => __( 'Remove Image', 'cmb' ),
@@ -183,8 +182,10 @@ class CMB2_hookup {
 	public function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
 		if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
-			self::enqueue_cmb_css( $this->cmb->meta_box );
-			self::enqueue_cmb_js( $this->cmb->object_type() );
+			if ( $this->cmb->prop( 'cmb_styles' ) ) {
+				self::enqueue_cmb_css();
+			}
+			self::enqueue_cmb_js();
 		}
 	}
 
@@ -229,12 +230,23 @@ class CMB2_hookup {
 	}
 
 	/**
+	 * Display metaboxes for new user page
+	 * @since  1.0.0
+	 */
+	public function user_new_metabox( $section ) {
+		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
+			$this->cmb->new_user_page = true;
+			$this->user_metabox();
+		}
+	}
+
+	/**
 	 * Display metaboxes for a user object
 	 * @since  1.0.0
 	 */
 	public function user_metabox() {
 
-		if ( 'user' != $this->mb_object_type() ) {
+		if ( 'user' != $this->cmb->mb_object_type() ) {
 			return;
 		}
 
@@ -242,10 +254,12 @@ class CMB2_hookup {
 			return;
 		}
 
-		self::enqueue_cmb_css( $this->cmb->meta_box );
-		self::enqueue_cmb_js( $this->cmb->object_type() );
+		if ( $this->cmb->prop( 'cmb_styles' ) ) {
+			self::enqueue_cmb_css();
+		}
+		self::enqueue_cmb_js();
 
-		$this->cmb->show_form();
+		$this->cmb->show_form( 0, 'user' );
 	}
 
 	/**
@@ -255,11 +269,10 @@ class CMB2_hookup {
 
 		$post_type = $post ? $post->post_type : get_post_type( $post_id );
 
-		// check permissions
-		if (
+		$do_not_pass_go = (
 			// check nonce
-			! isset( $_POST['wp_meta_box_nonce'] )
-			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], $this->cmb->nonce() )
+			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 			// check if autosave
 			|| defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE
 			// check user editing permissions
@@ -267,10 +280,14 @@ class CMB2_hookup {
 			|| ! current_user_can( 'edit_post', $post_id )
 			// get the metabox post_types & compare it to this post_type
 			|| ! in_array( $post_type, $this->cmb->prop( 'pages' ) )
-		) {
-			return $post_id;
+		);
+
+		if ( $do_not_pass_go ) {
+			// do not collect $200
+			return;
 		}
 
+		// take a trip to reading railroad – if you pass go collect $200
 		$this->cmb->save_fields( $post_id, 'post', $_POST );
 	}
 
@@ -278,15 +295,14 @@ class CMB2_hookup {
 	 * Save data from metabox
 	 */
 	public function save_user( $user_id )  {
-
 		// check permissions
-		// @todo more hardening?
 		if (
 			// check nonce
-			! isset( $_POST['wp_meta_box_nonce'] )
-			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], $this->cmb->nonce() )
+			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 		) {
-			return $user_id;
+			// @todo more hardening?
+			return;
 		}
 
 		$this->cmb->save_fields( $user_id, 'user', $_POST );
@@ -302,7 +318,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Ensures WordPress hooks only get fired once
+	 * Ensures WordPress hook only gets fired once
 	 * @since  2.0.0
 	 * @param string   $action        The name of the filter to hook the $hook callback to.
 	 * @param callback $hook          The callback to be run when the filter is applied.
@@ -321,26 +337,23 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Conditionally includes CMB styles unless metabox explicitly requests not to
+	 * Includes CMB styles
 	 * @since  2.0.0
-	 * @param  array   $meta_box Metabox config array
 	 */
-	public static function enqueue_cmb_css( $meta_box = array() ) {
-		if ( isset( $meta_box['cmb_styles'] ) && $meta_box['cmb_styles'] ) {
-			wp_enqueue_style( 'cmb-styles' );
-		}
+	public static function enqueue_cmb_css() {
+		CMB2_hookup::register_scripts();
+
+		return wp_enqueue_style( 'cmb-styles' );
 	}
 
 	/**
 	 * Includes CMB JS
 	 * @since  2.0.0
 	 */
-	public static function enqueue_cmb_js( $object_type = 'post' ) {
-		if ( ! wp_script_is( 'cmb-scripts', 'registered' ) ) {
-			CMB2_hookup::register_scripts( $object_type );
-		}
+	public static function enqueue_cmb_js() {
+		CMB2_hookup::register_scripts();
 
-		wp_enqueue_script( 'cmb-scripts' );
+		return wp_enqueue_script( 'cmb-scripts' );
 	}
 
 }
