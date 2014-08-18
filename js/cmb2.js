@@ -458,8 +458,11 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		cmb.afterRowInsert( $newRow, true );
 
-		var disabled = ( $table.find('.repeatable-grouping').length <= 1 );
-		$table.find('.remove-group-row').prop( 'disabled', disabled );
+		if ( $table.find('.repeatable-grouping').length <= 1  ) {
+			$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
+		} else {
+			$table.find('.remove-group-row').removeAttr( 'disabled' );
+		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
 	};
@@ -484,7 +487,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
 
-		$table.find( '.remove-row-button' ).prop( 'disabled', false );
+		$table.find( '.remove-row-button' ).removeAttr( 'disabled' );
 
 	};
 
@@ -498,12 +501,14 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( number > 1 ) {
 			// when a group is removed loop through all next groups and update fields names
 			$parent.nextAll( '.repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
-			cmb.log( 'number', number );
 
 			$parent.remove();
-			$table
-				.trigger( 'cmb2_remove_row' )
-				.find('.remove-group-row').prop( 'disabled', number <= 2 );
+			if ( number <= 2 ) {
+				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
+			} else {
+				$table.find('.remove-group-row').removeAttr( 'disabled' );
+			}
+			$table.trigger( 'cmb2_remove_row' );
 		}
 
 	};
@@ -521,11 +526,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			if ( number === 3 ) {
-				$table.find( '.remove-row-button' ).prop( 'disabled', true );
+				$table.find( '.remove-row-button' ).attr( 'disabled', 'disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		} else {
-			$self.prop( 'disabled', true );
+			$self.attr( 'disabled', 'disabled' );
 		}
 	};
 
