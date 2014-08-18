@@ -257,9 +257,8 @@ class CMB2_Field {
 			: null;
 
 		$new_value = $this->sanitization_cb( $meta_value );
-		$name      = $field->id();
+		$name      = $this->id();
 		$old       = $this->get_data();
-
 		// if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
 		// 	$this->remove_data();
 		// 	if ( ! empty( $new_value ) ) {
@@ -431,25 +430,22 @@ class CMB2_Field {
 		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
 		$classes   .= ' cmb2_id_'. sanitize_html_class( $this->id() );
 		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
+		$classes   .= $this->group ? ' cmb-repeat-group-field' : '';
 		// 'inline' flag, or _inline in the field type, set to true
 		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
-		$is_side    = 'side' === $this->args( 'context' );
 
 		printf( "<li class=\"cmb-row %s\">\n", $classes );
 
-		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) || $is_side ) {
+		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
 			echo "\t<div class=\"cmb-td\">\n";
 
-			if ( ! $this->args( 'show_names' ) || $is_side ) {
-				$style = ! $is_side || 'title' == $this->type() ? ' style="display:none;"' : '';
+			if ( ! $this->args( 'show_names' ) ) {
+				$style = 'title' == $this->type() ? ' style="display:none;"' : '';
 				printf( "\n<label%s for=\"%s\">%s</label>\n", $style, $this->id(), $this->args( 'name' ) );
 			}
 		} else {
 
-			$style = 'post' == $this->object_type ? ' style="width:18%"' : '';
-			// $tag   = 'side' !== $this->args( 'context' ) ? 'th' : 'p';
-
-			printf( '<div class="cmb-th"%2$s><label for="%3$s">%4$s</label></div>', $tag, $style, $this->id(), $this->args( 'name' ) );
+			printf( '<div class="cmb-th"><label for="%1$s">%2$s</label></div>', $this->id(), $this->args( 'name' ) );
 
 			echo "\n\t<div class=\"cmb-td\">\n";
 		}
