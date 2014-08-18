@@ -70,14 +70,23 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
 	$cmb->object_type( $object_type );
 
 	if ( is_array( $field_id ) && isset( $field_id['id'] ) ) {
-		return new CMB2_Field( $field_id );
+		return new CMB2_Field( array(
+			'field_args'  => $field_id,
+			'object_id'   => $object_id,
+			'object_type' => $object_type,
+		) );
 	}
 
 	$fields = (array) $cmb->prop( 'fields' );
 	foreach ( $fields as $field ) {
-		if ( $field['id'] = $field_id || $field['name'] = $field_id ) {
+		if ( $field['id'] == $field_id || $field['name'] == $field_id ) {
 			// Send back field object
-			return new CMB2_Field( $field );
+			return new CMB2_Field( array(
+				'field_args'  => $field,
+				'object_id'   => $object_id,
+				'object_type' => $object_type,
+			) );
+
 		}
 	}
 }
@@ -157,15 +166,6 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		return;
 	}
 
-	$args = wp_parse_args( $args, array(
-		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
-		'save_button' => __( 'Save', 'cmb2' ),
-	) );
-
-	$form_format = apply_filters( 'cmb2_get_metabox_form_format', $args['form_format'], $object_id, $cmb );
-
-	$format_parts = explode( '%3$s', $form_format );
-
 	// Set object type to what is declared in the metabox (rather than trying to guess from context)
 	$cmb->object_type( $cmb->mb_object_type() );
 
@@ -181,12 +181,22 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		$cmb->save_fields( $object_id, $cmb->object_type(), $_POST );
 	}
 
+	// Enqueue JS/CSS
 	if ( $cmb->prop( 'cmb_styles' ) ) {
 		CMB2_hookup::enqueue_cmb_css();
 	}
 	CMB2_hookup::enqueue_cmb_js();
 
-	// Get cmb form
+	$args = wp_parse_args( $args, array(
+		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
+		'save_button' => __( 'Save', 'cmb2' ),
+	) );
+
+	$form_format = apply_filters( 'cmb2_get_metabox_form_format', $args['form_format'], $object_id, $cmb );
+
+	$format_parts = explode( '%3$s', $form_format );
+
+	// Show cmb form
 	printf( $format_parts[0], $cmb->box_id, $object_id );
 	$cmb->show_form();
 	printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
