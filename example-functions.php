@@ -341,12 +341,12 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	 * Metabox for the user profile screen
 	 */
 	$meta_boxes['user_edit'] = array(
-		'id'         => 'user_edit',
-		'title'      => __( 'User Profile Metabox', 'cmb' ),
-		'pages'      => array( 'user' ), // Tells CMB to use user_meta vs post_meta
-		'show_names' => true,
-		'cmb_styles' => false, // Show cmb bundled styles.. not needed on user profile page
-		'fields'     => array(
+		'id'               => 'user_edit',
+		'title'            => __( 'User Profile Metabox', 'cmb' ),
+		'pages'            => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'show_names'       => true,
+		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
+		'fields'           => array(
 			array(
 				'name'     => __( 'Extra Info', 'cmb' ),
 				'desc'     => __( 'field description (optional)', 'cmb' ),
