@@ -1,4 +1,4 @@
-# Custom Metaboxes and Fields for WordPress [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
+# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
 
 **Contributors**:
 
@@ -16,6 +16,8 @@
 ## Description
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with custom fields that will blow your mind.
+
+**Version 2.0 is in beta and is a complete rewrite. Much of the documentation available is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg).**
 
 ##### Features:
 
