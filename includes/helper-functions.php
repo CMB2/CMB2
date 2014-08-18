@@ -174,18 +174,20 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	// @todo more hardening?
 	if (
 		// check nonce
-		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST['wp_meta_box_nonce'] )
-		&& wp_verify_nonce( $_POST['wp_meta_box_nonce'], $cmb->nonce() )
+		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
+		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
 		&& $_POST['object_id'] == $object_id
 	) {
-		$cmb->save_fields( $meta_box, $object_id );
+		$cmb->save_fields( $object_id, $cmb->object_type(), $_POST );
 	}
 
-	CMB2_hookup::enqueue_cmb_css( $cmb->meta_box );
-	CMB2_hookup::enqueue_cmb_js( $cmb->object_type() );
+	if ( $cmb->prop( 'cmb_styles' ) ) {
+		CMB2_hookup::enqueue_cmb_css();
+	}
+	CMB2_hookup::enqueue_cmb_js();
 
 	// Get cmb form
-	printf( $format_parts[0], $meta_box['id'], $object_id );
+	printf( $format_parts[0], $cmb->box_id, $object_id );
 	$cmb->show_form();
 	printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
 
