@@ -159,7 +159,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
 	$args = wp_parse_args( $args, array(
 		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
-		'save_button' => __( 'Save' ),
+		'save_button' => __( 'Save', 'cmb2' ),
 	) );
 
 	$form_format = apply_filters( 'cmb2_get_metabox_form_format', $args['form_format'], $object_id, $cmb );

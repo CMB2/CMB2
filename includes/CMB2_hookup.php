@@ -129,10 +129,10 @@ class CMB2_hookup {
 		   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
 	   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
 			wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
-				'clear'         => __( 'Clear' ),
-				'defaultString' => __( 'Default' ),
-				'pick'          => __( 'Select Color' ),
-				'current'       => __( 'Current Color' ),
+				'clear'         => __( 'Clear', 'cmb2' ),
+				'defaultString' => __( 'Default', 'cmb2' ),
+				'pick'          => __( 'Select Color', 'cmb2' ),
+				'current'       => __( 'Current Color', 'cmb2' ),
 			) );
 		}
 
@@ -150,12 +150,12 @@ class CMB2_hookup {
 			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
 			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
 			'strings'         => array(
-				'upload_file'  => __( 'Use this file', 'cmb' ),
-				'remove_image' => __( 'Remove Image', 'cmb' ),
-				'remove_file'  => __( 'Remove', 'cmb' ),
-				'file'         => __( 'File:', 'cmb' ),
-				'download'     => __( 'Download', 'cmb' ),
-				'check_toggle' => __( 'Select / Deselect All', 'cmb' ),
+				'upload_file'  => __( 'Use this file', 'cmb2' ),
+				'remove_image' => __( 'Remove Image', 'cmb2' ),
+				'remove_file'  => __( 'Remove', 'cmb2' ),
+				'file'         => __( 'File:', 'cmb2' ),
+				'download'     => __( 'Download', 'cmb2' ),
+				'check_toggle' => __( 'Select / Deselect All', 'cmb2' ),
 			),
 			'defaults'        => array(
 				'date_picker'  => false,

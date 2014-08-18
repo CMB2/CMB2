@@ -507,8 +507,8 @@ class CMB2_Field {
 		$args['options']    = isset( $args['options'] ) && is_array( $args['options'] ) ? $args['options'] : array();
 
 		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
-			'add_button'    => __( 'Add Group', 'cmb' ),
-			'remove_button' => __( 'Remove Group', 'cmb' ),
+			'add_button'    => __( 'Add Group', 'cmb2' ),
+			'remove_button' => __( 'Remove Group', 'cmb2' ),
 		) ) : $args['options'];
 
 		$args['_id']        = $args['id'];

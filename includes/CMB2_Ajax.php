@@ -31,7 +31,7 @@ class CMB2_Ajax {
 
 		// send back error if empty
 		if ( empty( $oembed_string ) ) {
-			wp_send_json_error( '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb' ) .'</p>' );
+			wp_send_json_error( '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb2' ) .'</p>' );
 		}
 
 		// Set width of embed
@@ -117,10 +117,10 @@ class CMB2_Ajax {
 
 		// Send back our embed
 		if ( $check_embed && $check_embed != $fallback )
-			return '<div class="embed_status">'. $check_embed .'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="'. $args['field_id'] .'">'. __( 'Remove Embed', 'cmb' ) .'</a></p></div>';
+			return '<div class="embed_status">'. $check_embed .'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="'. $args['field_id'] .'">'. __( 'Remove Embed', 'cmb2' ) .'</a></p></div>';
 
 		// Otherwise, send back error info that no oEmbeds were found
-		return '<p class="ui-state-error-text">'. sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
+		return '<p class="ui-state-error-text">'. sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
 
 	}
 
