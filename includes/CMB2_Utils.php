@@ -33,8 +33,9 @@ class CMB2_Utils {
 		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
 
 		// If we found an attachement ID, return it
-		if ( !empty( $attachment ) && is_array( $attachment ) )
+		if ( !empty( $attachment ) && is_array( $attachment ) ) {
 			return $attachment[0];
+		}
 
 		// No luck
 		return false;
@@ -78,12 +79,13 @@ class CMB2_Utils {
 		$tzstring       = get_option( 'timezone_string' );
 
 		if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
-			if ( 0 == $current_offset )
+			if ( 0 == $current_offset ) {
 				$tzstring = 'UTC+0';
-			elseif ( $current_offset < 0 )
+			} elseif ( $current_offset < 0 ) {
 				$tzstring = 'UTC' . $current_offset;
-			else
+			} else {
 				$tzstring = 'UTC+' . $current_offset;
+			}
 		}
 
 		return $tzstring;

@@ -23,8 +23,9 @@ class CMB2_Ajax {
 	public function oembed_handler() {
 
 		// verify our nonce
-		if ( ! ( isset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'] ) && wp_verify_nonce( $_REQUEST['cmb2_ajax_nonce'], 'ajax_nonce' ) ) )
+		if ( ! ( isset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'] ) && wp_verify_nonce( $_REQUEST['cmb2_ajax_nonce'], 'ajax_nonce' ) ) ) {
 			die();
+		}
 
 		// sanitize our search string
 		$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
@@ -116,8 +117,9 @@ class CMB2_Ajax {
 		$fallback = $wp_embed->maybe_make_link( $oembed_url );
 
 		// Send back our embed
-		if ( $check_embed && $check_embed != $fallback )
+		if ( $check_embed && $check_embed != $fallback ) {
 			return '<div class="embed_status">'. $check_embed .'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="'. $args['field_id'] .'">'. __( 'Remove Embed', 'cmb2' ) .'</a></p></div>';
+		}
 
 		// Otherwise, send back error info that no oEmbeds were found
 		return '<p class="ui-state-error-text">'. sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $fallback ) .' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
@@ -136,8 +138,9 @@ class CMB2_Ajax {
 	 */
 	public function hijack_oembed_cache_get( $check, $object_id, $meta_key ) {
 
-		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) )
+		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) ) {
 			return $check;
+		}
 
 		if ( $this->ajax_update ) {
 			return false;
@@ -163,8 +166,9 @@ class CMB2_Ajax {
 	 * @return boolean             Whether to continue setting
 	 */
 	public function hijack_oembed_cache_set( $check, $object_id, $meta_key, $meta_value ) {
-		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) )
+		if ( ! $this->hijack || ( $this->object_id != $object_id && 1987645321 !== $object_id ) ){
 			return $check;
+		}
 
 		$this->oembed_cache_set( $meta_key, $meta_value );
 

@@ -203,16 +203,19 @@ class CMB2_Sanitize {
 	public function text_datetime_timestamp( $value, $repeat = false ) {
 
 		$test = is_array( $value ) ? array_filter( $value ) : '';
-		if ( empty( $test ) )
+		if ( empty( $test ) ) {
 			return '';
+		}
 
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) )
+		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
+		}
 
 		$value = strtotime( $value['date'] .' '. $value['time'] );
 
-		if ( $tz_offset = $this->field->field_timezone_offset() )
+		if ( $tz_offset = $this->field->field_timezone_offset() ) {
 			$value += $tz_offset;
+		}
 
 		return $value;
 	}
@@ -226,24 +229,29 @@ class CMB2_Sanitize {
 	public function text_datetime_timestamp_timezone( $value, $repeat = false ) {
 
 		$test = is_array( $value ) ? array_filter( $value ) : '';
-		if ( empty( $test ) )
+		if ( empty( $test ) ) {
 			return '';
+		}
 
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) )
+		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
+		}
 
 		$tzstring = null;
 
-		if ( is_array( $value ) && array_key_exists( 'timezone', $value ) )
+		if ( is_array( $value ) && array_key_exists( 'timezone', $value ) ) {
 			$tzstring = $value['timezone'];
+		}
 
-		if ( empty( $tzstring ) )
+		if ( empty( $tzstring ) ) {
 			$tzstring = cmb2_utils()->timezone_string();
+		}
 
 		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
 
-		if ( substr( $tzstring, 0, 3 ) === 'UTC' )
+		if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+		}
 
 		$value = new DateTime( $value['date'] .' '. $value['time'], new DateTimeZone( $tzstring ) );
 		$value = serialize( $value );
@@ -352,8 +360,9 @@ class CMB2_Sanitize {
 	 * @return mixed          Sanitized value
 	 */
 	public function _check_repeat( $value, $method, $repeat ) {
-		if ( $repeat || ! $this->field->args( 'repeatable' ) )
+		if ( $repeat || ! $this->field->args( 'repeatable' ) ) {
 			return;
+		}
 		$new_value = array();
 		foreach ( $value as $iterator => $val ) {
 			$new_value[] = $this->$method( $val, true );

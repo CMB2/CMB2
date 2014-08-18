@@ -42,20 +42,23 @@ class CMB2_Show_Filters {
 	 */
 	public static function check_page_template( $display, $meta_box_args, $cmb ) {
 
-		if ( ! isset( $meta_box_args['show_on']['key'] ) || 'page-template' !== $meta_box_args['show_on']['key'] )
+		if ( ! isset( $meta_box_args['show_on']['key'] ) || 'page-template' !== $meta_box_args['show_on']['key'] ) {
 			return $display;
+		}
 
 		$object_id = $cmb->object_id();
 
-		if ( ! $object_id || $cmb->object_type() !== 'post' )
+		if ( ! $object_id || $cmb->object_type() !== 'post' ) {
 			return false;
+		}
 
 		// Get current template
 		$current_template = get_post_meta( $object_id, '_wp_page_template', true );
 
 		// See if there's a match
-		if ( $current_template && in_array( $current_template, (array) $meta_box_args['show_on']['value'] ) )
+		if ( $current_template && in_array( $current_template, (array) $meta_box_args['show_on']['value'] ) ) {
 			return true;
+		}
 
 		return false;
 	}
@@ -70,18 +73,21 @@ class CMB2_Show_Filters {
 	public static function check_admin_page( $display, $meta_box_args ) {
 
 		// check if this is a 'options-page' metabox
-		if ( ! isset( $meta_box_args['show_on']['key'] ) || 'options-page' !== $meta_box_args['show_on']['key'] )
+		if ( ! isset( $meta_box_args['show_on']['key'] ) || 'options-page' !== $meta_box_args['show_on']['key'] ) {
 			return $display;
+		}
 
 		// Enforce 'show_on' filter in the admin
 		if ( is_admin() ) {
 
 			// If there is no 'page' query var, our filter isn't applicable
-			if ( ! isset( $_GET['page'] ) )
+			if ( ! isset( $_GET['page'] ) ) {
 				return $display;
+			}
 
-			if ( ! isset( $meta_box_args['show_on']['value'] ) )
+			if ( ! isset( $meta_box_args['show_on']['value'] ) ) {
 				return false;
+			}
 
 			$pages = $meta_box_args['show_on']['value'];
 
