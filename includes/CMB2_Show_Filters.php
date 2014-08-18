@@ -25,7 +25,6 @@ class CMB2_Show_Filters {
 		}
 
 		$object_id = is_admin() ? $cmb->object_id() : @get_the_id();
-		echo '<xmp>$object_id: '. print_r( $cmb->object_id(), true ) .'</xmp>';
 
 		if ( ! $object_id )
 			return false;
