@@ -58,7 +58,7 @@ class CMB2 {
 	 * @var   string
 	 * @since 1.0.0
 	 */
-	protected $mb_object_type = 'post';
+	protected $mb_object_type = null;
 
 	/**
 	 * List of fields that are changed/updated on save
@@ -84,6 +84,7 @@ class CMB2 {
 		'cmb_styles' => true, // Include cmb bundled stylesheet
 		'fields'     => array(),
 		'hookup'     => true,
+		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 	);
 
 	/**
@@ -109,7 +110,7 @@ class CMB2 {
 		$object_type = $this->object_type( $object_type );
 		$object_id = $this->object_id( $object_id );
 
-		wp_nonce_field( $this->nonce(), 'wp_meta_box_nonce', false, true );
+		$this->nonce_field();
 
 		echo "\n<!-- Begin CMB Fields -->\n";
 		/**
@@ -123,7 +124,7 @@ class CMB2 {
 		 */
 		do_action( 'cmb2_before_form', $this->meta_box, $object_id, $object_type );
 
-		echo '<ul id="cmb2_metabox_'. sanitize_html_class( $this->box_id ) .'" class="cmb2_metabox">';
+		echo '<div class="cmb2_wrap form-table"><ul id="cmb2_metabox_'. sanitize_html_class( $this->box_id ) .'" class="cmb2_metabox">';
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 
@@ -138,6 +139,7 @@ class CMB2 {
 			} else {
 
 				$field_args['show_names'] = $this->prop( 'show_names' );
+
 				// Render default fields
 				$field = new CMB2_Field( array(
 					'field_args'  => $field_args,
@@ -148,7 +150,7 @@ class CMB2 {
 			}
 		}
 
-		echo '</ul>';
+		echo '</ul></div>';
 
 		/**
 		 * Hook after form form has been rendered
@@ -185,9 +187,10 @@ class CMB2 {
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 
-		echo '<li class="cmb-row"><div class="cmb-td"><ul id="', $field_group->id(), '_repeat" class="cmb-nested repeatable-group'. $sortable .'" style="width:100%;">';
+		echo '<li class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><ul id="', $field_group->id(), '_repeat" class="cmb-nested repeatable-group'. $sortable .'" style="width:100%;">';
 		if ( $desc || $label ) {
-			echo '<li class="cmb-row"><div class="cmb-th">';
+			$class = $desc ? ' cmb-group-description' : '';
+			echo '<li class="cmb-row'. $class .'"><div class="cmb-th">';
 				if ( $label )
 					echo '<h2 class="cmb-group-name">'. $label .'</h2>';
 				if ( $desc )
@@ -236,7 +239,7 @@ class CMB2 {
 					$field->render_field();
 				}
 				echo '
-					<li class="cmb-row">
+					<li class="cmb-row remove-field-row">
 						<div class="remove-row">
 							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 						</div>
@@ -269,6 +272,9 @@ class CMB2 {
 
 			if ( 'group' == $field_args['type'] ) {
 				$this->save_group( $field_args );
+			} elseif ( 'title' == $field_args['type'] ) {
+				// Don't process title fields
+				continue;
 			} else {
 				// Save default fields
 				$field = new CMB2_Field( array(
@@ -277,7 +283,7 @@ class CMB2 {
 					'object_id'   => $object_id,
 				) );
 
-				$this->save_field( $_post );
+				$field->save_field( $_post );
 			}
 
 		}
@@ -308,6 +314,7 @@ class CMB2 {
 	 * Save a repeatable group
 	 */
 	public function save_group( $args ) {
+
 		if ( ! isset( $args['id'], $args['fields'], $_POST[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
 			return;
 
@@ -390,7 +397,9 @@ class CMB2 {
 		// Try to get our object ID from the global space
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				if ( ! isset( $this->new_user_page ) ) {
+					$object_id = isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				}
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
 				break;
 
@@ -414,26 +423,35 @@ class CMB2 {
 	 */
 	public function mb_object_type() {
 
-		if ( isset( $this->mb_object_type ) ) {
+		if ( null !== $this->mb_object_type ) {
+			return $this->mb_object_type;
+		}
+
+		if ( $this->is_options_page_mb() ) {
+			$this->mb_object_type = 'options-page';
 			return $this->mb_object_type;
 		}
 
 		if ( ! $this->prop( 'pages' ) ) {
+			$this->mb_object_type = 'post';
 			return $this->mb_object_type;
 		}
 
 		$type = false;
 		// check if 'pages' is a string
-		if ( $this->is_options_page_mb() )
-			$type = 'options-page';
-		// check if 'pages' is a string
-		elseif ( is_string( $this->prop( 'pages' ) ) )
+		if ( is_string( $this->prop( 'pages' ) ) ) {
 			$type = $this->prop( 'pages' );
+		}
 		// if it's an array of one, extract it
-		elseif ( is_array( $this->prop( 'pages' ) ) && count( $this->prop( 'pages' ) === 1 ) )
-			$type = is_string( end( $this->prop( 'pages' ) ) ) ? end( $this->prop( 'pages' ) ) : false;
+		elseif ( is_array( $this->prop( 'pages' ) ) && count( $this->prop( 'pages' ) === 1 ) ) {
+			$cpts = $this->prop( 'pages' );
+			$type = is_string( end( $cpts ) )
+				? end( $cpts )
+				: false;
+		}
 
-		if ( !$type ) {
+		if ( ! $type ) {
+			$this->mb_object_type = 'post';
 			return $this->mb_object_type;
 		}
 
@@ -442,8 +460,6 @@ class CMB2 {
 			$this->mb_object_type = 'user';
 		elseif ( 'comment' == $type )
 			$this->mb_object_type = 'comment';
-		elseif ( 'options-page' == $type )
-			$this->mb_object_type = 'options-page';
 		else
 			$this->mb_object_type = 'post';
 
@@ -505,16 +521,25 @@ class CMB2 {
 	}
 
 	/**
+	 * Generate a unique nonce field for each registered meta_box
+	 * @since  2.0.0
+	 * @return string unique nonce hidden input
+	 */
+	public function nonce_field() {
+		wp_nonce_field( $this->nonce(), $this->nonce(), false, true );
+	}
+
+	/**
 	 * Generate a unique nonce for each registered meta_box
 	 * @since  2.0.0
 	 * @return string unique nonce string
 	 */
 	public function nonce() {
-		if ( isset( $this->nonce ) ) {
-			return $this->nonce;
+		if ( isset( $this->generated_nonce ) ) {
+			return $this->generated_nonce;
 		}
-		$this->nonce = md5( serialize( $this->meta_box ) );
-		return $this->nonce;
+		$this->generated_nonce = sanitize_html_class( 'nonce_'. basename( __FILE__ ) . $this->box_id );
+		return $this->generated_nonce;
 	}
 
 	/**
