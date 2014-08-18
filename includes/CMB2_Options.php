@@ -151,7 +151,7 @@ class CMB2_Option {
 	 * @param  mixed  $default Optional. Default value to return if the option does not exist.
 	 * @return mixed           Value set for the option.
 	 */
-	function get( $default = null ) {
+	function get_options( $default = null ) {
 		if ( empty( $this->options ) ) {
 
 			$test_get = apply_filters( "cmb2_override_option_get_{$this->key}", 'cmb2_no_override_option_get', $default, $this );
