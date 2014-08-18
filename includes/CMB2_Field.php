@@ -420,12 +420,14 @@ class CMB2_Field {
 	public function render_field() {
 
 		// If field is requesting to not be shown on the front-end
-		if ( ! is_admin() && ! $this->args( 'on_front' ) )
+		if ( ! is_admin() && ! $this->args( 'on_front' ) ) {
 			return;
+		}
 
 		// If field is requesting to be conditionally shown
-		if ( is_callable( $this->args( 'show_on_cb' ) ) && ! call_user_func( $this->args( 'show_on_cb' ), $this ) )
+		if ( is_callable( $this->args( 'show_on_cb' ) ) && ! call_user_func( $this->args( 'show_on_cb' ), $this ) ) {
 			return;
+		}
 
 		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
 		$classes   .= ' cmb2_id_'. sanitize_html_class( $this->id() );

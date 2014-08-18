@@ -119,8 +119,8 @@ class CMB2_hookup {
 
 		if ( ! is_admin() ) {
 			// we need to register colorpicker on the front-end
-		   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
-	   	wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
+			wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
+			wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
 			wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
 				'clear'         => __( 'Clear', 'cmb2' ),
 				'defaultString' => __( 'Default', 'cmb2' ),
@@ -208,7 +208,7 @@ class CMB2_hookup {
 		echo '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
-			$form = jQuery("#'. $this->form_id .'");
+			$form = jQuery("#' . $this->form_id . '");
 			if ( $form.length ) {
 				$form.attr( {
 					"enctype" : "multipart/form-data",

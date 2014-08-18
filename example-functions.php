@@ -424,7 +424,8 @@ add_action( 'init', 'cmb2_initialize_meta_boxes', 9999 );
  */
 function cmb2_initialize_meta_boxes() {
 
-	if ( ! class_exists( 'CMB2' ) )
+	if ( ! class_exists( 'CMB2' ) ) {
 		require_once 'cmb/init.php';
+	}
 
 }

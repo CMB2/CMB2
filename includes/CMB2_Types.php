@@ -90,8 +90,9 @@ class CMB2_Types {
 
 			// Check cache
 			$cached = $test = get_transient( $cache_key );
-			if ( $cached )
+			if ( $cached ) {
 				return $cached;
+			}
 
 			$cached = wp_get_object_terms( $object_id, $taxonomy );
 			// Do our own (minimal) caching. Long enough for a page-load.
@@ -199,8 +200,9 @@ class CMB2_Types {
 				$this_args = $args;
 				$this_args['value'] = $opt_value;
 				$this_args['label'] = $opt_label;
-				if ( $is_current )
+				if ( $is_current ) {
 					$this_args['checked'] = 'checked';
+				}
 
 				$_options .= $this->$method( $this_args, $i );
 			} else {
@@ -535,11 +537,12 @@ class CMB2_Types {
 	public function colorpicker() {
 		$meta_value = $this->field->escaped_value();
 		$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
-		if ( preg_match( '/^' . $hex_color . '/i', $meta_value ) ) // Value is just 123abc, so prepend #.
+		if ( preg_match( '/^' . $hex_color . '/i', $meta_value ) ) { // Value is just 123abc, so prepend #.
 			$meta_value = '#' . $meta_value;
-		elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta_value ) ) // Value doesn't match #123abc, so sanitize to just #.
+		}
+		elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta_value ) ) { // Value doesn't match #123abc, so sanitize to just #.
 			$meta_value = "#";
-
+		}
 		return $this->input( array( 'class' => 'cmb2_colorpicker cmb2_text_small', 'value' => $meta_value ) );
 	}
 
