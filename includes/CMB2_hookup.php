@@ -117,13 +117,6 @@ class CMB2_hookup {
 		// Only use minified files if SCRIPT_DEBUG is off
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-timepicker' );
-		// styles required for cmb
-		$styles = array();
-
-		$scripts[] = 'wp-color-picker';
-		$styles[] = 'wp-color-picker';
 		if ( ! is_admin() ) {
 			// we need to register colorpicker on the front-end
 		   wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
@@ -136,8 +129,13 @@ class CMB2_hookup {
 			) );
 		}
 
-		wp_register_script( 'cmb-datepicker', cmb2_utils()->url( 'js/jquery.datePicker.min.js' ) );
 		wp_register_script( 'cmb-timepicker', cmb2_utils()->url( 'js/jquery.timePicker.min.js' ) );
+
+		// scripts required for cmb
+		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-timepicker', 'wp-color-picker' );
+		// styles required for cmb
+		$styles = array( 'wp-color-picker' );
+
 		wp_register_script( 'cmb-scripts', cmb2_utils()->url( "js/cmb2{$min}.js" ), $scripts, CMB2_VERSION );
 
 		wp_enqueue_media();
