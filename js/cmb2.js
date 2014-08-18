@@ -87,7 +87,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$(this).find( '.remove-group-row' ).before( '<a class="shift-rows move-up alignleft" href="#">'+ l10n.strings.up_arrow +'</a> <a class="shift-rows move-down alignleft" href="#">'+ l10n.strings.down_arrow +'</a>' );
+					$(this).find( '.remove-group-row' ).before( '<a class="button shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
 				.on( 'click', '.shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
@@ -365,9 +365,14 @@ window.CMB2 = (function(window, document, $, undefined){
 		return this;
 	};
 
-	cmb.afterRowInsert = function( $row ) {
+	cmb.afterRowInsert = function( $row, group ) {
 		var $focus = $row.find('input:not([type="button"]), textarea, select').first();
 		if ( $focus.length ) {
+			if ( group ) {
+				$('html, body').animate({
+					scrollTop: Math.round( $focus.offset().top - 150 )
+				}, 1000);
+			}
 			$focus.focus();
 		}
 
@@ -451,13 +456,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $newRow = $( '<div class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
-		cmb.afterRowInsert( $newRow );
+		cmb.afterRowInsert( $newRow, true );
 
-		if ( $table.find('.repeatable-grouping').length <= 1 ) {
-			$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
-		} else {
-			$table.find('.remove-group-row').removeAttr( 'disabled' );
-		}
+		var disabled = ( $table.find('.repeatable-grouping').length <= 1 );
+		$table.find('.remove-group-row').prop( 'disabled', disabled );
 
 		$table.trigger( 'cmb2_add_row', $newRow );
 	};
@@ -482,7 +484,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
 
-		$table.find( '.remove-row-button' ).removeAttr( 'disabled' );
+		$table.find( '.remove-row-button' ).prop( 'disabled', false );
 
 	};
 
@@ -491,20 +493,19 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $self   = $(this);
 		var $table  = $('#'+ $self.data('selector'));
 		var $parent = $self.parents('.repeatable-grouping');
-		var noRows  = $table.find('.repeatable-grouping').length;
+		var number  = $table.find('.repeatable-grouping').length;
 
-		// when a group is removed loop through all next groups and update fields names
-		$parent.nextAll( '.repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+		if ( number > 1 ) {
+			// when a group is removed loop through all next groups and update fields names
+			$parent.nextAll( '.repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+			cmb.log( 'number', number );
 
-		if ( noRows > 1 ) {
 			$parent.remove();
-			if ( noRows < 3 ) {
-				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
-			} else {
-				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
-			}
-			$table.trigger( 'cmb2_remove_row' );
+			$table
+				.trigger( 'cmb2_remove_row' )
+				.find('.remove-group-row').prop( 'disabled', number <= 2 );
 		}
+
 	};
 
 	cmb.removeAjaxRow = function( event ) {
@@ -520,11 +521,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			if ( number === 3 ) {
-				$table.find( '.remove-row-button' ).attr( 'disabled', 'disabled' );
+				$table.find( '.remove-row-button' ).prop( 'disabled', true );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		} else {
-			$self.attr( 'disabled', 'disabled' );
+			$self.prop( 'disabled', true );
 		}
 	};
 
