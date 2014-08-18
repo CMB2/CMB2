@@ -28,14 +28,15 @@ window.CMB2 = (function(window, document, $, undefined){
 			timePicker  : l10n.defaults.time_picker,
 			datePicker  : l10n.defaults.date_picker,
 			colorPicker : l10n.defaults.color_picker || {},
-		}
+		},
+		styleBreakPoint : 450,
 	};
 
 	cmb.metabox = function() {
 		if ( cmb.$metabox ) {
 			return cmb.$metabox;
 		}
-		cmb.$metabox = $('table.cmb2_metabox');
+		cmb.$metabox = $('.cmb2_wrap > .cmb2_metabox');
 		return cmb.$metabox;
 	};
 
@@ -52,7 +53,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		/**
 		 * Initialize time/date/color pickers
 		 */
-		cmb.initPickers( $metabox.find('input:text.cmb2_timepicker'), $metabox.find('input:text.cmb2_datepicker'), $metabox.find('input:text.cmb2_colorpicker') );
+		cmb.initPickers( $metabox.find('input[type="text"].cmb2_timepicker'), $metabox.find('input[type="text"].cmb2_datepicker'), $metabox.find('input[type="text"].cmb2_colorpicker') );
 
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 		$("#ui-datepicker-div").wrap('<div class="cmb2_element" />');
@@ -354,7 +355,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Need to clean-up colorpicker before appending
 			$colorPicker.each( function() {
 				var $td = $(this).parent();
-				$td.html( $td.find( 'input:text.cmb2_colorpicker' ).attr('style', '') );
+				$td.html( $td.find( 'input[type="text"].cmb2_colorpicker' ).attr('style', '') );
 			});
 		}
 
@@ -407,7 +408,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		// Init pickers from new row
-		cmb.initPickers( $row.find('input:text.cmb2_timepicker'), $row.find('input:text.cmb2_datepicker'), $row.find('input:text.cmb2_colorpicker') );
+		cmb.initPickers( $row.find('input[type="text"].cmb2_timepicker'), $row.find('input[type="text"].cmb2_datepicker'), $row.find('input[type="text"].cmb2_colorpicker') );
 	};
 
 	cmb.updateNameAttr = function () {
@@ -448,15 +449,13 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
-		// console.log( '$row.html()', $row.html() );
 		var $newRow = $( '<div class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
-		// console.log( '$newRow.html()', $row.html() );
 
 		cmb.afterRowInsert( $newRow );
 
 		if ( $table.find('.repeatable-grouping').length <= 1 ) {
-			$table.find('.remove-group-row').prop('disabled', true);
+			$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
 		} else {
 			$table.find('.remove-group-row').removeAttr( 'disabled' );
 		}
@@ -483,6 +482,9 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
+
+		$table.find( '.remove-row-button' ).removeAttr( 'disabled' );
+
 	};
 
 	cmb.removeGroupRow = function( event ) {
@@ -498,9 +500,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( noRows > 1 ) {
 			$parent.remove();
 			if ( noRows < 3 ) {
-				$table.find('.remove-group-row').prop('disabled', true);
+				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
 			} else {
-				$table.find('.remove-group-row').prop('disabled', false);
+				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		}
@@ -511,15 +513,19 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $self   = $(this);
 		var $parent = $self.parents('.cmb-row');
 		var $table  = $self.parents('.cmb-repeat-table');
+		var number  = $table.find('.cmb-row').length;
 
-		// cmb.log( 'number of tbodys', $table.length );
-		// cmb.log( 'number of trs', $('tr', $table).length );
-		if ( $table.find('.cmb-row').length > 2 ) {
+		if ( number > 2 ) {
 			if ( $parent.hasClass('empty-row') ) {
 				$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
+			if ( number === 3 ) {
+				$table.find( '.remove-row-button' ).attr( 'disabled', 'disabled' );
+			}
 			$table.trigger( 'cmb2_remove_row' );
+		} else {
+			$self.attr( 'disabled', 'disabled' );
 		}
 	};
 
@@ -545,10 +551,8 @@ window.CMB2 = (function(window, document, $, undefined){
 				val = $element.html();
 			} else if ( 'checkbox' === $element.attr('type') ) {
 				val = $element.is(':checked');
-				cmb.log( 'checked', val );
 			} else if ( 'select' === $element.prop('tagName') ) {
 				val = $element.is(':selected');
-				cmb.log( 'checked', val );
 			} else {
 				val = $element.val();
 			}
@@ -681,12 +685,26 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.metabox().each( function() {
 			var $self      = $(this);
 			var $tableWrap = $self.parents('.inside');
+			var isSide     = $self.parents('.inner-sidebar').length || $self.parents( '#side-sortables' ).length;
+			var isSmall    = isSide;
+			var isSmallest = false;
 			if ( ! $tableWrap.length )  {
 				return true; // continue
 			}
 
 			// Calculate new width
-			var newWidth = Math.round(($tableWrap.width() * 0.82)*0.97) - 30;
+			var tableW = $tableWrap.width();
+
+			if ( cmb.styleBreakPoint > tableW ) {
+				isSmall    = true;
+				isSmallest = ( cmb.styleBreakPoint - 62 ) > tableW;
+			}
+
+			tableW = isSmall ? tableW : Math.round(($tableWrap.width() * 0.82)*0.97);
+			var newWidth = tableW - 30;
+			if ( isSmall && ! isSide && ! isSmallest ) {
+				newWidth = newWidth - 75;
+			}
 			if ( newWidth > 639 ) {
 				return true; // continue
 			}
@@ -702,9 +720,10 @@ window.CMB2 = (function(window, document, $, undefined){
 				var iwidth    = $self.width();
 				var iheight   = $self.height();
 				var _newWidth = newWidth;
-				if ( $self.parents( '.repeat-row' ).length ) {
+				if ( $self.parents( '.repeat-row' ).length && ! isSmall ) {
 					// Make room for our repeatable "remove" button column
 					_newWidth = newWidth - 91;
+					_newWidth = 785 > tableW ? _newWidth - 15 : _newWidth;
 				}
 				// Calc new height
 				var newHeight = Math.round((_newWidth * iheight)/iwidth);
