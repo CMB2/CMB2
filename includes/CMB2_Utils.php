@@ -125,13 +125,4 @@ class CMB2_Utils {
 		return $this->url . $path;
 	}
 
-	/**
-	 * Returns the nonce value for wp_meta_box_nonce
-	 * @since  1.0.0
-	 * @return string Nonce value
-	 */
-	public function nonce() {
-		return basename( __FILE__ );
-	}
-
 }
