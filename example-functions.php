@@ -9,6 +9,11 @@
  */
 
 /**
+ * Get the bootstrap!
+ */
+require_once 'cmb/init.php';
+
+/**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
  *
  * @param  CMB2_Field object $field Field object
@@ -416,15 +421,4 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	// Add other metaboxes as needed
 
 	return $meta_boxes;
-}
-
-add_action( 'init', 'cmb2_initialize_meta_boxes', 9999 );
-/**
- * Initialize the metabox class.
- */
-function cmb2_initialize_meta_boxes() {
-
-	if ( ! class_exists( 'CMB2' ) )
-		require_once 'cmb/init.php';
-
 }
