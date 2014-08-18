@@ -64,8 +64,9 @@ class CMB2_Sanitize {
 		 */
 		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
 
-		if ( null !== $override_value )
+		if ( null !== $override_value ) {
 			return $updated;
+		}
 
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':

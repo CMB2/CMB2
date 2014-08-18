@@ -8,9 +8,9 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->box_id = 'test';
+		$this->cmb_id = 'test';
 		$this->metabox_array = array(
-			'id' => $this->box_id,
+			'id' => $this->cmb_id,
 			'fields' => array(
 				array(
 					'name' => 'Name',
@@ -47,7 +47,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		);
 
 		$this->defaults = array(
-			'id'               => $this->box_id,
+			'id'               => $this->cmb_id,
 			'title'            => false,
 			'type'             => false,
 			'pages'            => array(),
@@ -72,7 +72,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'bg_color' => '#ffffff',
 			'my_name' => 'Justin',
 		);
-		add_option( $this->options_cmb->box_id, $this->opt_set );
+		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
 	}
@@ -96,7 +96,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 	}
 
 	public function test_defaults_set() {
-		$cmb = new CMB2( array( 'id' => $this->box_id ) );
+		$cmb = new CMB2( array( 'id' => $this->cmb_id ) );
 		$this->assertEquals( $cmb->meta_box, $this->defaults );
 	}
 
@@ -112,7 +112,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 
 	public function test_cmb2_get_metabox() {
 		// Test that successful retrieval by box ID
-		$retrieve = cmb2_get_metabox( $this->box_id );
+		$retrieve = cmb2_get_metabox( $this->cmb_id );
 		$this->assertEquals( $this->cmb, $retrieve );
 
 		// Test that successful retrieval by box Array
@@ -129,7 +129,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 	public function test_cmb2_get_field() {
 		$val_to_save = '123Abc';
 		$field_id    = 'test_test';
-		$retrieved   = cmb2_get_field( $this->box_id, $field_id, $this->post_id );
+		$retrieved   = cmb2_get_field( $this->cmb_id, $field_id, $this->post_id );
 		$this->assertInstanceOf( 'CMB2_Field', $retrieved );
 	}
 
@@ -138,7 +138,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$field_id    = 'test_test';
 		$added       = add_post_meta( $this->post_id, $field_id, $val_to_save );
 
-		$retrieved   = cmb2_get_field_value( $this->box_id, $field_id, $this->post_id );
+		$retrieved   = cmb2_get_field_value( $this->cmb_id, $field_id, $this->post_id );
 
 		// Test retrieved value matches value we saved
 		$this->assertEquals( $val_to_save, $retrieved );
@@ -151,12 +151,12 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 
 	public function test_cmb2_print_metabox_form() {
 		$form = '
-		<form class="cmb-form" method="post" id="'. $this->box_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
+		<form class="cmb-form" method="post" id="'. $this->cmb_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
 			<input type="hidden" name="object_id" value="'. $this->post_id .'">
 			'.wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
 			<!-- Begin CMB Fields -->
 			<div class="cmb2_wrap form-table">
-				<ul id="cmb2_metabox_'. $this->box_id .'" class="cmb2_metabox">
+				<ul id="cmb2_metabox_'. $this->cmb_id .'" class="cmb2_metabox">
 					<li class="cmb-row cmb-type-text cmb2_id_test_test">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
@@ -173,17 +173,17 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		</form>
 		';
 
-		$form_get = cmb2_get_metabox_form( $this->box_id, $this->post_id );
+		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
 
 		$this->assertEquals( $this->clean_string( $form_get ), $this->clean_string( $form ) );
 	}
 
 	public function test_cmb2_options() {
-		$opts = cmb2_options( $this->options_cmb->box_id );
+		$opts = cmb2_options( $this->options_cmb->cmb_id );
 		$this->assertEquals( $opts->get_options(), $this->opt_set );
 
-		$get = get_option( $this->options_cmb->box_id );
-		$val = cmb2_get_option( $this->options_cmb->box_id, 'my_name' );
+		$get = get_option( $this->options_cmb->cmb_id );
+		$val = cmb2_get_option( $this->options_cmb->cmb_id, 'my_name' );
 
 		$this->assertEquals( $this->opt_set['my_name'], $get['my_name'] );
 		$this->assertEquals( $val, $get['my_name'] );

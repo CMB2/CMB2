@@ -41,18 +41,18 @@ class CMB2_Types {
 		 *
 		 * The dynamic portion of the hook name, $name, refers to the field type.
 		 *
-		 * @param array  $field_args         The passed in field arguments augmented with defaults
+		 * @param array  $field              The passed in `CMB2_Field` object
 		 * @param mixed  $escaped_value      The value of this field escaped.
 		 *                                   It defaults to `sanitize_text_field`.
 		 *                                   If you need the unescaped value, you can access it
-		 *                                   via `$field_type_object->value()`
+		 *                                   via `$field->value()`
 		 * @param int    $object_id          The ID of the current object
 		 * @param string $object_type        The type of object you are working with.
 		 *                                   Most commonly, `post` (this applies to all post-types),
 		 *                                   but could also be `comment`, `user` or `options-page`.
 		 * @param object $field_type_object  This `CMB2_Types` object
 		 */
-		do_action( "cmb2_render_$name", $this->field->args(), $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
+		do_action( "cmb2_render_$name", $this->field, $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
 	}
 
 	/**
@@ -576,7 +576,8 @@ class CMB2_Types {
 
 		$option_none  = $this->field->args( 'show_option_none' );
 		if( ! empty( $option_none ) ) {
-			$option_none_value = apply_filters( "cmb2_taxonomy_select_{$this->_id()}_default_value", apply_filters( 'cmb2_taxonomy_select_default_value', '' ) );
+			$option_none_value = apply_filters( 'cmb2_taxonomy_select_default_value', '' );
+			$option_none_value = apply_filters( "cmb2_taxonomy_select_{$this->_id()}_default_value", $option_none_value );
 			$selected = $saved_term == $option_none_value;
 			$options .= $this->option( $option_none, $option_none_value, $selected );
 		}

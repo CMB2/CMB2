@@ -17,22 +17,51 @@ function cmb2_autoload_classes( $class_name ) {
 }
 spl_autoload_register( 'cmb2_autoload_classes' );
 
+/**
+ * Get instance of the CMB2_Utils class
+ * @since  2.0.0
+ * @return CMB2_Utils object CMB utilities class
+ */
 function cmb2_utils() {
 	static $cmb2_utils;
 	$cmb2_utils = $cmb2_utils ? $cmb2_utils : new CMB2_Utils();
 	return $cmb2_utils;
 }
 
-function cmb2_options( $key ) {
-	return CMB2_Options::get( $key );
-}
-
+/**
+ * Get instance of the CMB2_Ajax class
+ * @since  2.0.0
+ * @return CMB2_Ajax object CMB utilities class
+ */
 function cmb2_ajax( $args = array() ) {
 	static $cmb2_ajax;
 	$cmb2_ajax = $cmb2_ajax ? $cmb2_ajax : new CMB2_Ajax();
 	return $cmb2_ajax;
 }
 
+/**
+ * Get instance of the CMB2_Option class for the passed metabox ID
+ * @since  2.0.0
+ * @return CMB2_Option object Options class for setting/getting options for metabox
+ */
+function cmb2_options( $key ) {
+	return CMB2_Options::get( $key );
+}
+
+/**
+ * Get a cmb oEmbed. Handles oEmbed getting for non-post objects
+ * @since  2.0.0
+ * @param  array   $args Arguments. Accepts:
+ *
+ *         'url'         - URL to retrieve the oEmbed from,
+ *         'object_id'   - $post_id,
+ *         'object_type' - 'post',
+ *         'oembed_args' - $embed_args, // array containing 'width', etc
+ *         'field_id'    - false,
+ *         'cache_key'   - false,
+ *
+ * @return string        oEmbed string
+ */
 function cmb2_get_oembed( $args = array() ) {
 	return cmb2_ajax()->get_oembed( $args );
 }
@@ -60,7 +89,7 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
 function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
 
 	$object_id = $object_id ? $object_id : get_the_ID();
-	$cmb = cmb2_get_metabox( $meta_box, $object_id );
+	$cmb = ( $meta_box instanceof CMB2 ) ? $meta_box : cmb2_get_metabox( $meta_box, $object_id );
 
 	if ( ! $cmb ) {
 		return;
@@ -113,6 +142,10 @@ function cmb2_get_field_value( $meta_box, $field_id, $object_id = 0, $object_typ
  */
 function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 
+	if ( $meta_box instanceof CMB2 ) {
+		return $meta_box;
+	}
+
 	if ( is_string( $meta_box ) ) {
 		$cmb = CMB2_Boxes::get( $meta_box );
 	} else {
@@ -139,14 +172,15 @@ function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
 	$object_id = $object_id ? $object_id : get_the_ID();
+	$cmb       = cmb2_get_metabox( $meta_box, $object_id );
 
 	ob_start();
 	// Get cmb form
-	cmb2_print_metabox_form( $meta_box, $object_id, $args );
+	cmb2_print_metabox_form( $cmb, $object_id, $args );
 	$form = ob_get_contents();
 	ob_end_clean();
 
-	return apply_filters( 'cmb2_get_metabox_form', $form, $object_id, cmb2_get_metabox( $meta_box ) );
+	return apply_filters( 'cmb2_get_metabox_form', $form, $object_id, $cmb );
 }
 
 /**
@@ -197,7 +231,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$format_parts = explode( '%3$s', $form_format );
 
 	// Show cmb form
-	printf( $format_parts[0], $cmb->box_id, $object_id );
+	printf( $format_parts[0], $cmb->cmb_id, $object_id );
 	$cmb->show_form();
 	printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
 

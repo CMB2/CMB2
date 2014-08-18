@@ -30,7 +30,7 @@ class CMB2 {
 	 * @var   string
 	 * @since 2.0.0
 	 */
-	protected $box_id = '';
+	protected $cmb_id = '';
 
 	/**
 	 * Metabox Config array
@@ -99,7 +99,7 @@ class CMB2 {
 		$this->meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
 		$this->object_id( $object_id );
 		$this->mb_object_type();
-		$this->box_id = $meta_box['id'];
+		$this->cmb_id = $meta_box['id'];
 
 		CMB2_Boxes::add( $this );
 	}
@@ -120,15 +120,16 @@ class CMB2 {
 		/**
 		 * Hook before form table begins
 		 *
-		 * @param array  $meta_box    Metabox config array
+		 * @param array  $cmb_id      The current box ID
 		 * @param int    $object_id   The ID of the current object
 		 * @param string $object_type The type of object you are working with.
 		 *	                           Usually `post` (this applies to all post-types).
 		 *	                           Could also be `comment`, `user` or `options-page`.
+		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_before_form', $this->meta_box, $object_id, $object_type );
+		do_action( 'cmb2_before_form', $this->cmb_id, $object_id, $object_type, $this );
 
-		echo '<div class="cmb2_wrap form-table"><ul id="cmb2_metabox_'. sanitize_html_class( $this->box_id ) .'" class="cmb2_metabox">';
+		echo '<div class="cmb2_wrap form-table"><ul id="cmb2_metabox_'. sanitize_html_class( $this->cmb_id ) .'" class="cmb2_metabox">';
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 
@@ -159,13 +160,14 @@ class CMB2 {
 		/**
 		 * Hook after form form has been rendered
 		 *
-		 * @param array  $meta_box    Metabox config array
+		 * @param array  $cmb_id      The current box ID
 		 * @param int    $object_id   The ID of the current object
 		 * @param string $object_type The type of object you are working with.
 		 *	                           Usually `post` (this applies to all post-types).
 		 *	                           Could also be `comment`, `user` or `options-page`.
+		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_after_form', $this->meta_box, $object_id, $object_type );
+		do_action( 'cmb2_after_form', $this->cmb_id, $object_id, $object_type, $this );
 		echo "\n<!-- End CMB Fields -->\n";
 
 	}
@@ -305,12 +307,12 @@ class CMB2 {
 		 *  	Could also be `comment`, `user` or `options-page`.
 		 *
 		 * @param int    $object_id   The ID of the current object
-		 * @param array  $meta_box_id Metabox's id parameter
+		 * @param array  $cmb_id      The current box ID
 		 * @param string $updated     All fields that were updated.
 		 *                            Will only include fields that had values change.
-		 * @param string $meta_box    The metabox config array.
+		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->prop( 'id' ), $this->updated, $this->meta_box );
+		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->cmb_id, $this->updated, $this );
 
 	}
 
@@ -542,7 +544,7 @@ class CMB2 {
 		if ( isset( $this->generated_nonce ) ) {
 			return $this->generated_nonce;
 		}
-		$this->generated_nonce = sanitize_html_class( 'nonce_'. basename( __FILE__ ) . $this->box_id );
+		$this->generated_nonce = sanitize_html_class( 'nonce_'. basename( __FILE__ ) . $this->cmb_id );
 		return $this->generated_nonce;
 	}
 
@@ -554,7 +556,7 @@ class CMB2 {
 	 */
 	public function __get( $field ) {
 		switch( $field ) {
-			case 'box_id':
+			case 'cmb_id':
 			case 'meta_box':
 				return $this->{$field};
 			default:
@@ -576,16 +578,16 @@ class CMB2_Boxes {
 	 */
 	protected static $meta_boxes = array();
 
-	public static function get( $meta_box_id ) {
-		if ( empty( self::$meta_boxes ) || empty( self::$meta_boxes[ $meta_box_id ] ) ) {
+	public static function get( $cmb_id ) {
+		if ( empty( self::$meta_boxes ) || empty( self::$meta_boxes[ $cmb_id ] ) ) {
 			return false;
 		}
 
-		return self::$meta_boxes[ $meta_box_id ];
+		return self::$meta_boxes[ $cmb_id ];
 	}
 
 	public static function add( $meta_box ) {
-		self::$meta_boxes[ $meta_box->box_id ] = $meta_box;
+		self::$meta_boxes[ $meta_box->cmb_id ] = $meta_box;
 	}
 
 }

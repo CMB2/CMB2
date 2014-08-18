@@ -14,7 +14,7 @@ class CMB2_hookup {
 	 * @var   array
 	 * @since 2.0.0
 	 */
-	protected static $done = array();
+	protected static $hooks_completed = array();
 
 	/**
 	 * Only allow JS registration once
@@ -229,7 +229,7 @@ class CMB2_hookup {
 		}
 
 		foreach ( $this->cmb->prop( 'pages' ) as $page ) {
-			add_meta_box( $this->cmb->prop( 'id' ), $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) ) ;
+			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) ) ;
 		}
 	}
 
@@ -340,11 +340,11 @@ class CMB2_hookup {
 	public function once( $action, $hook, $priority = 10, $accepted_args = 1 ) {
 		$key = md5( serialize( func_get_args() ) );
 
-		if ( in_array( $key, self::$done ) ) {
+		if ( in_array( $key, self::$hooks_completed ) ) {
 			return;
 		}
 
-		self::$done[] = $key;
+		self::$hooks_completed[] = $key;
 		add_filter( $action, $hook, $priority, $accepted_args );
 	}
 

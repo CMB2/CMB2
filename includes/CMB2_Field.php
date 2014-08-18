@@ -484,18 +484,15 @@ class CMB2_Field {
 		if ( ! isset( $args['before'] ) ) $args['before'] = '';
 		if ( ! isset( $args['after'] ) ) $args['after'] = '';
 		if ( ! isset( $args['protocols'] ) ) $args['protocols'] = null;
+		if ( ! isset( $args['default'] ) ) $args['default'] = null;
 		if ( ! isset( $args['description'] ) ) {
 			$args['description'] = isset( $args['desc'] ) ? $args['desc'] : '';
-		}
-		if ( ! isset( $args['default'] ) ) {
-			// Phase out 'std', and use 'default' instead
-			$args['default'] = isset( $args['std'] ) ? $args['std'] : '';
 		}
 		if ( ! isset( $args['preview_size'] ) ) $args['preview_size'] = array( 50, 50 );
 		if ( ! isset( $args['date_format'] ) ) $args['date_format'] = 'm\/d\/Y';
 		if ( ! isset( $args['time_format'] ) ) $args['time_format'] = 'h:i A';
 		// Allow a filter override of the default value
-		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $args, $this->object_type, $this->object_type );
+		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
 		$args['allow']      = 'file' == $args['type'] && ! isset( $args['allow'] ) ? array( 'url', 'attachment' ) : array();
 		$args['save_id']    = 'file' == $args['type'] && ! ( isset( $args['save_id'] ) && ! $args['save_id'] );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
@@ -524,7 +521,8 @@ class CMB2_Field {
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
-		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ) );
+		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
+
 		if ( in_array( $args['type'], $option_types, true ) ) {
 
 			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : 'None';
