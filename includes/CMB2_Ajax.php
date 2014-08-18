@@ -98,9 +98,9 @@ class CMB2_Ajax {
 			$this->object_type = $args['object_type'];
 
 			// Gets ombed cache from our object's meta (vs postmeta)
-			add_filter( 'get_post_metadata', array( 'CMB2_Ajax', 'hijack_oembed_cache_get' ), 10, 3 );
+			add_filter( 'get_post_metadata', array( $this, 'hijack_oembed_cache_get' ), 10, 3 );
 			// Sets ombed cache in our object's meta (vs postmeta)
-			add_filter( 'update_post_metadata', array( 'CMB2_Ajax', 'hijack_oembed_cache_set' ), 10, 4 );
+			add_filter( 'update_post_metadata', array( $this, 'hijack_oembed_cache_set' ), 10, 4 );
 
 		}
 
