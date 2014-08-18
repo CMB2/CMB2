@@ -258,9 +258,9 @@ class CMB2_Types {
 		?>
 
 		<div id="<?php echo $table_id; ?>" class="cmb-repeat-table cmb-nested">
-			<div class="cmb-tbody">
+			<ul class="cmb-tbody">
 				<?php $this->repeatable_rows(); ?>
-			</div>
+			</ul>
 		</div>
 		<p class="add-row">
 			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php _e( 'Add Row', 'cmb' ); ?></a>
@@ -290,38 +290,41 @@ class CMB2_Types {
 
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
+			$count = count( $meta_value );
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
-				$this->repeat_row();
+				$this->repeat_row( $count < 2 );
 				$this->iterator++;
 			}
 		} else {
 			// Otherwise add one row
-			$this->repeat_row();
+			$this->repeat_row( true );
 		}
 
 		// Then add an empty row
 		$this->field->escaped_value = '';
 		$this->iterator = $this->iterator ? $this->iterator : 1;
-		$this->repeat_row( 'empty-row hidden' );
+		$this->repeat_row( false, 'empty-row hidden' );
 	}
 
 	/**
 	 * Generates a repeatable row's markup
 	 * @since  1.1.0
+	 * @param  string  $disable_remover Whether remove button should be disabled
 	 * @param  string  $class Repeatable table row's class
 	 */
-	protected function repeat_row( $class = 'repeat-row' ) {
+	protected function repeat_row( $disable_remover = false, $class = 'repeat-row' ) {
+		$disabled = $disable_remover ? 'disabled="disabled"' : '';
 		?>
 
-		<div class="cmb-row <?php echo $class; ?>">
-			<td>
+		<li class="cmb-row <?php echo $class; ?>">
+			<div class="cmb-td">
 				<?php $this->_render(); ?>
-			</td>
-			<td class="remove-row">
-				<a class="button remove-row-button" href="#"><?php _e( 'Remove', 'cmb' ); ?></a>
-			</td>
-		</div>
+			</div>
+			<div class="cmb-td remove-row">
+				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php _e( 'Remove', 'cmb' ); ?></a>
+			</div>
+		</li>
 
 		<?php
 	}
@@ -444,7 +447,7 @@ class CMB2_Types {
 	}
 
 	public function textarea_code() {
-		return sprintf( '<pre>%s</pre>', $this->textarea( array( 'class' => 'cmb2_textarea_code' )  ) );
+		return sprintf( '<pre>%s', $this->textarea( array( 'class' => 'cmb2_textarea_code', 'desc' => '</pre>' . $this->_desc( true ) )  ) );
 	}
 
 	public function wysiwyg( $args = array() ) {
