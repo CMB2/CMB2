@@ -196,8 +196,18 @@ $mobile-break: 450px;
 
 		.shift-rows {
 			text-decoration: none;
-			margin-right: 5px;
-			font-size: 1.2em;
+			margin-right: 1em;
+			font-size: 1em;
+			.dashicons {
+				font-size: 1.5em;
+				line-height: 1.2em;
+				width: 1em;
+				height: 1.5em;
+				&.dashicons-arrow-down-alt2 {
+					line-height: 1.3em;
+
+				}
+			}
 		}
 
 		.cmb2_upload_button {

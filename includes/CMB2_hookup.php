@@ -143,18 +143,18 @@ class CMB2_hookup {
 		wp_enqueue_media();
 
 		wp_localize_script( 'cmb-scripts', 'cmb2_l10', apply_filters( 'cmb2_localized_data', array(
-			'ajax_nonce'      => wp_create_nonce( 'ajax_nonce' ),
-			'ajaxurl'         => admin_url( '/admin-ajax.php' ),
-			'script_debug'    => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-			'new_admin_style' => version_compare( $wp_version, '3.7', '>' ),
+			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
+			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
+			'script_debug'     => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
+			'new_admin_style'  => version_compare( $wp_version, '3.7', '>' ),
+			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
+			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
 			'strings'         => array(
 				'upload_file'  => __( 'Use this file', 'cmb' ),
 				'remove_image' => __( 'Remove Image', 'cmb' ),
 				'remove_file'  => __( 'Remove', 'cmb' ),
 				'file'         => __( 'File:', 'cmb' ),
 				'download'     => __( 'Download', 'cmb' ),
-				'up_arrow'     => __( '[ ↑ ]&nbsp;', 'cmb' ),
-				'down_arrow'   => __( '&nbsp;[ ↓ ]', 'cmb' ),
 				'check_toggle' => __( 'Select / Deselect All', 'cmb' ),
 			),
 			'defaults'        => array(
