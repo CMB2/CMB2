@@ -285,7 +285,6 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Remove extra ajaxed rows
 			$self.find('.cmb-repeat-table .repeat-row:not(:first-child)').remove();
 		}
-		cmb.$focus = false;
 		cmb.neweditor_id = [];
 
 		$inputs.filter(':checked').removeAttr( 'checked' );
@@ -340,7 +339,6 @@ window.CMB2 = (function(window, document, $, undefined){
 				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
 			}
 
-			cmb.$focus = cmb.$focus ? cmb.$focus : $newInput;
 		});
 
 		return this;
@@ -368,8 +366,9 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.afterRowInsert = function( $row ) {
-		if ( cmb.$focus ) {
-			cmb.$focus.focus();
+		var $focus = $row.find('input:not([type="button"]), textarea, select').first();
+		if ( $focus.length ) {
+			$focus.focus();
 		}
 
 		var _prop;
