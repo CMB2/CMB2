@@ -115,10 +115,10 @@ class CMB2_hookup {
 		global $wp_version;
 
 		// Only use minified files if SCRIPT_DEBUG is off
-		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'cmb-datepicker', 'cmb-timepicker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-timepicker' );
 		// styles required for cmb
 		$styles = array();
 
@@ -149,17 +149,23 @@ class CMB2_hookup {
 			'new_admin_style'  => version_compare( $wp_version, '3.7', '>' ),
 			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
 			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
-			'strings'         => array(
-				'upload_file'  => __( 'Use this file', 'cmb2' ),
-				'remove_image' => __( 'Remove Image', 'cmb2' ),
-				'remove_file'  => __( 'Remove', 'cmb2' ),
-				'file'         => __( 'File:', 'cmb2' ),
-				'download'     => __( 'Download', 'cmb2' ),
-				'check_toggle' => __( 'Select / Deselect All', 'cmb2' ),
-			),
-			'defaults'        => array(
-				'date_picker'  => false,
+			'defaults'         => array(
 				'color_picker' => false,
+				'date_picker'  => array(
+					'changeMonth'     => true,
+					'changeYear'      => true,
+					'dateFormat'      => __( 'mm/dd/yy', 'cmb2' ),
+					'dayNames'        => explode( ',', __( 'Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday', 'cmb2' ) ),
+					'dayNamesMin'     => explode( ',', __( 'Su, Mo, Tu, We, Th, Fr, Sa', 'cmb2' ) ),
+					'dayNamesShort'   => explode( ',', __( 'Sun, Mon, Tue, Wed, Thu, Fri, Sat', 'cmb2' ) ),
+					'monthNames'      => explode( ',', __( 'January, February, March, April, May, June, July, August, September, October, November, December', 'cmb2' ) ),
+					'monthNamesShort' => explode( ',', __( 'Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec', 'cmb2' ) ),
+					'nextText'        => __( 'Next', 'cmb2' ),
+					'prevText'        => __( 'Prev', 'cmb2' ),
+					'currentText'     => __( 'Today', 'cmb2' ),
+					'closeText'       => __( 'Done', 'cmb2' ),
+					'clearText'       => __( 'Clear', 'cmb2' ),
+				),
 				'time_picker'  => array(
 					'startTime'   => '00:00',
 					'endTime'     => '23:59',
@@ -167,6 +173,14 @@ class CMB2_hookup {
 					'separator'   => ':',
 					'step'        => 30
 				),
+			),
+			'strings' => array(
+				'upload_file'  => __( 'Use this file', 'cmb2' ),
+				'remove_image' => __( 'Remove Image', 'cmb2' ),
+				'remove_file'  => __( 'Remove', 'cmb2' ),
+				'file'         => __( 'File:', 'cmb2' ),
+				'download'     => __( 'Download', 'cmb2' ),
+				'check_toggle' => __( 'Select / Deselect All', 'cmb2' ),
 			),
 		) ) );
 
@@ -274,7 +288,7 @@ class CMB2_hookup {
 			! isset( $_POST[ $this->cmb->nonce() ] )
 			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 			// check if autosave
-			|| defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE
+			|| defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE
 			// check user editing permissions
 			|| ( 'page' ==  $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )

@@ -619,12 +619,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		$selector.datepicker( "destroy" );
-		$selector.datepicker();
-
-		// Set the defaults if we have any
-		if ( cmb.defaults.datePicker && ! $.isEmptyObject( cmb.defaults.datePicker ) ) {
-			$.datepicker.setDefaults( cmb.defaults.datePicker );
-		}
+		$selector.datepicker( cmb.defaults.datePicker );
 	};
 
 	cmb.initColorPickers = function( $selector ) {
