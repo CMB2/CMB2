@@ -92,6 +92,10 @@ class CMB2 {
 	 */
 	function __construct( $meta_box, $object_id = 0 ) {
 
+		if ( empty( $meta_box['id'] ) ) {
+			wp_die( __( 'Metabox configuration is required to have an ID parameter', 'cmb2' ) );
+		}
+
 		$this->meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
 		$this->object_id( $object_id );
 		$this->mb_object_type();
