@@ -8,16 +8,16 @@
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 2.0.0
-**Requires at least**: 3.5
-**Tested up to**: 3.9
-**License**: GPLv2
+**Version**: 2.0.0 
+**Requires at least**: 3.5  
+**Tested up to**: 3.9  
+**License**: GPLv2  
 
 ## Description
 
 Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with custom fields that will blow your mind.
 
-**Version 2.0 is in beta and is a complete rewrite. Much of the documentation available is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg).**
+**Version 2.0 is in beta and is a complete rewrite. Much of the documentation available is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg). 2.0 WILL break previous versions and is not a drop-in replacement.**
 
 ##### Features:
 
@@ -65,8 +65,8 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with
 1. [`group`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
 1. [Create your own custom field type](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#Custom)
 
-\* Not available as a repeatable field
-† Use `file_list` for repeatable
+\* Not available as a repeatable field  
+† Use `file_list` for repeatable  
 
 [More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
@@ -102,20 +102,20 @@ All contributions welcome. If you would like to submit a pull request, please ch
 ### 1.3.0
 
 **Enhancements**
-
+ 
 * Localize Date, Time, and Color picker defaults so that they can be overridden via the `cmb_localized_data` filter. ([#528](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/528))
 * Change third parameter for 'cmb_metabox_form' to be an args array. Optional arguments include `echo`, `form_format`, and `save_button`.
 * Add support for `show_option_none` argument for `taxonomy_select` and `taxonomy_radio` field types. Also adds the following filters: `cmb_all_or_nothing_types`, `cmb_taxonomy_select_default_value`, `cmb_taxonomy_select_{$this->_id()}_default_value`, `cmb_taxonomy_radio_{$this->_id()}_default_value`, `cmb_taxonomy_radio_default_value`. Props [@pmgarman](https://github.com/pmgarman), ([#569](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/569)).
 * Make the list items in the `file_list` field type drag & drop sortable. Props [twoelevenjay](https://github.com/twoelevenjay), ([#603](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/603)).
 
-**Bug Fixes**
+**Bug Fixes**  
 
 * Fixed typo in closing `</th>` tag. Props [@CivicImages](https://github.com/CivicImages). ([#616](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/616))
 
 ### 1.2.0
 
 **Enhancements**
-
+ 
 * Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent). ([#506](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/506))
 * Simplify `wysiwyg` escaping and allow it to be overridden via the `escape_cb` parameter. ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/491))
 * Add a 'Select/Deselect all' button for the `multicheck` field type.
@@ -123,7 +123,7 @@ All contributions welcome. If you would like to submit a pull request, please ch
 * New field parameter, `show_on_cb`, allows you to conditionally display a field via a callback. ([#47](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/47))
 * Unit testing (the beginning). Props [@brichards](https://github.com/brichards) and [@camdensegal](https://github.com/camdensegal).
 
-**Bug Fixes**
+**Bug Fixes**  
 
 * Fixed issue where remove file button wouldn't clear the url field. ([#514](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/514))
 * `wysiwyg` fields now allow underscores. Fixes some wysiwyg display issues in WordPress 3.8. Props [@lswilson](https://github.com/lswilson). ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/491))
@@ -135,14 +135,14 @@ All contributions welcome. If you would like to submit a pull request, please ch
 
 
 ### 1.1.3
-**Bug Fixes**
+**Bug Fixes**  
 
 * Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
 * Fix repeating fields not working correctly if meta key or prefix contained an integer. ([#503](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/503))
 
 ### 1.1.2
 
-**Bug Fixes**
+**Bug Fixes**  
 
 * Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`. ([#502](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/502))
 
@@ -159,7 +159,7 @@ All contributions welcome. If you would like to submit a pull request, please ch
 
 * [Repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group)
 * Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields, etc.
-* Codebase has been revamped to be more modular and object-oriented.
+* Codebase has been revamped to be more modular and object-oriented. 
 * New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
 * Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
 * Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
