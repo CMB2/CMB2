@@ -164,7 +164,7 @@ class CMB2_Option {
 			}
 		}
 
-		return $this->options;
+		return (array) $this->options;
 	}
 
 }
