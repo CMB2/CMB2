@@ -50,18 +50,18 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'id'               => $this->cmb_id,
 			'title'            => false,
 			'type'             => false,
-			'pages'            => array(),
+			'object_types'     => array(),
 			'context'          => 'normal',
 			'priority'         => 'high',
 			'show_names'       => 1,
-			'show_on'          => array(
-				'key'   => false,
-				'value' => false,
-			),
 			'cmb_styles'       => 1,
 			'fields'           => array(),
 			'hookup'           => 1,
 			'new_user_section' => 'add-new-user',
+			'show_on'          => array(
+				'key'   => false,
+				'value' => false,
+			),
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );

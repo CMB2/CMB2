@@ -73,17 +73,17 @@ class CMB2 {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'         => '',
-		'title'      => '',
-		'type'       => '',
-		'pages'      => array(), // Post type
-		'context'    => 'normal',
-		'priority'   => 'high',
-		'show_names' => true, // Show field names on the left
-		'show_on'    => array( 'key' => false, 'value' => false ), // Specific post IDs or page templates to display this metabox
-		'cmb_styles' => true, // Include cmb bundled stylesheet
-		'fields'     => array(),
-		'hookup'     => true,
+		'id'           => '',
+		'title'        => '',
+		'type'         => '',
+		'object_types' => array(), // Post type
+		'context'      => 'normal',
+		'priority'     => 'high',
+		'show_names'   => true, // Show field names on the left
+		'show_on'      => array( 'key' => false, 'value' => false ), // Specific post IDs or page templates to display this metabox
+		'cmb_styles'   => true, // Include cmb bundled stylesheet
+		'fields'       => array(),
+		'hookup'       => true,
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 	);
 
@@ -438,19 +438,19 @@ class CMB2 {
 			return $this->mb_object_type;
 		}
 
-		if ( ! $this->prop( 'pages' ) ) {
+		if ( ! $this->prop( 'object_types' ) ) {
 			$this->mb_object_type = 'post';
 			return $this->mb_object_type;
 		}
 
 		$type = false;
-		// check if 'pages' is a string
-		if ( is_string( $this->prop( 'pages' ) ) ) {
-			$type = $this->prop( 'pages' );
+		// check if 'object_types' is a string
+		if ( is_string( $this->prop( 'object_types' ) ) ) {
+			$type = $this->prop( 'object_types' );
 		}
 		// if it's an array of one, extract it
-		elseif ( is_array( $this->prop( 'pages' ) ) && count( $this->prop( 'pages' ) === 1 ) ) {
-			$cpts = $this->prop( 'pages' );
+		elseif ( is_array( $this->prop( 'object_types' ) ) && count( $this->prop( 'object_types' ) === 1 ) ) {
+			$cpts = $this->prop( 'object_types' );
 			$type = is_string( end( $cpts ) )
 				? end( $cpts )
 				: false;

@@ -44,14 +44,14 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	 * Sample metabox to demonstrate each field type included
 	 */
 	$meta_boxes['test_metabox'] = array(
-		'id'         => 'test_metabox',
-		'title'      => __( 'Test Metabox', 'cmb2' ),
-		'pages'      => array( 'page', ), // Post type
-		'context'    => 'normal',
-		'priority'   => 'high',
-		'show_names' => true, // Show field names on the left
+		'id'            => 'test_metabox',
+		'title'         => __( 'Test Metabox', 'cmb2' ),
+		'object_types'  => array( 'page', ), // Post type
+		'context'       => 'normal',
+		'priority'      => 'high',
+		'show_names'    => true, // Show field names on the left
 		// 'cmb_styles' => true, // Enqueue the CMB stylesheet on the frontend
-		'fields'     => array(
+		'fields'        => array(
 			array(
 				'name'       => __( 'Test Text', 'cmb2' ),
 				'desc'       => __( 'field description (optional)', 'cmb2' ),
@@ -278,14 +278,14 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	 * Metabox to be displayed on a single page ID
 	 */
 	$meta_boxes['about_page_metabox'] = array(
-		'id'         => 'about_page_metabox',
-		'title'      => __( 'About Page Metabox', 'cmb2' ),
-		'pages'      => array( 'page', ), // Post type
-		'context'    => 'normal',
-		'priority'   => 'high',
-		'show_names' => true, // Show field names on the left
-		'show_on'    => array( 'key' => 'id', 'value' => array( 2, ), ), // Specific post IDs to display this metabox
-		'fields'     => array(
+		'id'           => 'about_page_metabox',
+		'title'        => __( 'About Page Metabox', 'cmb2' ),
+		'object_types' => array( 'page', ), // Post type
+		'context'      => 'normal',
+		'priority'     => 'high',
+		'show_names'   => true, // Show field names on the left
+		'show_on'      => array( 'key' => 'id', 'value' => array( 2, ), ), // Specific post IDs to display this metabox
+		'fields'       => array(
 			array(
 				'name' => __( 'Test Text', 'cmb2' ),
 				'desc' => __( 'field description (optional)', 'cmb2' ),
@@ -299,10 +299,10 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	 * Repeatable Field Groups
 	 */
 	$meta_boxes['field_group'] = array(
-		'id'         => 'field_group',
-		'title'      => __( 'Repeating Field Group', 'cmb2' ),
-		'pages'      => array( 'page', ),
-		'fields'     => array(
+		'id'           => 'field_group',
+		'title'        => __( 'Repeating Field Group', 'cmb2' ),
+		'object_types' => array( 'page', ),
+		'fields'       => array(
 			array(
 				'id'          => $prefix . 'repeat_group',
 				'type'        => 'group',
@@ -348,7 +348,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	$meta_boxes['user_edit'] = array(
 		'id'               => 'user_edit',
 		'title'            => __( 'User Profile Metabox', 'cmb2' ),
-		'pages'            => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'object_types'     => array( 'user' ), // Tells CMB to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 		'fields'           => array(

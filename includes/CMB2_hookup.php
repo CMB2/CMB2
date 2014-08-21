@@ -228,7 +228,7 @@ class CMB2_hookup {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'pages' ) as $page ) {
+		foreach ( $this->cmb->prop( 'object_types' ) as $page ) {
 			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) ) ;
 		}
 	}
@@ -291,7 +291,7 @@ class CMB2_hookup {
 			|| ( 'page' ==  $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 			// get the metabox post_types & compare it to this post_type
-			|| ! in_array( $post_type, $this->cmb->prop( 'pages' ) )
+			|| ! in_array( $post_type, $this->cmb->prop( 'object_types' ) )
 		);
 
 		if ( $do_not_pass_go ) {
