@@ -48,8 +48,6 @@ class CMB2_Field {
 	 */
 	public function __construct( $args ) {
 
-		$this->args = $this->_set_field_defaults( $args['field_args'] );
-
 		if ( ! empty( $args['group_field'] ) ) {
 			$this->group       = $args['group_field'];
 			$this->object_id   = $this->group->object_id;
@@ -59,6 +57,8 @@ class CMB2_Field {
 			$this->object_type = $args['object_type'];
 			$this->group       = false;
 		}
+
+		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
 		// Allow an override for the field's value
 		// (assuming no one would want to save 'cmb2_field_no_override_val' as a value)
@@ -514,6 +514,7 @@ class CMB2_Field {
 		$args['_name']      = $args['id'];
 
 		if ( $this->group ) {
+
 			$args['id'] = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
 			$args['_name'] = $this->group->args( 'id' ) .'['. $this->group->args( 'count' ) .']['. $args['_name'] .']';
 		}
