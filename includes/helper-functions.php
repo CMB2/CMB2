@@ -245,9 +245,9 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
  * @param  array   $args      Optional arguments array
  */
 function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
-	if ( ! isset( $args['echo'] ) || ! $args['echo'] ) {
-		cmb2_get_metabox_form( $meta_box, $object_id, $args );
-	} else {
+	if ( ! isset( $args['echo'] ) || $args['echo'] ) {
 		cmb2_print_metabox_form( $meta_box, $object_id, $args );
+	} else {
+		cmb2_get_metabox_form( $meta_box, $object_id, $args );
 	}
 }
