@@ -12,8 +12,14 @@ $mobile-break: 450px;
 	label {
 		display: block;
 		padding-bottom: 5px;
-		border-bottom: 1px solid #E9E9E9;
 		margin-top: 0em;
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+			padding-top: .4em;
+			border-bottom: 1px solid #E9E9E9;
+		}
 	}
 }
 .cmb2_wrap {
