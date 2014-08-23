@@ -538,6 +538,11 @@ div {
 			display: block;
 			padding: 7px 0 0;
 		}
+		.cmb-type-checkbox {
+			label, .cmb2_metabox_description {
+				display: inline;
+			}
+		}
 
 		.cmb2_metabox_title {
 			font-size: 1.2em;
