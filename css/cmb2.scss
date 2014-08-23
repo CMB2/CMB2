@@ -8,8 +8,10 @@ $mobile-break: 450px;
 }
 @mixin fullth_side() {
 	@include _fullth;
-	font-size: 14px;
-	line-height: 1.4em;
+	label {
+		font-size: 14px;
+		line-height: 1.4em;
+	}
 }
 @mixin _fullth() {
 	width: 100%;
@@ -498,6 +500,10 @@ div {
 
 	.cmb2_wrap {
 
+		> ul > .cmb-row {
+			padding: 1.4em 0;
+		}
+
 		.cmb-row, .repeatable-group {
 			border-bottom: 0;
 		}
@@ -553,7 +559,7 @@ div {
 			padding: 7px 0 0;
 		}
 		.cmb-type-checkbox {
-			label, .cmb2_metabox_description {
+			.cmb-td label, .cmb2_metabox_description {
 				font-weight: normal;
 				display: inline;
 			}
