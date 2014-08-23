@@ -236,3 +236,18 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
 
 }
+
+/**
+ * Display a metabox form (or optionally return it) & save it on submission
+ * @since  1.0.0
+ * @param  array   $meta_box  Metabox config array or Metabox ID
+ * @param  int     $object_id Object ID
+ * @param  array   $args      Optional arguments array
+ */
+function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
+	if ( ! isset( $args['echo'] ) || ! $args['echo'] ) {
+		cmb2_get_metabox_form( $meta_box, $object_id, $args );
+	} else {
+		cmb2_print_metabox_form( $meta_box, $object_id, $args );
+	}
+}
