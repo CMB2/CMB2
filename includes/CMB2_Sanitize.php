@@ -330,7 +330,7 @@ class CMB2_Sanitize {
 		if ( $id_val && $id_val != $id_val_old ) {
 			return $field->update_data( $id_val );
 		} elseif ( empty( $id_val ) && $id_val_old ) {
-			return $field->remove_data( $old );
+			return $field->remove_data( $id_val_old );
 		}
 	}
 
