@@ -235,10 +235,6 @@ class CMB2_Field {
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
 
-		if ( empty( $meta_value ) ) {
-			return $meta_value;
-		}
-
 		$clean = new CMB2_Sanitize( $this, $meta_value );
 		// Validation via 'CMB2_Sanitize' (with fallback filter)
 		return $clean->{$this->type()}( $meta_value );
