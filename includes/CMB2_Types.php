@@ -416,6 +416,10 @@ class CMB2_Types {
 		return $this->input();
 	}
 
+	public function hidden() {
+		return $this->input( array( 'type' => 'hidden', 'desc' => '' ) );
+	}
+
 	public function text_small() {
 		return $this->input( array( 'class' => 'cmb2_text_small', 'desc' => $this->_desc() ) );
 	}

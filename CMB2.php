@@ -141,6 +141,16 @@ class CMB2 {
 					$field_args['show_names'] = $this->prop( 'show_names' );
 				}
 				$this->render_group( $field_args );
+
+			} elseif ( 'hidden' == $field_args['type'] ) {
+
+				// Save rendering for after the metabox
+				$this->add_hidden_field( array(
+					'field_args'  => $field_args,
+					'object_type' => $this->object_type(),
+					'object_id'   => $this->object_id(),
+				) );
+
 			} else {
 
 				$field_args['show_names'] = $this->prop( 'show_names' );
@@ -156,6 +166,8 @@ class CMB2 {
 		}
 
 		echo '</ul></div>';
+
+		$this->render_hidden_fields();
 
 		/**
 		 * Hook after form form has been rendered
@@ -234,15 +246,26 @@ class CMB2 {
 					</li>
 					';
 				}
-				// Render repeatable group fields
+				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
-					$field_args['show_names'] = $field_group->args( 'show_names' );
-					$field_args['context'] = $field_group->args( 'context' );
-					$field = new CMB2_Field( array(
-						'field_args'  => $field_args,
-						'group_field' => $field_group,
-					) );
-					$field->render_field();
+					if ( 'hidden' == $field_args['type'] ) {
+
+						// Save rendering for after the metabox
+						$this->add_hidden_field( array(
+							'field_args'  => $field_args,
+							'group_field' => $field_group,
+						) );
+
+					} else {
+
+						$field_args['show_names'] = $field_group->args( 'show_names' );
+						$field_args['context'] = $field_group->args( 'context' );
+						$field = new CMB2_Field( array(
+							'field_args'  => $field_args,
+							'group_field' => $field_group,
+						) );
+						$field->render_field();
+					}
 				}
 				echo '
 					<li class="cmb-row remove-field-row">
@@ -256,6 +279,29 @@ class CMB2 {
 		';
 
 		$field_group->args['count']++;
+	}
+
+	/**
+	 * Add a hidden field to the list of hidden fields to be rendered later
+	 * @since 2.0.0
+	 * @param array  $args Array of arguments to be passed to CMB2_Field
+	 */
+	public function add_hidden_field( $args ) {
+		$this->hidden_fields = ! empty( $this->hidden_fields ) ? $this->hidden_fields : array();
+
+		$this->hidden_fields[] = new CMB2_Types( new CMB2_Field( $args ) );
+	}
+
+	/**
+	 * Loop through and output hidden fields
+	 * @since  2.0.0
+	 */
+	public function render_hidden_fields() {
+		if ( ! empty( $this->hidden_fields ) ) {
+			foreach ( $this->hidden_fields as $hidden ) {
+				$hidden->render();
+			}
+		}
 	}
 
 	/**
