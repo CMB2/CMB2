@@ -766,9 +766,10 @@ class CMB2_Types {
 
 	public function file() {
 		$meta_value = $this->field->escaped_value();
-		$allow      = $this->field->args( 'allow' );
-		$input_type = ( 'url' == $allow || ( is_array( $allow ) && in_array( 'url', $allow ) ) )
-			? 'text' : 'hidden';
+		$options    = (array) $this->field->args( 'options' );
+
+		// if options array and 'url' => false, then hide the url field
+		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
 
 		echo $this->input( array(
 			'type'  => $input_type,

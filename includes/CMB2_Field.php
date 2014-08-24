@@ -495,8 +495,6 @@ class CMB2_Field {
 		if ( ! isset( $args['time_format'] ) ) $args['time_format'] = 'h:i A';
 		// Allow a filter override of the default value
 		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
-		$args['allow']      = 'file' == $args['type'] && ! isset( $args['allow'] ) ? array( 'url', 'attachment' ) : array();
-		$args['save_id']    = 'file' == $args['type'] && ! ( isset( $args['save_id'] ) && ! $args['save_id'] );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
 		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : false;
 		$args['repeatable'] = isset( $args['repeatable'] ) && $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );

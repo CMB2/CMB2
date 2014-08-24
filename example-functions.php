@@ -364,7 +364,6 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc'    => __( 'field description (optional)', 'cmb2' ),
 				'id'      => $prefix . 'avatar',
 				'type'    => 'file',
-				'save_id' => true,
 			),
 			array(
 				'name' => __( 'Facebook URL', 'cmb2' ),

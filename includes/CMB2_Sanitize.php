@@ -341,10 +341,7 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file( $value ) {
-		// If NOT specified to NOT save the file ID
-		if ( $this->field->args( 'save_id' ) ) {
-			$id_value = $this->_save_file_id( $value );
-		}
+		$id_value = $this->_save_file_id( $value );
 		$clean = $this->text_url( $value );
 
 		// Return an array with url/id if saving a group field
