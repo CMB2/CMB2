@@ -53,7 +53,7 @@ Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with
 **Version 2.0 is in beta and is a complete rewrite. Much of the documentation available is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg). 2.0 WILL break previous versions and is not a drop-in replacement.**
 
 ##### Notable Changes in 2.0
-**Change 1:** Most hooks/filters work nearly the same (if not the same), but you'll be required to use the `cmb2_` instead of the original `cmb_`. This includes the main filter for adding metaboxes, `'cmb2_meta_boxes'`.
+**Change 1:** Hooks/filters work nearly the same (if not the same), but you'll be required to use the `cmb2_` instead of the original `cmb_`. This includes the main filter for adding metaboxes, `'cmb2_meta_boxes'`. The `cmb2_render{$custom_field_type}` action no longer passes the unescaped value as the first parameter.
 
 **Change 2:** The [old method for including the CMB core files](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/blob/master/example-functions.php#L406-L415) is no longer applicable and you're simply required to [include it directly](https://github.com/WebDevStudios/CMB2/blob/master/example-functions.php#L14).
 
