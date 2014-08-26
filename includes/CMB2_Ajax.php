@@ -88,7 +88,7 @@ class CMB2_Ajax {
 
 		/**
 		 * Set the post_ID so oEmbed won't fail
-		 * wp-includes/class-wp-embed.php, WP_Embed::shortcode(), line 162
+		 * wp-includes/class-wp-embed.php, WP_Embed::shortcode()
 		 */
 		$wp_embed->post_ID = $this->object_id;
 
@@ -203,7 +203,7 @@ class CMB2_Ajax {
 
 		// Cache the result to our metadata
 		return ( 'options-page' !== $this->object_type )
-			? update_metadata( $this->object_type, $this->object_id, $meta_key, $meta_value );
+			? update_metadata( $this->object_type, $this->object_id, $meta_key, $meta_value )
 			: cmb2_options( $this->object_id )->update( $this->embed_args['cache_key'], $meta_value, true );
 	}
 
