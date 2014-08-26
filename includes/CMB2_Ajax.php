@@ -164,7 +164,6 @@ class CMB2_Ajax {
 			? cmb2_options( $this->object_id )->get( $this->embed_args['cache_key'] )
 			: get_metadata( $this->object_type, $this->object_id, $meta_key, true );
 
-		return $data;
 	}
 
 
