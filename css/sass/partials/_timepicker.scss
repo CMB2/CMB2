@@ -1,0 +1,40 @@
+/*--------------------------------------------------------------
+Timepicker
+--------------------------------------------------------------*/
+
+div {
+
+	&.time-picker {
+		background: #fff;
+		border: 1px solid $gray;
+		height: 191px;
+		margin: 0;
+		position: absolute;
+		overflow: auto;
+		width: 6em; /* needed for IE */
+		z-index: 99;
+
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		li {
+			cursor: pointer;
+			height: 10px;
+			font-family: $font-sans;
+			font-size: 14px;
+			padding: 4px 3px;
+
+			&.selected {
+				background: $blue;
+				color: #fff;
+			}
+		}
+	}
+
+	&.time-picker-12hours {
+		width: 8em; /* needed for IE */
+	}
+}
