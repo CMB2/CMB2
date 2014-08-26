@@ -612,7 +612,12 @@ class CMB2_Types {
 	}
 
 	public function multicheck( $type = 'checkbox' ) {
-		return $this->radio( array( 'class' => 'cmb2_checkbox_list cmb2_list', 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
+
+		$classes = false === $this->field->args( 'select_all_button' )
+			? 'cmb2_checkbox_list no_select_all cmb2_list'
+			: 'cmb2_checkbox_list cmb2_list';
+
+		return $this->radio( array( 'class' => $classes, 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
 	}
 
 	public function multicheck_inline() {
@@ -702,7 +707,11 @@ class CMB2_Types {
 			}
 		}
 
-		return $this->radio( array( 'class' => 'cmb2_checkbox_list cmb2_list', 'options' => $options ), 'taxonomy_multicheck' );
+		$classes = false === $this->field->args( 'select_all_button' )
+			? 'cmb2_checkbox_list no_select_all cmb2_list'
+			: 'cmb2_checkbox_list cmb2_list';
+
+		return $this->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' );
 	}
 
 	public function taxonomy_multicheck_inline() {

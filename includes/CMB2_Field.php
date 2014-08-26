@@ -493,6 +493,7 @@ class CMB2_Field {
 		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
 		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : false;
+		$args['select_all_button'] = isset( $args['select_all_button'] ) ? $args['select_all_button'] : true;
 		$args['repeatable'] = isset( $args['repeatable'] ) && $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = isset( $args['inline'] ) && $args['inline'] || false !== stripos( $args['type'], '_inline' );
 		$args['on_front']   = ! ( isset( $args['on_front'] ) && ! $args['on_front'] );
