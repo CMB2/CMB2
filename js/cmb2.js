@@ -437,7 +437,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.emptyValue = function( event, row ) {
-		$('input:not([type="button"]), textarea', row).val('');
+		$('input:not([type="button"]), textarea, select', row).val('');
 	};
 
 	cmb.addGroupRow = function( event ) {
