@@ -137,6 +137,16 @@ Main Wrap
 		border-bottom: 0;
 	}
 
+	.repeatable-grouping {
+		border-left: 1px solid $light-gray;
+		border-right: 1px solid $light-gray;
+		padding: 0 1em;
+		max-width: 1000px;
+		+ .repeatable-grouping {
+			border-top: 1px solid $light-gray;
+		}
+	}
+
 	.cmb-th {
 		color: $dark-gray;
 		float: left;
@@ -192,6 +202,16 @@ Main Wrap
 			padding: 5px;
 		}
 
+		.cmb-group-title .cmb-th {
+			display: block;
+			width: 100%;
+			padding-top: 1.8em;
+			h4 {
+				border: 0;
+				margin: 0;
+			}
+		}
+
 		.cmb-group-description .cmb-th {
 			@include fullth;
 		}
@@ -220,10 +240,16 @@ Main Wrap
 
 	}
 
-	.cmb-group-title h4 {
-		border-bottom: 1px solid $gray;
-		font-size: 1.2em;
-		font-weight: 500;
+	.cmb-group-title {
+		border-bottom: 4px solid #e9e9e9 !important;
+		h4 {
+			border-bottom: 1px solid $gray;
+			font-size: 1.2em;
+			font-weight: 500;
+		}
+		// + .cmb-row {
+		// 	border-top: 4px solid $light-gray;
+		// }
 	}
 
 	p.cmb2_metabox_description {

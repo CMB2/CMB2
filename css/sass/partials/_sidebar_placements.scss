@@ -11,9 +11,8 @@ Sidebar Placement Adjustments
 			padding: 1.4em 0;
 		}
 
-		.cmb-row,
 		.repeatable-group {
-			border-bottom: 0;
+			border-bottom: 1px solid $light-gray;
 		}
 
 		.cmb-th,
@@ -26,15 +25,38 @@ Sidebar Placement Adjustments
 
 		.cmb-th {
 			@include fullth_side;
+			padding-left: 0;
+			padding-right: 0;
 		}
 
+		.cmb-group-description {
+			.cmb-th {
+				padding-top: 0;
+			}
+			.cmb2_metabox_description {
+				padding: 0;
+			}
+		}
+
+		.cmb-group-title {
+			// padding-bottom: 0;
+			.cmb-th {
+				padding: 0;
+			}
+		}
+
+		.repeatable-grouping {
+			+ .repeatable-grouping {
+				margin-top: 1em;
+			}
+		}
 		input {
 
-			&[type=text] {
-				width: 95%;
+			&[type=text]:not( .wp-color-picker ) {
+				width: 100%;
 			}
 
-			+ input, + select {
+			+ input:not( .wp-picker-clear ), + select {
 				margin-left: 0;
 				margin-top: 1em;
 				display: block;
@@ -87,6 +109,7 @@ Sidebar Placement Adjustments
 		.remove-row {
 			clear: both;
 			padding-top: 12px;
+			padding-bottom: 0;
 		}
 
 		.cmb2_upload_button {

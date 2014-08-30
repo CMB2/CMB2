@@ -16,8 +16,19 @@ Post Metaboxes
 		padding: 0 0 1.8em;
 	}
 
+	.repeatable-grouping {
+		padding: 0 1em;
+		max-width: 100%;
+	}
+
 	.repeatable-group > .cmb-row {
 		padding-bottom: 0;
+	}
+
+	.cmb-group-title {
+		margin-right: -1em;
+		margin-left: -1em;
+		outline: 1px solid #fff;
 	}
 
 	.cmb-th {
