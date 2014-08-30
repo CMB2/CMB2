@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+	// load all grunt tasks in package.json matching the `grunt-*` pattern
+	require('load-grunt-tasks')(grunt);
+
 	grunt.initConfig({
 
 		pkg: grunt.file.readJSON('package.json'),
@@ -31,6 +34,40 @@ module.exports = function(grunt) {
 		// 	}
 		// },
 
+		csscomb: {
+			dist: {
+				files: [{
+					expand: true,
+					cwd: 'css/',
+					src: ['**/*.css'],
+					dest: 'css/',
+				}]
+			}
+		},
+
+		sass: {
+			dist: {
+				options: {
+					style: 'expanded',
+					lineNumbers: true
+				},
+				files: {
+				  'css/cmb2.css': 'css/sass/cmb2.scss',
+				}
+			}
+		},
+
+		cmq: {
+			options: {
+				log: false
+			},
+			dist: {
+				files: {
+					'css/cmb2.css': 'css/cmb2.css'
+				}
+			}
+		},
+
 		cssmin: {
 			options: {
 				// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -47,21 +84,8 @@ module.exports = function(grunt) {
 			}
 		},
 
-		sass: {
-			dist: {
-				options: {
-					style: 'expanded',
-					lineNumbers: true
-				},
-				files: {
-				  'css/cmb2.css': 'css/cmb2.scss',
-				}
-			}
-		},
-
 		jshint: {
 			all: [
-				'Gruntfile.js',
 				'js/cmb2.js'
 			],
 			options: {
@@ -110,11 +134,16 @@ module.exports = function(grunt) {
 			}
 		},
 
-		watch:  {
-			sass: {
-				files: ['**/*.scss'],
-				tasks: ['sass', 'cssmin']
+		watch: {
+
+			css: {
+				files: ['css/sass/partials/*.scss'],
+				tasks: ['styles'],
+				options: {
+					spawn: false,
+				},
 			},
+
 			scripts: {
 				files: ['js/cmb2.js'],
 				tasks: ['js'],
@@ -122,21 +151,27 @@ module.exports = function(grunt) {
 					debounceDelay: 500
 				}
 			}
+		},
+
+		update_submodules: {
+
+			default: {
+				options: {
+					// default command line parameters will be used: --init --recursive
+				}
+			},
+			withCustomParameters: {
+				options: {
+					params: '--force' // specifies your own command-line parameters
+				}
+			},
+
 		}
 
 	});
 
-	grunt.loadNpmTasks('grunt-phpunit');
-	grunt.loadNpmTasks('grunt-githooks');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-asciify');
-	// grunt.loadNpmTasks('grunt-contrib-concat');
-
+	grunt.registerTask('styles', ['sass', 'cmq', 'csscomb', 'cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
-	grunt.registerTask('default', ['js', 'sass', 'cssmin', 'phpunit']);
+	grunt.registerTask('default', ['update_submodules', 'styles', 'js', 'tests']);
 };

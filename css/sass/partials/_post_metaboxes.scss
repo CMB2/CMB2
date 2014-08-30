@@ -1,0 +1,75 @@
+/*--------------------------------------------------------------
+Post Metaboxes
+--------------------------------------------------------------*/
+
+.postbox-container {
+
+	.cmb2_wrap {
+		margin: 0;
+
+		> ul > .cmb-row {
+			padding: 1.8em 0;
+		}
+	}
+
+	.cmb-row {
+		padding: 0 0 1.8em;
+	}
+
+	.repeatable-grouping {
+		padding: 0 1em;
+		max-width: 100%;
+	}
+
+	.repeatable-group > .cmb-row {
+		padding-bottom: 0;
+	}
+
+	.cmb-group-title {
+		margin-right: -1em;
+		margin-left: -1em;
+		outline: 1px solid #fff;
+	}
+
+	.cmb-th {
+		width: 18%;
+		padding: 0 2% 0 0;
+		// text-align: right;
+	}
+
+	.cmb-td {
+		margin-bottom: 0;
+		padding: 0;
+		line-height: 1.3;
+	}
+
+	.repeat-row .cmb-td {
+		padding-bottom: 1.8em;
+	}
+
+	.cmb-th + .cmb-td {
+		width: 80%;
+		float: right;
+	}
+
+	.cmb-row,
+	.repeatable-group {
+		border-bottom: 1px solid $light-gray;
+
+		@media (max-width: $mobile-break) {
+			border-bottom: 0;
+		}
+	}
+
+	.cmb-repeat-group-field,
+	.remove-field-row {
+		padding-top: 1.8em;
+	}
+
+	input[type=text] {
+
+		&.cmb2_oembed {
+			width: 100%;
+		}
+	}
+}
