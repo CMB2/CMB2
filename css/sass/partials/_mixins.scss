@@ -1,0 +1,40 @@
+//--------------------------------------------------------------
+// Mixins
+//--------------------------------------------------------------
+
+@mixin fullth() {
+	font-size: 1.2em;
+	@include _fullth;
+}
+
+@mixin fullth_side() {
+
+	@include _fullth;
+
+	label {
+		font-size: $font-size;
+		line-height: 1.4em;
+	}
+}
+
+@mixin _fullth() {
+	display: block;
+	float: none;
+	padding-bottom: 1em;
+	text-align: left;
+	width: 100%;
+
+	label {
+		display: block;
+		margin-top: 0em;
+		padding-bottom: 5px;
+
+		&:after {
+			border-bottom: 1px solid $light-gray;
+			content: '';
+			clear: both;
+			display: block;
+			padding-top: .4em;
+		}
+	}
+}
