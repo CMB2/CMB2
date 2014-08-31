@@ -254,9 +254,11 @@ class CMB2_Types {
 	 * @since  1.0.0
 	 */
 	public function render_repeatable_field() {
-		$table_id = $this->field->id() .'_repeat';
+		$table_id            = $this->field->id() .'_repeat';
+		$this->group_options = $this->field->args( 'options' );
+		$add_row_text        = isset( $this->group_options['add_row_text'] ) ? $this->group_options['add_row_text'] : __( 'Add Row', 'cmb2' );
 
-		$this->_desc( true, true );
+		$this->_desc( true, true, true );
 		?>
 
 		<div id="<?php echo $table_id; ?>" class="cmb-repeat-table cmb-nested">
@@ -265,7 +267,7 @@ class CMB2_Types {
 			</ul>
 		</div>
 		<p class="add-row">
-			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php _e( 'Add Row', 'cmb2' ); ?></a>
+			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php echo $add_row_text; ?></a>
 		</p>
 
 		<?php
@@ -316,7 +318,9 @@ class CMB2_Types {
 	 * @param  string  $class Repeatable table row's class
 	 */
 	protected function repeat_row( $disable_remover = false, $class = 'repeat-row' ) {
-		$disabled = $disable_remover ? 'disabled="disabled"' : '';
+		$disabled        = $disable_remover ? 'disabled="disabled"' : '';
+		$remove_row_text = isset( $this->group_options['remove_row_text'] ) ? $this->group_options['remove_row_text'] : __( 'Remove', 'cmb2' );
+
 		?>
 
 		<li class="cmb-row <?php echo $class; ?>">
@@ -324,7 +328,7 @@ class CMB2_Types {
 				<?php $this->_render(); ?>
 			</div>
 			<div class="cmb-td remove-row">
-				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php _e( 'Remove', 'cmb2' ); ?></a>
+				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php echo $remove_row_text; ?></a>
 			</div>
 		</li>
 
@@ -338,9 +342,9 @@ class CMB2_Types {
 	 * @param  boolean $echo      Whether to echo description or only return it
 	 * @return string             Field's description markup
 	 */
-	public function _desc( $paragraph = false, $echo = false ) {
+	public function _desc( $paragraph = false, $echo = false, $repeat_group = false ) {
 		// Prevent description from printing multiple times for repeatable fields
-		if ( $this->field->args( 'repeatable' ) || $this->iterator > 0 ) {
+		if ( ! $repeat_group && ( $this->field->args( 'repeatable' ) || $this->iterator > 0 ) ) {
 			return '';
 		}
 		$tag = $paragraph ? 'p' : 'span';
