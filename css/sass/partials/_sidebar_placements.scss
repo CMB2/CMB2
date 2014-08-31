@@ -101,6 +101,10 @@ Sidebar Placement Adjustments
 			}
 		}
 
+		.cmb-row .cmb2_metabox_description {
+			padding-bottom: 1.8em;
+		}
+
 		.cmb2_metabox_title {
 			font-size: 1.2em;
 			font-style: italic;
@@ -112,10 +116,24 @@ Sidebar Placement Adjustments
 			padding-bottom: 0;
 		}
 
+		.cmb-type-colorpicker .repeat-row {
+			.cmb-td {
+				width: auto;
+				clear: none;
+				float: left;
+				padding-top: 0;
+				&.remove-row {
+					float: right;
+					margin: 0;
+				}
+			}
+		}
+
 		.cmb2_upload_button {
 			clear: both;
 			margin-top: 12px;
 		}
 	}
+
 }
 

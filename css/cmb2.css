@@ -181,14 +181,22 @@ Main Wrap
     padding: 0;
 }
 
-/* line 125, sass/partials/_main_wrap.scss */
+/* line 124, sass/partials/_main_wrap.scss */
+
+.cmb2_wrap .cmb-row.cmb-repeat .cmb2_metabox_description
+{
+    padding-top: 0;
+    padding-bottom: 1.8em;
+}
+
+/* line 130, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .add-row
 {
     margin: 1.8em 0 0;
 }
 
-/* line 129, sass/partials/_main_wrap.scss */
+/* line 134, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-nested .cmb-td,
 .cmb2_wrap .repeatable-group .cmb-th,
@@ -197,7 +205,7 @@ Main Wrap
     border: 0;
 }
 
-/* line 135, sass/partials/_main_wrap.scss */
+/* line 140, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-row:last-child,
 .cmb2_wrap .repeatable-group:last-child
@@ -205,7 +213,7 @@ Main Wrap
     border-bottom: 0;
 }
 
-/* line 140, sass/partials/_main_wrap.scss */
+/* line 145, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-grouping
 {
@@ -216,14 +224,14 @@ Main Wrap
     border-left: 1px solid #e9e9e9;
 }
 
-/* line 145, sass/partials/_main_wrap.scss */
+/* line 150, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-grouping + .repeatable-grouping
 {
     border-top: 1px solid #e9e9e9;
 }
 
-/* line 150, sass/partials/_main_wrap.scss */
+/* line 155, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-th
 {
@@ -240,7 +248,7 @@ Main Wrap
     color: #222;
 }
 
-/* line 164, sass/partials/_main_wrap.scss */
+/* line 169, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-td
 {
@@ -252,14 +260,14 @@ Main Wrap
     vertical-align: middle;
 }
 
-/* line 173, sass/partials/_main_wrap.scss */
+/* line 178, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-type-title .cmb-td
 {
     padding: 0;
 }
 
-/* line 178, sass/partials/_main_wrap.scss */
+/* line 183, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-th label
 {
@@ -268,42 +276,42 @@ Main Wrap
     padding: 5px 0;
 }
 
-/* line 183, sass/partials/_main_wrap.scss */
+/* line 188, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-th + .cmb-td
 {
     float: left;
 }
 
-/* line 187, sass/partials/_main_wrap.scss */
+/* line 192, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-td .cmb-td
 {
     padding-bottom: 1em;
 }
 
-/* line 191, sass/partials/_main_wrap.scss */
+/* line 196, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .remove-row
 {
     text-align: right;
 }
 
-/* line 195, sass/partials/_main_wrap.scss */
+/* line 200, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .empty-row.hidden
 {
     display: none;
 }
 
-/* line 201, sass/partials/_main_wrap.scss */
+/* line 206, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .cmb-th
 {
     padding: 5px;
 }
 
-/* line 205, sass/partials/_main_wrap.scss */
+/* line 210, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .cmb-group-title .cmb-th
 {
@@ -313,7 +321,7 @@ Main Wrap
     padding-top: 1.8em;
 }
 
-/* line 209, sass/partials/_main_wrap.scss */
+/* line 214, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .cmb-group-title .cmb-th h4
 {
@@ -322,7 +330,7 @@ Main Wrap
     border: 0;
 }
 
-/* line 215, sass/partials/_main_wrap.scss */
+/* line 220, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .cmb-group-description .cmb-th
 {
@@ -361,7 +369,7 @@ Main Wrap
     border-bottom: 1px solid #e9e9e9;
 }
 
-/* line 219, sass/partials/_main_wrap.scss */
+/* line 224, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .shift-rows
 {
@@ -372,7 +380,7 @@ Main Wrap
     text-decoration: none;
 }
 
-/* line 224, sass/partials/_main_wrap.scss */
+/* line 229, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .shift-rows .dashicons
 {
@@ -383,28 +391,28 @@ Main Wrap
     height: 1.5em;
 }
 
-/* line 230, sass/partials/_main_wrap.scss */
+/* line 235, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .shift-rows .dashicons.dashicons-arrow-down-alt2
 {
     line-height: 1.3em;
 }
 
-/* line 237, sass/partials/_main_wrap.scss */
+/* line 242, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .repeatable-group .cmb2_upload_button
 {
     float: right;
 }
 
-/* line 243, sass/partials/_main_wrap.scss */
+/* line 248, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-group-title
 {
     border-bottom: 4px solid #e9e9e9 !important;
 }
 
-/* line 245, sass/partials/_main_wrap.scss */
+/* line 250, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-group-title h4
 {
@@ -414,18 +422,19 @@ Main Wrap
     border-bottom: 1px solid #aaa;
 }
 
-/* line 255, sass/partials/_main_wrap.scss */
+/* line 260, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap p.cmb2_metabox_description
 {
     font-style: italic;
 
-    margin: 2px 0 !important;
+    margin: 0;
+    padding-top: .5em;
 
     color: #aaa;
 }
 
-/* line 261, sass/partials/_main_wrap.scss */
+/* line 267, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap span.cmb2_metabox_description
 {
@@ -434,7 +443,7 @@ Main Wrap
     color: #aaa;
 }
 
-/* line 266, sass/partials/_main_wrap.scss */
+/* line 272, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_metabox_title
 {
@@ -442,14 +451,14 @@ Main Wrap
     padding: 5px 0 0 0;
 }
 
-/* line 271, sass/partials/_main_wrap.scss */
+/* line 277, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-inline ul
 {
     padding: 4px 0 0 0;
 }
 
-/* line 275, sass/partials/_main_wrap.scss */
+/* line 281, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-inline li
 {
@@ -458,7 +467,7 @@ Main Wrap
     padding-right: 18px;
 }
 
-/* line 280, sass/partials/_main_wrap.scss */
+/* line 286, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap input[type='radio']
 {
@@ -466,7 +475,7 @@ Main Wrap
     padding: 0;
 }
 
-/* line 285, sass/partials/_main_wrap.scss */
+/* line 291, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap input[type='checkbox']
 {
@@ -474,42 +483,42 @@ Main Wrap
     padding: 0;
 }
 
-/* line 290, sass/partials/_main_wrap.scss */
+/* line 296, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .mceLayout
 {
     border: 1px solid #e9e9e9 !important;
 }
 
-/* line 294, sass/partials/_main_wrap.scss */
+/* line 300, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .mceIframeContainer
 {
     background: #fff;
 }
 
-/* line 298, sass/partials/_main_wrap.scss */
+/* line 304, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .meta_mce
 {
     width: 97%;
 }
 
-/* line 301, sass/partials/_main_wrap.scss */
+/* line 307, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .meta_mce textarea
 {
     width: 100%;
 }
 
-/* line 306, sass/partials/_main_wrap.scss */
+/* line 312, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-type-textarea_code pre
 {
     margin: 0;
 }
 
-/* line 312, sass/partials/_main_wrap.scss */
+/* line 318, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status
 {
@@ -521,14 +530,14 @@ Main Wrap
     margin-right: 10px;
 }
 
-/* line 319, sass/partials/_main_wrap.scss */
+/* line 325, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status img
 {
     max-width: 350px;
 }
 
-/* line 324, sass/partials/_main_wrap.scss */
+/* line 330, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status img,
 .cmb2_wrap .cmb2_media_status .embed_status
@@ -542,7 +551,7 @@ Main Wrap
     background: #fffff8;
 }
 
-/* line 334, sass/partials/_main_wrap.scss */
+/* line 340, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .embed_status
 {
@@ -551,7 +560,7 @@ Main Wrap
     max-width: 800px;
 }
 
-/* line 339, sass/partials/_main_wrap.scss */
+/* line 345, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status,
 .cmb2_wrap .cmb2_media_status .embed_status
@@ -559,7 +568,7 @@ Main Wrap
     position: relative;
 }
 
-/* line 342, sass/partials/_main_wrap.scss */
+/* line 348, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status .cmb2_remove_file_button,
 .cmb2_wrap .cmb2_media_status .embed_status .cmb2_remove_file_button
@@ -576,14 +585,14 @@ Main Wrap
     background: url(../images/ico-delete.png);
 }
 
-/* line 356, sass/partials/_main_wrap.scss */
+/* line 362, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_media_status .img_status .cmb2_remove_file_button
 {
     top: 10px;
 }
 
-/* line 363, sass/partials/_main_wrap.scss */
+/* line 369, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb-type-file_list .cmb2_media_status .img_status
 {
@@ -594,7 +603,7 @@ Main Wrap
     margin-right: 10px;
 }
 
-/* line 370, sass/partials/_main_wrap.scss */
+/* line 376, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .attach_list li
 {
@@ -605,7 +614,7 @@ Main Wrap
     margin-bottom: 25px;
 }
 
-/* line 376, sass/partials/_main_wrap.scss */
+/* line 382, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .attach_list li img
 {
@@ -616,14 +625,14 @@ Main Wrap
     cursor: move;
 }
 
-/* line 383, sass/partials/_main_wrap.scss */
+/* line 389, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .cmb2_remove_wrapper
 {
     margin: 0;
 }
 
-/* line 390, sass/partials/_main_wrap.scss */
+/* line 396, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .wp-color-result,
 .cmb2_wrap .wp-picker-input-wrap
@@ -631,7 +640,7 @@ Main Wrap
     vertical-align: middle;
 }
 
-/* line 395, sass/partials/_main_wrap.scss */
+/* line 401, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .wp-color-result,
 .cmb2_wrap .wp-picker-container
@@ -639,7 +648,7 @@ Main Wrap
     margin: 0 10px 0 0;
 }
 
-/* line 400, sass/partials/_main_wrap.scss */
+/* line 406, sass/partials/_main_wrap.scss */
 
 .cmb2_wrap .child-cmb2 .cmb-th
 {
@@ -1035,6 +1044,14 @@ Sidebar Placement Adjustments
 
 /* line 104, sass/partials/_sidebar_placements.scss */
 
+.inner-sidebar .cmb2_wrap .cmb-row .cmb2_metabox_description,
+#side-sortables .cmb2_wrap .cmb-row .cmb2_metabox_description
+{
+    padding-bottom: 1.8em;
+}
+
+/* line 108, sass/partials/_sidebar_placements.scss */
+
 .inner-sidebar .cmb2_wrap .cmb2_metabox_title,
 #side-sortables .cmb2_wrap .cmb2_metabox_title
 {
@@ -1042,7 +1059,7 @@ Sidebar Placement Adjustments
     font-style: italic;
 }
 
-/* line 109, sass/partials/_sidebar_placements.scss */
+/* line 113, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2_wrap .remove-row,
 #side-sortables .cmb2_wrap .remove-row
@@ -1053,7 +1070,29 @@ Sidebar Placement Adjustments
     padding-bottom: 0;
 }
 
-/* line 115, sass/partials/_sidebar_placements.scss */
+/* line 120, sass/partials/_sidebar_placements.scss */
+
+.inner-sidebar .cmb2_wrap .cmb-type-colorpicker .repeat-row .cmb-td,
+#side-sortables .cmb2_wrap .cmb-type-colorpicker .repeat-row .cmb-td
+{
+    float: left;
+    clear: none;
+
+    width: auto;
+    padding-top: 0;
+}
+
+/* line 125, sass/partials/_sidebar_placements.scss */
+
+.inner-sidebar .cmb2_wrap .cmb-type-colorpicker .repeat-row .cmb-td.remove-row,
+#side-sortables .cmb2_wrap .cmb-type-colorpicker .repeat-row .cmb-td.remove-row
+{
+    float: right;
+
+    margin: 0;
+}
+
+/* line 132, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2_wrap .cmb2_upload_button,
 #side-sortables .cmb2_wrap .cmb2_upload_button
@@ -3151,7 +3190,7 @@ Sidebar Placement Adjustments
 
 @media (max-width: 450px)
 {
-    /* line 150, sass/partials/_main_wrap.scss */
+    /* line 155, sass/partials/_main_wrap.scss */
 
     .cmb2_wrap .cmb-th
     {
@@ -3190,7 +3229,7 @@ Sidebar Placement Adjustments
         border-bottom: 1px solid #e9e9e9;
     }
 
-    /* line 409, sass/partials/_main_wrap.scss */
+    /* line 415, sass/partials/_main_wrap.scss */
 
     .cmb2_wrap .cmb-th,
     .cmb2_wrap .cmb-td,

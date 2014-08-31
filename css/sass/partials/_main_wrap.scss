@@ -120,6 +120,11 @@ Main Wrap
 				padding: 0;
 			}
 		}
+
+		&.cmb-repeat .cmb2_metabox_description {
+			padding-top: 0;
+			padding-bottom: 1.8em;
+		}
 	}
 
 	.add-row {
@@ -255,7 +260,8 @@ Main Wrap
 	p.cmb2_metabox_description {
 		color: $gray;
 		font-style: italic;
-		margin: 2px 0 !important;
+		margin: 0;
+		padding-top: .5em;
 	}
 
 	span.cmb2_metabox_description {
