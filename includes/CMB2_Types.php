@@ -106,6 +106,18 @@ class CMB2_Types {
 	}
 
 	/**
+	 * Retrieve text parameter from field's options array (if it has one), or use fallback text
+	 * @since  2.0.0
+	 * @param  string  $option_key Key in field's options array
+	 * @param  string  $fallback   Fallback text
+	 * @return string              Text
+	 */
+	public function text( $option_key, $fallback ) {
+		$options = (array) $this->field->args( 'options' );
+		return isset( $options[ $option_key ] ) ? $options[ $option_key ] : $fallback;
+	}
+
+	/**
 	 * Determine a file's extension
 	 * @since  1.0.0
 	 * @param  string       $file File url
@@ -254,9 +266,7 @@ class CMB2_Types {
 	 * @since  1.0.0
 	 */
 	public function render_repeatable_field() {
-		$table_id            = $this->field->id() .'_repeat';
-		$this->group_options = $this->field->args( 'options' );
-		$add_row_text        = isset( $this->group_options['add_row_text'] ) ? $this->group_options['add_row_text'] : __( 'Add Row', 'cmb2' );
+		$table_id = $this->field->id() .'_repeat';
 
 		$this->_desc( true, true, true );
 		?>
@@ -267,7 +277,7 @@ class CMB2_Types {
 			</ul>
 		</div>
 		<p class="add-row">
-			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php echo $add_row_text; ?></a>
+			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php echo esc_html( $this->text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
 		</p>
 
 		<?php
@@ -318,9 +328,7 @@ class CMB2_Types {
 	 * @param  string  $class Repeatable table row's class
 	 */
 	protected function repeat_row( $disable_remover = false, $class = 'repeat-row' ) {
-		$disabled        = $disable_remover ? 'disabled="disabled"' : '';
-		$remove_row_text = isset( $this->group_options['remove_row_text'] ) ? $this->group_options['remove_row_text'] : __( 'Remove', 'cmb2' );
-
+		$disabled = $disable_remover ? 'disabled="disabled"' : '';
 		?>
 
 		<li class="cmb-row <?php echo $class; ?>">
@@ -328,7 +336,7 @@ class CMB2_Types {
 				<?php $this->_render(); ?>
 			</div>
 			<div class="cmb-td remove-row">
-				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php echo $remove_row_text; ?></a>
+				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php echo esc_html( $this->text( 'remove_row_text', __( 'Remove', 'cmb2' ) ) ); ?></a>
 			</div>
 		</li>
 
@@ -644,7 +652,7 @@ class CMB2_Types {
 		$options    = ''; $i = 1;
 
 		if ( ! $terms ) {
-			$options .= '<li><label>'. __( 'No terms', 'cmb2' ) .'</label></li>';
+			$options .= '<li><label>'. esc_html( $this->text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) .'</label></li>';
 		} else {
 			$option_none  = $this->field->args( 'show_option_none' );
 			if( ! empty( $option_none ) ) {
@@ -692,7 +700,7 @@ class CMB2_Types {
 		$options     = ''; $i = 1;
 
 		if ( ! $terms ) {
-			$options .= '<li><label>'. __( 'No terms', 'cmb2' ) .'</label></li>';
+			$options .= '<li><label>'. esc_html( $this->text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) .'</label></li>';
 		} else {
 
 			foreach ( $terms as $term ) {
@@ -735,7 +743,7 @@ class CMB2_Types {
 		$this->input( array(
 			'type'  => 'button',
 			'class' => 'cmb2_upload_button button cmb2_upload_list',
-			'value'  => __( 'Add or Upload File', 'cmb2' ),
+			'value'  => esc_html( $this->text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ),
 			'name'  => '', 'id'  => '',
 		) );
 
@@ -756,7 +764,7 @@ class CMB2_Types {
 					echo
 					'<li class="img_status">',
 						wp_get_attachment_image( $id, $this->field->args( 'preview_size' ) ),
-						'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button">'. __( 'Remove Image', 'cmb2' ) .'</a></p>
+						'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button">'. esc_html( $this->text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
 						'. $id_input .'
 					</li>';
 
@@ -767,8 +775,8 @@ class CMB2_Types {
 					}
 					echo
 					'<li>',
-						__( 'File:', 'cmb2' ), ' <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl, '" target="_blank" rel="external">'. __( 'Download', 'cmb2' ) .'</a> / <a href="#" class="cmb2_remove_file_button">'. __( 'Remove', 'cmb2' ) .'</a>)
-						'. $id_input .'
+						esc_html( $this->text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->text( 'file_download_text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2_remove_file_button">', esc_html( $this->text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
+						', $id_input ,'
 					</li>';
 				}
 			}
@@ -790,7 +798,7 @@ class CMB2_Types {
 			'size'  => 45,
 			'desc'  => '',
 		) ),
-		'<input class="cmb2_upload_button button" type="button" value="'. __( 'Add or Upload File', 'cmb2' ) .'" />',
+		'<input class="cmb2_upload_button button" type="button" value="'. esc_attr( $this->text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) .'" />',
 		$this->_desc( true );
 
 		$cached_id = $this->_id();
@@ -827,7 +835,7 @@ class CMB2_Types {
 				if ( $this->is_valid_img_ext( $meta_value ) ) {
 					echo '<div class="img_status">';
 					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta_value, '" alt="" />';
-					echo '<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">'. __( 'Remove Image', 'cmb2' ) .'</a></p>';
+					echo '<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">'. esc_html( $this->text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
 					// $file_ext = $this->get_file_ext( $meta_value );
@@ -835,7 +843,7 @@ class CMB2_Types {
 					for ( $i = 0; $i < count( $parts ); ++$i ) {
 						$title = $parts[$i];
 					}
-					echo __( 'File:', 'cmb2' ), ' <strong>', $title, '</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value, '" target="_blank" rel="external">'. __( 'Download', 'cmb2' ) .'</a> / <a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">'. __( 'Remove', 'cmb2' ) .'</a>)';
+					echo esc_html( $this->text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->text( 'file_download_text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">', esc_html( $this->text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
 				}
 			}
 		echo '</div>';
