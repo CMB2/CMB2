@@ -7,7 +7,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  * Description:  This will create metaboxes with custom fields that will blow your mind.
- * Version:      2.0.0
+ * Version:      2.0.0-beta
  *
  * Text Domain:  cmb2
  * Domain Path:  /languages
@@ -39,12 +39,12 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_200' ) ) {
+if ( ! class_exists( 'cmb2_bootstrap_200beta' ) ) {
 
 	/**
 	 * Check for newest version of CMB
 	 */
-	class cmb2_bootstrap_200 {
+	class cmb2_bootstrap_200beta {
 
 		/**
 		 * Current version number
@@ -96,6 +96,6 @@ if ( ! class_exists( 'cmb2_bootstrap_200' ) ) {
 		}
 
 	}
-	cmb2_bootstrap_200::go();
+	cmb2_bootstrap_200beta::go();
 
 } // class exists check

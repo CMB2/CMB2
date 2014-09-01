@@ -41,7 +41,7 @@
 * [Emanuele Feliziani](https://github.com/GioSensation) // [http://gravida.pro](http://gravida.pro/)
 * [Cor van Noorloos](https://github.com/corvannoorloos) // [http://corvannoorloos.com](http://corvannoorloos.com/)
 
-**Version**: 2.0.0  
+**Version**: 2.0.0-beta  
 **WordPress minimum version**: 3.5  
 **WordPress version tested to**: 4.0  
 **License**: GPLv2  
