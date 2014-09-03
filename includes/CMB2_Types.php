@@ -153,7 +153,7 @@ class CMB2_Types {
 	 * @return array            Parsed and filtered arguments
 	 */
 	public function parse_args( $args, $element, $defaults ) {
-		return wp_parse_args( apply_filters( "cmb2_{$element}_attributes", $this->field->maybe_set_attributes( $args ), $this->field, $this ), $defaults );
+		return wp_parse_args( apply_filters( "cmb2_{$element}_attributes", $this->field->maybe_set_attributes( $args ), $defaults, $this->field, $this ), $defaults );
 	}
 
 	/**
