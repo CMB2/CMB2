@@ -345,16 +345,14 @@ class CMB2_Field {
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 
-		if ( isset( $this->escaped_value ) )
+		if ( isset( $this->escaped_value ) ) {
 			return $this->escaped_value;
+		}
 
 		$meta_value = $meta_value ? $meta_value : $this->value();
+
 		// Check if the field has a registered escaping callback
-		$cb = $this->maybe_callback( 'escape_cb' );
-		if ( false === $cb || $this->escaping_exception() ) {
-			// If requesting NO escaping, return meta value
-			return ! empty( $meta_value ) ? $meta_value : $this->args( 'default' );
-		} elseif ( $cb ) {
+		if ( $cb = $this->maybe_callback( 'escape_cb' ) ) {
 			// Ok, callback is good, let's run it.
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
@@ -363,6 +361,11 @@ class CMB2_Field {
 		$esc = apply_filters( 'cmb2_types_esc_'. $this->type(), null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
+		}
+
+		if ( false === $cb || $this->escaping_exception() ) {
+			// If requesting NO escaping, return meta value
+			return ! empty( $meta_value ) ? $meta_value : $this->args( 'default' );
 		}
 
 		// escaping function passed in?
