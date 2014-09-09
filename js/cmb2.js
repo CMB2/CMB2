@@ -453,7 +453,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
-		var $newRow = $( '<div class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
+		var $newRow = $( '<li class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</li>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow, true );
