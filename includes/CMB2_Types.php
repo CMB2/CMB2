@@ -355,8 +355,15 @@ class CMB2_Types {
 		if ( ! $repeat_group && ( $this->field->args( 'repeatable' ) || $this->iterator > 0 ) ) {
 			return '';
 		}
+
+		$desc = $this->field->args( 'description' );
+
+		if ( ! $desc ) {
+			return;
+		}
+
 		$tag = $paragraph ? 'p' : 'span';
-		$desc = "\n<$tag class=\"cmb2_metabox_description\">{$this->field->args( 'description' )}</$tag>\n";
+		$desc = "\n<$tag class=\"cmb2_metabox_description\">{$desc}</$tag>\n";
 		if ( $echo )
 			echo $desc;
 		return $desc;
