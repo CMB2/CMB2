@@ -335,7 +335,9 @@ class CMB2 {
 					'object_id'   => $object_id,
 				) );
 
-				$field->save_field( $_post );
+				if ( $updated = $field->save_field( $_post ) ) {
+					$this->updated[] = $field->id();
+				}
 			}
 
 		}
@@ -415,8 +417,9 @@ class CMB2 {
 				$is_updated = ( ! empty( $new_val ) && $new_val != $old_val );
 				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
 				// Compare values and add to `$updated` array
-				if ( $is_updated || $is_removed )
+				if ( $is_updated || $is_removed ) {
 					$this->updated[] = $base_id .'::'. $field_group->index .'::'. $sub_id;
+				}
 
 				// Add to `$saved` array
 				$saved[ $field_group->index ][ $sub_id ] = $new_val;
