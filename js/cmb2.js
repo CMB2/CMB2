@@ -645,7 +645,10 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.makeListSortable = function() {
-		cmb.metabox().find( '.cmb2_media_status.attach_list' ).sortable({ cursor: "move" }).disableSelection();
+		var $filelist = cmb.metabox().find( '.cmb2_media_status.attach_list' );
+		if ( $filelist.length ) {
+			$filelist.sortable({ cursor: "move" }).disableSelection();
+		}
 	};
 
 	cmb.maybeOembed = function( evt ) {
