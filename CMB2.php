@@ -633,6 +633,7 @@ class CMB2 {
 		switch( $field ) {
 			case 'cmb_id':
 			case 'meta_box':
+			case 'updated':
 				return $this->{$field};
 			default:
 				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
