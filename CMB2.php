@@ -323,7 +323,7 @@ class CMB2 {
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 
 			if ( 'group' == $field_args['type'] ) {
-				$this->save_group( $field_args );
+				$this->save_group( $field_args, $_post );
 			} elseif ( 'title' == $field_args['type'] ) {
 				// Don't process title fields
 				continue;
@@ -367,9 +367,9 @@ class CMB2 {
 	/**
 	 * Save a repeatable group
 	 */
-	public function save_group( $args ) {
+	public function save_group( $args, $_post ) {
 
-		if ( ! isset( $args['id'], $args['fields'], $_POST[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
+		if ( ! isset( $args['id'], $args['fields'], $_post[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
 			return;
 
 		$field_group        = new CMB2_Field( array(
@@ -379,7 +379,7 @@ class CMB2 {
 		) );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
-		$group_vals         = $_POST[ $base_id ];
+		$group_vals         = $_post[ $base_id ];
 		$saved              = array();
 		$is_updated         = false;
 		$field_group->index = 0;
