@@ -310,37 +310,13 @@ class CMB2 {
 	 * @param  int    $object_id   Object ID
 	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
-	public function save_fields( $object_id = 0, $object_type = '', $_post ) {
+	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
 
+		$this->data_to_save = $data_to_save;
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
-		$this->prop( 'show_on', array( 'key' => false, 'value' => false ) );
-
-		// save field ids of those that are updated
-		$this->updated = array();
-
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
-
-			if ( 'group' == $field_args['type'] ) {
-				$this->save_group( $field_args, $_post );
-			} elseif ( 'title' == $field_args['type'] ) {
-				// Don't process title fields
-				continue;
-			} else {
-				// Save default fields
-				$field = new CMB2_Field( array(
-					'field_args'  => $field_args,
-					'object_type' => $object_type,
-					'object_id'   => $object_id,
-				) );
-
-				if ( $updated = $field->save_field( $_post ) ) {
-					$this->updated[] = $field->id();
-				}
-			}
-
-		}
+		$this->process_fields();
 
 		// If options page, save the updated options
 		if ( $object_type == 'options-page' ) {
@@ -365,11 +341,61 @@ class CMB2 {
 	}
 
 	/**
+	 * Process and save form fields
+	 * @since  2.0.0
+	 */
+	public function process_fields() {
+		$this->prop( 'show_on', array( 'key' => false, 'value' => false ) );
+
+		// save field ids of those that are updated
+		$this->updated = array();
+
+		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$this->process_field( $field_args );
+		}
+	}
+
+	/**
+	 * Process and save a field
+	 * @since  2.0.0
+	 * @param  array  $field_args Array of field arguments
+	 */
+	public function process_field( $field_args ) {
+
+		switch ( $field_args['type'] ) {
+
+			case 'group':
+				$this->save_group( $field_args );
+				break;
+
+			case 'title':
+				// Don't process title fields
+				break;
+
+			default:
+
+				// Save default fields
+				$field = new CMB2_Field( array(
+					'field_args'  => $field_args,
+					'object_type' => $this->object_type(),
+					'object_id'   => $this->object_id(),
+				) );
+
+				if ( $updated = $field->save_field( $this->data_to_save ) ) {
+					$this->updated[] = $field->id();
+				}
+
+				break;
+		}
+
+	}
+
+	/**
 	 * Save a repeatable group
 	 */
-	public function save_group( $args, $_post ) {
+	public function save_group( $args ) {
 
-		if ( ! isset( $args['id'], $args['fields'], $_post[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
+		if ( ! isset( $args['id'], $args['fields'], $this->data_to_save[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
 			return;
 
 		$field_group        = new CMB2_Field( array(
@@ -379,7 +405,7 @@ class CMB2 {
 		) );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
-		$group_vals         = $_post[ $base_id ];
+		$group_vals         = $this->data_to_save[ $base_id ];
 		$saved              = array();
 		$is_updated         = false;
 		$field_group->index = 0;
