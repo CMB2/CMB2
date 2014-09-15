@@ -1,19 +1,20 @@
 <?php
 /**
- * Plugin Name  : CMB2
- * Plugin URI   : https://github.com/WebDevStudios/CMB2
- * Description  : This will create metaboxes with custom fields that will blow your mind.
- * Author       : WebDevStudios
- * Author URI   : http://webdevstudios.com
- * Contributors : WebDevStudios (@webdevstudios / webdevstudios.com)
- *                Justin Sternberg (@jtsternberg / dsgnwrks.pro)
- *                Jared Atchison (@jaredatch / jaredatchison.com)
- *                Bill Erickson (@billerickson / billerickson.net)
- *                Andrew Norcross (@norcross / andrewnorcross.com)
- * Version:      2.0.0-beta
+ * Plugin Name:  CMB2 (beta)
+ * Plugin URI:   https://github.com/WebDevStudios/CMB2
+ * Description:  This will create metaboxes with custom fields that will blow your mind.
+ * Author:       WebDevStudios
+ * Author URI:   http://webdevstudios.com
+ * Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
+ *               Justin Sternberg (@jtsternberg / dsgnwrks.pro)
+ *               Jared Atchison (@jaredatch / jaredatchison.com)
+ *               Bill Erickson (@billerickson / billerickson.net)
+ *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Text Domain  : cmb2
- * Domain Path  : /languages
+ * Version:      2.0.0
+ *
+ * Text Domain:  cmb2
+ * Domain Path:  languages
  */
 
 /**
