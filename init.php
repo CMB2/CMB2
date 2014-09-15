@@ -2,7 +2,7 @@
 /**
  * Plugin Name:  CMB2 (beta)
  * Plugin URI:   https://github.com/WebDevStudios/CMB2
- * Description:  This will create metaboxes with custom fields that will blow your mind.
+ * Description:  CMB2 will create metaboxes and forms with custom fields that will blow your mind.
  * Author:       WebDevStudios
  * Author URI:   http://webdevstudios.com
  * Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
