@@ -16,21 +16,20 @@ module.exports = function(grunt) {
 				'pre-commit': 'default'
 			}
 		},
+
 		// concat: {
 		// 	options: {
 		// 		stripBanners: true,
-		// 		// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-		// 		// 	' * <%= pkg.homepage %>\n' +
-		// 		// 	' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-		// 		// 	' * Licensed GPLv2+' +
-		// 		// 	' */\n'
+		// 		banner: '/**\n' +
+		// 		' * <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> | <%= pkg.homepage %> | Copyright (c) <%= grunt.template.today("yyyy") %>; | Licensed GPLv2+\n' +
+		// 		' */\n',
 		// 	},
-		// 	'': {
+		// 	CMB2 : {
 		// 		src: [
-		// 			'js/cmb2.js',
-		// 			'js/cmb2.js',
+		// 			'js/cmb2.min.js',
+		// 			'js/jquery.timePicker.min.js',
 		// 		],
-		// 		dest: 'assets/js/{%= dir_name %}.js'
+		// 		dest: 'assets/js/combined.js'
 		// 	}
 		// },
 
@@ -153,19 +152,29 @@ module.exports = function(grunt) {
 			}
 		},
 
-		update_submodules: {
-
-			default: {
+		// make a zipfile
+		compress: {
+			main: {
 				options: {
-					// default command line parameters will be used: --init --recursive
-				}
-			},
-			withCustomParameters: {
-				options: {
-					params: '--force' // specifies your own command-line parameters
-				}
-			},
-
+					mode: 'zip',
+					archive: 'cmb2.zip'
+				},
+				files: [ {
+						expand: true,
+						// cwd: '/',
+						src: [
+							'**',
+							'!node_modules/**',
+							'!css/sass/**',
+							'!**.zip',
+							'!Gruntfile.js',
+							'!package.json',
+							'!phpunit.xml',
+							'!tests/**'
+						],
+						dest: '/'
+				} ]
+			}
 		}
 
 	});
@@ -173,5 +182,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('styles', ['sass', 'cmq', 'csscomb', 'cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
-	grunt.registerTask('default', ['update_submodules', 'styles', 'js', 'tests']);
+	grunt.registerTask('default', ['styles', 'js', 'tests']);
 };
