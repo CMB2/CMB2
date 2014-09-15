@@ -117,6 +117,10 @@ class CMB2_Utils {
 			);
 		}
 
+		if ( is_ssl() ) {
+			$cmb2_url = str_ireplace( 'http://', 'https://', $cmb2_url );
+		}
+
 		/**
 		 * Filter the CMB location url
 		 *
