@@ -1,0 +1,383 @@
+# Copyright (C) 2014 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/cmb2\n"
+"POT-Creation-Date: 2014-09-16 14:59:56+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: CMB2.php:96
+msgid "Metabox configuration is required to have an ID parameter"
+msgstr ""
+
+#: example-functions.php:48
+msgid "Test Metabox"
+msgstr ""
+
+#: example-functions.php:56 example-functions.php:290
+msgid "Test Text"
+msgstr ""
+
+#: example-functions.php:57 example-functions.php:68 example-functions.php:75
+#: example-functions.php:82 example-functions.php:90 example-functions.php:97
+#: example-functions.php:109 example-functions.php:115
+#: example-functions.php:122 example-functions.php:137
+#: example-functions.php:145 example-functions.php:152
+#: example-functions.php:158 example-functions.php:164
+#: example-functions.php:176 example-functions.php:187
+#: example-functions.php:198 example-functions.php:209
+#: example-functions.php:217 example-functions.php:224
+#: example-functions.php:232 example-functions.php:238
+#: example-functions.php:250 example-functions.php:291
+#: example-functions.php:357 example-functions.php:364
+#: example-functions.php:370 example-functions.php:376
+#: example-functions.php:382 example-functions.php:388
+#: example-functions.php:394 example-functions.php:412
+msgid "field description (optional)"
+msgstr ""
+
+#: example-functions.php:67
+msgid "Test Text Small"
+msgstr ""
+
+#: example-functions.php:74
+msgid "Test Text Medium"
+msgstr ""
+
+#: example-functions.php:81
+msgid "Website URL"
+msgstr ""
+
+#: example-functions.php:89
+msgid "Test Text Email"
+msgstr ""
+
+#: example-functions.php:96
+msgid "Test Time"
+msgstr ""
+
+#: example-functions.php:102 example-functions.php:103
+msgid "Time zone"
+msgstr ""
+
+#: example-functions.php:108
+msgid "Test Date Picker"
+msgstr ""
+
+#: example-functions.php:114
+msgid "Test Date Picker (UNIX timestamp)"
+msgstr ""
+
+#: example-functions.php:121
+msgid "Test Date/Time Picker Combo (UNIX timestamp)"
+msgstr ""
+
+#: example-functions.php:136
+msgid "Test Money"
+msgstr ""
+
+#: example-functions.php:144
+msgid "Test Color Picker"
+msgstr ""
+
+#: example-functions.php:151
+msgid "Test Text Area"
+msgstr ""
+
+#: example-functions.php:157
+msgid "Test Text Area Small"
+msgstr ""
+
+#: example-functions.php:163
+msgid "Test Text Area for Code"
+msgstr ""
+
+#: example-functions.php:169
+msgid "Test Title Weeeee"
+msgstr ""
+
+#: example-functions.php:170
+msgid "This is a title description"
+msgstr ""
+
+#: example-functions.php:175
+msgid "Test Select"
+msgstr ""
+
+#: example-functions.php:180 example-functions.php:191
+#: example-functions.php:202
+msgid "Option One"
+msgstr ""
+
+#: example-functions.php:181 example-functions.php:192
+#: example-functions.php:203
+msgid "Option Two"
+msgstr ""
+
+#: example-functions.php:182 example-functions.php:193
+#: example-functions.php:204
+msgid "Option Three"
+msgstr ""
+
+#: example-functions.php:186
+msgid "Test Radio inline"
+msgstr ""
+
+#: example-functions.php:197
+msgid "Test Radio"
+msgstr ""
+
+#: example-functions.php:208
+msgid "Test Taxonomy Radio"
+msgstr ""
+
+#: example-functions.php:216
+msgid "Test Taxonomy Select"
+msgstr ""
+
+#: example-functions.php:223
+msgid "Test Taxonomy Multi Checkbox"
+msgstr ""
+
+#: example-functions.php:231
+msgid "Test Checkbox"
+msgstr ""
+
+#: example-functions.php:237
+msgid "Test Multi Checkbox"
+msgstr ""
+
+#: example-functions.php:242
+msgid "Check One"
+msgstr ""
+
+#: example-functions.php:243
+msgid "Check Two"
+msgstr ""
+
+#: example-functions.php:244
+msgid "Check Three"
+msgstr ""
+
+#: example-functions.php:249
+msgid "Test wysiwyg"
+msgstr ""
+
+#: example-functions.php:256
+msgid "Test Image"
+msgstr ""
+
+#: example-functions.php:257
+msgid "Upload an image or enter a URL."
+msgstr ""
+
+#: example-functions.php:262
+msgid "Multiple Files"
+msgstr ""
+
+#: example-functions.php:263
+msgid "Upload or add multiple images/attachments."
+msgstr ""
+
+#: example-functions.php:269
+msgid "oEmbed"
+msgstr ""
+
+#: example-functions.php:270
+msgid ""
+"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
+"Embeds</a>."
+msgstr ""
+
+#: example-functions.php:282
+msgid "About Page Metabox"
+msgstr ""
+
+#: example-functions.php:303
+msgid "Repeating Field Group"
+msgstr ""
+
+#: example-functions.php:309
+msgid "Generates reusable form entries"
+msgstr ""
+
+#: example-functions.php:311
+msgid "Entry {#}"
+msgstr ""
+
+#: example-functions.php:312
+msgid "Add Another Entry"
+msgstr ""
+
+#: example-functions.php:313
+msgid "Remove Entry"
+msgstr ""
+
+#: example-functions.php:350
+msgid "User Profile Metabox"
+msgstr ""
+
+#: example-functions.php:356
+msgid "Extra Info"
+msgstr ""
+
+#: example-functions.php:363
+msgid "Avatar"
+msgstr ""
+
+#: example-functions.php:369
+msgid "Facebook URL"
+msgstr ""
+
+#: example-functions.php:375
+msgid "Twitter URL"
+msgstr ""
+
+#: example-functions.php:381
+msgid "Google+ URL"
+msgstr ""
+
+#: example-functions.php:387
+msgid "Linkedin URL"
+msgstr ""
+
+#: example-functions.php:393
+msgid "User Field"
+msgstr ""
+
+#: example-functions.php:407
+msgid "Theme Options Metabox"
+msgstr ""
+
+#: example-functions.php:411
+msgid "Site Background Color"
+msgstr ""
+
+#: includes/CMB2_Ajax.php:37
+msgid "Please Try Again"
+msgstr ""
+
+#: includes/CMB2_Ajax.php:133
+msgid "Remove Embed"
+msgstr ""
+
+#: includes/CMB2_Ajax.php:137
+msgid "No oEmbed Results Found for %s. View more info at"
+msgstr ""
+
+#: includes/CMB2_Field.php:529
+msgid "Add Group"
+msgstr ""
+
+#: includes/CMB2_Field.php:530
+msgid "Remove Group"
+msgstr ""
+
+#: includes/CMB2_Types.php:280
+msgid "Add Row"
+msgstr ""
+
+#: includes/CMB2_Types.php:339 includes/CMB2_Types.php:785
+#: includes/CMB2_Types.php:853 includes/CMB2_hookup.php:178
+msgid "Remove"
+msgstr ""
+
+#: includes/CMB2_Types.php:662 includes/CMB2_Types.php:710
+msgid "No terms"
+msgstr ""
+
+#: includes/CMB2_Types.php:753 includes/CMB2_Types.php:808
+msgid "Add or Upload File"
+msgstr ""
+
+#: includes/CMB2_Types.php:774 includes/CMB2_Types.php:845
+#: includes/CMB2_hookup.php:177
+msgid "Remove Image"
+msgstr ""
+
+#: includes/CMB2_Types.php:785 includes/CMB2_Types.php:853
+#: includes/CMB2_hookup.php:179
+msgid "File:"
+msgstr ""
+
+#: includes/CMB2_Types.php:785 includes/CMB2_Types.php:853
+#: includes/CMB2_hookup.php:180
+msgid "Download"
+msgstr ""
+
+#: includes/CMB2_hookup.php:125 includes/CMB2_hookup.php:165
+msgid "Clear"
+msgstr ""
+
+#: includes/CMB2_hookup.php:126
+msgid "Default"
+msgstr ""
+
+#: includes/CMB2_hookup.php:127
+msgid "Select Color"
+msgstr ""
+
+#: includes/CMB2_hookup.php:128
+msgid "Current Color"
+msgstr ""
+
+#: includes/CMB2_hookup.php:155
+msgid "mm/dd/yy"
+msgstr ""
+
+#: includes/CMB2_hookup.php:156
+msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+msgstr ""
+
+#: includes/CMB2_hookup.php:157
+msgid "Su, Mo, Tu, We, Th, Fr, Sa"
+msgstr ""
+
+#: includes/CMB2_hookup.php:158
+msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
+msgstr ""
+
+#: includes/CMB2_hookup.php:159
+msgid ""
+"January, February, March, April, May, June, July, August, September, "
+"October, November, December"
+msgstr ""
+
+#: includes/CMB2_hookup.php:160
+msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
+msgstr ""
+
+#: includes/CMB2_hookup.php:161
+msgid "Next"
+msgstr ""
+
+#: includes/CMB2_hookup.php:162
+msgid "Prev"
+msgstr ""
+
+#: includes/CMB2_hookup.php:163
+msgid "Today"
+msgstr ""
+
+#: includes/CMB2_hookup.php:164
+msgid "Done"
+msgstr ""
+
+#: includes/CMB2_hookup.php:176
+msgid "Use this file"
+msgstr ""
+
+#: includes/CMB2_hookup.php:181
+msgid "Select / Deselect All"
+msgstr ""
+
+#: includes/helper-functions.php:226
+msgid "Save"
+msgstr ""
