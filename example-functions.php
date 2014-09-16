@@ -11,7 +11,7 @@
 /**
  * Get the bootstrap!
  */
-require_once 'cmb/init.php';
+require_once 'cmb2/init.php';
 
 /**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
