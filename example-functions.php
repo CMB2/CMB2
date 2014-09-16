@@ -9,7 +9,7 @@
  */
 
 /**
- * Get the bootstrap!
+ * Get the bootstrap! If using the plugin from wordpress.org, REMOVE THIS!
  */
 require_once 'cmb2/init.php';
 
