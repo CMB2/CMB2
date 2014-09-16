@@ -16,7 +16,7 @@
     ],
     "support": {
         "issues": "https://github.com/WebDevStudios/CMB2/issues",
-        "source": "https://github.com/WebDevStudios/CMB2"
+        "source": "http://wordpress.org/support/plugin/cmb2"
     },
     "require": {
         "php": ">5.2.4",
