@@ -10,18 +10,25 @@ Post Metaboxes
 		> .cmb-field-list > .cmb-row {
 			padding: 1.8em 0;
 		}
+
+		input[type=text] {
+
+			&.cmb2-oembed {
+				width: 100%;
+			}
+		}
 	}
 
 	.cmb-row {
 		padding: 0 0 1.8em;
 	}
 
-	.repeatable-grouping {
+	.cmb-repeatable-grouping {
 		padding: 0 1em;
 		max-width: 100%;
 	}
 
-	.repeatable-group > .cmb-row {
+	.cmb-repeatable-group > .cmb-row {
 		padding-bottom: 0;
 	}
 
@@ -43,7 +50,7 @@ Post Metaboxes
 		line-height: 1.3;
 	}
 
-	.repeat-row .cmb-td {
+	.cmb-repeat-row .cmb-td {
 		padding-bottom: 1.8em;
 	}
 
@@ -53,7 +60,7 @@ Post Metaboxes
 	}
 
 	.cmb-row,
-	.repeatable-group {
+	.cmb-repeatable-group {
 		border-bottom: 1px solid $light-gray;
 
 		@media (max-width: $mobile-break) {
@@ -62,14 +69,8 @@ Post Metaboxes
 	}
 
 	.cmb-repeat-group-field,
-	.remove-field-row {
+	.cmb-remove-field-row {
 		padding-top: 1.8em;
 	}
 
-	input[type=text] {
-
-		&.cmb2-oembed {
-			width: 100%;
-		}
-	}
 }

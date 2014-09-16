@@ -43,7 +43,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.init = function() {
 
 		var $metabox = cmb.metabox();
-		var $repeatGroup = $metabox.find('.repeatable-group');
+		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
 
 		// hide our spinner gif if we're on a MP6 dashboard
 		if ( l10n.new_admin_style ) {
@@ -74,22 +74,22 @@ window.CMB2 = (function(window, document, $, undefined){
 			.on( 'click', '.cmb2-upload-button', cmb.handleMedia )
 			.on( 'click', '.cmb2-remove-file-button', cmb.handleRemoveMedia )
 			// Repeatable content
-			.on( 'click', '.add-group-row', cmb.addGroupRow )
-			.on( 'click', '.add-row-button', cmb.addAjaxRow )
-			.on( 'click', '.remove-group-row', cmb.removeGroupRow )
-			.on( 'click', '.remove-row-button', cmb.removeAjaxRow )
+			.on( 'click', '.cmb-add-group-row', cmb.addGroupRow )
+			.on( 'click', '.cmb-add-row-button', cmb.addAjaxRow )
+			.on( 'click', '.cmb-remove-group-row', cmb.removeGroupRow )
+			.on( 'click', '.cmb-remove-row-button', cmb.removeAjaxRow )
 			// Ajax oEmbed display
 			.on( 'keyup paste focusout', '.cmb2-oembed', cmb.maybeOembed )
 			// Reset titles when removing a row
-			.on( 'cmb2_remove_row', '.repeatable-group', cmb.resetTitlesAndIterator );
+			.on( 'cmb2_remove_row', '.cmb-repeatable-group', cmb.resetTitlesAndIterator );
 
 		if ( $repeatGroup.length ) {
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$(this).find( '.remove-group-row' ).before( '<a class="button shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
+					$(this).find( '.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
-				.on( 'click', '.shift-rows', cmb.shiftRows )
+				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
 		}
 
@@ -102,15 +102,15 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.resetTitlesAndIterator = function() {
 		// Loop repeatable group tables
-		$( '.repeatable-group' ).each( function() {
+		$( '.cmb-repeatable-group' ).each( function() {
 			var $table = $(this);
 			// Loop repeatable group table rows
-			$table.find( '.repeatable-grouping' ).each( function( rowindex ) {
+			$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
 				var $row = $(this);
 				// Reset rows iterator
 				$row.data( 'iterator', rowindex );
 				// Reset rows title
-				$row.find( '.cmb-group-title h4' ).text( $table.find( '.add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
+				$row.find( '.cmb-group-title h4' ).text( $table.find( '.cmb-add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
 			});
 		});
 	};
@@ -237,7 +237,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.handleRemoveMedia = function( event ) {
 		event.preventDefault();
 		var $self = $(this);
-		if ( $self.is( '.attach-list .cmb2-remove-file-button' ) ){
+		if ( $self.is( '.cmb-attach-list .cmb2-remove-file-button' ) ){
 			$self.parents('li').remove();
 			return false;
 		}
@@ -283,7 +283,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $inputs = $self.find('input:not([type="button"]), select, textarea, label');
 		if ( group ) {
 			// Remove extra ajaxed rows
-			$self.find('.cmb-repeat-table .repeat-row:not(:first-child)').remove();
+			$self.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
 		}
 		cmb.neweditor_id = [];
 
@@ -425,7 +425,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			return false;
 		}
 
-		var prevNum = parseInt( $this.parents( '.repeatable-grouping' ).data( 'iterator' ) );
+		var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
 		var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
 
 		// Update field name attributes so data is not orphaned when a row is removed and post is saved
@@ -446,22 +446,22 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		var $self    = $(this);
 		var $table   = $('#'+ $self.data('selector'));
-		var $oldRow  = $table.find('.repeatable-grouping').last();
+		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
 		var prevNum  = parseInt( $oldRow.data('iterator') );
 		cmb.idNumber = prevNum + 1;
 		var $row     = $oldRow.clone();
 
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
-		var $newRow = $( '<div class="cmb-row repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
+		var $newRow = $( '<div class="cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow, true );
 
-		if ( $table.find('.repeatable-grouping').length <= 1  ) {
-			$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
+		if ( $table.find('.cmb-repeatable-grouping').length <= 1  ) {
+			$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
 		} else {
-			$table.find('.remove-group-row').removeAttr( 'disabled' );
+			$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
@@ -481,13 +481,13 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$row.newRowHousekeeping().cleanRow( prevNum );
 
-		$emptyrow.removeClass('empty-row hidden').addClass('repeat-row');
+		$emptyrow.removeClass('empty-row hidden').addClass('cmb-repeat-row');
 		$emptyrow.after( $row );
 
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
 
-		$table.find( '.remove-row-button' ).removeAttr( 'disabled' );
+		$table.find( '.cmb-remove-row-button' ).removeAttr( 'disabled' );
 
 	};
 
@@ -495,18 +495,18 @@ window.CMB2 = (function(window, document, $, undefined){
 		event.preventDefault();
 		var $self   = $(this);
 		var $table  = $('#'+ $self.data('selector'));
-		var $parent = $self.parents('.repeatable-grouping');
-		var number  = $table.find('.repeatable-grouping').length;
+		var $parent = $self.parents('.cmb-repeatable-grouping');
+		var number  = $table.find('.cmb-repeatable-grouping').length;
 
 		if ( number > 1 ) {
 			// when a group is removed loop through all next groups and update fields names
-			$parent.nextAll( '.repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 			$parent.remove();
 			if ( number <= 2 ) {
-				$table.find('.remove-group-row').attr( 'disabled', 'disabled' );
+				$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
 			} else {
-				$table.find('.remove-group-row').removeAttr( 'disabled' );
+				$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		}
@@ -522,11 +522,11 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		if ( number > 2 ) {
 			if ( $parent.hasClass('empty-row') ) {
-				$parent.prev().addClass( 'empty-row' ).removeClass('repeat-row');
+				$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			if ( number === 3 ) {
-				$table.find( '.remove-row-button' ).attr( 'disabled', 'disabled' );
+				$table.find( '.cmb-remove-row-button' ).attr( 'disabled', 'disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		} else {
@@ -539,8 +539,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		event.preventDefault();
 
 		var $self     = $(this);
-		var $parent   = $self.parents( '.repeatable-grouping' );
-		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.repeatable-grouping' ) : $parent.next( '.repeatable-grouping' );
+		var $parent   = $self.parents( '.cmb-repeatable-grouping' );
+		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
 
 		if ( ! $goto.length ) {
 			return;
@@ -645,7 +645,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.makeListSortable = function() {
-		var $filelist = cmb.metabox().find( '.cmb2-media-status.attach-list' );
+		var $filelist = cmb.metabox().find( '.cmb2-media-status.cmb-attach-list' );
 		if ( $filelist.length ) {
 			$filelist.sortable({ cursor: "move" }).disableSelection();
 		}
@@ -723,7 +723,7 @@ window.CMB2 = (function(window, document, $, undefined){
 				var iwidth    = $self.width();
 				var iheight   = $self.height();
 				var _newWidth = newWidth;
-				if ( $self.parents( '.repeat-row' ).length && ! isSmall ) {
+				if ( $self.parents( '.cmb-repeat-row' ).length && ! isSmall ) {
 					// Make room for our repeatable "remove" button column
 					_newWidth = newWidth - 91;
 					_newWidth = 785 > tableW ? _newWidth - 15 : _newWidth;

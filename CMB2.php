@@ -205,7 +205,7 @@ class CMB2 {
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list repeatable-group'. $sortable .'" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group'. $sortable .'" style="width:100%;">';
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row'. $class .'"><div class="cmb-th">';
@@ -225,7 +225,7 @@ class CMB2 {
 			$this->render_group_row( $field_group, $remove_disabled );
 		}
 
-		echo '<div class="cmb-row"><div class="cmb-td"><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" data-grouptitle="', $field_group->options( 'group_title' ) ,'" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></div></div>';
+		echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field_group->id() ,'_repeat" data-grouptitle="', $field_group->options( 'group_title' ) ,'" class="cmb-add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></div></div>';
 
 		echo '</div></div></div>';
 
@@ -234,7 +234,7 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<div class="cmb-row repeatable-grouping" data-iterator="'. $field_group->count() .'">
+		<div class="cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
 			<div class="cmb-td">
 				<div class="cmb-nested cmb-field-list" style="width: 100%;">';
 				if ( $field_group->options( 'group_title' ) ) {
@@ -268,9 +268,9 @@ class CMB2 {
 					}
 				}
 				echo '
-					<div class="cmb-row remove-field-row">
-						<div class="remove-row">
-							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
+					<div class="cmb-row cmb-remove-field-row">
+						<div class="cmb-remove-row">
+							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button cmb-remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 						</div>
 					</div>
 				</div>
