@@ -1,5 +1,5 @@
 === CMB2 (beta) ===  
-Contributors:      webdevstudios, jtsternberg  
+Contributors:      webdevstudios, jtsternberg, gregrickaby, tw2113, patrickgarman  
 Donate link:       http://webdevstudios.com  
 Tags: metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
