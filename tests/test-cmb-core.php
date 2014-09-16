@@ -13,10 +13,14 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'id' => $this->cmb_id,
 			'fields' => array(
 				array(
-					'name' => 'Name',
+					'name'        => 'Name',
 					'description' => 'Description',
-					'id'   => 'test_test',
-					'type' => 'text',
+					'id'          => 'test_test',
+					'type'        => 'text',
+					'before_row'  => array( $this, 'cmb_before_row' ),
+					'before'      => 'testing before',
+					'after'       => array( $this, 'cmb_after' ),
+					'after_row'   => 'testing after row',
 				),
 			),
 		);
@@ -158,15 +162,19 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			<!-- Begin CMB Fields -->
 			<div class="cmb2-wrap form-table">
 				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
+					function test_before_row Description test_test
 					<div class="cmb-row cmb-type-text cmb2-id-test-test">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
 						<div class="cmb-td">
+							testing before
 							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
 							<p class="cmb2-metabox-description">Description</p>
+							function test_after_row Description test_test
 						</div>
 					</div>
+					testing after row
 				</div>
 			</div>
 			<!-- End CMB Fields -->
@@ -177,6 +185,14 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
 
 		$this->assertEquals( $this->clean_string( $form_get ), $this->clean_string( $form ) );
+	}
+
+	public function cmb_before_row( $field_args, $field ) {
+		echo 'function test_before_row '. $field_args['description'] .' '. $field->id();
+	}
+
+	public function cmb_after( $field_args, $field ) {
+		echo 'function test_after_row '. $field_args['description'] .' '. $field->id();
 	}
 
 	public function test_cmb2_options() {
