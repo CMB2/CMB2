@@ -158,7 +158,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$form = '
 		<form class="cmb-form" method="post" id="'. $this->cmb_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
 			<input type="hidden" name="object_id" value="'. $this->post_id .'">
-			'.wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
+			'. wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
 			<!-- Begin CMB Fields -->
 			<div class="cmb2-wrap form-table">
 				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
@@ -171,7 +171,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 							testing before
 							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
 							<p class="cmb2-metabox-description">Description</p>
-							function test_after_row Description test_test
+							function test_after Description test_test
 						</div>
 					</div>
 					testing after row
@@ -192,7 +192,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 	}
 
 	public function cmb_after( $field_args, $field ) {
-		echo 'function test_after_row '. $field_args['description'] .' '. $field->id();
+		echo 'function test_after '. $field_args['description'] .' '. $field->id();
 	}
 
 	public function test_cmb2_options() {
