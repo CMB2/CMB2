@@ -1,5 +1,5 @@
 ### NOTE: The issues section is for bug reports and feature requests only.
-_Support is not offered for this library, and the likelihood that the maintainers will respond is very low. If you need help, please use [stackoverflow](http://stackoverflow.com/search?q=cmb)._
+_Support is not offered for this library, and the likelihood that the maintainers will respond is very low. If you need help, please use [stackoverflow](http://stackoverflow.com/search?q=cmb), or the [wordpress.org plugin forums](http://wordpress.org/support/plugin/cmb2)._
 
 Before reporting a bug
 ---
