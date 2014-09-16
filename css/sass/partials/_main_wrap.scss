@@ -2,15 +2,15 @@
 Main Wrap
 --------------------------------------------------------------*/
 
-.cmb2_wrap {
+.cmb2-wrap {
 	margin: 0;
 
-	.cmb2_metabox {
+	.cmb2-metabox {
 		clear: both;
 		margin: 0;
 
 		> .cmb-row:first-of-type >,
-		ul > .cmb-row:first-of-type > {
+		.cmb-field-list > .cmb-row:first-of-type > {
 			.cmb-td,
 			.cmb-th {
 				border: 0;
@@ -35,7 +35,7 @@ Main Wrap
 
 	input[type=text] {
 
-		&.cmb2_oembed {
+		&.cmb2-oembed {
 			width: 100%;
 		}
 	}
@@ -43,7 +43,7 @@ Main Wrap
 	textarea {
 		width: 500px;
 
-		&.cmb2_textarea_code {
+		&.cmb2-textarea-code {
 			font-family: $font-mono;
 			line-height: 16px;
 		}
@@ -51,23 +51,23 @@ Main Wrap
 
 	input {
 
-		&.cmb2_text_small,
-		&.cmb2_timepicker {
+		&.cmb2-text-small,
+		&.cmb2-timepicker {
 			width: 100px;
 			// margin-right: 15px
 		}
 
-		&.cmb2_text_money {
+		&.cmb2-text-money {
 			width: 90px;
 			// margin-right: 15px
 		}
 
-		&.cmb2_text_medium {
+		&.cmb2-text-medium {
 			width: 230px;
 			// margin-right: 15px
 		}
 
-		&.cmb2_upload_file {
+		&.cmb2-upload-file {
 			width: 65%;
 		}
 
@@ -88,7 +88,7 @@ Main Wrap
 		margin: 1px 0 5px 0;
 	}
 
-	// ul ul {
+	// .cmb-field-list .cmb-field-list {
 	// 	padding-top:5px;
 	// 	margin: 0;
 	// }
@@ -121,7 +121,7 @@ Main Wrap
 			}
 		}
 
-		&.cmb-repeat .cmb2_metabox_description {
+		&.cmb-repeat .cmb2-metabox-description {
 			padding-top: 0;
 			padding-bottom: 1.8em;
 		}
@@ -239,7 +239,7 @@ Main Wrap
 			}
 		}
 
-		.cmb2_upload_button {
+		.cmb2-upload-button {
 			float: right;
 		}
 
@@ -257,21 +257,25 @@ Main Wrap
 		// }
 	}
 
-	p.cmb2_metabox_description {
+	p.cmb2-metabox-description {
 		color: $gray;
 		font-style: italic;
 		margin: 0;
 		padding-top: .5em;
 	}
 
-	span.cmb2_metabox_description {
+	span.cmb2-metabox-description {
 		color: $gray;
 		font-style: italic;
 	}
 
-	.cmb2_metabox_title {
+	.cmb2-metabox-title {
 		margin: 0 0 5px 0;
 		padding: 5px 0 0 0;
+	}
+
+	ul {
+		margin: 0;
 	}
 
 	.cmb-inline ul {
@@ -309,13 +313,13 @@ Main Wrap
 		}
 	}
 
-	.cmb-type-textarea_code pre {
+	.cmb-type-textarea-code pre {
 		margin: 0;
 	}
 
-	.cmb2_media_status {
+	.cmb2-media-status {
 
-		.img_status {
+		.img-status {
 			clear: none;
 			display: inline-block;
 			float: left;
@@ -327,8 +331,8 @@ Main Wrap
 			}
 		}
 
-		.img_status img,
-		.embed_status {
+		.img-status img,
+		.embed-status {
 			background: $light-yellow;
 			border: 1px solid $light-gray;
 			border-radius: 2px;
@@ -337,15 +341,15 @@ Main Wrap
 			padding: 5px;
 		}
 
-		.embed_status {
+		.embed-status {
 			float: left;
 			max-width: 800px;
 		}
 
-		.img_status, .embed_status {
+		.img-status, .embed-status {
 			position: relative;
 
-			.cmb2_remove_file_button {
+			.cmb2-remove-file-button {
 				background: url(../images/ico-delete.png);
 				height: 16px;
 				left: -5px;
@@ -357,23 +361,23 @@ Main Wrap
 
 		}
 
-		.img_status {
+		.img-status {
 
-			.cmb2_remove_file_button {
+			.cmb2-remove-file-button {
 				top: 10px;
 			}
 		}
 
 	}
 
-	.cmb-type-file_list .cmb2_media_status .img_status {
+	.cmb-type-file-list .cmb2-media-status .img-status {
 		clear: none;
 		float: left;
 		margin-right: 10px;
 		width: auto;
 	}
 
-	.attach_list li {
+	.attach-list li {
 		clear: both;
 		display: inline-block;
 		margin-bottom: 25px;
@@ -386,7 +390,7 @@ Main Wrap
 		}
 	}
 
-	.cmb2_remove_wrapper {
+	.cmb2-remove-wrapper {
 		margin: 0;
 	}
 
@@ -410,7 +414,7 @@ Main Wrap
 
 @media (max-width: $mobile-break) {
 
-	.cmb2_wrap {
+	.cmb2-wrap {
 
 		.cmb-th,
 		.cmb-td,

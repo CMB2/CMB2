@@ -14,6 +14,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'fields' => array(
 				array(
 					'name' => 'Name',
+					'description' => 'Description',
 					'id'   => 'test_test',
 					'type' => 'text',
 				),
@@ -155,18 +156,18 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			<input type="hidden" name="object_id" value="'. $this->post_id .'">
 			'.wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
 			<!-- Begin CMB Fields -->
-			<div class="cmb2_wrap form-table">
-				<ul id="cmb2_metabox_'. $this->cmb_id .'" class="cmb2_metabox">
-					<li class="cmb-row cmb-type-text cmb2_id_test_test">
+			<div class="cmb2-wrap form-table">
+				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
+					<div class="cmb-row cmb-type-text cmb2-id-test-test">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
 						<div class="cmb-td">
 							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
-							<p class="cmb2_metabox_description"></p>
+							<p class="cmb2-metabox-description">Description</p>
 						</div>
-					</li>
-				</ul>
+					</div>
+				</div>
 			</div>
 			<!-- End CMB Fields -->
 			<input type="submit" name="submit-cmb" value="Save" class="button-primary">

@@ -428,14 +428,14 @@ class CMB2_Field {
 			return;
 		}
 
-		$classes    = 'cmb-type-'. sanitize_html_class( $this->type() );
-		$classes   .= ' cmb2_id_'. sanitize_html_class( $this->id() );
+		$classes    = 'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) );
+		$classes   .= ' cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) );
 		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
 		$classes   .= $this->group ? ' cmb-repeat-group-field' : '';
 		// 'inline' flag, or _inline in the field type, set to true
 		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
-		printf( "<li class=\"cmb-row %s\">\n", $classes );
+		printf( "<div class=\"cmb-row %s\">\n", $classes );
 
 		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
 			echo "\t<div class=\"cmb-td\">\n";
@@ -458,7 +458,7 @@ class CMB2_Field {
 
 		echo $this->args( 'after' );
 
-		echo "\n\t</div>\n</li>";
+		echo "\n\t</div>\n</div>";
 	}
 
 	/**

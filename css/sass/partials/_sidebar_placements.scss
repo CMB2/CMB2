@@ -5,9 +5,9 @@ Sidebar Placement Adjustments
 .inner-sidebar,
 #side-sortables {
 
-	.cmb2_wrap {
+	.cmb2-wrap {
 
-		> ul > .cmb-row {
+		> .cmb-field-list > .cmb-row {
 			padding: 1.4em 0;
 		}
 
@@ -33,7 +33,7 @@ Sidebar Placement Adjustments
 			.cmb-th {
 				padding-top: 0;
 			}
-			.cmb2_metabox_description {
+			.cmb2-metabox-description {
 				padding: 0;
 			}
 		}
@@ -63,10 +63,10 @@ Sidebar Placement Adjustments
 			}
 		}
 
-		.cmb2_media_status {
+		.cmb2-media-status {
 
-			.img_status,
-			.embed_status {
+			.img-status,
+			.embed-status {
 
 				img {
 					max-width: 90%;
@@ -82,12 +82,12 @@ Sidebar Placement Adjustments
 			padding: 0 0 5px;
 		}
 
-		.cmb2_list label {
+		.cmb2-list label {
 			display: inline;
 			font-weight: normal;
 		}
 
-		.cmb2_metabox_description {
+		.cmb2-metabox-description {
 			display: block;
 			padding: 7px 0 0;
 		}
@@ -95,17 +95,17 @@ Sidebar Placement Adjustments
 		.cmb-type-checkbox {
 
 			.cmb-td label,
-			.cmb2_metabox_description {
+			.cmb2-metabox-description {
 				font-weight: normal;
 				display: inline;
 			}
 		}
 
-		.cmb-row .cmb2_metabox_description {
+		.cmb-row .cmb2-metabox-description {
 			padding-bottom: 1.8em;
 		}
 
-		.cmb2_metabox_title {
+		.cmb2-metabox-title {
 			font-size: 1.2em;
 			font-style: italic;
 		}
@@ -129,7 +129,7 @@ Sidebar Placement Adjustments
 			}
 		}
 
-		.cmb2_upload_button {
+		.cmb2-upload-button {
 			clear: both;
 			margin-top: 12px;
 		}
