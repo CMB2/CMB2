@@ -276,8 +276,8 @@ class CMB2_Types {
 				<?php $this->repeatable_rows(); ?>
 			</div>
 		</div>
-		<p class="add-row">
-			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
+		<p class="cmb-add-row">
+			<a data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button" href="#"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
 		</p>
 
 		<?php
@@ -327,7 +327,7 @@ class CMB2_Types {
 	 * @param  string  $disable_remover Whether remove button should be disabled
 	 * @param  string  $class Repeatable table row's class
 	 */
-	protected function repeat_row( $disable_remover = false, $class = 'repeat-row' ) {
+	protected function repeat_row( $disable_remover = false, $class = 'cmb-repeat-row' ) {
 		$disabled = $disable_remover ? 'disabled="disabled"' : '';
 		?>
 
@@ -335,8 +335,8 @@ class CMB2_Types {
 			<div class="cmb-td">
 				<?php $this->_render(); ?>
 			</div>
-			<div class="cmb-td remove-row">
-				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php echo esc_html( $this->_text( 'remove_row_text', __( 'Remove', 'cmb2' ) ) ); ?></a>
+			<div class="cmb-td cmb-remove-row">
+				<a class="button cmb-remove-row-button" <?php echo $disabled; ?> href="#"><?php echo esc_html( $this->_text( 'remove_row_text', __( 'Remove', 'cmb2' ) ) ); ?></a>
 			</div>
 		</div>
 
@@ -754,7 +754,7 @@ class CMB2_Types {
 			'name'  => '', 'id'  => '',
 		) );
 
-		echo '<ul id="', $this->_id( '-status' ) ,'" class="cmb2-media-status attach-list">';
+		echo '<ul id="', $this->_id( '-status' ) ,'" class="cmb2-media-status cmb-attach-list">';
 
 		if ( $meta_value && is_array( $meta_value ) ) {
 
