@@ -14,6 +14,8 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 
 CMB2 will create metaboxes and forms with custom fields that will blow your mind.
 
+**This is the production version. The development version is [on Github](https://github.com/WebDevStudios/CMB2).**
+
 **CMB2 is in beta and is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). Much of the documentation available [in the wiki](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki) is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg).**
 
 ##### Notable Changes in CMB2 (from original CMB)
