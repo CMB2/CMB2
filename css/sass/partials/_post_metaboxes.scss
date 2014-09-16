@@ -4,10 +4,10 @@ Post Metaboxes
 
 .postbox-container {
 
-	.cmb2_wrap {
+	.cmb2-wrap {
 		margin: 0;
 
-		> ul > .cmb-row {
+		> .cmb-field-list > .cmb-row {
 			padding: 1.8em 0;
 		}
 	}
@@ -68,7 +68,7 @@ Post Metaboxes
 
 	input[type=text] {
 
-		&.cmb2_oembed {
+		&.cmb2-oembed {
 			width: 100%;
 		}
 	}

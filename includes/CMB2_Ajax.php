@@ -130,7 +130,7 @@ class CMB2_Ajax {
 
 		// Send back our embed
 		if ( $check_embed && $check_embed != $fallback ) {
-			return '<div class="embed_status">' . $check_embed . '<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="' . $args['field_id'] . '">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
+			return '<div class="embed-status">' . $check_embed . '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="' . $args['field_id'] . '">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
 		}
 
 		// Otherwise, send back error info that no oEmbeds were found

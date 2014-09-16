@@ -235,7 +235,7 @@ class CMB2_Types {
 	public function list_input( $args = array(), $i ) {
 		$args = $this->parse_args( $args, 'list_input', array(
 			'type'  => 'radio',
-			'class' => 'cmb2_option',
+			'class' => 'cmb2-option',
 			'name'  => $this->_name(),
 			'id'    => $this->_id( $i ),
 			'value' => $this->field->escaped_value(),
@@ -272,9 +272,9 @@ class CMB2_Types {
 		?>
 
 		<div id="<?php echo $table_id; ?>" class="cmb-repeat-table cmb-nested">
-			<ul class="cmb-tbody">
+			<div class="cmb-tbody cmb-field-list">
 				<?php $this->repeatable_rows(); ?>
-			</ul>
+			</div>
 		</div>
 		<p class="add-row">
 			<a data-selector="<?php echo $table_id; ?>" class="add-row-button button" href="#"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
@@ -331,14 +331,14 @@ class CMB2_Types {
 		$disabled = $disable_remover ? 'disabled="disabled"' : '';
 		?>
 
-		<li class="cmb-row <?php echo $class; ?>">
+		<div class="cmb-row <?php echo $class; ?>">
 			<div class="cmb-td">
 				<?php $this->_render(); ?>
 			</div>
 			<div class="cmb-td remove-row">
 				<a class="button remove-row-button" <?php echo $disabled; ?> href="#"><?php echo esc_html( $this->_text( 'remove_row_text', __( 'Remove', 'cmb2' ) ) ); ?></a>
 			</div>
-		</li>
+		</div>
 
 		<?php
 	}
@@ -363,7 +363,7 @@ class CMB2_Types {
 		}
 
 		$tag = $paragraph ? 'p' : 'span';
-		$desc = "\n<$tag class=\"cmb2_metabox_description\">{$desc}</$tag>\n";
+		$desc = "\n<$tag class=\"cmb2-metabox-description\">{$desc}</$tag>\n";
 		if ( $echo )
 			echo $desc;
 		return $desc;
@@ -440,39 +440,39 @@ class CMB2_Types {
 	}
 
 	public function text_small() {
-		return $this->input( array( 'class' => 'cmb2_text_small', 'desc' => $this->_desc() ) );
+		return $this->input( array( 'class' => 'cmb2-text-small', 'desc' => $this->_desc() ) );
 	}
 
 	public function text_medium() {
-		return $this->input( array( 'class' => 'cmb2_text_medium', 'desc' => $this->_desc() ) );
+		return $this->input( array( 'class' => 'cmb2-text-medium', 'desc' => $this->_desc() ) );
 	}
 
 	public function text_email() {
-		return $this->input( array( 'class' => 'cmb2_text_email cmb2_text_medium', 'type' => 'email' ) );
+		return $this->input( array( 'class' => 'cmb2-text-email cmb2-text-medium', 'type' => 'email' ) );
 	}
 
 	public function text_url() {
-		return $this->input( array( 'class' => 'cmb2_text_url cmb2_text_medium regular-text', 'value' => $this->field->escaped_value( 'esc_url' ) ) );
+		return $this->input( array( 'class' => 'cmb2-text-url cmb2-text-medium regular-text', 'value' => $this->field->escaped_value( 'esc_url' ) ) );
 	}
 
 	public function text_date() {
-		return $this->input( array( 'class' => 'cmb2_text_small cmb2_datepicker', 'desc' => $this->_desc() ) );
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc() ) );
 	}
 
 	public function text_time() {
-		return $this->input( array( 'class' => 'cmb2_timepicker text_time', 'desc' => $this->_desc() ) );
+		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc() ) );
 	}
 
 	public function text_money() {
-		return ( ! $this->field->args( 'before' ) ? '$ ' : ' ' ) . $this->input( array( 'class' => 'cmb2_text_money', 'desc' => $this->_desc() ) );
+		return ( ! $this->field->args( 'before' ) ? '$ ' : ' ' ) . $this->input( array( 'class' => 'cmb2-text-money', 'desc' => $this->_desc() ) );
 	}
 
 	public function textarea_small() {
-		return $this->textarea( array( 'class' => 'cmb2_textarea_small', 'rows' => 4 ) );
+		return $this->textarea( array( 'class' => 'cmb2-textarea-small', 'rows' => 4 ) );
 	}
 
 	public function textarea_code() {
-		return sprintf( '<pre>%s', $this->textarea( array( 'class' => 'cmb2_textarea_code', 'desc' => '</pre>' . $this->_desc( true ) )  ) );
+		return sprintf( '<pre>%s', $this->textarea( array( 'class' => 'cmb2-textarea-code', 'desc' => '</pre>' . $this->_desc( true ) )  ) );
 	}
 
 	public function wysiwyg( $args = array() ) {
@@ -490,7 +490,7 @@ class CMB2_Types {
 	public function text_date_timestamp() {
 		$meta_value = $this->field->escaped_value();
 		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '';
-		return $this->input( array( 'class' => 'cmb2_text_small cmb2_datepicker', 'value' => $value ) );
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $value ) );
 	}
 
 	public function text_datetime_timestamp( $meta_value = '' ) {
@@ -507,14 +507,14 @@ class CMB2_Types {
 
 		$inputs = array(
 			$this->input( array(
-				'class' => 'cmb2_text_small cmb2_datepicker',
+				'class' => 'cmb2-text-small cmb2-datepicker',
 				'name'  => $this->_name( '[date]' ),
 				'id'    => $this->_id( '_date' ),
 				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '',
 				'desc'  => '',
 			) ),
 			$this->input( array(
-				'class' => 'cmb2_timepicker text_time',
+				'class' => 'cmb2-timepicker text-time',
 				'name'  => $this->_name( '[time]' ),
 				'id'    => $this->_id( '_time' ),
 				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'time_format' ), $meta_value ) : '',
@@ -566,13 +566,13 @@ class CMB2_Types {
 		elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta_value ) ) { // Value doesn't match #123abc, so sanitize to just #.
 			$meta_value = "#";
 		}
-		return $this->input( array( 'class' => 'cmb2_colorpicker cmb2_text_small', 'value' => $meta_value ) );
+		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
 
 	public function title() {
 		extract( $this->parse_args( array(), 'title', array(
 			'tag'   => $this->field->object_type == 'post' ? 'h5' : 'h3',
-			'class' => 'cmb2_metabox_title',
+			'class' => 'cmb2-metabox-title',
 			'name'  => $this->field->args( 'name' ),
 			'desc'  => $this->_desc( true ),
 		) ) );
@@ -618,7 +618,7 @@ class CMB2_Types {
 
 	public function radio( $args = array(), $type = 'radio' ) {
 		extract( $this->parse_args( $args, $type, array(
-			'class'   => 'cmb2_radio_list cmb2_list',
+			'class'   => 'cmb2-radio-list cmb2-list',
 			'options' => $this->concat_options( array( 'label' => 'test' ) ),
 			'desc'    => $this->_desc( true ),
 		) ) );
@@ -633,8 +633,8 @@ class CMB2_Types {
 	public function multicheck( $type = 'checkbox' ) {
 
 		$classes = false === $this->field->args( 'select_all_button' )
-			? 'cmb2_checkbox_list no_select_all cmb2_list'
-			: 'cmb2_checkbox_list cmb2_list';
+			? 'cmb2-checkbox-list no-select-all cmb2-list'
+			: 'cmb2-checkbox-list cmb2-list';
 
 		return $this->radio( array( 'class' => $classes, 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
 	}
@@ -645,7 +645,7 @@ class CMB2_Types {
 
 	public function checkbox() {
 		$meta_value = $this->field->escaped_value();
-		$args = array( 'type' => 'checkbox', 'class' => 'cmb2_option cmb2_list', 'value' => 'on', 'desc' => '' );
+		$args = array( 'type' => 'checkbox', 'class' => 'cmb2-option cmb2-list', 'value' => 'on', 'desc' => '' );
 		if ( ! empty( $meta_value ) ) {
 			$args['checked'] = 'checked';
 		}
@@ -727,8 +727,8 @@ class CMB2_Types {
 		}
 
 		$classes = false === $this->field->args( 'select_all_button' )
-			? 'cmb2_checkbox_list no_select_all cmb2_list'
-			: 'cmb2_checkbox_list cmb2_list';
+			? 'cmb2-checkbox-list no-select-all cmb2-list'
+			: 'cmb2-checkbox-list cmb2-list';
 
 		return $this->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' );
 	}
@@ -744,17 +744,17 @@ class CMB2_Types {
 
 		echo $this->input( array(
 			'type'  => 'hidden',
-			'class' => 'cmb2_upload_file cmb2_upload_list',
+			'class' => 'cmb2-upload-file cmb2-upload-list',
 			'size'  => 45, 'desc'  => '', 'value'  => '',
 		) ),
 		$this->input( array(
 			'type'  => 'button',
-			'class' => 'cmb2_upload_button button cmb2_upload_list',
+			'class' => 'cmb2-upload-button button cmb2-upload-list',
 			'value'  => esc_html( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ),
 			'name'  => '', 'id'  => '',
 		) );
 
-		echo '<ul id="', $this->_id( '_status' ) ,'" class="cmb2_media_status attach_list">';
+		echo '<ul id="', $this->_id( '-status' ) ,'" class="cmb2-media-status attach-list">';
 
 		if ( $meta_value && is_array( $meta_value ) ) {
 
@@ -769,9 +769,9 @@ class CMB2_Types {
 
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
 					echo
-					'<li class="img_status">',
+					'<li class="img-status">',
 						wp_get_attachment_image( $id, $this->field->args( 'preview_size' ) ),
-						'<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
+						'<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
 						'. $id_input .'
 					</li>';
 
@@ -782,7 +782,7 @@ class CMB2_Types {
 					}
 					echo
 					'<li>',
-						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file_download_text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2_remove_file_button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
+						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
 						', $id_input ,'
 					</li>';
 				}
@@ -801,11 +801,11 @@ class CMB2_Types {
 
 		echo $this->input( array(
 			'type'  => $input_type,
-			'class' => 'cmb2_upload_file',
+			'class' => 'cmb2-upload-file',
 			'size'  => 45,
 			'desc'  => '',
 		) ),
-		'<input class="cmb2_upload_button button" type="button" value="'. esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) .'" />',
+		'<input class="cmb2-upload-button button" type="button" value="'. esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) .'" />',
 		$this->_desc( true );
 
 		$cached_id = $this->_id();
@@ -832,17 +832,17 @@ class CMB2_Types {
 
 		echo $this->input( array(
 			'type'  => 'hidden',
-			'class' => 'cmb2_upload_file_id',
+			'class' => 'cmb2-upload-file-id',
 			'value' => $_id_value,
 			'desc'  => '',
 		) ),
-		'<div id="', $this->_id( '_status' ) ,'" class="cmb2_media_status">';
+		'<div id="', $this->_id( '-status' ) ,'" class="cmb2-media-status">';
 			if ( ! empty( $meta_value ) ) {
 
 				if ( $this->is_valid_img_ext( $meta_value ) ) {
-					echo '<div class="img_status">';
+					echo '<div class="img-status">';
 					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta_value, '" alt="" />';
-					echo '<p class="cmb2_remove_wrapper"><a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
+					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
 					// $file_ext = $this->get_file_ext( $meta_value );
@@ -850,7 +850,7 @@ class CMB2_Types {
 					for ( $i = 0; $i < count( $parts ); ++$i ) {
 						$title = $parts[$i];
 					}
-					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file_download_text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2_remove_file_button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
+					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
 				}
 			}
 		echo '</div>';
@@ -858,12 +858,12 @@ class CMB2_Types {
 
 	public function oembed() {
 		echo $this->input( array(
-			'class'           => 'cmb2_oembed regular-text',
+			'class'           => 'cmb2-oembed regular-text',
 			'data-objectid'   => $this->field->object_id,
 			'data-objecttype' => $this->field->object_type
 		) ),
 		'<p class="cmb-spinner spinner" style="display:none;"><img src="'. admin_url( '/images/wpspin_light.gif' ) .'" alt="spinner"/></p>',
-		'<div id="',$this->_id( '_status' ) ,'" class="cmb2_media_status ui-helper-clearfix embed_wrap">';
+		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">';
 
 			if ( $meta_value = $this->field->escaped_value() ) {
 				echo cmb2_get_oembed( array(

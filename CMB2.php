@@ -129,7 +129,7 @@ class CMB2 {
 		 */
 		do_action( 'cmb2_before_form', $this->cmb_id, $object_id, $object_type, $this );
 
-		echo '<div class="cmb2_wrap form-table"><ul id="cmb2_metabox_'. sanitize_html_class( $this->cmb_id ) .'" class="cmb2_metabox">';
+		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-'. sanitize_html_class( $this->cmb_id ) .'" class="cmb2-metabox cmb-field-list">';
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 
@@ -165,7 +165,7 @@ class CMB2 {
 			}
 		}
 
-		echo '</ul></div>';
+		echo '</div></div>';
 
 		$this->render_hidden_fields();
 
@@ -205,15 +205,15 @@ class CMB2 {
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 
-		echo '<li class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><ul id="', $field_group->id(), '_repeat" class="cmb-nested repeatable-group'. $sortable .'" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list repeatable-group'. $sortable .'" style="width:100%;">';
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
-			echo '<li class="cmb-row'. $class .'"><div class="cmb-th">';
+			echo '<div class="cmb-row'. $class .'"><div class="cmb-th">';
 				if ( $label )
 					echo '<h2 class="cmb-group-name">'. $label .'</h2>';
 				if ( $desc )
-					echo '<p class="cmb2_metabox_description">'. $desc .'</p>';
-			echo '</div></li>';
+					echo '<p class="cmb2-metabox-description">'. $desc .'</p>';
+			echo '</div></div>';
 		}
 
 		if ( ! empty( $group_val ) ) {
@@ -225,25 +225,25 @@ class CMB2 {
 			$this->render_group_row( $field_group, $remove_disabled );
 		}
 
-		echo '<li class="cmb-row"><div class="cmb-td"><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" data-grouptitle="', $field_group->options( 'group_title' ) ,'" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></div></li>';
+		echo '<div class="cmb-row"><div class="cmb-td"><p class="add-row"><button data-selector="', $field_group->id() ,'_repeat" data-grouptitle="', $field_group->options( 'group_title' ) ,'" class="add-group-row button">'. $field_group->options( 'add_button' ) .'</button></p></div></div>';
 
-		echo '</ul></div></li>';
+		echo '</div></div></div>';
 
 	}
 
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<li class="cmb-row repeatable-grouping" data-iterator="'. $field_group->count() .'">
+		<div class="cmb-row repeatable-grouping" data-iterator="'. $field_group->count() .'">
 			<div class="cmb-td">
-				<ul class="cmb-nested" style="width: 100%;">';
+				<div class="cmb-nested cmb-field-list" style="width: 100%;">';
 				if ( $field_group->options( 'group_title' ) ) {
 					echo '
-					<li class="cmb-row cmb-group-title">
+					<div class="cmb-row cmb-group-title">
 						<div class="cmb-th">
 							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
 						</div>
-					</li>
+					</div>
 					';
 				}
 				// Loop and render repeatable group fields
@@ -268,14 +268,14 @@ class CMB2 {
 					}
 				}
 				echo '
-					<li class="cmb-row remove-field-row">
+					<div class="cmb-row remove-field-row">
 						<div class="remove-row">
 							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 						</div>
-					</li>
-				</ul>
+					</div>
+				</div>
 			</div>
-		</li>
+		</div>
 		';
 
 		$field_group->args['count']++;
