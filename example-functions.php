@@ -137,7 +137,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc' => __( 'field description (optional)', 'cmb2' ),
 				'id'   => $prefix . 'test_textmoney',
 				'type' => 'text_money',
-				// 'before'     => '£', // override '$' symbol if needed
+				// 'before_field' => '£', // override '$' symbol if needed
 				// 'repeatable' => true,
 			),
 			array(
