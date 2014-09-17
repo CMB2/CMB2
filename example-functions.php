@@ -11,7 +11,11 @@
 /**
  * Get the bootstrap! If using the plugin from wordpress.org, REMOVE THIS!
  */
-require_once 'cmb2/init.php';
+if ( file_exists( 'cmb2/init.php' ) ) {
+	require_once 'cmb2/init.php';
+} elseif ( file_exists( 'CMB2/init.php' ) ) {
+	require_once 'CMB2/init.php';
+}
 
 /**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
