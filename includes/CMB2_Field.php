@@ -511,7 +511,9 @@ class CMB2_Field {
 		if ( ! isset( $args['description'] ) ) {
 			$args['description'] = isset( $args['desc'] ) ? $args['desc'] : '';
 		}
-		if ( ! isset( $args['preview_size'] ) ) $args['preview_size'] = array( 50, 50 );
+		if ( ! isset( $args['preview_size'] ) ) {
+			$args['preview_size'] = 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 );
+		}
 		if ( ! isset( $args['date_format'] ) ) $args['date_format'] = 'm\/d\/Y';
 		if ( ! isset( $args['time_format'] ) ) $args['time_format'] = 'h:i A';
 		// Allow a filter override of the default value
