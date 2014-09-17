@@ -842,8 +842,18 @@ class CMB2_Types {
 			if ( ! empty( $meta_value ) ) {
 
 				if ( $this->is_valid_img_ext( $meta_value ) ) {
+
 					echo '<div class="img-status">';
-					echo '<img style="max-width: 350px; width: 100%; height: auto;" src="', $meta_value, '" alt="" />';
+					if ( $_id_value ) {
+
+						$image = wp_get_attachment_image( $_id_value, $this->field->args( 'preview_size' ), null, array( 'class' => 'cmb-file-field-image' ) );
+					} else {
+
+						$size = $this->field->args( 'preview_size' );
+						$image = '<img style="max-width: '. absint( $size[0] ) .'px; width: 100%; height: auto;" src="'. $meta_value .'" alt="" />';
+					}
+
+					echo $image;
 					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
