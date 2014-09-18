@@ -122,7 +122,7 @@ class CMB2_Utils {
 		 *
 		 * @param string $cmb2_url Currently registered url
 		 */
-		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', $cmb2_url, CMB2_VERSION ) );
+		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', set_url_scheme( $cmb2_url ), CMB2_VERSION ) );
 
 		return $this->url . $path;
 	}
