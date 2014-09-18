@@ -117,16 +117,12 @@ class CMB2_Utils {
 			);
 		}
 
-		if ( is_ssl() ) {
-			$cmb2_url = str_ireplace( 'http://', 'https://', $cmb2_url );
-		}
-
 		/**
 		 * Filter the CMB location url
 		 *
 		 * @param string $cmb2_url Currently registered url
 		 */
-		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', $cmb2_url ), CMB2_VERSION );
+		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', $cmb2_url, CMB2_VERSION ) );
 
 		return $this->url . $path;
 	}
