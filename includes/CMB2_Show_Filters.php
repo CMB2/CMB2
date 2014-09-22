@@ -20,7 +20,7 @@ class CMB2_Show_Filters {
 	 *
 	 * @return string|false         show_on key or false
 	 */
-	public function get_show_on_key( $meta_box_args ) {
+	public static function get_show_on_key( $meta_box_args ) {
 		$show_on = isset( $meta_box_args['show_on'] ) ? (array) $meta_box_args['show_on'] : false;
 		if ( $show_on && is_array( $show_on ) ) {
 
@@ -44,7 +44,7 @@ class CMB2_Show_Filters {
 	 *
 	 * @return mixed                show_on value or false
 	 */
-	public function get_show_on_value( $meta_box_args ) {
+	public static function get_show_on_value( $meta_box_args ) {
 		$show_on = isset( $meta_box_args['show_on'] ) ? (array) $meta_box_args['show_on'] : false;
 
 		if ( $show_on && is_array( $show_on ) ) {
@@ -70,7 +70,7 @@ class CMB2_Show_Filters {
 	 */
 	public static function check_id( $display, $meta_box_args, $cmb ) {
 
-		$key = $this->get_show_on_key( $meta_box_args );
+		$key = self::get_show_on_key( $meta_box_args );
 		if ( ! $key || 'id' !== $key ) {
 			return $display;
 		}
@@ -81,7 +81,7 @@ class CMB2_Show_Filters {
 			return false;
 
 		// If current page id is in the included array, display the metabox
-		return in_array( $object_id, (array) $this->get_show_on_value( $meta_box_args ) );
+		return in_array( $object_id, (array) self::get_show_on_value( $meta_box_args ) );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class CMB2_Show_Filters {
 	 */
 	public static function check_page_template( $display, $meta_box_args, $cmb ) {
 
-		$key = $this->get_show_on_key( $meta_box_args );
+		$key = self::get_show_on_key( $meta_box_args );
 		if ( ! $key || 'page-template' !== $key ) {
 			return $display;
 		}
@@ -108,7 +108,7 @@ class CMB2_Show_Filters {
 		$current_template = get_post_meta( $object_id, '_wp_page_template', true );
 
 		// See if there's a match
-		if ( $current_template && in_array( $current_template, (array) $this->get_show_on_value( $meta_box_args ) ) ) {
+		if ( $current_template && in_array( $current_template, (array) self::get_show_on_value( $meta_box_args ) ) ) {
 			return true;
 		}
 
@@ -124,7 +124,7 @@ class CMB2_Show_Filters {
 	 */
 	public static function check_admin_page( $display, $meta_box_args ) {
 
-		$key = $this->get_show_on_key( $meta_box_args );
+		$key = self::get_show_on_key( $meta_box_args );
 		// check if this is a 'options-page' metabox
 		if ( ! $key || 'options-page' !== $key ) {
 			return $display;
@@ -138,7 +138,7 @@ class CMB2_Show_Filters {
 				return $display;
 			}
 
-			$show_on = $this->get_show_on_value( $meta_box_args );
+			$show_on = self::get_show_on_value( $meta_box_args );
 
 			if ( empty( $show_on ) ) {
 				return false;
