@@ -20,7 +20,7 @@ class CMB2_Show_Filters {
 	 *
 	 * @return string|false         show_on key or false
 	 */
-	public static function get_show_on_key( $meta_box_args ) {
+	private static function get_show_on_key( $meta_box_args ) {
 		$show_on = isset( $meta_box_args['show_on'] ) ? (array) $meta_box_args['show_on'] : false;
 		if ( $show_on && is_array( $show_on ) ) {
 
@@ -44,7 +44,7 @@ class CMB2_Show_Filters {
 	 *
 	 * @return mixed                show_on value or false
 	 */
-	public static function get_show_on_value( $meta_box_args ) {
+	private static function get_show_on_value( $meta_box_args ) {
 		$show_on = isset( $meta_box_args['show_on'] ) ? (array) $meta_box_args['show_on'] : false;
 
 		if ( $show_on && is_array( $show_on ) ) {
