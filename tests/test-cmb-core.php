@@ -39,7 +39,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$this->option_metabox_array = array(
 			'id'            => 'options_page',
 			'title'         => 'Theme Options Metabox',
-			'show_on'    => array( 'key' => 'options-page', 'value' => array( 'theme_options', ), ),
+			'show_on'    => array( 'options-page' => array( 'theme_options', ), ),
 			'fields'        => array(
 				array(
 					'name'    => 'Site Background Color',
@@ -63,10 +63,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'fields'           => array(),
 			'hookup'           => 1,
 			'new_user_section' => 'add-new-user',
-			'show_on'          => array(
-				'key'   => false,
-				'value' => false,
-			),
+			'show_on'          => array(),
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
