@@ -80,7 +80,7 @@ class CMB2 {
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on'      => array( 'key' => false, 'value' => false ), // Specific post IDs or page templates to display this metabox
+		'show_on'      => array(), // Specific post IDs or page templates to display this metabox
 		'cmb_styles'   => true, // Include cmb bundled stylesheet
 		'fields'       => array(),
 		'hookup'       => true,
@@ -345,7 +345,7 @@ class CMB2 {
 	 * @since  2.0.0
 	 */
 	public function process_fields() {
-		$this->prop( 'show_on', array( 'key' => false, 'value' => false ) );
+		$this->prop( 'show_on', array() );
 
 		// save field ids of those that are updated
 		$this->updated = array();
@@ -553,7 +553,7 @@ class CMB2 {
 	 * @return boolean True/False
 	 */
 	public function is_options_page_mb() {
-		return ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] );
+		return ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] || array_key_exists( 'options-page', $this->meta_box['show_on'] ) );
 	}
 
 	/**
