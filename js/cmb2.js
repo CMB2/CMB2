@@ -145,6 +145,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $self        = $(this);
 		cmb.formfield    = $self.prev('input').attr('id');
 		var $formfield   = $('#'+cmb.formfield);
+		var previewSize  = $formfield.data( 'previewsize' );
 		var formName     = $formfield.attr('name');
 		var uploadStatus = true;
 		var attachment   = true;
@@ -179,9 +180,12 @@ window.CMB2 = (function(window, document, $, undefined){
 				// Loop through each attachment
 				$( attachment ).each( function() {
 					if ( this.type && this.type === 'image' ) {
+						var width = previewSize[0] ? previewSize[0] : 50;
+						var height = previewSize[1] ? previewSize[1] : 50;
+
 						// image preview
 						uploadStatus = '<li class="img-status">'+
-							'<img width="50" height="50" src="' + this.url + '" class="attachment-50x50" alt="'+ this.filename +'">'+
+							'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
 							'<p><a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
 							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
 						'</li>';
@@ -212,7 +216,8 @@ window.CMB2 = (function(window, document, $, undefined){
 
 				if ( attachment.type && attachment.type === 'image' ) {
 					// image preview
-					uploadStatus = '<div class="img-status"><img style="max-width: 350px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
+					var width = previewSize[0] ? previewSize[0] : 350;
+					uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
 				} else {
 					// Standard generic output if it's not an image.
 					uploadStatus = l10n.strings.file +' <strong>'+ attachment.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'">'+ l10n.strings.remove_file +'</a>)';
