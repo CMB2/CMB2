@@ -741,13 +741,14 @@ class CMB2_Types {
 
 	public function file_list() {
 		$meta_value = $this->field->escaped_value();
-
-		$name = $this->_name();
+		$name       = $this->_name();
+		$img_size   = $this->field->args( 'preview_size' );
 
 		echo $this->input( array(
 			'type'  => 'hidden',
 			'class' => 'cmb2-upload-file cmb2-upload-list',
 			'size'  => 45, 'desc'  => '', 'value'  => '',
+			'data-previewsize' => is_array( $img_size ) ? '['. implode( ',', $img_size ) .']' : 50,
 		) ),
 		$this->input( array(
 			'type'  => 'button',
@@ -772,7 +773,7 @@ class CMB2_Types {
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
 					echo
 					'<li class="img-status">',
-						wp_get_attachment_image( $id, $this->field->args( 'preview_size' ) ),
+						wp_get_attachment_image( $id, $img_size ),
 						'<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
 						'. $id_input .'
 					</li>';
@@ -797,6 +798,7 @@ class CMB2_Types {
 	public function file() {
 		$meta_value = $this->field->escaped_value();
 		$options    = (array) $this->field->args( 'options' );
+		$img_size   = $this->field->args( 'preview_size' );
 
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
@@ -806,6 +808,7 @@ class CMB2_Types {
 			'class' => 'cmb2-upload-file',
 			'size'  => 45,
 			'desc'  => '',
+			'data-previewsize' => is_array( $img_size ) ? '['. implode( ',', $img_size ) .']' : 350,
 		) ),
 		'<input class="cmb2-upload-button button" type="button" value="'. esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) .'" />',
 		$this->_desc( true );
@@ -846,11 +849,11 @@ class CMB2_Types {
 					echo '<div class="img-status">';
 					if ( $_id_value ) {
 
-						$image = wp_get_attachment_image( $_id_value, $this->field->args( 'preview_size' ), null, array( 'class' => 'cmb-file-field-image' ) );
+						$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
 					} else {
 
-						$size = $this->field->args( 'preview_size' );
-						$image = '<img style="max-width: '. absint( $size[0] ) .'px; width: 100%; height: auto;" src="'. $meta_value .'" alt="" />';
+						$size = is_array( $img_size ) ? $img_size[0] : 350;
+						$image = '<img style="max-width: '. absint( $size ) .'px; width: 100%; height: auto;" src="'. $meta_value .'" alt="" />';
 					}
 
 					echo $image;
