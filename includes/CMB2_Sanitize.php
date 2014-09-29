@@ -65,7 +65,7 @@ class CMB2_Sanitize {
 		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
-			return $updated;
+			return $override_value;
 		}
 
 		switch ( $this->field->type() ) {
@@ -330,7 +330,7 @@ class CMB2_Sanitize {
 		if ( $id_val && $id_val != $id_val_old ) {
 			return $field->update_data( $id_val );
 		} elseif ( empty( $id_val ) && $id_val_old ) {
-			return $field->remove_data( $old );
+			return $field->remove_data( $id_val_old );
 		}
 	}
 
@@ -341,10 +341,7 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file( $value ) {
-		// If NOT specified to NOT save the file ID
-		if ( $this->field->args( 'save_id' ) ) {
-			$id_value = $this->_save_file_id( $value );
-		}
+		$id_value = $this->_save_file_id( $value );
 		$clean = $this->text_url( $value );
 
 		// Return an array with url/id if saving a group field

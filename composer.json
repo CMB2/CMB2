@@ -1,0 +1,31 @@
+{
+    "name": "WebDevStudios/CMB2",
+    "description": "Custom Metaboxes and Fields (CMB) will create metaboxes and forms with custom fields that will blow your mind.",
+    "license": "GPL-2.0+",
+    "version": "2.0",
+    "keywords": ["wordpress", "plugin", "metabox"],
+    "homepage": "https://github.com/WebDevStudios/CMB2",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "WebDevStudios",
+            "email": "contact@webdevstudios.com",
+            "homepage": "https://github.com/WebDevStudios",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/WebDevStudios/CMB2/issues",
+        "source": "http://wordpress.org/support/plugin/cmb2"
+    },
+    "require": {
+        "php": ">5.2.4",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "files": ["init.php"]
+    }
+}

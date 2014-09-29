@@ -13,9 +13,14 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'id' => $this->cmb_id,
 			'fields' => array(
 				array(
-					'name' => 'Name',
-					'id'   => 'test_test',
-					'type' => 'text',
+					'name'        => 'Name',
+					'description' => 'Description',
+					'id'          => 'test_test',
+					'type'        => 'text',
+					'before_row'  => array( $this, 'cmb_before_row' ),
+					'before'      => 'testing before',
+					'after'       => array( $this, 'cmb_after' ),
+					'after_row'   => 'testing after row',
 				),
 			),
 		);
@@ -34,7 +39,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$this->option_metabox_array = array(
 			'id'            => 'options_page',
 			'title'         => 'Theme Options Metabox',
-			'show_on'    => array( 'key' => 'options-page', 'value' => array( 'theme_options', ), ),
+			'show_on'    => array( 'options-page' => array( 'theme_options', ), ),
 			'fields'        => array(
 				array(
 					'name'    => 'Site Background Color',
@@ -58,10 +63,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			'fields'           => array(),
 			'hookup'           => 1,
 			'new_user_section' => 'add-new-user',
-			'show_on'          => array(
-				'key'   => false,
-				'value' => false,
-			),
+			'show_on'          => array(),
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -153,20 +155,24 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$form = '
 		<form class="cmb-form" method="post" id="'. $this->cmb_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
 			<input type="hidden" name="object_id" value="'. $this->post_id .'">
-			'.wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
+			'. wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
 			<!-- Begin CMB Fields -->
-			<div class="cmb2_wrap form-table">
-				<ul id="cmb2_metabox_'. $this->cmb_id .'" class="cmb2_metabox">
-					<li class="cmb-row cmb-type-text cmb2_id_test_test">
+			<div class="cmb2-wrap form-table">
+				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
+					function test_before_row Description test_test
+					<div class="cmb-row cmb-type-text cmb2-id-test-test">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
 						<div class="cmb-td">
+							testing before
 							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
-							<p class="cmb2_metabox_description"></p>
+							<p class="cmb2-metabox-description">Description</p>
+							function test_after Description test_test
 						</div>
-					</li>
-				</ul>
+					</div>
+					testing after row
+				</div>
 			</div>
 			<!-- End CMB Fields -->
 			<input type="submit" name="submit-cmb" value="Save" class="button-primary">
@@ -176,6 +182,14 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
 
 		$this->assertEquals( $this->clean_string( $form_get ), $this->clean_string( $form ) );
+	}
+
+	public function cmb_before_row( $field_args, $field ) {
+		echo 'function test_before_row '. $field_args['description'] .' '. $field->id();
+	}
+
+	public function cmb_after( $field_args, $field ) {
+		echo 'function test_after '. $field_args['description'] .' '. $field->id();
 	}
 
 	public function test_cmb2_options() {

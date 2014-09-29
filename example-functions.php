@@ -9,9 +9,13 @@
  */
 
 /**
- * Get the bootstrap!
+ * Get the bootstrap! If using the plugin from wordpress.org, REMOVE THIS!
  */
-require_once 'cmb/init.php';
+if ( file_exists( 'cmb2/init.php' ) ) {
+	require_once 'cmb2/init.php';
+} elseif ( file_exists( 'CMB2/init.php' ) ) {
+	require_once 'CMB2/init.php';
+}
 
 /**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
@@ -137,7 +141,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc' => __( 'field description (optional)', 'cmb2' ),
 				'id'   => $prefix . 'test_textmoney',
 				'type' => 'text_money',
-				// 'before'     => '£', // override '$' symbol if needed
+				// 'before_field' => '£', // override '$' symbol if needed
 				// 'repeatable' => true,
 			),
 			array(
@@ -284,7 +288,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on'      => array( 'key' => 'id', 'value' => array( 2, ), ), // Specific post IDs to display this metabox
+		'show_on'      => array( 'id' => array( 2, ) ), // Specific post IDs to display this metabox
 		'fields'       => array(
 			array(
 				'name' => __( 'Test Text', 'cmb2' ),
@@ -364,7 +368,6 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc'    => __( 'field description (optional)', 'cmb2' ),
 				'id'      => $prefix . 'avatar',
 				'type'    => 'file',
-				'save_id' => true,
 			),
 			array(
 				'name' => __( 'Facebook URL', 'cmb2' ),
@@ -406,7 +409,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 	$meta_boxes['options_page'] = array(
 		'id'      => 'options_page',
 		'title'   => __( 'Theme Options Metabox', 'cmb2' ),
-		'show_on' => array( 'key' => 'options-page', 'value' => array( $prefix . 'theme_options', ), ),
+		'show_on' => array( 'options-page' => array( $prefix . 'theme_options', ), ),
 		'fields'  => array(
 			array(
 				'name'    => __( 'Site Background Color', 'cmb2' ),
