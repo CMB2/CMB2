@@ -515,18 +515,20 @@ span.cmb2-metabox-description
 
 .cmb2-metabox-title
 {
+    font-size: 14px;
+
     margin: 0 0 5px 0;
     padding: 5px 0 0 0;
 }
 
-/* line 322, sass/partials/_main_wrap.scss */
+/* line 323, sass/partials/_main_wrap.scss */
 
 .cmb-inline ul
 {
     padding: 4px 0 0 0;
 }
 
-/* line 326, sass/partials/_main_wrap.scss */
+/* line 327, sass/partials/_main_wrap.scss */
 
 .cmb-inline li
 {
@@ -535,14 +537,14 @@ span.cmb2-metabox-description
     padding-right: 18px;
 }
 
-/* line 331, sass/partials/_main_wrap.scss */
+/* line 332, sass/partials/_main_wrap.scss */
 
 .cmb-type-textarea-code pre
 {
     margin: 0;
 }
 
-/* line 337, sass/partials/_main_wrap.scss */
+/* line 338, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status
 {
@@ -554,14 +556,14 @@ span.cmb2-metabox-description
     margin-right: 10px;
 }
 
-/* line 344, sass/partials/_main_wrap.scss */
+/* line 345, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img
 {
     max-width: 350px;
 }
 
-/* line 349, sass/partials/_main_wrap.scss */
+/* line 350, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status
@@ -572,10 +574,10 @@ span.cmb2-metabox-description
     border: 1px solid #e9e9e9;
     -moz-border-radius: 2px;
          border-radius: 2px;
-    background: #fffff8;
+    background: #fff;
 }
 
-/* line 359, sass/partials/_main_wrap.scss */
+/* line 360, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .embed-status
 {
@@ -584,7 +586,7 @@ span.cmb2-metabox-description
     max-width: 800px;
 }
 
-/* line 364, sass/partials/_main_wrap.scss */
+/* line 365, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status,
 .cmb2-media-status .embed-status
@@ -592,7 +594,7 @@ span.cmb2-metabox-description
     position: relative;
 }
 
-/* line 367, sass/partials/_main_wrap.scss */
+/* line 368, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button,
 .cmb2-media-status .embed-status .cmb2-remove-file-button
@@ -609,14 +611,14 @@ span.cmb2-metabox-description
     background: url(../images/ico-delete.png);
 }
 
-/* line 381, sass/partials/_main_wrap.scss */
+/* line 382, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button
 {
     top: 10px;
 }
 
-/* line 388, sass/partials/_main_wrap.scss */
+/* line 389, sass/partials/_main_wrap.scss */
 
 .cmb-type-file-list .cmb2-media-status .img-status
 {
@@ -627,7 +629,7 @@ span.cmb2-metabox-description
     margin-right: 10px;
 }
 
-/* line 395, sass/partials/_main_wrap.scss */
+/* line 396, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li
 {
@@ -638,7 +640,7 @@ span.cmb2-metabox-description
     margin-bottom: 25px;
 }
 
-/* line 401, sass/partials/_main_wrap.scss */
+/* line 402, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li img
 {
@@ -649,14 +651,14 @@ span.cmb2-metabox-description
     cursor: move;
 }
 
-/* line 408, sass/partials/_main_wrap.scss */
+/* line 409, sass/partials/_main_wrap.scss */
 
 .cmb2-remove-wrapper
 {
     margin: 0;
 }
 
-/* line 412, sass/partials/_main_wrap.scss */
+/* line 413, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th
 {
@@ -701,7 +703,7 @@ div.time-picker li
     font-family: sans-serif;
     font-size: 14px;
 
-    height: 10px;
+    margin-bottom: 0;
     padding: 4px 3px;
 
     cursor: pointer;
@@ -1276,7 +1278,7 @@ Sidebar Placement Adjustments
 {
     color: #222;
     border: 1px solid #aaa;
-    background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    background: #fff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 }
 
 /* line 28, sass/partials/_jquery_ui.scss */
@@ -1364,7 +1366,7 @@ Sidebar Placement Adjustments
 
     color: #212121;
     border: 1px solid #aaa;
-    background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+    background: #fff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
 }
 
 /* line 36, sass/partials/_jquery_ui.scss */
@@ -3204,6 +3206,8 @@ Sidebar Placement Adjustments
     filter: mask(); /*must have*/
 }
 
+/*# sourceMappingURL=cmb2.css.map */
+
 @media (max-width: 450px)
 {
     /* line 200, sass/partials/_main_wrap.scss */
@@ -3245,7 +3249,7 @@ Sidebar Placement Adjustments
         border-bottom: 1px solid #e9e9e9;
     }
 
-    /* line 417, sass/partials/_main_wrap.scss */
+    /* line 418, sass/partials/_main_wrap.scss */
 
     .cmb-th,
     .cmb-td,
@@ -3265,3 +3269,4 @@ Sidebar Placement Adjustments
         border-bottom: 0;
     }
 }
+

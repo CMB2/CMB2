@@ -317,6 +317,7 @@ span.cmb2-metabox-description {
 .cmb2-metabox-title {
 	margin: 0 0 5px 0;
 	padding: 5px 0 0 0;
+	font-size: 14px;
 }
 
 .cmb-inline ul {
@@ -348,7 +349,7 @@ span.cmb2-metabox-description {
 
 	.img-status img,
 	.embed-status {
-		background: $light-yellow;
+		background: $white;
 		border: 1px solid $light-gray;
 		border-radius: 2px;
 		-moz-border-radius: 2px;
