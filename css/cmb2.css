@@ -421,8 +421,8 @@ Main Wrap
 
 .cmb-repeatable-group .cmb-group-title
 {
-    margin-right: -1em;
-    margin-left: -1em;
+    margin-right: -.75em;
+    margin-left: -.75em;
 
     background-color: #e9e9e9;
 }
@@ -809,10 +809,12 @@ Post Metaboxes
 
 .postbox-container .cmb-group-title
 {
+    margin-right: -1em;
+    margin-left: -1em;
     padding: 0;
 }
 
-/* line 39, sass/partials/_post_metaboxes.scss */
+/* line 41, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th
 {
@@ -820,7 +822,7 @@ Post Metaboxes
     padding: 0 2% 0 0;
 }
 
-/* line 45, sass/partials/_post_metaboxes.scss */
+/* line 47, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-td
 {
@@ -830,14 +832,14 @@ Post Metaboxes
     padding: 0;
 }
 
-/* line 51, sass/partials/_post_metaboxes.scss */
+/* line 53, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-row .cmb-td
 {
     padding-bottom: 1.8em;
 }
 
-/* line 55, sass/partials/_post_metaboxes.scss */
+/* line 57, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th + .cmb-td
 {
@@ -846,7 +848,7 @@ Post Metaboxes
     width: 80%;
 }
 
-/* line 60, sass/partials/_post_metaboxes.scss */
+/* line 62, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-row:not(:last-child),
 .postbox-container .cmb-repeatable-group:not(:last-child)
@@ -854,7 +856,7 @@ Post Metaboxes
     border-bottom: 1px solid #e9e9e9;
 }
 
-/* line 69, sass/partials/_post_metaboxes.scss */
+/* line 71, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-group-field,
 .postbox-container .cmb-remove-field-row
@@ -862,7 +864,7 @@ Post Metaboxes
     padding-top: 1.8em;
 }
 
-/* line 74, sass/partials/_post_metaboxes.scss */
+/* line 76, sass/partials/_post_metaboxes.scss */
 
 .postbox-container input.regular-text
 {
@@ -3299,7 +3301,7 @@ Sidebar Placement Adjustments
         width: 100%;
     }
 
-    /* line 60, sass/partials/_post_metaboxes.scss */
+    /* line 62, sass/partials/_post_metaboxes.scss */
 
     .postbox-container .cmb-row:not(:last-child),
     .postbox-container .cmb-repeatable-group:not(:last-child)
