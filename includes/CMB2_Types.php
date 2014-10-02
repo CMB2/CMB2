@@ -283,7 +283,7 @@ class CMB2_Types {
 			</div>
 		</div>
 		<p class="cmb-add-row">
-			<a data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button" href="#"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
+			<a data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button button-primary" href="#"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></a>
 		</p>
 
 		<?php
