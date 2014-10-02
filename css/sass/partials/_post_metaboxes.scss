@@ -33,9 +33,7 @@ Post Metaboxes
 	}
 
 	.cmb-group-title {
-		margin-right: -1em;
-		margin-left: -1em;
-		outline: 1px solid #fff;
+		padding: 0;
 	}
 
 	.cmb-th {
@@ -59,8 +57,8 @@ Post Metaboxes
 		float: right;
 	}
 
-	.cmb-row,
-	.cmb-repeatable-group {
+	.cmb-row:not(:last-child),
+	.cmb-repeatable-group:not(:last-child) {
 		border-bottom: 1px solid $light-gray;
 
 		@media (max-width: $mobile-break) {
@@ -73,4 +71,7 @@ Post Metaboxes
 		padding-top: 1.8em;
 	}
 
+	input.regular-text {
+		width: 100%;
+	}
 }
