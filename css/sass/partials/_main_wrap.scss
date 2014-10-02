@@ -174,32 +174,6 @@ Main Wrap
 			box-sizing: border-box;
 			float: left;
 		}
-
-		&.cmb-type-url,
-		&.cmb-type-text {
-			.cmb-repeat-table .cmb-tbody {
-				display: table;
-				width: 100%;
-
-				.cmb-row:not(.hidden):not(.empty-row) {
-					display: table-row;
-				}
-
-				.cmb-td {
-					display: table-cell;
-					float: none;
-					width: 100%;
-				}
-
-				.cmb-row:not(:first-child) .cmb-td {
-					padding-top: 1.8em;
-				}
-
-				.cmb-td.cmb-remove-row {
-					padding-right: 0;
-				}
-			}
-		}
 	}
 }
 
