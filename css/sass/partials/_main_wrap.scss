@@ -97,6 +97,11 @@ Main Wrap
 		padding: 0;
 	}
 
+	button,
+	.button {
+		white-space: nowrap;
+	}
+
 	.mceLayout {
 		border: 1px solid $light-gray !important;
 	}
