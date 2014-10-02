@@ -602,6 +602,38 @@ class CMB2 {
 	}
 
 	/**
+	 * Add a field to the metabox
+	 * @since 2.0.0
+	 * @param  array $args Metabox field config array
+	 * @return bool        True if field was added
+	 */
+	public function add_field( array $field ) {
+		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
+			return false;
+		}
+
+		$this->meta_box['fields'][ $field['id'] ] = $field;
+		return true;
+	}
+
+	/**
+	 * Update or add a property to a field
+	 * @since  2.0.0
+	 * @param  string  $field_id Field id
+	 * @param  string  $property Field property to set/update
+	 * @param  mixed   $value    Value to set the field property
+	 * @return bool              True if field was updated
+	 */
+	public function update_field_property( $field_id, $property, $value ) {
+		if ( ! array_key_exists( $this->meta_box['fields'], $field_id ) ) {
+			return false;
+		}
+
+		$this->meta_box['fields'][ $field_id ][ $property ] = $value;
+		return true;
+	}
+
+	/**
 	 * Generate a unique nonce field for each registered meta_box
 	 * @since  2.0.0
 	 * @return string unique nonce hidden input
