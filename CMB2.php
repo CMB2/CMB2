@@ -625,7 +625,7 @@ class CMB2 {
 	 * @return bool              True if field was updated
 	 */
 	public function update_field_property( $field_id, $property, $value ) {
-		if ( ! array_key_exists( $this->meta_box['fields'], $field_id ) ) {
+		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
 			return false;
 		}
 
