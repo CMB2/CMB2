@@ -443,7 +443,7 @@ class CMB2_Field {
 			echo "\t<div class=\"cmb-td\">\n";
 
 			if ( ! $this->args( 'show_names' ) ) {
-				$style = 'title' == $this->type() ? ' style="display:none;"' : '';
+				$style = 'title' == $this->type() ? '' : ' style="display:none;"';
 				printf( "\n<label%s for=\"%s\">%s</label>\n", $style, $this->id(), $this->args( 'name' ) );
 			}
 		} else {
