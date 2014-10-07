@@ -233,7 +233,10 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	// Show cmb form
 	printf( $format_parts[0], $cmb->cmb_id, $object_id );
 	$cmb->show_form();
-	printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
+
+	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
+		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
+	}
 
 }
 
