@@ -78,6 +78,7 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 
 ##### 3rd Party Resources
 * [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): Custom field type for attaching posts to a page.
+* [CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field): Custom field type, `post_search_text` which adds a post-search dialog for searching/attaching other post IDs.
 * [CMB Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
 	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
 * [CMB Field Type: Select2](https://github.com/mustardBees/cmb-field-select2) from [mustardBees](https://github.com/mustardBees): Custom field types which use the [Select2](http://ivaynberg.github.io/select2/) script:
