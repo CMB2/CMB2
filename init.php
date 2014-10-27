@@ -43,7 +43,7 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_200beta' ) ) {
+if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 
 	/**
 	 * Check for newest version of CMB
@@ -80,7 +80,7 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta' ) ) {
 		}
 
 		public function include_cmb() {
-			if ( ! class_exists( 'CMB2' ) ) {
+			if ( ! class_exists( 'CMB2', false ) ) {
 				if ( ! defined( 'CMB2_VERSION' ) ) {
 					define( 'CMB2_VERSION', self::VERSION );
 				}
