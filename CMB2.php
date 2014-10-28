@@ -233,19 +233,11 @@ class CMB2 {
 
 	public function render_group_row( $field_group, $remove_disabled ) {
 
-		echo '
-		<div class="cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
-			<div class="cmb-td">
-				<div class="cmb-nested cmb-field-list" style="width: 100%;">';
+		echo '<div class="postbox"><div class="handlediv" title="Click to toggle"><br></div>';
 				if ( $field_group->options( 'group_title' ) ) {
-					echo '
-					<div class="cmb-row cmb-group-title">
-						<div class="cmb-th">
-							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
-						</div>
-					</div>
-					';
+					echo sprintf( '<h3 class="hndle"><span>%1$s</span></h3>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) );
 				}
+		echo '<div class="cmb-row inside cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">';
 				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
@@ -274,8 +266,6 @@ class CMB2 {
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
 		';
 
 		$field_group->args['count']++;
