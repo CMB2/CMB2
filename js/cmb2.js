@@ -295,8 +295,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		$inputs.filter(':checked').removeAttr( 'checked' );
 		$inputs.filter(':selected').removeAttr( 'selected' );
 
-		if ( $self.find('.cmb-group-title').length ) {
-			$self.find( '.cmb-group-title h4' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
+		if ( $self.find('h3').length ) {
+			$self.find( 'h3' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
 
 		$inputs.each( function(){
@@ -458,7 +458,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
-		var $newRow = $( '<div class="cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
+		var $newRow = $( '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow, true );
