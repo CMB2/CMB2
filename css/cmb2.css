@@ -746,18 +746,19 @@ Post Metaboxes
 
 .postbox-container .cmb-repeatable-grouping
 {
+    min-width: 1px !important;
     max-width: 100%;
     padding: 0 1em;
 }
 
-/* line 31, sass/partials/_post_metaboxes.scss */
+/* line 32, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-group > .cmb-row
 {
     padding-bottom: 0;
 }
 
-/* line 35, sass/partials/_post_metaboxes.scss */
+/* line 36, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-group-title
 {
@@ -765,7 +766,7 @@ Post Metaboxes
     margin-left: -1em;
 }
 
-/* line 40, sass/partials/_post_metaboxes.scss */
+/* line 41, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th
 {
@@ -773,7 +774,7 @@ Post Metaboxes
     padding: 0 2% 0 0;
 }
 
-/* line 46, sass/partials/_post_metaboxes.scss */
+/* line 47, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-td
 {
@@ -783,14 +784,14 @@ Post Metaboxes
     padding: 0;
 }
 
-/* line 52, sass/partials/_post_metaboxes.scss */
+/* line 53, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-row .cmb-td
 {
     padding-bottom: 1.8em;
 }
 
-/* line 56, sass/partials/_post_metaboxes.scss */
+/* line 57, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th + .cmb-td
 {
@@ -799,7 +800,7 @@ Post Metaboxes
     width: 80%;
 }
 
-/* line 68, sass/partials/_post_metaboxes.scss */
+/* line 69, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-group-field,
 .postbox-container .cmb-remove-field-row
@@ -3237,7 +3238,7 @@ Sidebar Placement Adjustments
         width: 100%;
     }
 
-    /* line 61, sass/partials/_post_metaboxes.scss */
+    /* line 62, sass/partials/_post_metaboxes.scss */
 
     .postbox-container .cmb-row,
     .postbox-container .cmb-repeatable-group
