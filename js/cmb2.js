@@ -523,6 +523,12 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.removeAjaxRow = function( event ) {
 		event.preventDefault();
 		var $self   = $(this);
+
+		// Check if disabled
+		if ( $self.hasClass( 'button-disabled' ) ) {
+			return;
+		}
+
 		var $parent = $self.parents('.cmb-row');
 		var $table  = $self.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
