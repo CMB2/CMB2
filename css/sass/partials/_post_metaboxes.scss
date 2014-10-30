@@ -35,7 +35,6 @@ Post Metaboxes
 	.cmb-group-title {
 		margin-right: -1em;
 		margin-left: -1em;
-		outline: 1px solid #fff;
 	}
 
 	.cmb-th {
@@ -61,8 +60,6 @@ Post Metaboxes
 
 	.cmb-row,
 	.cmb-repeatable-group {
-		border-bottom: 1px solid $light-gray;
-
 		@media (max-width: $mobile-break) {
 			border-bottom: 0;
 		}
