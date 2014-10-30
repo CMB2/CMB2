@@ -7,6 +7,7 @@
  * @author Justin Sternberg
  * @see    https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
  */
+/* global postboxes:true, pagenow:true */
 
 /**
  * Custom jQuery for Custom Metaboxes and Fields
@@ -470,6 +471,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
+
+		// Unbind/Rebind our toggle event
+		$('.postbox .hndle, .postbox .handlediv').unbind('click.postboxes');
+		postboxes.add_postbox_toggles(pagenow);
 	};
 
 	cmb.addAjaxRow = function( event ) {
