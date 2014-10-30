@@ -172,10 +172,10 @@ class CMB2_Field {
 		$a[ 'value' ] = $a['repeat'] ? array_values( $new_value ) : $new_value;
 
 		// Allow an override for the field's saving
-		$override = apply_filters( 'cmb2_override_meta_save', false, $a, $this->args(), $this );
+		$override = apply_filters( 'cmb2_override_meta_save', null, $a, $this->args(), $this );
 
 		// If no override, update as usual
-		if ( false !== $override ) {
+		if ( null !== $override ) {
 			return $override;
 		}
 		// Options page handling
@@ -200,10 +200,10 @@ class CMB2_Field {
 		$a = $this->data_args( array( 'old' => $old ) );
 
 		// Allow an override for the field's saving
-		$override = apply_filters( 'cmb2_override_meta_remove', false, $a, $this->args(), $this );
+		$override = apply_filters( 'cmb2_override_meta_remove', null, $a, $this->args(), $this );
 
 		// If no override, remove as usual
-		if ( false !== $override ) {
+		if ( null !== $override ) {
 			return $override;
 		}
 		// Option page handling
