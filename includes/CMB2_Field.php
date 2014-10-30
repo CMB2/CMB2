@@ -169,17 +169,26 @@ class CMB2_Field {
 	public function update_data( $new_value, $single = true ) {
 		$a = $this->data_args( array( 'single' => $single ) );
 
-		$new_value = $a['repeat'] ? array_values( $new_value ) : $new_value;
+		$a[ 'value' ] = $a['repeat'] ? array_values( $new_value ) : $new_value;
 
-		if ( 'options-page' === $a['type'] ) {
-			return cmb2_options( $a['id'] )->update( $a['field_id'], $new_value, false, $a['single'] );
+		// Allow an override for the field's saving
+		$override = apply_filters( 'cmb2_override_meta_save', false, $a, $this->args(), $this );
+
+		// If no override, update as usual
+		if ( false !== $override ) {
+			return $override;
+		}
+		// Options page handling
+		elseif ( 'options-page' === $a['type'] ) {
+			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
+		}
+		// Add metadata if not single
+		elseif ( ! $a['single'] ) {
+			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ], false );
 		}
 
-		if ( ! $a['single'] ) {
-			return add_metadata( $a['type'], $a['id'], $a['field_id'], $new_value, false );
-		}
-
-		return update_metadata( $a['type'], $a['id'], $a['field_id'], $new_value );
+		// Update metadata
+		return update_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ] );
 	}
 
 	/**
@@ -188,11 +197,22 @@ class CMB2_Field {
 	 * @param  string $old Old value
 	 */
 	public function remove_data( $old = '' ) {
-		$a = $this->data_args();
+		$a = $this->data_args( array( 'old' => $old ) );
 
-		return 'options-page' === $a['type']
-			? cmb2_options( $a['id'] )->remove( $a['field_id'] )
-			: delete_metadata( $a['type'], $a['id'], $a['field_id'], $old );
+		// Allow an override for the field's saving
+		$override = apply_filters( 'cmb2_override_meta_remove', false, $a, $this->args(), $this );
+
+		// If no override, remove as usual
+		if ( false !== $override ) {
+			return $override;
+		}
+		// Option page handling
+		elseif ( 'options-page' === $a['type'] ) {
+			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
+		}
+
+		// Remove metadata
+		return delete_metadata( $a['type'], $a['id'], $a['field_id'], $old );
 	}
 
 	/**
