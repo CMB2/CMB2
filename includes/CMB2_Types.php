@@ -811,8 +811,8 @@ class CMB2_Types {
 		$this->field = new CMB2_Field( array(
 			'field_args'  => $args,
 			'group_field' => $this->field->group,
-			'object_type' => $this->field->object_type(),
-			'object_id'   => $this->field->object_id(),
+			'object_type' => $this->field->object_type,
+			'object_id'   => $this->field->object_id,
 		) );
 
 		// Get ID value
