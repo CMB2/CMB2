@@ -495,6 +495,38 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Retrieve options args. Calls options_cb if it exists.
+	 * @since  2.0.0
+	 * @param  string  $key Specific option to retrieve
+	 * @return array        Array of options
+	 */
+	public function options( $key = '' ) {
+		if ( isset( $this->field_options ) && is_array( $this->field_options ) ) {
+			if ( $key ) {
+				return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
+			}
+
+			return $this->field_options;
+		}
+
+		$this->field_options = (array) $this->args['options'];
+
+		if ( is_callable( $this->args['options_cb'] ) ) {
+			$options = call_user_func( $this->args['options_cb'], $this );
+
+			if ( $options && is_array( $options ) ) {
+				$this->field_options += $options;
+			}
+		}
+
+		if ( $key ) {
+			return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
+		}
+
+		return $this->field_options;
+	}
+
+	/**
 	 * Fills in empty field parameters with defaults
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
@@ -508,19 +540,20 @@ class CMB2_Field {
 			'desc'              => '',
 			'before'            => '',
 			'after'             => '',
+			'options_cb'        => '',
+			'options'           => array(),
+			'attributes'        => array(),
 			'protocols'         => null,
 			'default'           => null,
-			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
-			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
-			'date_format'       => 'm\/d\/Y',
-			'time_format'       => 'h:i A',
-			'multiple'          => false,
 			'select_all_button' => true,
+			'multiple'          => false,
 			'repeatable'        => false,
 			'inline'            => false,
 			'on_front'          => true,
-			'attributes'        => array(),
-			'options'           => array(),
+			'date_format'       => 'm\/d\/Y',
+			'time_format'       => 'h:i A',
+			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
+			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
 		) );
 
 
@@ -529,6 +562,12 @@ class CMB2_Field {
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
 		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
+
+		// options param can be passed a callback as well
+		if ( is_callable( $args['options'] ) ) {
+			$args['options_cb'] = $args['options'];
+			$args['options'] = array();
+		}
 
 		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
 			'add_button'    => __( 'Add Group', 'cmb2' ),
