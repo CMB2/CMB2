@@ -448,7 +448,9 @@ class CMB2_Field {
 			}
 		} else {
 
-			printf( '<div class="cmb-th"><label for="%1$s">%2$s</label></div>', $this->id(), $this->args( 'name' ) );
+			if ( $this->args( 'name' ) ) {
+				printf( '<div class="cmb-th"><label for="%1$s">%2$s</label></div>', $this->id(), $this->args( 'name' ) );
+			}
 
 			echo "\n\t<div class=\"cmb-td\">\n";
 		}
