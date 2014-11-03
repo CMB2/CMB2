@@ -10,49 +10,39 @@ class CMB2_Field_Test extends CMB2_Test {
 	public function setUp() {
 		parent::setUp();
 
-		$this->cmb_id = 'test';
+		$this->post_id = $this->factory->post->create();
 
-		$this->metabox_array_test_attributes = array(
-			'id' => $this->cmb_id,
-			'fields' => array(
-				array(
+		$this->field_args = array(
+			'name' => 'Name',
+			'id'   => 'test_test',
+			'type' => 'text',
+			'attributes' => array(
+				'type' => 'number',
+				'disabled' => 'disabled',
+				'data-test' => 'data-value',
+				'data-test' => json_encode( array(
 					'name' => 'Name',
 					'id'   => 'test_test',
 					'type' => 'text',
-					'attributes' => array(
-						'type' => 'number',
-						'disabled' => 'disabled',
-						'data-test' => 'data-value',
-						// 'data-test' => json_encode( array(
-						// 	'name' => 'Name',
-						// 	'id'   => 'test_test',
-						// 	'type' => 'text',
-						// ) ),
-					),
-				),
+				) ),
 			),
 		);
 
-		$this->cmb = new CMB2( $this->metabox_array_test_attributes );
+		$this->object_id   = $this->post_id;
+		$this->object_type = 'post';
+		$this->group       = false;
 
-		$this->post_id = $this->factory->post->create();
+		$this->field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'group' => $this->group,
+			'field_args' => $this->field_args,
+		) );
+
 	}
 
-	public function test_cmb2_get_metabox() {
-
-		$field = cmb2_get_field( $this->cmb_id, 'test_test', $this->post_id );
-		$this->assertInstanceOf( 'CMB2_Field', $field );
-
-		ob_start();
-		$field->render_field();
-		// grab the data from the output buffer and add it to our $content variable
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		$field_gen = '';
-
-		$this->assertEquals( $this->clean_string( $output ), $this->clean_string( $field_gen ) );
-
+	public function test_cmb2_field_instance() {
+		$this->assertInstanceOf( 'CMB2_Field', $this->field  );
 	}
 
 }

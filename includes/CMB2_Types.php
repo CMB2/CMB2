@@ -173,7 +173,9 @@ class CMB2_Types {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			if ( ! in_array( $attr, (array) $attr_exclude, true ) ) {
-				$attributes .= sprintf( ' %s="%s"', $attr, $val );
+				// if value contains a double quote, use single quote wraps, else double
+				$quotes = false !== stripos( $val, '"' ) ? "'" : '"';
+				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
 		return $attributes;
