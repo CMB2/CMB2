@@ -136,8 +136,6 @@ class CMB2_hookup {
 
 		wp_register_script( 'cmb2-scripts', cmb2_utils()->url( "js/cmb2{$min}.js" ), $scripts, CMB2_VERSION );
 
-		wp_enqueue_media();
-
 		wp_localize_script( 'cmb2-scripts', 'cmb2_l10', apply_filters( 'cmb2_localized_data', array(
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
@@ -361,7 +359,7 @@ class CMB2_hookup {
 	 */
 	public static function enqueue_cmb_js() {
 		CMB2_hookup::register_scripts();
-
+		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );
 	}
 
