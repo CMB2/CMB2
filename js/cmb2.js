@@ -42,13 +42,9 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.init = function() {
 
+		cmb.log( 'CMB2 localized data', l10n );
 		var $metabox = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
-
-		// hide our spinner gif if we're on a MP6 dashboard
-		if ( l10n.new_admin_style ) {
-			$metabox.find('.cmb-spinner img').hide();
-		}
 
 		/**
 		 * Initialize time/date/color pickers

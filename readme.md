@@ -156,6 +156,7 @@ If including the library in your plugin or theme:
 
 ### 2.0.0
 
+* __Note: This release requires WordPress 3.8+__
 * Detailed list to come
 
 ### 1.3.0
