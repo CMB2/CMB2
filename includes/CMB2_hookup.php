@@ -112,8 +112,6 @@ class CMB2_hookup {
 			return;
 		}
 
-		global $wp_version;
-
 		// Only use minified files if SCRIPT_DEBUG is off
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
@@ -144,7 +142,6 @@ class CMB2_hookup {
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
 			'script_debug'     => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-			'new_admin_style'  => version_compare( $wp_version, '3.7', '>' ),
 			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
 			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
 			'defaults'         => array(
