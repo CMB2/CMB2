@@ -42,13 +42,9 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.init = function() {
 
+		cmb.log( 'CMB2 localized data', l10n );
 		var $metabox = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
-
-		// hide our spinner gif if we're on a MP6 dashboard
-		if ( l10n.new_admin_style ) {
-			$metabox.find('.cmb-spinner img').hide();
-		}
 
 		/**
 		 * Initialize time/date/color pickers
@@ -118,7 +114,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.toggleCheckBoxes = function( event ) {
 		event.preventDefault();
 		var $self = $(this);
-		var $multicheck = $self.parents( '.cmb-td' ).find( 'input[type=checkbox]' );
+		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]' );
 
 		// If the button has already been clicked once...
 		if ( $self.data( 'checked' ) ) {

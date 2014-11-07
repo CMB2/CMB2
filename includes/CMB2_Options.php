@@ -117,6 +117,8 @@ class CMB2_Option {
 		if ( $resave || $field_id === true ) {
 			return $this->set();
 		}
+
+		return true;
 	}
 
 	/**

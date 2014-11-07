@@ -53,3 +53,5 @@ node_modules
 
 # Sass Cache
 *.sass-cache
+
+dandelion.yml

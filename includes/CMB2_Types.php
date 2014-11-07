@@ -119,8 +119,8 @@ class CMB2_Types {
 	 * @return string              Text
 	 */
 	public function _text( $option_key, $fallback ) {
-		$options = (array) $this->field->args( 'options' );
-		return isset( $options[ $option_key ] ) ? $options[ $option_key ] : $fallback;
+		$has_string_param = $this->field->options( $option_key );
+		return $has_string_param ? $has_string_param : $fallback;
 	}
 
 	/**
@@ -173,7 +173,9 @@ class CMB2_Types {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			if ( ! in_array( $attr, (array) $attr_exclude, true ) ) {
-				$attributes .= sprintf( ' %s="%s"', $attr, $val );
+				// if data attribute, use single quote wraps, else double
+				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
+				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
 		return $attributes;
@@ -200,7 +202,7 @@ class CMB2_Types {
 	 */
 	public function concat_options( $args = array(), $method = 'list_input' ) {
 
-		$options     = (array) $this->field->args( 'options' );
+		$options     = (array) $this->field->options();
 		$saved_value = $this->field->escaped_value();
 		$value       = $saved_value ? $saved_value : $this->field->args( 'default' );
 
@@ -486,7 +488,7 @@ class CMB2_Types {
 			'id'      => $this->_id(),
 			'value'   => $this->field->escaped_value( 'stripslashes' ),
 			'desc'    => $this->_desc( true ),
-			'options' => $this->field->args( 'options' ),
+			'options' => $this->field->options(),
 		) ) );
 
 		wp_editor( $value, $id, $options );
@@ -801,7 +803,7 @@ class CMB2_Types {
 
 	public function file() {
 		$meta_value = $this->field->escaped_value();
-		$options    = (array) $this->field->args( 'options' );
+		$options    = (array) $this->field->options();
 		$img_size   = $this->field->args( 'preview_size' );
 
 		// if options array and 'url' => false, then hide the url field
@@ -881,7 +883,7 @@ class CMB2_Types {
 			'data-objectid'   => $this->field->object_id,
 			'data-objecttype' => $this->field->object_type
 		) ),
-		'<p class="cmb-spinner spinner" style="display:none;"><img src="'. admin_url( '/images/wpspin_light.gif' ) .'" alt="spinner"/></p>',
+		'<p class="cmb-spinner spinner" style="display:none;"></p>',
 		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">';
 
 			if ( $meta_value = $this->field->escaped_value() ) {

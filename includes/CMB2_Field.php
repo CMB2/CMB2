@@ -448,7 +448,9 @@ class CMB2_Field {
 			}
 		} else {
 
-			printf( '<div class="cmb-th"><label for="%1$s">%2$s</label></div>', $this->id(), $this->args( 'name' ) );
+			if ( $this->args( 'name' ) ) {
+				printf( '<div class="cmb-th"><label for="%1$s">%2$s</label></div>', $this->id(), $this->args( 'name' ) );
+			}
 
 			echo "\n\t<div class=\"cmb-td\">\n";
 		}
@@ -495,6 +497,38 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Retrieve options args. Calls options_cb if it exists.
+	 * @since  2.0.0
+	 * @param  string  $key Specific option to retrieve
+	 * @return array        Array of options
+	 */
+	public function options( $key = '' ) {
+		if ( isset( $this->field_options ) && is_array( $this->field_options ) ) {
+			if ( $key ) {
+				return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
+			}
+
+			return $this->field_options;
+		}
+
+		$this->field_options = (array) $this->args['options'];
+
+		if ( is_callable( $this->args['options_cb'] ) ) {
+			$options = call_user_func( $this->args['options_cb'], $this );
+
+			if ( $options && is_array( $options ) ) {
+				$this->field_options += $options;
+			}
+		}
+
+		if ( $key ) {
+			return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
+		}
+
+		return $this->field_options;
+	}
+
+	/**
 	 * Fills in empty field parameters with defaults
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
@@ -502,30 +536,40 @@ class CMB2_Field {
 	public function _set_field_defaults( $args ) {
 
 		// Set up blank or default values for empty ones
-		if ( ! isset( $args['name'] ) ) $args['name'] = '';
-		if ( ! isset( $args['desc'] ) ) $args['desc'] = '';
-		if ( ! isset( $args['before'] ) ) $args['before'] = '';
-		if ( ! isset( $args['after'] ) ) $args['after'] = '';
-		if ( ! isset( $args['protocols'] ) ) $args['protocols'] = null;
-		if ( ! isset( $args['default'] ) ) $args['default'] = null;
-		if ( ! isset( $args['description'] ) ) {
-			$args['description'] = isset( $args['desc'] ) ? $args['desc'] : '';
-		}
-		if ( ! isset( $args['preview_size'] ) ) {
-			$args['preview_size'] = 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 );
-		}
-		if ( ! isset( $args['date_format'] ) ) $args['date_format'] = 'm\/d\/Y';
-		if ( ! isset( $args['time_format'] ) ) $args['time_format'] = 'h:i A';
+		$args = wp_parse_args( $args, array(
+			'type'              => '',
+			'name'              => '',
+			'desc'              => '',
+			'before'            => '',
+			'after'             => '',
+			'options_cb'        => '',
+			'options'           => array(),
+			'attributes'        => array(),
+			'protocols'         => null,
+			'default'           => null,
+			'select_all_button' => true,
+			'multiple'          => false,
+			'repeatable'        => false,
+			'inline'            => false,
+			'on_front'          => true,
+			'date_format'       => 'm\/d\/Y',
+			'time_format'       => 'h:i A',
+			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
+			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
+		) );
+
+
 		// Allow a filter override of the default value
 		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );
-		$args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : false;
-		$args['select_all_button'] = isset( $args['select_all_button'] ) ? $args['select_all_button'] : true;
-		$args['repeatable'] = isset( $args['repeatable'] ) && $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
-		$args['inline']     = isset( $args['inline'] ) && $args['inline'] || false !== stripos( $args['type'], '_inline' );
-		$args['on_front']   = ! ( isset( $args['on_front'] ) && ! $args['on_front'] );
-		$args['attributes'] = isset( $args['attributes'] ) && is_array( $args['attributes'] ) ? $args['attributes'] : array();
-		$args['options']    = isset( $args['options'] ) && is_array( $args['options'] ) ? $args['options'] : array();
+		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
+		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
+
+		// options param can be passed a callback as well
+		if ( is_callable( $args['options'] ) ) {
+			$args['options_cb'] = $args['options'];
+			$args['options'] = array();
+		}
 
 		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
 			'add_button'    => __( 'Add Group', 'cmb2' ),
@@ -537,7 +581,7 @@ class CMB2_Field {
 
 		if ( $this->group ) {
 
-			$args['id'] = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
+			$args['id']    = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
 			$args['_name'] = $this->group->args( 'id' ) .'['. $this->group->args( 'count' ) .']['. $args['_name'] .']';
 		}
 
@@ -550,8 +594,8 @@ class CMB2_Field {
 
 		if ( in_array( $args['type'], $option_types, true ) ) {
 
-			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : 'None';
-			$args['show_option_all'] = isset( $args['show_option_all'] ) ? $args['show_option_all'] : 'All'; // @todo: implementation
+			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : __( 'None', 'cmb2' );
+			$args['show_option_all']  = isset( $args['show_option_all'] ) ? $args['show_option_all'] : __( 'All', 'cmb2' ); // @todo: implementation
 
 		}
 
