@@ -59,8 +59,8 @@ Post Metaboxes
 		float: right;
 	}
 
-	.cmb-row:not(:last-child),
-	.cmb-repeatable-group:not(:last-child) {
+	.cmb-row:not(:last-of-type),
+	.cmb-repeatable-group:not(:last-of-type) {
 		border-bottom: 1px solid $light-gray;
 
 		@media (max-width: $mobile-break) {
@@ -94,7 +94,7 @@ Post Metaboxes
 					width: 100%;
 				}
 
-				.cmb-row:not(:first-child) .cmb-td {
+				.cmb-row:not(:first-of-type) .cmb-td {
 					padding-top: 1.8em;
 				}
 

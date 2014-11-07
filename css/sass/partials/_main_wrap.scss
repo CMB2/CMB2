@@ -144,7 +144,7 @@ Main Wrap
 		&.cmb-repeat-row {
 			padding: 1.8em 0 0;
 
-			&:first-child {
+			&:first-of-type {
 				padding: 0;
 			}
 		}
@@ -187,9 +187,9 @@ Main Wrap
 	border: 0;
 }
 
-.cmb-row:last-child,
-.cmb2-wrap .cmb-row:last-child,
-.cmb-repeatable-group:last-child {
+.cmb-row:last-of-type,
+.cmb2-wrap .cmb-row:last-of-type,
+.cmb-repeatable-group:last-of-type {
 	border-bottom: 0;
 }
 
