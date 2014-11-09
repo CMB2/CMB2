@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
 		githooks: {
 			all: {
-				'pre-commit': ['makepot','tests']
+				'pre-commit': 'makepot tests'
 			}
 		},
 
