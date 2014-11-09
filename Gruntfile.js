@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
 		githooks: {
 			all: {
-				'pre-commit': 'default'
+				'pre-commit': 'tests'
 			}
 		},
 
