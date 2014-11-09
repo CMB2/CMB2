@@ -17,6 +17,22 @@ module.exports = function(grunt) {
 			}
 		},
 
+		makepot: {
+			target: {
+				options: {
+					domainPath: 'languages/',
+					potComments: '',
+					potFilename: 'cmb2.pot',
+					potHeaders: {
+						poedit: true,
+						'x-poedit-keywordslist': true
+					},
+					type: 'wp-plugin',
+					updateTimestamp: false
+				}
+			}
+		},
+
 		// concat: {
 		// 	options: {
 		// 		stripBanners: true,
