@@ -60,9 +60,41 @@ class CMB2_Field {
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
-		// Allow an override for the field's value
-		// (assuming no one would want to save 'cmb2_field_no_override_val' as a value)
+		/**
+		 * Filter whether to override getting of meta value.
+		 * Returning a non 'cmb2_field_no_override_val' value
+		 * will effectively short-circuit the value retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|array|string $value       The value get_metadata() should
+		 *                                       return - a single metadata value,
+		 *                                       or an array of values.
+		 * @param int               $object_id   Object ID.
+		 * @param array             $field_args  All field arguments
+		 * @param string            $object_type Object Type
+		 * @param CMB2_Field object $field_obj   This field object
+		 */
 		$this->value = apply_filters( 'cmb2_override_meta_value', 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
+
+		/**
+		 * Filter whether to override getting of meta value.
+		 *
+		 * The dynamic portion of the hook, $field_id, refers to the current
+		 * field id paramater. Returning a non 'cmb2_field_no_override_val' value
+		 * will effectively short-circuit the value retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|array|string $value       The value get_metadata() should
+		 *                                       return - a single metadata value,
+		 *                                       or an array of values.
+		 * @param int               $object_id   Object ID.
+		 * @param array             $field_args  All field arguments
+		 * @param string            $object_type Object Type
+		 * @param CMB2_Field object $field_obj   This field object
+		 */
+		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
 
 		// If no override, get our meta
 		$this->value = 'cmb2_field_no_override_val' === $this->value
@@ -171,10 +203,66 @@ class CMB2_Field {
 
 		$a[ 'value' ] = $a['repeat'] ? array_values( $new_value ) : $new_value;
 
-		// Allow an override for the field's saving
+		/**
+		 * Filter whether to override saving of meta value.
+		 * Returning a non-null value will effectively short-circuit the function.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|bool $check  Whether to allow updating metadata for the given type.
+		 * @param array $args       Array of data about current field including:
+		 *                              'type'     : Current object type
+		 *                              'id'       : Current object ID
+		 *                              'field_id' : Current Field ID
+		 *                              'repeat'   : Whether current field is repeatable
+		 *                              'single'   : Whether to save as a
+		 *                              					single meta value
+		 * @param array $field_args All field arguments
+		 * @param CMB2_Field object $field_obj This field object
+		 */
 		$override = apply_filters( 'cmb2_override_meta_save', null, $a, $this->args(), $this );
 
-		// If no override, update as usual
+		/**
+		 * Filter whether to override getting of meta value.
+		 *
+		 * The dynamic portion of the hook, $field_id, refers to the current
+		 * field id paramater. Returning a non 'cmb2_field_no_override_val' value
+		 * will effectively short-circuit the value retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|array|string $value       The value get_metadata() should
+		 *                                       return - a single metadata value,
+		 *                                       or an array of values.
+		 * @param int               $object_id   Object ID.
+		 * @param array             $field_args  All field arguments
+		 * @param string            $object_type Object Type
+		 * @param CMB2_Field object $field_obj   This field object
+		 */
+
+		/**
+		 * Filter whether to override saving of meta value.
+		 *
+		 * The dynamic portion of the hook, $a['field_id'], refers to the current
+		 * field id paramater. Returning a non-null value
+		 * will effectively short-circuit the function.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|bool $check  Whether to allow updating metadata for the given type.
+		 * @param array $args       Array of data about current field including:
+		 *                              'type'     : Current object type
+		 *                              'id'       : Current object ID
+		 *                              'field_id' : Current Field ID
+		 *                              'repeat'   : Whether current field is repeatable
+		 *                              'single'   : Whether to save as a
+		 *                              					single meta value
+		 * @param array $field_args All field arguments
+		 * @param CMB2_Field object $field_obj This field object
+		 */
+		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_save", null, $a, $this->args(), $this );
+
+		// If override, return that
 		if ( null !== $override ) {
 			return $override;
 		}
@@ -199,8 +287,46 @@ class CMB2_Field {
 	public function remove_data( $old = '' ) {
 		$a = $this->data_args( array( 'old' => $old ) );
 
-		// Allow an override for the field's saving
+		/**
+		 * Filter whether to override removing of meta value.
+		 * Returning a non-null value will effectively short-circuit the function.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|bool $delete Whether to allow metadata deletion of the given type.
+		 * @param array $args       Array of data about current field including:
+		 *                              'type'     : Current object type
+		 *                              'id'       : Current object ID
+		 *                              'field_id' : Current Field ID
+		 *                              'repeat'   : Whether current field is repeatable
+		 *                              'single'   : Whether to save as a
+		 *                              					single meta value
+		 * @param array $field_args All field arguments
+		 * @param CMB2_Field object $field_obj This field object
+		 */
 		$override = apply_filters( 'cmb2_override_meta_remove', null, $a, $this->args(), $this );
+
+		/**
+		 * Filter whether to override removing of meta value.
+		 *
+		 * The dynamic portion of the hook, $a['field_id'], refers to the current
+		 * field id paramater. Returning a non-null value
+		 * will effectively short-circuit the function.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|bool $delete Whether to allow metadata deletion of the given type.
+		 * @param array $args       Array of data about current field including:
+		 *                              'type'     : Current object type
+		 *                              'id'       : Current object ID
+		 *                              'field_id' : Current Field ID
+		 *                              'repeat'   : Whether current field is repeatable
+		 *                              'single'   : Whether to save as a
+		 *                              					single meta value
+		 * @param array $field_args All field arguments
+		 * @param CMB2_Field object $field_obj This field object
+		 */
+		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_remove", null, $a, $this->args(), $this );
 
 		// If no override, remove as usual
 		if ( null !== $override ) {
