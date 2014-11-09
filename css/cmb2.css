@@ -574,7 +574,7 @@ span.cmb2-metabox-description
     border: 1px solid #e9e9e9;
     -moz-border-radius: 2px;
          border-radius: 2px;
-    background: #fff;
+    background: white;
 }
 
 /* line 360, sass/partials/_main_wrap.scss */
@@ -1278,7 +1278,7 @@ Sidebar Placement Adjustments
 {
     color: #222;
     border: 1px solid #aaa;
-    background: #fff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 }
 
 /* line 28, sass/partials/_jquery_ui.scss */
@@ -1366,7 +1366,7 @@ Sidebar Placement Adjustments
 
     color: #212121;
     border: 1px solid #aaa;
-    background: #fff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+    background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
 }
 
 /* line 36, sass/partials/_jquery_ui.scss */
@@ -3206,8 +3206,6 @@ Sidebar Placement Adjustments
     filter: mask(); /*must have*/
 }
 
-/*# sourceMappingURL=cmb2.css.map */
-
 @media (max-width: 450px)
 {
     /* line 200, sass/partials/_main_wrap.scss */
@@ -3269,4 +3267,3 @@ Sidebar Placement Adjustments
         border-bottom: 0;
     }
 }
-
