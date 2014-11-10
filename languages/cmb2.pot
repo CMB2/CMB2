@@ -304,31 +304,31 @@ msgstr ""
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_Types.php:347 includes/CMB2_Types.php:794
-#: includes/CMB2_Types.php:874 includes/CMB2_hookup.php:173
+#: includes/CMB2_Types.php:347 includes/CMB2_Types.php:798
+#: includes/CMB2_Types.php:878 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:153 tests/test-cmb-types.php:161
 msgid "Remove"
 msgstr ""
 
-#: includes/CMB2_Types.php:670 includes/CMB2_Types.php:718
+#: includes/CMB2_Types.php:674 includes/CMB2_Types.php:722
 msgid "No terms"
 msgstr ""
 
-#: includes/CMB2_Types.php:762 includes/CMB2_Types.php:819
+#: includes/CMB2_Types.php:766 includes/CMB2_Types.php:823
 msgid "Add or Upload File"
 msgstr ""
 
-#: includes/CMB2_Types.php:783 includes/CMB2_Types.php:866
+#: includes/CMB2_Types.php:787 includes/CMB2_Types.php:870
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_Types.php:794 includes/CMB2_Types.php:874
+#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
 #: includes/CMB2_hookup.php:174
 msgid "File:"
 msgstr ""
 
-#: includes/CMB2_Types.php:794 includes/CMB2_Types.php:874
+#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
 #: includes/CMB2_hookup.php:175
 msgid "Download"
 msgstr ""
