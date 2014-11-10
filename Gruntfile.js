@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
 		githooks: {
 			all: {
-				'pre-commit': 'makepot tests'
+				'pre-commit': 'tests'
 			}
 		},
 
@@ -165,7 +165,13 @@ module.exports = function(grunt) {
 				options: {
 					debounceDelay: 500
 				}
+			},
+
+			other: {
+				files: [ '*.php', '**/*.php', '!node_modules/**', '!tests/**' ],
+				tasks: [ 'makepot' ]
 			}
+
 		},
 
 		// make a zipfile
