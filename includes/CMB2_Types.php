@@ -464,11 +464,15 @@ class CMB2_Types {
 	}
 
 	public function text_date() {
-		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc() ) );
+		$meta_value = $this->field->escaped_value();
+		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), strtotime( $meta_value ) ) : '';
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc(), 'value' => $value ) );
 	}
 
 	public function text_time() {
-		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc() ) );
+		$meta_value = $this->field->escaped_value();
+		$value = ! empty( $meta_value ) ? date( $this->field->args( 'time_format' ), $meta_value ) : '';
+		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $value ) );
 	}
 
 	public function text_money() {
