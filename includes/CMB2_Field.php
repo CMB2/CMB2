@@ -581,7 +581,7 @@ class CMB2_Field {
 		// 'inline' flag, or _inline in the field type, set to true
 		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
-		$this->peform_param_cb( 'before_row' );
+		$this->peform_param_callback( 'before_row' );
 
 		printf( "<div class=\"cmb-row %s\">\n", $classes );
 
@@ -601,16 +601,16 @@ class CMB2_Field {
 			echo "\n\t<div class=\"cmb-td\">\n";
 		}
 
-		$this->peform_param_cb( 'before' );
+		$this->peform_param_callback( 'before' );
 
 		$this_type = new CMB2_Types( $this );
 		$this_type->render();
 
-		$this->peform_param_cb( 'after' );
+		$this->peform_param_callback( 'after' );
 
 		echo "\n\t</div>\n</div>";
 
-		$this->peform_param_cb( 'after_row' );
+		$this->peform_param_callback( 'after_row' );
 	}
 
 	/**
@@ -620,7 +620,7 @@ class CMB2_Field {
 	 * @since  2.0.0
 	 * @param  string  $param Field parameter
 	 */
-	public function peform_param_cb( $param ) {
+	public function peform_param_callback( $param ) {
 		if ( $cb = $this->maybe_callback( $param ) ) {
 			// Ok, callback is good, let's run it and bail
 			echo call_user_func( $cb, $this->args(), $this );
