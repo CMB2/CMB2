@@ -23,12 +23,20 @@ module.exports = function(grunt) {
 					domainPath: 'languages/',
 					potComments: '',
 					potFilename: 'cmb2.pot',
+					type: 'wp-plugin',
+					updateTimestamp: true,
 					potHeaders: {
 						poedit: true,
 						'x-poedit-keywordslist': true
 					},
-					type: 'wp-plugin',
-					updateTimestamp: false
+					processPot: function( pot, options ) {
+						pot.headers['report-msgid-bugs-to'] = 'http://wordpress.org/support/plugin/cmb2';
+						pot.headers['last-translator'] = 'WebDevStudios contact@webdevstudios.com';
+						pot.headers['language-team'] = 'WebDevStudios contact@webdevstudios.com';
+						var today = new Date();
+						pot.headers['po-revision-date'] = today.getFullYear() +'-'+ ( today.getMonth() + 1 ) +'-'+ today.getDate() +' '+ today.getUTCHours() +':'+ today.getUTCMinutes() +'+'+ today.getTimezoneOffset();
+						return pot;
+					}
 				}
 			}
 		},
