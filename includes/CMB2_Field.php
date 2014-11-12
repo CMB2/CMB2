@@ -94,7 +94,7 @@ class CMB2_Field {
 		 * @param string            $object_type Object Type
 		 * @param CMB2_Field object $field_obj   This field object
 		 */
-		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
+		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", $this->value, $this->object_id, $this->args(), $this->object_type, $this );
 
 		// If no override, get our meta
 		$this->value = 'cmb2_field_no_override_val' === $this->value
@@ -260,7 +260,7 @@ class CMB2_Field {
 		 * @param array $field_args All field arguments
 		 * @param CMB2_Field object $field_obj This field object
 		 */
-		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_save", null, $a, $this->args(), $this );
+		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_save", $override, $a, $this->args(), $this );
 
 		// If override, return that
 		if ( null !== $override ) {
@@ -326,7 +326,7 @@ class CMB2_Field {
 		 * @param array $field_args All field arguments
 		 * @param CMB2_Field object $field_obj This field object
 		 */
-		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_remove", null, $a, $this->args(), $this );
+		$override = apply_filters( "cmb2_override_{$a['field_id']}_meta_remove", $override, $a, $this->args(), $this );
 
 		// If no override, remove as usual
 		if ( null !== $override ) {
