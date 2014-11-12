@@ -273,7 +273,7 @@ class CMB2 {
 		echo '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">';
 		echo '<div class="handlediv" title="Click to toggle"><br></div>';
 				if ( $field_group->options( 'group_title' ) ) {
-					echo sprintf( '<h3 class="cmb-group-title hndle"><span>%1$s</span></h3>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) );
+					echo sprintf( '<h3 class="cmb-group-title"><span>%1$s</span></h3>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) );
 				}
 		echo '<div class="inside">';
 				// Loop and render repeatable group fields
