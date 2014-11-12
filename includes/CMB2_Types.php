@@ -826,15 +826,15 @@ class CMB2_Types {
 		$cached_id = $this->_id();
 		// Reset field args for attachment ID
 		$args = $this->field->args();
-		$args['id'] = $args['_id'] . '_id';
+		$args['id'] = $cached_id . '_id';
 		unset( $args['_id'], $args['_name'] );
 
 		// And get new field object
 		$this->field = new CMB2_Field( array(
 			'field_args'  => $args,
 			'group_field' => $this->field->group,
-			'object_type' => $this->field->object_type(),
-			'object_id'   => $this->field->object_id(),
+			'object_type' => $this->field->object_type,
+			'object_id'   => $this->field->object_id,
 		) );
 
 		// Get ID value
