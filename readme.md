@@ -179,7 +179,7 @@ If including the library in your plugin or theme:
 * Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent). ([#506](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/506))
 * Simplify `wysiwyg` escaping and allow it to be overridden via the `escape_cb` parameter. ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/491))
 * Add a 'Select/Deselect all' button for the `multicheck` field type.
-* Add title option for [repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group). Title field takes an optional replacement hash, "{#}" that will be replaced by the row number.
+* Add title option for [repeatable groups](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#group). Title field takes an optional replacement hash, "{#}" that will be replaced by the row number.
 * New field parameter, `show_on_cb`, allows you to conditionally display a field via a callback. ([#47](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/47))
 * Unit testing (the beginning). Props [@brichards](https://github.com/brichards) and [@camdensegal](https://github.com/camdensegal).
 
@@ -217,11 +217,11 @@ If including the library in your plugin or theme:
 
 **Enhancements**
 
-* [Repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group)
+* [Repeatable groups](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#group)
 * Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields, etc.
 * Codebase has been revamped to be more modular and object-oriented. 
 * New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
-* Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
+* Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#attributes).
 * Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
 * Better handling of labels in sidebar. They are now placed on top of the input rather than adjacent.
 * Added i18n compatibility to text_money. props [@ArchCarrier](https://github.com/ArchCarrier), ([#485](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/485))
