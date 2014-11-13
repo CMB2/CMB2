@@ -1,4 +1,4 @@
-# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
+# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2)
 
 **Maintainers**:
 
@@ -52,7 +52,7 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 
 **[Plugin now available on wordpress.org](http://wordpress.org/plugins/cmb2/)**
 
-**CMB2 is in beta and is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). Much of the documentation available [in the wiki](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki) is inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg).**
+**CMB2 is in beta and is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). We've brought over the documentation from [the wiki](https://github.com/WebDevStudios/CMB2/wiki), but some of the information is still inaccurate. Please follow the examples in `example-functions.php` and if you need assistance with beta-testing, please [ping me](http://twitter.com/jtsternberg).**
 
 ##### Notable Changes in CMB2 (from original CMB)
 **Change 1:** Hooks/filters work nearly the same (if not the same), but you'll be required to use the `cmb2_` instead of the original `cmb_`. This includes the main filter for adding metaboxes, `'cmb2_meta_boxes'`. The `cmb2_render{$custom_field_type}` action no longer passes the unescaped value as the first parameter.
@@ -73,44 +73,44 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
 
 ##### Field Types:
-1. [`title`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#title) An arbitrary title field *
-1. [`text`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text)
-1. [`text_small`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_small)
-1. [`text_medium`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_medium)
-1. [`text_email`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_email)
-1. [`text_url`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_url)
-1. [`text_money`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_money)
-1. [`textarea`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea)
-1. [`textarea_small`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_small)
-1. [`textarea_code`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_code)
-1. [`text_date`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date) Date Picker
-1. [`text_time`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_time) Time picker
-1. [`select_timezone`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select_timezone) Time zone dropdown
-1. [`text_date_timestamp`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date_timestamp) Date Picker (UNIX timestamp)
-1. [`text_datetime_timestamp`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp) Test Date/Time Picker Combo (UNIX timestamp)
-1. [`text_datetime_timestamp_timezone`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp_timezone) Test Date/Time Picker/Time zone Combo (serialized DateTime object)
-1. [`colorpicker`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#colorpicker) Color picker
-1. [`radio`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio) *
-1. [`radio_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio_inline) *
-1. [`taxonomy_radio`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio) *
-1. [`taxonomy_radio_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio_inline) *
-1. [`select`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select)
-1. [`taxonomy_select`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_select) *
-1. [`checkbox`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#checkbox) *
-1. [`multicheck`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#multicheck)
-1. [`taxonomy_multicheck`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck) *
-1. [`taxonomy_multicheck_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck_inline)
-1. [`wysiwyg`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#wysiwyg) (TinyMCE) *
-1. [`file`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file) Image/File upload *†
-1. [`file_list`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file_list) Image/File list upload
-1. [`oembed`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#oembed) Converts oembed urls (instagram, twitter, youtube, etc. [oEmbed in the Codex](https://codex.wordpress.org/Embeds))
-1. [`group`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
-1. [Create your own custom field type](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#Custom)
+1. [`title`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#title) An arbitrary title field *
+1. [`text`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text)
+1. [`text_small`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_small)
+1. [`text_medium`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_medium)
+1. [`text_email`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_email)
+1. [`text_url`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_url)
+1. [`text_money`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_money)
+1. [`textarea`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#textarea)
+1. [`textarea_small`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#textarea_small)
+1. [`textarea_code`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#textarea_code)
+1. [`text_date`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_date) Date Picker
+1. [`text_time`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_time) Time picker
+1. [`select_timezone`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#select_timezone) Time zone dropdown
+1. [`text_date_timestamp`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_date_timestamp) Date Picker (UNIX timestamp)
+1. [`text_datetime_timestamp`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_datetime_timestamp) Test Date/Time Picker Combo (UNIX timestamp)
+1. [`text_datetime_timestamp_timezone`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text_datetime_timestamp_timezone) Test Date/Time Picker/Time zone Combo (serialized DateTime object)
+1. [`colorpicker`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#colorpicker) Color picker
+1. [`radio`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#radio) *
+1. [`radio_inline`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#radio_inline) *
+1. [`taxonomy_radio`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#taxonomy_radio) *
+1. [`taxonomy_radio_inline`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#taxonomy_radio_inline) *
+1. [`select`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#select)
+1. [`taxonomy_select`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#taxonomy_select) *
+1. [`checkbox`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#checkbox) *
+1. [`multicheck`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#multicheck)
+1. [`taxonomy_multicheck`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#taxonomy_multicheck) *
+1. [`taxonomy_multicheck_inline`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#taxonomy_multicheck_inline)
+1. [`wysiwyg`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#wysiwyg) (TinyMCE) *
+1. [`file`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#file) Image/File upload *†
+1. [`file_list`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#file_list) Image/File list upload
+1. [`oembed`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#oembed) Converts oembed urls (instagram, twitter, youtube, etc. [oEmbed in the Codex](https://codex.wordpress.org/Embeds))
+1. [`group`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
+1. [Create your own custom field type](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#Custom)
 
 \* Not available as a repeatable field  
 † Use `file_list` for repeatable  
 
-[More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
+[More on field types (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki/Field-Types)
 
 ##### 3rd Party Resources
 * [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): Custom field type for attaching posts to a page.
@@ -128,11 +128,11 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 
 ##### Contribution
-All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
+All contributions welcome. ~~If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/CMB2/tree/trunk) and pull request against it.~~ _Until CMB2 is out of beta, feel free to PR against the master branch_
 
 ##### Links
-* [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
-* [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
+* [Github project page](https://github.com/webdevstudios/CMB2)
+* [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
 
 ## Installation
@@ -259,7 +259,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 **Enhancements**
 
-* Now works with option pages and site settings. ([view example in wiki](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page))
+* Now works with option pages and site settings. ([view example in wiki](https://github.com/WebDevStudios/CMB2/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page))
 * two filters to override the setting and getting of options, `cmb_override_option_get_$option_key` and `cmb_override_option_save_$option_key` respectively. Handy for using plugins like [WP Large Options](https://github.com/voceconnect/wp-large-options/) ([also here](http://vip.wordpress.com/plugins/wp-large-options/)).
 * Improved styling on taxonomy (\*tease\*) and options pages and for new 3.8 admin UI.
 * New sanitization class to sanitize data when saved.
