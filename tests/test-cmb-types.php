@@ -104,6 +104,8 @@ class CMB2_Types_Test extends CMB2_Test {
 	}
 
 	public function test_wysiwyg_field() {
+		global $wp_version;
+
 		$this->field_test['fields'][0]['type'] = 'wysiwyg';
 		$cmb   = new CMB2( $this->field_test );
 		$field = cmb2_get_field( $this->field_test['id'], 'field_test_field', $this->post_id );
@@ -114,8 +116,8 @@ class CMB2_Types_Test extends CMB2_Test {
 			<div class="cmb-td">
 				<label for="field_test_field">Name</label>
 				<div id="wp-field_test_field-wrap" class="wp-core-ui wp-editor-wrap html-active">
-					<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'http://example.org/wp-includes/css/dashicons.min.css?ver=4.0\' type=\'text/css\' media=\'all\' />
-					<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'http://example.org/wp-includes/css/editor.min.css?ver=4.0\' type=\'text/css\' media=\'all\' />
+					<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'http://example.org/wp-includes/css/dashicons.min.css?ver='. $wp_version .'\' type=\'text/css\' media=\'all\' />
+					<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'http://example.org/wp-includes/css/editor.min.css?ver='. $wp_version .'\' type=\'text/css\' media=\'all\' />
 					<div id="wp-field_test_field-editor-container" class="wp-editor-container">
 						<textarea class="wp-editor-area" rows="20" cols="40" name="field_test_field" id="field_test_field">
 						</textarea>
