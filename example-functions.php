@@ -54,7 +54,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 		'context'       => 'normal',
 		'priority'      => 'high',
 		'show_names'    => true, // Show field names on the left
-		// 'cmb_styles' => true, // Enqueue the CMB stylesheet on the frontend
+		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		'fields'        => array(
 			array(
 				'name'       => __( 'Test Text', 'cmb2' ),
