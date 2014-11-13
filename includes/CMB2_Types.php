@@ -471,7 +471,7 @@ class CMB2_Types {
 
 	public function text_time() {
 		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'time_format' ), $meta_value ) : '';
+		$value = ! empty( $meta_value ) ? date( $this->field->args( 'time_format' ), strtotime( $meta_value ) ) : '';
 		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $value ) );
 	}
 
