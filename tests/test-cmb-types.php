@@ -152,7 +152,7 @@ class CMB2_Types_Test extends CMB2_Test {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<a class="button cmb-remove-row-button" disabled="disabled" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
+								<a class="button cmb-remove-row-button button-disabled" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
