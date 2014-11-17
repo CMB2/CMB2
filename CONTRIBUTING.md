@@ -24,6 +24,6 @@ All contributions welcome. If you would like to submit a pull request, please fo
 3. ~~**Check out the trunk version of CMB2.** If you submit to the master branch, the PR will be closed with a link back to this document.~~
 4. ~~**Verify your issue still exists in the trunk branch.**~~
 5. Make changes to your clone of the repository.
-6. Submit a pull request.
+6. [Submit a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 **Note:** You may gain more ground and avoid unecessary effort if you first open an issue with the proposed changes, but this step is not necessary.
