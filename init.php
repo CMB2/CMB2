@@ -95,8 +95,8 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		 */
 		public function l10ni18n() {
 			$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
-			load_textdomain( 'cmb2', WP_LANG_DIR . '/cmb2/cmb2-' . $locale . '.mo' );
-			load_plugin_textdomain( 'cmb2', false, dirname( __FILE__ ) . '/languages/' );
+			$mofile = dirname( __FILE__ ) . '/languages/cmb2-'. $locale .'.mo';
+			load_textdomain( 'cmb2', $mofile );
 		}
 
 	}
