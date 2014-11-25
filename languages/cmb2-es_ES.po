@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-11-11 01:25:43+00:00\n"
-"PO-Revision-Date: 2014-11-10 20:55-0500\n"
+"PO-Revision-Date: 2014-11-24 20:17-0500\n"
 "Last-Translator: Justin Sternberg <justin@dsgnwrks.pro>\n"
 "Language-Team: \n"
-"Language: es\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7beta2\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -28,20 +28,21 @@ msgid "Test Text"
 msgstr "Texto de prueba"
 
 #: example-functions.php:61 example-functions.php:72 example-functions.php:79
-#: example-functions.php:86 example-functions.php:94 example-functions.php:101
-#: example-functions.php:113 example-functions.php:119
-#: example-functions.php:126 example-functions.php:141
-#: example-functions.php:149 example-functions.php:156
-#: example-functions.php:162 example-functions.php:168
-#: example-functions.php:180 example-functions.php:191
-#: example-functions.php:202 example-functions.php:213
-#: example-functions.php:221 example-functions.php:228
-#: example-functions.php:236 example-functions.php:242
-#: example-functions.php:254 example-functions.php:295
-#: example-functions.php:361 example-functions.php:368
-#: example-functions.php:374 example-functions.php:380
-#: example-functions.php:386 example-functions.php:392
-#: example-functions.php:398 example-functions.php:416
+#: example-functions.php:86 example-functions.php:94
+#: example-functions.php:101 example-functions.php:113
+#: example-functions.php:119 example-functions.php:126
+#: example-functions.php:141 example-functions.php:149
+#: example-functions.php:156 example-functions.php:162
+#: example-functions.php:168 example-functions.php:180
+#: example-functions.php:191 example-functions.php:202
+#: example-functions.php:213 example-functions.php:221
+#: example-functions.php:228 example-functions.php:236
+#: example-functions.php:242 example-functions.php:254
+#: example-functions.php:295 example-functions.php:361
+#: example-functions.php:368 example-functions.php:374
+#: example-functions.php:380 example-functions.php:386
+#: example-functions.php:392 example-functions.php:398
+#: example-functions.php:416
 msgid "field description (optional)"
 msgstr "campo de descripción (opcional)"
 
