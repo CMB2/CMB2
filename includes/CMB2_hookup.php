@@ -66,6 +66,12 @@ class CMB2_hookup {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
 
+			// register table column properties
+			foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
+				add_filter( "manage_{$object_type}_posts_columns", array( $this, 'table_columns' ) );
+				add_filter( "manage_edit-{$object_type}_sortable_columns", array( $this, 'sortable_columns' ) );
+				add_action( "manage_posts_custom_column", array( $this, 'show_columns' ), 10, 2 );
+			}
 		}
 		elseif ( 'user' == $type ) {
 
@@ -361,6 +367,81 @@ class CMB2_hookup {
 		CMB2_hookup::register_scripts();
 		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );
+	}
+
+	/**
+	 * Set the table columns
+	 *
+	 * Each field can have an option of 'show_in_columns' = true,
+	 * to have it show up in the table overview.
+	 *
+	 * @param  array $cols Array of current table columns
+	 * @return array Array of table columns
+	 */
+	public function table_columns( $cols ) {
+		// first determine if this is neccesary,
+		// by collecting columns with option 'show_in_columns' = true
+		$show_columns = array();
+
+		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
+			if ( ! empty( $field['show_in_columns'] ) ) {
+				$show_columns[ $field['id'] ] = $field['name'];
+			}
+		}
+
+		// if no columns defined, return default columns
+		if ( empty( $show_columns ) ) {
+			return $cols;
+		}
+
+		// unset default columns (others will be added later)
+		unset( $cols['cb'], $cols['title'], $cols['date'] );
+
+		// set default columns
+		$columns = array(
+			'cb' => '<input type="checkbox" />',
+			'title' => __( 'Title' ),
+		);
+
+		// add defined columns
+		foreach ( $show_columns as $field_id => $field_name ) {
+			$columns[ $field_id ] = $field_name;
+		}
+
+		// return columns + columns defined in other hooks
+		return $columns + $cols;
+	}
+
+	/**
+	 * Show content of custom column
+	 * @param  string $column  ID if the custom field
+	 * @param  integer $post_id Current post ID
+	 * @return string Raw meta value
+	 * @todo Output formatted values (ie. images)
+	 */
+	public function show_columns( $column, $post_id ) {
+		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
+			if ( $field['id'] == $column ) {
+				echo get_post_meta( $post_id, $column, true );
+			}
+		}
+	}
+
+	/**
+	 * Set sortable columns
+	 * @return array Array of sortable columns
+	 */
+	public function sortable_columns() {
+		// set title as sortable (default)
+		$sortables = array( 'title' => 'title' );
+
+		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
+			if ( ! empty( $field['sortable_column'] ) ) {
+				$sortables[ $field['id'] ] = $field['id'];
+			}
+		}
+
+		return $sortables;
 	}
 
 }
