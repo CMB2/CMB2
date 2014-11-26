@@ -66,6 +66,8 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 				// 'on_front'        => false, // Optionally designate a field to wp-admin only
 				// 'repeatable'      => true,
+				// 'show_in_columns' => true, // Show this field in table overview
+				// 'sortable_column' => true // Make this column sortable in table overview
 			),
 			array(
 				'name' => __( 'Test Text Small', 'cmb2' ),
