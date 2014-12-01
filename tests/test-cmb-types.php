@@ -155,7 +155,7 @@ class CMB2_Types_Test extends CMB2_Test {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<a class="button cmb-remove-row-button button-disabled" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
+								<button class="button cmb-remove-row-button button-disabled">'. __( 'Remove', 'cmb2' ) .'</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -163,13 +163,13 @@ class CMB2_Types_Test extends CMB2_Test {
 								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<a class="button cmb-remove-row-button" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
+								<button class="button cmb-remove-row-button">'. __( 'Remove', 'cmb2' ) .'</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<p class="cmb-add-row">
-					<a data-selector="field_test_field_repeat" class="cmb-add-row-button button" href="#">ADD NEW ROW</a>
+					<button data-selector="field_test_field_repeat" class="cmb-add-row-button button button-primary">ADD NEW ROW</button>
 				</p>
 			</div>
 		</div>
