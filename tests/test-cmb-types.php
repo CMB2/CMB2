@@ -169,7 +169,7 @@ class CMB2_Types_Test extends CMB2_Test {
 					</div>
 				</div>
 				<p class="cmb-add-row">
-					<button data-selector="field_test_field_repeat" class="cmb-add-row-button button button-primary">ADD NEW ROW</button>
+					<button data-selector="field_test_field_repeat" class="cmb-add-row-button button">ADD NEW ROW</button>
 				</p>
 			</div>
 		</div>
