@@ -815,7 +815,7 @@ class CMB2_Types {
 
 		echo $this->input( array(
 			'type'  => $input_type,
-			'class' => 'cmb2-upload-file',
+			'class' => 'cmb2-upload-file regular-text',
 			'size'  => 45,
 			'desc'  => '',
 			'data-previewsize' => is_array( $img_size ) ? '['. implode( ',', $img_size ) .']' : 350,

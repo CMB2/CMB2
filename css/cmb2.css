@@ -827,35 +827,36 @@ Post Metaboxes
     padding-top: 1.8em;
 }
 
-/* line 76, sass/partials/_post_metaboxes.scss */
+/* line 78, sass/partials/_post_metaboxes.scss */
 
-.postbox-container input.regular-text
-{
-    width: 100%;
-}
-
-/* line 83, sass/partials/_post_metaboxes.scss */
-
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-url .cmb-repeat-table .cmb-tbody,
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-text .cmb-repeat-table .cmb-tbody
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody
 {
     display: table;
 
     width: 100%;
 }
 
-/* line 87, sass/partials/_post_metaboxes.scss */
+/* line 82, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-url .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-text .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row)
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text
+{
+    width: 100%;
+}
+
+/* line 86, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row)
 {
     display: table-row;
 }
 
-/* line 91, sass/partials/_post_metaboxes.scss */
+/* line 90, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-url .cmb-repeat-table .cmb-tbody .cmb-td,
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-text .cmb-repeat-table .cmb-tbody .cmb-td
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td
 {
     display: table-cell;
     float: none;
@@ -863,18 +864,18 @@ Post Metaboxes
     width: 100%;
 }
 
-/* line 97, sass/partials/_post_metaboxes.scss */
+/* line 96, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-url .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-text .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td
 {
     padding-top: 1.8em;
 }
 
-/* line 101, sass/partials/_post_metaboxes.scss */
+/* line 100, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-url .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
-.postbox-container .cmb2-metabox > .cmb-row.cmb-type-text .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row
 {
     padding-right: 0;
 }

@@ -144,7 +144,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$field_gen = '
-		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat">
+		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout">
 			<div class="cmb-td">
 				<label for="field_test_field">Name</label>
 				<p class="cmb2-metabox-description">This is a description</p>
@@ -234,7 +234,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$field_gen = '
-		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field">
+		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout">
 			<div class="cmb-td">
 				<label for="attributes_test_field">Name</label>
 				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>

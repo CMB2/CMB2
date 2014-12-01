@@ -73,16 +73,15 @@ Post Metaboxes
 		padding-top: 1.8em;
 	}
 
-	input.regular-text {
-		width: 100%;
-	}
-
 	.cmb2-metabox > .cmb-row {
-		&.cmb-type-url,
-		&.cmb-type-text {
+		&.table-layout, .cmb-row.table-layout {
 			.cmb-repeat-table .cmb-tbody {
 				display: table;
 				width: 100%;
+
+				input.regular-text {
+					width: 100%;
+				}
 
 				.cmb-row:not(.hidden):not(.empty-row) {
 					display: table-row;
