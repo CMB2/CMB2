@@ -144,7 +144,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$field_gen = '
-		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat">
+		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout">
 			<div class="cmb-td">
 				<label for="field_test_field">Name</label>
 				<p class="cmb2-metabox-description">This is a description</p>
@@ -155,7 +155,7 @@ class CMB2_Types_Test extends CMB2_Test {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<a class="button cmb-remove-row-button button-disabled" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
+								<button class="button cmb-remove-row-button button-disabled">'. __( 'Remove', 'cmb2' ) .'</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -163,13 +163,13 @@ class CMB2_Types_Test extends CMB2_Test {
 								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<a class="button cmb-remove-row-button" href="#">'. __( 'Remove', 'cmb2' ) .'</a>
+								<button class="button cmb-remove-row-button">'. __( 'Remove', 'cmb2' ) .'</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<p class="cmb-add-row">
-					<a data-selector="field_test_field_repeat" class="cmb-add-row-button button" href="#">ADD NEW ROW</a>
+					<button data-selector="field_test_field_repeat" class="cmb-add-row-button button">ADD NEW ROW</button>
 				</p>
 			</div>
 		</div>
@@ -234,7 +234,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$field_gen = '
-		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field">
+		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout">
 			<div class="cmb-td">
 				<label for="attributes_test_field">Name</label>
 				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>

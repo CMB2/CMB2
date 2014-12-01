@@ -150,7 +150,7 @@ class CMB2_Core_Test extends CMB2_Test {
 			<div class="cmb2-wrap form-table">
 				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
-					<div class="cmb-row cmb-type-text cmb2-id-test-test">
+					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>

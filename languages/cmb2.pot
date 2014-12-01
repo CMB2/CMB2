@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-11-13 14:04:56+00:00\n"
+"POT-Creation-Date: 2014-12-01 15:55:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-11-13 14:4+300\n"
+"PO-Revision-Date: 2014-12-1 15:55+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: CMB2.php:96
+#: CMB2.php:113
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr ""
 
@@ -284,19 +284,19 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:721
+#: includes/CMB2_Field.php:739
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:722
+#: includes/CMB2_Field.php:740
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:743
+#: includes/CMB2_Field.php:761
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:744
+#: includes/CMB2_Field.php:762
 msgid "All"
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 
 #: includes/CMB2_Types.php:347 includes/CMB2_Types.php:798
 #: includes/CMB2_Types.php:878 includes/CMB2_hookup.php:173
-#: tests/test-cmb-types.php:155 tests/test-cmb-types.php:163
+#: tests/test-cmb-types.php:158 tests/test-cmb-types.php:166
 msgid "Remove"
 msgstr ""
 
