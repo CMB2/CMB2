@@ -191,7 +191,7 @@ All contributions welcome. If you would like to submit a pull request, please ch
 
 **Enhancements**
 
-* Change the way the `'cmb_validate_{$field['type']}'` filter works.
+* Change the way the `'cmb_sanitize_{$field['type']}'` filter works.
 It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
 * All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
 * Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc), ([#473](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/473))
@@ -389,7 +389,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 **Enhancements**
 
-* Change the way the `'cmb_validate_{$field['type']}'` filter works.
+* Change the way the `'cmb_sanitize_{$field['type']}'` filter works.
 It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
 * All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
 * Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc), ([#473](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/473))

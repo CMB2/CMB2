@@ -62,7 +62,11 @@ class CMB2_Sanitize {
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( 'cmb2_sanitize_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
+		/**
+		 * For back compatibility. See documentation above.
+		 */
+		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), $override_value, $value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;
@@ -142,7 +146,7 @@ class CMB2_Sanitize {
 	 * Validate email in a meta value
 	 * @since  1.0.1
 	 * @param  string $value Meta value
-	 * @return string       Empty string or validated email
+	 * @return string       Empty string or sanitized email
 	 */
 	public function text_email( $value ) {
 		// for repeatable
@@ -163,7 +167,7 @@ class CMB2_Sanitize {
 	 * Validate money in a meta value
 	 * @since  1.0.1
 	 * @param  string $value Meta value
-	 * @return string       Empty string or validated money value
+	 * @return string       Empty string or sanitized money value
 	 */
 	public function text_money( $value ) {
 

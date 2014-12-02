@@ -362,7 +362,7 @@ class CMB2_Field {
 	 * Checks if field has a registered sanitization callback
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
-	 * @return mixed             Possibly validated meta value
+	 * @return mixed             Possibly sanitized meta value
 	 */
 	public function sanitization_cb( $meta_value ) {
 
