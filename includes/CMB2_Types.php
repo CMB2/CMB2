@@ -608,7 +608,7 @@ class CMB2_Types {
 	public function taxonomy_select() {
 
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[0]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key($names)]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = '';
 
@@ -666,7 +666,7 @@ class CMB2_Types {
 
 	public function taxonomy_radio() {
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[0]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key($names)]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = ''; $i = 1;
 
