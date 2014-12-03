@@ -1,0 +1,402 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CMB2 (beta)\n"
+"POT-Creation-Date: 2014-12-03 21:24+0200\n"
+"PO-Revision-Date: 2014-12-03 21:53+0200\n"
+"Last-Translator: Onni Hakala <onni@koodimonni.fi>\n"
+"Language-Team: Onni Hakala <onni@koodimonni.fi>\n"
+"Language: fi_FI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: CMB2.php:113
+msgid "Metabox configuration is required to have an ID parameter"
+msgstr ""
+
+#: example-functions.php:52
+msgid "Test Metabox"
+msgstr ""
+
+#: example-functions.php:60 example-functions.php:294
+msgid "Test Text"
+msgstr ""
+
+#: example-functions.php:61 example-functions.php:72 example-functions.php:79
+#: example-functions.php:86 example-functions.php:94 example-functions.php:101
+#: example-functions.php:113 example-functions.php:119
+#: example-functions.php:126 example-functions.php:141
+#: example-functions.php:149 example-functions.php:156
+#: example-functions.php:162 example-functions.php:168
+#: example-functions.php:180 example-functions.php:191
+#: example-functions.php:202 example-functions.php:213
+#: example-functions.php:221 example-functions.php:228
+#: example-functions.php:236 example-functions.php:242
+#: example-functions.php:254 example-functions.php:295
+#: example-functions.php:361 example-functions.php:368
+#: example-functions.php:374 example-functions.php:380
+#: example-functions.php:386 example-functions.php:392
+#: example-functions.php:398 example-functions.php:416
+msgid "field description (optional)"
+msgstr ""
+
+#: example-functions.php:71
+msgid "Test Text Small"
+msgstr ""
+
+#: example-functions.php:78
+msgid "Test Text Medium"
+msgstr ""
+
+#: example-functions.php:85
+msgid "Website URL"
+msgstr ""
+
+#: example-functions.php:93
+msgid "Test Text Email"
+msgstr ""
+
+#: example-functions.php:100
+msgid "Test Time"
+msgstr ""
+
+#: example-functions.php:106 example-functions.php:107
+msgid "Time zone"
+msgstr ""
+
+#: example-functions.php:112
+msgid "Test Date Picker"
+msgstr ""
+
+#: example-functions.php:118
+msgid "Test Date Picker (UNIX timestamp)"
+msgstr ""
+
+#: example-functions.php:125
+msgid "Test Date/Time Picker Combo (UNIX timestamp)"
+msgstr ""
+
+#: example-functions.php:140
+msgid "Test Money"
+msgstr ""
+
+#: example-functions.php:148
+msgid "Test Color Picker"
+msgstr ""
+
+#: example-functions.php:155
+msgid "Test Text Area"
+msgstr ""
+
+#: example-functions.php:161
+msgid "Test Text Area Small"
+msgstr ""
+
+#: example-functions.php:167
+msgid "Test Text Area for Code"
+msgstr ""
+
+#: example-functions.php:173
+msgid "Test Title Weeeee"
+msgstr ""
+
+#: example-functions.php:174
+msgid "This is a title description"
+msgstr ""
+
+#: example-functions.php:179
+msgid "Test Select"
+msgstr ""
+
+#: example-functions.php:184 example-functions.php:195
+#: example-functions.php:206
+msgid "Option One"
+msgstr ""
+
+#: example-functions.php:185 example-functions.php:196
+#: example-functions.php:207
+msgid "Option Two"
+msgstr ""
+
+#: example-functions.php:186 example-functions.php:197
+#: example-functions.php:208
+msgid "Option Three"
+msgstr ""
+
+#: example-functions.php:190
+msgid "Test Radio inline"
+msgstr ""
+
+#: example-functions.php:201
+msgid "Test Radio"
+msgstr ""
+
+#: example-functions.php:212
+msgid "Test Taxonomy Radio"
+msgstr ""
+
+#: example-functions.php:220
+msgid "Test Taxonomy Select"
+msgstr ""
+
+#: example-functions.php:227
+msgid "Test Taxonomy Multi Checkbox"
+msgstr ""
+
+#: example-functions.php:235
+msgid "Test Checkbox"
+msgstr ""
+
+#: example-functions.php:241
+msgid "Test Multi Checkbox"
+msgstr ""
+
+#: example-functions.php:246
+msgid "Check One"
+msgstr ""
+
+#: example-functions.php:247
+msgid "Check Two"
+msgstr ""
+
+#: example-functions.php:248
+msgid "Check Three"
+msgstr ""
+
+#: example-functions.php:253
+msgid "Test wysiwyg"
+msgstr ""
+
+#: example-functions.php:260
+msgid "Test Image"
+msgstr ""
+
+#: example-functions.php:261
+msgid "Upload an image or enter a URL."
+msgstr ""
+
+#: example-functions.php:266
+msgid "Multiple Files"
+msgstr ""
+
+#: example-functions.php:267
+msgid "Upload or add multiple images/attachments."
+msgstr ""
+
+#: example-functions.php:273
+msgid "oEmbed"
+msgstr ""
+
+#: example-functions.php:274
+msgid ""
+"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
+"Embeds</a>."
+msgstr ""
+
+#: example-functions.php:286
+msgid "About Page Metabox"
+msgstr ""
+
+#: example-functions.php:307
+msgid "Repeating Field Group"
+msgstr ""
+
+#: example-functions.php:313
+msgid "Generates reusable form entries"
+msgstr ""
+
+#: example-functions.php:315
+msgid "Entry {#}"
+msgstr ""
+
+#: example-functions.php:316
+msgid "Add Another Entry"
+msgstr ""
+
+#: example-functions.php:317
+msgid "Remove Entry"
+msgstr ""
+
+#: example-functions.php:354
+msgid "User Profile Metabox"
+msgstr ""
+
+#: example-functions.php:360
+msgid "Extra Info"
+msgstr "Lisätiedot"
+
+#: example-functions.php:367
+msgid "Avatar"
+msgstr ""
+
+#: example-functions.php:373
+msgid "Facebook URL"
+msgstr ""
+
+#: example-functions.php:379
+msgid "Twitter URL"
+msgstr ""
+
+#: example-functions.php:385
+msgid "Google+ URL"
+msgstr ""
+
+#: example-functions.php:391
+msgid "Linkedin URL"
+msgstr ""
+
+#: example-functions.php:397
+msgid "User Field"
+msgstr ""
+
+#: example-functions.php:411
+msgid "Theme Options Metabox"
+msgstr ""
+
+#: example-functions.php:415
+msgid "Site Background Color"
+msgstr "Sivuston taustaväri"
+
+#: includes/CMB2_Ajax.php:37
+msgid "Please Try Again"
+msgstr "Yritä uudelleen"
+
+#: includes/CMB2_Ajax.php:133
+msgid "Remove Embed"
+msgstr "Poista Embed"
+
+#: includes/CMB2_Ajax.php:137
+#, php-format
+msgid "No oEmbed Results Found for %s. View more info at"
+msgstr "Yhtään oEmbed:iä ei löytynyt haulle %s. Katso lisää täältä: "
+
+#: includes/CMB2_Field.php:739
+msgid "Add Group"
+msgstr "Lisää Ryhmä"
+
+#: includes/CMB2_Field.php:740
+msgid "Remove Group"
+msgstr "Poista Ryhmä"
+
+#: includes/CMB2_Field.php:761
+msgid "None"
+msgstr "﻿Ei mitään"
+
+#: includes/CMB2_Field.php:762
+msgid "All"
+msgstr "Kaikki"
+
+#: includes/CMB2_Types.php:288
+msgid "Add Row"
+msgstr "﻿Lisää rivi"
+
+#: includes/CMB2_Types.php:347 includes/CMB2_Types.php:798
+#: includes/CMB2_Types.php:878 includes/CMB2_hookup.php:173
+#: tests/test-cmb-types.php:158 tests/test-cmb-types.php:166
+msgid "Remove"
+msgstr "Poista"
+
+#: includes/CMB2_Types.php:674 includes/CMB2_Types.php:722
+msgid "No terms"
+msgstr "Ei kohteita"
+
+#: includes/CMB2_Types.php:766 includes/CMB2_Types.php:823
+msgid "Add or Upload File"
+msgstr "Lisää tai Lataa kuva"
+
+#: includes/CMB2_Types.php:787 includes/CMB2_Types.php:870
+#: includes/CMB2_hookup.php:172
+msgid "Remove Image"
+msgstr "﻿Poista kuva"
+
+#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
+#: includes/CMB2_hookup.php:174
+msgid "File:"
+msgstr "﻿Tiedosto:"
+
+#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
+#: includes/CMB2_hookup.php:175
+msgid "Download"
+msgstr "﻿Lataa"
+
+#: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
+msgid "Clear"
+msgstr "﻿Tyhjennä"
+
+#: includes/CMB2_hookup.php:124
+msgid "Default"
+msgstr "Oletusarvo"
+
+#: includes/CMB2_hookup.php:125
+msgid "Select Color"
+msgstr "﻿Valitse väri"
+
+#: includes/CMB2_hookup.php:126
+msgid "Current Color"
+msgstr "Nykyinen väri"
+
+#: includes/CMB2_hookup.php:150
+msgid "mm/dd/yy"
+msgstr "kk/pp/vv"
+
+#: includes/CMB2_hookup.php:151
+msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+msgstr ""
+"Sunnuntai, Maanantai, Tiistai, Keskiviikko, Torstai, Perjantai, Lauantai"
+
+#: includes/CMB2_hookup.php:152
+msgid "Su, Mo, Tu, We, Th, Fr, Sa"
+msgstr "Su, Ma, Ti, Ke, To, Pe, La"
+
+#: includes/CMB2_hookup.php:153
+msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
+msgstr "Sun, Man, Tii, Kes, Tor, Per, Lau"
+
+#: includes/CMB2_hookup.php:154
+msgid ""
+"January, February, March, April, May, June, July, August, September, "
+"October, November, December"
+msgstr ""
+"Tammikuu, Helmikuu, Maaliskuu, Huhtikuu, Toukokuu, Kesäkuu, Heinäkuu, "
+"Elokuu, Syyskuu, Lokakuu, Marraskuu, Joulukuu"
+
+#: includes/CMB2_hookup.php:155
+msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
+msgstr "Tam, Hel, Mar, Huh, Tou, Kes, Hei, Elo, Syy, Lok, Mar, Jou"
+
+#: includes/CMB2_hookup.php:156
+msgid "Next"
+msgstr "Seuraava"
+
+#: includes/CMB2_hookup.php:157
+msgid "Prev"
+msgstr "Edellinen"
+
+#: includes/CMB2_hookup.php:158
+msgid "Today"
+msgstr "Tänään"
+
+#: includes/CMB2_hookup.php:159
+msgid "Done"
+msgstr "Valmis"
+
+#: includes/CMB2_hookup.php:171
+msgid "Use this file"
+msgstr "﻿Käytä tätä tiedostoa"
+
+#: includes/CMB2_hookup.php:176
+msgid "Select / Deselect All"
+msgstr "Valitse / Poista kaikki valinnat"
+
+#: includes/helper-functions.php:226
+msgid "Save"
+msgstr "Tallenna"
