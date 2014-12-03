@@ -311,7 +311,7 @@ msgstr "Ei kohteita"
 
 #: includes/CMB2_Types.php:766 includes/CMB2_Types.php:823
 msgid "Add or Upload File"
-msgstr "Lisää tai Lataa kuvaa"
+msgstr "Lisää tai Lataa kuva"
 
 #: includes/CMB2_Types.php:787 includes/CMB2_Types.php:870
 #: includes/CMB2_hookup.php:172
