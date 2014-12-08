@@ -6,7 +6,7 @@
  * @param  string $class_name Name of the class being requested
  */
 function cmb2_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) || false === stripos( $class_name, 'CMB2_' ) ) {
+	if ( class_exists( $class_name, false ) || false === strpos( $class_name, 'CMB2_' ) ) {
 		return;
 	}
 

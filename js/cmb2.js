@@ -42,13 +42,9 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.init = function() {
 
+		cmb.log( 'CMB2 localized data', l10n );
 		var $metabox = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
-
-		// hide our spinner gif if we're on a MP6 dashboard
-		if ( l10n.new_admin_style ) {
-			$metabox.find('.cmb-spinner img').hide();
-		}
 
 		/**
 		 * Initialize time/date/color pickers
@@ -118,7 +114,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.toggleCheckBoxes = function( event ) {
 		event.preventDefault();
 		var $self = $(this);
-		var $multicheck = $self.parents( '.cmb-td' ).find( 'input[type=checkbox]' );
+		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]' );
 
 		// If the button has already been clicked once...
 		if ( $self.data( 'checked' ) ) {
@@ -292,8 +288,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 		cmb.neweditor_id = [];
 
-		$inputs.filter(':checked').removeAttr( 'checked' );
-		$inputs.filter(':selected').removeAttr( 'selected' );
+		$inputs.filter(':checked').prop( 'checked', false );
+		$inputs.filter(':selected').prop( 'selected', false );
 
 		if ( $self.find('h3').length ) {
 			$self.find( 'h3' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
@@ -464,12 +460,16 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $newRow, true );
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1  ) {
-			$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
+			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
 		} else {
-			$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
+			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
+
+		// Unbind/Rebind our toggle event
+		$('.postbox .hndle, .postbox .handlediv').unbind('click.postboxes');
+		postboxes.add_postbox_toggles(pagenow);
 	};
 
 	cmb.addAjaxRow = function( event ) {
@@ -492,7 +492,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
 
-		$table.find( '.cmb-remove-row-button' ).removeAttr( 'disabled' );
+		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
 
 	};
 
@@ -508,11 +508,13 @@ window.CMB2 = (function(window, document, $, undefined){
 			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 			$parent.remove();
+
 			if ( number <= 2 ) {
-				$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
+				$table.find('.cmb-remove-group-row').prop( 'disabled', true );
 			} else {
-				$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
+				$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 			}
+
 			$table.trigger( 'cmb2_remove_row' );
 		}
 
@@ -521,6 +523,12 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.removeAjaxRow = function( event ) {
 		event.preventDefault();
 		var $self   = $(this);
+
+		// Check if disabled
+		if ( $self.hasClass( 'button-disabled' ) ) {
+			return;
+		}
+
 		var $parent = $self.parents('.cmb-row');
 		var $table  = $self.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
@@ -531,11 +539,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			if ( number === 3 ) {
-				$table.find( '.cmb-remove-row-button' ).attr( 'disabled', 'disabled' );
+				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		} else {
-			$self.attr( 'disabled', 'disabled' );
+			$self.addClass( 'button-disabled' );
 		}
 	};
 

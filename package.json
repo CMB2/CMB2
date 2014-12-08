@@ -1,38 +1,48 @@
 {
-	"name": "cmb",
-	"version": "1.1.3",
-	"description": "**Contributors**:",
-	"main": "Gruntfile.js",
-	"directories": {
-		"test": "tests"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress"
-	},
-	"author": "WebDevStudios",
-	"license": "GPLv2",
-	"bugs": {
-		"url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues"
-	},
-	"homepage": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress",
-	"devDependencies": {
-		"grunt-phpunit": "~0.3.3",
-		"grunt": "~0.4.4",
-		"grunt-githooks": "~0.3.1",
-		"grunt-contrib-jshint": "~0.10.0",
-		"grunt-contrib-uglify": "~0.4.0",
-		"grunt-contrib-cssmin": "~0.9.0",
-		"grunt-contrib-watch": "~0.6.1",
-		"grunt-contrib-sass": "~0.7.3",
-		"grunt-csscomb": "~3.0.0-1",
-		"grunt-combine-media-queries": "~1.0.15",
-		"load-grunt-tasks": "~0.5.0",
-		"grunt-update-submodules": "~0.4.1",
-		"grunt-asciify": "~0.2.2",
-		"grunt-contrib-compress": "~0.11.0"
-	}
+  "name": "cmb",
+  "version": "1.1.3",
+  "description": "**Contributors**:",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress"
+  },
+  "author": "WebDevStudios",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues"
+  },
+  "homepage": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress",
+  "devDependencies": {
+    "grunt-phpunit": "~0.3.3",
+    "grunt": "~0.4.4",
+    "grunt-githooks": "~0.3.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-cssmin": "~0.9.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-sass": "~0.7.3",
+    "grunt-csscomb": "~3.0.0-1",
+    "grunt-combine-media-queries": "~1.0.15",
+    "load-grunt-tasks": "~0.5.0",
+    "grunt-update-submodules": "~0.4.1",
+    "grunt-asciify": "~0.2.2",
+    "grunt-contrib-compress": "~0.11.0",
+    "grunt-wp-i18n": "~0.4.9"
+  },
+  "dependencies": {
+    "grunt-phpunit": "~0.3.6",
+    "grunt-contrib-sass": "~0.7.4",
+    "load-grunt-tasks": "~0.5.0",
+    "grunt-wp-i18n": "~0.4.9",
+    "grunt-contrib-compress": "~0.11.0",
+    "grunt-contrib-cssmin": "~0.9.0",
+    "grunt-contrib-uglify": "~0.4.1"
+  }
 }

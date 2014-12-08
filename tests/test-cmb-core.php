@@ -1,6 +1,8 @@
 <?php
 
-class CMB2_Core_Test extends WP_UnitTestCase {
+require_once( 'cmb-tests-base.php' );
+
+class CMB2_Core_Test extends CMB2_Test {
 
 	/**
 	 * Set up the test fixture
@@ -79,17 +81,6 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$this->post_id = $this->factory->post->create();
 	}
 
-	public function test_cmb2_has_version_number() {
-		$this->assertTrue( defined( 'CMB2_VERSION' ) );
-	}
-
-	/**
-	 * @expectedException WPDieException
-	 */
-	public function test_cmb2_die_with_no_id() {
-		$cmb = new CMB2( array() );
-	}
-
 	/**
 	 * @expectedException Exception
 	 */
@@ -129,7 +120,6 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 	}
 
 	public function test_cmb2_get_field() {
-		$val_to_save = '123Abc';
 		$field_id    = 'test_test';
 		$retrieved   = cmb2_get_field( $this->cmb_id, $field_id, $this->post_id );
 		$this->assertInstanceOf( 'CMB2_Field', $retrieved );
@@ -160,7 +150,7 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 			<div class="cmb2-wrap form-table">
 				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
-					<div class="cmb-row cmb-type-text cmb2-id-test-test">
+					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
@@ -209,14 +199,6 @@ class CMB2_Core_Test extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'CMB2_Ajax', cmb2_ajax() );
 		$this->assertInstanceOf( 'CMB2_Utils', cmb2_utils() );
 		$this->assertInstanceOf( 'CMB2_Option', cmb2_options( 'test' ) );
-	}
-
-	public function clean_string( $string ) {
-		return trim( str_ireplace( array(
-			"\n", "\r", "\t", '  ', '> <',
-		), array(
-			'', '', '', ' ', '><',
-		), $string ) );
 	}
 
 }
