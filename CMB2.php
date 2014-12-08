@@ -7,7 +7,24 @@
  * @return string        Directory with optional path appended
  */
 function cmb2_dir( $path = '' ) {
-	return trailingslashit( dirname( __FILE__ ) ) . $path;
+	return wp_normalize_path( trailingslashit( dirname( __FILE__ ) ) . $path );
+}
+
+if ( ! function_exists( 'wp_normalize_path' ) ) {
+	/**
+	 * Normalize a filesystem path.
+	 *
+	 * Replaces backslashes with forward slashes for Windows systems, and ensures
+	 * no duplicate slashes exist.
+	 * Available in WordPress 3.9.0
+	 *
+	 * @since  2.0.0
+	 * @param  string $path Path to normalize.
+	 * @return string       Normalized path.
+	 */
+	function wp_normalize_path( $path ) {
+		return preg_replace( '|/+|','/', str_replace( '\\', '/', $path ) );
+	}
 }
 
 require_once cmb2_dir( 'includes/helper-functions.php' );

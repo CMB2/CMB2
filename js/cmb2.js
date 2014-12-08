@@ -288,8 +288,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 		cmb.neweditor_id = [];
 
-		$inputs.filter(':checked').removeAttr( 'checked' );
-		$inputs.filter(':selected').removeAttr( 'selected' );
+		$inputs.filter(':checked').prop( 'checked', false );
+		$inputs.filter(':selected').prop( 'selected', false );
 
 		if ( $self.find('.cmb-group-title').length ) {
 			$self.find( '.cmb-group-title h4' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
@@ -460,9 +460,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $newRow, true );
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1  ) {
-			$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
+			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
 		} else {
-			$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
+			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
@@ -488,7 +488,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.afterRowInsert( $row );
 		$table.trigger( 'cmb2_add_row', $row );
 
-		$table.find( '.cmb-remove-row-button' ).removeAttr( 'disabled' );
+		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
 
 	};
 
@@ -504,11 +504,13 @@ window.CMB2 = (function(window, document, $, undefined){
 			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 			$parent.remove();
+
 			if ( number <= 2 ) {
-				$table.find('.cmb-remove-group-row').attr( 'disabled', 'disabled' );
+				$table.find('.cmb-remove-group-row').prop( 'disabled', true );
 			} else {
-				$table.find('.cmb-remove-group-row').removeAttr( 'disabled' );
+				$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 			}
+
 			$table.trigger( 'cmb2_remove_row' );
 		}
 
@@ -517,6 +519,12 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.removeAjaxRow = function( event ) {
 		event.preventDefault();
 		var $self   = $(this);
+
+		// Check if disabled
+		if ( $self.hasClass( 'button-disabled' ) ) {
+			return;
+		}
+
 		var $parent = $self.parents('.cmb-row');
 		var $table  = $self.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
@@ -527,11 +535,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 			$self.parents('.cmb-repeat-table .cmb-row').remove();
 			if ( number === 3 ) {
-				$table.find( '.cmb-remove-row-button' ).attr( 'disabled', 'disabled' );
+				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
 			}
 			$table.trigger( 'cmb2_remove_row' );
 		} else {
-			$self.attr( 'disabled', 'disabled' );
+			$self.addClass( 'button-disabled' );
 		}
 	};
 
