@@ -11,7 +11,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.0.0.1
+ * Version:      2.0.0.2
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -55,7 +55,7 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.0.1';
+		const VERSION = '2.0.0.2';
 
 		/**
 		 * Current version hook priority
@@ -94,9 +94,19 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
-			$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
-			load_textdomain( 'cmb2', WP_LANG_DIR . '/cmb2/cmb2-' . $locale . '.mo' );
-			load_plugin_textdomain( 'cmb2', false, dirname( __FILE__ ) . '/languages/' );
+			$loaded = load_plugin_textdomain( 'cmb2', false, '/languages/' );
+			if ( ! $loaded ) {
+				$loaded = load_muplugin_textdomain( 'cmb2', '/languages/' );
+			}
+			if ( ! $loaded ) {
+				$loaded = load_theme_textdomain( 'cmb2', '/languages/' );
+			}
+
+			if ( ! $loaded ) {
+				$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
+				$mofile = dirname( __FILE__ ) . '/languages/cmb2-'. $locale .'.mo';
+				load_textdomain( 'cmb2', $mofile );
+			}
 		}
 
 	}

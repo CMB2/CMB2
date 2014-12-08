@@ -21,6 +21,7 @@ Post Metaboxes
 
 	.cmb-row {
 		padding: 0 0 1.8em;
+		margin: 0 0 0.8em;
 	}
 
 	.cmb-repeatable-grouping {
@@ -34,8 +35,9 @@ Post Metaboxes
 	}
 
 	.cmb-group-title {
-		margin-right: -1em;
 		margin-left: -1em;
+		margin-right: -1em;
+		padding: 0;
 	}
 
 	.cmb-th {
@@ -59,8 +61,10 @@ Post Metaboxes
 		float: right;
 	}
 
-	.cmb-row,
-	.cmb-repeatable-group {
+	.cmb-row:not(:last-of-type),
+	.cmb-repeatable-group:not(:last-of-type) {
+		border-bottom: 1px solid $light-gray;
+
 		@media (max-width: $mobile-break) {
 			border-bottom: 0;
 		}
@@ -71,4 +75,34 @@ Post Metaboxes
 		padding-top: 1.8em;
 	}
 
+	.cmb2-metabox > .cmb-row {
+		&.table-layout, .cmb-row.table-layout {
+			.cmb-repeat-table .cmb-tbody {
+				display: table;
+				width: 100%;
+
+				input.regular-text {
+					width: 100%;
+				}
+
+				.cmb-row:not(.hidden):not(.empty-row) {
+					display: table-row;
+				}
+
+				.cmb-td {
+					display: table-cell;
+					float: none;
+					width: 100%;
+				}
+
+				.cmb-row:not(:first-of-type) .cmb-td {
+					padding-top: 1.8em;
+				}
+
+				.cmb-td.cmb-remove-row {
+					padding-right: 0;
+				}
+			}
+		}
+	}
 }

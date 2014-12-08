@@ -145,33 +145,41 @@ Main Wrap
 
 /* line 100, sass/partials/_main_wrap.scss */
 
+.cmb2-wrap button,
+.cmb2-wrap .button
+{
+    white-space: nowrap;
+}
+
+/* line 105, sass/partials/_main_wrap.scss */
+
 .cmb2-wrap .mceLayout
 {
     border: 1px solid #e9e9e9 !important;
 }
 
-/* line 104, sass/partials/_main_wrap.scss */
+/* line 109, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .mceIframeContainer
 {
     background: #fff;
 }
 
-/* line 108, sass/partials/_main_wrap.scss */
+/* line 113, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .meta_mce
 {
     width: 97%;
 }
 
-/* line 111, sass/partials/_main_wrap.scss */
+/* line 116, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .meta_mce textarea
 {
     width: 100%;
 }
 
-/* line 119, sass/partials/_main_wrap.scss */
+/* line 124, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-input-wrap
@@ -179,7 +187,7 @@ Main Wrap
     vertical-align: middle;
 }
 
-/* line 124, sass/partials/_main_wrap.scss */
+/* line 129, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-container
@@ -187,7 +195,14 @@ Main Wrap
     margin: 0 10px 0 0;
 }
 
-/* line 130, sass/partials/_main_wrap.scss */
+/* line 134, sass/partials/_main_wrap.scss */
+
+.cmb2-wrap .cmb-row
+{
+    margin: 0;
+}
+
+/* line 137, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row:after
 {
@@ -199,21 +214,21 @@ Main Wrap
     content: '';
 }
 
-/* line 137, sass/partials/_main_wrap.scss */
+/* line 144, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row.cmb-repeat-row
 {
     padding: 1.8em 0 0;
 }
 
-/* line 140, sass/partials/_main_wrap.scss */
+/* line 147, sass/partials/_main_wrap.scss */
 
-.cmb2-wrap .cmb-row.cmb-repeat-row:first-child
+.cmb2-wrap .cmb-row.cmb-repeat-row:first-of-type
 {
     padding: 0;
 }
 
-/* line 145, sass/partials/_main_wrap.scss */
+/* line 152, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row.cmb-repeat .cmb2-metabox-description
 {
@@ -221,7 +236,7 @@ Main Wrap
     padding-bottom: 1.8em;
 }
 
-/* line 152, sass/partials/_main_wrap.scss */
+/* line 159, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox
 {
@@ -230,7 +245,7 @@ Main Wrap
     margin: 0;
 }
 
-/* line 158, sass/partials/_main_wrap.scss */
+/* line 165, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-td,
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-th,
@@ -240,23 +255,24 @@ Main Wrap
     border: 0;
 }
 
-/* line 165, sass/partials/_main_wrap.scss */
+/* line 172, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox > .cmb-row .cmb-repeat-table .cmb-row > .cmb-td
 {
     float: left;
 
-    margin-right: 20px;
+    box-sizing: border-box;
+    padding-right: 20px;
 }
 
-/* line 172, sass/partials/_main_wrap.scss */
+/* line 180, sass/partials/_main_wrap.scss */
 
 .cmb-add-row
 {
     margin: 1.8em 0 0;
 }
 
-/* line 176, sass/partials/_main_wrap.scss */
+/* line 184, sass/partials/_main_wrap.scss */
 
 .cmb-nested .cmb-td,
 .cmb-repeatable-group .cmb-th,
@@ -265,34 +281,26 @@ Main Wrap
     border: 0;
 }
 
-/* line 182, sass/partials/_main_wrap.scss */
+/* line 190, sass/partials/_main_wrap.scss */
 
-.cmb-row:last-child,
-.cmb2-wrap .cmb-row:last-child,
-.cmb-repeatable-group:last-child
+.cmb-row:last-of-type,
+.cmb2-wrap .cmb-row:last-of-type,
+.cmb-repeatable-group:last-of-type
 {
     border-bottom: 0;
 }
 
-/* line 188, sass/partials/_main_wrap.scss */
+/* line 196, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-grouping
 {
     max-width: 1000px;
     padding: 0 1em;
 
-    border-right: 1px solid #e9e9e9;
-    border-left: 1px solid #e9e9e9;
+    border: 1px solid #e9e9e9;
 }
 
-/* line 193, sass/partials/_main_wrap.scss */
-
-.cmb-repeatable-grouping + .cmb-repeatable-grouping
-{
-    border-top: 1px solid #e9e9e9;
-}
-
-/* line 198, sass/partials/_main_wrap.scss */
+/* line 204, sass/partials/_main_wrap.scss */
 
 .cmb-th
 {
@@ -309,7 +317,7 @@ Main Wrap
     color: #222;
 }
 
-/* line 212, sass/partials/_main_wrap.scss */
+/* line 218, sass/partials/_main_wrap.scss */
 
 .cmb-td
 {
@@ -321,14 +329,14 @@ Main Wrap
     vertical-align: middle;
 }
 
-/* line 221, sass/partials/_main_wrap.scss */
+/* line 227, sass/partials/_main_wrap.scss */
 
 .cmb-type-title .cmb-td
 {
     padding: 0;
 }
 
-/* line 226, sass/partials/_main_wrap.scss */
+/* line 232, sass/partials/_main_wrap.scss */
 
 .cmb-th label
 {
@@ -337,61 +345,72 @@ Main Wrap
     padding: 5px 0;
 }
 
-/* line 231, sass/partials/_main_wrap.scss */
+/* line 237, sass/partials/_main_wrap.scss */
 
 .cmb-th + .cmb-td
 {
     float: left;
 }
 
-/* line 235, sass/partials/_main_wrap.scss */
+/* line 241, sass/partials/_main_wrap.scss */
 
 .cmb-td .cmb-td
 {
     padding-bottom: 1em;
 }
 
-/* line 239, sass/partials/_main_wrap.scss */
+/* line 245, sass/partials/_main_wrap.scss */
 
 .cmb-remove-row
 {
     text-align: right;
 }
 
-/* line 243, sass/partials/_main_wrap.scss */
+/* line 249, sass/partials/_main_wrap.scss */
 
 .empty-row.hidden
 {
     display: none;
 }
 
-/* line 249, sass/partials/_main_wrap.scss */
+/* line 255, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-th
 {
     padding: 5px;
 }
 
-/* line 253, sass/partials/_main_wrap.scss */
+/* line 259, sass/partials/_main_wrap.scss */
+
+.cmb-repeatable-group .cmb-group-title
+{
+    margin-right: -.75em;
+    margin-left: -.75em;
+}
+
+/* line 263, sass/partials/_main_wrap.scss */
+
+.cmb-repeatable-group .cmb-group-title h4
+{
+    font-size: 1.2em;
+    font-weight: 500;
+
+    margin: 0;
+    padding: .5em .75em;
+
+    border: 0;
+}
+
+/* line 271, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-title .cmb-th
 {
     display: block;
 
     width: 100%;
-    padding-top: 1.8em;
 }
 
-/* line 257, sass/partials/_main_wrap.scss */
-
-.cmb-repeatable-group .cmb-group-title .cmb-th h4
-{
-    margin: 0;
-
-    border: 0;
-}
-
-/* line 263, sass/partials/_main_wrap.scss */
+/* line 277, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-description .cmb-th
 {
@@ -430,7 +449,7 @@ Main Wrap
     border-bottom: 1px solid #e9e9e9;
 }
 
-/* line 267, sass/partials/_main_wrap.scss */
+/* line 281, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows
 {
@@ -441,7 +460,7 @@ Main Wrap
     text-decoration: none;
 }
 
-/* line 272, sass/partials/_main_wrap.scss */
+/* line 286, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows .dashicons
 {
@@ -452,31 +471,21 @@ Main Wrap
     height: 1.5em;
 }
 
-/* line 278, sass/partials/_main_wrap.scss */
+/* line 292, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows .dashicons.dashicons-arrow-down-alt2
 {
     line-height: 1.3em;
 }
 
-/* line 285, sass/partials/_main_wrap.scss */
+/* line 299, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb2-upload-button
 {
     float: right;
 }
 
-/* line 292, sass/partials/_main_wrap.scss */
-
-.cmb-group-title h4
-{
-    font-size: 1.2em;
-    font-weight: 500;
-
-    border-bottom: 1px solid #aaa;
-}
-
-/* line 302, sass/partials/_main_wrap.scss */
+/* line 305, sass/partials/_main_wrap.scss */
 
 p.cmb2-metabox-description
 {
@@ -488,7 +497,7 @@ p.cmb2-metabox-description
     color: #aaa;
 }
 
-/* line 309, sass/partials/_main_wrap.scss */
+/* line 312, sass/partials/_main_wrap.scss */
 
 span.cmb2-metabox-description
 {
@@ -497,7 +506,7 @@ span.cmb2-metabox-description
     color: #aaa;
 }
 
-/* line 314, sass/partials/_main_wrap.scss */
+/* line 317, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox-title
 {
@@ -507,14 +516,14 @@ span.cmb2-metabox-description
     padding: 5px 0 0 0;
 }
 
-/* line 320, sass/partials/_main_wrap.scss */
+/* line 323, sass/partials/_main_wrap.scss */
 
 .cmb-inline ul
 {
     padding: 4px 0 0 0;
 }
 
-/* line 324, sass/partials/_main_wrap.scss */
+/* line 327, sass/partials/_main_wrap.scss */
 
 .cmb-inline li
 {
@@ -523,14 +532,14 @@ span.cmb2-metabox-description
     padding-right: 18px;
 }
 
-/* line 329, sass/partials/_main_wrap.scss */
+/* line 332, sass/partials/_main_wrap.scss */
 
 .cmb-type-textarea-code pre
 {
     margin: 0;
 }
 
-/* line 335, sass/partials/_main_wrap.scss */
+/* line 338, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status
 {
@@ -542,14 +551,14 @@ span.cmb2-metabox-description
     margin-right: 10px;
 }
 
-/* line 342, sass/partials/_main_wrap.scss */
+/* line 345, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img
 {
     max-width: 350px;
 }
 
-/* line 347, sass/partials/_main_wrap.scss */
+/* line 350, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status
@@ -560,10 +569,10 @@ span.cmb2-metabox-description
     border: 1px solid #e9e9e9;
     -moz-border-radius: 2px;
          border-radius: 2px;
-    background: white;
+    background: #fff;
 }
 
-/* line 357, sass/partials/_main_wrap.scss */
+/* line 360, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .embed-status
 {
@@ -572,7 +581,7 @@ span.cmb2-metabox-description
     max-width: 800px;
 }
 
-/* line 362, sass/partials/_main_wrap.scss */
+/* line 365, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status,
 .cmb2-media-status .embed-status
@@ -580,7 +589,7 @@ span.cmb2-metabox-description
     position: relative;
 }
 
-/* line 365, sass/partials/_main_wrap.scss */
+/* line 368, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button,
 .cmb2-media-status .embed-status .cmb2-remove-file-button
@@ -597,14 +606,14 @@ span.cmb2-metabox-description
     background: url(../images/ico-delete.png);
 }
 
-/* line 379, sass/partials/_main_wrap.scss */
+/* line 382, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button
 {
     top: 10px;
 }
 
-/* line 386, sass/partials/_main_wrap.scss */
+/* line 389, sass/partials/_main_wrap.scss */
 
 .cmb-type-file-list .cmb2-media-status .img-status
 {
@@ -615,7 +624,7 @@ span.cmb2-metabox-description
     margin-right: 10px;
 }
 
-/* line 393, sass/partials/_main_wrap.scss */
+/* line 396, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li
 {
@@ -626,7 +635,7 @@ span.cmb2-metabox-description
     margin-bottom: 25px;
 }
 
-/* line 399, sass/partials/_main_wrap.scss */
+/* line 402, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li img
 {
@@ -637,14 +646,14 @@ span.cmb2-metabox-description
     cursor: move;
 }
 
-/* line 406, sass/partials/_main_wrap.scss */
+/* line 409, sass/partials/_main_wrap.scss */
 
 .cmb2-remove-wrapper
 {
     margin: 0;
 }
 
-/* line 410, sass/partials/_main_wrap.scss */
+/* line 413, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th
 {
@@ -739,10 +748,11 @@ Post Metaboxes
 
 .postbox-container .cmb-row
 {
+    margin: 0 0 .8em;
     padding: 0 0 1.8em;
 }
 
-/* line 26, sass/partials/_post_metaboxes.scss */
+/* line 27, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-grouping
 {
@@ -751,22 +761,23 @@ Post Metaboxes
     padding: 0 1em;
 }
 
-/* line 32, sass/partials/_post_metaboxes.scss */
+/* line 33, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-group > .cmb-row
 {
     padding-bottom: 0;
 }
 
-/* line 36, sass/partials/_post_metaboxes.scss */
+/* line 37, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-group-title
 {
     margin-right: -1em;
     margin-left: -1em;
+    padding: 0;
 }
 
-/* line 41, sass/partials/_post_metaboxes.scss */
+/* line 43, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th
 {
@@ -774,7 +785,7 @@ Post Metaboxes
     padding: 0 2% 0 0;
 }
 
-/* line 47, sass/partials/_post_metaboxes.scss */
+/* line 49, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-td
 {
@@ -784,14 +795,14 @@ Post Metaboxes
     padding: 0;
 }
 
-/* line 53, sass/partials/_post_metaboxes.scss */
+/* line 55, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-row .cmb-td
 {
     padding-bottom: 1.8em;
 }
 
-/* line 57, sass/partials/_post_metaboxes.scss */
+/* line 59, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th + .cmb-td
 {
@@ -800,12 +811,73 @@ Post Metaboxes
     width: 80%;
 }
 
-/* line 69, sass/partials/_post_metaboxes.scss */
+/* line 64, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb-row:not(:last-of-type),
+.postbox-container .cmb-repeatable-group:not(:last-of-type)
+{
+    border-bottom: 1px solid #e9e9e9;
+}
+
+/* line 73, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-group-field,
 .postbox-container .cmb-remove-field-row
 {
     padding-top: 1.8em;
+}
+
+/* line 80, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody
+{
+    display: table;
+
+    width: 100%;
+}
+
+/* line 84, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text
+{
+    width: 100%;
+}
+
+/* line 88, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row)
+{
+    display: table-row;
+}
+
+/* line 92, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td
+{
+    display: table-cell;
+    float: none;
+
+    width: 100%;
+}
+
+/* line 98, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td
+{
+    padding-top: 1.8em;
+}
+
+/* line 102, sass/partials/_post_metaboxes.scss */
+
+.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
+.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row
+{
+    padding-right: 0;
 }
 
 /*--------------------------------------------------------------
@@ -1255,7 +1327,7 @@ Sidebar Placement Adjustments
 {
     color: #222;
     border: 1px solid #aaa;
-    background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+    background: #fff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 }
 
 /* line 28, sass/partials/_jquery_ui.scss */
@@ -1343,7 +1415,7 @@ Sidebar Placement Adjustments
 
     color: #212121;
     border: 1px solid #aaa;
-    background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+    background: #fff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
 }
 
 /* line 36, sass/partials/_jquery_ui.scss */
@@ -3183,9 +3255,11 @@ Sidebar Placement Adjustments
     filter: mask(); /*must have*/
 }
 
+/*# sourceMappingURL=cmb2.css.map */
+
 @media (max-width: 450px)
 {
-    /* line 198, sass/partials/_main_wrap.scss */
+    /* line 204, sass/partials/_main_wrap.scss */
 
     .cmb-th
     {
@@ -3224,7 +3298,7 @@ Sidebar Placement Adjustments
         border-bottom: 1px solid #e9e9e9;
     }
 
-    /* line 415, sass/partials/_main_wrap.scss */
+    /* line 418, sass/partials/_main_wrap.scss */
 
     .cmb-th,
     .cmb-td,
@@ -3236,10 +3310,10 @@ Sidebar Placement Adjustments
         width: 100%;
     }
 
-    /* line 62, sass/partials/_post_metaboxes.scss */
+    /* line 64, sass/partials/_post_metaboxes.scss */
 
-    .postbox-container .cmb-row,
-    .postbox-container .cmb-repeatable-group
+    .postbox-container .cmb-row:not(:last-of-type),
+    .postbox-container .cmb-repeatable-group:not(:last-of-type)
     {
         border-bottom: 0;
     }
