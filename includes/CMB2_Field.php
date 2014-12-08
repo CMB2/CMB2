@@ -668,7 +668,7 @@ class CMB2_Field {
 		}
 
 		if ( $key ) {
-			return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
+			return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : NULL;
 		}
 
 		return $this->field_options;
