@@ -244,7 +244,7 @@ class CMB2 {
 	public function render_group( $args ) {
 
 		// If field is requesting to be conditionally shown
-		if ( is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
+		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
 			return;
 		}
 
