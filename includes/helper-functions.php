@@ -83,7 +83,7 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
  * @param  mixed   $value      Value to update data with
- * @param  bool    $single     Whether data should be an array
+ * @param  bool    $single     Whether data should not be an array
  * @return array               Modified options
  */
 function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
