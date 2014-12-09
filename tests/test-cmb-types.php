@@ -131,7 +131,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		</div>
 		';
 
-		$this->assertEquals( $this->clean_string( $this->render_field( $field ) ), $this->clean_string( $field_gen ) );
+		$this->assertEquals( $this->clean_string( $field_gen ), $this->clean_string( $this->render_field( $field ) ) );
 	}
 
 	public function test_repeatable_field() {
@@ -175,7 +175,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		</div>
 		';
 
-		$this->assertEquals( $this->clean_string( $this->render_field( $field ) ), $this->clean_string( $field_gen ) );
+		$this->assertEquals( $this->clean_string( $field_gen ), $this->clean_string( $this->render_field( $field ) ) );
 	}
 
 	public function test_field_options_cb() {
@@ -201,7 +201,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		</div>
 		';
 
-		$this->assertEquals( $this->clean_string( $this->render_field( $field ) ), $this->clean_string( $field_gen ) );
+		$this->assertEquals( $this->clean_string( $field_gen ), $this->clean_string( $this->render_field( $field ) ) );
 	}
 
 	public function test_field_options() {
@@ -225,7 +225,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		</div>
 		';
 
-		$this->assertEquals( $this->clean_string( $this->render_field( $field ) ), $this->clean_string( $field_gen ) );
+		$this->assertEquals( $this->clean_string( $field_gen ), $this->clean_string( $this->render_field( $field ) ) );
 	}
 
 	public function test_field_attributes() {
@@ -243,7 +243,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		</div>
 		';
 
-		$this->assertEquals( $this->clean_string( $this->render_field( $field ) ), $this->clean_string( $field_gen ) );
+		$this->assertEquals( $this->clean_string( $field_gen ), $this->clean_string( $this->render_field( $field ) ) );
 	}
 
 	public function options_cb( $field ) {
