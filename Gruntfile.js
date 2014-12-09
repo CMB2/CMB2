@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 		csscomb: {
 			dist: {
 				files: [{
-					expand: true,
+					expand: false,
 					cwd: 'css/',
 					src: ['**/*.css'],
 					dest: 'css/',
