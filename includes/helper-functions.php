@@ -83,12 +83,11 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
  * @param  mixed   $value      Value to update data with
- * @param  bool    $resave     Whether to re-save the data
  * @param  bool    $single     Whether data should be an array
  * @return array               Modified options
  */
-function cmb2_update_option( $option_key, $field_id, $value, $resave = false, $single = true ) {
-	if ( cmb2_options( $option_key )->update( $field_id, $value, $resave, $single ) ) {
+function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
+	if ( cmb2_options( $option_key )->update( $field_id, $value, false, $single ) ) {
 		return cmb2_options( $option_key )->set();
 	}
 
