@@ -716,6 +716,7 @@ class CMB2_Field {
 			'repeatable'        => false,
 			'inline'            => false,
 			'on_front'          => true,
+			'show_names'        => true,
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
