@@ -171,7 +171,7 @@ class CMB2_Core_Test extends CMB2_Test {
 
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
 
-		$this->assertEquals( $this->clean_string( $form ), $this->clean_string( $form_get ) );
+		$this->assertEquals( $this->normalize_string( $form ), $this->normalize_string( $form_get ) );
 	}
 
 	public function cmb_before_row( $field_args, $field ) {
