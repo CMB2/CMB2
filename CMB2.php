@@ -242,6 +242,12 @@ class CMB2 {
 	 * Render a repeatable group
 	 */
 	public function render_group( $args ) {
+
+		// If field is requesting to be conditionally shown
+		if ( is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
+			return;
+		}
+
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
