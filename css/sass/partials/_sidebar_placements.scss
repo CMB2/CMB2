@@ -44,6 +44,10 @@ Sidebar Placement Adjustments
 		float: none;
 	}
 
+	.closed .inside {
+		display: none;
+	}
+
 	.cmb-td .cmb-td {
 		padding-bottom: 1em;
 	}

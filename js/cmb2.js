@@ -83,7 +83,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$(this).find( '.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
+					$(this).find( '.button.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
 				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
@@ -291,8 +291,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		$inputs.filter(':checked').prop( 'checked', false );
 		$inputs.filter(':selected').prop( 'selected', false );
 
-		if ( $self.find('.cmb-group-title').length ) {
-			$self.find( '.cmb-group-title h4' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
+		if ( $self.find('h3.cmb-group-title').length ) {
+			$self.find( 'h3.cmb-group-title' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
 
 		$inputs.each( function(){
@@ -454,7 +454,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true );
 
-		var $newRow = $( '<div class="cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
+		var $newRow = $( '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow, true );
@@ -466,6 +466,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
+
+		// Unbind/Rebind our toggle event
+		$('.postbox .hndle, .postbox .handlediv').unbind('click.postboxes');
+		postboxes.add_postbox_toggles(pagenow);
 	};
 
 	cmb.addAjaxRow = function( event ) {

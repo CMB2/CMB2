@@ -1,6 +1,13 @@
 /*--------------------------------------------------------------
 Post Metaboxes
 --------------------------------------------------------------*/
+#poststuff .cmb-group-title {
+	margin-left: -1em;
+	margin-right: -1em;
+	padding-left: 2.2em;
+	// cursor: move;
+	min-height: 1.5em;
+}
 
 .postbox-container {
 
@@ -21,21 +28,38 @@ Post Metaboxes
 
 	.cmb-row {
 		padding: 0 0 1.8em;
+		margin: 0 0 0.8em;
+
+		.handlediv {
+			right: -1em;
+			position: relative;
+		}
 	}
 
 	.cmb-repeatable-grouping {
 		padding: 0 1em;
 		max-width: 100%;
+		min-width: 1px !important;
+		button.dashicons-before {
+			-webkit-appearance: none !important;
+			background: none !important;
+			border: none !important;
+			position: absolute;
+			left: 0;
+			top: .5em;
+			line-height: 1em;
+			cursor: pointer;
+			&:not([disabled]) {
+				color: $dark-red;
+				&:hover {
+					color: $red;
+				}
+			}
+		}
 	}
 
 	.cmb-repeatable-group > .cmb-row {
 		padding-bottom: 0;
-	}
-
-	.cmb-group-title {
-		margin-left: -1em;
-		margin-right: -1em;
-		padding: 0;
 	}
 
 	.cmb-th {

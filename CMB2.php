@@ -288,18 +288,13 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<div class="cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
-			<div class="cmb-td">
-				<div class="cmb-nested cmb-field-list" style="width: 100%;">';
-				if ( $field_group->options( 'group_title' ) ) {
-					echo '
-					<div class="cmb-row cmb-group-title">
-						<div class="cmb-th">
-							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
-						</div>
-					</div>
-					';
-				}
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
+
+			<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+			<div class="handlediv" title="' . __( 'Click to toggle', 'cmb2' ) . '"><br></div>
+			<h3 class="cmb-group-title"><span>'. $field_group->replace_hash( $field_group->options( 'group_title' ) ) .'</span></h3>
+
+			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
@@ -322,12 +317,12 @@ class CMB2 {
 					}
 				}
 				echo '
-					<div class="cmb-row cmb-remove-field-row">
-						<div class="cmb-remove-row">
-							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button cmb-remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
-						</div>
+				<div class="cmb-row cmb-remove-field-row">
+					<div class="cmb-remove-row">
+						<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button cmb-remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
 		';
