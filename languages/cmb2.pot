@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-09 22:51:50+00:00\n"
+"POT-Creation-Date: 2014-12-10 19:06:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-9 22:51+300\n"
+"PO-Revision-Date: 2014-12-10 19:6+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: CMB2.php:113
+#: CMB2.php:96
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr ""
 
-#: CMB2.php:300
+#: CMB2.php:283
 msgid "Click to toggle"
 msgstr ""
 
