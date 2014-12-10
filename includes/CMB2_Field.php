@@ -362,7 +362,7 @@ class CMB2_Field {
 	 * Checks if field has a registered sanitization callback
 	 * @since  1.0.1
 	 * @param  mixed $meta_value Meta value
-	 * @return mixed             Possibly validated meta value
+	 * @return mixed             Possibly sanitized meta value
 	 */
 	public function sanitization_cb( $meta_value ) {
 
@@ -574,22 +574,15 @@ class CMB2_Field {
 			return;
 		}
 
-		$classes    = 'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) );
-		$classes   .= ' cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) );
-		$classes   .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
-		$classes   .= $this->group ? ' cmb-repeat-group-field' : '';
-		// 'inline' flag, or _inline in the field type, set to true
-		$classes   .= $this->args( 'inline' ) ? ' cmb-inline' : '';
-
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\">\n", $classes );
+		printf( "<div class=\"cmb-row %s\">\n", $this->row_classes() );
 
 		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
 			echo "\t<div class=\"cmb-td\">\n";
 
 			if ( ! $this->args( 'show_names' ) ) {
-				$style = 'title' == $this->type() ? ' style="display:none;"' : '';
+				$style = 'title' == $this->type() ? '' : ' style="display:none;"';
 				printf( "\n<label%s for=\"%s\">%s</label>\n", $style, $this->id(), $this->args( 'name' ) );
 			}
 		} else {
@@ -611,6 +604,31 @@ class CMB2_Field {
 		echo "\n\t</div>\n</div>";
 
 		$this->peform_param_callback( 'after_row' );
+	}
+
+	/**
+	 * Defines the classes for the current CMB field row
+	 *
+	 * @since  2.0.0
+	 * @return string Space concatenated list of classes
+	 */
+	public function row_classes() {
+		$classes = 'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) );
+		$classes .= ' cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) );
+		$classes .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
+		$classes .= $this->group ? ' cmb-repeat-group-field' : '';
+		// 'inline' flag, or _inline in the field type, set to true
+		$classes .= $this->args( 'inline' ) ? ' cmb-inline' : '';
+
+		$repeat_table_rows_types = apply_filters( 'cmb2_repeat_table_row_types', array(
+			'text_url', 'text'
+		) );
+
+		if ( in_array( $this->type(), $repeat_table_rows_types ) ) {
+			$classes .= ' table-layout';
+		}
+
+		return apply_filters( 'cmb2_row_classes', $classes, $this );
 	}
 
 	/**
@@ -698,6 +716,7 @@ class CMB2_Field {
 			'repeatable'        => false,
 			'inline'            => false,
 			'on_front'          => true,
+			'show_names'        => true,
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',

@@ -1,35 +1,25 @@
-# Copyright (C) 2014 WebDevStudios
-# This file is distributed under the same license as the CMB2 (beta) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 (beta) 2.0.0.3\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-10 19:06:23+00:00\n"
+"Project-Id-Version: CMB2 (beta)\n"
+"POT-Creation-Date: 2014-12-03 21:24+0200\n"
+"PO-Revision-Date: 2014-12-03 21:53+0200\n"
+"Last-Translator: Onni Hakala <onni@koodimonni.fi>\n"
+"Language-Team: Onni Hakala <onni@koodimonni.fi>\n"
+"Language: fi_FI\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-10 19:6+300\n"
-"Last-Translator: WebDevStudios contact@webdevstudios.com\n"
-"Language-Team: WebDevStudios contact@webdevstudios.com\n"
-"X-Generator: grunt-wp-i18n 0.4.9\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: United States\n"
+"X-Generator: Poedit 1.7\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-Bookmarks: \n"
-"X-Textdomain-Support: yes\n"
 
-#: CMB2.php:96
+#: CMB2.php:113
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr ""
-
-#: CMB2.php:283
-msgid "Click to toggle"
 msgstr ""
 
 #: example-functions.php:52
@@ -242,7 +232,7 @@ msgstr ""
 
 #: example-functions.php:360
 msgid "Extra Info"
-msgstr ""
+msgstr "Lisätiedot"
 
 #: example-functions.php:367
 msgid "Avatar"
@@ -274,157 +264,139 @@ msgstr ""
 
 #: example-functions.php:415
 msgid "Site Background Color"
-msgstr ""
+msgstr "Sivuston taustaväri"
 
 #: includes/CMB2_Ajax.php:37
 msgid "Please Try Again"
-msgstr ""
+msgstr "Yritä uudelleen"
 
 #: includes/CMB2_Ajax.php:133
 msgid "Remove Embed"
-msgstr ""
+msgstr "Poista Embed"
 
 #: includes/CMB2_Ajax.php:137
+#, php-format
 msgid "No oEmbed Results Found for %s. View more info at"
-msgstr ""
+msgstr "Yhtään oEmbed:iä ei löytynyt haulle %s. Katso lisää täältä: "
+
+#: includes/CMB2_Field.php:739
+msgid "Add Group"
+msgstr "Lisää Ryhmä"
 
 #: includes/CMB2_Field.php:740
-msgid "Add Group"
-msgstr ""
-
-#: includes/CMB2_Field.php:741
 msgid "Remove Group"
-msgstr ""
+msgstr "Poista Ryhmä"
+
+#: includes/CMB2_Field.php:761
+msgid "None"
+msgstr "﻿Ei mitään"
 
 #: includes/CMB2_Field.php:762
-msgid "None"
-msgstr ""
-
-#: includes/CMB2_Field.php:763
 msgid "All"
-msgstr ""
+msgstr "Kaikki"
 
 #: includes/CMB2_Types.php:288
 msgid "Add Row"
-msgstr ""
+msgstr "﻿Lisää rivi"
 
 #: includes/CMB2_Types.php:347 includes/CMB2_Types.php:798
 #: includes/CMB2_Types.php:878 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:158 tests/test-cmb-types.php:166
 msgid "Remove"
-msgstr ""
+msgstr "Poista"
 
 #: includes/CMB2_Types.php:674 includes/CMB2_Types.php:722
 msgid "No terms"
-msgstr ""
+msgstr "Ei kohteita"
 
 #: includes/CMB2_Types.php:766 includes/CMB2_Types.php:823
 msgid "Add or Upload File"
-msgstr ""
+msgstr "Lisää tai Lataa kuva"
 
 #: includes/CMB2_Types.php:787 includes/CMB2_Types.php:870
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr ""
+msgstr "﻿Poista kuva"
 
 #: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
 #: includes/CMB2_hookup.php:174
 msgid "File:"
-msgstr ""
+msgstr "﻿Tiedosto:"
 
 #: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
 #: includes/CMB2_hookup.php:175
 msgid "Download"
-msgstr ""
+msgstr "﻿Lataa"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr ""
+msgstr "﻿Tyhjennä"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr ""
+msgstr "Oletusarvo"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr ""
+msgstr "﻿Valitse väri"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr ""
+msgstr "Nykyinen väri"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
-msgstr ""
+msgstr "kk/pp/vv"
 
 #: includes/CMB2_hookup.php:151
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
 msgstr ""
+"Sunnuntai, Maanantai, Tiistai, Keskiviikko, Torstai, Perjantai, Lauantai"
 
 #: includes/CMB2_hookup.php:152
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "Su, Ma, Ti, Ke, To, Pe, La"
 
 #: includes/CMB2_hookup.php:153
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "Sun, Man, Tii, Kes, Tor, Per, Lau"
 
 #: includes/CMB2_hookup.php:154
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
 msgstr ""
+"Tammikuu, Helmikuu, Maaliskuu, Huhtikuu, Toukokuu, Kesäkuu, Heinäkuu, "
+"Elokuu, Syyskuu, Lokakuu, Marraskuu, Joulukuu"
 
 #: includes/CMB2_hookup.php:155
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr ""
+msgstr "Tam, Hel, Mar, Huh, Tou, Kes, Hei, Elo, Syy, Lok, Mar, Jou"
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr ""
+msgstr "Seuraava"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
-msgstr ""
+msgstr "Edellinen"
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr ""
+msgstr "Tänään"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr ""
+msgstr "Valmis"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
-msgstr ""
+msgstr "﻿Käytä tätä tiedostoa"
 
 #: includes/CMB2_hookup.php:176
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "Valitse / Poista kaikki valinnat"
 
-#: includes/helper-functions.php:243
+#: includes/helper-functions.php:226
 msgid "Save"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "CMB2 (beta)"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid ""
-"CMB2 will create metaboxes and forms with custom fields that will blow your "
-"mind."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "WebDevStudios"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "Tallenna"

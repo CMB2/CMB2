@@ -97,7 +97,7 @@ class CMB2_Option {
 	 * @param  string  $field_id   Option array field key
 	 * @param  mixed   $value      Value to update data with
 	 * @param  bool    $resave     Whether to re-save the data
-	 * @param  bool    $single     Whether data should be an array
+	 * @param  bool    $single     Whether data should not be an array
 	 * @return array               Modified options
 	 */
 	function update( $field_id, $value = '', $resave = false, $single = true ) {

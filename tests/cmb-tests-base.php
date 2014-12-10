@@ -20,11 +20,15 @@ class CMB2_Test extends WP_UnitTestCase {
 		$cmb = new CMB2( array() );
 	}
 
-	public function clean_string( $string ) {
-		return trim( str_ireplace( array(
-			"\n", "\r", "\t", '  ', '> <',
+	public function normalize_string( $string ) {
+		return trim( preg_replace( array(
+			'/[\t\n\r]/', // Remove tabs and newlines
+			'/\s{2,}/', // Replace repeating spaces with one space
+			'/> </', // Remove spaces between carats
 		), array(
-			'', '', '', ' ', '><',
+			'',
+			' ',
+			'><',
 		), $string ) );
 	}
 

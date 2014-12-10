@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 		csscomb: {
 			dist: {
 				files: [{
-					expand: true,
+					expand: false,
 					cwd: 'css/',
 					src: ['**/*.css'],
 					dest: 'css/',
@@ -127,7 +127,7 @@ module.exports = function(grunt) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console']
+				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow']
 			}
 		},
 

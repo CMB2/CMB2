@@ -4,7 +4,7 @@ _Support is not offered for this library, and the likelihood that the maintainer
 Before reporting a bug
 ---
 1. Search issue tracker for similar issues.
-2. ~~Install the trunk version of CMB2.~~ **(We'll be working form `master` until out of beta)**
+2. ~~Install the trunk version of CMB2.~~ **(We'll be working from `master` until out of beta)**
 
 
 How to report a bug

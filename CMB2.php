@@ -7,24 +7,7 @@
  * @return string        Directory with optional path appended
  */
 function cmb2_dir( $path = '' ) {
-	return wp_normalize_path( trailingslashit( dirname( __FILE__ ) ) . $path );
-}
-
-if ( ! function_exists( 'wp_normalize_path' ) ) {
-	/**
-	 * Normalize a filesystem path.
-	 *
-	 * Replaces backslashes with forward slashes for Windows systems, and ensures
-	 * no duplicate slashes exist.
-	 * Available in WordPress 3.9.0
-	 *
-	 * @since  2.0.0
-	 * @param  string $path Path to normalize.
-	 * @return string       Normalized path.
-	 */
-	function wp_normalize_path( $path ) {
-		return preg_replace( '|/+|','/', str_replace( '\\', '/', $path ) );
-	}
+	return trailingslashit( dirname( __FILE__ ) ) . $path;
 }
 
 require_once cmb2_dir( 'includes/helper-functions.php' );
@@ -242,6 +225,12 @@ class CMB2 {
 	 * Render a repeatable group
 	 */
 	public function render_group( $args ) {
+
+		// If field is requesting to be conditionally shown
+		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
+			return;
+		}
+
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
@@ -288,18 +277,13 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<div class="cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
-			<div class="cmb-td">
-				<div class="cmb-nested cmb-field-list" style="width: 100%;">';
-				if ( $field_group->options( 'group_title' ) ) {
-					echo '
-					<div class="cmb-row cmb-group-title">
-						<div class="cmb-th">
-							', sprintf( '<h4>%1$s</h4>', $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '
-						</div>
-					</div>
-					';
-				}
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
+
+			<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+			<div class="handlediv" title="' . __( 'Click to toggle', 'cmb2' ) . '"><br></div>
+			<h3 class="cmb-group-title"><span>'. $field_group->replace_hash( $field_group->options( 'group_title' ) ) .'</span></h3>
+
+			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
@@ -322,12 +306,12 @@ class CMB2 {
 					}
 				}
 				echo '
-					<div class="cmb-row cmb-remove-field-row">
-						<div class="cmb-remove-row">
-							<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button cmb-remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
-						</div>
+				<div class="cmb-row cmb-remove-field-row">
+					<div class="cmb-remove-row">
+						<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="button cmb-remove-group-row alignright">'. $field_group->options( 'remove_button' ) .'</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
 		';
