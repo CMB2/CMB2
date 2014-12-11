@@ -291,7 +291,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		// pre-filter
 		$elements.filter(':checked').prop( 'checked', false );
 		$elements.filter(':selected').prop( 'selected', false );
-		$elements.find(".quicktags-toolbar, .mce-container").remove(); // remove quicktags bar, cause its reinit soon and will then be known by wordpress
+		 // remove quicktags bar, cause its reinit soon and will then be known by wordpress
+		$elements.find(".quicktags-toolbar, .mce-container").remove();
 
 		// filter titles
 		if ( $self.find('h3.cmb-group-title').length ) {
@@ -306,11 +307,13 @@ window.CMB2 = (function(window, document, $, undefined){
 			var attrs     = {};
 			var newID, oldID;
 			
-			if ( $newElement.prop('tagName') == 'LABEL' ) { // label
+			 // label
+			if ( $newElement.prop('tagName') === 'LABEL' ) {
 				
 				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
 				
-			} else if( $newElement.prop('tagName') == 'DIV' ){ // div handling
+			// div handling
+			} else if( $newElement.prop('tagName') === 'DIV' ){
 				/*
 					Divs have an id and class, so replace it. also if it had an data-iterator tag set it too.
 				*/
@@ -321,17 +324,21 @@ window.CMB2 = (function(window, document, $, undefined){
 				var oldId = $newElement.attr( 'id' );
 				var newId = oldId ? oldId.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				// if there is an id
-				if( $newElement.attr( 'id' ) )
+				if( $newElement.attr( 'id' ) ){
 					attrs["id"] = newId;
+				}
 				// if there is an class
-				if( $newElement.attr( 'class' ) )
-					attrs["class"] = newClass; // replace class name
+				if( $newElement.attr( 'class' ) ){
+					 // replace class name
+					attrs["class"] = newClass;
+				}
 				// check for data-iterator tag and set if needed
-				if( $newElement.attr("data-iterator") )
+				if( $newElement.attr("data-iterator") ){
 					attrs["data-iterator"] = cmb.idNumber;
+				}
 				
-				
-			} else { // other
+			 // other	
+			} else {
 				var oldName = $newElement.attr( 'name' );
 				var oldValue = $newElement.val();
 				// Replace 'name' attribute key
@@ -346,15 +353,20 @@ window.CMB2 = (function(window, document, $, undefined){
 					'data-iterator': cmb.idNumber,
 					value: ""
 				};
-				
-				// check for data-iterator tag and set if needed
-				if( "radio" == $newElement.attr("type") || // check for input type radio
-				     "checkbox" == $newElement.attr("type") || // check for input type checkbox
-				     "SELECT" == $newElement.prop("tagName") ) { // check for element type select
+				 
+				// check for data-iterator tag and set if needed, check for input type radio
+				if( "radio" === $newElement.attr("type") ||
+					// check for input type checkbox
+				     "checkbox" === $newElement.attr("type") ||
+					 // check for element type select
+				     "SELECT" === $newElement.prop("tagName") ) {
 						attrs["value"] = oldValue;
-						attrs["selected"] = false; // remove selected
-						attrs["checked"] = false; // remove checked
-						$newElement.find("option").attr( 'checked', false ).attr( 'selected', false ); // remove option checked and selected
+						 // remove selected
+						attrs["selected"] = false;
+						 // remove checked
+						attrs["checked"] = false;
+						 // remove option checked and selected
+						$newElement.find("option").attr( 'checked', false ).attr( 'selected', false );
 				}
 			}
 			
@@ -446,25 +458,31 @@ window.CMB2 = (function(window, document, $, undefined){
 					}
 					tinyMCEPreInit.qtInit[ id ] = newQTS;
 				}
-				
-				QTags( tinyMCEPreInit.qtInit[ id ] ); // init qtags
-				QTags._buttonsInit(); // init qtags bar
-				
-				
-				 // init tinymce
-				if( jQuery(  "#"+id  ).closest(".wp-editor-wrap").find(".wp-switch-editor").length > 0 ){ // if options not there, the qysiswg is disabled by options
-					tinyMCE.init({
-						id : tinyMCEPreInit.mceInit[ id ],
-					});
+				if ( typeof( QTags ) !== 'undefined' && typeof( tinyMCEPreInit ) !== 'undefined' ) {
+					
+					// init qtags
+					QTags( tinyMCEPreInit.qtInit[ id ] );
+					 // init qtags bar
+					QTags._buttonsInit();
+					
+					
+					// init tinymce
+					if( $(  '#'+id  ).closest('.wp-editor-wrap').find('.wp-switch-editor').length > 0 ){ // if options not there, the qysiswg is disabled by options
+						tinyMCE.init({
+							id : tinyMCEPreInit.mceInit[ id ],
+						});
+					}
+					
+					// switch to correct editor
+					if( !$(  '#'+id  ).closest('.wp-editor-wrap').hasClass('html-active') && 
+						// check the class to get the current mode and auto switch editor to it
+				   	  	$(  '#'+id  ).closest('.wp-editor-wrap').find('.wp-switch-editor').length > 0 ){
+						 // wp_editor html qtags active before doing tinyMCE to reload it
+						  switchEditors.go(id, 'html'); 
+						 // wp_editor tinymce active
+						  switchEditors.go(id, 'tmce');
+					}
 				}
-				
-				// switch to correct editor
-				if( !jQuery(  "#"+id  ).closest(".wp-editor-wrap").hasClass("html-active") && 
-				     jQuery(  "#"+id  ).closest(".wp-editor-wrap").find(".wp-switch-editor").length > 0 ){// check the class to get the current mode and auto switch editor to it
-					switchEditors.go(id, "html"); // wp_editor html qtags active before doing tinyMCE to reload it
-					switchEditors.go(id, "tmce"); // wp_editor tinymce active
-				}
-				
 			}
 		}
 
@@ -623,27 +641,32 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
-			} else if ( 'checkbox' == $element.attr('type') || 'radio' == $element.attr('type') ) {
+			} else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr('type') ) {
 				val = $element.is(':checked');
-			} else if ( 'SELECT' == $element.prop('tagName') ) {
-				val = ""; // unset
+			} else if ( 'SELECT' === $element.prop('tagName') ) {
+				val = ''; // unset
 			} else if ( 'TEXTAREA' === $element.prop('tagName') ) {
-				var id = $element.attr("id"),
+				var id = $element.attr('id'),
 					mode;
 				
-				// get modes
-				if( jQuery(  "#"+id  ).closest(".wp-editor-wrap").hasClass("html-active") )// check the class to get the current mode and auto switch editor to it
-					mode = "html";
-				else
-					mode = "tmce";
+				// get modes, check the class to get the current mode and auto switch editor to it
+				if( $(  '#'+id  ).closest('.wp-editor-wrap').hasClass('html-active') ){
+					mode = 'html';
+				} else {
+					mode = 'tmce';
+				}
 				
-				if(mode == "tmce")
-					switchEditors.go(id, "html"); // switch to html to prevent errors in string handle with tinymce
+				if(mode === 'tmce'){
+					// switch to html to prevent errors in string handle with tinymce
+					switchEditors.go(id, 'html');
+				}
 				
 				val = $element.val();
 				
-				if(mode == "tmce")
-					switchEditors.go(id, "tmce"); // switch back if the mode before was tinymce
+				if(mode === 'tmce'){
+					 // switch back if the mode before was tinymce
+					switchEditors.go(id, 'tmce');
+				}
 				
 			} else {
 				val = $element.val();
@@ -670,57 +693,65 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 			// handle select swapping
 			else if ( 'SELECT' === $element.prop('tagName') ) {
-				var $parent = inputVals[ index ]['$'].find("option"),
-				       $new = $element.find("option"),
-				       $parentSelectedValue = inputVals[ index ]['$'].find("option:selected").val(),
-				       $newSelectedValue = $element.find("option:selected").val();
+				var $parent = inputVals[ index ]['$'].find('option'),
+				       $new = $element.find('option'),
+				       $parentSelectedValue = inputVals[ index ]['$'].find('option:selected').val(),
+				       $newSelectedValue = $element.find('option:selected').val();
 					  
 				// get selected data value
-				$parent.prop("selected", false);
-				$new.prop("selected", false);
+				$parent.prop('selected', false);
+				$new.prop('selected', false);
 				
 				// look for value of the other selected and try to check it
 				$parent.each(function(i, $elem){
-					if(jQuery($elem).val() == $newSelectedValue)
-						jQuery($elem).prop("selected", true); // check if the other value is the same
+					if($($elem).val() === $newSelectedValue){
+						$($elem).prop('selected', true); // check if the other value is the same
+					}
 				});  
 				$new.each(function(i, $elem){
-					if(jQuery($elem).val() == $parentSelectedValue)
-						jQuery($elem).prop("selected", true); // check if the other value is the same
+					if($($elem).val() === $parentSelectedValue){
+						$($elem).prop('selected', true); // check if the other value is the same
+					}
 				});
 			}
 			else if ( 'TEXTAREA' === $element.prop('tagName') ) {
 				var parentMode, newMode;
 				
 				// get ids
-				var parentid = inputVals[ index ]['$'].attr("id"),
-					newid = $element.attr("id"); // get ids
+				var parentid = inputVals[ index ]['$'].attr('id'),
+					newid = $element.attr('id'); // get ids
 				
 				// get modes
-				if( jQuery(  "#"+parentid  ).closest(".wp-editor-wrap").hasClass("html-active") )// check the class to get the current mode and auto switch editor to it
-					parentMode = "html";
-				else
-					parentMode = "tmce";
-				if( jQuery(  "#"+newid  ).closest(".wp-editor-wrap").hasClass("html-active") )// check the class to get the current mode and auto switch editor to it
-					newMode = "html";
-				else
-					newMode = "tmce";
+				if( $(  '#'+parentid  ).closest('.wp-editor-wrap').hasClass('html-active') ){ // check the class to get the current mode and auto switch editor to it
+					parentMode = 'html';
+				} else {
+					parentMode = 'tmce';
+				}
+				if( $(  '#'+newid  ).closest('.wp-editor-wrap').hasClass('html-active') ){ // check the class to get the current mode and auto switch editor to it
+					newMode = 'html';
+				} else {
+					newMode = 'tmce';
+				}
 				
 				// switch to html if needed to prevent parsing problems by wysiwyg
-				if(parentMode == "tmce")
-					switchEditors.go(parentid, "html");
-				if(newMode == "tmce")
-					switchEditors.go(newid, "html");
+				if(parentMode === 'tmce'){
+					switchEditors.go(parentid, 'html');
+				}
+				if(newMode === 'tmce'){
+					switchEditors.go(newid, 'html');
+				}
 				
 				 // set values to both
 				inputVals[ index ]['$'].val( $element.val() );
 				$element.val( inputVals[ index ]['val'] );
 				
 				// switch back if needed
-				if(parentMode == "tmce")
-					switchEditors.go(parentid, "tmce");
-				if(newMode == "tmce")
-					switchEditors.go(newid, "tmce");
+				if(parentMode === 'tmce'){
+					switchEditors.go(parentid, 'tmce');
+				}
+				if(newMode === 'tmce'){
+					switchEditors.go(newid, 'tmce');
+				}
 				
 			} 
 			// handle normal input swapping
@@ -770,7 +801,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			$selector.wpColorPicker( cmb.defaults.color_picker );
 			
 			$selector.each(function(){ // update colors
-				var $this_selector = jQuery(this);
+				var $this_selector = $(this);
 				$this_selector.wpColorPicker( 'color',  $this_selector.val());
 				$this_selector.trigger( 'change' );
 			});
