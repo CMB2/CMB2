@@ -464,7 +464,7 @@ span.cmb2-metabox-description {
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
-	background: white;
+	background: #ffffff;
 	border: 1px solid #e9e9e9;
 	border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -660,13 +660,13 @@ Post Metaboxes
 /* line 52, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-grouping button.dashicons-before:not([disabled]) {
-	color: #aa0000;
+	color: #a00;
 }
 
 /* line 54, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-grouping button.dashicons-before:not([disabled]):hover {
-	color: red;
+	color: #f00;
 }
 
 /* line 61, sass/partials/_post_metaboxes.scss */
@@ -1142,7 +1142,7 @@ Sidebar Placement Adjustments
 
 .cmb2-element .ui-widget-content {
 	border: 1px solid #aaaaaa;
-	background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+	background: #ffffff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 	color: #222222;
 }
 
@@ -1215,7 +1215,7 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-widget-content .ui-state-active,
 .cmb2-element .ui-widget-header .ui-state-active {
 	border: 1px solid #aaaaaa;
-	background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+	background: #ffffff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
 	font-weight: normal;
 	color: #212121;
 }
@@ -2780,6 +2780,8 @@ Sidebar Placement Adjustments
 	width: 200px; /*must have*/
 	height: 200px; /*must have*/
 }
+
+/*# sourceMappingURL=cmb2.css.map */
 
 @media (max-width: 450px) {
 
