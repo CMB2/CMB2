@@ -62,6 +62,10 @@ Main Wrap
 		}
 	}
 
+	input[type=hidden] + input {
+		margin-left: 0;
+	}
+
 	ul {
 		margin: 0;
 	}
@@ -118,9 +122,9 @@ Main Wrap
 		}
 	}
 
-	/**
-	 * Color picker
-	 */
+	// /**
+	//  * Color picker
+	//  */
 	.wp-color-result,
 	.wp-picker-input-wrap {
 		vertical-align: middle;
@@ -247,6 +251,10 @@ Main Wrap
 }
 
 .empty-row.hidden {
+	display: none;
+}
+
+.hidden {
 	display: none;
 }
 

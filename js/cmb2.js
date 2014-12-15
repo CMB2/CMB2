@@ -68,6 +68,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Media/file management
 			.on( 'click', '.cmb-multicheck-toggle', cmb.toggleCheckBoxes )
 			.on( 'click', '.cmb2-upload-button', cmb.handleMedia )
+			.on( 'click', '.cmb2-img-link', cmb.handleMedia )
 			.on( 'click', '.cmb2-remove-file-button', cmb.handleRemoveMedia )
 			// Repeatable content
 			.on( 'click', '.cmb-add-group-row', cmb.addGroupRow )
@@ -139,7 +140,14 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		var $metabox     = cmb.metabox();
 		var $self        = $(this);
-		cmb.formfield    = $self.prev('input').attr('id');
+
+		// Could be the button or the link of the image.
+		cmb.formfield    = $self.prev('input').attr('id') || $self.parents('.cmb-td').children('.cmb2-upload-file').attr('id');
+
+		// Store who clicked this, so when opening the window, we can reference it.  We need to store this globally because the function
+		// is only defined once.
+		cmb.$clicker = $(this);
+		
 		var $formfield   = $('#'+cmb.formfield);
 		var previewSize  = $formfield.data( 'previewsize' );
 		var formName     = $formfield.attr('name');
@@ -181,9 +189,9 @@ window.CMB2 = (function(window, document, $, undefined){
 
 						// image preview
 						uploadStatus = '<li class="img-status">'+
-							'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
+							'<a href="#" class="cmb2-img-link cmb2-upload-list"><img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'"></a>'+
 							'<p><a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
-							'<input type="hidden" id="filelist-'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
+							'<input type="hidden" class="cmb2-file-list-item" id="filelist-'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
 						'</li>';
 
 					} else {
@@ -213,7 +221,7 @@ window.CMB2 = (function(window, document, $, undefined){
 				if ( attachment.type && attachment.type === 'image' ) {
 					// image preview
 					var width = previewSize[0] ? previewSize[0] : 350;
-					uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
+					uploadStatus = '<div class="img-status"><a href="#" class="cmb2-img-link"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /></a><p><a href="#" class="cmb2-remove-file-button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
 				} else {
 					// Standard generic output if it's not an image.
 					uploadStatus = l10n.strings.file +' <strong>'+ attachment.filename +'</strong>&nbsp;&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'">'+ l10n.strings.remove_file +'</a>)';
@@ -224,11 +232,42 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		};
 
-		// When an file is selected, run a callback.
+		// When a file is selected, run a callback.
 		cmb.file_frames[cmb.formfield].on( 'select', function() {
 			var selection = cmb.file_frames[cmb.formfield].state().get('selection');
 			var type = isList ? 'list' : 'single';
 			handlers[type]( selection );
+
+			// Hide the add or upload button.  You can now click on the image.
+			if (!isList) {
+				$self.parents('.cmb-td').children('.cmb2-upload-button').hide();
+			}
+		});
+
+		// Select the media if one was already selected.
+		cmb.file_frames[cmb.formfield].on('open', function() {
+			var selection = cmb.file_frames[cmb.formfield].state().get('selection');
+			var wpAttachment = null;
+
+			if (isList) {
+
+				// If it was the upload button, we don't want anything there when the media manager comes up.
+				if (!cmb.$clicker.hasClass('cmb2-upload-button')) {
+					var wpAttachmentId = cmb.$clicker.parent().children('.cmb2-file-list-item').attr('id');
+					wpAttachment = wp.media.attachment(wpAttachmentId.substr(9));
+					wpAttachment.fetch();
+
+					selection.reset(wpAttachment ? [ wpAttachment ] : []);
+				} else {
+					selection.reset();
+				}
+			} else {
+				wpAttachment = wp.media.attachment($('#'+ cmb.formfield +'_id').val());
+				wpAttachment.fetch();
+
+				console.log($('#'+ cmb.formfield +'_id').val());
+				selection.reset(wpAttachment ? [ wpAttachment ] : []);
+			}
 		});
 
 		// Finally, open the modal
@@ -238,6 +277,10 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.handleRemoveMedia = function( event ) {
 		event.preventDefault();
 		var $self = $(this);
+
+		// Need to show the button again.
+		$self.parents('.cmb-td').children('.cmb2-upload-button').show();
+		
 		if ( $self.is( '.cmb-attach-list .cmb2-remove-file-button' ) ){
 			$self.parents('li').remove();
 			return false;

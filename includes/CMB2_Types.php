@@ -774,17 +774,18 @@ class CMB2_Types {
 			foreach ( $meta_value as $id => $fullurl ) {
 				$id_input = $this->input( array(
 					'type'  => 'hidden',
+					'class' => 'cmb2-file-list-item',
 					'value' => $fullurl,
 					'name'  => $name .'['. $id .']',
 					'id'    => 'filelist-'. $id,
-					'desc'  => '', 'class' => '',
+					'desc'  => ''
 				) );
 
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
 					echo
-					'<li class="img-status">',
+					'<li class="img-status"><a href="#" class="cmb2-img-link cmb2-upload-list">',
 						wp_get_attachment_image( $id, $img_size ),
-						'<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
+						'</a><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>
 						'. $id_input .'
 					</li>';
 
@@ -813,14 +814,25 @@ class CMB2_Types {
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
 
+		// Display the button or not, depending on if there is media already and it is an image.
+		if (!empty($meta_value) && $this->is_valid_img_ext($meta_value)) {
+			$possibly_hidden_class = ' hidden';
+		} else {
+			$possibly_hidden_class = '';
+		}
+
+		$input_str = ''
+				. '<input class="cmb2-upload-button button'.$possibly_hidden_class.'" type="button" value="'
+				. esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) 
+				. '" />';
+
 		echo $this->input( array(
 			'type'  => $input_type,
 			'class' => 'cmb2-upload-file regular-text',
 			'size'  => 45,
 			'desc'  => '',
 			'data-previewsize' => is_array( $img_size ) ? '['. implode( ',', $img_size ) .']' : 350,
-		) ),
-		'<input class="cmb2-upload-button button" type="button" value="'. esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) .'" />',
+		) ),$input_str,
 		$this->_desc( true );
 
 		$cached_id = $this->_id();
@@ -866,7 +878,9 @@ class CMB2_Types {
 						$image = '<img style="max-width: '. absint( $size ) .'px; width: 100%; height: auto;" src="'. $meta_value .'" alt="" />';
 					}
 
+					echo '<a href="#" class="cmb2-img-link">';
 					echo $image;
+					echo '</a>';
 					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
