@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the CMB2 (beta) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 (beta) 2.0.0.2\n"
+"Project-Id-Version: CMB2 (beta) 2.0.0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-09 03:54:16+00:00\n"
+"POT-Creation-Date: 2014-12-15 15:29:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-8 3:54+300\n"
+"PO-Revision-Date: 2014-12-15 15:29+360\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: CMB2.php:113
+#: CMB2.php:96
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr ""
 
-#: CMB2.php:300
+#: CMB2.php:283
 msgid "Click to toggle"
 msgstr ""
 
@@ -288,19 +288,19 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:739
+#: includes/CMB2_Field.php:740
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:740
+#: includes/CMB2_Field.php:741
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:761
+#: includes/CMB2_Field.php:762
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:762
+#: includes/CMB2_Field.php:763
 msgid "All"
 msgstr ""
 
@@ -308,8 +308,8 @@ msgstr ""
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_Types.php:347 includes/CMB2_Types.php:798
-#: includes/CMB2_Types.php:878 includes/CMB2_hookup.php:173
+#: includes/CMB2_Types.php:347 includes/CMB2_Types.php:799
+#: includes/CMB2_Types.php:892 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:158 tests/test-cmb-types.php:166
 msgid "Remove"
 msgstr ""
@@ -318,21 +318,21 @@ msgstr ""
 msgid "No terms"
 msgstr ""
 
-#: includes/CMB2_Types.php:766 includes/CMB2_Types.php:823
+#: includes/CMB2_Types.php:766 includes/CMB2_Types.php:826
 msgid "Add or Upload File"
 msgstr ""
 
-#: includes/CMB2_Types.php:787 includes/CMB2_Types.php:870
+#: includes/CMB2_Types.php:788 includes/CMB2_Types.php:884
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
+#: includes/CMB2_Types.php:799 includes/CMB2_Types.php:892
 #: includes/CMB2_hookup.php:174
 msgid "File:"
 msgstr ""
 
-#: includes/CMB2_Types.php:798 includes/CMB2_Types.php:878
+#: includes/CMB2_Types.php:799 includes/CMB2_Types.php:892
 #: includes/CMB2_hookup.php:175
 msgid "Download"
 msgstr ""
