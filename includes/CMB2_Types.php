@@ -20,7 +20,7 @@ class CMB2_Types {
 
 	/**
 	 * Current CMB2_Field field object
-	 * @var   array
+	 * @var   CMB2_Field object
 	 * @since 1.0.0
 	 */
 	public $field;
@@ -36,8 +36,6 @@ class CMB2_Types {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		$this->field->peform_param_cb( 'before_field' );
-
 		/**
 		 * Pass non-existent field types through an action
 		 *
@@ -55,8 +53,6 @@ class CMB2_Types {
 		 * @param object $field_type_object  This `CMB2_Types` object
 		 */
 		do_action( "cmb2_render_$name", $this->field, $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
-
-		$this->field->peform_param_cb( 'after_field' );
 	}
 
 	/**
