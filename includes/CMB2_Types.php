@@ -72,9 +72,9 @@ class CMB2_Types {
 	 * @since  1.1.0
 	 */
 	protected function _render() {
-		$this->field->peform_param_cb( 'before_field' );
+		$this->field->peform_param_callback( 'before_field' );
 		echo $this->{$this->field->type()}();
-		$this->field->peform_param_cb( 'after_field' );
+		$this->field->peform_param_callback( 'after_field' );
 	}
 
 	/**
