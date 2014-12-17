@@ -472,7 +472,7 @@ class CMB2_Types {
 	}
 
 	public function text_money() {
-		return ( ! $this->field->args( 'before_field' ) ? '$ ' : ' ' ) . $this->input( array( 'class' => 'cmb2-text-money', 'desc' => $this->_desc() ) );
+		return ( ! $this->field->args( 'before_field' ) ? '$ ' : $this->field->args( 'before_field' ) . ' ' ) . $this->input( array( 'class' => 'cmb2-text-money', 'desc' => $this->_desc() ) );
 	}
 
 	public function textarea_small() {
