@@ -1,4 +1,5 @@
-# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master)
+# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
+
 
 **Maintainers**:
 
