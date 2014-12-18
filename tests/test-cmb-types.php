@@ -580,7 +580,7 @@ class CMB2_Types_Test extends CMB2_Test {
 
 	public function test_file_list_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="'. _( 'Add or Upload File', 'cmb2' ) .'"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
+			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="'. __( 'Add or Upload File', 'cmb2' ) .'"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file_list', 'preview_size' => array( 120, 120 ) ) ), 'render' ) )
 		);
 	}
@@ -606,7 +606,7 @@ class CMB2_Types_Test extends CMB2_Test {
 				__( 'Download','cmb2' ),
 				__( 'Remove', 'cmb2' ),
 				__( 'File:', 'cmb2' ),
-				_( 'Add or Upload File', 'cmb2' )
+				__( 'Add or Upload File', 'cmb2' )
 			),
 			$this->capture_render( array( $this->get_field_type_object( 'file_list' ), 'render' ) )
 		);
@@ -616,7 +616,7 @@ class CMB2_Types_Test extends CMB2_Test {
 
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\'/><input class="cmb2-upload-button button" type="button" value="'. _( 'Add or Upload File', 'cmb2' ) .'" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\'/><input class="cmb2-upload-button button" type="button" value="'. __( 'Add or Upload File', 'cmb2' ) .'" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file', 'preview_size' => array( 199, 199 ) ) ), 'render' ) )
 		);
 	}
@@ -631,7 +631,7 @@ class CMB2_Types_Test extends CMB2_Test {
 				__( 'Download','cmb2' ),
 				__( 'Remove', 'cmb2' ),
 				__( 'File:', 'cmb2' ),
-				_( 'Add or Upload File', 'cmb2' )
+				__( 'Add or Upload File', 'cmb2' )
 			),
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file', 'preview_size' => array( 199, 199 ) ) ), 'render' ) )
 		);
