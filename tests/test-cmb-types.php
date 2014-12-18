@@ -234,6 +234,36 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	public function test_get_file_ext() {
+		$type = $this->get_field_type_object( 'file' );
+		$ext = $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) );
+		$this->assertEquals( 'pdf', $ext );
+	}
+
+	public function test_get_file_name_from_path() {
+		$type = $this->get_field_type_object( 'file' );
+		$name = $type->get_file_name_from_path( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) );
+		$this->assertEquals( 'test-file.pdf', $name );
+	}
+
+	public function test_is_valid_img_ext() {
+		$type = $this->get_field_type_object( 'file' );
+		$this->assertFalse( $type->is_valid_img_ext( $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) ) ) );
+		$this->assertFalse( $type->is_valid_img_ext( '.pdf' ) );
+		$this->assertFalse( $type->is_valid_img_ext( 'jpg' ) );
+		$this->assertFalse( $type->is_valid_img_ext( '.test' ) );
+
+		$valid_types = apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
+
+		foreach ( $valid_types as $ext ) {
+			$this->assertTrue( $type->is_valid_img_ext( '/test.'. $ext ) );
+		}
+
+		// Add .test as a valid image type
+		add_filter( 'cmb2_valid_img_types', array( $this, 'add_type_cb' ) );
+		$this->assertTrue( $type->is_valid_img_ext( '/test.test' ) );
+	}
+
 	public function test_text_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<input type="text" class="regular-text" name="field_test_field" id="field_test_field" value=""/><p class="cmb2-metabox-description">This is a description</p>',
@@ -715,6 +745,11 @@ class CMB2_Types_Test extends CMB2_Test {
 			'object_type' => $field->object_type,
 			'type'        => $field->args( 'type' ),
 		);
+	}
+
+	public function add_type_cb( $types ) {
+		$types[] = 'test';
+		return $types;
 	}
 
 }
