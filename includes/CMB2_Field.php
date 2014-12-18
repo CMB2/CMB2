@@ -559,6 +559,36 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Format the timestamp field value based on the field date/time format arg
+	 * @since  2.0.0
+	 * @param  int    $meta_value Timestamp
+	 * @param  string $format     Either date_format or time_format
+	 * @return string             Formatted date
+	 */
+	public function format_timestamp( $meta_value, $format = 'date_format' ) {
+		return date( stripslashes( $this->args( $format ) ), $meta_value );
+	}
+
+	/**
+	 * Return a formatted timestamp for a field
+	 * @since  2.0.0
+	 * @param  string $format Either date_format or time_format
+	 * @return string         Formatted date
+	 */
+	public function get_timestamp_format( $format = 'date_format', $meta_value = 0 ) {
+		$meta_value = $meta_value ? $meta_value : $this->escaped_value();
+		$meta_value = cmb2_utils()->make_valid_time_stamp( $meta_value );
+
+		if ( empty( $meta_value ) ) {
+			return '';
+		}
+
+		return is_array( $meta_value )
+			? array_map( array( $this, 'format_timestamp' ), $meta_value, $format )
+			: $this->format_timestamp( $meta_value, $format );
+	}
+
+	/**
 	 * Render a field row
 	 * @since 1.0.0
 	 */

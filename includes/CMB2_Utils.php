@@ -92,6 +92,35 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Returns a timestamp, first checking if value already is a timestamp.
+	 * @since  2.0.0
+	 * @param  string|int $string Possible timestamp string
+	 * @return int   	            Time stamp
+	 */
+	public function make_valid_time_stamp( $string ) {
+		if ( ! $string ) {
+			return 0;
+		}
+
+		return $this->is_valid_time_stamp( $string )
+			? (int) $string :
+			strtotime( $string );
+	}
+
+	/**
+	 * Determine if a value is a valid timestamp
+	 * @since  2.0.0
+	 * @param  mixed  $timestamp Value to check
+	 * @return boolean           Whether value is a valid timestamp
+	 */
+	public function is_valid_time_stamp( $timestamp ) {
+		return ! strtotime( $timestamp )
+			&& is_numeric( $timestamp )
+			&& ( $timestamp <= PHP_INT_MAX )
+			&& ( $timestamp >= ~PHP_INT_MAX );
+	}
+
+	/**
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.

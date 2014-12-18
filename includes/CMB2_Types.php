@@ -460,15 +460,15 @@ class CMB2_Types {
 	}
 
 	public function text_date() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), strtotime( $meta_value ) ) : '';
-		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc(), 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format();
+
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc(), 'value' => $formatted_value ) );
 	}
 
 	public function text_time() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'time_format' ), strtotime( $meta_value ) ) : '';
-		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format( 'time_format' );
+
+		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $formatted_value ) );
 	}
 
 	public function text_money() {
@@ -496,9 +496,9 @@ class CMB2_Types {
 	}
 
 	public function text_date_timestamp() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '';
-		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format();
+
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $formatted_value ) );
 	}
 
 	public function text_datetime_timestamp( $meta_value = '' ) {
@@ -518,14 +518,14 @@ class CMB2_Types {
 				'class' => 'cmb2-text-small cmb2-datepicker',
 				'name'  => $this->_name( '[date]' ),
 				'id'    => $this->_id( '_date' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '',
+				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'date_format', $meta_value ) : '',
 				'desc'  => '',
 			) ),
 			$this->input( array(
 				'class' => 'cmb2-timepicker text-time',
 				'name'  => $this->_name( '[time]' ),
 				'id'    => $this->_id( '_time' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'time_format' ), $meta_value ) : '',
+				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'time_format', $meta_value ) : '',
 				'desc'  => $desc,
 			) )
 		);
