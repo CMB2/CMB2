@@ -4,6 +4,7 @@
  * CMB field class
  * @since  1.1.0
  * @method string _id()
+ * @method string type()
  */
 class CMB2_Field {
 
@@ -12,35 +13,42 @@ class CMB2_Field {
 	 * @var   mixed
 	 * @since 1.1.0
 	 */
-	public $object_id;
+	public $object_id = null;
 
 	/**
 	 * Metabox object type
-	 * @var   mixed
+	 * @var   string
 	 * @since 1.1.0
 	 */
-	public $object_type;
+	public $object_type = '';
 
 	/**
 	 * Field arguments
 	 * @var   mixed
 	 * @since 1.1.0
 	 */
-	public $args;
+	public $args = array();
 
 	/**
 	 * Field group object or false (if no group)
 	 * @var   mixed
 	 * @since 1.1.0
 	 */
-	public $group;
+	public $group = false;
 
 	/**
 	 * Field meta value
 	 * @var   mixed
 	 * @since 1.1.0
 	 */
-	public $value;
+	public $value = null;
+
+	/**
+	 * Field meta value
+	 * @var   mixed
+	 * @since 1.1.0
+	 */
+	public $escaped_value = null;
 
 	/**
 	 * Constructs our field object
@@ -56,7 +64,6 @@ class CMB2_Field {
 		} else {
 			$this->object_id   = $args['object_id'];
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
-			$this->group       = false;
 		}
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
@@ -492,7 +499,7 @@ class CMB2_Field {
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 
-		if ( isset( $this->escaped_value ) ) {
+		if ( ! is_null( $this->escaped_value ) ) {
 			return $this->escaped_value;
 		}
 
