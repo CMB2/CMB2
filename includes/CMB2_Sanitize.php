@@ -3,6 +3,7 @@
 /**
  * CMB field validation
  * @since  0.0.4
+ * @method string _id()
  */
 class CMB2_Sanitize {
 
