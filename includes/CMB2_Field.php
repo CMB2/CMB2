@@ -29,7 +29,7 @@ class CMB2_Field {
 
 	/**
 	 * Field group object
-	 * @var   array
+	 * @var   CMB2_Field object
 	 * @since 1.1.0
 	 */
 	public $group;
