@@ -43,6 +43,10 @@ class CMB2_Field_Test extends CMB2_Test {
 
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	public function test_cmb2_field_instance() {
 		$this->assertInstanceOf( 'CMB2_Field', $this->field  );
 	}
