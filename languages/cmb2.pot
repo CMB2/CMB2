@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-18 04:32:25+00:00\n"
+"POT-Creation-Date: 2014-12-18 04:47:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-17 4:32+300\n"
+"PO-Revision-Date: 2014-12-17 4:47+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Please Try Again"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:656
+#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:658
 msgid "Remove Embed"
 msgstr ""
 

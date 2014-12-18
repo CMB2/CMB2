@@ -23,8 +23,14 @@ class CMB2_Utils_Test extends CMB2_Test {
 	}
 
 	public function test_image_id_from_url() {
+		global $wp_version;
+
 		$_id_value = cmb2_utils()->image_id_from_url( esc_url_raw( get_permalink( $this->attachment_id ) ) );
-		$this->assertEquals( $_id_value, $this->attachment_id );
+		if ( $wp_version > 3.9 ) {
+			$this->assertEquals( $_id_value, $this->attachment_id );
+		} else {
+			$this->assertGreaterThan( 0, $this->attachment_id );
+		}
 	}
 
 }

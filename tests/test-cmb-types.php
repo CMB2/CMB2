@@ -647,9 +647,11 @@ class CMB2_Types_Test extends CMB2_Test {
 	}
 
 	public function test_oembed_field_after_value_update() {
+		global $wp_version;
+
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v='. $vid;
-		$src = 'https://www.youtube.com/embed/'. $vid .'?feature=oembed';
+		$src = 'http'. ( $wp_version > 3.9 ? 's' : '' ) .'://www.youtube.com/embed/'. $vid .'?feature=oembed';
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
 		$this->assertHTMLstringsAreEqual(
