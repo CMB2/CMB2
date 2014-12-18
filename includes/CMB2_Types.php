@@ -131,6 +131,21 @@ class CMB2_Types {
 	}
 
 	/**
+	 * Get the file name from a url
+	 * @since  2.0.0
+	 * @param  string  $value File url or path
+	 * @return string         File name
+	 */
+	public function get_file_name_from_path( $value ) {
+		$parts = explode( '/', $value );
+		for ( $i = 0; $i < count( $parts ); ++$i ) {
+			$file_name = $parts[$i];
+		}
+
+		return $file_name;
+	}
+
+	/**
 	 * Determines if a file has a valid image extension
 	 * @since  1.0.0
 	 * @param  string $file File url
@@ -785,10 +800,8 @@ class CMB2_Types {
 					</li>';
 
 				} else {
-					$parts = explode( '/', $fullurl );
-					for ( $i = 0; $i < count( $parts ); ++$i ) {
-						$title = $parts[$i];
-					}
+					$title = $this->get_file_name_from_path( $fullurl );
+
 					echo
 					'<li>',
 						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
@@ -866,11 +879,8 @@ class CMB2_Types {
 					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
-					// $file_ext = $this->get_file_ext( $meta_value );
-					$parts = explode( '/', $meta_value );
-					for ( $i = 0; $i < count( $parts ); ++$i ) {
-						$title = $parts[$i];
-					}
+					$title = $this->get_file_name_from_path( $meta_value );
+
 					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
 				}
 			}
