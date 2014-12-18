@@ -28,8 +28,8 @@ class CMB2_Field {
 	public $args;
 
 	/**
-	 * Field group object
-	 * @var   CMB2_Field object
+	 * Field group object or false (if no group)
+	 * @var   mixed
 	 * @since 1.1.0
 	 */
 	public $group;
