@@ -54,7 +54,7 @@ class CMB2_Field {
 			$this->object_type = $this->group->object_type;
 		} else {
 			$this->object_id   = $args['object_id'];
-			$this->object_type = $args['object_type'];
+			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
 			$this->group       = false;
 		}
 
