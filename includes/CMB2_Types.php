@@ -562,7 +562,7 @@ class CMB2_Types {
 
 		$meta_value = $this->field->escaped_value();
 
-		return '<select name="'. $this->_name() .'" id="'. $this->_id() .'">'. wp_timezone_choice( $meta_value ) .'</select>';
+		return '<select name="'. $this->_name() .'" id="'. $this->_id() .'">'. wp_timezone_choice( $meta_value ) .'</select>'. $this->_desc();
 	}
 
 	public function colorpicker() {
