@@ -67,7 +67,7 @@ class CMB2_Utils {
 	 * Utility method that returns a timezone string representing the default timezone for the site.
 	 *
 	 * Roughly copied from WordPress, as get_option('timezone_string') will return
-	 * an empty string if no value has beens set on the options page.
+	 * an empty string if no value has been set on the options page.
 	 * A timezone string is required by the wp_timezone_choice() used by the
 	 * select_timezone field.
 	 *
