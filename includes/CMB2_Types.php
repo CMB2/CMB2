@@ -154,11 +154,9 @@ class CMB2_Types {
 	public function is_valid_img_ext( $file ) {
 		$file_ext = $this->get_file_ext( $file );
 
-		$this->valid = empty( $this->valid )
-			? (array) apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) )
-			: $this->valid;
+		$is_valid_types = (array) apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
 
-		return ( $file_ext && in_array( $file_ext, $this->valid ) );
+		return ( $file_ext && in_array( $file_ext, $is_valid_types ) );
 	}
 
 	/**
