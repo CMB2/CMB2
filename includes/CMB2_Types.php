@@ -20,7 +20,7 @@ class CMB2_Types {
 
 	/**
 	 * Current CMB2_Field field object
-	 * @var   array
+	 * @var   CMB2_Field object
 	 * @since 1.0.0
 	 */
 	public $field;
@@ -36,8 +36,6 @@ class CMB2_Types {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		$this->field->peform_param_cb( 'before_field' );
-
 		/**
 		 * Pass non-existent field types through an action
 		 *
@@ -55,8 +53,6 @@ class CMB2_Types {
 		 * @param object $field_type_object  This `CMB2_Types` object
 		 */
 		do_action( "cmb2_render_$name", $this->field, $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
-
-		$this->field->peform_param_cb( 'after_field' );
 	}
 
 	/**
@@ -76,9 +72,9 @@ class CMB2_Types {
 	 * @since  1.1.0
 	 */
 	protected function _render() {
-		$this->field->peform_param_cb( 'before_field' );
+		$this->field->peform_param_callback( 'before_field' );
 		echo $this->{$this->field->type()}();
-		$this->field->peform_param_cb( 'after_field' );
+		$this->field->peform_param_callback( 'after_field' );
 	}
 
 	/**
@@ -135,6 +131,21 @@ class CMB2_Types {
 	}
 
 	/**
+	 * Get the file name from a url
+	 * @since  2.0.0
+	 * @param  string  $value File url or path
+	 * @return string         File name
+	 */
+	public function get_file_name_from_path( $value ) {
+		$parts = explode( '/', $value );
+		for ( $i = 0; $i < count( $parts ); ++$i ) {
+			$file_name = $parts[$i];
+		}
+
+		return $file_name;
+	}
+
+	/**
 	 * Determines if a file has a valid image extension
 	 * @since  1.0.0
 	 * @param  string $file File url
@@ -143,11 +154,9 @@ class CMB2_Types {
 	public function is_valid_img_ext( $file ) {
 		$file_ext = $this->get_file_ext( $file );
 
-		$this->valid = empty( $this->valid )
-			? (array) apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) )
-			: $this->valid;
+		$is_valid_types = (array) apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
 
-		return ( $file_ext && in_array( $file_ext, $this->valid ) );
+		return ( $file_ext && in_array( $file_ext, $is_valid_types ) );
 	}
 
 	/**
@@ -464,15 +473,15 @@ class CMB2_Types {
 	}
 
 	public function text_date() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), strtotime( $meta_value ) ) : '';
-		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc(), 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format();
+
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'desc' => $this->_desc(), 'value' => $formatted_value ) );
 	}
 
 	public function text_time() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'time_format' ), strtotime( $meta_value ) ) : '';
-		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format( 'time_format' );
+
+		return $this->input( array( 'class' => 'cmb2-timepicker text-time', 'desc' => $this->_desc(), 'value' => $formatted_value ) );
 	}
 
 	public function text_money() {
@@ -500,9 +509,9 @@ class CMB2_Types {
 	}
 
 	public function text_date_timestamp() {
-		$meta_value = $this->field->escaped_value();
-		$value = ! empty( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '';
-		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $value ) );
+		$formatted_value = $this->field->get_timestamp_format();
+
+		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $formatted_value ) );
 	}
 
 	public function text_datetime_timestamp( $meta_value = '' ) {
@@ -522,14 +531,14 @@ class CMB2_Types {
 				'class' => 'cmb2-text-small cmb2-datepicker',
 				'name'  => $this->_name( '[date]' ),
 				'id'    => $this->_id( '_date' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'date_format' ), $meta_value ) : '',
+				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'date_format', $meta_value ) : '',
 				'desc'  => '',
 			) ),
 			$this->input( array(
 				'class' => 'cmb2-timepicker text-time',
 				'name'  => $this->_name( '[time]' ),
 				'id'    => $this->_id( '_time' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? date( $this->field->args( 'time_format' ), $meta_value ) : '',
+				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'time_format', $meta_value ) : '',
 				'desc'  => $desc,
 			) )
 		);
@@ -566,7 +575,7 @@ class CMB2_Types {
 
 		$meta_value = $this->field->escaped_value();
 
-		return '<select name="'. $this->_name() .'" id="'. $this->_id() .'">'. wp_timezone_choice( $meta_value ) .'</select>';
+		return '<select name="'. $this->_name() .'" id="'. $this->_id() .'">'. wp_timezone_choice( $meta_value ) .'</select>'. $this->_desc();
 	}
 
 	public function colorpicker() {
@@ -789,10 +798,8 @@ class CMB2_Types {
 					</li>';
 
 				} else {
-					$parts = explode( '/', $fullurl );
-					for ( $i = 0; $i < count( $parts ); ++$i ) {
-						$title = $parts[$i];
-					}
+					$title = $this->get_file_name_from_path( $fullurl );
+
 					echo
 					'<li>',
 						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
@@ -870,11 +877,8 @@ class CMB2_Types {
 					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">'. esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) .'</a></p>';
 					echo '</div>';
 				} else {
-					// $file_ext = $this->get_file_ext( $meta_value );
-					$parts = explode( '/', $meta_value );
-					for ( $i = 0; $i < count( $parts ); ++$i ) {
-						$title = $parts[$i];
-					}
+					$title = $this->get_file_name_from_path( $meta_value );
+
 					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
 				}
 			}

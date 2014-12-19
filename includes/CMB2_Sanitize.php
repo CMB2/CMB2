@@ -3,6 +3,7 @@
 /**
  * CMB field validation
  * @since  0.0.4
+ * @method string _id()
  */
 class CMB2_Sanitize {
 
@@ -64,7 +65,7 @@ class CMB2_Sanitize {
 		 */
 		$override_value = apply_filters( 'cmb2_sanitize_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
 		/**
-		 * For back compatibility. See documentation above.
+		 * DEPRECATED. See documentation above.
 		 */
 		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), $override_value, $value, $this->field->object_id, $this->field->args(), $this );
 

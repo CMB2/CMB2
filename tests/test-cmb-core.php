@@ -81,6 +81,10 @@ class CMB2_Core_Test extends CMB2_Test {
 		$this->post_id = $this->factory->post->create();
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @expectedException Exception
 	 */
@@ -142,7 +146,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_cmb2_print_metabox_form() {
-		$form = '
+		$expected_form = '
 		<form class="cmb-form" method="post" id="'. $this->cmb_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
 			<input type="hidden" name="object_id" value="'. $this->post_id .'">
 			'. wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
@@ -171,7 +175,7 @@ class CMB2_Core_Test extends CMB2_Test {
 
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
 
-		$this->assertEquals( $this->normalize_string( $form ), $this->normalize_string( $form_get ) );
+		$this->assertHTMLstringsAreEqual( $expected_form, $form_get );
 	}
 
 	public function cmb_before_row( $field_args, $field ) {

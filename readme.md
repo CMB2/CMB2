@@ -1,45 +1,13 @@
-# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2)
+# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
+
 
 **Maintainers**:
 
 * [WebDevStudios](https://https://github.com/WebDevStudios/) // [http://webdevstudios.com](http://webdevstudios.com/)
 * [Justin Sternberg](https://github.com/jtsternberg) // [http://dsgnwrks.pro](http://dsgnwrks.pro/)
 
-**Contributors**:
+Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
 
-* [Jared Atchison](https://github.com/jaredatch) // [http://www.jaredatchison.com](http://www.jaredatchison.com/)
-* [Bill Erickson](https://github.com/billerickson) // [http://www.billerickson.net](http://www.billerickson.net/)
-* [Andrew Norcross](https://github.com/norcross) // [http://reaktivstudios.com](http://reaktivstudios.com/)
-* [Gary Jones](https://github.com/GaryJones) // [http://gamajo.com](http://gamajo.com/)
-* [Simon Fransson](https://github.com/dessibelle) // [http://dessibelle.se](http://dessibelle.se/)
-* [Leon Francis Shelhamer](https://github.com/twoelevenjay) // [http://211j.com](http://211j.com/)
-* [senicar](https://github.com/senicar)
-* [Scrent](https://github.com/Scrent)
-* [Patrick Forringer](https://github.com/destos) // [http://patrick.forringer.com](http://patrick.forringer.com/)
-* [Brad Parbs](https://github.com/bradp) // [http://bradparbs.com](http://bradparbs.com/)
-* [Greg Rickaby](https://github.com/gregrickaby) // [http://gregrickaby.com](http://gregrickaby.com/)
-* [ArchCarrier](https://github.com/ArchCarrier)
-* [Devin Walker](https://github.com/DevinWalker) // [http://wordimpress.com](http://wordimpress.com/)
-* [Randy Hoyt](https://github.com/randyhoyt) // [http://randyhoyt.com](http://randyhoyt.com/)
-* [Doug Stewart](https://github.com/zamoose) // [http://literalbarrage.org/blog](http://literalbarrage.org/blog/)
-* [Igor Jerosimić](https://github.com/IgorCode) // [http://igor.jerosimic.net](http://igor.jerosimic.net/)
-* [Joe Hoyle](https://github.com/joehoyle) // [http://www.joehoyle.co.uk](http://www.joehoyle.co.uk/)
-* [Tom Rhodes](https://github.com/tommusrhodus) // [http://www.madeinebor.com](http://www.madeinebor.com/)
-* [David O'Trakoun](https://github.com/davidosomething) // [http://davidosomething.com](http://davidosomething.com/)
-* [Phil Wylie](https://github.com/mustardBees) // [http://www.philwylie.co.uk](http://www.philwylie.co.uk/)
-* [Lisa Sabin-Wilson](https://github.com/lswilson) // [http://webdevstudios.com](http://webdevstudios.com/)
-* [Darlan ten Caten](https://github.com/darlantc) // [http://i9solucoesdigitais.com.br](http://i9solucoesdigitais.com.br/)
-* [Jan Willem](https://github.com/veelen)
-* [Luiz Henrique Almeida da Silva](https://github.com/luizhrqas) // [http://henriquealmeida.net](http://henriquealmeida.net/)
-* [TweetPJulien MauryressFr](https://github.com/TweetPressFr) // [http://tweetpressfr.github.io](http://tweetpressfr.github.io/)
-* [Gustave F. Gerhardt](https://github.com/GhostToast) // [http://ghosttoa.st](http://ghosttoa.st/)
-* [greenbrook](https://github.com/greenbrook)
-* [stellageo](https://github.com/stellageo)
-* [Patrick Garman](https://github.com/pmgarman) // [http://pmgarman.me](http://pmgarman.me/)
-* [Travis Smith](https://github.com/wpsmith) // [http://wpsmith.net](http://wpsmith.net/)
-* [Scott](https://github.com/CivicImages) // [http://scottkobewka.com](http://scottkobewka.com/)
-* [Emanuele Feliziani](https://github.com/GioSensation) // [http://gravida.pro](http://gravida.pro/)
-* [Cor van Noorloos](https://github.com/corvannoorloos) // [http://corvannoorloos.com](http://corvannoorloos.com/)
 
 **Version**: 2.0.0-beta  
 **WordPress minimum version**: 3.8  

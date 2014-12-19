@@ -26,6 +26,8 @@ class CMB2_Field_Test extends CMB2_Test {
 					'type' => 'text',
 				) ),
 			),
+			'before_field' => array( $this, 'before_field_cb' ),
+			'after_field' => 'after_field_static',
 		);
 
 		$this->object_id   = $this->post_id;
@@ -41,8 +43,27 @@ class CMB2_Field_Test extends CMB2_Test {
 
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	public function test_cmb2_field_instance() {
 		$this->assertInstanceOf( 'CMB2_Field', $this->field  );
+	}
+
+	public function test_cmb2_before_and_after_field_callbacks() {
+		ob_start();
+		$this->field->peform_param_callback( 'before_field' );
+		$this->field->peform_param_callback( 'after_field' );
+		// grab the data from the output buffer and add it to our $content variable
+		$content = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertEquals( 'before_field_cb_test_testafter_field_static', $content );
+	}
+
+	public function before_field_cb( $args ) {
+		echo 'before_field_cb_'. $args['id'];
 	}
 
 }
