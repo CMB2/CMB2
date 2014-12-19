@@ -1,4 +1,11 @@
-# CMB 2.0 (beta) [![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
+# CMB 2.0 (beta) 
+[![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg?style=flat)]()
+[![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg?style=flat)]()
+[![Wordpress rating](http://img.shields.io/wordpress/plugin/r/cmb2.svg?style=flat)]()
+[![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)]()
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg?style=flat)]()
+[![Scrutinizer Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master)
+[![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 
 **Maintainers**:
