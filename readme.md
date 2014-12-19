@@ -1,4 +1,6 @@
 # CMB 2.0 (beta) 
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg?style=flat)]()
 [![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg?style=flat)]()
 [![Wordpress rating](http://img.shields.io/wordpress/plugin/r/cmb2.svg?style=flat)]()
