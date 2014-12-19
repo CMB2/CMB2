@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-19 02:19:58+00:00\n"
+"POT-Creation-Date: 2014-12-19 14:34:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-18 2:19+300\n"
+"PO-Revision-Date: 2014-12-19 14:34+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Please Try Again"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:688
+#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:734
 msgid "Remove Embed"
 msgstr ""
 
@@ -304,14 +304,14 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/CMB2_Types.php:297
+#: includes/CMB2_Types.php:290
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_Types.php:356 includes/CMB2_Types.php:805
+#: includes/CMB2_Types.php:349 includes/CMB2_Types.php:805
 #: includes/CMB2_Types.php:882 includes/CMB2_hookup.php:173
-#: tests/test-cmb-types.php:146 tests/test-cmb-types.php:154
-#: tests/test-cmb-types.php:637 tests/test-cmb-types.php:662
+#: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
+#: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
 msgstr ""
 
@@ -320,8 +320,8 @@ msgid "No terms"
 msgstr ""
 
 #: includes/CMB2_Types.php:775 includes/CMB2_Types.php:830
-#: tests/test-cmb-types.php:613 tests/test-cmb-types.php:639
-#: tests/test-cmb-types.php:649 tests/test-cmb-types.php:664
+#: tests/test-cmb-types.php:659 tests/test-cmb-types.php:685
+#: tests/test-cmb-types.php:695 tests/test-cmb-types.php:710
 msgid "Add or Upload File"
 msgstr ""
 
@@ -331,14 +331,14 @@ msgid "Remove Image"
 msgstr ""
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
-#: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:638
-#: tests/test-cmb-types.php:663
+#: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
+#: tests/test-cmb-types.php:709
 msgid "File:"
 msgstr ""
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
-#: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:636
-#: tests/test-cmb-types.php:661
+#: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
+#: tests/test-cmb-types.php:707
 msgid "Download"
 msgstr ""
 
