@@ -459,12 +459,13 @@ window.CMB2 = (function(window, document, $, undefined){
 					tinyMCEPreInit.qtInit[ id ] = newQTS;
 				}
 				if ( typeof( QTags ) !== 'undefined' && typeof( tinyMCEPreInit ) !== 'undefined' ) {
-					
+					/* jshint ignore:start */
+					// this must be in a jshint ignore block cause it cant be validate correctly. QTags can't be init with new operator.
 					// init qtags
 					QTags( tinyMCEPreInit.qtInit[ id ] );
 					 // init qtags bar
 					QTags._buttonsInit();
-					
+					/* jshint ignore:end */
 					
 					// init tinymce
 					if( $(  '#'+id  ).closest('.wp-editor-wrap').find('.wp-switch-editor').length > 0 ){ // if options not there, the qysiswg is disabled by options
