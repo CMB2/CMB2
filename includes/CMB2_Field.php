@@ -231,24 +231,6 @@ class CMB2_Field {
 		$override = apply_filters( 'cmb2_override_meta_save', null, $a, $this->args(), $this );
 
 		/**
-		 * Filter whether to override getting of meta value.
-		 *
-		 * The dynamic portion of the hook, $field_id, refers to the current
-		 * field id paramater. Returning a non 'cmb2_field_no_override_val' value
-		 * will effectively short-circuit the value retrieval.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param null|array|string $value       The value get_metadata() should
-		 *                                       return - a single metadata value,
-		 *                                       or an array of values.
-		 * @param int               $object_id   Object ID.
-		 * @param array             $field_args  All field arguments
-		 * @param string            $object_type Object Type
-		 * @param CMB2_Field object $field_obj   This field object
-		 */
-
-		/**
 		 * Filter whether to override saving of meta value.
 		 *
 		 * The dynamic portion of the hook, $a['field_id'], refers to the current
@@ -275,12 +257,16 @@ class CMB2_Field {
 			return $override;
 		}
 		// Options page handling
-		elseif ( 'options-page' === $a['type'] ) {
+		if ( 'options-page' === $a['type'] ) {
 			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
 		}
 		// Add metadata if not single
-		elseif ( ! $a['single'] ) {
+		if ( ! $a['single'] ) {
 			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ], false );
+		}
+		// Delete meta if we have an empty array
+		if ( is_array( $a[ 'value' ] ) && empty( $a[ 'value' ] ) ) {
+			return delete_metadata( $a['type'], $a['id'], $a['field_id'], $this->value );
 		}
 
 		// Update metadata
@@ -422,8 +408,9 @@ class CMB2_Field {
 			$this->updated[] = $name;
 			return $this->update_data( $new_value );
 		} elseif ( empty( $new_value ) ) {
-			if ( ! empty( $old ) )
+			if ( ! empty( $old ) ) {
 				$this->updated[] = $name;
+			}
 			return $this->remove_data();
 		}
 	}

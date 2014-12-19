@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the CMB2 (beta) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 (beta) 2.0.0.3\n"
+"Project-Id-Version: CMB2 (beta) 2.0.0.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2014-12-18 17:16:01+00:00\n"
+"POT-Creation-Date: 2014-12-19 02:19:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-12-18 17:16+300\n"
+"PO-Revision-Date: 2014-12-18 2:19+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -288,19 +288,19 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:778
+#: includes/CMB2_Field.php:765
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:779
+#: includes/CMB2_Field.php:766
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:800
+#: includes/CMB2_Field.php:787
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:801
+#: includes/CMB2_Field.php:788
 msgid "All"
 msgstr ""
 
