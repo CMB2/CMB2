@@ -11,13 +11,12 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.0.0.4
+ * Version:      2.0.0.5
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
- */
-
-/**
+ *
+ *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
  *
@@ -55,7 +54,7 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.0.4';
+		const VERSION = '2.0.0.5';
 
 		/**
 		 * Current version hook priority

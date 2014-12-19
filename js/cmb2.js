@@ -281,10 +281,27 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	$.fn.cleanRow = function( prevNum, group ) {
 		var $self = $(this);
-		var $inputs = $self.find('input:not([type="button"]), select, textarea, label');
+		var $inputs = $self.find( 'input:not([type="button"]), select, textarea, label' );
+		var $other  = $self.find('[id]').not( 'input:not([type="button"]), select, textarea, label' );
 		if ( group ) {
 			// Remove extra ajaxed rows
 			$self.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
+
+			// Update all elements w/ an ID
+			if ( $other.length ) {
+				$other.each( function() {
+					var $_this = $( this );
+					var oldID = $_this.attr( 'id' );
+					var newID = oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber );
+					var $buttons = $self.find('[data-selector="'+ oldID +'"]');
+					$_this.attr( 'id', newID );
+
+					// Replace data-selector vars
+					if ( $buttons.length ) {
+						$buttons.attr( 'data-selector', newID ).data( 'selector', newID );
+					}
+				});
+			}
 		}
 		cmb.neweditor_id = [];
 
@@ -299,7 +316,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
-			// var $next     = $newInput.next();
+			// var $next  = $newInput.next();
 			var attrs     = {};
 			var newID, oldID;
 			if ( oldFor ) {
@@ -339,7 +356,6 @@ window.CMB2 = (function(window, document, $, undefined){
 				// Save ids for later to re-init tinymce
 				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
 			}
-
 		});
 
 		return this;
