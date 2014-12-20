@@ -388,6 +388,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.afterRowInsert = function( $row, group ) {
+
 		var $focus = $row.find('input:not([type="button"]), textarea, select').first();
 		if ( $focus.length ) {
 			if ( group ) {
@@ -466,6 +467,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		evt.preventDefault();
 
 		var $self    = $(this);
+
+		// before anything significant happens
+		$self.trigger( 'cmb2_add_group_row_start', $self );
+
 		var $table   = $id( $self.data('selector') );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
 		var prevNum  = parseInt( $oldRow.data('iterator') );
@@ -524,6 +529,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
 		if ( number > 1 ) {
+
+			$table.trigger( 'cmb2_remove_group_row_start', $self );
+
 			// when a group is removed loop through all next groups and update fields names
 			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
@@ -573,12 +581,18 @@ window.CMB2 = (function(window, document, $, undefined){
 		evt.preventDefault();
 
 		var $self     = $(this);
+		// before anything signif happens
+		$self.trigger( 'cmb2_shift_rows_enter', $self );
+
 		var $parent   = $self.parents( '.cmb-repeatable-grouping' );
 		var $goto     = $self.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
 
 		if ( ! $goto.length ) {
 			return;
 		}
+
+		// we're gonna shift
+		$self.trigger( 'cmb2_shift_rows_start', $self );
 
 		var inputVals = [];
 		// Loop this items fields
@@ -626,6 +640,9 @@ window.CMB2 = (function(window, document, $, undefined){
 				$element.val( inputVals[ index ]['val'] );
 			}
 		});
+
+		// shift done
+		$self.trigger( 'cmb2_shift_rows_complete', $self );
 	};
 
 	cmb.initPickers = function( $timePickers, $datePickers, $colorPickers ) {
