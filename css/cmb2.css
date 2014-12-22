@@ -1026,6 +1026,12 @@ Sidebar Placement Adjustments
 
 /* line 2, sass/partials/_collapsible_ui.scss */
 
+.cmb2-metabox .cmb-repeat-group-wrap {
+	max-width: 1000px;
+}
+
+/* line 5, sass/partials/_collapsible_ui.scss */
+
 .cmb2-metabox .cmbhandle {
 	color: #aaa;
 	float: right;
@@ -1036,7 +1042,7 @@ Sidebar Placement Adjustments
 	position: relative;
 }
 
-/* line 10, sass/partials/_collapsible_ui.scss */
+/* line 13, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox .cmbhandle:before {
 	content: '\f142';
@@ -1052,13 +1058,13 @@ Sidebar Placement Adjustments
 	text-decoration: none !important;
 }
 
-/* line 27, sass/partials/_collapsible_ui.scss */
+/* line 30, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox .postbox.closed .cmbhandle:before {
 	content: '\f140';
 }
 
-/* line 33, sass/partials/_collapsible_ui.scss */
+/* line 36, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
 	-webkit-appearance: none !important;
@@ -1071,13 +1077,13 @@ Sidebar Placement Adjustments
 	cursor: pointer;
 }
 
-/* line 42, sass/partials/_collapsible_ui.scss */
+/* line 45, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
 	color: #aa0000;
 }
 
-/* line 44, sass/partials/_collapsible_ui.scss */
+/* line 47, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
 	color: red;
