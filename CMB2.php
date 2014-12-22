@@ -7,7 +7,11 @@
  * @return string        Directory with optional path appended
  */
 function cmb2_dir( $path = '' ) {
-	return trailingslashit( dirname( __FILE__ ) ) . $path;
+	static $cmb2_dir = null;
+	if ( is_null( $cmb2_dir ) ) {
+		$cmb2_dir = trailingslashit( dirname( __FILE__ ) );
+	}
+	return $cmb2_dir . $path;
 }
 
 require_once cmb2_dir( 'includes/helper-functions.php' );
