@@ -11,10 +11,14 @@
 /**
  * Get the bootstrap! If using the plugin from wordpress.org, REMOVE THIS!
  */
-if ( file_exists(  __DIR__ . '/cmb2/init.php' ) ) {
-	require_once  __DIR__ . '/cmb2/init.php';
-} elseif ( file_exists(  __DIR__ . '/CMB2/init.php' ) ) {
-	require_once  __DIR__ . '/CMB2/init.php';
+
+// Check for  PHP version and use the correct dir
+$dir = ( version_compare( PHP_VERSION, '5.3.0' ) >= 0 ) ? __DIR__ : dirname( __FILE__ );
+
+if ( file_exists(  $dir . '/cmb2/init.php' ) ) {
+	require_once  $dir . '/cmb2/init.php';
+} elseif ( file_exists(  $dir . '/CMB2/init.php' ) ) {
+	require_once  $dir . '/CMB2/init.php';
 }
 
 /**
