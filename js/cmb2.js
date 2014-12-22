@@ -48,7 +48,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.init = function() {
 
 		cmb.log( 'CMB2 localized data', l10n );
-		var $metabox = cmb.metabox();
+		var $metabox     = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
 
 		/**
@@ -82,7 +82,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Ajax oEmbed display
 			.on( 'keyup paste focusout', '.cmb2-oembed', cmb.maybeOembed )
 			// Reset titles when removing a row
-			.on( 'cmb2_remove_row', '.cmb-repeatable-group', cmb.resetTitlesAndIterator );
+			.on( 'cmb2_remove_row', '.cmb-repeatable-group', cmb.resetTitlesAndIterator )
+			.on( 'click', '.cmbhandle', cmb.toggleHandle );
 
 		if ( $repeatGroup.length ) {
 			$repeatGroup
@@ -114,6 +115,11 @@ window.CMB2 = (function(window, document, $, undefined){
 				$row.find( '.cmb-group-title h4' ).text( $table.find( '.cmb-add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
 			});
 		});
+	};
+
+	cmb.toggleHandle = function( evt ) {
+		evt.preventDefault();
+		$(document).trigger( 'postbox-toggled', $(this).parent('.postbox').toggleClass('closed') );
 	};
 
 	cmb.toggleCheckBoxes = function( evt ) {
@@ -491,10 +497,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		$table.trigger( 'cmb2_add_row', $newRow );
-
-		// Unbind/Rebind our toggle event
-		$('.postbox .hndle, .postbox .handlediv').unbind('click.postboxes');
-		postboxes.add_postbox_toggles(pagenow);
 	};
 
 	cmb.addAjaxRow = function( evt ) {

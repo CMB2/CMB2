@@ -9,7 +9,7 @@ Post Metaboxes
 	min-height: 1.5em;
 }
 
-.postbox-container {
+.postbox-container, .cmb-repeat-group-wrap {
 
 	.cmb2-wrap {
 		margin: 0;
@@ -30,7 +30,7 @@ Post Metaboxes
 		padding: 0 0 1.8em;
 		margin: 0 0 0.8em;
 
-		.handlediv {
+		.cmbhandle {
 			right: -1em;
 			position: relative;
 		}
@@ -40,22 +40,6 @@ Post Metaboxes
 		padding: 0 1em;
 		max-width: 100%;
 		min-width: 1px !important;
-		button.dashicons-before {
-			-webkit-appearance: none !important;
-			background: none !important;
-			border: none !important;
-			position: absolute;
-			left: 0;
-			top: .5em;
-			line-height: 1em;
-			cursor: pointer;
-			&:not([disabled]) {
-				color: $dark-red;
-				&:hover {
-					color: $red;
-				}
-			}
-		}
 	}
 
 	.cmb-repeatable-group > .cmb-row {

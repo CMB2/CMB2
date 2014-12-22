@@ -197,6 +197,9 @@ Main Wrap
 	border: 1px solid $light-gray;
 	padding: 0 1em;
 	max-width: 1000px;
+	&.cmb-row {
+		margin: 0 0 0.8em;
+	}
 	+ .cmb-repeatable-grouping {
 	}
 }
@@ -258,8 +261,11 @@ Main Wrap
 
 	.cmb-group-title {
 		background-color: $light-gray;
-		margin-left: -0.75em;
-		margin-right: -0.75em;
+		padding: 8px 12px 8px 2.2em;
+		margin: 0 -1em;
+		min-height: 1.5em;
+		font-size: 14px;
+		line-height: 1.4;
 
 		h4 {
 			border: 0;

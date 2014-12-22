@@ -280,7 +280,7 @@ class CMB2 {
 		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'. $field_group->count() .'">
 
 			<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
-			<div class="handlediv" title="' . __( 'Click to toggle', 'cmb2' ) . '"><br></div>
+			<div class="cmbhandle" title="' . __( 'Click to toggle', 'cmb2' ) . '"><br></div>
 			<h3 class="cmb-group-title"><span>'. $field_group->replace_hash( $field_group->options( 'group_title' ) ) .'</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
