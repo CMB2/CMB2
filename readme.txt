@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags: metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
 Tested up to:      4.1.0  
-Stable tag:        2.0.0.5  
+Stable tag:        2.0.0.6  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -13,8 +13,6 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 == Description ==
 
 CMB2 will create metaboxes and forms with custom fields that will blow your mind.
-
-[![Build Status](https://travis-ci.org/WebDevStudios/CMB2.svg?branch=master)](https://travis-ci.org/WebDevStudios/CMB2) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=master) [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 **This is the production version. The development version is [on Github](https://github.com/WebDevStudios/CMB2).**
 
