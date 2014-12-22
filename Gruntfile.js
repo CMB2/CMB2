@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: false,
 					cwd: 'css/',
-					src: ['**/*.css'],
+					src: ['css/cmb2.css'],
 					dest: 'css/',
 				}]
 			}
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
 
 	});
 
-	grunt.registerTask('styles', ['sass', 'cmq', 'csscomb', 'cssmin']);
+	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
 	grunt.registerTask('default', ['styles', 'js', 'tests']);
