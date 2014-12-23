@@ -85,6 +85,17 @@ class CMB2_Core_Test extends CMB2_Test {
 		parent::tearDown();
 	}
 
+	public function test_cmb2_has_version_number() {
+		$this->assertTrue( defined( 'CMB2_VERSION' ) );
+	}
+
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_cmb2_die_with_no_id() {
+		$cmb = new CMB2( array() );
+	}
+
 	/**
 	 * @expectedException Exception
 	 */

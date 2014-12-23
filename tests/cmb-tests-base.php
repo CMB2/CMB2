@@ -1,6 +1,6 @@
 <?php
 
-class CMB2_Test extends WP_UnitTestCase {
+abstract class CMB2_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up the test fixture
@@ -11,17 +11,6 @@ class CMB2_Test extends WP_UnitTestCase {
 
 	public function tearDown() {
 		parent::tearDown();
-	}
-
-	public function test_cmb2_has_version_number() {
-		$this->assertTrue( defined( 'CMB2_VERSION' ) );
-	}
-
-	/**
-	 * @expectedException WPDieException
-	 */
-	public function test_cmb2_die_with_no_id() {
-		$cmb = new CMB2( array() );
 	}
 
 	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
