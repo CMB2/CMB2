@@ -27,6 +27,7 @@ module.exports = function(grunt) {
 					updateTimestamp: true,
 					potHeaders: {
 						poedit: true,
+						'language': 'en_US',
 						'x-poedit-keywordslist': true
 					},
 					processPot: function( pot, options ) {
