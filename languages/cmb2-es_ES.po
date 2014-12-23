@@ -1,12 +1,13 @@
 # Copyright (C) 2014 WebDevStudios
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
+# Justin Sternberg <me@jtsternberg.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2014-12-23 14:44+0000\n"
+"PO-Revision-Date: 2014-12-23 16:12+0000\n"
 "Last-Translator: Justin Sternberg <me@jtsternberg.com>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/cmb2/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +30,7 @@ msgstr "Se requiere de configuración Metabox tener un parámetro de identificac
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr ""
+msgstr "Haga clic para alternar"
 
 #: example-functions.php:53
 msgid "Test Metabox"
@@ -416,7 +417,7 @@ msgstr "CMB2 (beta)"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
+msgstr "https://github.com/WebDevStudios/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
@@ -426,8 +427,8 @@ msgstr "CMB2 creará metaboxes y formularios con campos personalizados que hará
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"

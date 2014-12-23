@@ -1,12 +1,13 @@
 # Copyright (C) 2014 WebDevStudios
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
+# Justin Sternberg <me@jtsternberg.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2014-12-23 14:31+0000\n"
+"PO-Revision-Date: 2014-12-23 16:12+0000\n"
 "Last-Translator: Justin Sternberg <me@jtsternberg.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/cmb2/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -412,22 +413,22 @@ msgstr "﻿Enregistrer"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"
-msgstr ""
+msgstr "CMB2 (beta)"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
+msgstr "https://github.com/WebDevStudios/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
+msgstr "CMB2 will create metaboxes and forms with custom fields that will blow your mind."
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
