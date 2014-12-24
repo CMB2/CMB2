@@ -17,6 +17,10 @@ module.exports = function(grunt) {
 			}
 		},
 
+		dirs: {
+			lang: 'languages'
+		},
+
 		makepot: {
 			target: {
 				options: {
@@ -42,6 +46,21 @@ module.exports = function(grunt) {
 			}
 		},
 
+		potomo: {
+			dist: {
+				options: {
+					poDel: false
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= dirs.lang %>/',
+					src: ['*.po'],
+					dest: '<%= dirs.lang %>/',
+					ext: '.mo',
+					nonull: true
+				}]
+			}
+		},
 		// concat: {
 		// 	options: {
 		// 		stripBanners: true,

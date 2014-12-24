@@ -1,24 +1,27 @@
+# Copyright (C) 2014 WebDevStudios
+# This file is distributed under the same license as the CMB2 (beta) package.
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 (beta) v2.0.0.2\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-23 11:24-0500\n"
-"Last-Translator: Justin Sternberg <justin@dsgnwrks.pro>\n"
-"Language-Team: \n"
+"Project-Id-Version: CMB2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
+"POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
+"PO-Revision-Date: 2014-12-23 21:54+0000\n"
+"Last-Translator: FxB <fxb@wp-translations.org>\n"
+"Language-Team: Russian (Russia) (http://www.transifex.com/projects/p/cmb2/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%100/10==1 ? 2 : n%10==1 ? 0 : (n"
-"+9)%10>3 ? 2 : 1;\n"
-"X-Generator: Poedit 1.7.1\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
-"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
-"X-Textdomain-Support: yes\n"
-"Language: ru\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Textdomain-Support: yes\n"
 
 #: CMB2.php:100
 msgid "Metabox configuration is required to have an ID parameter"
@@ -37,21 +40,20 @@ msgid "Test Text"
 msgstr ""
 
 #: example-functions.php:62 example-functions.php:73 example-functions.php:80
-#: example-functions.php:87 example-functions.php:95
-#: example-functions.php:102 example-functions.php:114
-#: example-functions.php:120 example-functions.php:127
-#: example-functions.php:142 example-functions.php:150
-#: example-functions.php:157 example-functions.php:163
-#: example-functions.php:169 example-functions.php:181
-#: example-functions.php:192 example-functions.php:203
-#: example-functions.php:214 example-functions.php:222
-#: example-functions.php:229 example-functions.php:237
-#: example-functions.php:243 example-functions.php:255
-#: example-functions.php:296 example-functions.php:362
-#: example-functions.php:369 example-functions.php:375
-#: example-functions.php:381 example-functions.php:387
-#: example-functions.php:393 example-functions.php:399
-#: example-functions.php:417
+#: example-functions.php:87 example-functions.php:95 example-functions.php:102
+#: example-functions.php:114 example-functions.php:120
+#: example-functions.php:127 example-functions.php:142
+#: example-functions.php:150 example-functions.php:157
+#: example-functions.php:163 example-functions.php:169
+#: example-functions.php:181 example-functions.php:192
+#: example-functions.php:203 example-functions.php:214
+#: example-functions.php:222 example-functions.php:229
+#: example-functions.php:237 example-functions.php:243
+#: example-functions.php:255 example-functions.php:296
+#: example-functions.php:362 example-functions.php:369
+#: example-functions.php:375 example-functions.php:381
+#: example-functions.php:387 example-functions.php:393
+#: example-functions.php:399 example-functions.php:417
 msgid "field description (optional)"
 msgstr ""
 
@@ -65,7 +67,7 @@ msgstr ""
 
 #: example-functions.php:86
 msgid "Website URL"
-msgstr ""
+msgstr "URL Сайта"
 
 #: example-functions.php:94
 msgid "Test Text Email"
@@ -205,8 +207,7 @@ msgstr ""
 #: example-functions.php:275
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
 msgstr ""
 
 #: example-functions.php:287
@@ -247,19 +248,19 @@ msgstr ""
 
 #: example-functions.php:374
 msgid "Facebook URL"
-msgstr ""
+msgstr "URL-адрес Facebook"
 
 #: example-functions.php:380
 msgid "Twitter URL"
-msgstr ""
+msgstr "Адрес Twitter"
 
 #: example-functions.php:386
 msgid "Google+ URL"
-msgstr ""
+msgstr "URL-адрес Google+ "
 
 #: example-functions.php:392
 msgid "Linkedin URL"
-msgstr ""
+msgstr "Адрес LinkedIn"
 
 #: example-functions.php:398
 msgid "User Field"
@@ -295,11 +296,11 @@ msgstr ""
 
 #: includes/CMB2_Field.php:787
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: includes/CMB2_Field.php:788
 msgid "All"
-msgstr ""
+msgstr "Все"
 
 #: includes/CMB2_Types.php:290
 msgid "Add Row"
@@ -310,7 +311,7 @@ msgstr ""
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
-msgstr ""
+msgstr "Убрать"
 
 #: includes/CMB2_Types.php:683 includes/CMB2_Types.php:731
 msgid "No terms"
@@ -325,7 +326,7 @@ msgstr ""
 #: includes/CMB2_Types.php:796 includes/CMB2_Types.php:877
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr ""
+msgstr "Удалить изображение"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
@@ -337,23 +338,23 @@ msgstr ""
 #: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:707
 msgid "Download"
-msgstr ""
+msgstr "Скачать"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr ""
+msgstr "Очистить"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr ""
+msgstr "По умолчанию"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr ""
+msgstr "Выбрать цвет"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr ""
+msgstr "Текущий цвет"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
@@ -383,7 +384,7 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr ""
+msgstr "Далее"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
@@ -391,11 +392,11 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr ""
+msgstr "Сегодня"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr ""
+msgstr "Готово"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
@@ -407,7 +408,7 @@ msgstr ""
 
 #: includes/helper-functions.php:243
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"
