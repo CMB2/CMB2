@@ -36,6 +36,11 @@ Sidebar Placement Adjustments
 		border-bottom: 1px solid $light-gray;
 	}
 
+	.cmb-repeat-group-wrap > .cmb-td > .cmb-repeatable-group {
+		border-bottom: 0;
+		margin-bottom: -1.4em;
+	}
+
 	.cmb-th,
 	.cmb-td,
 	.cmb-th + .cmb-td {

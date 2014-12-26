@@ -844,6 +844,14 @@ Sidebar Placement Adjustments
 
 /* line 39, sass/partials/_sidebar_placements.scss */
 
+.inner-sidebar .cmb-repeat-group-wrap .cmb-repeatable-group,
+#side-sortables .cmb-repeat-group-wrap .cmb-repeatable-group {
+	border-bottom: 0;
+	margin-bottom: -1.4em;
+}
+
+/* line 44, sass/partials/_sidebar_placements.scss */
+
 .inner-sidebar .cmb-th,
 .inner-sidebar .cmb-td,
 .inner-sidebar .cmb-th + .cmb-td,
@@ -855,21 +863,21 @@ Sidebar Placement Adjustments
 	float: none;
 }
 
-/* line 47, sass/partials/_sidebar_placements.scss */
+/* line 52, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .closed .inside,
 #side-sortables .closed .inside {
 	display: none;
 }
 
-/* line 51, sass/partials/_sidebar_placements.scss */
+/* line 56, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-td .cmb-td,
 #side-sortables .cmb-td .cmb-td {
 	padding-bottom: 1em;
 }
 
-/* line 55, sass/partials/_sidebar_placements.scss */
+/* line 60, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-th,
 #side-sortables .cmb-th {
@@ -910,35 +918,35 @@ Sidebar Placement Adjustments
 	line-height: 1.4em;
 }
 
-/* line 62, sass/partials/_sidebar_placements.scss */
+/* line 67, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-description .cmb-th,
 #side-sortables .cmb-group-description .cmb-th {
 	padding-top: 0;
 }
 
-/* line 65, sass/partials/_sidebar_placements.scss */
+/* line 70, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-description .cmb2-metabox-description,
 #side-sortables .cmb-group-description .cmb2-metabox-description {
 	padding: 0;
 }
 
-/* line 72, sass/partials/_sidebar_placements.scss */
+/* line 77, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-title .cmb-th,
 #side-sortables .cmb-group-title .cmb-th {
 	padding: 0;
 }
 
-/* line 78, sass/partials/_sidebar_placements.scss */
+/* line 83, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-repeatable-grouping + .cmb-repeatable-grouping,
 #side-sortables .cmb-repeatable-grouping + .cmb-repeatable-grouping {
 	margin-top: 1em;
 }
 
-/* line 87, sass/partials/_sidebar_placements.scss */
+/* line 92, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-media-status .img-status img,
 .inner-sidebar .cmb2-media-status .embed-status img,
@@ -948,7 +956,7 @@ Sidebar Placement Adjustments
 	height: auto;
 }
 
-/* line 95, sass/partials/_sidebar_placements.scss */
+/* line 100, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-list label,
 #side-sortables .cmb2-list label {
@@ -956,7 +964,7 @@ Sidebar Placement Adjustments
 	font-weight: normal;
 }
 
-/* line 100, sass/partials/_sidebar_placements.scss */
+/* line 105, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-metabox-description,
 #side-sortables .cmb2-metabox-description {
@@ -964,7 +972,7 @@ Sidebar Placement Adjustments
 	padding: 7px 0 0;
 }
 
-/* line 107, sass/partials/_sidebar_placements.scss */
+/* line 112, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-type-checkbox .cmb-td label,
 .inner-sidebar .cmb-type-checkbox .cmb2-metabox-description,
@@ -974,14 +982,14 @@ Sidebar Placement Adjustments
 	display: inline;
 }
 
-/* line 114, sass/partials/_sidebar_placements.scss */
+/* line 119, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-row .cmb2-metabox-description,
 #side-sortables .cmb-row .cmb2-metabox-description {
 	padding-bottom: 1.8em;
 }
 
-/* line 118, sass/partials/_sidebar_placements.scss */
+/* line 123, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-metabox-title,
 #side-sortables .cmb2-metabox-title {
@@ -989,7 +997,7 @@ Sidebar Placement Adjustments
 	font-style: italic;
 }
 
-/* line 123, sass/partials/_sidebar_placements.scss */
+/* line 128, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-remove-row,
 #side-sortables .cmb-remove-row {
@@ -998,7 +1006,7 @@ Sidebar Placement Adjustments
 	padding-bottom: 0;
 }
 
-/* line 130, sass/partials/_sidebar_placements.scss */
+/* line 135, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-type-colorpicker .cmb-repeat-row .cmb-td,
 #side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td {
@@ -1008,7 +1016,7 @@ Sidebar Placement Adjustments
 	padding-top: 0;
 }
 
-/* line 135, sass/partials/_sidebar_placements.scss */
+/* line 140, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row,
 #side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row {
@@ -1016,7 +1024,7 @@ Sidebar Placement Adjustments
 	margin: 0;
 }
 
-/* line 142, sass/partials/_sidebar_placements.scss */
+/* line 147, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-upload-button,
 #side-sortables .cmb2-upload-button {
