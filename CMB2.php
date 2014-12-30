@@ -285,7 +285,7 @@ class CMB2 {
 
 			<button '. $remove_disabled .'data-selector="'. $field_group->id() .'_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 			<div class="cmbhandle" title="' . __( 'Click to toggle', 'cmb2' ) . '"><br></div>
-			<h3 class="cmb-group-title"><span>'. $field_group->replace_hash( $field_group->options( 'group_title' ) ) .'</span></h3>
+			<h3 class="cmb-group-title cmbhandle-title"><span>'. $field_group->replace_hash( $field_group->options( 'group_title' ) ) .'</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
