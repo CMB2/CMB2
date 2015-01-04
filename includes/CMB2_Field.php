@@ -113,7 +113,7 @@ class CMB2_Field {
 	/**
 	 * Non-existent methods fallback to checking for field arguments of the same name
 	 * @since  1.1.0
-	 * @param  string $name     Method name
+	 * @param  string $name      Method name
 	 * @param  array  $arguments Array of passed-in arguments
 	 * @return mixed             Value of field argument
 	 */

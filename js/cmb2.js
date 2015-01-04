@@ -11,7 +11,7 @@
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
-window.CMB2 = (function(window, document, $, undefined){
+window.CMB2 = window.CMB2 || (function(window, document, $, undefined){
 	'use strict';
 
 	// localization strings
@@ -45,16 +45,15 @@ window.CMB2 = (function(window, document, $, undefined){
 		return cmb.$metabox;
 	};
 
-	cmb.init = function() {
+	cmb.readyInit = function() {
 
 		cmb.log( 'CMB2 localized data', l10n );
-		var $metabox     = cmb.metabox();
-		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
+		var $repeatGroup = cmb.metabox().find('.cmb-repeatable-group');
 
 		/**
 		 * Initialize time/date/color pickers
 		 */
-		cmb.initPickers( $metabox.find('input[type="text"].cmb2-timepicker'), $metabox.find('input[type="text"].cmb2-datepicker'), $metabox.find('input[type="text"].cmb2-colorpicker') );
+		cmb.initPickers( cmb.metabox().find('input[type="text"].cmb2-timepicker'), cmb.metabox().find('input[type="text"].cmb2-datepicker'), cmb.metabox().find('input[type="text"].cmb2-colorpicker') );
 
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 		$id( 'ui-datepicker-div' ).wrap('<div class="cmb2-element" />');
@@ -65,7 +64,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		// Make File List drag/drop sortable:
 		cmb.makeListSortable();
 
-		$metabox
+		cmb.metabox()
 			.on( 'change', '.cmb2_upload_file', function() {
 				cmb.formfield = $(this).attr('id');
 				$id( cmb.formfield + '_id' ).val('');
@@ -100,6 +99,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
+		cmb.metabox().trigger( 'cmbInit' ).find( 'data-type' ).each( function() {
+			var $_this = $(this);
+			cmb.metabox().trigger( 'cmbInit-'+ $_this.data( 'type' ), $_this );
+		});
 	};
 
 	cmb.resetTitlesAndIterator = function() {
@@ -353,7 +356,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// wysiwyg field
 			if ( isEditor ) {
 				// Get new wysiwyg ID
-				newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
+				newID = newID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				// Empty the contents
 				$newInput.html('');
 				// Get wysiwyg field
@@ -368,6 +371,8 @@ window.CMB2 = (function(window, document, $, undefined){
 				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
 			}
 		});
+
+		cmb.log( 'cmb.neweditor_id', cmb.neweditor_id );
 
 		return this;
 	};
@@ -440,6 +445,14 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		}
 
+		$row.find( '[data-type]' ).each( function() {
+			var $el = $( this );
+			var fieldType = $el.data( 'type' );
+			if ( cmb.types[ fieldType ] ) {
+				console.log( 'fieldType', fieldType );
+				cmb.types[ fieldType ]( $el );
+			}
+		});
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
 	};
@@ -868,8 +881,17 @@ window.CMB2 = (function(window, document, $, undefined){
 			}, 500);
 	};
 
-	$(document).ready(cmb.init);
+	$(document).ready(cmb.readyInit);
 
 	return cmb;
+
+})(window, document, jQuery);
+
+window.CMB2.types = window.CMB2.types || (function(window, document, $, undefined){
+	'use strict';
+
+	var types = {};
+
+	return types;
 
 })(window, document, jQuery);
