@@ -64,6 +64,7 @@ class CMB2_Core_Test extends CMB2_Test {
 			'cmb_styles'       => 1,
 			'fields'           => array(),
 			'hookup'           => 1,
+			'closed'           => false,
 			'new_user_section' => 'add-new-user',
 			'show_on'          => array(),
 		);
