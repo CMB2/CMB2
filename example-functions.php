@@ -56,6 +56,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 		'priority'      => 'high',
 		'show_names'    => true, // Show field names on the left
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
+		// 'closed'     => true, // true to keep the metabox closed by default
 		'fields'        => array(
 			array(
 				'name'       => __( 'Test Text', 'cmb2' ),
