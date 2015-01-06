@@ -17,6 +17,10 @@ module.exports = function(grunt) {
 			}
 		},
 
+		dirs: {
+			lang: 'languages'
+		},
+
 		makepot: {
 			target: {
 				options: {
@@ -27,6 +31,7 @@ module.exports = function(grunt) {
 					updateTimestamp: true,
 					potHeaders: {
 						poedit: true,
+						'language': 'en_US',
 						'x-poedit-keywordslist': true
 					},
 					processPot: function( pot, options ) {
@@ -41,6 +46,21 @@ module.exports = function(grunt) {
 			}
 		},
 
+		potomo: {
+			dist: {
+				options: {
+					poDel: false
+				},
+				files: [{
+					expand: true,
+					cwd: '<%= dirs.lang %>/',
+					src: ['*.po'],
+					dest: '<%= dirs.lang %>/',
+					ext: '.mo',
+					nonull: true
+				}]
+			}
+		},
 		// concat: {
 		// 	options: {
 		// 		stripBanners: true,
@@ -62,7 +82,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: false,
 					cwd: 'css/',
-					src: ['**/*.css'],
+					src: ['css/cmb2.css'],
 					dest: 'css/',
 				}]
 			}
@@ -209,7 +229,7 @@ module.exports = function(grunt) {
 
 	});
 
-	grunt.registerTask('styles', ['sass', 'cmq', 'csscomb', 'cssmin']);
+	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
 	grunt.registerTask('default', ['styles', 'js', 'tests']);

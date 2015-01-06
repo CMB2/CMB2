@@ -191,55 +191,48 @@ class CMB2_Types {
 	}
 
 	/**
-	 * Generates html for an option element
+	 * Generates html for concatenated items
 	 * @since  1.1.0
-	 * @param  string  $opt_label Option label
-	 * @param  string  $opt_value Option value
-	 * @param  mixed   $selected  Selected attribute if option is selected
-	 * @return string             Generated option element html
+	 * @param  array   $args Optional arguments
+	 * @return string        Concatenated html items
 	 */
-	public function option( $opt_label, $opt_value, $selected ) {
-		return sprintf( "\t".'<option value="%s" %s>%s</option>', $opt_value, selected( $selected, true, false ), $opt_label )."\n";
+	public function concat_items( $args = array() ) {
+
+		$method = isset( $args['method'] ) ? $args['method'] : 'select_option';
+		unset( $args['method'] );
+
+		$value = $this->field->escaped_value()
+			? $this->field->escaped_value()
+			: $this->field->args( 'default' );
+
+		$concatenated_items = ''; $i = 1;
+		foreach ( (array) $this->field->options() as $opt_value => $opt_label ) {
+
+			// Clone args & modify for just this item
+			$a = $args;
+
+			$a['value'] = $opt_value;
+			$a['label'] = $opt_label;
+
+			// Check if this option is the value of the input
+			if ( $value == $opt_value ) {
+				$a['checked'] = 'checked';
+			}
+
+			$concatenated_items .= $this->$method( $a, $i++ );
+		}
+
+		return $concatenated_items;
 	}
 
 	/**
-	 * Generates options html
+	 * Generates html for an option element
 	 * @since  1.1.0
-	 * @param  array   $args   Optional arguments
-	 * @param  string  $method Method to generate individual option item
-	 * @return string          Concatenated html options
+	 * @param  array  $args Arguments array containing value, label, and checked boolean
+	 * @return string       Generated option element html
 	 */
-	public function concat_options( $args = array(), $method = 'list_input' ) {
-
-		$options     = (array) $this->field->options();
-		$saved_value = $this->field->escaped_value();
-		$value       = $saved_value ? $saved_value : $this->field->args( 'default' );
-
-		$_options = ''; $i = 1;
-		foreach ( $options as $option_key => $option ) {
-
-			// Check for the "old" way
-			$opt_label  = is_array( $option ) && array_key_exists( 'name', $option ) ? $option['name'] : $option;
-			$opt_value  = is_array( $option ) && array_key_exists( 'value', $option ) ? $option['value'] : $option_key;
-			// Check if this option is the value of the input
-			$is_current = $value == $opt_value;
-
-			if ( ! empty( $args ) ) {
-				// Clone args & modify for just this item
-				$this_args = $args;
-				$this_args['value'] = $opt_value;
-				$this_args['label'] = $opt_label;
-				if ( $is_current ) {
-					$this_args['checked'] = 'checked';
-				}
-
-				$_options .= $this->$method( $this_args, $i );
-			} else {
-				$_options .= $this->option( $opt_label, $opt_value, $is_current );
-			}
-			$i++;
-		}
-		return $_options;
+	public function select_option( $args = array() ) {
+		return sprintf( "\t".'<option value="%s" %s>%s</option>', $args['value'], selected( isset( $args['checked'] ) && $args['checked'], true, false ), $args['label'] )."\n";
 	}
 
 	/**
@@ -270,11 +263,11 @@ class CMB2_Types {
 	 * @return string       Gnerated list item html
 	 */
 	public function list_input_checkbox( $args, $i ) {
-		unset( $args['selected'] );
 		$saved_value = $this->field->escaped_value();
 		if ( is_array( $saved_value ) && in_array( $args['value'], $saved_value ) ) {
 			$args['checked'] = 'checked';
 		}
+		$args['type'] = 'checkbox';
 		return $this->list_input( $args, $i );
 	}
 
@@ -607,7 +600,7 @@ class CMB2_Types {
 			'name'    => $this->_name(),
 			'id'      => $this->_id(),
 			'desc'    => $this->_desc( true ),
-			'options' => $this->concat_options(),
+			'options' => $this->concat_items(),
 		) );
 
 		$attrs = $this->concat_attrs( $args, array( 'desc', 'options' ) );
@@ -625,13 +618,20 @@ class CMB2_Types {
 		if( ! empty( $option_none ) ) {
 			$option_none_value = apply_filters( 'cmb2_taxonomy_select_default_value', '' );
 			$option_none_value = apply_filters( "cmb2_taxonomy_select_{$this->_id()}_default_value", $option_none_value );
-			$selected = $saved_term == $option_none_value;
-			$options .= $this->option( $option_none, $option_none_value, $selected );
+
+			$options .= $this->select_option( array(
+				'label'   => $option_none,
+				'value'   => $option_none_value,
+				'checked' => $saved_term == $option_none_value,
+			) );
 		}
 
 		foreach ( $terms as $term ) {
-			$selected = $saved_term == $term->slug;
-			$options .= $this->option( $term->name, $term->slug, $selected );
+			$options .= $this->select_option( array(
+				'label'   => $term->name,
+				'value'   => $term->slug,
+				'checked' => $saved_term == $term->slug,
+			) );
 		}
 
 		return $this->select( array( 'options' => $options ) );
@@ -640,7 +640,7 @@ class CMB2_Types {
 	public function radio( $args = array(), $type = 'radio' ) {
 		extract( $this->parse_args( $args, $type, array(
 			'class'   => 'cmb2-radio-list cmb2-list',
-			'options' => $this->concat_options( array( 'label' => 'test' ) ),
+			'options' => $this->concat_items( array( 'label' => 'test', 'method' => 'list_input' ) ),
 			'desc'    => $this->_desc( true ),
 		) ) );
 
@@ -657,7 +657,7 @@ class CMB2_Types {
 			? 'cmb2-checkbox-list no-select-all cmb2-list'
 			: 'cmb2-checkbox-list cmb2-list';
 
-		return $this->radio( array( 'class' => $classes, 'options' => $this->concat_options( array( 'type' => 'checkbox', 'name' => $this->_name() .'[]' ), 'list_input_checkbox' ) ), $type );
+		return $this->radio( array( 'class' => $classes, 'options' => $this->concat_items( array( 'name' => $this->_name() .'[]', 'method' => 'list_input_checkbox' ) ) ), $type );
 	}
 
 	public function multicheck_inline() {

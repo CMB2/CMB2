@@ -64,6 +64,7 @@ class CMB2_Core_Test extends CMB2_Test {
 			'cmb_styles'       => 1,
 			'fields'           => array(),
 			'hookup'           => 1,
+			'closed'           => false,
 			'new_user_section' => 'add-new-user',
 			'show_on'          => array(),
 		);
@@ -83,6 +84,17 @@ class CMB2_Core_Test extends CMB2_Test {
 
 	public function tearDown() {
 		parent::tearDown();
+	}
+
+	public function test_cmb2_has_version_number() {
+		$this->assertTrue( defined( 'CMB2_VERSION' ) );
+	}
+
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_cmb2_die_with_no_id() {
+		$cmb = new CMB2( array() );
 	}
 
 	/**

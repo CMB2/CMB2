@@ -104,6 +104,7 @@ class CMB2_Types_Test extends CMB2_Test {
 
 		$this->post_id = $this->factory->post->create();
 		$this->term = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'test_category' ) );
+		$this->term2 = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'number_2' ) );
 
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 
@@ -543,6 +544,18 @@ class CMB2_Types_Test extends CMB2_Test {
 		);
 	}
 
+	public function test_select_field_after_value_update() {
+ 		update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], 'one' );
+
+		$field = $this->get_field_object( $this->options_test['fields'][0] );
+		$this->assertHTMLstringsAreEqual(
+			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="one" selected=\'selected\'>One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
 	public function test_taxonomy_select_field() {
 
 		$args = $this->options_test['fields'][0];
@@ -551,7 +564,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$field = $this->get_field_object( $args );
 
 		$this->assertHTMLstringsAreEqual(
-			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><option value="test_category" selected=\'selected\'>test_category</option><option value="uncategorized" >Uncategorized</option></select><p class="cmb2-metabox-description">This is a description</p>',
+			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><option value="number_2" >number_2</option><option value="test_category" selected=\'selected\'>test_category</option><option value="uncategorized" >Uncategorized</option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -576,6 +589,20 @@ class CMB2_Types_Test extends CMB2_Test {
 		);
 	}
 
+	public function test_multicheck_field_after_value_update() {
+  		update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], array( 'false', 'one' ) );
+
+		$args = $this->options_test['fields'][0];
+		$args['type'] = 'multicheck';
+		$field = $this->get_field_object( $args );
+		$this->assertHTMLstringsAreEqual(
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field1" value="one" checked="checked"/><label for="options_test_field1">One</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field2" value="two"/><label for="options_test_field2">Two</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field3" value="true"/><label for="options_test_field3">1</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field4" value="false" checked="checked"/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
 	public function test_checkbox_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
@@ -590,7 +617,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$field = $this->get_field_object( $args );
 
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="uncategorized"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized"/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( array(
 				'type' => 'taxonomy_radio',
 				'taxonomy' => 'category',
@@ -600,12 +627,31 @@ class CMB2_Types_Test extends CMB2_Test {
 
 	public function test_taxonomy_multicheck_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="test_category" checked="checked"/><label for="field_test_field1">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="uncategorized"/><label for="field_test_field2">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( array(
 				'type' => 'taxonomy_multicheck',
 				'taxonomy' => 'category',
 			) ), 'render' ) )
 		);
+	}
+
+	public function test_taxonomy_multicheck_field_after_value_update() {
+
+		$set = wp_set_post_categories( $this->post_id, array( $this->term, 1 ) );
+		$terms = wp_get_post_categories( $this->post_id );
+		$this->assertTrue( in_array( $this->term, $terms ) );
+		$this->assertTrue( !! $set );
+		// $this->assertEquals( 0, $this->term );
+		$type = $this->get_field_type_object( array(
+			'type' => 'taxonomy_multicheck',
+			'taxonomy' => 'category',
+		) );
+		$this->assertHTMLstringsAreEqual(
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized" checked="checked"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $type, 'render' ) )
+		);
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 	}
 
 	public function test_file_list_field() {

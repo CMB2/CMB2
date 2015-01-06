@@ -114,10 +114,9 @@ class CMB2_Utils {
 	 * @return boolean           Whether value is a valid timestamp
 	 */
 	public function is_valid_time_stamp( $timestamp ) {
-		return ! strtotime( $timestamp )
-			&& is_numeric( $timestamp )
-			&& ( $timestamp <= PHP_INT_MAX )
-			&& ( $timestamp >= ~PHP_INT_MAX );
+		return (string) (int) $timestamp === (string) $timestamp
+			&& $timestamp <= PHP_INT_MAX
+			&& $timestamp >= ~PHP_INT_MAX;
 	}
 
 	/**
