@@ -404,11 +404,11 @@ class CMB2_Field {
 		// 		}
 		// 	}
 		// } else
-		if ( ! empty( $new_value ) && $new_value !== $old  ) {
+		if ( ! is_null( $new_value ) && $new_value !== $old  ) {
 			$this->updated[] = $name;
 			return $this->update_data( $new_value );
-		} elseif ( empty( $new_value ) ) {
-			if ( ! empty( $old ) ) {
+		} elseif ( is_null( $new_value ) ) {
+			if ( ! is_null( $old ) ) {
 				$this->updated[] = $name;
 			}
 			return $this->remove_data();
@@ -506,12 +506,12 @@ class CMB2_Field {
 
 		if ( false === $cb || $this->escaping_exception() ) {
 			// If requesting NO escaping, return meta value
-			return ! empty( $meta_value ) ? $meta_value : $this->args( 'default' );
+			return ! is_null( $meta_value ) ? $meta_value : $this->args( 'default' );
 		}
 
 		// escaping function passed in?
 		$func       = $func ? $func : 'esc_attr';
-		$meta_value = ! empty( $meta_value ) ? $meta_value : $this->args( 'default' );
+		$meta_value = ! is_null( $meta_value ) ? $meta_value : $this->args( 'default' );
 
 		if ( is_array( $meta_value ) ) {
 			foreach ( $meta_value as $key => $value ) {
