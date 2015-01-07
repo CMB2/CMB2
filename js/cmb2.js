@@ -627,7 +627,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			}
 			// handle checkbox swapping
-			else if ( 'checkbox' === $element.attr('type') ) {
+			else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr( 'type' )  ) {
 				inputVals[ index ]['$'].prop( 'checked', $element.is(':checked') );
 				$element.prop( 'checked', inputVals[ index ]['val'] );
 			}

@@ -473,7 +473,7 @@ span.cmb2-metabox-description {
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
-	background: white;
+	background: #ffffff;
 	border: 1px solid #e9e9e9;
 	border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -844,8 +844,8 @@ Sidebar Placement Adjustments
 
 /* line 39, sass/partials/_sidebar_placements.scss */
 
-.inner-sidebar .cmb-repeat-group-wrap .cmb-repeatable-group,
-#side-sortables .cmb-repeat-group-wrap .cmb-repeatable-group {
+.inner-sidebar .cmb-repeat-group-wrap > .cmb-td > .cmb-repeatable-group,
+#side-sortables .cmb-repeat-group-wrap > .cmb-td > .cmb-repeatable-group {
 	border-bottom: 0;
 	margin-bottom: -1.4em;
 }
@@ -1088,13 +1088,13 @@ Sidebar Placement Adjustments
 /* line 45, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
-	color: #aa0000;
+	color: #a00;
 }
 
 /* line 47, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
-	color: red;
+	color: #f00;
 }
 
 /*
@@ -1226,7 +1226,7 @@ Sidebar Placement Adjustments
 
 .cmb2-element .ui-widget-content {
 	border: 1px solid #aaaaaa;
-	background: white url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+	background: #ffffff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 	color: #222222;
 }
 
@@ -1299,7 +1299,7 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-widget-content .ui-state-active,
 .cmb2-element .ui-widget-header .ui-state-active {
 	border: 1px solid #aaaaaa;
-	background: white url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+	background: #ffffff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
 	font-weight: normal;
 	color: #212121;
 }
@@ -2864,6 +2864,8 @@ Sidebar Placement Adjustments
 	width: 200px; /*must have*/
 	height: 200px; /*must have*/
 }
+
+/*# sourceMappingURL=cmb2.css.map */
 
 @media (max-width: 450px) {
 
