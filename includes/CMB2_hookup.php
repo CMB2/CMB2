@@ -364,8 +364,11 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css() {
-		CMB2_hookup::register_scripts();
+		if ( ! apply_filters( 'cmb2_enqueue_cmb_css', true ) ) {
+			return false;
+		}
 
+		CMB2_hookup::register_scripts();
 		return wp_enqueue_style( 'cmb2-styles' );
 	}
 
@@ -374,6 +377,10 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {
+		if ( ! apply_filters( 'cmb2_enqueue_cmb_js', true ) ) {
+			return false;
+		}
+
 		CMB2_hookup::register_scripts();
 		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );
