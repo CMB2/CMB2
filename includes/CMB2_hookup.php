@@ -364,7 +364,7 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css() {
-		if ( ! apply_filters( 'cmb2_enqueue_cmb_css', true ) ) {
+		if ( ! apply_filters( 'cmb2_enqueue_css', true ) ) {
 			return false;
 		}
 
@@ -377,7 +377,7 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {
-		if ( ! apply_filters( 'cmb2_enqueue_cmb_js', true ) ) {
+		if ( ! apply_filters( 'cmb2_enqueue_js', true ) ) {
 			return false;
 		}
 
