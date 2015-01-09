@@ -22,8 +22,8 @@ class CMB2_Sanitize {
 	/**
 	 * Setup our class vars
 	 * @since 1.1.0
-	 * @param object $field A CMB field object
-	 * @param mixed  $value Field value
+	 * @param CMB2_Field $field A CMB field object
+	 * @param mixed      $value Field value
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
 		$this->field = $field;
@@ -101,7 +101,7 @@ class CMB2_Sanitize {
 	 * Simple checkbox validation
 	 * @since  1.0.1
 	 * @param  mixed $value 'on' or false
-	 * @return mixed        'on' or false
+	 * @return string|false 'on' or false
 	 */
 	public function checkbox( $value ) {
 		return $value === 'on' ? 'on' : false;

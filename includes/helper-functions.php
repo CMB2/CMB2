@@ -83,8 +83,8 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
  * @param  mixed   $value      Value to update data with
- * @param  bool    $single     Whether data should not be an array
- * @return array               Modified options
+ * @param  boolean $single     Whether data should not be an array
+ * @return boolean             Success/Failure
  */
 function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
 	if ( cmb2_options( $option_key )->update( $field_id, $value, false, $single ) ) {
@@ -101,7 +101,7 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
  * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
- * @return object              CMB2_Field object
+ * @return CMB2_Field|null     CMB2_Field object unless metabox config cannot be found
  */
 function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
 

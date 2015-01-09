@@ -492,9 +492,9 @@ class CMB2_Field {
 	/**
 	 * Escape the value before output. Defaults to 'esc_attr()'
 	 * @since  1.0.1
-	 * @param  mixed  $meta_value Meta value
-	 * @param  mixed  $func       Escaping function (if not esc_attr())
-	 * @return mixed              Final value
+	 * @param  mixed    $meta_value Meta value
+	 * @param  callable $func       Escaping function (if not esc_attr())
+	 * @return mixed                Final value
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 

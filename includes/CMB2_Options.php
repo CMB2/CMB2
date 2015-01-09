@@ -98,7 +98,7 @@ class CMB2_Option {
 	 * @param  mixed   $value      Value to update data with
 	 * @param  bool    $resave     Whether to re-save the data
 	 * @param  bool    $single     Whether data should not be an array
-	 * @return array               Modified options
+	 * @return boolean             Return status of update
 	 */
 	function update( $field_id, $value = '', $resave = false, $single = true ) {
 		$this->get_options();
@@ -128,7 +128,7 @@ class CMB2_Option {
 	 * 	overwriting the option value to be stored.
 	 *
 	 * @since  1.0.1
-	 * @return boolean             Success/Failure
+	 * @return boolean Success/Failure
 	 */
 	function set( $options = false ) {
 		$this->options = $options ? $options : $this->options;
