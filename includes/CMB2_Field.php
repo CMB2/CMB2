@@ -5,6 +5,8 @@
  * @since  1.1.0
  * @method string _id()
  * @method string type()
+ * @method mixed fields()
+ * @method mixed count()
  */
 class CMB2_Field {
 
@@ -49,6 +51,20 @@ class CMB2_Field {
 	 * @since 1.1.0
 	 */
 	public $escaped_value = null;
+
+	/**
+	 * Grouped Field's current numeric index during the save process
+	 * @var   mixed
+	 * @since 2.0.0
+	 */
+	public $index = 0;
+
+	/**
+	 * Array of field options
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	protected $field_options = array();
 
 	/**
 	 * Constructs our field object
@@ -203,8 +219,8 @@ class CMB2_Field {
 	/**
 	 * Updates metadata/option data
 	 * @since  1.0.1
-	 * @param  mixed $value  Value to update data with
-	 * @param  bool  $single Whether data is an array (add_metadata)
+	 * @param  mixed $new_value Value to update data with
+	 * @param  bool  $single    Whether data is an array (add_metadata)
 	 */
 	public function update_data( $new_value, $single = true ) {
 		$a = $this->data_args( array( 'single' => $single ) );
@@ -405,12 +421,8 @@ class CMB2_Field {
 		// 	}
 		// } else
 		if ( ! is_null( $new_value ) && $new_value !== $old  ) {
-			$this->updated[] = $name;
 			return $this->update_data( $new_value );
 		} elseif ( is_null( $new_value ) ) {
-			if ( ! is_null( $old ) ) {
-				$this->updated[] = $name;
-			}
 			return $this->remove_data();
 		}
 	}
@@ -543,14 +555,14 @@ class CMB2_Field {
 
 		// Is timezone arg set?
 		if ( $this->args( 'timezone' ) ) {
-			return $this->args( 'timezone' ) ;
+			return $this->args( 'timezone' );
 		}
 		// Is there another meta key with a timezone stored as its value we should use?
 		else if ( $this->args( 'timezone_meta_key' ) ) {
 			return $this->get_data( $this->args( 'timezone_meta_key' ) );
 		}
 
-		return false;
+		return '';
 	}
 
 	/**
@@ -646,7 +658,7 @@ class CMB2_Field {
 		$classes .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
 		$repeat_table_rows_types = apply_filters( 'cmb2_repeat_table_row_types', array(
-			'text_url', 'text'
+			'text_url', 'text',
 		) );
 
 		if ( in_array( $this->type(), $repeat_table_rows_types ) ) {
@@ -692,7 +704,7 @@ class CMB2_Field {
 	 * @return array        Array of options
 	 */
 	public function options( $key = '' ) {
-		if ( isset( $this->field_options ) && is_array( $this->field_options ) ) {
+		if ( ! empty( $this->field_options ) ) {
 			if ( $key ) {
 				return array_key_exists( $key, $this->field_options ) ? $this->field_options[ $key ] : false;
 			}

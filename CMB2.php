@@ -93,6 +93,27 @@ class CMB2 {
 	);
 
 	/**
+	 * An array of hidden fields to output at the end of the form
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	protected $hidden_fields = array();
+
+	/**
+	 * Array of key => value data for saving. Likely $_POST data.
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	protected $data_to_save = array();
+
+	/**
+	 * Array of key => value data for saving. Likely $_POST data.
+	 * @var   string
+	 * @since 2.0.0
+	 */
+	protected $generated_nonce = '';
+
+	/**
 	 * Get started
 	 */
 	function __construct( $meta_box, $object_id = 0 ) {
@@ -257,10 +278,12 @@ class CMB2 {
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row'. $class .'"><div class="cmb-th">';
-				if ( $label )
+				if ( $label ) {
 					echo '<h2 class="cmb-group-name">'. $label .'</h2>';
-				if ( $desc )
+				}
+				if ( $desc ) {
 					echo '<p class="cmb2-metabox-description">'. $desc .'</p>';
+				}
 			echo '</div></div>';
 		}
 
@@ -330,8 +353,6 @@ class CMB2 {
 	 * @param array  $args Array of arguments to be passed to CMB2_Field
 	 */
 	public function add_hidden_field( $args ) {
-		$this->hidden_fields = ! empty( $this->hidden_fields ) ? $this->hidden_fields : array();
-
 		$this->hidden_fields[] = new CMB2_Types( new CMB2_Field( $args ) );
 	}
 
@@ -350,8 +371,9 @@ class CMB2 {
 	/**
 	 * Loops through and saves field data
 	 * @since  1.0.0
-	 * @param  int    $object_id   Object ID
-	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
+	 * @param  int    $object_id    Object ID
+	 * @param  string $object_type  Type of object being saved. (e.g., post, user, or comment)
+	 * @param  array  $data_to_save Array of key => value data for saving. Likely $_POST data.
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
 
@@ -362,7 +384,7 @@ class CMB2 {
 		$this->process_fields();
 
 		// If options page, save the updated options
-		if ( $object_type == 'options-page' ) {
+		if ( 'options-page' == $object_type ) {
 			cmb2_options( $object_id )->set();
 		}
 
@@ -424,7 +446,7 @@ class CMB2 {
 					'object_id'   => $this->object_id(),
 				) );
 
-				if ( $updated = $field->save_field( $this->data_to_save ) ) {
+				if ( $field->save_field( $this->data_to_save ) ) {
 					$this->updated[] = $field->id();
 				}
 
@@ -438,8 +460,9 @@ class CMB2 {
 	 */
 	public function save_group( $args ) {
 
-		if ( ! isset( $args['id'], $args['fields'], $this->data_to_save[ $args['id'] ] ) || ! is_array( $args['fields'] ) )
+		if ( ! isset( $args['id'], $args['fields'], $this->data_to_save[ $args['id'] ] ) || ! is_array( $args['fields'] ) ) {
 			return;
+		}
 
 		$field_group        = new CMB2_Field( array(
 			'field_args'  => $args,
@@ -450,10 +473,8 @@ class CMB2 {
 		$old                = $field_group->get_data();
 		$group_vals         = $this->data_to_save[ $base_id ];
 		$saved              = array();
-		$is_updated         = false;
 		$field_group->index = 0;
 
-		// $group_vals[0]['color'] = '333';
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
 			$field = new CMB2_Field( array(
 				'field_args'  => $field_args,
@@ -542,8 +563,7 @@ class CMB2 {
 	/**
 	 * Sets the $object_type based on metabox settings
 	 * @since  1.0.0
-	 * @param  array|string $meta_box Metabox config array or explicit setting
-	 * @return string       Object type
+	 * @return string Object type
 	 */
 	public function mb_object_type() {
 
@@ -567,7 +587,7 @@ class CMB2 {
 			$type = $this->prop( 'object_types' );
 		}
 		// if it's an array of one, extract it
-		elseif ( is_array( $this->prop( 'object_types' ) ) && count( $this->prop( 'object_types' ) === 1 ) ) {
+		elseif ( is_array( $this->prop( 'object_types' ) ) && 1 === count( $this->prop( 'object_types' ) ) ) {
 			$cpts = $this->prop( 'object_types' );
 			$type = is_string( end( $cpts ) )
 				? end( $cpts )
@@ -580,12 +600,17 @@ class CMB2 {
 		}
 
 		// Get our object type
-		if ( 'user' == $type )
-			$this->mb_object_type = 'user';
-		elseif ( 'comment' == $type )
-			$this->mb_object_type = 'comment';
-		else
-			$this->mb_object_type = 'post';
+		switch ( $type ) {
+
+			case 'user':
+			case 'comment':
+				$this->mb_object_type = $type;
+				break;
+
+			default:
+				$this->mb_object_type = 'post';
+				break;
+		}
 
 		return $this->mb_object_type;
 	}
@@ -633,7 +658,7 @@ class CMB2 {
 	 * Get metabox property and optionally set a fallback
 	 * @since  2.0.0
 	 * @param  string $property Metabox config property to retrieve
-	 * @param  mixex  $fallback Fallback value to set if no value found
+	 * @param  mixed  $fallback Fallback value to set if no value found
 	 * @return mixed            Metabox config property value or false
 	 */
 	public function prop( $property, $fallback = null ) {
@@ -647,8 +672,8 @@ class CMB2 {
 	/**
 	 * Add a field to the metabox
 	 * @since 2.0.0
-	 * @param  array $args Metabox field config array
-	 * @return bool        True if field was added
+	 * @param  array $field Metabox field config array
+	 * @return bool         True if field was added
 	 */
 	public function add_field( array $field ) {
 		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
@@ -691,7 +716,7 @@ class CMB2 {
 	 * @return string unique nonce string
 	 */
 	public function nonce() {
-		if ( isset( $this->generated_nonce ) ) {
+		if ( $this->generated_nonce ) {
 			return $this->generated_nonce;
 		}
 		$this->generated_nonce = sanitize_html_class( 'nonce_'. basename( __FILE__ ) . $this->cmb_id );
@@ -705,7 +730,7 @@ class CMB2 {
 	 * @return mixed
 	 */
 	public function __get( $field ) {
-		switch( $field ) {
+		switch ( $field ) {
 			case 'cmb_id':
 			case 'meta_box':
 			case 'updated':

@@ -100,8 +100,8 @@ class CMB2_Sanitize {
 	/**
 	 * Simple checkbox validation
 	 * @since  1.0.1
-	 * @param  mixed  $val 'on' or false
-	 * @return mixed         'on' or false
+	 * @param  mixed $value 'on' or false
+	 * @return mixed        'on' or false
 	 */
 	public function checkbox( $value ) {
 		return $value === 'on' ? 'on' : false;
@@ -254,7 +254,7 @@ class CMB2_Sanitize {
 
 		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
 
-		if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
+		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}
 
@@ -281,8 +281,9 @@ class CMB2_Sanitize {
 	 * @return string       Sanitized data
 	 */
 	public function textarea_code( $value, $repeat = false ) {
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) )
+		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
+		}
 
 		return htmlspecialchars_decode( stripslashes( $value ) );
 	}
@@ -328,7 +329,7 @@ class CMB2_Sanitize {
 		if ( $group ) {
 			return array(
 				'attach_id' => $id_val,
-				'field_id'  => $id_key
+				'field_id'  => $id_key,
 			);
 		}
 

@@ -98,7 +98,7 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
  * Get a CMB field object.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
- * @param  array  $field_args  Field ID or all field arguments
+ * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
  * @return object              CMB2_Field object
@@ -141,7 +141,7 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
  * Get a field's value.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
- * @param  array  $field_args  Field ID or all field arguments
+ * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
  * @return mixed               Maybe escaped value

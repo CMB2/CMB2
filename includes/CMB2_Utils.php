@@ -33,7 +33,7 @@ class CMB2_Utils {
 		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
 
 		// If we found an attachement ID, return it
-		if ( !empty( $attachment ) && is_array( $attachment ) ) {
+		if ( ! empty( $attachment ) && is_array( $attachment ) ) {
 			return $attachment[0];
 		}
 
@@ -49,8 +49,8 @@ class CMB2_Utils {
 	 */
 	public function timezone_offset( $tzstring ) {
 		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
-			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
-				$tzstring = str_replace( array( ':15',':30',':45' ), array( '.25','.5','.75' ), $tzstring );
+			if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
+				$tzstring = str_replace( array( ':15', ':30', ':45' ), array( '.25', '.5', '.75' ), $tzstring );
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
 			}
 
@@ -131,14 +131,14 @@ class CMB2_Utils {
 			return $this->url . $path;
 		}
 
-		if ( strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN' ) {
+		if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
 			// Windows
 			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
 			$content_url = str_replace( $content_dir, WP_CONTENT_URL, cmb2_dir() );
 			$cmb2_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
 
 		} else {
-		  $cmb2_url = str_replace(
+			$cmb2_url = str_replace(
 				array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
 				array( WP_CONTENT_URL, WP_PLUGIN_URL ),
 				cmb2_dir()
