@@ -704,16 +704,16 @@ class CMB2_Field {
 			ob_start();
 			echo call_user_func( $cb, $this->args(), $this );
 			// grab the result from the output buffer and store it
-			$this->callbacks_results[ $param ] = ob_get_contents();
+			$this->callback_results[ $param ] = ob_get_contents();
 			ob_end_clean();
 
-			return $this->callbacks_results[ $param ];
+			return $this->callback_results[ $param ];
 		}
 
 		// Otherwise just get whatever is there
-		$this->callbacks_results[ $param ] = $this->args( $param );
+		$this->callback_results[ $param ] = $this->args( $param );
 
-		return $this->callbacks_results[ $param ];
+		return $this->callback_results[ $param ];
 	}
 
 	/**
