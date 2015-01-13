@@ -67,6 +67,13 @@ class CMB2_Field {
 	protected $field_options = array();
 
 	/**
+	 * Array of field param callback results
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	protected $callback_results = array();
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args  Field arguments
@@ -669,21 +676,44 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Check if param is a callback, and if so, call it.
-	 * If not echo out whatever is there.
+	 * Displays the results of the param callbacks.
 	 *
-	 * @since  2.0.0
-	 * @param  string  $param Field parameter
+	 * @since 2.0.0
+	 * @param string $param Field parameter
 	 */
 	public function peform_param_callback( $param ) {
-		if ( $cb = $this->maybe_callback( $param ) ) {
-			// Ok, callback is good, let's run it and bail
-			echo call_user_func( $cb, $this->args(), $this );
-			return;
+		echo $this->get_param_callback_result( $param );
+	}
+
+	/**
+	 * Store results of the param callbacks for continual access
+	 * @since  2.0.0
+	 * @param  string $param Field parameter
+	 * @return mixed         Results of param/param callback
+	 */
+	public function get_param_callback_result( $param ) {
+
+		// If we've already retrieved this param's value,
+		if ( array_key_exists( $param, $this->callback_results ) ) {
+			// send it back
+			return $this->callback_results[ $param ];
 		}
 
-		// Otherwise just echo out whatever's there
-		echo $this->args( $param );
+		if ( $cb = $this->maybe_callback( $param ) ) {
+			// Ok, callback is good, let's run it and store the result
+			ob_start();
+			echo call_user_func( $cb, $this->args(), $this );
+			// grab the result from the output buffer and store it
+			$this->callbacks_results[ $param ] = ob_get_contents();
+			ob_end_clean();
+
+			return $this->callbacks_results[ $param ];
+		}
+
+		// Otherwise just get whatever is there
+		$this->callbacks_results[ $param ] = $this->args( $param );
+
+		return $this->callbacks_results[ $param ];
 	}
 
 	/**

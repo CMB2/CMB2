@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.7\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-01-09 17:49:39+00:00\n"
+"POT-Creation-Date: 2015-01-13 14:36:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-1-9 17:49+300\n"
+"PO-Revision-Date: 2015-1-13 14:36+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Please Try Again"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:734
+#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:756
 msgid "Remove Embed"
 msgstr ""
 
@@ -288,19 +288,19 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:777
+#: includes/CMB2_Field.php:807
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:778
+#: includes/CMB2_Field.php:808
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:799
+#: includes/CMB2_Field.php:829
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:800
+#: includes/CMB2_Field.php:830
 msgid "All"
 msgstr ""
 
@@ -311,7 +311,7 @@ msgstr ""
 #: includes/CMB2_Types.php:349 includes/CMB2_Types.php:806
 #: includes/CMB2_Types.php:883 includes/CMB2_hookup.php:180
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
-#: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
+#: tests/test-cmb-types.php:705 tests/test-cmb-types.php:730
 msgid "Remove"
 msgstr ""
 
@@ -320,8 +320,8 @@ msgid "No terms"
 msgstr ""
 
 #: includes/CMB2_Types.php:776 includes/CMB2_Types.php:831
-#: tests/test-cmb-types.php:659 tests/test-cmb-types.php:685
-#: tests/test-cmb-types.php:695 tests/test-cmb-types.php:710
+#: tests/test-cmb-types.php:681 tests/test-cmb-types.php:707
+#: tests/test-cmb-types.php:717 tests/test-cmb-types.php:732
 msgid "Add or Upload File"
 msgstr ""
 
@@ -331,14 +331,14 @@ msgid "Remove Image"
 msgstr ""
 
 #: includes/CMB2_Types.php:806 includes/CMB2_Types.php:883
-#: includes/CMB2_hookup.php:181 tests/test-cmb-types.php:684
-#: tests/test-cmb-types.php:709
+#: includes/CMB2_hookup.php:181 tests/test-cmb-types.php:706
+#: tests/test-cmb-types.php:731
 msgid "File:"
 msgstr ""
 
 #: includes/CMB2_Types.php:806 includes/CMB2_Types.php:883
-#: includes/CMB2_hookup.php:182 tests/test-cmb-types.php:682
-#: tests/test-cmb-types.php:707
+#: includes/CMB2_hookup.php:182 tests/test-cmb-types.php:704
+#: tests/test-cmb-types.php:729
 msgid "Download"
 msgstr ""
 

@@ -382,16 +382,38 @@ class CMB2_Types_Test extends CMB2_Test {
 		 * but use a British pound symbol for the prefix
 		 */
 
+		// replace $ w/ £
+		$expected_field = substr_replace( $expected_field, '£', 0, 1 );
+
 		$type = $this->get_field_type_object( array(
 			'type'         => 'text_money',
 			'before_field' => '£',
 		) );
 
 		$this->assertHTMLstringsAreEqual(
-			// replace $ w/ £
-			substr_replace( $expected_field, '£', 0, 1 ),
+			$expected_field,
 			$this->capture_render( array( $type, 'render' ) )
 		);
+
+		/**
+		 * Create a new field type object,
+		 * but use a callback to produce the British pound symbol
+		 */
+
+		// update expected
+		$expected_field = str_replace( '£', '£ text_money', $expected_field );
+
+		$type = $this->get_field_type_object( array(
+			'type'         => 'text_money',
+			'before_field' => array( $this, 'change_money_cb' ),
+		) );
+
+		$this->assertHTMLstringsAreEqual(
+			$expected_field,
+			$this->capture_render( array( $type, 'render' ) )
+		);
+
+		$this->assertEquals( '£ text_money', $type->field->get_param_callback_result( 'before_field' ) );
 	}
 
 	public function test_textarea_small_field() {
@@ -796,6 +818,10 @@ class CMB2_Types_Test extends CMB2_Test {
 	public function add_type_cb( $types ) {
 		$types[] = 'test';
 		return $types;
+	}
+
+	public function change_money_cb( $field_args ) {
+		return '£ '. $field_args['type'];
 	}
 
 }
