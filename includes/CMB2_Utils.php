@@ -120,6 +120,16 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Checks if a value is 'empty'. Still accepts 0.
+	 * @since  2.0.0
+	 * @param  mixed $value Value to check
+	 * @return bool         True or false
+	 */
+	public function isempty( $value ) {
+		return is_null( $value ) || ( is_string( $value ) && empty( $value ) );
+	}
+
+	/**
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.

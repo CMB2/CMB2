@@ -551,6 +551,13 @@ class CMB2_Types_Test extends CMB2_Test {
 		);
 	}
 
+	public function test_colorpicker_field_default() {
+		$this->assertHTMLstringsAreEqual(
+			'<input type="text" class="cmb2-colorpicker cmb2-text-small" name="field_test_field" id="field_test_field" value="#bada55"/><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'colorpicker', 'default' => '#bada55' ) ), 'render' ) )
+		);
+	}
+
 	public function test_title_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<h5 class="cmb2-metabox-title">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
