@@ -604,7 +604,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
-			} else if ( 'checkbox' === $element.attr('type') ) {
+			} else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr('type') ) {
 				val = $element.is(':checked');
 			} else if ( 'select' === $element.prop('tagName') ) {
 				val = $element.is(':selected');
