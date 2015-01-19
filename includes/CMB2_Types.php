@@ -219,7 +219,7 @@ class CMB2_Types {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value === $opt_value || ( !$value_isempty && $value == $opt_value ) ) {
+			if ( ( $value_isempty && cmb2_utils()->isempty( $opt_value ) ) || ( !$value_isempty && $value == $opt_value ) ) {
 				$a['checked'] = 'checked';
 			}
 
