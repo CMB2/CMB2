@@ -348,7 +348,11 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			$newInput
 				.removeClass( 'hasDatepicker' )
-				.attr( attrs ).val('');
+				.attr( attrs );//.val('');
+				
+			if ($newInput.attr('type')!='radio' && $newInput.attr('type')!='checkbox') {
+				$newInput.val('');
+			}				
 
 			// wysiwyg field
 			if ( isEditor ) {
@@ -466,7 +470,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.emptyValue = function( evt, row ) {
-		$('input:not([type="button"]), textarea', row).val('');
+		$('input:not([type="button"],[type="radio"],[type="checkbox"]), textarea', row).val('');
 	};
 
 	cmb.addGroupRow = function( evt ) {
