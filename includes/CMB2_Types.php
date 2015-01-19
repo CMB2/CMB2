@@ -201,9 +201,13 @@ class CMB2_Types {
 		$method = isset( $args['method'] ) ? $args['method'] : 'select_option';
 		unset( $args['method'] );
 
-		$value = $this->field->escaped_value()
-			? $this->field->escaped_value()
-			: $this->field->args( 'default' );
+	        if( cmb2_utils()->isempty( $this->field->escaped_value() ) ) {
+	            $value = $this->field->args( 'default' );
+	            $value_isempty = true;
+	        } else {
+	            $value = $this->field->escaped_value();
+	            $value_isempty = false;
+	        }
 
 		$concatenated_items = ''; $i = 1;
 		foreach ( (array) $this->field->options() as $opt_value => $opt_label ) {
@@ -215,7 +219,7 @@ class CMB2_Types {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value == $opt_value ) {
+			if ( $value === $opt_value || ( !$value_isempty && $value == $opt_value ) ) {
 				$a['checked'] = 'checked';
 			}
 
