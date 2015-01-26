@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags: metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
 Tested up to:      4.1.0  
-Stable tag:        2.0.0.9  
+Stable tag:        2.0.0.10  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -93,6 +93,9 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 
 ##### Contribution
 All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/CMB2/tree/trunk) and pull request against it.
+
+##### Translation
+Translation service provided by [WP-Translations](http://wp-translations.org/). To help us translate, 
 
 ##### Links
 * [Github project page](https://github.com/webdevstudios/CMB2)
