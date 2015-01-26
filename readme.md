@@ -49,6 +49,9 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 * There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
 
+##### Translation
+* Thank you to many of you and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
+
 ##### Field Types:
 1. [`title`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#title) An arbitrary title field *
 1. [`text`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#text)
