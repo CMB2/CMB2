@@ -227,7 +227,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		// check nonce
 		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
 		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
-		&& $_POST['object_id'] == $object_id
+		&& $object_id && $_POST['object_id'] == $object_id
 	) {
 		$cmb->save_fields( $object_id, $cmb->object_type(), $_POST );
 	}
