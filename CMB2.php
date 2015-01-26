@@ -25,6 +25,11 @@ foreach ( (array) $meta_boxes_config as $meta_box ) {
 }
 
 /**
+ * Fires when CMB2 is included/loaded
+ */
+do_action( 'cmb2_init' );
+
+/**
  * Create meta boxes
  */
 class CMB2 {
@@ -128,6 +133,15 @@ class CMB2 {
 		$this->cmb_id = $meta_box['id'];
 
 		CMB2_Boxes::add( $this );
+
+		/**
+		 * Hook during initiation of CMB2 object
+		 *
+		 * The dynamic portion of the hook name, $this->cmb_id, is this meta_box id.
+		 *
+		 * @param array $cmb This CMB2 object
+		 */
+		do_action( "cmb2_init_{$this->cmb_id}", $this );
 	}
 
 	/**
