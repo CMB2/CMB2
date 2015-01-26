@@ -505,7 +505,7 @@ class CMB2_Field {
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 
-		if ( ! cmb2_utils()->isempty( $this->escaped_value ) ) {
+		if ( ! is_null( $this->escaped_value ) ) {
 			return $this->escaped_value;
 		}
 
@@ -525,12 +525,12 @@ class CMB2_Field {
 
 		if ( false === $cb || $this->escaping_exception() ) {
 			// If requesting NO escaping, return meta value
-			return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->args( 'default' );
+			return $this->val_or_default( $meta_value );
 		}
 
 		// escaping function passed in?
 		$func       = $func ? $func : 'esc_attr';
-		$meta_value = ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->args( 'default' );
+		$meta_value = $this->val_or_default( $meta_value );
 
 		if ( is_array( $meta_value ) ) {
 			foreach ( $meta_value as $key => $value ) {
@@ -542,6 +542,16 @@ class CMB2_Field {
 
 		$this->escaped_value = $meta_value;
 		return $this->escaped_value;
+	}
+
+	/**
+	 * Return non-empty value or field default if value IS empty
+	 * @since  2.0.0
+	 * @param  mixed $meta_value Field value
+	 * @return mixed             Field value, or default value
+	 */
+	public function val_or_default( $meta_value ) {
+		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->args( 'default' );
 	}
 
 	/**

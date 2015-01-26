@@ -125,8 +125,8 @@ class CMB2_Utils {
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
 	 */
-	public function isempty( $value ) {
-		return is_null( $value ) || ( is_string( $value ) && empty( $value ) );
+	public function isempty( $value, $field = null ) {
+		return is_null( $value ) || '' === $value;
 	}
 
 	/**
