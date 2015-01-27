@@ -33,6 +33,20 @@ function cmb2_hide_if_no_cats( $field ) {
 	return true;
 }
 
+/**
+ * Conditionally displays a message if the $post_id is 2
+ *
+ * @param  array             $field_args Array of field parameters
+ * @param  CMB2_Field object $field      Field object
+ */
+function cmb2_before_row_if_2( $field_args, $field ) {
+	if ( 2 == $field->object_id ) {
+		echo '<p>Testing <b>"before_row"</b> parameter (on $post_id 2)</p>';
+	} else {
+		echo '<p>Testing <b>"before_row"</b> parameter (<b>NOT</b> on $post_id 2)</p>';
+	}
+}
+
 add_filter( 'cmb2_meta_boxes', 'cmb2_sample_metaboxes' );
 /**
  * Define the metabox and field configurations.
@@ -276,6 +290,17 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc' => __( 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.', 'cmb2' ),
 				'id'   => $prefix . 'test_embed',
 				'type' => 'oembed',
+			),
+			array(
+				'name'         => 'Testing Field Parameters',
+				'id'           => $prefix . 'test_parameters',
+				'type'         => 'text',
+				'before_row'   => 'cmb2_before_row_if_2', // callback
+				'before'       => '<p>Testing <b>"before"</b> parameter</p>',
+				'before_field' => '<p>Testing <b>"before_field"</b> parameter</p>',
+				'after_field'  => '<p>Testing <b>"after_field"</b> parameter</p>',
+				'after'        => '<p>Testing <b>"after"</b> parameter</p>',
+				'after_row'    => '<p>Testing <b>"after_row"</b> parameter</p>',
 			),
 		),
 	);

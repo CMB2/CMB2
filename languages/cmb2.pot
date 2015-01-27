@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 (beta) 2.0.0.11\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-01-27 20:46:28+00:00\n"
+"POT-Creation-Date: 2015-01-27 20:48:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-1-27 20:46+300\n"
+"PO-Revision-Date: 2015-1-27 20:48+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -28,251 +28,252 @@ msgstr ""
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr ""
 
-#: CMB2.php:325
+#: CMB2.php:319
 msgid "Click to toggle"
 msgstr ""
 
-#: example-functions.php:53
+#: example-functions.php:67
 msgid "Test Metabox"
 msgstr ""
 
-#: example-functions.php:62 example-functions.php:296
+#: example-functions.php:76 example-functions.php:321
 msgid "Test Text"
 msgstr ""
 
-#: example-functions.php:63 example-functions.php:74 example-functions.php:81
-#: example-functions.php:88 example-functions.php:96 example-functions.php:103
-#: example-functions.php:115 example-functions.php:121
-#: example-functions.php:128 example-functions.php:143
-#: example-functions.php:151 example-functions.php:158
-#: example-functions.php:164 example-functions.php:170
-#: example-functions.php:182 example-functions.php:193
-#: example-functions.php:204 example-functions.php:215
-#: example-functions.php:223 example-functions.php:230
-#: example-functions.php:238 example-functions.php:244
-#: example-functions.php:256 example-functions.php:297
-#: example-functions.php:363 example-functions.php:370
-#: example-functions.php:376 example-functions.php:382
-#: example-functions.php:388 example-functions.php:394
-#: example-functions.php:400 example-functions.php:418
+#: example-functions.php:77 example-functions.php:88 example-functions.php:95
+#: example-functions.php:102 example-functions.php:110
+#: example-functions.php:117 example-functions.php:129
+#: example-functions.php:135 example-functions.php:142
+#: example-functions.php:157 example-functions.php:165
+#: example-functions.php:172 example-functions.php:178
+#: example-functions.php:184 example-functions.php:196
+#: example-functions.php:207 example-functions.php:218
+#: example-functions.php:229 example-functions.php:237
+#: example-functions.php:244 example-functions.php:252
+#: example-functions.php:258 example-functions.php:270
+#: example-functions.php:322 example-functions.php:388
+#: example-functions.php:395 example-functions.php:401
+#: example-functions.php:407 example-functions.php:413
+#: example-functions.php:419 example-functions.php:425
+#: example-functions.php:443
 msgid "field description (optional)"
 msgstr ""
 
-#: example-functions.php:73
+#: example-functions.php:87
 msgid "Test Text Small"
 msgstr ""
 
-#: example-functions.php:80
+#: example-functions.php:94
 msgid "Test Text Medium"
 msgstr ""
 
-#: example-functions.php:87
+#: example-functions.php:101
 msgid "Website URL"
 msgstr ""
 
-#: example-functions.php:95
+#: example-functions.php:109
 msgid "Test Text Email"
 msgstr ""
 
-#: example-functions.php:102
+#: example-functions.php:116
 msgid "Test Time"
 msgstr ""
 
-#: example-functions.php:108 example-functions.php:109
+#: example-functions.php:122 example-functions.php:123
 msgid "Time zone"
 msgstr ""
 
-#: example-functions.php:114
+#: example-functions.php:128
 msgid "Test Date Picker"
 msgstr ""
 
-#: example-functions.php:120
+#: example-functions.php:134
 msgid "Test Date Picker (UNIX timestamp)"
 msgstr ""
 
-#: example-functions.php:127
+#: example-functions.php:141
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
 msgstr ""
 
-#: example-functions.php:142
+#: example-functions.php:156
 msgid "Test Money"
 msgstr ""
 
-#: example-functions.php:150
+#: example-functions.php:164
 msgid "Test Color Picker"
 msgstr ""
 
-#: example-functions.php:157
+#: example-functions.php:171
 msgid "Test Text Area"
 msgstr ""
 
-#: example-functions.php:163
+#: example-functions.php:177
 msgid "Test Text Area Small"
 msgstr ""
 
-#: example-functions.php:169
+#: example-functions.php:183
 msgid "Test Text Area for Code"
 msgstr ""
 
-#: example-functions.php:175
+#: example-functions.php:189
 msgid "Test Title Weeeee"
 msgstr ""
 
-#: example-functions.php:176
+#: example-functions.php:190
 msgid "This is a title description"
 msgstr ""
 
-#: example-functions.php:181
+#: example-functions.php:195
 msgid "Test Select"
 msgstr ""
 
-#: example-functions.php:186 example-functions.php:197
-#: example-functions.php:208
+#: example-functions.php:200 example-functions.php:211
+#: example-functions.php:222
 msgid "Option One"
 msgstr ""
 
-#: example-functions.php:187 example-functions.php:198
-#: example-functions.php:209
+#: example-functions.php:201 example-functions.php:212
+#: example-functions.php:223
 msgid "Option Two"
 msgstr ""
 
-#: example-functions.php:188 example-functions.php:199
-#: example-functions.php:210
+#: example-functions.php:202 example-functions.php:213
+#: example-functions.php:224
 msgid "Option Three"
 msgstr ""
 
-#: example-functions.php:192
+#: example-functions.php:206
 msgid "Test Radio inline"
 msgstr ""
 
-#: example-functions.php:203
+#: example-functions.php:217
 msgid "Test Radio"
 msgstr ""
 
-#: example-functions.php:214
+#: example-functions.php:228
 msgid "Test Taxonomy Radio"
 msgstr ""
 
-#: example-functions.php:222
+#: example-functions.php:236
 msgid "Test Taxonomy Select"
 msgstr ""
 
-#: example-functions.php:229
+#: example-functions.php:243
 msgid "Test Taxonomy Multi Checkbox"
 msgstr ""
 
-#: example-functions.php:237
+#: example-functions.php:251
 msgid "Test Checkbox"
 msgstr ""
 
-#: example-functions.php:243
+#: example-functions.php:257
 msgid "Test Multi Checkbox"
 msgstr ""
 
-#: example-functions.php:248
+#: example-functions.php:262
 msgid "Check One"
 msgstr ""
 
-#: example-functions.php:249
+#: example-functions.php:263
 msgid "Check Two"
 msgstr ""
 
-#: example-functions.php:250
+#: example-functions.php:264
 msgid "Check Three"
 msgstr ""
 
-#: example-functions.php:255
+#: example-functions.php:269
 msgid "Test wysiwyg"
 msgstr ""
 
-#: example-functions.php:262
+#: example-functions.php:276
 msgid "Test Image"
 msgstr ""
 
-#: example-functions.php:263
+#: example-functions.php:277
 msgid "Upload an image or enter a URL."
 msgstr ""
 
-#: example-functions.php:268
+#: example-functions.php:282
 msgid "Multiple Files"
 msgstr ""
 
-#: example-functions.php:269
+#: example-functions.php:283
 msgid "Upload or add multiple images/attachments."
 msgstr ""
 
-#: example-functions.php:275
+#: example-functions.php:289
 msgid "oEmbed"
 msgstr ""
 
-#: example-functions.php:276
+#: example-functions.php:290
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
 "Embeds</a>."
 msgstr ""
 
-#: example-functions.php:288
+#: example-functions.php:313
 msgid "About Page Metabox"
 msgstr ""
 
-#: example-functions.php:309
+#: example-functions.php:334
 msgid "Repeating Field Group"
 msgstr ""
 
-#: example-functions.php:315
+#: example-functions.php:340
 msgid "Generates reusable form entries"
 msgstr ""
 
-#: example-functions.php:317
+#: example-functions.php:342
 msgid "Entry {#}"
 msgstr ""
 
-#: example-functions.php:318
+#: example-functions.php:343
 msgid "Add Another Entry"
 msgstr ""
 
-#: example-functions.php:319
+#: example-functions.php:344
 msgid "Remove Entry"
 msgstr ""
 
-#: example-functions.php:356
+#: example-functions.php:381
 msgid "User Profile Metabox"
 msgstr ""
 
-#: example-functions.php:362
+#: example-functions.php:387
 msgid "Extra Info"
 msgstr ""
 
-#: example-functions.php:369
+#: example-functions.php:394
 msgid "Avatar"
 msgstr ""
 
-#: example-functions.php:375
+#: example-functions.php:400
 msgid "Facebook URL"
 msgstr ""
 
-#: example-functions.php:381
+#: example-functions.php:406
 msgid "Twitter URL"
 msgstr ""
 
-#: example-functions.php:387
+#: example-functions.php:412
 msgid "Google+ URL"
 msgstr ""
 
-#: example-functions.php:393
+#: example-functions.php:418
 msgid "Linkedin URL"
 msgstr ""
 
-#: example-functions.php:399
+#: example-functions.php:424
 msgid "User Field"
 msgstr ""
 
-#: example-functions.php:413
+#: example-functions.php:438
 msgid "Theme Options Metabox"
 msgstr ""
 
-#: example-functions.php:417
+#: example-functions.php:442
 msgid "Site Background Color"
 msgstr ""
 

@@ -4,7 +4,7 @@ _Support is not offered for this library, and the likelihood that the maintainer
 Before reporting a bug
 ---
 1. Search issue tracker for similar issues.
-2. ~~Install the trunk version of CMB2.~~ **(We'll be working from `master` until out of beta)**
+2. Install the trunk version of CMB2.
 
 
 How to report a bug
@@ -21,8 +21,8 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 1. Make sure you have a GitHub account.
 2. Fork the repository on GitHub.
-3. ~~**Check out the trunk version of CMB2.** If you submit to the master branch, the PR will be closed with a link back to this document.~~
-4. ~~**Verify your issue still exists in the trunk branch.**~~
+3. **Check out the trunk version of CMB2.** If you submit to the master branch, the PR will be closed with a link back to this document.
+4. **Verify your issue still exists in the trunk branch.**
 5. Make changes to your clone of the repository.
 6. [Submit a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
