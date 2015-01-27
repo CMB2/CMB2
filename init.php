@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:  CMB2 (beta)
+ * Plugin Name:  CMB2
  * Plugin URI:   https://github.com/WebDevStudios/CMB2
  * Description:  CMB2 will create metaboxes and forms with custom fields that will blow your mind.
  * Author:       WebDevStudios
@@ -11,7 +11,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.0.0.11
+ * Version:      2.0.1
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -42,19 +42,19 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
+if ( ! class_exists( 'cmb2_bootstrap_201', false ) ) {
 
 	/**
 	 * Check for newest version of CMB
 	 */
-	class cmb2_bootstrap_200beta {
+	class cmb2_bootstrap_201 {
 
 		/**
 		 * Current version number
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.0.11';
+		const VERSION = '2.0.1';
 
 		/**
 		 * Current version hook priority
@@ -63,7 +63,7 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9999;
+		const PRIORITY = 9998;
 
 		public static $single = null;
 
@@ -109,6 +109,6 @@ if ( ! class_exists( 'cmb2_bootstrap_200beta', false ) ) {
 		}
 
 	}
-	cmb2_bootstrap_200beta::go();
+	cmb2_bootstrap_201::go();
 
 } // class exists check

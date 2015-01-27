@@ -10,7 +10,7 @@
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 **Contributors:**      [webdevstudios](https://github.com/webdevstudios), [jtsternberg](https://github.com/jtsternberg), [gregrickaby](https://github.com/gregrickaby), [tw2113](https://github.com/tw2113), [patrickgarman](https://github.com/pmgarman)  
-**Donate link:**       [http://webdevstudios.com](http://webdevstudios.co)  
+**Donate link:**       [http://webdevstudios.com](http://webdevstudios.com)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Tested up to:**      4.1.0  
