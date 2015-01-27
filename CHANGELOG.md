@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 
 * 
 
-## 2.0.0(beta)-2.0.1 - 2015-01-28
+## 2.0.1 - 2015-01-28
+
+2.0.1 is the official version after beta, and includes all the changes from 2.0.0 (beta).
+
+## 2.0.0(beta) - 2014-08-16
 
 2.0.0 is the official version number for the transition to CMB2, and 2.0.1 is the official version after beta. It is a complete rewrite. Improvements and fixes are listed below. __Note: This release requires WordPress 3.8+__
  
