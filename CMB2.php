@@ -391,7 +391,7 @@ class CMB2 {
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
 
-		$this->data_to_save = $data_to_save;
+		$this->data_to_save = stripslashes_deep($data_to_save);
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
