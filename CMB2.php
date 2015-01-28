@@ -182,11 +182,8 @@ class CMB2 {
 		 * @param array  $cmb_id      The current box ID
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
-		 * @param string $object_type The type of object you are working with.
-		 *	                           Usually `post` (this applies to all post-types).
-		 *	                           Could also be `comment`, `user` or `options-page`.
 		 */
-		do_action( "cmb2_before_{$object_type}_form_{$this->cmb_id}", $object_id, $this, $object_type );
+		do_action( "cmb2_before_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
 		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-'. sanitize_html_class( $this->cmb_id ) .'" class="cmb2-metabox cmb-field-list">';
 
@@ -251,9 +248,6 @@ class CMB2 {
 		 *
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
-		 * @param string $object_type The type of object you are working with.
-		 *	                           Usually `post` (this applies to all post-types).
-		 *	                           Could also be `comment`, `user` or `options-page`.
 		 */
 		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
