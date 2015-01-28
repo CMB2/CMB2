@@ -109,7 +109,7 @@ class CMB2 {
 	 * @var   array
 	 * @since 2.0.0
 	 */
-	protected $data_to_save = array();
+	public $data_to_save = array();
 
 	/**
 	 * Array of key => value data for saving. Likely $_POST data.
