@@ -126,7 +126,7 @@ class CMB2_Utils {
 	 * @return bool         True or false
 	 */
 	public function isempty( $value ) {
-		return is_null( $value ) || '' === $value;
+		return is_null( $value ) || '' === $value || false === $value;
 	}
 
 	/**
