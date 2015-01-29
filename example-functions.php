@@ -151,7 +151,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc'    => __( 'field description (optional)', 'cmb2' ),
 				'id'      => $prefix . 'test_colorpicker',
 				'type'    => 'colorpicker',
-				'default' => '#ffffff'
+				'default' => '#ffffff',
 			),
 			array(
 				'name' => __( 'Test Text Area', 'cmb2' ),
@@ -418,7 +418,7 @@ function cmb2_sample_metaboxes( array $meta_boxes ) {
 				'desc'    => __( 'field description (optional)', 'cmb2' ),
 				'id'      => $prefix . 'bg_color',
 				'type'    => 'colorpicker',
-				'default' => '#ffffff'
+				'default' => '#ffffff',
 			),
 		)
 	);

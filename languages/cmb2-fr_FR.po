@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2014-12-23 21:54+0000\n"
+"PO-Revision-Date: 2014-12-23 23:50+0000\n"
 "Last-Translator: FxB <fxb@wp-translations.org>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/cmb2/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "﻿Configuration de Metabox requise pour l'obtention d'un paramètre ID"
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr "﻿Cliquez ici pour pré-visualiser"
+msgstr "Cliquer pour inverser."
 
 #: example-functions.php:53
 msgid "Test Metabox"

@@ -83,8 +83,8 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
  * @param  mixed   $value      Value to update data with
- * @param  bool    $single     Whether data should not be an array
- * @return array               Modified options
+ * @param  boolean $single     Whether data should not be an array
+ * @return boolean             Success/Failure
  */
 function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
 	if ( cmb2_options( $option_key )->update( $field_id, $value, false, $single ) ) {
@@ -98,10 +98,10 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
  * Get a CMB field object.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
- * @param  array  $field_args  Field ID or all field arguments
+ * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
- * @return object              CMB2_Field object
+ * @return CMB2_Field|null     CMB2_Field object unless metabox config cannot be found
  */
 function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
 
@@ -141,7 +141,7 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
  * Get a field's value.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
- * @param  array  $field_args  Field ID or all field arguments
+ * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
  * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
  * @return mixed               Maybe escaped value
@@ -227,7 +227,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		// check nonce
 		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
 		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
-		&& $_POST['object_id'] == $object_id
+		&& $object_id && $_POST['object_id'] == $object_id
 	) {
 		$cmb->save_fields( $object_id, $cmb->object_type(), $_POST );
 	}
@@ -268,6 +268,6 @@ function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	if ( ! isset( $args['echo'] ) || $args['echo'] ) {
 		cmb2_print_metabox_form( $meta_box, $object_id, $args );
 	} else {
-		cmb2_get_metabox_form( $meta_box, $object_id, $args );
+		return cmb2_get_metabox_form( $meta_box, $object_id, $args );
 	}
 }

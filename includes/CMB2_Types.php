@@ -374,8 +374,9 @@ class CMB2_Types {
 
 		$tag = $paragraph ? 'p' : 'span';
 		$desc = "\n<$tag class=\"cmb2-metabox-description\">{$desc}</$tag>\n";
-		if ( $echo )
+		if ( $echo ) {
 			echo $desc;
+		}
 		return $desc;
 	}
 
@@ -478,7 +479,7 @@ class CMB2_Types {
 	}
 
 	public function text_money() {
-		return ( ! $this->field->args( 'before_field' ) ? '$ ' : ' ' ) . $this->input( array( 'class' => 'cmb2-text-money', 'desc' => $this->_desc() ) );
+		return ( ! $this->field->get_param_callback_result( 'before_field' ) ? '$ ' : ' ' ) . $this->input( array( 'class' => 'cmb2-text-money', 'desc' => $this->_desc() ) );
 	}
 
 	public function textarea_small() {
@@ -486,7 +487,7 @@ class CMB2_Types {
 	}
 
 	public function textarea_code() {
-		return sprintf( '<pre>%s', $this->textarea( array( 'class' => 'cmb2-textarea-code', 'desc' => '</pre>' . $this->_desc( true ) )  ) );
+		return sprintf( '<pre>%s', $this->textarea( array( 'class' => 'cmb2-textarea-code', 'desc' => '</pre>' . $this->_desc( true ) ) ) );
 	}
 
 	public function wysiwyg( $args = array() ) {
@@ -533,7 +534,7 @@ class CMB2_Types {
 				'id'    => $this->_id( '_time' ),
 				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'time_format', $meta_value ) : '',
 				'desc'  => $desc,
-			) )
+			) ),
 		);
 
 		return implode( "\n", $inputs );
@@ -578,7 +579,7 @@ class CMB2_Types {
 			$meta_value = '#' . $meta_value;
 		}
 		elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta_value ) ) { // Value doesn't match #123abc, so sanitize to just #.
-			$meta_value = "#";
+			$meta_value = '#';
 		}
 		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
@@ -610,12 +611,12 @@ class CMB2_Types {
 	public function taxonomy_select() {
 
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key($names)]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key( $names )]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = '';
 
 		$option_none  = $this->field->args( 'show_option_none' );
-		if( ! empty( $option_none ) ) {
+		if ( ! empty( $option_none ) ) {
 			$option_none_value = apply_filters( 'cmb2_taxonomy_select_default_value', '' );
 			$option_none_value = apply_filters( "cmb2_taxonomy_select_{$this->_id()}_default_value", $option_none_value );
 
@@ -675,7 +676,7 @@ class CMB2_Types {
 
 	public function taxonomy_radio() {
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key($names)]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key( $names )]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = ''; $i = 1;
 
@@ -683,13 +684,13 @@ class CMB2_Types {
 			$options .= '<li><label>'. esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) .'</label></li>';
 		} else {
 			$option_none  = $this->field->args( 'show_option_none' );
-			if( ! empty( $option_none ) ) {
+			if ( ! empty( $option_none ) ) {
 				$option_none_value = apply_filters( "cmb2_taxonomy_radio_{$this->_id()}_default_value", apply_filters( 'cmb2_taxonomy_radio_default_value', '' ) );
 				$args = array(
 					'value' => $option_none_value,
 					'label' => $option_none,
 				);
-				if( $saved_term == $option_none_value ) {
+				if ( $saved_term == $option_none_value ) {
 					$args['checked'] = 'checked';
 				}
 				$options .= $this->list_input( $args, $i );
@@ -889,7 +890,7 @@ class CMB2_Types {
 		echo $this->input( array(
 			'class'           => 'cmb2-oembed regular-text',
 			'data-objectid'   => $this->field->object_id,
-			'data-objecttype' => $this->field->object_type
+			'data-objecttype' => $this->field->object_type,
 		) ),
 		'<p class="cmb-spinner spinner" style="display:none;"></p>',
 		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">';

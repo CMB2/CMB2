@@ -77,8 +77,9 @@ class CMB2_Show_Filters {
 
 		$object_id = is_admin() ? $cmb->object_id() : @get_the_id();
 
-		if ( ! $object_id )
+		if ( ! $object_id ) {
 			return false;
+		}
 
 		// If current page id is in the included array, display the metabox
 		return in_array( $object_id, (array) self::get_show_on_value( $meta_box_args ) );
@@ -100,7 +101,7 @@ class CMB2_Show_Filters {
 
 		$object_id = $cmb->object_id();
 
-		if ( ! $object_id || $cmb->object_type() !== 'post' ) {
+		if ( ! $object_id || 'post' !== $cmb->object_type() ) {
 			return false;
 		}
 
@@ -146,12 +147,14 @@ class CMB2_Show_Filters {
 
 			if ( is_array( $show_on ) ) {
 				foreach ( $show_on as $page ) {
-					if ( $_GET['page'] == $page )
+					if ( $_GET['page'] == $page ) {
 						return true;
+					}
 				}
 			} else {
-				if ( $_GET['page'] == $show_on )
+				if ( $_GET['page'] == $show_on ) {
 					return true;
+				}
 			}
 
 			return false;
