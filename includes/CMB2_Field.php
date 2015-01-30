@@ -800,7 +800,6 @@ class CMB2_Field {
 			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
 		) );
 
-
 		// Allow a filter override of the default value
 		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
 		// $args['multiple']   = isset( $args['multiple'] ) ? $args['multiple'] : ( 'multicheck' == $args['type'] ? true : false );

@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.0.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-01-27 20:49:10+00:00\n"
+"POT-Creation-Date: 2015-01-30 15:31:40+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-1-27 20:49+300\n"
+"PO-Revision-Date: 2015-1-30 15:31+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -289,19 +289,19 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:817
+#: includes/CMB2_Field.php:816
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:818
+#: includes/CMB2_Field.php:817
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:839
+#: includes/CMB2_Field.php:838
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:840
+#: includes/CMB2_Field.php:839
 msgid "All"
 msgstr ""
 
