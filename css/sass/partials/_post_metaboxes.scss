@@ -1,8 +1,15 @@
 /*--------------------------------------------------------------
 Post Metaboxes
 --------------------------------------------------------------*/
+#poststuff .cmb-group-title {
+	margin-left: -1em;
+	margin-right: -1em;
+	padding-left: 2.2em;
+	// cursor: move;
+	min-height: 1.5em;
+}
 
-.postbox-container {
+.postbox-container, .cmb-repeat-group-wrap {
 
 	.cmb2-wrap {
 		margin: 0;
@@ -21,21 +28,22 @@ Post Metaboxes
 
 	.cmb-row {
 		padding: 0 0 1.8em;
+		margin: 0 0 0.8em;
+
+		.cmbhandle {
+			right: -1em;
+			position: relative;
+		}
 	}
 
 	.cmb-repeatable-grouping {
 		padding: 0 1em;
 		max-width: 100%;
+		min-width: 1px !important;
 	}
 
 	.cmb-repeatable-group > .cmb-row {
 		padding-bottom: 0;
-	}
-
-	.cmb-group-title {
-		margin-left: -1em;
-		margin-right: -1em;
-		padding: 0;
 	}
 
 	.cmb-th {

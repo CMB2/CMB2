@@ -3,8 +3,8 @@ Contributors:      webdevstudios, jtsternberg, gregrickaby, tw2113, patrickgarma
 Donate link:       http://webdevstudios.com  
 Tags: metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
-Tested up to:      4.0.0  
-Stable tag:        2.0.0.2  
+Tested up to:      4.1.0  
+Stable tag:        2.0.0.11  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -35,6 +35,9 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 * Custom API hook that allows you to create your own field types.
 * There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
+
+##### Translation
+* Thank you to many of you and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
 
 ##### Field Types:
 1. [`title`](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#title) An arbitrary title field *
@@ -93,6 +96,9 @@ CMB2 will create metaboxes and forms with custom fields that will blow your mind
 
 ##### Contribution
 All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/CMB2/tree/trunk) and pull request against it.
+
+##### Translation
+Translation service provided by [WP-Translations](http://wp-translations.org/). To help us translate, 
 
 ##### Links
 * [Github project page](https://github.com/webdevstudios/CMB2)

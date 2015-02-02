@@ -1,0 +1,52 @@
+.cmb2-metabox {
+	.cmb-repeat-group-wrap {
+		max-width: 1000px
+	}
+	.cmbhandle {
+		color: #aaa;
+		float: right;
+		width: 27px;
+		height: 30px;
+		cursor: pointer;
+		right: -1em;
+		position: relative;
+		&:before {
+			content: '\f142';
+			right: 12px;
+			font: normal 20px/1 'dashicons';
+			speak: none;
+			display: inline-block;
+			padding: 8px 10px;
+			top: 0;
+			position: relative;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			text-decoration: none !important;
+		}
+	}
+
+	.postbox.closed {
+		.cmbhandle {
+			&:before {
+				content: '\f140';
+			}
+		}
+	}
+
+	button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
+		-webkit-appearance: none !important;
+		background: none !important;
+		border: none !important;
+		position: absolute;
+		left: 0;
+		top: .5em;
+		line-height: 1em;
+		cursor: pointer;
+		&:not([disabled]) {
+			color: $dark-red;
+			&:hover {
+				color: $red;
+			}
+		}
+	}
+}

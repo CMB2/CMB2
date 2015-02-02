@@ -72,12 +72,19 @@ class CMB2_hookup {
 			$priority = $this->cmb->prop( 'priority' );
 
 			if ( ! is_numeric( $priority ) ) {
-				if ( $priority == 'high' ) {
-					$priority = 5;
-				} elseif ( $priority == 'low' ) {
-					$priority = 20;
-				} else {
-					$priority = 10;
+				switch ( $priority ) {
+
+					case 'high':
+						$priority = 5;
+						break;
+
+					case 'low':
+						$priority = 20;
+						break;
+
+					default:
+						$priority = 10;
+						break;
 				}
 			}
 
@@ -164,7 +171,7 @@ class CMB2_hookup {
 					'endTime'     => '23:59',
 					'show24Hours' => false,
 					'separator'   => ':',
-					'step'        => 30
+					'step'        => 30,
 				),
 			),
 			'strings' => array(
@@ -188,7 +195,7 @@ class CMB2_hookup {
 	 */
 	public function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
-		if ( $hook == 'post.php' || $hook == 'post-new.php' || $hook == 'page-new.php' || $hook == 'page.php' ) {
+		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'page-new.php', 'page.php' ), true ) ) {
 			if ( $this->cmb->prop( 'cmb_styles' ) ) {
 				self::enqueue_cmb_css();
 			}
@@ -224,8 +231,24 @@ class CMB2_hookup {
 		}
 
 		foreach ( $this->cmb->prop( 'object_types' ) as $page ) {
-			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) ) ;
+
+			if ( $this->cmb->prop( 'closed' ) ) {
+				add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
+			}
+
+			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 		}
+	}
+
+	/**
+	 * Add 'closed' class to metabox
+	 * @since  2.0.0
+	 * @param  array  $classes Array of classes
+	 * @return array           Modified array of classes
+	 */
+	public function close_metabox_class( $classes ) {
+		$classes[] = 'closed';
+		return $classes;
 	}
 
 	/**
@@ -283,7 +306,7 @@ class CMB2_hookup {
 			// check if autosave
 			|| defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE
 			// check user editing permissions
-			|| ( 'page' ==  $post_type && ! current_user_can( 'edit_page', $post_id ) )
+			|| ( 'page' == $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 			// get the metabox post_types & compare it to this post_type
 			|| ! in_array( $post_type, $this->cmb->prop( 'object_types' ) )
@@ -348,8 +371,11 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css() {
-		CMB2_hookup::register_scripts();
+		if ( ! apply_filters( 'cmb2_enqueue_css', true ) ) {
+			return false;
+		}
 
+		CMB2_hookup::register_scripts();
 		return wp_enqueue_style( 'cmb2-styles' );
 	}
 
@@ -358,6 +384,10 @@ class CMB2_hookup {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {
+		if ( ! apply_filters( 'cmb2_enqueue_js', true ) ) {
+			return false;
+		}
+
 		CMB2_hookup::register_scripts();
 		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );

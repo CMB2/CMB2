@@ -93,7 +93,7 @@ class CMB2_Ajax {
 		$wp_embed->post_ID = $this->object_id;
 
 		// Special scenario if NOT a post object
-		if ( isset( $args['object_type'] ) && $args['object_type'] != 'post' ) {
+		if ( isset( $args['object_type'] ) && 'post' != $args['object_type'] ) {
 
 			if ( 'options-page' == $args['object_type'] ) {
 

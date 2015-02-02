@@ -3,6 +3,7 @@
 /**
  * CMB field validation
  * @since  0.0.4
+ * @method string _id()
  */
 class CMB2_Sanitize {
 
@@ -21,12 +22,12 @@ class CMB2_Sanitize {
 	/**
 	 * Setup our class vars
 	 * @since 1.1.0
-	 * @param object $field A CMB field object
-	 * @param mixed  $value Field value
+	 * @param CMB2_Field $field A CMB field object
+	 * @param mixed      $value Field value
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
 		$this->field = $field;
-		$this->value = $value;
+		$this->value = stripslashes_deep( $value ); // get rid of those evil magic quotes
 	}
 
 	/**
@@ -64,7 +65,7 @@ class CMB2_Sanitize {
 		 */
 		$override_value = apply_filters( 'cmb2_sanitize_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
 		/**
-		 * For back compatibility. See documentation above.
+		 * DEPRECATED. See documentation above.
 		 */
 		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), $override_value, $value, $this->field->object_id, $this->field->args(), $this );
 
@@ -99,8 +100,8 @@ class CMB2_Sanitize {
 	/**
 	 * Simple checkbox validation
 	 * @since  1.0.1
-	 * @param  mixed  $val 'on' or false
-	 * @return mixed         'on' or false
+	 * @param  mixed $value 'on' or false
+	 * @return string|false 'on' or false
 	 */
 	public function checkbox( $value ) {
 		return $value === 'on' ? 'on' : false;
@@ -253,7 +254,7 @@ class CMB2_Sanitize {
 
 		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
 
-		if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
+		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}
 
@@ -280,8 +281,9 @@ class CMB2_Sanitize {
 	 * @return string       Sanitized data
 	 */
 	public function textarea_code( $value, $repeat = false ) {
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) )
+		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
+		}
 
 		return htmlspecialchars_decode( stripslashes( $value ) );
 	}
@@ -327,7 +329,7 @@ class CMB2_Sanitize {
 		if ( $group ) {
 			return array(
 				'attach_id' => $id_val,
-				'field_id'  => $id_key
+				'field_id'  => $id_key,
 			);
 		}
 
