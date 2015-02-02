@@ -33,6 +33,9 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 ### Translation
 * Thanks to many in the CMB2 community and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
 
+### Documentation
+* CMB2 documentation can be found at [the CMB2 wiki](https://github.com/WebDevStudios/CMB2/wiki) on github. Also, If you're into reading code and inline documentation, we tried to keep all functions and methods fully inline-documented.
+
 ### 3rd Party Resources
 
 ##### Custom Field Types
