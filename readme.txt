@@ -18,7 +18,7 @@ CMB2 is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https:
 
 You can see a list of available field types [here](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#types).
 
-## Features:
+### Features:
 
 * Create metaboxes to be used on post edit screens.
 * [Create forms to be used on an options pages](https://github.com/WebDevStudios/CMB2/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page).
@@ -30,12 +30,12 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
 * CMB2 is safe to bundle with any project. It will only load the newest version in the system.
 
-## Translation
+### Translation
 * Thanks to many in the CMB2 community and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
 
-## 3rd Party Resources
+### 3rd Party Resources
 
-#### Custom Field Types
+##### Custom Field Types
 * [CMB2 Field Type: CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): `custom_attached_posts`, for attaching posts to a page.
 * [CMB2 Field Type: CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
 * [CMB2 Field Type: CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) from [JayWood](https://github.com/JayWood): `rgba_colorpicker ` adds a color picker that supports RGBa, (RGB with transparency (alpha) value).
@@ -49,20 +49,20 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 
 * [CMB Field Type: Gallery](https://github.com/mustardBees/cmb-field-gallery) from [mustardBees](https://github.com/mustardBees): Adds a WordPress gallery field.
 
-#### Other Helpful Resources
+##### Other Helpful Resources
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 
-## Contribution
+### Contribution
 All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/CMB2/tree/trunk) and pull request against it. Please read the [CONTRIBUTING](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md) doc for more details.
 
 A complete list of all our awesome contributors found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
 
-## Links
+### Links
 * [Github project page](https://github.com/webdevstudios/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
-## Installation
+### Installation
 
 If installing the plugin from wordpress.org:
 
@@ -79,11 +79,11 @@ If including the library in your plugin or theme:
 2. Edit to only include the fields you need and rename the functions (CMB directory should be left unedited in order to easily update the library).
 4. Profit.
 
-## 2.0.0(beta)-2.0.1 Changelog
+### 2.0.0(beta)-2.0.1 Changelog
 
 2.0.0 is the official version number for the transition to CMB2, and 2.0.1 is the official version after beta. It is a complete rewrite. Improvements and fixes are listed below. __Note: This release requires WordPress 3.8+__
  
-### Enhancements
+#### Enhancements
 
 * Converted `<table>` markup to more generic `<div>` markup to be more extensible and allow easier styling.
 * Much better handling and display of repeatable groups.
@@ -110,7 +110,7 @@ If including the library in your plugin or theme:
 * [New metabox config option for defaulting to closed](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#setting-a-metabox-to-closed-by-default).
 * New hooks, [`cmb2_init`](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#using-cmb2-helper-functions-and-cmb2_init) and `cmb2_init_{$cmb_id}`.
 
-### Bug Fixes
+#### Bug Fixes
 
 * New mechanism to ensure CMB2 only loads the most recent version of CMB2 in your system. This fixes the issue where another bundled version could conflict or take precendent over your up-to-date version.
 * Fix issue with field labels being hidden. Props [mustardBees](https://github.com/mustardBees), ([#48](https://github.com/WebDevStudios/CMB2/pull/48)).
@@ -124,7 +124,7 @@ If including the library in your plugin or theme:
 
 **[View complete changelog](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md)**
 
-## Known Issues
+### Known Issues
 
 * The CMB2 url (for css/js resources) does not define properly in all WAMP/XAMP (Windows) environments.
 * Metabox containing WYSIWYG editor cannot be moved or used in a repeatable way at this time (this is a TinyMCE issue).
