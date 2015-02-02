@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 * 
 
-## 2.0.1 - 2015-01-30
+## 2.0.1 - 2015-02-02
 
 2.0.1 is the official version after beta, and includes all the changes from 2.0.0 (beta).
 
