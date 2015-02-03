@@ -134,7 +134,7 @@ If including the library in your plugin or theme:
 * Fix metabox form not being returned to caller. Props [akshayagarwal](https://github.com/akshayagarwal), ([#145](https://github.com/WebDevStudios/CMB2/pull/145)).
 * Run stripslashes before saving data, since WordPress forces magic quotes. Props [clifgriffin](https://github.com/clifgriffin), ([#162](https://github.com/WebDevStudios/CMB2/pull/162)).
 
-**[View complete changelog](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md)**
+**[View complete changelog](https://github.com/WebDevStudios/CMB2/blob/master/CHANGELOG.md)**
 
 ## Known Issues
 
