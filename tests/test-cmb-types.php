@@ -217,6 +217,19 @@ class CMB2_Types_Test extends CMB2_Test {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	public function test_field_options_bools() {
+		$cmb   = new CMB2( $this->options_test );
+		$field = cmb2_get_field( $this->options_test['id'], 'options_test_field', $this->post_id );
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+
+		$this->assertEquals( $field->options('one'), 'One' );
+		$this->assertEquals( $field->options('two'), 'Two' );
+		$this->assertTrue( $field->options('true') );
+		$this->assertFalse( $field->options('false') );
+		$this->assertNull( $field->options('random_string') );
+
+	}
+
 	public function test_field_attributes() {
 		$cmb   = new CMB2( $this->attributes_test );
 		$field = cmb2_get_field( $this->attributes_test['id'], 'attributes_test_field', $this->post_id );
