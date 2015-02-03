@@ -55,7 +55,7 @@ class CMB2_hookup {
 
 		$type = $this->cmb->mb_object_type();
 		if ( 'post' == $type ) {
-			add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
 			add_action( 'add_attachment', array( $this, 'save_post' ) );
 			add_action( 'edit_attachment', array( $this, 'save_post' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
