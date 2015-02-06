@@ -205,7 +205,20 @@ class CMB2_Types {
 			? $this->field->escaped_value()
 			: $this->field->args( 'default' );
 
-		$concatenated_items = ''; $i = 1;
+		$concatenated_items = '';
+
+		// Check for option_none
+		if( $this->field->args( 'option_none' ) ) {
+			$a = $args;
+
+			$a['value'] = 0;
+			$a['label'] = $this->field->args( 'option_none' );
+
+			$concatenated_items .= $this->$method( $a );
+		}
+
+		$i = 1;
+
 		foreach ( (array) $this->field->options() as $opt_value => $opt_label ) {
 
 			// Clone args & modify for just this item
