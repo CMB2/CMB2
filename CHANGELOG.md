@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-* 
+### Enhancements
+
+* Use the more appropriate `add_meta_boxes` hook for adding metaboxes to post-edit screen. Thanks [@inspiraaz](https://github.com/inspiraaz) for reporting. ([#161](https://github.com/WebDevStudios/CMB2/issues/161))
 
 ## 2.0.1 - 2015-02-02
 
