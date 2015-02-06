@@ -208,13 +208,13 @@ class CMB2_Types {
 		$concatenated_items = '';
 
 		// Check for option_none
-		if( $this->field->args( 'option_none' ) ) {
+		if( $this->field->args( 'type' ) != 'multicheck' && $this->field->args( 'option_none' ) ) {
 			$a = $args;
 
 			$a['value'] = 0;
 			$a['label'] = $this->field->args( 'option_none' );
 
-			$concatenated_items .= $this->$method( $a );
+			$concatenated_items .= $this->$method( $a, 0 );
 		}
 
 		$i = 1;
