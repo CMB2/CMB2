@@ -20,6 +20,11 @@ class CMB2_Utils {
 	 * @return mixed            Attachment ID or false
 	 */
 	public function image_id_from_url( $img_url ) {
+		// Since WP 4.0.0
+		if( function_exists( 'attachment_url_to_postid' ) {
+			return attachment_url_to_postid( $img_url );
+		}
+
 		global $wpdb;
 
 		$img_url = esc_url_raw( $img_url );
