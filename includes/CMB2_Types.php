@@ -181,7 +181,9 @@ class CMB2_Types {
 	public function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
-			if ( ! in_array( $attr, (array) $attr_exclude, true ) ) {
+			$excluded = in_array( $attr, (array) $attr_exclude, true );
+			$empty    = false === $val && 'value' !== $attr;
+			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
 				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
@@ -447,7 +449,7 @@ class CMB2_Types {
 	}
 
 	public function hidden() {
-		return $this->input( array( 'type' => 'hidden', 'desc' => '', 'class' => '' ) );
+		return $this->input( array( 'type' => 'hidden', 'desc' => '', 'class' => false ) );
 	}
 
 	public function text_small() {
@@ -783,11 +785,13 @@ class CMB2_Types {
 
 			foreach ( $meta_value as $id => $fullurl ) {
 				$id_input = $this->input( array(
-					'type'  => 'hidden',
-					'value' => $fullurl,
-					'name'  => $name .'['. $id .']',
-					'id'    => 'filelist-'. $id,
-					'desc'  => '', 'class' => '',
+					'type'    => 'hidden',
+					'value'   => $fullurl,
+					'name'    => $name .'['. $id .']',
+					'id'      => 'filelist-'. $id,
+					'data-id' => $id,
+					'desc'    => '',
+					'class'   => false,
 				) );
 
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
@@ -802,8 +806,8 @@ class CMB2_Types {
 					$title = $this->get_file_name_from_path( $fullurl );
 
 					echo
-					'<li>',
-						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
+					'<li class="file-status"><span>',
+						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong></span>&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
 						', $id_input ,'
 					</li>';
 				}
@@ -880,7 +884,7 @@ class CMB2_Types {
 				} else {
 					$title = $this->get_file_name_from_path( $meta_value );
 
-					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
+					echo '<div class="file-status">'. esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)</div>';
 				}
 			}
 		echo '</div>';
