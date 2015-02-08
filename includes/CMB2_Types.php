@@ -798,7 +798,7 @@ class CMB2_Types {
 				$id_input = $this->input( array(
 					'type'    => 'hidden',
 					'value'   => $fullurl,
-					'name'    => $name . '[' . $id . ']' ,
+					'name'    => $name . '[' . $id . ']',
 					'id'      => 'filelist-' . $id,
 					'data-id' => $id,
 					'desc'    => '',
