@@ -73,6 +73,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Media/file management
 			.on( 'click', '.cmb-multicheck-toggle', cmb.toggleCheckBoxes )
 			.on( 'click', '.cmb2-upload-button', cmb.handleMedia )
+			.on( 'click', '.cmb-attach-list li, .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span', cmb.handleFileClick )
 			.on( 'click', '.cmb2-remove-file-button', cmb.handleRemoveMedia )
 			// Repeatable content
 			.on( 'click', '.cmb-add-group-row', cmb.addGroupRow )
@@ -141,31 +142,36 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.handleMedia = function( evt ) {
+		evt.preventDefault();
+
+		var $el = $( this );
+		cmb.attach_id = false;
+
+		cmb._handleMedia( $el.prev('input.cmb2-upload-file').attr('id'), $el.hasClass( 'cmb2-upload-list' ) );
+	};
+
+	cmb._handleMedia = function( formfield, isList ) {
 
 		if ( ! wp ) {
 			return;
 		}
 
-		evt.preventDefault();
-
 		var $metabox     = cmb.metabox();
-		var $self        = $(this);
-		cmb.formfield    = $self.prev('input').attr('id');
+		cmb.formfield    = formfield;
 		var $formfield   = $id( cmb.formfield );
 		var previewSize  = $formfield.data( 'previewsize' );
 		var formName     = $formfield.attr('name');
 		var uploadStatus = true;
 		var attachment   = true;
-		var isList       = $self.hasClass( 'cmb2-upload-list' );
 
 		// If this field's media frame already exists, reopen it.
 		if ( cmb.formfield in cmb.file_frames ) {
-			cmb.file_frames[cmb.formfield].open();
+			cmb.file_frames[ cmb.formfield ].open();
 			return;
 		}
 
 		// Create the media frame.
-		cmb.file_frames[cmb.formfield] = wp.media.frames.file_frame = wp.media({
+		cmb.file_frames[ cmb.formfield ] = wp.media({
 			title: $metabox.find('label[for=' + cmb.formfield + ']').text(),
 			button: {
 				text: l10n.strings.upload_file
@@ -174,7 +180,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		});
 
 		var handlers = {
-			list : function( selection ) {
+			list : function( selection, returnIt ) {
 				// Get all of our selected files
 				attachment = selection.toJSON();
 
@@ -209,10 +215,15 @@ window.CMB2 = (function(window, document, $, undefined){
 					fileGroup.push( uploadStatus );
 				});
 
-				// Append each item from our fileGroup array to .cmb2-media-status
-				$( fileGroup ).each( function() {
-					$formfield.siblings('.cmb2-media-status').slideDown().append(this);
-				});
+				if ( ! returnIt ) {
+					// Append each item from our fileGroup array to .cmb2-media-status
+					$( fileGroup ).each( function() {
+						$formfield.siblings('.cmb2-media-status').slideDown().append(this);
+					});
+				} else {
+					return fileGroup;
+				}
+
 			},
 			single : function( selection ) {
 				// Only get one file from the uploader
@@ -235,16 +246,53 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		};
 
-		// When an file is selected, run a callback.
-		cmb.file_frames[cmb.formfield].on( 'select', function() {
-			var selection = cmb.file_frames[cmb.formfield].state().get('selection');
-			var type = isList ? 'list' : 'single';
-			handlers[type]( selection );
-		});
+		// When a file is selected, run a callback.
+		cmb.file_frames[ cmb.formfield ]
+			.on( 'select', function() {
+				var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
+				var type = isList ? 'list' : 'single';
+
+				if ( cmb.attach_id && isList ) {
+					$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( handlers.list( selection, true ) );
+
+					return;
+				}
+
+				handlers[type]( selection );
+			})
+			.on( 'open', function() {
+				if ( ! cmb.attach_id ) {
+					return;
+				}
+				var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
+				var attach = wp.media.attachment( cmb.attach_id );  // get attachment with id
+				attach.fetch();
+				selection.set( attach ? [ attach ] : [] );
+			});
 
 		// Finally, open the modal
-		cmb.file_frames[cmb.formfield].open();
+		cmb.file_frames[ cmb.formfield ].open();
 	};
+
+	cmb.handleFileClick = function( evt ) {
+
+		if ( ! wp ) {
+			return;
+		}
+
+		evt.preventDefault();
+
+		var $el    = $( this );
+		var $td    = $el.closest( '.cmb-td' );
+		var isList = $td.find( '.cmb2-upload-button' ).hasClass( 'cmb2-upload-list' );
+		cmb.attach_id = isList ? $el.find( 'input[type="hidden"]' ).data( 'id' ) : $td.find( '.cmb2-upload-file-id' ).val();
+
+		if ( cmb.attach_id ) {
+			cmb.log( 'handleFileClick cmb.attach_id', cmb.attach_id );
+			cmb._handleMedia( $td.find( 'input.cmb2-upload-file' ).attr('id'), isList, cmb.attach_id );
+		}
+	};
+
 
 	cmb.handleRemoveMedia = function( evt ) {
 		evt.preventDefault();

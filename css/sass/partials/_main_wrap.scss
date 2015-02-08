@@ -391,6 +391,10 @@ span.cmb2-metabox-description {
 		}
 	}
 
+	.img-status img, .file-status > span {
+		cursor: pointer;
+	}
+
 }
 
 .cmb-type-file-list .cmb2-media-status .img-status {

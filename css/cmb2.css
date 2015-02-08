@@ -514,7 +514,14 @@ span.cmb2-metabox-description {
 	top: 10px;
 }
 
-/* line 396, sass/partials/_main_wrap.scss */
+/* line 394, sass/partials/_main_wrap.scss */
+
+.cmb2-media-status .img-status img,
+.cmb2-media-status .file-status > span {
+	cursor: pointer;
+}
+
+/* line 400, sass/partials/_main_wrap.scss */
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
@@ -523,7 +530,7 @@ span.cmb2-metabox-description {
 	width: auto;
 }
 
-/* line 403, sass/partials/_main_wrap.scss */
+/* line 407, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li {
 	clear: both;
@@ -532,7 +539,7 @@ span.cmb2-metabox-description {
 	width: 100%;
 }
 
-/* line 409, sass/partials/_main_wrap.scss */
+/* line 413, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li img {
 	cursor: move;
@@ -540,13 +547,13 @@ span.cmb2-metabox-description {
 	margin-right: 10px;
 }
 
-/* line 416, sass/partials/_main_wrap.scss */
+/* line 420, sass/partials/_main_wrap.scss */
 
 .cmb2-remove-wrapper {
 	margin: 0;
 }
 
-/* line 420, sass/partials/_main_wrap.scss */
+/* line 424, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th {
 	text-align: left;
@@ -2898,7 +2905,7 @@ Sidebar Placement Adjustments
 	padding-top: .4em;
 }
 
-/* line 425, sass/partials/_main_wrap.scss */
+/* line 429, sass/partials/_main_wrap.scss */
 
 .cmb-th,
 .cmb-td,
