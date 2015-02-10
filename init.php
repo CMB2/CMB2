@@ -75,6 +75,13 @@ if ( ! class_exists( 'cmb2_bootstrap_202_trunk', false ) ) {
 		}
 
 		private function __construct() {
+			/**
+			 * A constant you can use to check if CMB2 is loaded
+			 * for your plugins/themes with CMB2 dependency
+			 */
+			if ( ! defined( 'CMB2_LOADED' ) ) {
+				define( 'CMB2_LOADED', true );
+			}
 			add_action( 'init', array( $this, 'include_cmb' ), self::PRIORITY );
 		}
 
