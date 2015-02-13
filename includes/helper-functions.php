@@ -18,6 +18,16 @@ function cmb2_autoload_classes( $class_name ) {
 spl_autoload_register( 'cmb2_autoload_classes' );
 
 /**
+ * Because OOP can be scary
+ * @since  2.0.2
+ * @param  array $meta_box_config Metabox Config array
+ * @return CMB2 object            Instantiated CMB2 object
+ */
+function new_cmb2_box( array $meta_box_config ) {
+	return new CMB2( $meta_box_config );
+}
+
+/**
  * Get instance of the CMB2_Utils class
  * @since  2.0.0
  * @return CMB2_Utils object CMB utilities class
