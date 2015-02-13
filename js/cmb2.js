@@ -1,11 +1,8 @@
 /**
  * Controls the behaviours of custom metabox fields.
  *
- * @author Andrew Norcross
- * @author Jared Atchison
- * @author Bill Erickson
- * @author Justin Sternberg
- * @see    https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
+ * @author WebDevStudios
+ * @see    https://github.com/WebDevStudios/CMB2
  */
 
 /**
