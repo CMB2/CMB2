@@ -91,7 +91,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202_trunk', false ) ) {
 					define( 'CMB2_VERSION', self::VERSION );
 				}
 				$this->l10ni18n();
-				require_once 'CMB2.php';
+				require_once 'bootstrap.php';
 			}
 		}
 

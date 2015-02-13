@@ -1,34 +1,4 @@
 <?php
-
-/**
- * Helper function to provide directory path to CMB
- * @since  2.0.0
- * @param  string  $path Path to append
- * @return string        Directory with optional path appended
- */
-function cmb2_dir( $path = '' ) {
-	static $cmb2_dir = null;
-	if ( is_null( $cmb2_dir ) ) {
-		$cmb2_dir = trailingslashit( dirname( __FILE__ ) );
-	}
-	return $cmb2_dir . $path;
-}
-
-require_once cmb2_dir( 'includes/helper-functions.php' );
-
-$meta_boxes_config = apply_filters( 'cmb2_meta_boxes', array() );
-foreach ( (array) $meta_boxes_config as $meta_box ) {
-	$cmb = new CMB2( $meta_box );
-	if ( $cmb->prop( 'hookup' ) ) {
-		$hookup = new CMB2_hookup( $cmb );
-	}
-}
-
-/**
- * Fires when CMB2 is included/loaded
- */
-do_action( 'cmb2_init' );
-
 /**
  * Create meta boxes
  */
@@ -749,31 +719,3 @@ class CMB2 {
 	}
 
 }
-
-/**
- * Stores each CMB2 instance
- */
-class CMB2_Boxes {
-
-	/**
-	 * Array of all metabox objects
-	 * @var   array
-	 * @since 2.0.0
-	 */
-	protected static $meta_boxes = array();
-
-	public static function get( $cmb_id ) {
-		if ( empty( self::$meta_boxes ) || empty( self::$meta_boxes[ $cmb_id ] ) ) {
-			return false;
-		}
-
-		return self::$meta_boxes[ $cmb_id ];
-	}
-
-	public static function add( $meta_box ) {
-		self::$meta_boxes[ $meta_box->cmb_id ] = $meta_box;
-	}
-
-}
-
-// End. That's it, folks! //
