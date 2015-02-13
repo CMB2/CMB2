@@ -650,8 +650,8 @@ class CMB2 {
 	/**
 	 * Add a field to the metabox
 	 * @since 2.0.0
-	 * @param  array $field Metabox field config array
-	 * @return bool         True if field was added
+	 * @param  array  $field Metabox field config array
+	 * @return string        The field id
 	 */
 	public function add_field( array $field ) {
 		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
@@ -659,7 +659,37 @@ class CMB2 {
 		}
 
 		$this->meta_box['fields'][ $field['id'] ] = $field;
-		return true;
+		return $field['id'];
+	}
+
+	/**
+	 * Add a field to a group field array
+	 * @since 2.0.2
+	 * @param  string $field_id The Field ID of the group field to append the fields
+	 * @param  array  $field    Metabox field config array
+	 * @return string           The group field id
+	 */
+	public function add_group_field( $field_id, array $field ) {
+		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
+			return false;
+		}
+
+		$parent_field = $this->meta_box['fields'][ $field_id ];
+
+		if ( 'group' !== $parent_field['type'] ) {
+			return false;
+		}
+
+		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
+			return false;
+		}
+
+		if ( ! isset( $parent_field['fields'] ) ) {
+			$this->meta_box['fields'][ $field_id ]['fields'] = array();
+		}
+
+		$this->meta_box['fields'][ $field_id ]['fields'][ $field['id'] ] = $field;
+		return $field_id;
 	}
 
 	/**
