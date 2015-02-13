@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.0.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-02-15 01:20:24+00:00\n"
+"POT-Creation-Date: 2015-02-15 01:21:01+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-2-14 1:20+300\n"
+"PO-Revision-Date: 2015-2-14 1:21+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Test Metabox"
 msgstr ""
 
-#: example-functions.php:77 example-functions.php:360
+#: example-functions.php:77
 msgid "Test Text"
 msgstr ""
 
@@ -39,15 +39,6 @@ msgstr ""
 #: example-functions.php:168 example-functions.php:177
 #: example-functions.php:185 example-functions.php:192
 #: example-functions.php:199 example-functions.php:213
-#: example-functions.php:225 example-functions.php:237
-#: example-functions.php:249 example-functions.php:258
-#: example-functions.php:266 example-functions.php:275
-#: example-functions.php:282 example-functions.php:295
-#: example-functions.php:361 example-functions.php:455
-#: example-functions.php:463 example-functions.php:470
-#: example-functions.php:477 example-functions.php:484
-#: example-functions.php:491 example-functions.php:498
-#: example-functions.php:536
 msgid "field description (optional)"
 msgstr ""
 
@@ -119,174 +110,16 @@ msgstr ""
 msgid "Test Select"
 msgstr ""
 
-#: example-functions.php:217 example-functions.php:229
-#: example-functions.php:241
+#: example-functions.php:217
 msgid "Option One"
 msgstr ""
 
-#: example-functions.php:218 example-functions.php:230
-#: example-functions.php:242
+#: example-functions.php:218
 msgid "Option Two"
 msgstr ""
 
-#: example-functions.php:219 example-functions.php:231
-#: example-functions.php:243
+#: example-functions.php:219
 msgid "Option Three"
-msgstr ""
-
-#: example-functions.php:224
-msgid "Test Radio inline"
-msgstr ""
-
-#: example-functions.php:236
-msgid "Test Radio"
-msgstr ""
-
-#: example-functions.php:248
-msgid "Test Taxonomy Radio"
-msgstr ""
-
-#: example-functions.php:257
-msgid "Test Taxonomy Select"
-msgstr ""
-
-#: example-functions.php:265
-msgid "Test Taxonomy Multi Checkbox"
-msgstr ""
-
-#: example-functions.php:274
-msgid "Test Checkbox"
-msgstr ""
-
-#: example-functions.php:281
-msgid "Test Multi Checkbox"
-msgstr ""
-
-#: example-functions.php:286
-msgid "Check One"
-msgstr ""
-
-#: example-functions.php:287
-msgid "Check Two"
-msgstr ""
-
-#: example-functions.php:288
-msgid "Check Three"
-msgstr ""
-
-#: example-functions.php:294
-msgid "Test wysiwyg"
-msgstr ""
-
-#: example-functions.php:302
-msgid "Test Image"
-msgstr ""
-
-#: example-functions.php:303
-msgid "Upload an image or enter a URL."
-msgstr ""
-
-#: example-functions.php:309
-msgid "Multiple Files"
-msgstr ""
-
-#: example-functions.php:310
-msgid "Upload or add multiple images/attachments."
-msgstr ""
-
-#: example-functions.php:317
-msgid "oEmbed"
-msgstr ""
-
-#: example-functions.php:318
-msgid ""
-"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
-msgstr ""
-
-#: example-functions.php:351
-msgid "About Page Metabox"
-msgstr ""
-
-#: example-functions.php:382
-msgid "Repeating Field Group"
-msgstr ""
-
-#: example-functions.php:390
-msgid "Generates reusable form entries"
-msgstr ""
-
-#: example-functions.php:392
-msgid "Entry {#}"
-msgstr ""
-
-#: example-functions.php:393
-msgid "Add Another Entry"
-msgstr ""
-
-#: example-functions.php:394
-msgid "Remove Entry"
-msgstr ""
-
-#: example-functions.php:406
-msgid "Entry Title"
-msgstr ""
-
-#: example-functions.php:413
-msgid "Description"
-msgstr ""
-
-#: example-functions.php:414
-msgid "Write a short description for this entry"
-msgstr ""
-
-#: example-functions.php:420
-msgid "Entry Image"
-msgstr ""
-
-#: example-functions.php:426
-msgid "Image Caption"
-msgstr ""
-
-#: example-functions.php:447
-msgid "User Profile Metabox"
-msgstr ""
-
-#: example-functions.php:454
-msgid "Extra Info"
-msgstr ""
-
-#: example-functions.php:462
-msgid "Avatar"
-msgstr ""
-
-#: example-functions.php:469
-msgid "Facebook URL"
-msgstr ""
-
-#: example-functions.php:476
-msgid "Twitter URL"
-msgstr ""
-
-#: example-functions.php:483
-msgid "Google+ URL"
-msgstr ""
-
-#: example-functions.php:490
-msgid "Linkedin URL"
-msgstr ""
-
-#: example-functions.php:497
-msgid "User Field"
-msgstr ""
-
-#: example-functions.php:520
-msgid "Theme Options Metabox"
-msgstr ""
-
-#: example-functions.php:535
-msgid "Site Background Color"
 msgstr ""
 
 #: includes/CMB2.php:97
