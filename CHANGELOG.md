@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Use the more appropriate `add_meta_boxes` hook for adding metaboxes to post-edit screen. Thanks [@inspiraaz](https://github.com/inspiraaz) for reporting. ([#161](https://github.com/WebDevStudios/CMB2/issues/161))
 * Add a `row_classes` field param which allows you to add additional classes to the cmb-row wrap. This parameter can take a string, or array, or can take a callback that returns a string or array. The callback will receive `$field_args` as the first argument, and the CMB2_Field `$field` object as the second argument. Reported/requested in [#68](https://github.com/WebDevStudios/CMB2/issues/68).
 * New constant, `CMB2_LOADED`, which you can use to check if CMB2 is loaded for your plugins/themes with CMB2 dependency.
+* New function `new_cmb2_box` and new CMB2 method `add_group_field` for allowing easier metabox initiation. Refactored example-functions.php to use new API.
 
 ## 2.0.1 - 2015-02-02
 
