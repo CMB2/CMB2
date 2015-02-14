@@ -61,7 +61,6 @@ coding_style:
                 catch: true
                 finally: true
             within:
-                brackets: true
                 array_initializer: true
                 grouping: true
                 function_call: true
@@ -109,3 +108,4 @@ coding_style:
                 opening: end-of-line
                 catch_on_new_line: false
                 finally_on_new_line: false
+
