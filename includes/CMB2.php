@@ -650,51 +650,69 @@ class CMB2 {
 	/**
 	 * Add a field to the metabox
 	 * @since  2.0.0
-	 * @param  array  $field Metabox   field config array
-	 * @param  string $parent_field_id (optional) The field id of the group field to add the field
+	 * @param  array  $field           Metabox field config array
 	 * @param  int    $position        (optional) Position of metabox. 1 for first, etc
-	 * @return string                  The field id if successful
+	 * @return mixed                   Field id or false
 	 */
-	public function add_field( array $field, $parent_field_id = '', $position = 0 ) {
+	public function add_field( array $field, $position = 0 ) {
 		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
 			return false;
 		}
 
-		$new_field = $position ? array( $field['id'] => $field ) : false;
-
-		if ( $parent_field_id ) {
-
-			if ( ! array_key_exists( $parent_field_id, $this->meta_box['fields'] ) ) {
-				return false;
-			}
-
-			$parent_field = $this->meta_box['fields'][ $parent_field_id ];
-
-			if ( 'group' !== $parent_field['type'] ) {
-				return false;
-			}
-
-			if ( ! isset( $parent_field['fields'] ) ) {
-				$this->meta_box['fields'][ $parent_field_id ]['fields'] = array();
-			}
-
-			if ( $position ) {
-				cmb2_utils()->array_insert( $this->meta_box['fields'][ $parent_field_id ]['fields'], $new_field, $position );
-			} else {
-				$this->meta_box['fields'][ $parent_field_id ]['fields'][ $field['id'] ] = $field;
-			}
-
-			return $parent_field_id;
-		}
-
-
-		if ( $position ) {
-			cmb2_utils()->array_insert( $this->meta_box['fields'], $new_field, $position );
-		} else {
-			$this->meta_box['fields'][ $field['id'] ] = $field;
-		}
+		$this->_add_field_to_array(
+			$field,
+			$this->meta_box['fields'],
+			$position
+		);
 
 		return $field['id'];
+	}
+
+	/**
+	 * Add a field to the metabox
+	 * @since  2.0.0
+	 * @param  string $parent_field_id The field id of the group field to add the field
+	 * @param  array  $field           Metabox field config array
+	 * @param  int    $position        (optional) Position of metabox. 1 for first, etc
+	 * @return mixed                   Array of parent/field ids or false
+	 */
+	public function add_group_field( $parent_field_id, array $field, $position = 0 ) {
+		if ( ! array_key_exists( $parent_field_id, $this->meta_box['fields'] ) ) {
+			return false;
+		}
+
+		$parent_field = $this->meta_box['fields'][ $parent_field_id ];
+
+		if ( 'group' !== $parent_field['type'] ) {
+			return false;
+		}
+
+		if ( ! isset( $parent_field['fields'] ) ) {
+			$this->meta_box['fields'][ $parent_field_id ]['fields'] = array();
+		}
+
+		$this->_add_field_to_array(
+			$field,
+			$this->meta_box['fields'][ $parent_field_id ]['fields'],
+			$position
+		);
+
+		return array( $parent_field_id, $field['id'] );
+	}
+
+	/**
+	 * Add a field array to a fields array in desired position
+	 * @since 2.0.2
+	 * @param array   $field    Metabox field config array
+	 * @param array   &$fields  Array (passed by reference) to append the field (array) to
+	 * @param integer $position Optionally specify a position in the array to be inserted
+	 */
+	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
+		if ( $position ) {
+			cmb2_utils()->array_insert( $fields, array( $field['id'] => $field ), $position );
+		} else {
+			$fields[ $field['id'] ] = $field;
+		}
 	}
 
 	/**
