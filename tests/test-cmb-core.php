@@ -263,7 +263,7 @@ class CMB2_Core_Test extends CMB2_Test {
 		new CMB2_for_testing( $this->metabox_array2 );
 
 		// Retrieve the instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 
 		$after_args_parsed = wp_parse_args( $this->metabox_array2, $cmb->get_metabox_defaults() );
 		$this->assertEquals( $after_args_parsed, $cmb->meta_box );
@@ -271,7 +271,7 @@ class CMB2_Core_Test extends CMB2_Test {
 
 	function test_update_field_property() {
 		// Retrieve a CMB2 instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
@@ -298,7 +298,7 @@ class CMB2_Core_Test extends CMB2_Test {
 
 	public function test_updated_fields_properties() {
 		// Retrieve a CMB2 instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
 		$field = cmb2_get_field( $cmb, 'test_test' );
@@ -319,7 +319,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	public function test_add_field() {
 
 		// Retrieve a CMB2 instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 
 		// This should return false because we don't have a 'demo_text2' field
 		$field_id = $cmb->update_field_property( 'demo_text2', 'type', 'text' );
@@ -339,7 +339,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	public function test_added_field() {
 
 		// Retrieve a CMB2 instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 
 		$this->assertEquals( array(
 			array(
@@ -362,7 +362,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	public function test_add_group_field() {
 
 		// Retrieve a CMB2 instance
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 
 		// This should return false because we don't have a 'demo_text2' field
 		$field_id = $cmb->update_field_property( 'group_field', 'type', 'group' );
@@ -418,7 +418,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_remove_group_field() {
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'colorpicker', 'group_field' );
 
 		$field = cmb2_get_field( 'test2', 'group_field' );
@@ -435,7 +435,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_remove_field() {
-		$cmb = CMB2_Boxes::get( 'test2' );
+		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'group_field' );
 		$this->assertEquals( array(
 			array(
