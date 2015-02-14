@@ -11,3 +11,101 @@ checks:
     php:
         code_rating: true
         duplication: true
+
+coding_style:
+    php:
+        indentation:
+            general:
+                use_tabs: true
+                size: 3
+            switch:
+                indent_case: true
+        spaces:
+            before_parentheses:
+                function_declaration: false
+                closure_definition: false
+                function_call: false
+                if: true
+                for: true
+                while: true
+                switch: true
+                catch: true
+                array_initializer: false
+            around_operators:
+                assignment: true
+                logical: true
+                equality: true
+                relational: true
+                bitwise: true
+                additive: true
+                multiplicative: true
+                shift: true
+                unary_additive: false
+                concatenation: true
+                negation: true
+            before_left_brace:
+                class: true
+                function: true
+                if: true
+                else: true
+                for: true
+                while: true
+                do: true
+                switch: true
+                try: true
+                catch: true
+                finally: true
+            before_keywords:
+                else: true
+                while: true
+                catch: true
+                finally: true
+            within:
+                brackets: true
+                array_initializer: true
+                grouping: true
+                function_call: true
+                function_declaration: true
+                if: true
+                for: true
+                while: true
+                switch: true
+                catch: true
+                type_cast: false
+            ternary_operator:
+                before_condition: true
+                after_condition: true
+                before_alternative: true
+                after_alternative: true
+                in_short_version: true
+            other:
+                before_comma: false
+                after_comma: true
+                before_semicolon: false
+                after_semicolon: true
+                after_type_cast: true
+        braces:
+            classes_functions:
+                class: end-of-line
+                function: end-of-line
+                closure: end-of-line
+            if:
+                opening: end-of-line
+                always: true
+                else_on_new_line: false
+            for:
+                opening: end-of-line
+                always: true
+            while:
+                opening: end-of-line
+                always: true
+            do_while:
+                opening: end-of-line
+                always: true
+                while_on_new_line: false
+            switch:
+                opening: end-of-line
+            try:
+                opening: end-of-line
+                catch_on_new_line: false
+                finally_on_new_line: false
