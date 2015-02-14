@@ -400,33 +400,33 @@ function yourprefix_register_repeatable_group_field_metabox() {
 	 * Group fields works the same, except ids only need
 	 * to be unique to the group. Prefix is not needed.
 	 *
-	 * The parent field's id needs to be passed as the first argument.
+	 * The parent field's id needs to be passed as the second argument.
 	 */
-	$cmb_group->add_group_field( $group_field_id, array(
-		'name'       => __( 'Entry Title', 'cmb2' ),
-		'id'         => 'title',
-		'type'       => 'text',
+	$cmb_group->add_field( array(
+		'name' => 'Entry Title',
+		'id'   => 'title',
+		'type' => 'text',
 		// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
-	) );
+	), $group_field_id );
 
-	$cmb_group->add_group_field( $group_field_id, array(
-		'name'        => __( 'Description', 'cmb2' ),
-		'description' => __( 'Write a short description for this entry', 'cmb2' ),
-		'id'          => 'description',
-		'type'        => 'textarea_small',
-	) );
+	$cmb_group->add_field( array(
+		'name' => 'Description',
+		'description' => 'Write a short description for this entry',
+		'id'   => 'description',
+		'type' => 'textarea_small',
+	), $group_field_id );
 
-	$cmb_group->add_group_field( $group_field_id, array(
-		'name' => __( 'Entry Image', 'cmb2' ),
+	$cmb_group->add_field( array(
+		'name' => 'Entry Image',
 		'id'   => 'image',
 		'type' => 'file',
-	) );
+	), $group_field_id );
 
-	$cmb_group->add_group_field( $group_field_id, array(
-		'name' => __( 'Image Caption', 'cmb2' ),
+	$cmb_group->add_field( array(
+		'name' => 'Image Caption',
 		'id'   => 'image_caption',
 		'type' => 'text',
-	) );
+	), $group_field_id );
 
 }
 
