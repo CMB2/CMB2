@@ -377,21 +377,21 @@ class CMB2_Core_Test extends CMB2_Test {
 
 		$this->assertEquals( 'group_field', $field_id );
 
-		$sub_field_id = $cmb->add_field( array(
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
 			'name' => 'Field 1',
 			'id'   => 'first_field',
 			'type' => 'group',
-		), $field_id );
+		) );
 
-		$this->assertEquals( 'group_field', $sub_field_id );
+		$this->assertEquals( array( 'group_field', 'first_field' ), $sub_field_id );
 
-		$sub_field_id = $cmb->add_field( array(
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
 			'name' => 'Colorpicker',
 			'id'   => 'colorpicker',
 			'type' => 'colorpicker',
-		), $field_id );
+		), 1 ); // Test that the position argument is working
 
-		$this->assertEquals( 'group_field', $sub_field_id );
+		$this->assertEquals( array( 'group_field', 'colorpicker' ), $sub_field_id );
 
 	}
 
@@ -400,21 +400,22 @@ class CMB2_Core_Test extends CMB2_Test {
 		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
+		$fields = $field->fields();
 		$mock = array(
-			'first_field' => array(
-				'name' => 'Field 1',
-				'id'   => 'first_field',
-				'type' => 'group',
-			),
-
 			'colorpicker' => array(
 				'name' => 'Colorpicker',
 				'id'   => 'colorpicker',
 				'type' => 'colorpicker',
 			),
+			'first_field' => array(
+				'name' => 'Field 1',
+				'id'   => 'first_field',
+				'type' => 'group',
+			),
 		);
 
-		$this->assertEquals( $mock, $field->fields() );
+		$this->assertEquals( $mock, $fields );
+		$this->assertEquals( array_shift( $mock ), array_shift( $fields ) );
 	}
 
 	public function test_remove_group_field() {
