@@ -667,22 +667,8 @@ class CMB2_Field {
 	 * @return string Space concatenated list of classes
 	 */
 	public function row_classes() {
+
 		$classes = array();
-		$classes[] = 'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) );
-		$classes[] = 'cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) );
-
-		if ( $this->args( 'repeatable' ) ) {
-			$classes[] = 'cmb-repeat';
-		}
-
-		if ( $this->group ) {
-			$classes[] = 'cmb-repeat-group-field';
-		}
-
-		// 'inline' flag, or _inline in the field type, set to true
-		if ( $this->args( 'inline' ) ) {
-			$classes[] = 'cmb-inline';
-		}
 
 		/**
 		 * By default, 'text_url' and 'text' fields get table-like styling
@@ -695,16 +681,27 @@ class CMB2_Field {
 			'text_url', 'text',
 		) );
 
-		if ( in_array( $this->type(), $repeat_table_rows_types ) ) {
-			$classes[] = 'table-layout';
+		$conditional_classes = array(
+			'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
+			'cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) )    => true,
+			'cmb-repeat'             => $this->args( 'repeatable' ),
+			'cmb-repeat-group-field' => $this->group,
+			'cmb-inline'             => $this->args( 'inline' ),
+			'table-layout'           => in_array( $this->type(), $repeat_table_rows_types ),
+		);
+
+		foreach ( $conditional_classes as $class => $condition ) {
+			if ( $condition ) {
+				$classes[] = $class;
+			}
 		}
 
 		if ( $added_classes = $this->get_param_callback_result( 'row_classes', false ) ) {
-			if ( is_array( $added_classes ) ) {
-				$classes[] = esc_attr( implode( ' ', $added_classes ) );
-			} elseif ( is_string( $added_classes ) ) {
-				$classes[] = esc_attr( $added_classes );
-			}
+			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
+		}
+
+		if ( $added_classes ) {
+			$classes[] = esc_attr( $added_classes );
 		}
 
 		/**
