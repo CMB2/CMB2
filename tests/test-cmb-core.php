@@ -301,7 +301,7 @@ class CMB2_Core_Test extends CMB2_Test {
 		$cmb = cmb2_get_metabox( 'test2' );
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
-		$field = cmb2_get_field( $cmb, 'test_test' );
+		$field = cmb2_get_field( $cmb, 'test_test', $this->post_id );
 
 		$this->assertEquals( 'textarea', $field->type() );
 		$this->assertEquals( array( 'placeholder' => "I'm some placeholder text" ), $field->attributes() );
@@ -397,7 +397,7 @@ class CMB2_Core_Test extends CMB2_Test {
 
 	public function test_added_group_field() {
 
-		$field = cmb2_get_field( 'test2', 'group_field' );
+		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$mock = array(
@@ -421,7 +421,7 @@ class CMB2_Core_Test extends CMB2_Test {
 		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'colorpicker', 'group_field' );
 
-		$field = cmb2_get_field( 'test2', 'group_field' );
+		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
 
 		$mock = array(
 			'first_field' => array(
