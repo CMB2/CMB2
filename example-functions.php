@@ -516,7 +516,7 @@ function yourprefix_register_theme_options_metabox() {
 	 * the `cmb2_metabox_form` helper function. See wiki for more info.
 	 */
 	$cmb_options = new_cmb2_box( array(
-		'id'      => $prefix . 'page',
+		'id'      => $option_key . 'page',
 		'title'   => __( 'Theme Options Metabox', 'cmb2' ),
 		'hookup'  => false, // Do not need the normal user/post hookup
 		'show_on' => array(
