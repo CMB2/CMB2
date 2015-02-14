@@ -649,13 +649,34 @@ class CMB2 {
 
 	/**
 	 * Add a field to the metabox
-	 * @since 2.0.0
-	 * @param  array  $field Metabox field config array
-	 * @return string        The field id
+	 * @since  2.0.0
+	 * @param  array  $field Metabox   field config array
+	 * @param  string $parent_field_id (optional) The field id of the group field to add the field
+	 * @return string                  The field id if successful
 	 */
-	public function add_field( array $field ) {
+	public function add_field( array $field, $parent_field_id = '' ) {
 		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
 			return false;
+		}
+
+		if ( $parent_field_id ) {
+
+			if ( ! array_key_exists( $parent_field_id, $this->meta_box['fields'] ) ) {
+				return false;
+			}
+
+			$parent_field = $this->meta_box['fields'][ $parent_field_id ];
+
+			if ( 'group' !== $parent_field['type'] ) {
+				return false;
+			}
+
+			if ( ! isset( $parent_field['fields'] ) ) {
+				$this->meta_box['fields'][ $parent_field_id ]['fields'] = array();
+			}
+
+			$this->meta_box['fields'][ $parent_field_id ]['fields'][ $field['id'] ] = $field;
+			return $parent_field_id;
 		}
 
 		$this->meta_box['fields'][ $field['id'] ] = $field;
@@ -663,49 +684,60 @@ class CMB2 {
 	}
 
 	/**
-	 * Add a field to a group field array
-	 * @since 2.0.2
-	 * @param  string $field_id The Field ID of the group field to append the fields
-	 * @param  array  $field    Metabox field config array
-	 * @return string           The group field id
+	 * Remove a field from the metabox
+	 * @since 2.0.0
+	 * @param  string $field_id        The field id of the field to remove
+	 * @param  string $parent_field_id (optional) The field id of the group field to remove field from
+	 * @return bool                    True if field was removed
 	 */
-	public function add_group_field( $field_id, array $field ) {
+	public function remove_field( $field_id, $parent_field_id = '' ) {
+		$sub_field_id = $parent_field_id ? $field_id : null;
+		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
+
 		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
 			return false;
 		}
 
-		$parent_field = $this->meta_box['fields'][ $field_id ];
+		if ( ! $sub_field_id ) {
+			unset( $this->meta_box['fields'][ $field_id ] );
+			return true;
+		}
 
-		if ( 'group' !== $parent_field['type'] ) {
+		if ( ! array_key_exists( $sub_field_id, $this->meta_box['fields'][ $field_id ]['fields'] ) ) {
 			return false;
 		}
 
-		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
-			return false;
-		}
-
-		if ( ! isset( $parent_field['fields'] ) ) {
-			$this->meta_box['fields'][ $field_id ]['fields'] = array();
-		}
-
-		$this->meta_box['fields'][ $field_id ]['fields'][ $field['id'] ] = $field;
-		return $field_id;
+		unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
+		return true;
 	}
 
 	/**
 	 * Update or add a property to a field
 	 * @since  2.0.0
-	 * @param  string  $field_id Field id
-	 * @param  string  $property Field property to set/update
-	 * @param  mixed   $value    Value to set the field property
-	 * @return bool              True if field was updated
+	 * @param  string $field_id        Field id
+	 * @param  string $property        Field property to set/update
+	 * @param  mixed  $value           Value to set the field property
+	 * @param  string $parent_field_id (optional) The field id of the group field to remove field from
+	 * @return bool                    True if field was updated
 	 */
-	public function update_field_property( $field_id, $property, $value ) {
+	public function update_field_property( $field_id, $property, $value, $parent_field_id = '' ) {
+		$sub_field_id = $parent_field_id ? $field_id : null;
+		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
+
 		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
 			return false;
 		}
 
-		$this->meta_box['fields'][ $field_id ][ $property ] = $value;
+		if ( ! $sub_field_id ) {
+			$this->meta_box['fields'][ $field_id ][ $property ] = $value;
+			return true;
+		}
+
+		if ( 'group' !== $this->meta_box['fields'][ $field_id ]['type'] ) {
+			return false;
+		}
+
+		$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ][ $property ] = $value;
 		return true;
 	}
 
