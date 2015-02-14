@@ -66,8 +66,7 @@ class CMB2_hookup {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
 
-		}
-		elseif ( 'user' == $type ) {
+		} elseif ( 'user' == $type ) {
 
 			$priority = $this->cmb->prop( 'priority' );
 
@@ -324,7 +323,7 @@ class CMB2_hookup {
 	/**
 	 * Save data from metabox
 	 */
-	public function save_user( $user_id )  {
+	public function save_user( $user_id ) {
 		// check permissions
 		if (
 			// check nonce
