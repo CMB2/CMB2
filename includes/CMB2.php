@@ -732,19 +732,22 @@ class CMB2 {
 	 * @param  string $property        Field property to set/update
 	 * @param  mixed  $value           Value to set the field property
 	 * @param  string $parent_field_id (optional) The field id of the group field to remove field from
-	 * @return bool                    True if field was updated
+	 * @return mixed                   Field id. Strict compare to false, as success can return a falsey value (like 0)
 	 */
 	public function update_field_property( $field_id, $property, $value, $parent_field_id = '' ) {
 		$sub_field_id = $parent_field_id ? $field_id : null;
 		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
 
 		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
-			return false;
+			$field_id = $this->search_old_school_array( $field_id );
+			if ( false === $field_id ) {
+				return false;
+			}
 		}
 
 		if ( ! $sub_field_id ) {
 			$this->meta_box['fields'][ $field_id ][ $property ] = $value;
-			return true;
+			return $field_id;
 		}
 
 		if ( 'group' !== $this->meta_box['fields'][ $field_id ]['type'] ) {
@@ -752,7 +755,19 @@ class CMB2 {
 		}
 
 		$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ][ $property ] = $value;
-		return true;
+		return $field_id;
+	}
+
+	/**
+	 * When using the old array filter, it is unlikely field array indexes will be the field id
+	 * @since  2.0.2
+	 * @param  string $field_id The field id
+	 * @return mixed            Field index or false
+	 */
+	public function search_old_school_array( $field_id ) {
+		$ids = wp_list_pluck( $this->meta_box['fields'], 'id' );
+		$index = array_search( $field_id, $ids );
+		return false !== $index ? $index : false;
 	}
 
 	/**
