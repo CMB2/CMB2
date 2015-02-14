@@ -275,7 +275,10 @@ class CMB2_Core_Test extends CMB2_Test {
 
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
-		$cmb->update_field_property( 'test_test', 'type', 'textarea' );
+		$test = $cmb->update_field_property( 'test_test', 'type', 'textarea' );
+
+		$this->assertEquals( 0, $test );
+
 		$field_id = $cmb->update_field_property( 'test_test', 'name', 'Test Name' );
 
 		$this->assertNotFalse( $field_id );
