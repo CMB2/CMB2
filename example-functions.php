@@ -347,7 +347,7 @@ function yourprefix_register_about_page_metabox() {
 	 * Metabox to be displayed on a single page ID
 	 */
 	$cmb_about_page = new_cmb2_box( array(
-		'id'           => 'about_page_metabox',
+		'id'           => $prefix . 'metabox',
 		'title'        => __( 'About Page Metabox', 'cmb2' ),
 		'object_types' => array( 'page', ), // Post type
 		'context'      => 'normal',
@@ -378,7 +378,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 	 * Repeatable Field Groups
 	 */
 	$cmb_group = new_cmb2_box( array(
-		'id'           => 'field_group',
+		'id'           => $prefix . 'metabox',
 		'title'        => __( 'Repeating Field Group', 'cmb2' ),
 		'object_types' => array( 'page', ),
 	) );
@@ -516,7 +516,7 @@ function yourprefix_register_theme_options_metabox() {
 	 * the `cmb2_metabox_form` helper function. See wiki for more info.
 	 */
 	$cmb_options = new_cmb2_box( array(
-		'id'      => 'yourprefix_options_page',
+		'id'      => $prefix . 'page',
 		'title'   => __( 'Theme Options Metabox', 'cmb2' ),
 		'hookup'  => false, // Do not need the normal user/post hookup
 		'show_on' => array(
