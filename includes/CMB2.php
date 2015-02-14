@@ -723,20 +723,17 @@ class CMB2 {
 	 * @return bool                    True if field was removed
 	 */
 	public function remove_field( $field_id, $parent_field_id = '' ) {
-		$sub_field_id = $parent_field_id ? $field_id : null;
-		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
+		$ids = $this->get_field_ids( $field_id, $parent_field_id );
 
-		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
+		if ( ! $ids ) {
 			return false;
 		}
+
+		list( $field_id, $sub_field_id ) = $ids;
 
 		if ( ! $sub_field_id ) {
 			unset( $this->meta_box['fields'][ $field_id ] );
 			return true;
-		}
-
-		if ( ! array_key_exists( $sub_field_id, $this->meta_box['fields'][ $field_id ]['fields'] ) ) {
-			return false;
 		}
 
 		unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
@@ -753,23 +750,17 @@ class CMB2 {
 	 * @return mixed                   Field id. Strict compare to false, as success can return a falsey value (like 0)
 	 */
 	public function update_field_property( $field_id, $property, $value, $parent_field_id = '' ) {
-		$sub_field_id = $parent_field_id ? $field_id : null;
-		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
+		$ids = $this->get_field_ids( $field_id, $parent_field_id );
 
-		if ( ! array_key_exists( $field_id, $this->meta_box['fields'] ) ) {
-			$field_id = $this->search_old_school_array( $field_id );
-			if ( false === $field_id ) {
-				return false;
-			}
+		if ( ! $ids ) {
+			return false;
 		}
+
+		list( $field_id, $sub_field_id ) = $ids;
 
 		if ( ! $sub_field_id ) {
 			$this->meta_box['fields'][ $field_id ][ $property ] = $value;
 			return $field_id;
-		}
-
-		if ( 'group' !== $this->meta_box['fields'][ $field_id ]['type'] ) {
-			return false;
 		}
 
 		$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ][ $property ] = $value;
@@ -777,13 +768,49 @@ class CMB2 {
 	}
 
 	/**
+	 * Check if field ids match a field and return the index/field id
+	 * @since  2.0.2
+	 * @param  string  $field_id        Field id
+	 * @param  string  $parent_field_id (optional) Parent field id
+	 * @return mixed                    Array of field/parent ids, or false
+	 */
+	public function get_field_ids( $field_id, $parent_field_id = '' ) {
+		$sub_field_id = $parent_field_id ? $field_id : '';
+		$field_id     = $parent_field_id ? $parent_field_id : $field_id;
+		$fields       =& $this->meta_box['fields'];
+
+		if ( ! array_key_exists( $field_id, $fields ) ) {
+			$field_id = $this->search_old_school_array( $field_id, $fields );
+		}
+
+		if ( false === $field_id ) {
+			return false;
+		}
+
+		if ( ! $sub_field_id ) {
+			return array( $field_id, $sub_field_id );
+		}
+
+		if ( 'group' !== $fields[ $field_id ]['type'] ) {
+			return false;
+		}
+
+		if ( ! array_key_exists( $sub_field_id, $fields[ $field_id ]['fields'] ) ) {
+			$sub_field_id = $this->search_old_school_array( $sub_field_id, $fields[ $field_id ]['fields'] );
+		}
+
+		return false === $sub_field_id ? false : array( $field_id, $sub_field_id );
+	}
+
+	/**
 	 * When using the old array filter, it is unlikely field array indexes will be the field id
 	 * @since  2.0.2
 	 * @param  string $field_id The field id
+	 * @param  array  $fields   Array of fields to search
 	 * @return mixed            Field index or false
 	 */
-	public function search_old_school_array( $field_id ) {
-		$ids = wp_list_pluck( $this->meta_box['fields'], 'id' );
+	public function search_old_school_array( $field_id, $fields ) {
+		$ids = wp_list_pluck( $fields, 'id' );
 		$index = array_search( $field_id, $ids );
 		return false !== $index ? $index : false;
 	}
