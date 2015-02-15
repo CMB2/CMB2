@@ -42,12 +42,12 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
+if ( ! class_exists( 'cmb2_bootstrap_203_trunk', false ) ) {
 
 	/**
 	 * Check for newest version of CMB
 	 */
-	class cmb2_bootstrap_202 {
+	class cmb2_bootstrap_203_trunk {
 
 		/**
 		 * Current version number
@@ -63,7 +63,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9997;
+		const PRIORITY = 9996;
 
 		public static $single = null;
 
@@ -116,6 +116,6 @@ if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
 		}
 
 	}
-	cmb2_bootstrap_202::go();
+	cmb2_bootstrap_203_trunk::go();
 
 } // class exists check
