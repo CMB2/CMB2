@@ -486,7 +486,7 @@ class CMB2 {
 				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
-					$this->updated[] = $base_id .'::'. $field_group->index .'::'. $sub_id;
+					$this->updated[] = $base_id . '::' . $field_group->index . '::' . $sub_id;
 				}
 
 				// Add to `$saved` array
@@ -833,7 +833,7 @@ class CMB2 {
 		if ( $this->generated_nonce ) {
 			return $this->generated_nonce;
 		}
-		$this->generated_nonce = sanitize_html_class( 'nonce_'. basename( __FILE__ ) . $this->cmb_id );
+		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->cmb_id );
 		return $this->generated_nonce;
 	}
 
@@ -850,7 +850,7 @@ class CMB2 {
 			case 'updated':
 				return $this->{$field};
 			default:
-				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
+				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
 	}
 
