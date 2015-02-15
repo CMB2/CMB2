@@ -292,7 +292,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * New sanitization class to sanitize data when saved.
 * New callback field parameter, `sanitization_cb`, for performing your own sanitization.
 * new `cmb_Meta_Box_types::esc()` method that handles escaping data for display.
-* New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
+* New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `"cmb_types_esc_{$field_type}"`.
 
 ##### Bug Fixes
 

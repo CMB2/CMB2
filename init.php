@@ -110,7 +110,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202_trunk', false ) ) {
 
 			if ( ! $loaded ) {
 				$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
-				$mofile = dirname( __FILE__ ) . '/languages/cmb2-'. $locale .'.mo';
+				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}
 		}

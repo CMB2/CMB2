@@ -183,12 +183,12 @@ class CMB2_Core_Test extends CMB2_Test {
 
 	public function test_cmb2_print_metabox_form() {
 		$expected_form = '
-		<form class="cmb-form" method="post" id="'. $this->cmb_id .'" enctype="multipart/form-data" encoding="multipart/form-data">
-			<input type="hidden" name="object_id" value="'. $this->post_id .'">
-			'. wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) .'
+		<form class="cmb-form" method="post" id="' . $this->cmb_id . '" enctype="multipart/form-data" encoding="multipart/form-data">
+			<input type="hidden" name="object_id" value="' . $this->post_id . '">
+			' . wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) . '
 			<!-- Begin CMB Fields -->
 			<div class="cmb2-wrap form-table">
-				<div id="cmb2-metabox-'. $this->cmb_id .'" class="cmb2-metabox cmb-field-list">
+				<div id="cmb2-metabox-' . $this->cmb_id . '" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
 					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout">
 						<div class="cmb-th">
@@ -215,11 +215,11 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function cmb_before_row( $field_args, $field ) {
-		echo 'function test_before_row '. $field_args['description'] .' '. $field->id();
+		echo 'function test_before_row ' . $field_args['description'] . ' ' . $field->id();
 	}
 
 	public function cmb_after( $field_args, $field ) {
-		echo 'function test_after '. $field_args['description'] .' '. $field->id();
+		echo 'function test_after ' . $field_args['description'] . ' ' . $field->id();
 	}
 
 	public function test_cmb2_options() {

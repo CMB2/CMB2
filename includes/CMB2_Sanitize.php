@@ -63,11 +63,11 @@ class CMB2_Sanitize {
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( 'cmb2_sanitize_'. $this->field->type(), null, $value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $value, $this->field->object_id, $this->field->args(), $this );
 		/**
 		 * DEPRECATED. See documentation above.
 		 */
-		$override_value = apply_filters( 'cmb2_validate_'. $this->field->type(), $override_value, $value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;
@@ -216,7 +216,7 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		$value = strtotime( $value['date'] .' '. $value['time'] );
+		$value = strtotime( $value['date'] . ' ' . $value['time'] );
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
 			$value += $tz_offset;
@@ -258,7 +258,7 @@ class CMB2_Sanitize {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}
 
-		$value = new DateTime( $value['date'] .' '. $value['time'], new DateTimeZone( $tzstring ) );
+		$value = new DateTime( $value['date'] . ' ' . $value['time'], new DateTimeZone( $tzstring ) );
 		$value = serialize( $value );
 
 		return $value;
