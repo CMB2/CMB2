@@ -3,6 +3,8 @@
  * Create meta boxes
  *
  * @property-read string $cmb_id
+ * @property-read array $meta_box
+ * @property-read array $updated
  */
 class CMB2 {
 
