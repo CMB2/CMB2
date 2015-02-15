@@ -786,7 +786,7 @@ class CMB2_Types {
 			'data-objecttype' => $this->field->object_type,
 		) ),
 		'<p class="cmb-spinner spinner" style="display:none;"></p>',
-		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">', $oembed, '</div>';
+		'<div id="', $this->_id( '-status' ), '" class="cmb2-media-status ui-helper-clearfix embed_wrap">', $oembed, '</div>';
 	}
 
 	public function file_list() {
@@ -807,7 +807,7 @@ class CMB2_Types {
 			'name'  => '', 'id'  => '',
 		) );
 
-		echo '<ul id="', $this->_id( '-status' ) ,'" class="cmb2-media-status cmb-attach-list">';
+		echo '<ul id="', $this->_id( '-status' ), '" class="cmb2-media-status cmb-attach-list">';
 
 		if ( $meta_value && is_array( $meta_value ) ) {
 
@@ -893,7 +893,7 @@ class CMB2_Types {
 			'value' => $_id_value,
 			'desc'  => '',
 		) ),
-		'<div id="', $this->_id( '-status' ) ,'" class="cmb2-media-status">';
+		'<div id="', $this->_id( '-status' ), '" class="cmb2-media-status">';
 			if ( ! empty( $meta_value ) ) {
 
 				if ( $this->is_valid_img_ext( $meta_value ) ) {
