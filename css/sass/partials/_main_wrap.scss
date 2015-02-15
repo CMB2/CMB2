@@ -55,10 +55,12 @@ Main Wrap
 			padding: 2px 4px;
 		}
 
-		+ input,
-		+ .button,
-		+ select {
-			margin-left: 20px;
+		&:not([type="hidden"]) {
+			+ input,
+			+ .button,
+			+ select {
+				margin-left: 20px;
+			}
 		}
 	}
 
