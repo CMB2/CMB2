@@ -142,13 +142,27 @@ window.CMB2 = (function(window, document, $, undefined){
 		evt.preventDefault();
 
 		var $el = $( this );
-		cmb.attach_id = false;
+		cmb.attach_id = ! $el.hasClass( 'cmb2-upload-list' ) ? $el.closest( '.cmb-td' ).find( '.cmb2-upload-file-id' ).val() : false;
+		// Clean up default 0 value
+		cmb.attach_id = '0' !== cmb.attach_id ? cmb.attach_id : false;
 
 		cmb._handleMedia( $el.prev('input.cmb2-upload-file').attr('id'), $el.hasClass( 'cmb2-upload-list' ) );
 	};
 
-	cmb._handleMedia = function( formfield, isList ) {
+	cmb.handleFileClick = function( evt ) {
+		evt.preventDefault();
 
+		var $el    = $( this );
+		var $td    = $el.closest( '.cmb-td' );
+		var isList = $td.find( '.cmb2-upload-button' ).hasClass( 'cmb2-upload-list' );
+		cmb.attach_id = isList ? $el.find( 'input[type="hidden"]' ).data( 'id' ) : $td.find( '.cmb2-upload-file-id' ).val();
+
+		if ( cmb.attach_id ) {
+			cmb._handleMedia( $td.find( 'input.cmb2-upload-file' ).attr('id'), isList, cmb.attach_id );
+		}
+	};
+
+	cmb._handleMedia = function( formfield, isList ) {
 		if ( ! wp ) {
 			return;
 		}
@@ -258,11 +272,13 @@ window.CMB2 = (function(window, document, $, undefined){
 				handlers[type]( selection );
 			})
 			.on( 'open', function() {
-				if ( ! cmb.attach_id ) {
-					return;
-				}
 				var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
-				var attach = wp.media.attachment( cmb.attach_id );  // get attachment with id
+
+				if ( ! cmb.attach_id ) {
+					return selection.reset();
+				}
+
+				var attach = wp.media.attachment( cmb.attach_id );
 				attach.fetch();
 				selection.set( attach ? [ attach ] : [] );
 			});
@@ -271,26 +287,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.file_frames[ cmb.formfield ].open();
 	};
 
-	cmb.handleFileClick = function( evt ) {
-
-		if ( ! wp ) {
-			return;
-		}
-
-		evt.preventDefault();
-
-		var $el    = $( this );
-		var $td    = $el.closest( '.cmb-td' );
-		var isList = $td.find( '.cmb2-upload-button' ).hasClass( 'cmb2-upload-list' );
-		cmb.attach_id = isList ? $el.find( 'input[type="hidden"]' ).data( 'id' ) : $td.find( '.cmb2-upload-file-id' ).val();
-
-		if ( cmb.attach_id ) {
-			cmb.log( 'handleFileClick cmb.attach_id', cmb.attach_id );
-			cmb._handleMedia( $td.find( 'input.cmb2-upload-file' ).attr('id'), isList, cmb.attach_id );
-		}
-	};
-
-
 	cmb.handleRemoveMedia = function( evt ) {
 		evt.preventDefault();
 		var $self = $(this);
@@ -298,41 +294,14 @@ window.CMB2 = (function(window, document, $, undefined){
 			$self.parents('li').remove();
 			return false;
 		}
-		cmb.formfield    = $self.attr('rel');
-		var $container   = $self.parents('.img-status');
+
+		cmb.formfield = $self.attr('rel');
 
 		cmb.metabox().find( 'input#' + cmb.formfield ).val('');
 		cmb.metabox().find( 'input#' + cmb.formfield + '_id' ).val('');
-		if ( ! $container.length ) {
-			$self.parents('.cmb2-media-status').html('');
-		} else {
-			$container.html('');
-		}
-		return false;
-	};
+		$self.parents('.cmb2-media-status').html('');
 
-	// src: http://www.benalman.com/projects/jquery-replacetext-plugin/
-	$.fn.replaceText = function(b, a, c) {
-		return this.each(function() {
-			var f = this.firstChild, g, e, d = [];
-			if (f) {
-				do {
-					if (f.nodeType === 3) {
-						g = f.nodeValue;
-						e = g.replace(b, a);
-						if (e !== g) {
-							if (!c && /</.test(e)) {
-								$(f).before(e);
-								d.push(f);
-							} else {
-								f.nodeValue = e;
-							}
-						}
-					}
-				} while (f = f.nextSibling);
-			}
-			if ( d.length ) { $(d).remove(); }
-		});
+		return false;
 	};
 
 	$.fn.cleanRow = function( prevNum, group ) {
@@ -667,24 +636,24 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
-				$element.html( inputVals[ index ]['val'] );
-				inputVals[ index ]['$'].html( val );
+				$element.html( inputVals[ index ].val );
+				inputVals[ index ].$.html( val );
 
 			}
 			// handle checkbox swapping
 			else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr( 'type' )  ) {
-				inputVals[ index ]['$'].prop( 'checked', $element.is(':checked') );
-				$element.prop( 'checked', inputVals[ index ]['val'] );
+				inputVals[ index ].$.prop( 'checked', $element.is(':checked') );
+				$element.prop( 'checked', inputVals[ index ].val );
 			}
 			// handle select swapping
 			else if ( 'select' === $element.prop('tagName') ) {
-				inputVals[ index ]['$'].prop( 'selected', $element.is(':selected') );
-				$element.prop( 'selected', inputVals[ index ]['val'] );
+				inputVals[ index ].$.prop( 'selected', $element.is(':selected') );
+				$element.prop( 'selected', inputVals[ index ].val );
 			}
 			// handle normal input swapping
 			else {
-				inputVals[ index ]['$'].val( $element.val() );
-				$element.val( inputVals[ index ]['val'] );
+				inputVals[ index ].$.val( $element.val() );
+				$element.val( inputVals[ index ].val );
 			}
 		});
 
