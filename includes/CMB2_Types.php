@@ -786,7 +786,7 @@ class CMB2_Types {
 		$this->input( array(
 			'type'  => 'button',
 			'class' => 'cmb2-upload-button button cmb2-upload-list',
-			'value'  => esc_html( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ),
+			'value'  => esc_html( $this->_text( 'add_upload_files_text', __( 'Add or Upload Files', 'cmb2' ) ) ),
 			'name'  => '', 'id'  => '',
 		) );
 
