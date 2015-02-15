@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress"
+    "url": "https://github.com/WebDevStudios/CMB2"
   },
   "author": "WebDevStudios",
   "license": "GPLv2",
   "bugs": {
-    "url": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues"
+    "url": "https://github.com/WebDevStudios/CMB2/issues"
   },
-  "homepage": "https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress",
+  "homepage": "https://github.com/WebDevStudios/CMB2",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-asciify": "~0.2.2",

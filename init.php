@@ -91,7 +91,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202_trunk', false ) ) {
 					define( 'CMB2_VERSION', self::VERSION );
 				}
 				$this->l10ni18n();
-				require_once 'CMB2.php';
+				require_once 'bootstrap.php';
 			}
 		}
 
@@ -110,7 +110,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202_trunk', false ) ) {
 
 			if ( ! $loaded ) {
 				$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
-				$mofile = dirname( __FILE__ ) . '/languages/cmb2-'. $locale .'.mo';
+				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}
 		}

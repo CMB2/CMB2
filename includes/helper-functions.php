@@ -6,7 +6,7 @@
  * @param  string $class_name Name of the class being requested
  */
 function cmb2_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) || false === strpos( $class_name, 'CMB2_' ) ) {
+	if ( class_exists( $class_name, false ) || false === strpos( $class_name, 'CMB2' ) ) {
 		return;
 	}
 
@@ -149,6 +149,16 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
 function cmb2_get_field_value( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
 	$field = cmb2_get_field( $meta_box, $field_id, $object_id, $object_type );
 	return $field->escaped_value();
+}
+
+/**
+ * Because OOP can be scary
+ * @since  2.0.2
+ * @param  array $meta_box_config Metabox Config array
+ * @return CMB2 object            Instantiated CMB2 object
+ */
+function new_cmb2_box( array $meta_box_config ) {
+	return cmb2_get_metabox( $meta_box_config );
 }
 
 /**

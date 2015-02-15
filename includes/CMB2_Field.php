@@ -427,7 +427,7 @@ class CMB2_Field {
 		// 		}
 		// 	}
 		// } else
-		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old  ) {
+		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
 			return $this->update_data( $new_value );
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			return $this->remove_data();
@@ -518,7 +518,7 @@ class CMB2_Field {
 		}
 
 		// Or custom escaping filter can be used
-		$esc = apply_filters( 'cmb2_types_esc_'. $this->type(), null, $meta_value, $this->args(), $this );
+		$esc = apply_filters( "cmb2_types_esc_{$this->type()}", null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
 		}
@@ -682,8 +682,8 @@ class CMB2_Field {
 		) );
 
 		$conditional_classes = array(
-			'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
-			'cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) )    => true,
+			'cmb-type-' . str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
+			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->id() ) )    => true,
 			'cmb-repeat'             => $this->args( 'repeatable' ),
 			'cmb-repeat-group-field' => $this->group,
 			'cmb-inline'             => $this->args( 'inline' ),
@@ -857,8 +857,8 @@ class CMB2_Field {
 
 		if ( $this->group ) {
 
-			$args['id']    = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
-			$args['_name'] = $this->group->args( 'id' ) .'['. $this->group->args( 'count' ) .']['. $args['_name'] .']';
+			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->args( 'count' ) . '_' . $args['id'];
+			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->args( 'count' ) . '][' . $args['_name'] . ']';
 		}
 
 		if ( 'wysiwyg' == $args['type'] ) {

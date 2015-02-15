@@ -110,7 +110,7 @@ class CMB2_Field_Test extends CMB2_Test {
 	}
 
 	public function before_field_cb( $args ) {
-		echo 'before_field_cb_'. $args['id'];
+		echo 'before_field_cb_' . $args['id'];
 	}
 
 	public function row_classes_array_cb( $args ) {

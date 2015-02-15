@@ -1,11 +1,8 @@
 /**
  * Controls the behaviours of custom metabox fields.
  *
- * @author Andrew Norcross
- * @author Jared Atchison
- * @author Bill Erickson
- * @author Justin Sternberg
- * @see    https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress
+ * @author WebDevStudios
+ * @see    https://github.com/WebDevStudios/CMB2
  */
 
 /**
@@ -490,7 +487,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		cmb.afterRowInsert( $newRow, true );
 
-		if ( $table.find('.cmb-repeatable-grouping').length <= 1  ) {
+		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
 		} else {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
