@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2015-02-06 14:22+0000\n"
+"PO-Revision-Date: 2014-12-23 21:54+0000\n"
 "Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/cmb2/language/pl_PL/)\n"
+"Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/cmb2/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -26,11 +26,11 @@ msgstr ""
 
 #: CMB2.php:100
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr "﻿Konfiguracja Metabox musi posiadać parametr ID"
+msgstr ""
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr "Kliknij, aby przełączyć"
+msgstr "برای جانشینی کلیک کنید"
 
 #: example-functions.php:53
 msgid "Test Metabox"
@@ -297,11 +297,11 @@ msgstr ""
 
 #: includes/CMB2_Field.php:787
 msgid "None"
-msgstr "Brak"
+msgstr "هیچ‌یک"
 
 #: includes/CMB2_Field.php:788
 msgid "All"
-msgstr "Wszystkie"
+msgstr "همه"
 
 #: includes/CMB2_Types.php:290
 msgid "Add Row"
@@ -312,7 +312,7 @@ msgstr ""
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
-msgstr "Usuń"
+msgstr "حذف"
 
 #: includes/CMB2_Types.php:683 includes/CMB2_Types.php:731
 msgid "No terms"
@@ -327,7 +327,7 @@ msgstr ""
 #: includes/CMB2_Types.php:796 includes/CMB2_Types.php:877
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr "Usuń obrazek"
+msgstr "حذف تصویر"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
@@ -339,23 +339,23 @@ msgstr ""
 #: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:707
 msgid "Download"
-msgstr "Pobierz"
+msgstr "دانلود"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr "Wyczyść"
+msgstr "پاکسازی"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr "Domyślny"
+msgstr "پیش‌فرض"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr "Wybierz kolor"
+msgstr "گزینش رنگ"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr "Bieżący kolor"
+msgstr "رنگ فعلی"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
@@ -385,7 +385,7 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr "Dalej"
+msgstr "بعدی"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
@@ -393,11 +393,11 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr "Dzisiaj"
+msgstr "امروز"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr "Gotowe"
+msgstr "انجام شد"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
@@ -409,7 +409,7 @@ msgstr ""
 
 #: includes/helper-functions.php:243
 msgid "Save"
-msgstr "Zapisz"
+msgstr "ذخیره"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"

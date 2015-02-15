@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
 # Translators:
+# Thomas De Jonghe <thomas@teedejee.be>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2015-02-06 14:22+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/cmb2/language/pl_PL/)\n"
+"PO-Revision-Date: 2015-02-10 15:11+0000\n"
+"Last-Translator: Thomas De Jonghe <thomas@teedejee.be>\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/cmb2/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -26,11 +27,11 @@ msgstr ""
 
 #: CMB2.php:100
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr "﻿Konfiguracja Metabox musi posiadać parametr ID"
+msgstr ""
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr "Kliknij, aby przełączyć"
+msgstr "Klik om te wisselen"
 
 #: example-functions.php:53
 msgid "Test Metabox"
@@ -38,7 +39,7 @@ msgstr ""
 
 #: example-functions.php:61 example-functions.php:295
 msgid "Test Text"
-msgstr ""
+msgstr "Test Tekst"
 
 #: example-functions.php:62 example-functions.php:73 example-functions.php:80
 #: example-functions.php:87 example-functions.php:95 example-functions.php:102
@@ -76,11 +77,11 @@ msgstr ""
 
 #: example-functions.php:101
 msgid "Test Time"
-msgstr ""
+msgstr "Test Tijd"
 
 #: example-functions.php:107 example-functions.php:108
 msgid "Time zone"
-msgstr ""
+msgstr "Tijdzone"
 
 #: example-functions.php:113
 msgid "Test Date Picker"
@@ -96,11 +97,11 @@ msgstr ""
 
 #: example-functions.php:141
 msgid "Test Money"
-msgstr ""
+msgstr "Test Geld"
 
 #: example-functions.php:149
 msgid "Test Color Picker"
-msgstr ""
+msgstr "Test Kleurenkiezer"
 
 #: example-functions.php:156
 msgid "Test Text Area"
@@ -129,17 +130,17 @@ msgstr ""
 #: example-functions.php:185 example-functions.php:196
 #: example-functions.php:207
 msgid "Option One"
-msgstr ""
+msgstr "Keuze Een"
 
 #: example-functions.php:186 example-functions.php:197
 #: example-functions.php:208
 msgid "Option Two"
-msgstr ""
+msgstr "Keuze Twee"
 
 #: example-functions.php:187 example-functions.php:198
 #: example-functions.php:209
 msgid "Option Three"
-msgstr ""
+msgstr "Keuze Drie"
 
 #: example-functions.php:191
 msgid "Test Radio inline"
@@ -187,7 +188,7 @@ msgstr ""
 
 #: example-functions.php:261
 msgid "Test Image"
-msgstr ""
+msgstr "Test Afbeelding"
 
 #: example-functions.php:262
 msgid "Upload an image or enter a URL."
@@ -195,7 +196,7 @@ msgstr ""
 
 #: example-functions.php:267
 msgid "Multiple Files"
-msgstr ""
+msgstr "Meerdere Bestanden"
 
 #: example-functions.php:268
 msgid "Upload or add multiple images/attachments."
@@ -203,7 +204,7 @@ msgstr ""
 
 #: example-functions.php:274
 msgid "oEmbed"
-msgstr ""
+msgstr "oEmbed"
 
 #: example-functions.php:275
 msgid ""
@@ -237,51 +238,51 @@ msgstr ""
 
 #: example-functions.php:355
 msgid "User Profile Metabox"
-msgstr ""
+msgstr "Gebruikersprofiel Metabox"
 
 #: example-functions.php:361
 msgid "Extra Info"
-msgstr ""
+msgstr "Extra Info"
 
 #: example-functions.php:368
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: example-functions.php:374
 msgid "Facebook URL"
-msgstr ""
+msgstr "Facebook URL"
 
 #: example-functions.php:380
 msgid "Twitter URL"
-msgstr ""
+msgstr "Twitter URL"
 
 #: example-functions.php:386
 msgid "Google+ URL"
-msgstr ""
+msgstr "Google+ URL"
 
 #: example-functions.php:392
 msgid "Linkedin URL"
-msgstr ""
+msgstr "Linkedin URL"
 
 #: example-functions.php:398
 msgid "User Field"
-msgstr ""
+msgstr "Gebruiker Veld"
 
 #: example-functions.php:412
 msgid "Theme Options Metabox"
-msgstr ""
+msgstr "Thema instellingen Metabox"
 
 #: example-functions.php:416
 msgid "Site Background Color"
-msgstr ""
+msgstr "Achtergrondkleur Site"
 
 #: includes/CMB2_Ajax.php:37
 msgid "Please Try Again"
-msgstr ""
+msgstr "Opnieuw proberen."
 
 #: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:734
 msgid "Remove Embed"
-msgstr ""
+msgstr "Verwijder Embed"
 
 #: includes/CMB2_Ajax.php:137
 msgid "No oEmbed Results Found for %s. View more info at"
@@ -289,34 +290,34 @@ msgstr ""
 
 #: includes/CMB2_Field.php:765
 msgid "Add Group"
-msgstr ""
+msgstr "Voeg Groep Toe"
 
 #: includes/CMB2_Field.php:766
 msgid "Remove Group"
-msgstr ""
+msgstr "Verwijder Groep"
 
 #: includes/CMB2_Field.php:787
 msgid "None"
-msgstr "Brak"
+msgstr "Geen"
 
 #: includes/CMB2_Field.php:788
 msgid "All"
-msgstr "Wszystkie"
+msgstr "Alles"
 
 #: includes/CMB2_Types.php:290
 msgid "Add Row"
-msgstr ""
+msgstr "Voeg Rij Toe"
 
 #: includes/CMB2_Types.php:349 includes/CMB2_Types.php:805
 #: includes/CMB2_Types.php:882 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
-msgstr "Usuń"
+msgstr "Verwijderen"
 
 #: includes/CMB2_Types.php:683 includes/CMB2_Types.php:731
 msgid "No terms"
-msgstr ""
+msgstr "Geen termen"
 
 #: includes/CMB2_Types.php:775 includes/CMB2_Types.php:830
 #: tests/test-cmb-types.php:659 tests/test-cmb-types.php:685
@@ -327,93 +328,93 @@ msgstr ""
 #: includes/CMB2_Types.php:796 includes/CMB2_Types.php:877
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr "Usuń obrazek"
+msgstr "Afbeelding verwijderen"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
 #: tests/test-cmb-types.php:709
 msgid "File:"
-msgstr ""
+msgstr "Bestand:"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:707
 msgid "Download"
-msgstr "Pobierz"
+msgstr "Downloaden"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr "Wyczyść"
+msgstr "Wissen"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr "Domyślny"
+msgstr "Standaard"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr "Wybierz kolor"
+msgstr "Kleur selecteren"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr "Bieżący kolor"
+msgstr "Huidige kleur"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
-msgstr ""
+msgstr "mm/dd/jj"
 
 #: includes/CMB2_hookup.php:151
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
+msgstr "Zondag, Maandag, Dinsdag, Woensdag, Donderdag, Vrijdag, Zaterdag, Zondag"
 
 #: includes/CMB2_hookup.php:152
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "Zo, Ma, Di, Wo, Do, Vr, Za"
 
 #: includes/CMB2_hookup.php:153
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "Zon, Maa, Din, Woe, Don, Vri, Zat"
 
 #: includes/CMB2_hookup.php:154
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr ""
+msgstr "Januari, Februari, Maart, April, Mei, Juni, Juli, Augustus, September, Oktober, November, December"
 
 #: includes/CMB2_hookup.php:155
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr ""
+msgstr "Jan, Feb, Maa, Apr, Mei, Jun, Jul, Aug, Sep, Okt, Nov, Dec"
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr "Dalej"
+msgstr "Volgende"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
-msgstr ""
+msgstr "Vorige"
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr "Dzisiaj"
+msgstr "Vandaag"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr "Gotowe"
+msgstr "Klaar"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
-msgstr ""
+msgstr "Gebruik dit bestand"
 
 #: includes/CMB2_hookup.php:176
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "Alle selecteren / deselecteren"
 
 #: includes/helper-functions.php:243
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Opslaan"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"
-msgstr ""
+msgstr "CMB2 (beta)"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"

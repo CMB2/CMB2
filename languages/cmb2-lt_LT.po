@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
 # Translators:
+# Moo, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2015-02-06 14:22+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/cmb2/language/pl_PL/)\n"
+"PO-Revision-Date: 2015-01-16 18:11+0000\n"
+"Last-Translator: Moo\n"
+"Language-Team: Lithuanian (Lithuania) (http://www.transifex.com/projects/p/cmb2/language/lt_LT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: lt_LT\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -26,11 +27,11 @@ msgstr ""
 
 #: CMB2.php:100
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr "﻿Konfiguracja Metabox musi posiadać parametr ID"
+msgstr ""
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr "Kliknij, aby przełączyć"
+msgstr "Paspauskite, jei norite perjungti"
 
 #: example-functions.php:53
 msgid "Test Metabox"
@@ -120,7 +121,7 @@ msgstr ""
 
 #: example-functions.php:175
 msgid "This is a title description"
-msgstr ""
+msgstr "Tai yra pavadinimo aprašas"
 
 #: example-functions.php:180
 msgid "Test Select"
@@ -225,15 +226,15 @@ msgstr ""
 
 #: example-functions.php:316
 msgid "Entry {#}"
-msgstr ""
+msgstr "Įrašas {#}"
 
 #: example-functions.php:317
 msgid "Add Another Entry"
-msgstr ""
+msgstr "Pridėti Kitą Įrašą"
 
 #: example-functions.php:318
 msgid "Remove Entry"
-msgstr ""
+msgstr "Šalinti Įrašą"
 
 #: example-functions.php:355
 msgid "User Profile Metabox"
@@ -249,19 +250,19 @@ msgstr ""
 
 #: example-functions.php:374
 msgid "Facebook URL"
-msgstr ""
+msgstr "Facebook URL"
 
 #: example-functions.php:380
 msgid "Twitter URL"
-msgstr ""
+msgstr "Twitter URL"
 
 #: example-functions.php:386
 msgid "Google+ URL"
-msgstr ""
+msgstr "Google+ URL"
 
 #: example-functions.php:392
 msgid "Linkedin URL"
-msgstr ""
+msgstr "Linkedin URL"
 
 #: example-functions.php:398
 msgid "User Field"
@@ -277,7 +278,7 @@ msgstr ""
 
 #: includes/CMB2_Ajax.php:37
 msgid "Please Try Again"
-msgstr ""
+msgstr "Prašome Bandyti Dar Kartą"
 
 #: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:734
 msgid "Remove Embed"
@@ -289,30 +290,30 @@ msgstr ""
 
 #: includes/CMB2_Field.php:765
 msgid "Add Group"
-msgstr ""
+msgstr "Pridėti Grupę"
 
 #: includes/CMB2_Field.php:766
 msgid "Remove Group"
-msgstr ""
+msgstr "Šalinti Grupę"
 
 #: includes/CMB2_Field.php:787
 msgid "None"
-msgstr "Brak"
+msgstr "Nieko"
 
 #: includes/CMB2_Field.php:788
 msgid "All"
-msgstr "Wszystkie"
+msgstr "Visi"
 
 #: includes/CMB2_Types.php:290
 msgid "Add Row"
-msgstr ""
+msgstr "Pridėti Eilutę"
 
 #: includes/CMB2_Types.php:349 includes/CMB2_Types.php:805
 #: includes/CMB2_Types.php:882 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
-msgstr "Usuń"
+msgstr "Pašalinti"
 
 #: includes/CMB2_Types.php:683 includes/CMB2_Types.php:731
 msgid "No terms"
@@ -327,35 +328,35 @@ msgstr ""
 #: includes/CMB2_Types.php:796 includes/CMB2_Types.php:877
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr "Usuń obrazek"
+msgstr "Pašalinti paveikslėlį"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
 #: tests/test-cmb-types.php:709
 msgid "File:"
-msgstr ""
+msgstr "Failas:"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:707
 msgid "Download"
-msgstr "Pobierz"
+msgstr "Atsisiųsti"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr "Wyczyść"
+msgstr "Išvalyti"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr "Domyślny"
+msgstr "Numatytieji"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr "Wybierz kolor"
+msgstr "Pasirinkti spalvą"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr "Bieżący kolor"
+msgstr "Dabartinė spalva"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
@@ -363,21 +364,21 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:151
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
+msgstr "Sekmadienis, Pirmadienis, Antradienis, Trečiadienis, Ketvirtadienis, Penktadienis, Šeštadienis"
 
 #: includes/CMB2_hookup.php:152
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "Se, Pr, An, Tr, Kt, Pn, Še"
 
 #: includes/CMB2_hookup.php:153
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "Sek, Pir, Ant, Tre, Ket, Pen, Šeš"
 
 #: includes/CMB2_hookup.php:154
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr ""
+msgstr "Sausis, Vasaris, Kovas, Balandis, Gegužė, Birželis, Liepa, Rugpjūtis, Rugsėjis, Spalis, Lapkritis, Gruodis"
 
 #: includes/CMB2_hookup.php:155
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
@@ -385,7 +386,7 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr "Dalej"
+msgstr "Toliau"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
@@ -393,11 +394,11 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr "Dzisiaj"
+msgstr "Šiandien"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr "Gotowe"
+msgstr "Atlikta"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
@@ -409,15 +410,15 @@ msgstr ""
 
 #: includes/helper-functions.php:243
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Išsaugoti"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"
-msgstr ""
+msgstr "CMB2 (beta)"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
+msgstr "https://github.com/WebDevStudios/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
@@ -427,8 +428,8 @@ msgstr ""
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
