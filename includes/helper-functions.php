@@ -12,7 +12,7 @@ function cmb2_autoload_classes( $class_name ) {
 
 	$file = cmb2_dir( "includes/{$class_name}.php" );
 	if ( file_exists( $file ) ) {
-		@include_once( $file );
+		include_once( $file );
 	}
 }
 spl_autoload_register( 'cmb2_autoload_classes' );
@@ -33,7 +33,7 @@ function cmb2_utils() {
  * @since  2.0.0
  * @return CMB2_Ajax object CMB utilities class
  */
-function cmb2_ajax( $args = array() ) {
+function cmb2_ajax() {
 	static $cmb2_ajax;
 	$cmb2_ajax = $cmb2_ajax ? $cmb2_ajax : new CMB2_Ajax();
 	return $cmb2_ajax;
@@ -164,7 +164,7 @@ function new_cmb2_box( array $meta_box_config ) {
 /**
  * Retrieve a CMB instance by the metabox ID
  * @since  2.0.0
- * @param  array $meta_box  Metabox ID or Metabox config array
+ * @param  mixed $meta_box  Metabox ID or Metabox config array
  * @return CMB2 object
  */
 function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
@@ -191,7 +191,7 @@ function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 /**
  * Retrieve a metabox form
  * @since  2.0.0
- * @param  array   $meta_box  Metabox config array or Metabox ID
+ * @param  mixed   $meta_box  Metabox config array or Metabox ID
  * @param  int     $object_id Object ID
  * @param  array   $args      Optional arguments array
  * @return string             CMB html form markup
@@ -213,7 +213,7 @@ function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 /**
  * Display a metabox form & save it on submission
  * @since  1.0.0
- * @param  array   $meta_box  Metabox config array or Metabox ID
+ * @param  mixed   $meta_box  Metabox config array or Metabox ID
  * @param  int     $object_id Object ID
  * @param  array   $args      Optional arguments array
  */
@@ -270,7 +270,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 /**
  * Display a metabox form (or optionally return it) & save it on submission
  * @since  1.0.0
- * @param  array   $meta_box  Metabox config array or Metabox ID
+ * @param  mixed   $meta_box  Metabox config array or Metabox ID
  * @param  int     $object_id Object ID
  * @param  array   $args      Optional arguments array
  */

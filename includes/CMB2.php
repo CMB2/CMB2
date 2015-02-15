@@ -1,6 +1,8 @@
 <?php
 /**
  * Create meta boxes
+ *
+ * @property-read string $cmb_id
  */
 class CMB2 {
 

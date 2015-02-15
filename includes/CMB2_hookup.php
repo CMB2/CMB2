@@ -18,12 +18,19 @@ class CMB2_hookup {
 
 	/**
 	 * Only allow JS registration once
-	 * @var   array
+	 * @var   bool
 	 * @since 2.0.0
 	 */
 	protected static $registration_done = false;
 
-	public function __construct( $cmb ) {
+	/**
+	 * Metabox Form ID
+	 * @var   CMB2 object
+	 * @since 2.0.2
+	 */
+	protected $cmb;
+
+	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 
 		$this->hooks();
@@ -51,7 +58,7 @@ class CMB2_hookup {
 		global $pagenow;
 
 		// register our scripts and styles for cmb
-		$this->once( 'admin_enqueue_scripts', array( $this, '_register_scripts' ), 8 );
+		$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
 
 		$type = $this->cmb->mb_object_type();
 		if ( 'post' == $type ) {
@@ -99,14 +106,6 @@ class CMB2_hookup {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
 		}
-	}
-
-	/**
-	 * Registers scripts and styles for CMB
-	 * @since  1.0.0
-	 */
-	public function _register_scripts() {
-		self::register_scripts( $this->cmb->object_type() );
 	}
 
 	/**
@@ -374,7 +373,7 @@ class CMB2_hookup {
 			return false;
 		}
 
-		CMB2_hookup::register_scripts();
+		self::register_scripts();
 		return wp_enqueue_style( 'cmb2-styles' );
 	}
 
@@ -387,7 +386,7 @@ class CMB2_hookup {
 			return false;
 		}
 
-		CMB2_hookup::register_scripts();
+		self::register_scripts();
 		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );
 	}

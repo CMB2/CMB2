@@ -502,7 +502,7 @@ class CMB2_Types_Test extends CMB2_Test {
 	public function test_text_datetime_timestamp_timezone_field_after_value_update() {
 
 		$tzstring = cmb2_utils()->timezone_string();
-		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
+		$offset = cmb2_utils()->timezone_offset( $tzstring );
 		if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}

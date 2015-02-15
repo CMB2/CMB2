@@ -91,14 +91,14 @@ class CMB2_Types {
 			$cache_key = "cmb-cache-{$taxonomy}-{$object_id}";
 
 			// Check cache
-			$cached = $test = get_transient( $cache_key );
+			$cached = get_transient( $cache_key );
 			if ( $cached ) {
 				return $cached;
 			}
 
 			$cached = wp_get_object_terms( $object_id, $taxonomy );
 			// Do our own (minimal) caching. Long enough for a page-load.
-			$set = set_transient( $cache_key, $cached, 60 );
+			set_transient( $cache_key, $cached, 60 );
 			return $cached;
 		}
 
@@ -136,13 +136,9 @@ class CMB2_Types {
 	 * @param  string  $value File url or path
 	 * @return string         File name
 	 */
-	public function get_file_name_from_path( $value ) {
-		$parts = explode( '/', $value );
-		for ( $i = 0; $i < count( $parts ); ++$i ) {
-			$file_name = $parts[$i];
-		}
-
-		return $file_name;
+	public function get_file_name_from_path( $url ) {
+		$parts = explode( '/', $url );
+		return is_array( $parts ) ? end( $parts ) : $url;
 	}
 
 	/**
@@ -254,7 +250,7 @@ class CMB2_Types {
 			'label' => '',
 		) );
 
-		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $a, 'label' ), $a['id'], $a['label'] );
+		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
 	}
 
 	/**
@@ -335,9 +331,9 @@ class CMB2_Types {
 
 	/**
 	 * Generates a repeatable row's markup
-	 * @since  1.1.0
-	 * @param  string  $disable_remover Whether remove button should be disabled
-	 * @param  string  $class Repeatable table row's class
+	 * @since 1.1.0
+	 * @param bool   $disable_remover Whether remove button should be disabled
+	 * @param string $class Repeatable table row's class
 	 */
 	protected function repeat_row( $disable_remover = false, $class = 'cmb-repeat-row' ) {
 		$disabled = $disable_remover ? ' button-disabled' : '';
@@ -419,7 +415,7 @@ class CMB2_Types {
 			'desc'  => $this->_desc( true ),
 		) );
 
-		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, 'desc' ), $a['desc'] );
+		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
 	}
 
 	/**
@@ -511,7 +507,7 @@ class CMB2_Types {
 		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $formatted_value ) );
 	}
 
-	public function text_datetime_timestamp( $meta_value = '' ) {
+	public function text_datetime_timestamp( $meta_value = null ) {
 		$desc = '';
 		if ( ! $meta_value ) {
 			$meta_value = $this->field->escaped_value();
@@ -549,7 +545,7 @@ class CMB2_Types {
 			$meta_value = '';
 		}
 		$datetime   = unserialize( $meta_value );
-		$meta_value = $tzstring = false;
+		$meta_value = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz         = $datetime->getTimezone();
