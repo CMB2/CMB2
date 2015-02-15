@@ -2,19 +2,22 @@
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
 # Translators:
+# Andrea Brandi, 2015
+# Daniele Scasciafratte Mte90 <mte90net@gmail.com>, 2015
+# Emanuele <realbarnux@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2015-02-06 14:22+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/cmb2/language/pl_PL/)\n"
+"PO-Revision-Date: 2015-02-10 14:41+0000\n"
+"Last-Translator: Emanuele <realbarnux@gmail.com>\n"
+"Language-Team: Italian (Italy) (http://www.transifex.com/projects/p/cmb2/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -26,11 +29,11 @@ msgstr ""
 
 #: CMB2.php:100
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr "﻿Konfiguracja Metabox musi posiadać parametr ID"
+msgstr "La configurazione del Metabox richiede un parametro ID"
 
 #: CMB2.php:287
 msgid "Click to toggle"
-msgstr "Kliknij, aby przełączyć"
+msgstr "Clicca per commutare"
 
 #: example-functions.php:53
 msgid "Test Metabox"
@@ -56,7 +59,7 @@ msgstr ""
 #: example-functions.php:387 example-functions.php:393
 #: example-functions.php:399 example-functions.php:417
 msgid "field description (optional)"
-msgstr ""
+msgstr "descrizione campo (opzionale)"
 
 #: example-functions.php:72
 msgid "Test Text Small"
@@ -68,7 +71,7 @@ msgstr ""
 
 #: example-functions.php:86
 msgid "Website URL"
-msgstr ""
+msgstr "URL Sito"
 
 #: example-functions.php:94
 msgid "Test Text Email"
@@ -120,7 +123,7 @@ msgstr ""
 
 #: example-functions.php:175
 msgid "This is a title description"
-msgstr ""
+msgstr "Questa è una descrizione del titolo"
 
 #: example-functions.php:180
 msgid "Test Select"
@@ -129,17 +132,17 @@ msgstr ""
 #: example-functions.php:185 example-functions.php:196
 #: example-functions.php:207
 msgid "Option One"
-msgstr ""
+msgstr "Opzione uno"
 
 #: example-functions.php:186 example-functions.php:197
 #: example-functions.php:208
 msgid "Option Two"
-msgstr ""
+msgstr "Opzione Due"
 
 #: example-functions.php:187 example-functions.php:198
 #: example-functions.php:209
 msgid "Option Three"
-msgstr ""
+msgstr "Opzione Tre"
 
 #: example-functions.php:191
 msgid "Test Radio inline"
@@ -171,15 +174,15 @@ msgstr ""
 
 #: example-functions.php:247
 msgid "Check One"
-msgstr ""
+msgstr "Check Uno"
 
 #: example-functions.php:248
 msgid "Check Two"
-msgstr ""
+msgstr "Check Due"
 
 #: example-functions.php:249
 msgid "Check Three"
-msgstr ""
+msgstr "Check Tre"
 
 #: example-functions.php:254
 msgid "Test wysiwyg"
@@ -191,15 +194,15 @@ msgstr ""
 
 #: example-functions.php:262
 msgid "Upload an image or enter a URL."
-msgstr ""
+msgstr "Carica una immagine o inserisci una URL"
 
 #: example-functions.php:267
 msgid "Multiple Files"
-msgstr ""
+msgstr "File Multipli"
 
 #: example-functions.php:268
 msgid "Upload or add multiple images/attachments."
-msgstr ""
+msgstr "Carica o aggiungi immagini/allegati multipli"
 
 #: example-functions.php:274
 msgid "oEmbed"
@@ -209,7 +212,7 @@ msgstr ""
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr ""
+msgstr "Inserisci una URL di youtube, twitter, o instagram. I servizi supportati si trovano su <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
 
 #: example-functions.php:287
 msgid "About Page Metabox"
@@ -217,7 +220,7 @@ msgstr ""
 
 #: example-functions.php:308
 msgid "Repeating Field Group"
-msgstr ""
+msgstr "Gruppo Campi Ripetuto"
 
 #: example-functions.php:314
 msgid "Generates reusable form entries"
@@ -225,15 +228,15 @@ msgstr ""
 
 #: example-functions.php:316
 msgid "Entry {#}"
-msgstr ""
+msgstr "Instanza {#}"
 
 #: example-functions.php:317
 msgid "Add Another Entry"
-msgstr ""
+msgstr "Aggiungi una nuova instanza"
 
 #: example-functions.php:318
 msgid "Remove Entry"
-msgstr ""
+msgstr "Rimuovi instanza"
 
 #: example-functions.php:355
 msgid "User Profile Metabox"
@@ -241,7 +244,7 @@ msgstr ""
 
 #: example-functions.php:361
 msgid "Extra Info"
-msgstr ""
+msgstr "Informazioni extra"
 
 #: example-functions.php:368
 msgid "Avatar"
@@ -249,23 +252,23 @@ msgstr ""
 
 #: example-functions.php:374
 msgid "Facebook URL"
-msgstr ""
+msgstr "URL Facebook"
 
 #: example-functions.php:380
 msgid "Twitter URL"
-msgstr ""
+msgstr "URL Twitter"
 
 #: example-functions.php:386
 msgid "Google+ URL"
-msgstr ""
+msgstr "URL Google+"
 
 #: example-functions.php:392
 msgid "Linkedin URL"
-msgstr ""
+msgstr "URL LinkedIn"
 
 #: example-functions.php:398
 msgid "User Field"
-msgstr ""
+msgstr "Campo utente"
 
 #: example-functions.php:412
 msgid "Theme Options Metabox"
@@ -273,89 +276,89 @@ msgstr ""
 
 #: example-functions.php:416
 msgid "Site Background Color"
-msgstr ""
+msgstr "Colore di sfondo del sito"
 
 #: includes/CMB2_Ajax.php:37
 msgid "Please Try Again"
-msgstr ""
+msgstr "Prova Ancora"
 
 #: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:734
 msgid "Remove Embed"
-msgstr ""
+msgstr "Rimuovi Embed"
 
 #: includes/CMB2_Ajax.php:137
 msgid "No oEmbed Results Found for %s. View more info at"
-msgstr ""
+msgstr "Nessun Risultato oEmbed trovato per %s. Trova altre informazioni su"
 
 #: includes/CMB2_Field.php:765
 msgid "Add Group"
-msgstr ""
+msgstr "Aggiungi gruppo"
 
 #: includes/CMB2_Field.php:766
 msgid "Remove Group"
-msgstr ""
+msgstr "Rimuovi gruppo"
 
 #: includes/CMB2_Field.php:787
 msgid "None"
-msgstr "Brak"
+msgstr "Nessuno"
 
 #: includes/CMB2_Field.php:788
 msgid "All"
-msgstr "Wszystkie"
+msgstr "Tutti"
 
 #: includes/CMB2_Types.php:290
 msgid "Add Row"
-msgstr ""
+msgstr "Aggiungi Riga"
 
 #: includes/CMB2_Types.php:349 includes/CMB2_Types.php:805
 #: includes/CMB2_Types.php:882 includes/CMB2_hookup.php:173
 #: tests/test-cmb-types.php:147 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:683 tests/test-cmb-types.php:708
 msgid "Remove"
-msgstr "Usuń"
+msgstr "Rimuovi"
 
 #: includes/CMB2_Types.php:683 includes/CMB2_Types.php:731
 msgid "No terms"
-msgstr ""
+msgstr "Nessun termine"
 
 #: includes/CMB2_Types.php:775 includes/CMB2_Types.php:830
 #: tests/test-cmb-types.php:659 tests/test-cmb-types.php:685
 #: tests/test-cmb-types.php:695 tests/test-cmb-types.php:710
 msgid "Add or Upload File"
-msgstr ""
+msgstr "Aggiungi o carica File"
 
 #: includes/CMB2_Types.php:796 includes/CMB2_Types.php:877
 #: includes/CMB2_hookup.php:172
 msgid "Remove Image"
-msgstr "Usuń obrazek"
+msgstr "Rimuovi immagine"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:174 tests/test-cmb-types.php:684
 #: tests/test-cmb-types.php:709
 msgid "File:"
-msgstr ""
+msgstr "File:"
 
 #: includes/CMB2_Types.php:805 includes/CMB2_Types.php:882
 #: includes/CMB2_hookup.php:175 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:707
 msgid "Download"
-msgstr "Pobierz"
+msgstr "Download"
 
 #: includes/CMB2_hookup.php:123 includes/CMB2_hookup.php:160
 msgid "Clear"
-msgstr "Wyczyść"
+msgstr "Pulisci"
 
 #: includes/CMB2_hookup.php:124
 msgid "Default"
-msgstr "Domyślny"
+msgstr "Predefinito"
 
 #: includes/CMB2_hookup.php:125
 msgid "Select Color"
-msgstr "Wybierz kolor"
+msgstr "Seleziona colore"
 
 #: includes/CMB2_hookup.php:126
 msgid "Current Color"
-msgstr "Bieżący kolor"
+msgstr "Colore attuale"
 
 #: includes/CMB2_hookup.php:150
 msgid "mm/dd/yy"
@@ -363,72 +366,72 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:151
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
+msgstr "Domenica, Lunedi, Martedì, Mercoledì, Giovedi, Venerdì, Sabato"
 
 #: includes/CMB2_hookup.php:152
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "Do, Lu, Ma, Me, Gi, Ve, Sa"
 
 #: includes/CMB2_hookup.php:153
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "Dom, Lun, Mar, Mer, Gio, Ven, Sab"
 
 #: includes/CMB2_hookup.php:154
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr ""
+msgstr "Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
 
 #: includes/CMB2_hookup.php:155
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr ""
+msgstr "Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic"
 
 #: includes/CMB2_hookup.php:156
 msgid "Next"
-msgstr "Dalej"
+msgstr "Successivo"
 
 #: includes/CMB2_hookup.php:157
 msgid "Prev"
-msgstr ""
+msgstr "Precedente"
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr "Dzisiaj"
+msgstr "Oggi"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"
-msgstr "Gotowe"
+msgstr "Finito"
 
 #: includes/CMB2_hookup.php:171
 msgid "Use this file"
-msgstr ""
+msgstr "Usa questo file"
 
 #: includes/CMB2_hookup.php:176
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "Seleziona / Deseleziona tutto"
 
 #: includes/helper-functions.php:243
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Salva"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2 (beta)"
-msgstr ""
+msgstr "CMB2 (beta)"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
+msgstr "https://github.com/WebDevStudios/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
+msgstr "CMB2 crea metabox e form con campi personalizzati che ti faranno esplodere la testa."
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
