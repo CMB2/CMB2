@@ -34,7 +34,7 @@ class CMB2_Ajax {
 
 		// Send back error if empty
 		if ( empty( $oembed_string ) ) {
-			wp_send_json_error( '<p class="ui-state-error-text">'. __( 'Please Try Again', 'cmb2' ) .'</p>' );
+			wp_send_json_error( '<p class="ui-state-error-text">' . __( 'Please Try Again', 'cmb2' ) . '</p>' );
 		}
 
 		// Set width of embed

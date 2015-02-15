@@ -55,7 +55,7 @@ class CMB2_hookup {
 
 		$type = $this->cmb->mb_object_type();
 		if ( 'post' == $type ) {
-			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
+			add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 			add_action( 'add_attachment', array( $this, 'save_post' ) );
 			add_action( 'edit_attachment', array( $this, 'save_post' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -66,8 +66,7 @@ class CMB2_hookup {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
 
-		}
-		elseif ( 'user' == $type ) {
+		} elseif ( 'user' == $type ) {
 
 			$priority = $this->cmb->prop( 'priority' );
 
@@ -324,7 +323,7 @@ class CMB2_hookup {
 	/**
 	 * Save data from metabox
 	 */
-	public function save_user( $user_id )  {
+	public function save_user( $user_id ) {
 		// check permissions
 		if (
 			// check nonce
