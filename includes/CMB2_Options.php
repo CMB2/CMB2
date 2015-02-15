@@ -34,6 +34,12 @@ class CMB2_Option {
 	protected $options = array();
 
 	/**
+	 * Current option key
+	 * @var string
+	 */
+	protected $key = '';
+
+	/**
 	 * Initiate option object
 	 * @since 2.0.0
 	 */
@@ -124,14 +130,15 @@ class CMB2_Option {
 	/**
 	 * Saves the option array
 	 * Needs to be run after finished using remove/update_option
-	 * @uses apply_filters() Calls 'cmb2_override_option_save_{$this->key}' hook to allow
-	 * 	overwriting the option value to be stored.
+	 * @uses apply_filters() Calls 'cmb2_override_option_save_{$this->key}' hook
+	 * to allow overwriting the option value to be stored.
 	 *
 	 * @since  1.0.1
-	 * @return boolean Success/Failure
+	 * @param  array $options Optional options to override
+	 * @return bool           Success/Failure
 	 */
-	function set( $options = false ) {
-		$this->options = $options ? $options : $this->options;
+	function set( $options = array() ) {
+		$this->options = ! empty( $options ) ? $options : $this->options;
 
 		$test_save = apply_filters( "cmb2_override_option_save_{$this->key}", 'cmb2_no_override_option_save', $this->options, $this );
 

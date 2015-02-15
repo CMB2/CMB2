@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
 Tested up to:      4.1.0  
-Stable tag:        2.0.1  
+Stable tag:        2.0.2  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -65,48 +65,18 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [Github project page](https://github.com/webdevstudios/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
-### Most Recent Changes
+### Most Recent Changes - 2.0.2
 
-2.0.0 is the official version number for the transition to CMB2, and 2.0.1 is the official version after beta. It is a complete rewrite. Improvements and fixes are listed below. __Note: This release requires WordPress 3.8+__
- 
-#### Enhancements
+### Enhancements
 
-* Converted `<table>` markup to more generic `<div>` markup to be more extensible and allow easier styling.
-* Much better handling and display of repeatable groups.
-* Entirely translation-ready [with full translations](http://wp-translations.org/project/cmb2/) in Spanish, French (Props [@fredserva](https://github.com/fredserva) - [#127](https://github.com/WebDevStudios/CMB2/pull/127)), Finnish (Props [@onnimonni](https://github.com/onnimonni) - [#108](https://github.com/WebDevStudios/CMB2/pull/108)), Swedish (Props [@EyesX](https://github.com/EyesX) - [#141](https://github.com/WebDevStudios/CMB2/pull/141)), and English.
-* Add cmb fields to new user page. Props [GioSensation](https://github.com/GioSensation), ([#616](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/616)).
-* Improved and additional [helper-functions](https://github.com/WebDevStudios/CMB2/blob/master/includes/helper-functions.php).
-* Added new features and translation for datepicker. Props [kalicki](https://github.com/kalicki), ([#657](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/657)).
-* General code standards cleanup. Props [gregrickaby](https://github.com/gregrickaby), ([#17](https://github.com/WebDevStudios/CMB2/pull/17) & others).
-* Use SASS for development. Props [gregrickaby](https://github.com/gregrickaby), ([#18](https://github.com/WebDevStudios/CMB2/pull/18)).
-* New `hidden` field type.
-* [Ability to override text strings in fields via field options parameter](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#override-text-strings-in-field).
-* Added composer.json. Props [nlemoine](https://github.com/nlemoine), ([#19](https://github.com/WebDevStudios/CMB2/pull/19)).
-* New field 'hooks' can take [static text/html](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#inject-static-content-in-a-field) or a [callback](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#inject-dynamic-content-in-a-field-via-a-callback).
-* New `preview_size` parameter for `file` field type. Takes an array or named image size.
-* Empty index.php file to all folders (for more security). Props [brunoramalho](https://github.com/brunoramalho), ([#41](https://github.com/WebDevStudios/CMB2/pull/41)).
-* Clean up styling. Props [brunoramalho](https://github.com/brunoramalho), ([#43](https://github.com/WebDevStudios/CMB2/pull/43)) and [senicar](https://github.com/senicar).
-* Collapsible field groups. Props [cluke009](https://github.com/cluke009), ([#59](https://github.com/WebDevStudios/CMB2/pull/59)).
-* Allow for override of update/remove for CMB2_Field. Props [sc0ttkclark](https://github.com/sc0ttkclark), ([#65](https://github.com/WebDevStudios/CMB2/pull/65)).
-* Use class button-disabled instead of disabled="disabled" for <a> buttons. Props [sc0ttkclark](https://github.com/sc0ttkclark), ([#66](https://github.com/WebDevStudios/CMB2/pull/66)).
-* [New before/after dynamic form hooks](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#using-the-dynamic-beforeafter-form-hooks).
-* Larger unit test coverage. Props to [@pmgarman](https://github.com/pmgarman) for assistance. ([#90](https://github.com/WebDevStudios/CMB2/pull/90) and [#91](https://github.com/WebDevStudios/CMB2/pull/91))
-* Added helper function to update an option. Props [mAAdhaTTah](https://github.com/mAAdhaTTah), ([#110](https://github.com/WebDevStudios/CMB2/pull/110)).
-* More JS hooks during repeat group shifting. Props [AlchemyUnited](https://github.com/AlchemyUnited), ([#125](https://github.com/WebDevStudios/CMB2/pull/125)). 
-* [New metabox config option for defaulting to closed](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#setting-a-metabox-to-closed-by-default).
-* New hooks, [`cmb2_init`](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#using-cmb2-helper-functions-and-cmb2_init) and `cmb2_init_{$cmb_id}`.
-
-#### Bug Fixes
-
-* New mechanism to ensure CMB2 only loads the most recent version of CMB2 in your system. This fixes the issue where another bundled version could conflict or take precendent over your up-to-date version.
-* Fix issue with field labels being hidden. Props [mustardBees](https://github.com/mustardBees), ([#48](https://github.com/WebDevStudios/CMB2/pull/48)).
-* Address issues with autoloading before autoloader is setup. Props [JPry](https://github.com/JPry), ([#56](https://github.com/WebDevStudios/CMB2/pull/56)).
-* Fixed 'show_on_cb' for field groups. Props [marcusbattle](https://github.com/marcusbattle), ([#98](https://github.com/WebDevStudios/CMB2/pull/98)).
-* Make get_object_terms work with and without object caching. Props [joshlevinson](https://github.com/joshlevinson), ([#105](https://github.com/WebDevStudios/CMB2/pull/105)).
-* Don't use `__DIR__` in example-functions.php to ensure PHP 5.2 compatibility. Props [bryceadams](https://github.com/bryceadams), ([#129](https://github.com/WebDevStudios/CMB2/pull/129)).
-* Added support for radio input swapping in repeatable fields. Props [DevinWalker](https://github.com/DevinWalker), ([#138](https://github.com/WebDevStudios/CMB2/pull/138), [#149](https://github.com/WebDevStudios/CMB2/pull/149)).
-* Fix metabox form not being returned to caller. Props [akshayagarwal](https://github.com/akshayagarwal), ([#145](https://github.com/WebDevStudios/CMB2/pull/145)).
-* Run stripslashes before saving data, since WordPress forces magic quotes. Props [clifgriffin](https://github.com/clifgriffin), ([#162](https://github.com/WebDevStudios/CMB2/pull/162)).
+* Use the more appropriate `add_meta_boxes` hook for hooking in metaboxes to post-edit screen. Thanks [@inspiraaz](https://github.com/inspiraaz) for reporting. ([#161](https://github.com/WebDevStudios/CMB2/issues/161))
+* Add a `row_classes` field param which allows you to add additional classes to the cmb-row wrap. This parameter can take a string, or array, or can take a callback that returns a string or array. The callback will receive `$field_args` as the first argument, and the CMB2_Field `$field` object as the second argument. Reported/requested in [#68](https://github.com/WebDevStudios/CMB2/issues/68).
+* New constant, `CMB2_LOADED`, which you can use to check if CMB2 is loaded for your plugins/themes with CMB2 dependency.
+* New hooks, [`cmb2_init_before_hookup` and `cmb2_after_init`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions).
+* New API for adding metaboxes and fields, demonstrated in [`example-functions.php`](https://github.com/WebDevStudios/CMB2/blob/master/example-functions.php). In keeping with backwards-compatibility, the `cmb2_meta_boxes` filter method will still work, but is not recommended. New API includes `new_cmb2_box` helper function to generate a new metabox, and returns a `$cmb` object to add new fields (via the `CMB2::add_field()` and `CMB2::add_group_field()` methods).
+* New CMB2 method, [`CMB2::remove_field()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_%24cmb_id-remove-field.php).
+* New CMB2_Boxes method, [`CMB2_Boxes::remove()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_before_hookup-remove-cmb2-metabox.php).
+* When clicking on a file/image in the `file`, or `file_list` type, the media modal will open with that image selected. Props [johnsonpaul1014](https://github.com/johnsonpaul1014), ([#120](https://github.com/WebDevStudios/CMB2/pull/120)).
 
 **[View complete changelog](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md)**
 
@@ -114,6 +84,7 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 
 * The CMB2 url (for css/js resources) does not define properly in all WAMP/XAMP (Windows) environments.
 * Metabox containing WYSIWYG editor cannot be moved or used in a repeatable way at this time (this is a TinyMCE issue).
+* Not all fields work well in a repeatable group.
 
 == Installation ==
 
@@ -137,6 +108,19 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.0.2 - 2015-02-15
+
+##### Enhancements
+
+* Use the more appropriate `add_meta_boxes` hook for hooking in metaboxes to post-edit screen. Thanks [@inspiraaz](https://github.com/inspiraaz) for reporting. ([#161](https://github.com/WebDevStudios/CMB2/issues/161))
+* Add a `row_classes` field param which allows you to add additional classes to the cmb-row wrap. This parameter can take a string, or array, or can take a callback that returns a string or array. The callback will receive `$field_args` as the first argument, and the CMB2_Field `$field` object as the second argument. Reported/requested in [#68](https://github.com/WebDevStudios/CMB2/issues/68).
+* New constant, `CMB2_LOADED`, which you can use to check if CMB2 is loaded for your plugins/themes with CMB2 dependency.
+* New hooks, [`cmb2_init_before_hookup` and `cmb2_after_init`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions).
+* New API for adding metaboxes and fields, demonstrated in [`example-functions.php`](https://github.com/WebDevStudios/CMB2/blob/master/example-functions.php). In keeping with backwards-compatibility, the `cmb2_meta_boxes` filter method will still work, but is not recommended. New API includes `new_cmb2_box` helper function to generate a new metabox, and returns a `$cmb` object to add new fields (via the `CMB2::add_field()` and `CMB2::add_group_field()` methods).
+* New CMB2 method, [`CMB2::remove_field()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_%24cmb_id-remove-field.php).
+* New CMB2_Boxes method, [`CMB2_Boxes::remove()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_before_hookup-remove-cmb2-metabox.php).
+* When clicking on a file/image in the `file`, or `file_list` type, the media modal will open with that image selected. Props [johnsonpaul1014](https://github.com/johnsonpaul1014), ([#120](https://github.com/WebDevStudios/CMB2/pull/120)).
 
 ### 2.0.1 - 2015-02-02
 
@@ -292,7 +276,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * New sanitization class to sanitize data when saved.
 * New callback field parameter, `sanitization_cb`, for performing your own sanitization.
 * new `cmb_Meta_Box_types::esc()` method that handles escaping data for display.
-* New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
+* New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `"cmb_types_esc_{$field_type}"`.
 
 ##### Bug Fixes
 
@@ -380,3 +364,16 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.0.2 - 2015-02-15
+
+##### Enhancements
+
+* Use the more appropriate `add_meta_boxes` hook for hooking in metaboxes to post-edit screen. Thanks [@inspiraaz](https://github.com/inspiraaz) for reporting. ([#161](https://github.com/WebDevStudios/CMB2/issues/161))
+* Add a `row_classes` field param which allows you to add additional classes to the cmb-row wrap. This parameter can take a string, or array, or can take a callback that returns a string or array. The callback will receive `$field_args` as the first argument, and the CMB2_Field `$field` object as the second argument. Reported/requested in [#68](https://github.com/WebDevStudios/CMB2/issues/68).
+* New constant, `CMB2_LOADED`, which you can use to check if CMB2 is loaded for your plugins/themes with CMB2 dependency.
+* New hooks, [`cmb2_init_before_hookup` and `cmb2_after_init`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions).
+* New API for adding metaboxes and fields, demonstrated in [`example-functions.php`](https://github.com/WebDevStudios/CMB2/blob/master/example-functions.php). In keeping with backwards-compatibility, the `cmb2_meta_boxes` filter method will still work, but is not recommended. New API includes `new_cmb2_box` helper function to generate a new metabox, and returns a `$cmb` object to add new fields (via the `CMB2::add_field()` and `CMB2::add_group_field()` methods).
+* New CMB2 method, [`CMB2::remove_field()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_%24cmb_id-remove-field.php).
+* New CMB2_Boxes method, [`CMB2_Boxes::remove()`](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_before_hookup-remove-cmb2-metabox.php).
+* When clicking on a file/image in the `file`, or `file_list` type, the media modal will open with that image selected. Props [johnsonpaul1014](https://github.com/johnsonpaul1014), ([#120](https://github.com/WebDevStudios/CMB2/pull/120)).

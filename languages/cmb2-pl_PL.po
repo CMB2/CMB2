@@ -1,12 +1,13 @@
 # Copyright (C) 2014 WebDevStudios
 # This file is distributed under the same license as the CMB2 (beta) package.
 # Translators:
+# Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2014-12-23 14:37:49+00:00\n"
-"PO-Revision-Date: 2014-12-23 21:54+0000\n"
+"PO-Revision-Date: 2015-02-06 14:22+0000\n"
 "Last-Translator: FxB <fxb@wp-translations.org>\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/cmb2/language/pl_PL/)\n"
 "MIME-Version: 1.0\n"
@@ -392,7 +393,7 @@ msgstr ""
 
 #: includes/CMB2_hookup.php:158
 msgid "Today"
-msgstr ""
+msgstr "Dzisiaj"
 
 #: includes/CMB2_hookup.php:159
 msgid "Done"

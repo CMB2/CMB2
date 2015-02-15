@@ -2,7 +2,9 @@
 
 /**
  * CMB field class
+ *
  * @since  1.1.0
+ *
  * @method string _id()
  * @method string type()
  * @method mixed fields()
@@ -427,7 +429,7 @@ class CMB2_Field {
 		// 		}
 		// 	}
 		// } else
-		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old  ) {
+		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
 			return $this->update_data( $new_value );
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			return $this->remove_data();
@@ -518,7 +520,7 @@ class CMB2_Field {
 		}
 
 		// Or custom escaping filter can be used
-		$esc = apply_filters( 'cmb2_types_esc_'. $this->type(), null, $meta_value, $this->args(), $this );
+		$esc = apply_filters( "cmb2_types_esc_{$this->type()}", null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
 		}
@@ -667,22 +669,52 @@ class CMB2_Field {
 	 * @return string Space concatenated list of classes
 	 */
 	public function row_classes() {
-		$classes = 'cmb-type-'. str_replace( '_', '-', sanitize_html_class( $this->type() ) );
-		$classes .= ' cmb2-id-'. str_replace( '_', '-', sanitize_html_class( $this->id() ) );
-		$classes .= $this->args( 'repeatable' ) ? ' cmb-repeat' : '';
-		$classes .= $this->group ? ' cmb-repeat-group-field' : '';
-		// 'inline' flag, or _inline in the field type, set to true
-		$classes .= $this->args( 'inline' ) ? ' cmb-inline' : '';
 
+		$classes = array();
+
+		/**
+		 * By default, 'text_url' and 'text' fields get table-like styling
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $field_types The types of fields which should get the 'table-layout' class
+		 */
 		$repeat_table_rows_types = apply_filters( 'cmb2_repeat_table_row_types', array(
 			'text_url', 'text',
 		) );
 
-		if ( in_array( $this->type(), $repeat_table_rows_types ) ) {
-			$classes .= ' table-layout';
+		$conditional_classes = array(
+			'cmb-type-' . str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
+			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->id() ) )    => true,
+			'cmb-repeat'             => $this->args( 'repeatable' ),
+			'cmb-repeat-group-field' => $this->group,
+			'cmb-inline'             => $this->args( 'inline' ),
+			'table-layout'           => in_array( $this->type(), $repeat_table_rows_types ),
+		);
+
+		foreach ( $conditional_classes as $class => $condition ) {
+			if ( $condition ) {
+				$classes[] = $class;
+			}
 		}
 
-		return apply_filters( 'cmb2_row_classes', $classes, $this );
+		if ( $added_classes = $this->get_param_callback_result( 'row_classes', false ) ) {
+			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
+		}
+
+		if ( $added_classes ) {
+			$classes[] = esc_attr( $added_classes );
+		}
+
+		/**
+		 * Globally filter row classes
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string            $classes Space-separated list of row classes
+		 * @param CMB2_Field object $field   This field object
+		 */
+		return apply_filters( 'cmb2_row_classes', implode( ' ', $classes ), $this );
 	}
 
 	/**
@@ -699,9 +731,10 @@ class CMB2_Field {
 	 * Store results of the param callbacks for continual access
 	 * @since  2.0.0
 	 * @param  string $param Field parameter
+	 * @param  bool   $echo  Whether field should be 'echoed'
 	 * @return mixed         Results of param/param callback
 	 */
-	public function get_param_callback_result( $param ) {
+	public function get_param_callback_result( $param, $echo = true ) {
 
 		// If we've already retrieved this param's value,
 		if ( array_key_exists( $param, $this->callback_results ) ) {
@@ -710,12 +743,16 @@ class CMB2_Field {
 		}
 
 		if ( $cb = $this->maybe_callback( $param ) ) {
-			// Ok, callback is good, let's run it and store the result
-			ob_start();
-			echo call_user_func( $cb, $this->args(), $this );
-			// grab the result from the output buffer and store it
-			$this->callback_results[ $param ] = ob_get_contents();
-			ob_end_clean();
+			if ( $echo ) {
+				// Ok, callback is good, let's run it and store the result
+				ob_start();
+				echo call_user_func( $cb, $this->args(), $this );
+				// grab the result from the output buffer and store it
+				$this->callback_results[ $param ] = ob_get_contents();
+				ob_end_clean();
+			} else {
+				$this->callback_results[ $param ] = call_user_func( $cb, $this->args(), $this );
+			}
 
 			return $this->callback_results[ $param ];
 		}
@@ -822,8 +859,8 @@ class CMB2_Field {
 
 		if ( $this->group ) {
 
-			$args['id']    = $this->group->args( 'id' ) .'_'. $this->group->args( 'count' ) .'_'. $args['id'];
-			$args['_name'] = $this->group->args( 'id' ) .'['. $this->group->args( 'count' ) .']['. $args['_name'] .']';
+			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->args( 'count' ) . '_' . $args['id'];
+			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->args( 'count' ) . '][' . $args['_name'] . ']';
 		}
 
 		if ( 'wysiwyg' == $args['type'] ) {

@@ -27,7 +27,8 @@ class CMB2_Field_Test extends CMB2_Test {
 				) ),
 			),
 			'before_field' => array( $this, 'before_field_cb' ),
-			'after_field' => 'after_field_static',
+			'after_field'  => 'after_field_static',
+			'row_classes'  => array( $this, 'row_classes_array_cb' ),
 		);
 
 		$this->object_id   = $this->post_id;
@@ -62,8 +63,65 @@ class CMB2_Field_Test extends CMB2_Test {
 		$this->assertEquals( 'before_field_cb_test_testafter_field_static', $content );
 	}
 
+	public function test_cmb2_row_classes_field_callback_with_array() {
+		// Add row classes dynamically with a callback that returns an array
+		$classes = $this->field->row_classes();
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size id before_field after_field row_classes _id _name', $classes );
+	}
+
+	public function test_cmb2_row_classes_field_callback_with_string() {
+
+		// Test with string
+		$args = $this->field_args;
+
+		// Add row classes dynamically with a callback that returns a string
+		$args['row_classes'] = array( $this, 'row_classes_string_cb' );
+
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'group' => $this->group,
+			'field_args' => $args,
+		) );
+
+		$classes = $field->row_classes();
+
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout callback with string', $classes );
+	}
+
+	public function test_cmb2_row_classes_string() {
+
+		// Test with string
+		$args = $this->field_args;
+
+		// Add row classes statically as a string
+		$args['row_classes'] = 'these are some classes';
+
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'group' => $this->group,
+			'field_args' => $args,
+		) );
+
+		$classes = $field->row_classes();
+
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout these are some classes', $classes );
+	}
+
 	public function before_field_cb( $args ) {
-		echo 'before_field_cb_'. $args['id'];
+		echo 'before_field_cb_' . $args['id'];
+	}
+
+	public function row_classes_array_cb( $args ) {
+		/**
+		 * Side benefit: this will call out when default args change
+		 */
+		return array_keys( $args );
+	}
+
+	public function row_classes_string_cb( $args ) {
+		return 'callback with string';
 	}
 
 }

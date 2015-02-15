@@ -55,10 +55,12 @@ Main Wrap
 			padding: 2px 4px;
 		}
 
-		+ input,
-		+ .button,
-		+ select {
-			margin-left: 20px;
+		&:not([type="hidden"]) {
+			+ input,
+			+ .button,
+			+ select {
+				margin-left: 20px;
+			}
 		}
 	}
 
@@ -389,6 +391,10 @@ span.cmb2-metabox-description {
 		.cmb2-remove-file-button {
 			top: 10px;
 		}
+	}
+
+	.img-status img, .file-status > span {
+		cursor: pointer;
 	}
 
 }
