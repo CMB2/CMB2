@@ -29,4 +29,16 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 		), $string ) );
 	}
 
+	public function is_connected() {
+		$connected = @fsockopen( 'www.youtube.com', 80 );
+		if ( $connected ){
+			$is_conn = true;
+			fclose( $connected );
+		} else {
+			$is_conn = false; //action in connection failure
+		}
+
+		return $is_conn;
+	}
+
 }

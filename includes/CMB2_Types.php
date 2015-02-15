@@ -91,14 +91,14 @@ class CMB2_Types {
 			$cache_key = "cmb-cache-{$taxonomy}-{$object_id}";
 
 			// Check cache
-			$cached = $test = get_transient( $cache_key );
+			$cached = get_transient( $cache_key );
 			if ( $cached ) {
 				return $cached;
 			}
 
 			$cached = wp_get_object_terms( $object_id, $taxonomy );
 			// Do our own (minimal) caching. Long enough for a page-load.
-			$set = set_transient( $cache_key, $cached, 60 );
+			set_transient( $cache_key, $cached, 60 );
 			return $cached;
 		}
 
@@ -133,16 +133,12 @@ class CMB2_Types {
 	/**
 	 * Get the file name from a url
 	 * @since  2.0.0
-	 * @param  string  $value File url or path
-	 * @return string         File name
+	 * @param  string $value File url or path
+	 * @return string        File name
 	 */
 	public function get_file_name_from_path( $value ) {
 		$parts = explode( '/', $value );
-		for ( $i = 0; $i < count( $parts ); ++$i ) {
-			$file_name = $parts[$i];
-		}
-
-		return $file_name;
+		return is_array( $parts ) ? end( $parts ) : $value;
 	}
 
 	/**
@@ -181,7 +177,9 @@ class CMB2_Types {
 	public function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
-			if ( ! in_array( $attr, (array) $attr_exclude, true ) ) {
+			$excluded = in_array( $attr, (array) $attr_exclude, true );
+			$empty    = false === $val && 'value' !== $attr;
+			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
 				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
@@ -252,7 +250,7 @@ class CMB2_Types {
 			'label' => '',
 		) );
 
-		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $a, 'label' ), $a['id'], $a['label'] );
+		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
 	}
 
 	/**
@@ -333,9 +331,9 @@ class CMB2_Types {
 
 	/**
 	 * Generates a repeatable row's markup
-	 * @since  1.1.0
-	 * @param  string  $disable_remover Whether remove button should be disabled
-	 * @param  string  $class Repeatable table row's class
+	 * @since 1.1.0
+	 * @param bool   $disable_remover Whether remove button should be disabled
+	 * @param string $class Repeatable table row's class
 	 */
 	protected function repeat_row( $disable_remover = false, $class = 'cmb-repeat-row' ) {
 		$disabled = $disable_remover ? ' button-disabled' : '';
@@ -417,7 +415,7 @@ class CMB2_Types {
 			'desc'  => $this->_desc( true ),
 		) );
 
-		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, 'desc' ), $a['desc'] );
+		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
 	}
 
 	/**
@@ -448,7 +446,7 @@ class CMB2_Types {
 	}
 
 	public function hidden() {
-		return $this->input( array( 'type' => 'hidden', 'desc' => '', 'class' => '' ) );
+		return $this->input( array( 'type' => 'hidden', 'desc' => '', 'class' => false ) );
 	}
 
 	public function text_small() {
@@ -509,7 +507,7 @@ class CMB2_Types {
 		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $formatted_value ) );
 	}
 
-	public function text_datetime_timestamp( $meta_value = '' ) {
+	public function text_datetime_timestamp( $meta_value = null ) {
 		$desc = '';
 		if ( ! $meta_value ) {
 			$meta_value = $this->field->escaped_value();
@@ -547,7 +545,7 @@ class CMB2_Types {
 			$meta_value = '';
 		}
 		$datetime   = unserialize( $meta_value );
-		$meta_value = $tzstring = false;
+		$meta_value = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz         = $datetime->getTimezone();
@@ -770,6 +768,27 @@ class CMB2_Types {
 		$this->taxonomy_multicheck();
 	}
 
+	public function oembed() {
+		$meta_value = trim( $this->field->escaped_value() );
+		$oembed = ! empty( $meta_value )
+			? cmb2_get_oembed( array(
+				'url'         => $this->field->escaped_value(),
+				'object_id'   => $this->field->object_id,
+				'object_type' => $this->field->object_type,
+				'oembed_args' => array( 'width' => '640' ),
+				'field_id'    => $this->_id(),
+			) )
+			: '';
+
+		echo $this->input( array(
+			'class'           => 'cmb2-oembed regular-text',
+			'data-objectid'   => $this->field->object_id,
+			'data-objecttype' => $this->field->object_type,
+		) ),
+		'<p class="cmb-spinner spinner" style="display:none;"></p>',
+		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">', $oembed, '</div>';
+	}
+
 	public function file_list() {
 		$meta_value = $this->field->escaped_value();
 		$name       = $this->_name();
@@ -784,7 +803,7 @@ class CMB2_Types {
 		$this->input( array(
 			'type'  => 'button',
 			'class' => 'cmb2-upload-button button cmb2-upload-list',
-			'value'  => esc_html( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ),
+			'value'  => esc_html( $this->_text( 'add_upload_files_text', __( 'Add or Upload Files', 'cmb2' ) ) ),
 			'name'  => '', 'id'  => '',
 		) );
 
@@ -794,29 +813,31 @@ class CMB2_Types {
 
 			foreach ( $meta_value as $id => $fullurl ) {
 				$id_input = $this->input( array(
-					'type'  => 'hidden',
-					'value' => $fullurl,
-					'name'  => $name . '[' . $id . ']',
-					'id'    => 'filelist-' . $id,
-					'desc'  => '', 'class' => '',
+					'type'    => 'hidden',
+					'value'   => $fullurl,
+					'name'    => $name . '[' . $id . ']',
+					'id'      => 'filelist-' . $id,
+					'data-id' => $id,
+					'desc'    => '',
+					'class'   => false,
 				) );
 
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
-					echo
-					'<li class="img-status">',
-						wp_get_attachment_image( $id, $img_size ),
-						'<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button">' . esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) . '</a></p>
-						' . $id_input . '
-					</li>';
+
+					$this->img_status_output( array(
+						'image'    => wp_get_attachment_image( $id, $img_size ),
+						'tag'      => 'li',
+						'id_input' => $id_input,
+					) );
 
 				} else {
-					$title = $this->get_file_name_from_path( $fullurl );
 
-					echo
-					'<li>',
-						esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ) ,' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $fullurl ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)
-						', $id_input ,'
-					</li>';
+					$this->file_status_output( array(
+						'value'    => $fullurl,
+						'tag'      => 'li',
+						'id_input' => $id_input,
+					) );
+
 				}
 			}
 		}
@@ -877,47 +898,65 @@ class CMB2_Types {
 
 				if ( $this->is_valid_img_ext( $meta_value ) ) {
 
-					echo '<div class="img-status">';
 					if ( $_id_value ) {
-
 						$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
 					} else {
-
 						$size = is_array( $img_size ) ? $img_size[0] : 350;
 						$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
 					}
 
-					echo $image;
-					echo '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">' . esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ) . '</a></p>';
-					echo '</div>';
-				} else {
-					$title = $this->get_file_name_from_path( $meta_value );
+					$this->img_status_output( array(
+						'image'     => $image,
+						'tag'       => 'div',
+						'cached_id' => $cached_id,
+					) );
 
-					echo esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ), ' <strong>', $title ,'</strong>&nbsp;&nbsp;&nbsp; (<a href="', $meta_value ,'" target="_blank" rel="external">', esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ) ,'</a> / <a href="#" class="cmb2-remove-file-button" rel="', $cached_id, '">', esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ) ,'</a>)';
+				} else {
+
+					$this->file_status_output( array(
+						'value'     => $meta_value,
+						'tag'       => 'div',
+						'cached_id' => $cached_id,
+					) );
+
 				}
 			}
 		echo '</div>';
 	}
 
-	public function oembed() {
-		$meta_value = trim( $this->field->escaped_value() );
-		$oembed = ! empty( $meta_value )
-			? cmb2_get_oembed( array(
-				'url'         => $this->field->escaped_value(),
-				'object_id'   => $this->field->object_id,
-				'object_type' => $this->field->object_type,
-				'oembed_args' => array( 'width' => '640' ),
-				'field_id'    => $this->_id(),
-			) )
-			: '';
+	/**
+	 * file/file_list image wrap
+	 * @since  2.0.2
+	 * @param  array  $args Array of arguments for output
+	 * @return string       Image wrap output
+	 */
+	public function img_status_output( $args ) {
+		printf( '<%1$s class="img-status">%2$s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button"%3$s>%4$s</a></p>%5$s</%1$s>',
+			$args['tag'],
+			$args['image'],
+			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
+			esc_html( $this->_text( 'remove_image_text', __( 'Remove Image', 'cmb2' ) ) ),
+			isset( $args['id_input'] ) ? $args['id_input'] : ''
+		);
+	}
 
-		echo $this->input( array(
-			'class'           => 'cmb2-oembed regular-text',
-			'data-objectid'   => $this->field->object_id,
-			'data-objecttype' => $this->field->object_type,
-		) ),
-		'<p class="cmb-spinner spinner" style="display:none;"></p>',
-		'<div id="',$this->_id( '-status' ) ,'" class="cmb2-media-status ui-helper-clearfix embed_wrap">', $oembed, '</div>';
+	/**
+	 * file/file_list file wrap
+	 * @since  2.0.2
+	 * @param  array  $args Array of arguments for output
+	 * @return string       File wrap output
+	 */
+	public function file_status_output( $args ) {
+		printf( '<%1$s class="file-status"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
+			$args['tag'],
+			esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
+			$this->get_file_name_from_path( $args['value'] ),
+			$args['value'],
+			esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ),
+			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
+			esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ),
+			isset( $args['id_input'] ) ? $args['id_input'] : ''
+		);
 	}
 
 }

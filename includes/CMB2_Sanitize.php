@@ -252,7 +252,7 @@ class CMB2_Sanitize {
 			$tzstring = cmb2_utils()->timezone_string();
 		}
 
-		$offset = cmb2_utils()->timezone_offset( $tzstring, true );
+		$offset = cmb2_utils()->timezone_offset( $tzstring );
 
 		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
