@@ -2,7 +2,7 @@
 
 /**
  * CMB field class
-
+ *
  * @since  1.1.0
  *
  * @method string _id()

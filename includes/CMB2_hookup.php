@@ -263,7 +263,8 @@ class CMB2_hookup {
 	 */
 	public function user_new_metabox( $section ) {
 		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
-			$this->cmb->new_user_page = true;
+			$object_id = $this->cmb->object_id();
+			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
 			$this->user_metabox();
 		}
 	}

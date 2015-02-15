@@ -133,12 +133,12 @@ class CMB2_Types {
 	/**
 	 * Get the file name from a url
 	 * @since  2.0.0
-	 * @param  string  $value File url or path
-	 * @return string         File name
+	 * @param  string $value File url or path
+	 * @return string        File name
 	 */
-	public function get_file_name_from_path( $url ) {
-		$parts = explode( '/', $url );
-		return is_array( $parts ) ? end( $parts ) : $url;
+	public function get_file_name_from_path( $value ) {
+		$parts = explode( '/', $value );
+		return is_array( $parts ) ? end( $parts ) : $value;
 	}
 
 	/**

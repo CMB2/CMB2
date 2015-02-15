@@ -522,10 +522,8 @@ class CMB2 {
 		// Try to get our object ID from the global space
 		switch ( $this->object_type() ) {
 			case 'user':
-				if ( ! isset( $this->new_user_page ) ) {
-					$object_id = isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
-				}
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
+				$object_id = ! $object_id && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			default:
