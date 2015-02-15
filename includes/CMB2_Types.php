@@ -230,7 +230,7 @@ class CMB2_Types {
 	 * @return string       Generated option element html
 	 */
 	public function select_option( $args = array() ) {
-		return sprintf( "\t".'<option value="%s" %s>%s</option>', $args['value'], selected( isset( $args['checked'] ) && $args['checked'], true, false ), $args['label'] )."\n";
+		return sprintf( "\t" . '<option value="%s" %s>%s</option>', $args['value'], selected( isset( $args['checked'] ) && $args['checked'], true, false ), $args['label'] ) . "\n";
 	}
 
 	/**
@@ -250,7 +250,7 @@ class CMB2_Types {
 			'label' => '',
 		) );
 
-		return sprintf( "\t".'<li><input%s/> <label for="%s">%s</label></li>'."\n", $this->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
+		return sprintf( "\t" . '<li><input%s/> <label for="%s">%s</label></li>' . "\n", $this->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
 	}
 
 	/**
@@ -371,7 +371,7 @@ class CMB2_Types {
 		}
 
 		$tag = $paragraph ? 'p' : 'span';
-		$desc = sprintf( "\n".'<%1$s class="cmb2-metabox-description">%2$s</%1$s>'."\n", $tag, $desc );
+		$desc = sprintf( "\n" . '<%1$s class="cmb2-metabox-description">%2$s</%1$s>' . "\n", $tag, $desc );
 
 		if ( $echo ) {
 			echo $desc;
