@@ -427,7 +427,7 @@ class CMB2_Field {
 		// 		}
 		// 	}
 		// } else
-		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old  ) {
+		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
 			return $this->update_data( $new_value );
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			return $this->remove_data();
