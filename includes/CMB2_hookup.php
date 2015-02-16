@@ -234,7 +234,18 @@ class CMB2_hookup {
 				add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
-			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			/**
+			 * To keep from registering an actual post-screen metabox,
+			 * omit the 'title' attribute from the metabox registration array.
+			 *
+			 * (WordPress will not display metaboxes without titles anyway)
+			 *
+			 * This is a good way solution if you want to output your metaboxes
+			 * Somewhere else in the post-screen
+			 */
+			if ( $this->cmb->prop( 'title' ) ) {
+				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			}
 		}
 	}
 
