@@ -60,6 +60,7 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
 
 * [CMB Field Type: Gallery](https://github.com/mustardBees/cmb-field-gallery) from [mustardBees](https://github.com/mustardBees): Adds a WordPress gallery field.
+* [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [qmatt](https://github.com/qmatt/): Slider type field by jQuery UI
 
 #### Other Helpful Resources
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
