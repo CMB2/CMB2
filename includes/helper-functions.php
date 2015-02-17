@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * Helper function to provide directory path to CMB
+ * @since  2.0.0
+ * @param  string  $path Path to append
+ * @return string        Directory with optional path appended
+ */
+function cmb2_dir( $path = '' ) {
+	return CMB2_DIR . $path;
+}
+
+/**
  * Autoloads files with CMB2 classes when needed
  * @since  1.0.0
  * @param  string $class_name Name of the class being requested
@@ -15,7 +25,6 @@ function cmb2_autoload_classes( $class_name ) {
 		include_once( $file );
 	}
 }
-spl_autoload_register( 'cmb2_autoload_classes' );
 
 /**
  * Get instance of the CMB2_Utils class

@@ -87,10 +87,22 @@ if ( ! class_exists( 'cmb2_bootstrap_203_trunk', false ) ) {
 
 		public function include_cmb() {
 			if ( ! class_exists( 'CMB2', false ) ) {
+
 				if ( ! defined( 'CMB2_VERSION' ) ) {
 					define( 'CMB2_VERSION', self::VERSION );
 				}
+
+				if ( ! defined( 'CMB2_DIR' ) ) {
+					define( 'CMB2_DIR', trailingslashit( dirname( __FILE__ ) ) );
+				}
+
 				$this->l10ni18n();
+
+				// Include helper functions
+				require_once 'includes/helper-functions.php';
+				// Now kick off the class autoloader
+				spl_autoload_register( 'cmb2_autoload_classes' );
+				// Kick the whole thing off
 				require_once 'bootstrap.php';
 			}
 		}

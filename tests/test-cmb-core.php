@@ -87,12 +87,14 @@ class CMB2_Core_Test extends CMB2_Test {
 		parent::tearDown();
 	}
 
-	public function test_cmb2_is_loaded() {
-		$this->assertTrue( defined( 'CMB2_LOADED' ) );
-	}
-
-	public function test_cmb2_has_version_number() {
-		$this->assertTrue( defined( 'CMB2_VERSION' ) );
+	public function test_cmb2_definitions() {
+		foreach ( array(
+			'CMB2_LOADED',
+			'CMB2_VERSION',
+			'CMB2_DIR',
+		) as $key => $definition ) {
+			$this->assertIsDefined( $definition );
+		}
 	}
 
 	/**
