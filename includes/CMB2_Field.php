@@ -507,7 +507,7 @@ class CMB2_Field {
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 
-		if ( ! is_null( $this->escaped_value ) ) {
+		if ( null !== $this->escaped_value ) {
 			return $this->escaped_value;
 		}
 
