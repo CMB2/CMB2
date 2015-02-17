@@ -8,7 +8,7 @@
  */
 function cmb2_dir( $path = '' ) {
 	static $cmb2_dir = null;
-	if ( is_null( $cmb2_dir ) ) {
+	if ( null === $cmb2_dir ) {
 		$cmb2_dir = trailingslashit( dirname( __FILE__ ) );
 	}
 	return $cmb2_dir . $path;
