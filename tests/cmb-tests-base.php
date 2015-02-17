@@ -17,6 +17,10 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 		return $this->assertEquals( $this->normalize_string( $expected_string ), $this->normalize_string( $string_to_test ) );
 	}
 
+	public function assertIsDefined( $definition ) {
+		return $this->assertTrue( defined( $definition ), "$definition is not defined." );
+	}
+
 	public function normalize_string( $string ) {
 		return trim( preg_replace( array(
 			'/[\t\n\r]/', // Remove tabs and newlines
