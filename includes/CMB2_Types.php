@@ -507,36 +507,40 @@ class CMB2_Types {
 		return $this->input( array( 'class' => 'cmb2-text-small cmb2-datepicker', 'value' => $formatted_value ) );
 	}
 
-	public function text_datetime_timestamp( $meta_value = null ) {
-		$desc = '';
-		if ( ! $meta_value ) {
-			$meta_value = $this->field->escaped_value();
+	public function text_datetime_timestamp( $args = array() ) {
+		$args = wp_parse_args( $args, array(
+			'value' => $this->field->escaped_value(),
+			'desc'  => $this->_desc(),
+			'cmb2-datepicker' => array(),
+			'cmb2-timepicker' => array(),
+		) );
+
+		if ( empty( $args['value'] ) ) {
+			$args['value'] = $this->field->escaped_value();
 			// This will be used if there is a select_timezone set for this field
 			$tz_offset = $this->field->field_timezone_offset();
 			if ( ! empty( $tz_offset ) ) {
-				$meta_value -= $tz_offset;
+				$args['value'] -= $tz_offset;
 			}
-			$desc = $this->_desc();
 		}
 
-		$inputs = array(
-			$this->input( array(
-				'class' => 'cmb2-text-small cmb2-datepicker',
-				'name'  => $this->_name( '[date]' ),
-				'id'    => $this->_id( '_date' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'date_format', $meta_value ) : '',
-				'desc'  => '',
-			) ),
-			$this->input( array(
-				'class' => 'cmb2-timepicker text-time',
-				'name'  => $this->_name( '[time]' ),
-				'id'    => $this->_id( '_time' ),
-				'value' => ! empty( $meta_value ) && ! is_array( $meta_value ) ? $this->field->get_timestamp_format( 'time_format', $meta_value ) : '',
-				'desc'  => $desc,
-			) ),
-		);
+		$date_args = wp_parse_args( $args['cmb2-datepicker'], array(
+			'class' => 'cmb2-text-small cmb2-datepicker',
+			'name'  => $this->_name( '[date]' ),
+			'id'    => $this->_id( '_date' ),
+			'value' => ! empty( $args['value'] ) && ! is_array( $args['value'] ) ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
+			'desc'  => '',
+		) );
 
-		return implode( "\n", $inputs );
+		$time_args = wp_parse_args( $args['cmb2-timepicker'], array(
+			'class' => 'cmb2-timepicker text-time',
+			'name'  => $this->_name( '[time]' ),
+			'id'    => $this->_id( '_time' ),
+			'value' => ! empty( $args['value'] ) && ! is_array( $args['value'] ) ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
+			'desc'  => $args['desc'],
+		) );
+
+		return $this->input( $date_args ) . "\n" . $this->input( $time_args );
 	}
 
 	public function text_datetime_timestamp_timezone() {
@@ -554,13 +558,16 @@ class CMB2_Types {
 		}
 
 		$inputs = array(
-			$this->text_datetime_timestamp( $meta_value ),
+			$this->text_datetime_timestamp( array(
+				'desc'  => '',
+				'value' => $meta_value,
+			) ),
 			$this->select( array(
 				'class'   => 'cmb2_select cmb2-select-timezone',
 				'name'    => $this->_name( '[timezone]' ),
 				'id'      => $this->_id( '_timezone' ),
 				'options' => wp_timezone_choice( $tzstring ),
-				'desc'    => $this->_desc(),
+				'desc'    => $this->_desc( true ),
 			) ),
 		);
 
