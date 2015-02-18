@@ -470,7 +470,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$formatted_val_to_update = $field->format_timestamp( $val_to_update );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><p class="cmb2-metabox-description">This is a description</p>', $formatted_val_to_update ),
+			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><span class="cmb2-metabox-description">This is a description</span>', $formatted_val_to_update ),
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
