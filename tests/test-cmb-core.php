@@ -257,11 +257,11 @@ class CMB2_Core_Test extends CMB2_Test {
 		$this->assertInstanceOf( 'CMB2_Option', cmb2_options( 'test' ) );
 	}
 
-	function test_boxes_get_all() {
+	public function test_boxes_get_all() {
 		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
 	}
 
-	function test_boxes_get() {
+	public function test_boxes_get() {
 		new CMB2_for_testing( $this->metabox_array2 );
 
 		// Retrieve the instance
@@ -271,7 +271,7 @@ class CMB2_Core_Test extends CMB2_Test {
 		$this->assertEquals( $after_args_parsed, $cmb->meta_box );
 	}
 
-	function test_update_field_property() {
+	public function test_update_field_property() {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
