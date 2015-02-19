@@ -54,19 +54,20 @@ class CMB2_Core_Test extends CMB2_Test {
 		);
 
 		$this->defaults = array(
-			'id'               => $this->cmb_id,
-			'title'            => false,
-			'type'             => false,
-			'object_types'     => array(),
-			'context'          => 'normal',
-			'priority'         => 'high',
-			'show_names'       => 1,
-			'cmb_styles'       => 1,
-			'fields'           => array(),
-			'hookup'           => 1,
-			'closed'           => false,
-			'new_user_section' => 'add-new-user',
-			'show_on'          => array(),
+			'id'           => $this->cmb_id,
+			'title'        => '',
+			'type'         => '',
+			'object_types' => array(), // Post type
+			'context'      => 'normal',
+			'priority'     => 'high',
+			'show_names'   => true, // Show field names on the left
+			'show_on'      => array(), // Specific post IDs or page templates to display this metabox
+			'cmb_styles'   => true, // Include cmb bundled stylesheet
+			'fields'       => array(),
+			'hookup'       => true,
+			'closed'       => false, // Default to metabox being closed?
+			'new_user_section' => 'add-new-user', // or 'add-existing-user'
+
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -118,9 +119,15 @@ class CMB2_Core_Test extends CMB2_Test {
 		}
 	}
 
+	public function test_id_get() {
+		$cmb = new CMB2( array( 'id' => $this->cmb_id ) );
+		$this->assertEquals( $cmb->cmb_id, $this->cmb_id );
+	}
+
 	public function test_defaults_set() {
 		$cmb = new CMB2( array( 'id' => $this->cmb_id ) );
-		$this->assertEquals( $cmb->meta_box, $this->defaults );
+
+		$this->assertEquals( $this->defaults, $cmb->meta_box, print_r( array( $this->defaults, $cmb->meta_box ), true ) );
 	}
 
 	public function test_url_set() {
