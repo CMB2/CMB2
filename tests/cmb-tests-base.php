@@ -66,4 +66,30 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
+	/**
+	 * Backport assertNotFalse to PHPUnit 3.6.12 which only runs in PHP 5.2
+	 *
+	 * @link   https://github.com/woothemes/woocommerce/blob/f5ff10711dc664f1c5ec5277634a5eea2b828765/tests/framework/class-wc-unit-test-case.php
+	 *
+	 */
+	public static function assertNotFalse( $condition, $message = '' ) {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			self::assertThat( $condition, self::logicalNot( self::isFalse() ), $message );
+		} else {
+			parent::assertNotFalse( $condition, $message );
+		}
+	}
+
+	/**
+	 * Backport assertContainsOnlyInstancesOf to PHPUnit 3.6.12 which only runs in PHP 5.2
+	 */
+	public static function assertContainsOnlyInstancesOf( $classname, $haystack, $message = '' ) {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			foreach ( $haystack as $to_check ) {
+				self::assertInstanceOf( $classname, $to_check, $message );
+			}
+		} else {
+			parent::assertContainsOnlyInstancesOf( $classname, $haystack, $message );
+		}
+	}
 }

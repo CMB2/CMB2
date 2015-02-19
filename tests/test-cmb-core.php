@@ -105,10 +105,17 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	/**
-	 * @expectedException Exception
+	 * @expectedException CMB2_Test_Exception
 	 */
 	public function test_set_metabox_after_offlimits() {
-		$this->cmb->metabox['title'] = 'title';
+		try {
+			// Fyi you don't need to do an assert test here, as we are only testing the exception, so just make the call
+			$this->cmb->metabox['title'] = 'title';
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new CMB2_Test_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
 	}
 
 	public function test_defaults_set() {
@@ -258,13 +265,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_boxes_get_all() {
-		if ( is_callable( array( $this, 'assertContainsOnlyInstancesOf' ) ) ) {
-			$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
-		} else {
-			foreach ( CMB2_Boxes::get_all() as $instances ) {
-				$this->assertInstanceOf( 'CMB2', $instances );
-			}
-		}
+		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
 	}
 
 	public function test_boxes_get() {
@@ -474,5 +475,11 @@ class CMB2_Core_Test extends CMB2_Test {
 class CMB2_for_testing extends CMB2 {
 	public function get_metabox_defaults() {
 		return $this->mb_defaults;
+	}
+}
+
+class CMB2_Test_Exception extends Exception {
+	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
+		parent::__construct( $message, $code, $previous );
 	}
 }
