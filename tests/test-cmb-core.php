@@ -480,6 +480,6 @@ class CMB2_for_testing extends CMB2 {
 
 class CMB2_Test_Exception extends Exception {
 	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
-		parent::__construct( $message, $code, $previous );
+		parent::__construct( $message, $code );
 	}
 }
