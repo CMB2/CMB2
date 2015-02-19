@@ -478,6 +478,12 @@ class CMB2_for_testing extends CMB2 {
 	}
 }
 
+/**
+ * Custom exception class because PHPunit < 3.7 has the following error:
+ * "InvalidArgumentException: You must not expect the generic exception class."
+ *
+ * @link http://stackoverflow.com/a/10744841
+ */
 class CMB2_Test_Exception extends Exception {
 	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
 		parent::__construct( $message, $code );
