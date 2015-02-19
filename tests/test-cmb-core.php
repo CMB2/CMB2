@@ -258,7 +258,13 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_boxes_get_all() {
-		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
+		if ( is_callable( array( $this, 'assertContainsOnlyInstancesOf' ) ) ) {
+			$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
+		} else {
+			foreach ( CMB2_Boxes::get_all() as $instances ) {
+				$this->assertInstanceOf( 'CMB2', $instances );
+			}
+		}
 	}
 
 	public function test_boxes_get() {
