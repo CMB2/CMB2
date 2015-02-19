@@ -25,10 +25,10 @@ install_wp() {
 		local ARCHIVE_NAME="wordpress-$WP_VERSION"
 	fi
 
-	wget -nv -O /tmp/wordpress.tar.gz http://wordpress.org/${ARCHIVE_NAME}.tar.gz
+	wget -nv -O /tmp/wordpress.tar.gz http://wordpress.org/${ARCHIVE_NAME}.tar.gz --no-check-certificate
 	tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
 
-	wget -nv -O $WP_CORE_DIR/wp-content/db.php https://raw.github.com/markoheijnen/wp-mysqli/master/db.php
+	wget -nv -O $WP_CORE_DIR/wp-content/db.php https://raw.github.com/markoheijnen/wp-mysqli/master/db.php --no-check-certificate
 }
 
 install_test_suite() {
@@ -44,7 +44,7 @@ install_test_suite() {
 	cd $WP_TESTS_DIR
 	svn co --quiet http://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
 
-	wget -nv -O wp-tests-config.php http://develop.svn.wordpress.org/trunk/wp-tests-config-sample.php
+	wget -nv -O wp-tests-config.php http://develop.svn.wordpress.org/trunk/wp-tests-config-sample.php --no-check-certificate
 	sed $ioption "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR':" wp-tests-config.php
 	sed $ioption "s:define( 'WP_DEBUG', true );:define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );:" wp-tests-config.php
 	sed $ioption "s/youremptytestdbnamehere/$DB_NAME/" wp-tests-config.php
