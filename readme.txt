@@ -110,6 +110,12 @@ FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/
 
 == Changelog ==
 
+### 2.0.3 - 2015-02-12
+
+#### Enhancements
+
+* Updated Timepicker utilizing the [@trentrichardson](https://github.com/trentrichardson) jQuery Timepicker addon (https://github.com/trentrichardson/jQuery-Timepicker-Addon) and updated Datepicker styles. Reported/requested in ([#204](https://github.com/WebDevStudios/CMB2/issues/204)) and ([#45](https://github.com/WebDevStudios/CMB2/issues/45)).
+
 ### 2.0.2 - 2015-02-15
 
 ##### Enhancements
