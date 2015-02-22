@@ -678,7 +678,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( ! $selector.length ) {
 			return;
 		}
-
+		
+		$selector.timepicker( "destroy" );
 		$selector.timepicker( cmb.defaults.time_picker );
 	};
 
