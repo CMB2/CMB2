@@ -132,7 +132,7 @@ class CMB2_hookup {
 			) );
 		}
 
-		wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ) );
+		wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-slider' ), CMB2_VERSION );
 
 		// scripts required for cmb
 		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'wp-color-picker' );
