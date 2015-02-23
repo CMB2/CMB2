@@ -671,7 +671,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		$selector.timepicker( "destroy" );
 		$selector.timepicker( cmb.defaults.time_picker );
 	};
-	
+
 	cmb.initDatePickers = function( $selector ) {
 		if ( ! $selector.length ) {
 			return;
