@@ -422,11 +422,39 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: includes/CMB2_hookup.php:176
-msgid "Use this file"
+#: includes/CMB2_hookup.php:168
+msgid "Choose Time"
+msgstr ""
+
+#: includes/CMB2_hookup.php:169
+msgid "Time"
+msgstr ""
+
+#: includes/CMB2_hookup.php:170
+msgid "Hour"
+msgstr ""
+
+#: includes/CMB2_hookup.php:171
+msgid "Minute"
+msgstr ""
+
+#: includes/CMB2_hookup.php:172
+msgid "Second"
+msgstr ""
+
+#: includes/CMB2_hookup.php:173
+msgid "Now"
+msgstr ""
+
+#: includes/CMB2_hookup.php:174
+msgid "Done"
 msgstr ""
 
 #: includes/CMB2_hookup.php:181
+msgid "Use this file"
+msgstr ""
+
+#: includes/CMB2_hookup.php:186
 msgid "Select / Deselect All"
 msgstr ""
 
