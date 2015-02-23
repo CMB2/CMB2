@@ -132,10 +132,10 @@ class CMB2_hookup {
 			) );
 		}
 
-		wp_register_script( 'cmb-timepicker', cmb2_utils()->url( 'js/jquery.timePicker.min.js' ) );
+		wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
 
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-timepicker', 'wp-color-picker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'wp-color-picker' );
 		// styles required for cmb
 		$styles = array( 'wp-color-picker' );
 
@@ -165,11 +165,16 @@ class CMB2_hookup {
 					'clearText'       => __( 'Clear', 'cmb2' ),
 				),
 				'time_picker'  => array(
-					'startTime'   => '00:00',
-					'endTime'     => '23:59',
-					'show24Hours' => false,
-					'separator'   => ':',
-					'step'        => 30,
+					'timeOnlyTitle' => __( 'Choose Time', 'cmb2' ),
+					'timeText' => __( 'Time', 'cmb2' ),
+					'hourText' => __( 'Hour', 'cmb2' ),
+					'minuteText' => __( 'Minute', 'cmb2' ),
+					'secondText' => __( 'Second', 'cmb2' ),
+					'currentText' => __( 'Now', 'cmb2' ),
+					'closeText' => __( 'Done', 'cmb2' ),
+					'timeFormat' => 'hh:mm TT',
+					'controlType' => 'select',
+					'stepMinute' => 5,
 				),
 			),
 			'strings' => array(
