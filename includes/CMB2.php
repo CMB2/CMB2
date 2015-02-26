@@ -287,7 +287,7 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->count(), '">
+		<div class="postbox cmb-row cmb-repeatable-grouping ',esc_attr($field_group->options('html_class')),'" data-iterator="', $field_group->count(), '">
 
 			<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 			<div class="cmbhandle" title="' , __( 'Click to toggle', 'cmb2' ), '"><br></div>
