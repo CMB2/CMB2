@@ -457,6 +457,10 @@ class CMB2_Types {
 		return $this->input( array( 'class' => 'cmb2-text-medium', 'desc' => $this->_desc() ) );
 	}
 
+	public function text_number() {
+		return $this->input( array( 'class' => 'cmb2-text-number cmb2-text-medium', 'desc' => $this->_desc(), 'type' => 'number' ) );
+	}
+
 	public function text_email() {
 		return $this->input( array( 'class' => 'cmb2-text-email cmb2-text-medium', 'type' => 'email' ) );
 	}
