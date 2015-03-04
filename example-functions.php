@@ -301,6 +301,7 @@ function yourprefix_register_demo_metabox() {
 		'desc'    => __( 'field description (optional)', 'cmb2' ),
 		'id'      => $prefix . 'multicheckbox',
 		'type'    => 'multicheck',
+		//'multiple' => true, // Store values in individual rows
 		'options' => array(
 			'check1' => __( 'Check One', 'cmb2' ),
 			'check2' => __( 'Check Two', 'cmb2' ),
