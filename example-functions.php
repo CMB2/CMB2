@@ -280,8 +280,9 @@ function yourprefix_register_demo_metabox() {
 	$cmb_demo->add_field( array(
 		'name'    => __( 'Test Multi Checkbox', 'cmb2' ),
 		'desc'    => __( 'field description (optional)', 'cmb2' ),
-		'id'      => $prefix . 'multicheckbox',
+		'id'      => $prefix . 'multicheckbox2',
 		'type'    => 'multicheck',
+		'multiple' => true, // Store values in individual rows
 		'options' => array(
 			'check1' => __( 'Check One', 'cmb2' ),
 			'check2' => __( 'Check Two', 'cmb2' ),
