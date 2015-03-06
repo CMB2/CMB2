@@ -16,14 +16,11 @@ function cmb2_dir( $path = '' ) {
  * @param  string $class_name Name of the class being requested
  */
 function cmb2_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) || false === strpos( $class_name, 'CMB2' ) ) {
+	if ( 0 !== strpos( $class_name, 'CMB2' ) ) {
 		return;
 	}
 
-	$file = cmb2_dir( "includes/{$class_name}.php" );
-	if ( file_exists( $file ) ) {
-		include_once( $file );
-	}
+	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
 }
 
 /**
