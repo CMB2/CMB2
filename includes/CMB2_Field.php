@@ -166,11 +166,18 @@ class CMB2_Field {
 	 * @return mixed       Argument value or false if non-existent
 	 */
 	public function args( $key = '', $_key = '' ) {
-		$vars = $this->_data( 'args', $key );
-		if ( $_key ) {
-			return isset( $vars[ $_key ] ) ? $vars[ $_key ] : false;
+		$arg = $this->_data( 'args', $key );
+
+		if ( 'default' == $key ) {
+
+			$arg = $this->get_param_callback_result( 'default', false );
+
+		} elseif ( $_key ) {
+
+			$arg = isset( $arg[ $_key ] ) ? $arg[ $_key ] : false;
 		}
-		return $vars;
+
+		return $arg;
 	}
 
 	/**
@@ -553,7 +560,7 @@ class CMB2_Field {
 	 * @return mixed             Field value, or default value
 	 */
 	public function val_or_default( $meta_value ) {
-		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->args( 'default' );
+		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->get_param_callback_result( 'default', false );
 	}
 
 	/**
@@ -758,7 +765,7 @@ class CMB2_Field {
 		}
 
 		// Otherwise just get whatever is there
-		$this->callback_results[ $param ] = $this->args( $param );
+		$this->callback_results[ $param ] = isset( $this->args[ $param ] ) ? $this->args[ $param ] : false;
 
 		return $this->callback_results[ $param ];
 	}
