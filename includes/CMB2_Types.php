@@ -310,6 +310,9 @@ class CMB2_Types {
 			$meta_value = $default;
 		}
 
+		// fix the empty select dropdown bug when the repeatable is set to 'true' for a 'select' type
+		if($this->field->type()=="select" && $this->field->args("repeatable")==true && is_array($meta_value)) array_pop($meta_value);
+		
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
 			$count = count( $meta_value );
