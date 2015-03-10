@@ -423,7 +423,7 @@ class CMB2 {
 					'object_id'   => $this->object_id(),
 				) );
 
-				if ( $field->save_field( $this->data_to_save ) ) {
+				if ( $field->save_field_from_data( $this->data_to_save ) ) {
 					$this->updated[] = $field->id();
 				}
 

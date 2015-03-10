@@ -414,15 +414,26 @@ class CMB2_Field {
 
 	/**
 	 * Process $_POST data to save this field's value
-	 * @since  2.0.0
+	 * @since  2.0.3
 	 * @param  array $data_to_save $_POST data to check
 	 * @return bool                Result of save
 	 */
-	public function save_field( $data_to_save ) {
+	public function save_field_from_data( $data_to_save ) {
 
 		$meta_value = isset( $data_to_save[ $this->id( true ) ] )
 			? $data_to_save[ $this->id( true ) ]
 			: null;
+
+		$this->save_field( $meta_value );
+	}
+
+	/**
+	 * Sanitize/store a value to this field
+	 * @since  2.0.0
+	 * @param  array $meta_value Desired value to sanitize/store
+	 * @return bool              Result of save
+	 */
+	public function save_field( $meta_value ) {
 
 		$new_value = $this->sanitization_cb( $meta_value );
 		$old       = $this->get_data();
