@@ -288,8 +288,8 @@ class CMB2_Field {
 		if ( null !== $override ) {
 			return $override;
 		}
-		// Options page handling
-		if ( 'options-page' === $a['type'] ) {
+		// Options page handling (or temp data store)
+		if ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
 		}
 		// Add metadata if not single
@@ -359,7 +359,7 @@ class CMB2_Field {
 			return $override;
 		}
 		// Option page handling
-		elseif ( 'options-page' === $a['type'] ) {
+		elseif ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
 		}
 
