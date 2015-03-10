@@ -37,7 +37,6 @@ class CMB2_Sanitize {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		list( $this->value ) = $arguments;
 		return $this->default_sanitization( $this->value );
 	}
 
