@@ -14,7 +14,7 @@ class CMB2_Sanitize {
 	public $field;
 
 	/**
-	 * Field's $_POST value
+	 * Field's value
 	 * @var mixed
 	 */
 	public $value;

@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-* 
+### Enhancements
+
+* Updated Timepicker utilizing the [@trentrichardson](https://github.com/trentrichardson) jQuery Timepicker add-on (https://github.com/trentrichardson/jQuery-Timepicker-Addon), and updated Datepicker styles. Props [JonMasterson](https://github.com/JonMasterson). ([#204](https://github.com/WebDevStudios/CMB2/issues/204), [#206](https://github.com/WebDevStudios/CMB2/issues/206), [#45](https://github.com/WebDevStudios/CMB2/issues/45)).
 
 ## 2.0.2 - 2015-02-15
 

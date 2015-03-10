@@ -409,18 +409,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		return this;
 	};
 
-	cmb.afterRowInsert = function( $row, group ) {
-
-		var $focus = $row.find('input:not([type="button"]), textarea, select').first();
-		if ( $focus.length ) {
-			if ( group ) {
-				$('html, body').animate({
-					scrollTop: Math.round( $focus.offset().top - 150 )
-				}, 1000);
-			}
-			$focus.focus();
-		}
-
+	cmb.afterRowInsert = function( $row ) {
 		var _prop;
 
 		// Need to re-init wp_editor instances
@@ -504,7 +493,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $newRow = $( '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
-		cmb.afterRowInsert( $newRow, true );
+		cmb.afterRowInsert( $newRow );
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
@@ -679,7 +668,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.timePicker( cmb.defaults.time_picker );
+		$selector.timepicker( "destroy" );
+		$selector.timepicker( cmb.defaults.time_picker );
 	};
 
 	cmb.initDatePickers = function( $selector ) {
