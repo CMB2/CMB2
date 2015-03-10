@@ -116,6 +116,29 @@ class CMB2_Field_Test extends CMB2_Test {
 		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout these are some classes', $classes );
 	}
 
+	public function test_empty_field_with_empty_object_id() {
+		$field = new CMB2_Field( array(
+			'field_args' => $this->field_args,
+		) );
+
+		// data should be empty since we have no object id
+		$this->assertEmpty( $field->get_data() );
+
+		// add some xss for good measure
+		$dirty_val = 'test<html><stuff><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>';
+		$cleaned_val = sanitize_text_field( $dirty_val );
+
+		// Make sure it sanitizes as expected
+		$this->assertEquals( $cleaned_val, $field->sanitization_cb( $dirty_val ) );
+
+		// Sanitize/store the field
+		$this->assertTrue( $field->save_field( $dirty_val ) );
+
+		// Retrieve saved value(s)
+		$this->assertEquals( $cleaned_val, cmb2_options( 0 )->get( $field->id() ) );
+		$this->assertEquals( array( 'test_test' => $cleaned_val ), cmb2_options( 0 )->get_options() );
+	}
+
 	public function before_field_cb( $args ) {
 		echo 'before_field_cb_' . $args['id'];
 	}

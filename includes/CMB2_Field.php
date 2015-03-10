@@ -78,7 +78,7 @@ class CMB2_Field {
 	/**
 	 * Constructs our field object
 	 * @since 1.1.0
-	 * @param array $args  Field arguments
+	 * @param array $args Field arguments
 	 */
 	public function __construct( $args ) {
 
@@ -87,52 +87,15 @@ class CMB2_Field {
 			$this->object_id   = $this->group->object_id;
 			$this->object_type = $this->group->object_type;
 		} else {
-			$this->object_id   = $args['object_id'];
+			$this->object_id   = isset( $args['object_id'] ) ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
 		}
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
-		/**
-		 * Filter whether to override getting of meta value.
-		 * Returning a non 'cmb2_field_no_override_val' value
-		 * will effectively short-circuit the value retrieval.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param null|array|string $value       The value get_metadata() should
-		 *                                       return - a single metadata value,
-		 *                                       or an array of values.
-		 * @param int               $object_id   Object ID.
-		 * @param array             $field_args  All field arguments
-		 * @param string            $object_type Object Type
-		 * @param CMB2_Field object $field_obj   This field object
-		 */
-		$this->value = apply_filters( 'cmb2_override_meta_value', 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
-
-		/**
-		 * Filter whether to override getting of meta value.
-		 *
-		 * The dynamic portion of the hook, $field_id, refers to the current
-		 * field id paramater. Returning a non 'cmb2_field_no_override_val' value
-		 * will effectively short-circuit the value retrieval.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param null|array|string $value       The value get_metadata() should
-		 *                                       return - a single metadata value,
-		 *                                       or an array of values.
-		 * @param int               $object_id   Object ID.
-		 * @param array             $field_args  All field arguments
-		 * @param string            $object_type Object Type
-		 * @param CMB2_Field object $field_obj   This field object
-		 */
-		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", $this->value, $this->object_id, $this->args(), $this->object_type, $this );
-
-		// If no override, get our meta
-		$this->value = 'cmb2_field_no_override_val' === $this->value
-			? $this->get_data()
-			: $this->value;
+		if ( $this->object_id ) {
+			$this->set_value();
+		}
 	}
 
 	/**
@@ -181,16 +144,6 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Get Field's value
-	 * @since  1.1.0
-	 * @param  string $key If value is an array, is used to get array key->value
-	 * @return mixed       Field value or false if non-existent
-	 */
-	public function value( $key = '' ) {
-		return $this->_data( 'value', $key );
-	}
-
-	/**
 	 * Retrieve a portion of a field property
 	 * @since  1.1.0
 	 * @param  string  $var Field property to check
@@ -203,6 +156,63 @@ class CMB2_Field {
 			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
 		}
 		return $vars;
+	}
+
+	/**
+	 * Fetches this field's value and sets as an object property
+	 * @since  2.0.3
+	 */
+	public function set_value() {
+		/**
+		 * Filter whether to override getting of meta value.
+		 * Returning a non 'cmb2_field_no_override_val' value
+		 * will effectively short-circuit the value retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|array|string $value       The value get_metadata() should
+		 *                                       return - a single metadata value,
+		 *                                       or an array of values.
+		 * @param int               $object_id   Object ID.
+		 * @param array             $field_args  All field arguments
+		 * @param string            $object_type Object Type
+		 * @param CMB2_Field object $field_obj   This field object
+		 */
+		$this->value = apply_filters( 'cmb2_override_meta_value', 'cmb2_field_no_override_val', $this->object_id, $this->args(), $this->object_type, $this );
+
+		/**
+		 * Filter whether to override getting of meta value.
+		 *
+		 * The dynamic portion of the hook, $field_id, refers to the current
+		 * field id paramater. Returning a non 'cmb2_field_no_override_val' value
+		 * will effectively short-circuit the value retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|array|string $value       The value get_metadata() should
+		 *                                       return - a single metadata value,
+		 *                                       or an array of values.
+		 * @param int               $object_id   Object ID.
+		 * @param array             $field_args  All field arguments
+		 * @param string            $object_type Object Type
+		 * @param CMB2_Field object $field_obj   This field object
+		 */
+		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", $this->value, $this->object_id, $this->args(), $this->object_type, $this );
+
+		// If no override, get our data
+		$this->value = 'cmb2_field_no_override_val' === $this->value
+			? $this->get_data()
+			: $this->value;
+	}
+
+	/**
+	 * Get Field's value
+	 * @since  1.1.0
+	 * @param  string $key If value is an array, is used to get array key->value
+	 * @return mixed       Field value or false if non-existent
+	 */
+	public function value( $key = '' ) {
+		return $this->_data( 'value', $key );
 	}
 
 	/**
