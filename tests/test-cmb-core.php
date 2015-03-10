@@ -474,6 +474,52 @@ class CMB2_Core_Test extends CMB2_Test {
 		), $cmb->prop( 'fields' ) );
 	}
 
+	public function test_get_sanitized_values() {
+		// Set our object id. Do this to test that it doesn't get broken
+		$this->cmb->object_id( $this->post_id );
+
+		// Add another field to test that multiple field sanitized vals will be returned.
+		$this->cmb->add_field( array(
+			'name' => 'another field',
+			'type' => 'textrea',
+			'id'   => 'another_field',
+		) );
+
+		// add some xss for good measure
+		$dirty_val   = 'test<html><stuff><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>';
+		$cleaned_val = sanitize_text_field( $dirty_val );
+
+		// Values to sanitize
+		$vals = array(
+			'test_test'     => $dirty_val,
+			'another_field' => $dirty_val,
+		);
+
+		// Expected clean val
+		$expected = array(
+			'test_test'     => $cleaned_val,
+			'another_field' => $cleaned_val
+		);
+
+		// Verify sanitization works
+		$this->assertEquals( $expected, cmb2_get_metabox_sanitized_values( $this->cmb_id, $vals ) );
+
+		// Then verify that the object id was properly returned.
+		$this->assertEquals( $this->post_id, $this->cmb->object_id() );
+
+		$meta_values = get_post_meta( $this->post_id );
+
+		// And verify that the post-meta was not saved to the post
+		$this->assertTrue( ! isset( $meta_values['test_test'], $meta_values['another_field'] ) );
+	}
+
+	public function test_get_field() {
+		$cmb = new CMB2( $this->metabox_array );
+
+		$field = $cmb->get_field( 'test_test' );
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+	}
+
 }
 
 /**

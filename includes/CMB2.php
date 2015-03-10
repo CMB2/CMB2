@@ -346,6 +346,36 @@ class CMB2 {
 	}
 
 	/**
+	 * Returns array of sanitized field values, but does nto save them
+	 * @since  2.0.3
+	 * @param  array  $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
+	 */
+	public function get_sanitized_values( array $data_to_sanitize ) {
+		$this->data_to_save = $data_to_sanitize;
+		$stored_id          = $this->object_id();
+
+		// We do this So CMB will sanitize our data for us, but not save it
+		$this->object_id = 0;
+
+		// Ensure temp. data store is empty
+		cmb2_options( 0 )->set();
+
+		// Process/save fields
+		$this->process_fields();
+
+		// Get data from temp. data store
+		$sanitized_values = cmb2_options( 0 )->get_options();
+
+		// Empty out temp. data store again
+		cmb2_options( 0 )->set();
+
+		// Reset the object id
+		$this->object_id( $stored_id );
+
+		return $sanitized_values;
+	}
+
+	/**
 	 * Loops through and saves field data
 	 * @since  1.0.0
 	 * @param  int    $object_id    Object ID

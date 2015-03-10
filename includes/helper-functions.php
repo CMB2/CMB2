@@ -177,6 +177,18 @@ function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 }
 
 /**
+ * Retrieve a CMB instance by the metabox ID
+ * @since  2.0.3
+ * @param  mixed $meta_box     Metabox ID or Metabox config array
+ * @param  array $data_to_save Array of key => value data for saving. Likely $_POST data.
+ * @return mixed               Array of sanitized values or false if no CMB2 object found
+ */
+function cmb2_get_metabox_sanitized_values( $meta_box, array $data_to_save ) {
+	$cmb = cmb2_get_metabox( $meta_box );
+	return $cmb ? $cmb->get_sanitized_values( $data_to_save ) : false;
+}
+
+/**
  * Retrieve a metabox form
  * @since  2.0.0
  * @param  mixed   $meta_box  Metabox config array or Metabox ID
