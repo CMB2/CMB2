@@ -41,8 +41,8 @@ class CMB2_Option {
 
 	/**
 	 * Initiate option object
-	 * @param string $field_id Option key where data will be saved.
-	 *                         Leave empty for temporary data store.
+	 * @param string $option_key Option key where data will be saved.
+	 *                           Leave empty for temporary data store.
 	 * @since 2.0.0
 	 */
 	public function __construct( $option_key = '' ) {

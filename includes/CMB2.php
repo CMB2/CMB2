@@ -101,6 +101,9 @@ class CMB2 {
 
 	/**
 	 * Get started
+	 * @since 0.4.0
+	 * @param array   $meta_box  Metabox config array
+	 * @param integer $object_id Optional object id
 	 */
 	public function __construct( $meta_box, $object_id = 0 ) {
 
@@ -233,6 +236,7 @@ class CMB2 {
 
 	/**
 	 * Render a repeatable group
+	 * @param array $field_args Array of field arguments for a group field parent
 	 */
 	public function render_group( $args ) {
 
@@ -282,6 +286,12 @@ class CMB2 {
 
 	}
 
+	/**
+	 * Render a repeatable group row
+	 * @since  1.0.2
+	 * @param  CMB2_Field $field_group  CMB2_Field group field object
+	 * @param  string  $remove_disabled Attribute string to disable the remove button
+	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
