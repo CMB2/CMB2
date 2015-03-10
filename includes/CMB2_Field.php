@@ -419,7 +419,7 @@ class CMB2_Field {
 
 		$clean = new CMB2_Sanitize( $this, $meta_value );
 		// Validation via 'CMB2_Sanitize' (with fallback filter)
-		return $clean->{$this->type()}( $meta_value );
+		return $clean->{$this->type()}();
 	}
 
 	/**
