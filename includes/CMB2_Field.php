@@ -667,6 +667,9 @@ class CMB2_Field {
 		echo "\n\t</div>\n</div>";
 
 		$this->peform_param_callback( 'after_row' );
+
+		// For chaining
+		return $this;
 	}
 
 	/**

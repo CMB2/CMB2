@@ -120,27 +120,9 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
 
 	$object_type = $object_type ? $object_type : $cmb->mb_object_type();
 	$cmb->object_type( $object_type );
+	$cmb->object_id( $object_id );
 
-	if ( is_array( $field_id ) && isset( $field_id['id'] ) ) {
-		return new CMB2_Field( array(
-			'field_args'  => $field_id,
-			'object_id'   => $object_id,
-			'object_type' => $object_type,
-		) );
-	}
-
-	$fields = (array) $cmb->prop( 'fields' );
-	foreach ( $fields as $field ) {
-		if ( $field['id'] == $field_id || $field['name'] == $field_id ) {
-			// Send back field object
-			return new CMB2_Field( array(
-				'field_args'  => $field,
-				'object_id'   => $object_id,
-				'object_type' => $object_type,
-			) );
-
-		}
-	}
+	return $cmb->get_field( $field_id );
 }
 
 /**

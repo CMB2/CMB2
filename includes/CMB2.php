@@ -72,6 +72,13 @@ class CMB2 {
 	);
 
 	/**
+	 * Metabox field objects
+	 * @var   array
+	 * @since 2.0.3
+	 */
+	protected $fields = array();
+
+	/**
 	 * An array of hidden fields to output at the end of the form
 	 * @var   array
 	 * @since 2.0.0
@@ -186,12 +193,7 @@ class CMB2 {
 				$field_args['show_names'] = $this->prop( 'show_names' );
 
 				// Render default fields
-				$field = new CMB2_Field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
-				$field->render_field();
+				$field = $this->get_field( $field_args )->render_field();
 			}
 		}
 
@@ -244,11 +246,7 @@ class CMB2 {
 		}
 
 		$args['count']   = 0;
-		$field_group     = new CMB2_Field( array(
-			'field_args'  => $args,
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		) );
+		$field_group     = $this->get_field( $args );
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
 		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : '';
@@ -307,12 +305,9 @@ class CMB2 {
 					} else {
 
 						$field_args['show_names'] = $field_group->args( 'show_names' );
-						$field_args['context'] = $field_group->args( 'context' );
-						$field = new CMB2_Field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
-						$field->render_field();
+						$field_args['context']    = $field_group->args( 'context' );
+
+						$field = $this->get_field( $field_args, $field_group )->render_field();
 					}
 				}
 				echo '
@@ -651,6 +646,52 @@ class CMB2 {
 
 	/**
 	 * Add a field to the metabox
+	 * @since  2.0.3
+	 * @param  mixed $field Metabox field id or field config array or CMB2_Field object
+	 * @param  array $group_field   (optional) CMB2_Field object (group parent)
+	 * @return mixed                CMB2_Field object (or false)
+	 */
+	public function get_field( $field, $group_field = null ) {
+		if ( is_a( $field, 'CMB2_Field' ) ) {
+			return $field;
+		}
+
+		$field_id = is_string( $field ) ? $field : $field['id'];
+
+		$parent_field_id = ! empty( $group_field ) ? $group_field->id() : '';
+		$ids = $this->get_field_ids( $field_id, $parent_field_id, true );
+
+		if ( ! $ids ) {
+			return false;
+		}
+
+		list( $field_id, $sub_field_id ) = $ids;
+
+		$index = implode( '', $ids );
+		if ( array_key_exists( $index, $this->fields ) ) {
+			return $this->fields[ $index ];
+		}
+
+		$field_array = $this->prop( 'fields' );
+
+		$args = ! $sub_field_id
+			? array(
+				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+			)
+			: array(
+				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
+				'group_field' => $group_field,
+			);
+
+		$this->fields[ $index ] = new CMB2_Field( $args );
+
+		return $this->fields[ $index ];
+	}
+
+	/**
+	 * Add a field to the metabox
 	 * @since  2.0.0
 	 * @param  array  $field           Metabox field config array
 	 * @param  int    $position        (optional) Position of metabox. 1 for first, etc
@@ -733,11 +774,14 @@ class CMB2 {
 
 		list( $field_id, $sub_field_id ) = $ids;
 
+		unset( $this->fields[ implode( '', $ids ) ] );
+
 		if ( ! $sub_field_id ) {
 			unset( $this->meta_box['fields'][ $field_id ] );
 			return true;
 		}
 
+		unset( $this->fields[ $field_id ]->args['fields'][ $sub_field_id ] );
 		unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
 		return true;
 	}
