@@ -346,7 +346,7 @@ class CMB2 {
 	}
 
 	/**
-	 * Returns array of sanitized field values, but does nto save them
+	 * Returns array of sanitized field values (without saving them)
 	 * @since  2.0.3
 	 * @param  array  $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
 	 */
