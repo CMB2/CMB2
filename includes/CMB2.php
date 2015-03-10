@@ -236,7 +236,7 @@ class CMB2 {
 
 	/**
 	 * Render a repeatable group
-	 * @param array $field_args Array of field arguments for a group field parent
+	 * @param array $args Array of field arguments for a group field parent
 	 */
 	public function render_group( $args ) {
 
@@ -687,9 +687,9 @@ class CMB2 {
 	/**
 	 * Add a field to the metabox
 	 * @since  2.0.3
-	 * @param  mixed $field Metabox field id or field config array or CMB2_Field object
-	 * @param  array $group_field   (optional) CMB2_Field object (group parent)
-	 * @return mixed                CMB2_Field object (or false)
+	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
+	 * @param  CMB2_Field object $group_field   (optional) CMB2_Field object (group parent)
+	 * @return mixed                            CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $group_field = null ) {
 		if ( is_a( $field, 'CMB2_Field' ) ) {
