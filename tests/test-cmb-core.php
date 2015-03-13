@@ -65,9 +65,9 @@ class CMB2_Core_Test extends CMB2_Test {
 			'cmb_styles'   => true, // Include cmb bundled stylesheet
 			'fields'       => array(),
 			'hookup'       => true,
+			'save_fields'  => true, // Will not save during hookup if false
 			'closed'       => false, // Default to metabox being closed?
 			'new_user_section' => 'add-new-user', // or 'add-existing-user'
-
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -518,6 +518,14 @@ class CMB2_Core_Test extends CMB2_Test {
 
 		$field = $cmb->get_field( 'test_test' );
 		$this->assertInstanceOf( 'CMB2_Field', $field );
+	}
+
+	public function test_disable_save_fields() {
+		$this->assertTrue( $this->cmb->prop( 'save_fields' ) );
+		$args = $this->metabox_array;
+		$args['save_fields'] = false;
+		$cmb = new CMB2( $args );
+		$this->assertFalse( $cmb->prop( 'save_fields' ) );
 	}
 
 }

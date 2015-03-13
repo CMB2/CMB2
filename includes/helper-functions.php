@@ -234,8 +234,9 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	// check permissions
 	// @todo more hardening?
 	if (
+		$cmb->prop( 'save_fields' )
 		// check nonce
-		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
+		&& isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
 		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
 		&& $object_id && $_POST['object_id'] == $object_id
 	) {

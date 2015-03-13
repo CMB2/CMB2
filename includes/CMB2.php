@@ -67,6 +67,7 @@ class CMB2 {
 		'cmb_styles'   => true, // Include cmb bundled stylesheet
 		'fields'       => array(),
 		'hookup'       => true,
+		'save_fields'  => true, // Will not save during hookup if false
 		'closed'       => false, // Default to metabox being closed?
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 	);

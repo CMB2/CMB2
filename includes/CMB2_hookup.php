@@ -315,8 +315,9 @@ class CMB2_hookup {
 		$post_type = $post ? $post->post_type : get_post_type( $post_id );
 
 		$do_not_pass_go = (
+			! $this->cmb->prop( 'save_fields' )
 			// check nonce
-			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! isset( $_POST[ $this->cmb->nonce() ] )
 			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 			// check if autosave
 			|| defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE
@@ -342,8 +343,9 @@ class CMB2_hookup {
 	public function save_user( $user_id ) {
 		// check permissions
 		if (
+			! $this->cmb->prop( 'save_fields' )
 			// check nonce
-			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! isset( $_POST[ $this->cmb->nonce() ] )
 			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 		) {
 			// @todo more hardening?
