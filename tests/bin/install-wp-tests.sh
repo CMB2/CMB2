@@ -17,6 +17,10 @@ WP_CORE_DIR=/tmp/wordpress/
 set -ex
 
 install_wp() {
+	if [ $WP_CORE_DIR == '' ]; then
+		rm -rf $WP_CORE_DIR
+	fi
+
 	mkdir -p $WP_CORE_DIR
 
 	if [ $WP_VERSION == 'latest' ]; then
@@ -40,6 +44,10 @@ install_test_suite() {
 	fi
 
 	# set up testing suite
+	if [ $WP_TESTS_DIR == '' ]; then
+		rm -rf $WP_TESTS_DIR
+	fi
+
 	mkdir -p $WP_TESTS_DIR
 	cd $WP_TESTS_DIR
 	svn co --quiet http://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
@@ -69,6 +77,9 @@ install_db() {
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi
+
+	# drop database
+	mysql --user="$DB_USER" --password="$DB_PASS"$EXTRA -e "DROP DATABASE IF EXISTS $DB_NAME"
 
 	# create database
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
