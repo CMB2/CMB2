@@ -87,7 +87,7 @@ class CMB2_Field {
 			$this->object_id   = $this->group->object_id;
 			$this->object_type = $this->group->object_type;
 		} else {
-			$this->object_id   = isset( $args['object_id'] ) ? $args['object_id'] : 0;
+			$this->object_id   = isset( $args['object_id'] ) && '_' !== $args['object_id'] ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
 		}
 
@@ -302,6 +302,7 @@ class CMB2_Field {
 		if ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
 		}
+
 		// Add metadata if not single
 		if ( ! $a['single'] ) {
 			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ], false );

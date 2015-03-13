@@ -365,7 +365,7 @@ class CMB2 {
 		$stored_id          = $this->object_id();
 
 		// We do this So CMB will sanitize our data for us, but not save it
-		$this->object_id = 0;
+		$this->object_id( '_' );
 
 		// Ensure temp. data store is empty
 		cmb2_options( 0 )->set();
