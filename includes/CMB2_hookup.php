@@ -245,7 +245,7 @@ class CMB2_hookup {
 			 *
 			 * (WordPress will not display metaboxes without titles anyway)
 			 *
-			 * This is a good way solution if you want to output your metaboxes
+			 * This is a good solution if you want to output your metaboxes
 			 * Somewhere else in the post-screen
 			 */
 			if ( $this->cmb->prop( 'title' ) ) {
