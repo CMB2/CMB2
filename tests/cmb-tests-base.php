@@ -13,6 +13,43 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 		parent::tearDown();
 	}
 
+	public function normalize_string( $string ) {
+		return trim( preg_replace( array(
+			'/[\t\n\r]/', // Remove tabs and newlines
+			'/\s{2,}/', // Replace repeating spaces with one space
+			'/> </', // Remove spaces between carats
+		), array(
+			'',
+			' ',
+			'><',
+		), $string ) );
+	}
+
+	public function is_connected() {
+		$connected = @fsockopen( 'www.youtube.com', 80 );
+		if ( $connected ){
+			$is_conn = true;
+			fclose( $connected );
+		} else {
+			$is_conn = false; //action in connection failure
+		}
+
+		return $is_conn;
+	}
+
+	protected function capture_render( $cb ) {
+		ob_start();
+		call_user_func( $cb );
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		return $output;
+	}
+
+	protected function render_field( $field ) {
+		return $this->capture_render( array( $field, 'render_field' ) );
+	}
+
 	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
@@ -40,30 +77,6 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 
 	public function assertIsDefined( $definition ) {
 		return $this->assertTrue( defined( $definition ), "$definition is not defined." );
-	}
-
-	public function normalize_string( $string ) {
-		return trim( preg_replace( array(
-			'/[\t\n\r]/', // Remove tabs and newlines
-			'/\s{2,}/', // Replace repeating spaces with one space
-			'/> </', // Remove spaces between carats
-		), array(
-			'',
-			' ',
-			'><',
-		), $string ) );
-	}
-
-	public function is_connected() {
-		$connected = @fsockopen( 'www.youtube.com', 80 );
-		if ( $connected ){
-			$is_conn = true;
-			fclose( $connected );
-		} else {
-			$is_conn = false; //action in connection failure
-		}
-
-		return $is_conn;
 	}
 
 	/**

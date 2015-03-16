@@ -801,19 +801,6 @@ class CMB2_Types_Test extends CMB2_Test {
 		return new CMB2_Types( $field );
 	}
 
-	private function capture_render( $cb ) {
-		ob_start();
-		call_user_func( $cb );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
-	}
-
-	private function render_field( $field ) {
-		return $this->capture_render( array( $field, 'render_field' ) );
-	}
-
 	/**
 	 * Test Callbacks
 	 */

@@ -204,7 +204,13 @@ class CMB2_Types {
 			: $this->field->args( 'default' );
 
 		$concatenated_items = ''; $i = 1;
-		foreach ( (array) $this->field->options() as $opt_value => $opt_label ) {
+
+		$options = array();
+		if ( $option_none = $this->field->args( 'show_option_none' ) ) {
+			$options[ '' ] = $option_none;
+		}
+		$options = $options + (array) $this->field->options();
+		foreach ( $options as $opt_value => $opt_label ) {
 
 			// Clone args & modify for just this item
 			$a = $args;
