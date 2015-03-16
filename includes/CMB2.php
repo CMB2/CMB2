@@ -715,15 +715,16 @@ class CMB2 {
 
 		$field_array = $this->prop( 'fields' );
 
-		$args = ! $sub_field_id
+		// Check if group is passed and if fields were added in the old-school fields array
+		$args = $group_field && ( $sub_field_id || 0 === $sub_field_id )
 			? array(
+				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
+				'group_field' => $group_field,
+			)
+			: array(
 				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
 				'object_type' => $this->object_type(),
 				'object_id'   => $this->object_id(),
-			)
-			: array(
-				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
-				'group_field' => $group_field,
 			);
 
 		$this->fields[ $index ] = new CMB2_Field( $args );
