@@ -670,7 +670,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.timepicker( "destroy" );
+		$selector.timepicker( 'destroy' );
 		$selector.timepicker( cmb.defaults.time_picker );
 	};
 
@@ -679,7 +679,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.datepicker( "destroy" );
+		$selector.datepicker( 'destroy' );
 		$selector.datepicker( cmb.defaults.date_picker );
 	};
 
@@ -708,7 +708,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.makeListSortable = function() {
 		var $filelist = cmb.metabox().find( '.cmb2-media-status.cmb-attach-list' );
 		if ( $filelist.length ) {
-			$filelist.sortable({ cursor: "move" }).disableSelection();
+			$filelist.sortable({ cursor: 'move' }).disableSelection();
 		}
 	};
 
