@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
 Tested up to:      4.1.2  
-Stable tag:        2.0.3  
+Stable tag:        2.0.4  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -66,24 +66,16 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [Github project page](https://github.com/webdevstudios/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
-### Most Recent Changes - 2.0.3
+### Most Recent Changes - 2.0.4
 
 ### Enhancements
 
-* New constant, `CMB2_DIR`, which stores the file-path to the CMB2 directory.
-* `text_date`, `text_time`, `text_date_timestamp`, `text_datetime_timestamp`, and ` text_datetime_timestamp_timezone` field types now take an arguments array so they can be extended by custom field types.
-* Removed auto-scroll when adding groups. To re-add the feature, use the [snippet/plugin here](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/javascript/cmb2-auto-scroll-to-new-group.php). ([#205](https://github.com/WebDevStudios/CMB2/issues/205))
-* Updated Timepicker utilizing the [@trentrichardson](https://github.com/trentrichardson) jQuery Timepicker add-on (https://github.com/trentrichardson/jQuery-Timepicker-Addon), and updated Datepicker styles. Props [JonMasterson](https://github.com/JonMasterson). ([#204](https://github.com/WebDevStudios/CMB2/issues/204), [#206](https://github.com/WebDevStudios/CMB2/issues/206), [#45](https://github.com/WebDevStudios/CMB2/issues/45)).
-* Added a callback option for the field default value. The callback gets passed an array of all the field parameters as the first argument, and the field object as the second argument. (which means you can get the post id using `$field->object_id`). ([#233](https://github.com/WebDevStudios/CMB2/issues/233)).
-* New `CMB2::get_field()` method and `cmb2_get_field` helper function for retrieving a `CMB2_Field` object from the array of registered fields for a metabox.
-* New `CMB2::get_sanitized_values()` method and `cmb2_get_metabox_sanitized_values` helper function for retrieving sanitized values from an array of values (usually `$_POST` data).
-* New `'save_fields'` metabox property that can be used to disable (by setting `'save_fields' => false`) the automatic saving of the fields when the form is submitted. These can be useful when you want to handle the saving of the fields yourself, or want to use submitted data for other purposes like generating new posts, or sending emails, etc.
+* `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
 
 ### Bug Fixes
 
-* Fix commented out text_datetime_timestamp_timezone field registration example in `example-functions.php`. Props [cliffordp](https://github.com/cliffordp), ([#203](https://github.com/WebDevStudios/CMB2/pull/203)).
-* Fix sidebar styling for money fields and fields with textareas. ([#234](https://github.com/WebDevStudios/CMB2/issues/234))
-* Fix `CMB2_Sanitize` class to properly use the stripslashed value (which was added in [#162](https://github.com/WebDevStudios/CMB2/pull/162) but never used). Props [dustyf](https://github.com/dustyf), ([#241](https://github.com/WebDevStudios/CMB2/pull/241)).
+* Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
+* Fix occasional jQuery issues with group-field indexes.
 
 
 **[View complete changelog](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md)**
@@ -116,6 +108,17 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.0.4 - 2015-03-16
+
+#### Enhancements
+
+* `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
+
+#### Bug Fixes
+
+* Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
+* Fix occasional jQuery issues with group-field indexes.
 
 ### 2.0.3 - 2015-03-15
 
@@ -392,21 +395,13 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.0.3 - 2015-03-15
+### 2.0.4 - 2015-03-16
 
-##### Enhancements
+#### Enhancements
 
-* New constant, `CMB2_DIR`, which stores the file-path to the CMB2 directory.
-* `text_date`, `text_time`, `text_date_timestamp`, `text_datetime_timestamp`, and ` text_datetime_timestamp_timezone` field types now take an arguments array so they can be extended by custom field types.
-* Removed auto-scroll when adding groups. To re-add the feature, use the [snippet/plugin here](https://github.com/WebDevStudios/CMB2-Snippet-Library/blob/master/javascript/cmb2-auto-scroll-to-new-group.php). ([#205](https://github.com/WebDevStudios/CMB2/issues/205))
-* Updated Timepicker utilizing the [@trentrichardson](https://github.com/trentrichardson) jQuery Timepicker add-on (https://github.com/trentrichardson/jQuery-Timepicker-Addon), and updated Datepicker styles. Props [JonMasterson](https://github.com/JonMasterson). ([#204](https://github.com/WebDevStudios/CMB2/issues/204), [#206](https://github.com/WebDevStudios/CMB2/issues/206), [#45](https://github.com/WebDevStudios/CMB2/issues/45)).
-* Added a callback option for the field default value. The callback gets passed an array of all the field parameters as the first argument, and the field object as the second argument. (which means you can get the post id using `$field->object_id`). ([#233](https://github.com/WebDevStudios/CMB2/issues/233)).
-* New `CMB2::get_field()` method and `cmb2_get_field` helper function for retrieving a `CMB2_Field` object from the array of registered fields for a metabox.
-* New `CMB2::get_sanitized_values()` method and `cmb2_get_metabox_sanitized_values` helper function for retrieving sanitized values from an array of values (usually `$_POST` data).
-* New `'save_fields'` metabox property that can be used to disable (by setting `'save_fields' => false`) the automatic saving of the fields when the form is submitted. These can be useful when you want to handle the saving of the fields yourself, or want to use submitted data for other purposes like generating new posts, or sending emails, etc.
+* `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
 
-##### Bug Fixes
+#### Bug Fixes
 
-* Fix commented out text_datetime_timestamp_timezone field registration example in `example-functions.php`. Props [cliffordp](https://github.com/cliffordp), ([#203](https://github.com/WebDevStudios/CMB2/pull/203)).
-* Fix sidebar styling for money fields and fields with textareas. ([#234](https://github.com/WebDevStudios/CMB2/issues/234))
-* Fix `CMB2_Sanitize` class to properly use the stripslashed value (which was added in [#162](https://github.com/WebDevStudios/CMB2/pull/162) but never used). Props [dustyf](https://github.com/dustyf), ([#241](https://github.com/WebDevStudios/CMB2/pull/241)).
+* Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
+* Fix occasional jQuery issues with group-field indexes.

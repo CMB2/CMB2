@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 
 *
 
+## 2.0.4 - 2015-03-16
+
+### Enhancements
+
+* `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
+
+### Bug Fixes
+
+* Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
+* Fix occasional jQuery issues with group-field indexes.
+I
 ## 2.0.3 - 2015-03-15
 
 ### Enhancements
