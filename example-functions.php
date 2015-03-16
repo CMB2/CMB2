@@ -210,11 +210,12 @@ function yourprefix_register_demo_metabox() {
 	) );
 
 	$cmb_demo->add_field( array(
-		'name'    => __( 'Test Select', 'cmb2' ),
-		'desc'    => __( 'field description (optional)', 'cmb2' ),
-		'id'      => $prefix . 'select',
-		'type'    => 'select',
-		'options' => array(
+		'name'             => __( 'Test Select', 'cmb2' ),
+		'desc'             => __( 'field description (optional)', 'cmb2' ),
+		'id'               => $prefix . 'select',
+		'type'             => 'select',
+		'show_option_none' => true,
+		'options'          => array(
 			'standard' => __( 'Option One', 'cmb2' ),
 			'custom'   => __( 'Option Two', 'cmb2' ),
 			'none'     => __( 'Option Three', 'cmb2' ),
@@ -222,11 +223,12 @@ function yourprefix_register_demo_metabox() {
 	) );
 
 	$cmb_demo->add_field( array(
-		'name'    => __( 'Test Radio inline', 'cmb2' ),
-		'desc'    => __( 'field description (optional)', 'cmb2' ),
-		'id'      => $prefix . 'radio_inline',
-		'type'    => 'radio_inline',
-		'options' => array(
+		'name'             => __( 'Test Radio inline', 'cmb2' ),
+		'desc'             => __( 'field description (optional)', 'cmb2' ),
+		'id'               => $prefix . 'radio_inline',
+		'type'             => 'radio_inline',
+		'show_option_none' => 'No Selection',
+		'options'          => array(
 			'standard' => __( 'Option One', 'cmb2' ),
 			'custom'   => __( 'Option Two', 'cmb2' ),
 			'none'     => __( 'Option Three', 'cmb2' ),
