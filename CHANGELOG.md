@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 * Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
 * Fix occasional jQuery issues with group-field indexes.
-I
+
 ## 2.0.3 - 2015-03-15
 
 ### Enhancements
