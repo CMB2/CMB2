@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 *
 
+## 2.0.5 - 2015-03-17
+
+### Bug Fixes
+
+* Fix grouped fields display (first field was being repeated), broken in 2.0.3.
+
 ## 2.0.4 - 2015-03-16
 
 ### Enhancements

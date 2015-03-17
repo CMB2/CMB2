@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings  
 Requires at least: 3.8.0  
 Tested up to:      4.1.2  
-Stable tag:        2.0.4  
+Stable tag:        2.0.5  
 License:           GPLv2 or later  
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -66,13 +66,21 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [Github project page](https://github.com/webdevstudios/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
-### Most Recent Changes - 2.0.4
+### Most Recent Changes - 2.0.4, 2.0.5
 
-### Enhancements
+#### 2.0.5 - 2015-03-17
+
+##### Bug Fixes
+
+* Fix grouped fields display (first field was being repeated), broken in 2.0.3.
+
+#### 2.0.4 - 2015-03-16
+
+##### Enhancements
 
 * `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
 
-### Bug Fixes
+##### Bug Fixes
 
 * Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
 * Fix occasional jQuery issues with group-field indexes.
@@ -108,6 +116,12 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.0.5 - 2015-03-17
+
+#### Bug Fixes
+
+* Fix grouped fields display (first field was being repeated), broken in 2.0.3.
 
 ### 2.0.4 - 2015-03-16
 
@@ -395,13 +409,8 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.0.4 - 2015-03-16
-
-#### Enhancements
-
-* `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
+### 2.0.5 - 2015-03-17
 
 #### Bug Fixes
 
-* Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
-* Fix occasional jQuery issues with group-field indexes.
+* Fix grouped fields display (first field was being repeated), broken in 2.0.3.

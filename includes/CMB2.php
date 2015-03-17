@@ -274,7 +274,7 @@ class CMB2 {
 
 		if ( ! empty( $group_val ) ) {
 
-			foreach ( $group_val as $iterator => $field_id ) {
+			foreach ( $group_val as $field_group->index => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
 			}
 		} else {
@@ -689,17 +689,17 @@ class CMB2 {
 	 * Add a field to the metabox
 	 * @since  2.0.3
 	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
-	 * @param  CMB2_Field object $group_field   (optional) CMB2_Field object (group parent)
+	 * @param  CMB2_Field object $field_group   (optional) CMB2_Field object (group parent)
 	 * @return mixed                            CMB2_Field object (or false)
 	 */
-	public function get_field( $field, $group_field = null ) {
+	public function get_field( $field, $field_group = null ) {
 		if ( is_a( $field, 'CMB2_Field' ) ) {
 			return $field;
 		}
 
 		$field_id = is_string( $field ) ? $field : $field['id'];
 
-		$parent_field_id = ! empty( $group_field ) ? $group_field->id() : '';
+		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
 		$ids = $this->get_field_ids( $field_id, $parent_field_id, true );
 
 		if ( ! $ids ) {
@@ -708,7 +708,7 @@ class CMB2 {
 
 		list( $field_id, $sub_field_id ) = $ids;
 
-		$index = implode( '', $ids );
+		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
 		if ( array_key_exists( $index, $this->fields ) ) {
 			return $this->fields[ $index ];
 		}
@@ -716,10 +716,10 @@ class CMB2 {
 		$field_array = $this->prop( 'fields' );
 
 		// Check if group is passed and if fields were added in the old-school fields array
-		$args = $group_field && ( $sub_field_id || 0 === $sub_field_id )
+		$args = $field_group && ( $sub_field_id || 0 === $sub_field_id )
 			? array(
 				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
-				'group_field' => $group_field,
+				'group_field' => $field_group,
 			)
 			: array(
 				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
