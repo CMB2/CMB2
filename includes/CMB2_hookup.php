@@ -361,7 +361,22 @@ class CMB2_hookup {
 	 * @return bool
 	 */
 	public function show_on() {
+		/**
+		 * Filter to determine if metabox should show. Default is true
+		 *
+		 * @param array  $show          Default is true, show the metabox
+		 * @param mixed  $meta_box_args Array of the metabox arguments
+		 * @param mixed  $cmb           The CMB2 instance
+		 */
 		$show = (bool) apply_filters( 'cmb2_show_on', true, $this->cmb->meta_box, $this->cmb );
+		/**
+		 * Filter to determine if metabox should show. Default is true
+		 *
+		 * The dynamic portion of the hook name, $cmb_id, refers to the metabox id.
+		 *
+		 * @param array  $show          Default is true, show the metabox
+		 * @param mixed  $cmb           The CMB2 instance
+		 */
 		return (bool) apply_filters( "cmb2_show_on_{$this->cmb->cmb_id}", $show, $this->cmb );
 	}
 
