@@ -361,7 +361,8 @@ class CMB2_hookup {
 	 * @return bool
 	 */
 	public function show_on() {
-		return (bool) apply_filters( 'cmb2_show_on', true, $this->cmb->meta_box, $this->cmb );
+		$show = (bool) apply_filters( 'cmb2_show_on', true, $this->cmb->meta_box, $this->cmb );
+		return (bool) apply_filters( "cmb2_show_on_{$this->cmb->cmb_id}", $show, $this->cmb );
 	}
 
 	/**
