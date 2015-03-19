@@ -83,7 +83,7 @@ class CMB2_Sanitize {
 			case 'taxonomy_radio':
 			case 'taxonomy_multicheck':
 				if ( $this->field->args( 'taxonomy' ) ) {
-					$sanitized_value = wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
 					break;
 				}
 			case 'multicheck':
