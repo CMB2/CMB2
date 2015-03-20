@@ -363,7 +363,7 @@ class CMB2_hookup {
 	public function show_on() {
 		$show = true;
 
-		// If field is requesting to be conditionally shown
+		// If metabox is requesting to be conditionally shown
 		if ( is_callable( $this->cmb->prop( 'show_on_cb' ) ) ) {
 			$show = (bool) call_user_func( $this->cmb->prop( 'show_on_cb' ), $this->cmb );
 		}
@@ -376,16 +376,6 @@ class CMB2_hookup {
 		 * @param mixed  $cmb           The CMB2 instance
 		 */
 		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
-
-		/**
-		 * Filter to determine if metabox should show. Default is true
-		 *
-		 * The dynamic portion of the hook name, $cmb_id, refers to the metabox id.
-		 *
-		 * @param array  $show          Default is true, show the metabox
-		 * @param mixed  $cmb           The CMB2 instance
-		 */
-		$show = (bool) apply_filters( "cmb2_show_on_{$this->cmb->cmb_id}", $show, $this->cmb );
 
 		return $show;
 	}
