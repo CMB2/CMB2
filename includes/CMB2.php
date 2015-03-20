@@ -64,6 +64,7 @@ class CMB2 {
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
 		'show_on'      => array(), // Specific post IDs or page templates to display this metabox
+		'show_on_cb'   => null, // Callback to determine if metabox should display. Overrides 'show_on'
 		'cmb_styles'   => true, // Include cmb bundled stylesheet
 		'fields'       => array(),
 		'hookup'       => true,
@@ -937,6 +938,8 @@ class CMB2 {
 			case 'meta_box':
 			case 'updated':
 				return $this->{$field};
+			case 'object_id':
+				return $this->object_id();
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
