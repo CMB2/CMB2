@@ -3,7 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-*
+### Enhancements
+
+* New metabox/form parameter, `show_on_cb`, allows you to conditionally display a cmb metabox/form via a callback. The `$cmb` object gets passed as a parameter to the callback. This complements the `'show_on_cb'` parameter that already exists for individual fields. Using this callback is similar to using the `'cmb2_show_on'` filter, but only applies to that specific metabox and it is recommended to use this callback instead as it minimizes th risk that your filter will affect other metaboxes.
+* Taxonomy types no longer save a value. The value getting saved was causing confusion and is not meant to be used. To use the saved taxonomy data, you need to use the WordPress term api, `get_the_terms `, `get_the_term_list`, etc.
+
+### Bug Fixes
+
+* Fix empty arrays (like in the group field) saving as a value.
 
 ## 2.0.5 - 2015-03-17
 

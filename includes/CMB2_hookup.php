@@ -358,10 +358,26 @@ class CMB2_hookup {
 	/**
 	 * Determines if metabox should be shown in current context
 	 * @since  2.0.0
-	 * @return bool
+	 * @return bool Whether metabox should be added/shown
 	 */
 	public function show_on() {
-		return (bool) apply_filters( 'cmb2_show_on', true, $this->cmb->meta_box, $this->cmb );
+		$show = true;
+
+		// If metabox is requesting to be conditionally shown
+		if ( is_callable( $this->cmb->prop( 'show_on_cb' ) ) ) {
+			$show = (bool) call_user_func( $this->cmb->prop( 'show_on_cb' ), $this->cmb );
+		}
+
+		/**
+		 * Filter to determine if metabox should show. Default is true
+		 *
+		 * @param array  $show          Default is true, show the metabox
+		 * @param mixed  $meta_box_args Array of the metabox arguments
+		 * @param mixed  $cmb           The CMB2 instance
+		 */
+		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
+
+		return $show;
 	}
 
 	/**
