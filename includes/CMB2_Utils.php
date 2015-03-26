@@ -126,7 +126,20 @@ class CMB2_Utils {
 	 * @return bool         True or false
 	 */
 	public function isempty( $value ) {
-		return is_null( $value ) || ( is_string( $value ) && empty( $value ) );
+		return null === $value || '' === $value || false === $value;
+	}
+
+	/**
+	 * Insert a single array item inside another array at a set position
+	 * @since  2.0.2
+	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
+	 * @param  array $new      New array to insert
+	 * @param  int   $position Position in the main array to insert the new array
+	 */
+	public function array_insert( &$array, $new, $position ) {
+		$before = array_slice( $array, 0, $position - 1 );
+		$after  = array_diff_key( $array, $before );
+		$array  = array_merge( $before, $new, $after );
 	}
 
 	/**

@@ -1,4 +1,4 @@
-# CMB Test Suite [![Build Status](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.svg?branch=trunk)](https://travis-ci.org/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress)
+# CMB Test Suite [![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)]()
 
 The CMB Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
@@ -12,7 +12,7 @@ Quick Start (For Manual Runs)
 
 ### 1. Clone this repository
 ```bash
-git clone git://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress.git ./
+git clone git@github.com:WebDevStudios/CMB2.git ./
 ```
 
 ### 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation)
@@ -27,7 +27,7 @@ Note: you'll need to already have `svn`, `wget`, and `mysql` available.
 
 Change to the CMB directory:
 ```bash
-cd Custom-Metaboxes-and-Fields-for-WordPress
+cd CMB2
 ```
 
 ```bash

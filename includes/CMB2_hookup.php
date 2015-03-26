@@ -18,12 +18,19 @@ class CMB2_hookup {
 
 	/**
 	 * Only allow JS registration once
-	 * @var   array
+	 * @var   bool
 	 * @since 2.0.0
 	 */
 	protected static $registration_done = false;
 
-	public function __construct( $cmb ) {
+	/**
+	 * Metabox Form ID
+	 * @var   CMB2 object
+	 * @since 2.0.2
+	 */
+	protected $cmb;
+
+	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 
 		$this->hooks();
@@ -51,11 +58,11 @@ class CMB2_hookup {
 		global $pagenow;
 
 		// register our scripts and styles for cmb
-		$this->once( 'admin_enqueue_scripts', array( $this, '_register_scripts' ), 8 );
+		$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
 
 		$type = $this->cmb->mb_object_type();
 		if ( 'post' == $type ) {
-			add_action( 'admin_menu', array( $this, 'add_metaboxes' ) );
+			add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 			add_action( 'add_attachment', array( $this, 'save_post' ) );
 			add_action( 'edit_attachment', array( $this, 'save_post' ) );
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -66,8 +73,7 @@ class CMB2_hookup {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
 
-		}
-		elseif ( 'user' == $type ) {
+		} elseif ( 'user' == $type ) {
 
 			$priority = $this->cmb->prop( 'priority' );
 
@@ -106,14 +112,6 @@ class CMB2_hookup {
 	 * Registers scripts and styles for CMB
 	 * @since  1.0.0
 	 */
-	public function _register_scripts() {
-		self::register_scripts( $this->cmb->object_type() );
-	}
-
-	/**
-	 * Registers scripts and styles for CMB
-	 * @since  1.0.0
-	 */
 	public static function register_scripts() {
 		if ( self::$registration_done ) {
 			return;
@@ -134,10 +132,10 @@ class CMB2_hookup {
 			) );
 		}
 
-		wp_register_script( 'cmb-timepicker', cmb2_utils()->url( 'js/jquery.timePicker.min.js' ) );
+		wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
 
 		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'cmb-timepicker', 'wp-color-picker' );
+		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'wp-color-picker' );
 		// styles required for cmb
 		$styles = array( 'wp-color-picker' );
 
@@ -167,11 +165,16 @@ class CMB2_hookup {
 					'clearText'       => __( 'Clear', 'cmb2' ),
 				),
 				'time_picker'  => array(
-					'startTime'   => '00:00',
-					'endTime'     => '23:59',
-					'show24Hours' => false,
-					'separator'   => ':',
-					'step'        => 30,
+					'timeOnlyTitle' => __( 'Choose Time', 'cmb2' ),
+					'timeText'      => __( 'Time', 'cmb2' ),
+					'hourText'      => __( 'Hour', 'cmb2' ),
+					'minuteText'    => __( 'Minute', 'cmb2' ),
+					'secondText'    => __( 'Second', 'cmb2' ),
+					'currentText'   => __( 'Now', 'cmb2' ),
+					'closeText'     => __( 'Done', 'cmb2' ),
+					'timeFormat'    => __( 'hh:mm TT', 'cmb2' ),
+					'controlType'   => 'select',
+					'stepMinute'    => 5,
 				),
 			),
 			'strings' => array(
@@ -236,7 +239,18 @@ class CMB2_hookup {
 				add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
-			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			/**
+			 * To keep from registering an actual post-screen metabox,
+			 * omit the 'title' attribute from the metabox registration array.
+			 *
+			 * (WordPress will not display metaboxes without titles anyway)
+			 *
+			 * This is a good solution if you want to output your metaboxes
+			 * Somewhere else in the post-screen
+			 */
+			if ( $this->cmb->prop( 'title' ) ) {
+				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			}
 		}
 	}
 
@@ -265,7 +279,8 @@ class CMB2_hookup {
 	 */
 	public function user_new_metabox( $section ) {
 		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
-			$this->cmb->new_user_page = true;
+			$object_id = $this->cmb->object_id();
+			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
 			$this->user_metabox();
 		}
 	}
@@ -300,8 +315,9 @@ class CMB2_hookup {
 		$post_type = $post ? $post->post_type : get_post_type( $post_id );
 
 		$do_not_pass_go = (
+			! $this->cmb->prop( 'save_fields' )
 			// check nonce
-			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! isset( $_POST[ $this->cmb->nonce() ] )
 			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 			// check if autosave
 			|| defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE
@@ -324,11 +340,12 @@ class CMB2_hookup {
 	/**
 	 * Save data from metabox
 	 */
-	public function save_user( $user_id )  {
+	public function save_user( $user_id ) {
 		// check permissions
 		if (
+			! $this->cmb->prop( 'save_fields' )
 			// check nonce
-			! isset( $_POST[ $this->cmb->nonce() ] )
+			|| ! isset( $_POST[ $this->cmb->nonce() ] )
 			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 		) {
 			// @todo more hardening?
@@ -375,7 +392,7 @@ class CMB2_hookup {
 			return false;
 		}
 
-		CMB2_hookup::register_scripts();
+		self::register_scripts();
 		return wp_enqueue_style( 'cmb2-styles' );
 	}
 
@@ -388,7 +405,7 @@ class CMB2_hookup {
 			return false;
 		}
 
-		CMB2_hookup::register_scripts();
+		self::register_scripts();
 		wp_enqueue_media();
 		return wp_enqueue_script( 'cmb2-scripts' );
 	}

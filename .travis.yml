@@ -1,14 +1,27 @@
 language: php
 
 php:
+    - 5.2
     - 5.3
     - 5.4
+    - 5.5
+    - 5.6
+    - hhvm
+    - nightly
 
 env:
     - WP_VERSION=latest WP_MULTISITE=0
     - WP_VERSION=latest WP_MULTISITE=1
     - WP_VERSION=3.8 WP_MULTISITE=0
     - WP_VERSION=3.8 WP_MULTISITE=1
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: WP_VERSION=3.8 WP_MULTISITE=0
+      php: nightly
+    - env: WP_VERSION=3.8 WP_MULTISITE=1
+      php: nightly
 
 before_script:
     - bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION

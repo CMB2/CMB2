@@ -18,7 +18,7 @@ class CMB2_Show_Filters {
 	 *
 	 * @param  array $meta_box_args Metabox config array
 	 *
-	 * @return string|false         show_on key or false
+	 * @return mixed                show_on key or false
 	 */
 	private static function get_show_on_key( $meta_box_args ) {
 		$show_on = isset( $meta_box_args['show_on'] ) ? (array) $meta_box_args['show_on'] : false;
