@@ -11,9 +11,6 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Fix issue with oembed fields in repeatable groups where changing video changed it for all fields in a group.
-
-### Bug Fixes
-
 * Fix empty arrays (like in the group field) saving as a value.
 
 ## 2.0.5 - 2015-03-17
