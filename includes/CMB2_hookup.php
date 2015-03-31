@@ -233,10 +233,10 @@ class CMB2_hookup {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $page ) {
+		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
 
 			if ( $this->cmb->prop( 'closed' ) ) {
-				add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
+				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
 			/**
@@ -249,7 +249,7 @@ class CMB2_hookup {
 			 * Somewhere else in the post-screen
 			 */
 			if ( $this->cmb->prop( 'title' ) ) {
-				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 			}
 		}
 	}
