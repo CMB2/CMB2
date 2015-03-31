@@ -251,7 +251,6 @@ class CMB2 {
 			return;
 		}
 
-		$args['count']   = 0;
 		$field_group     = $this->get_field( $args );
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
@@ -259,6 +258,7 @@ class CMB2 {
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
+		$field_group->index = 0;
 
 		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, '" style="width:100%;">';
 		if ( $desc || $label ) {
@@ -275,8 +275,9 @@ class CMB2 {
 
 		if ( ! empty( $group_val ) ) {
 
-			foreach ( $group_val as $field_group->index => $field_id ) {
+			foreach ( $group_val as $group_key => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
+				$field_group->index++;
 			}
 		} else {
 			$this->render_group_row( $field_group, $remove_disabled );
@@ -297,7 +298,7 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->count(), '">
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">
 
 			<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 			<div class="cmbhandle" title="' , __( 'Click to toggle', 'cmb2' ), '"><br></div>
@@ -332,8 +333,6 @@ class CMB2 {
 			</div>
 		</div>
 		';
-
-		$field_group->args['count']++;
 	}
 
 	/**
