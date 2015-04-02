@@ -67,9 +67,17 @@ class CMB2 {
 		'cmb_styles'   => true, // Include cmb bundled stylesheet
 		'fields'       => array(),
 		'hookup'       => true,
+		'save_fields'  => true, // Will not save during hookup if false
 		'closed'       => false, // Default to metabox being closed?
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 	);
+
+	/**
+	 * Metabox field objects
+	 * @var   array
+	 * @since 2.0.3
+	 */
+	protected $fields = array();
 
 	/**
 	 * An array of hidden fields to output at the end of the form
@@ -94,8 +102,11 @@ class CMB2 {
 
 	/**
 	 * Get started
+	 * @since 0.4.0
+	 * @param array   $meta_box  Metabox config array
+	 * @param integer $object_id Optional object id
 	 */
-	function __construct( $meta_box, $object_id = 0 ) {
+	public function __construct( $meta_box, $object_id = 0 ) {
 
 		if ( empty( $meta_box['id'] ) ) {
 			wp_die( __( 'Metabox configuration is required to have an ID parameter', 'cmb2' ) );
@@ -186,12 +197,7 @@ class CMB2 {
 				$field_args['show_names'] = $this->prop( 'show_names' );
 
 				// Render default fields
-				$field = new CMB2_Field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
-				$field->render_field();
+				$field = $this->get_field( $field_args )->render_field();
 			}
 		}
 
@@ -231,6 +237,7 @@ class CMB2 {
 
 	/**
 	 * Render a repeatable group
+	 * @param array $args Array of field arguments for a group field parent
 	 */
 	public function render_group( $args ) {
 
@@ -244,11 +251,7 @@ class CMB2 {
 		}
 
 		$args['count']   = 0;
-		$field_group     = new CMB2_Field( array(
-			'field_args'  => $args,
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		) );
+		$field_group     = $this->get_field( $args );
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
 		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : '';
@@ -271,7 +274,7 @@ class CMB2 {
 
 		if ( ! empty( $group_val ) ) {
 
-			foreach ( $group_val as $iterator => $field_id ) {
+			foreach ( $group_val as $field_group->index => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
 			}
 		} else {
@@ -284,6 +287,12 @@ class CMB2 {
 
 	}
 
+	/**
+	 * Render a repeatable group row
+	 * @since  1.0.2
+	 * @param  CMB2_Field $field_group  CMB2_Field group field object
+	 * @param  string  $remove_disabled Attribute string to disable the remove button
+	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		echo '
@@ -307,12 +316,9 @@ class CMB2 {
 					} else {
 
 						$field_args['show_names'] = $field_group->args( 'show_names' );
-						$field_args['context'] = $field_group->args( 'context' );
-						$field = new CMB2_Field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
-						$field->render_field();
+						$field_args['context']    = $field_group->args( 'context' );
+
+						$field = $this->get_field( $field_args, $field_group )->render_field();
 					}
 				}
 				echo '
@@ -348,6 +354,36 @@ class CMB2 {
 				$hidden->render();
 			}
 		}
+	}
+
+	/**
+	 * Returns array of sanitized field values (without saving them)
+	 * @since  2.0.3
+	 * @param  array  $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
+	 */
+	public function get_sanitized_values( array $data_to_sanitize ) {
+		$this->data_to_save = $data_to_sanitize;
+		$stored_id          = $this->object_id();
+
+		// We do this So CMB will sanitize our data for us, but not save it
+		$this->object_id( '_' );
+
+		// Ensure temp. data store is empty
+		cmb2_options( 0 )->set();
+
+		// Process/save fields
+		$this->process_fields();
+
+		// Get data from temp. data store
+		$sanitized_values = cmb2_options( 0 )->get_options();
+
+		// Empty out temp. data store again
+		cmb2_options( 0 )->set();
+
+		// Reset the object id
+		$this->object_id( $stored_id );
+
+		return $sanitized_values;
 	}
 
 	/**
@@ -428,7 +464,7 @@ class CMB2 {
 					'object_id'   => $this->object_id(),
 				) );
 
-				if ( $field->save_field( $this->data_to_save ) ) {
+				if ( $field->save_field_from_data( $this->data_to_save ) ) {
 					$this->updated[] = $field->id();
 				}
 
@@ -656,6 +692,53 @@ class CMB2 {
 
 	/**
 	 * Add a field to the metabox
+	 * @since  2.0.3
+	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
+	 * @param  CMB2_Field object $field_group   (optional) CMB2_Field object (group parent)
+	 * @return mixed                            CMB2_Field object (or false)
+	 */
+	public function get_field( $field, $field_group = null ) {
+		if ( is_a( $field, 'CMB2_Field' ) ) {
+			return $field;
+		}
+
+		$field_id = is_string( $field ) ? $field : $field['id'];
+
+		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
+		$ids = $this->get_field_ids( $field_id, $parent_field_id, true );
+
+		if ( ! $ids ) {
+			return false;
+		}
+
+		list( $field_id, $sub_field_id ) = $ids;
+
+		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
+		if ( array_key_exists( $index, $this->fields ) ) {
+			return $this->fields[ $index ];
+		}
+
+		$field_array = $this->prop( 'fields' );
+
+		// Check if group is passed and if fields were added in the old-school fields array
+		$args = $field_group && ( $sub_field_id || 0 === $sub_field_id )
+			? array(
+				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
+				'group_field' => $field_group,
+			)
+			: array(
+				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+			);
+
+		$this->fields[ $index ] = new CMB2_Field( $args );
+
+		return $this->fields[ $index ];
+	}
+
+	/**
+	 * Add a field to the metabox
 	 * @since  2.0.0
 	 * @param  array  $field           Metabox field config array
 	 * @param  int    $position        (optional) Position of metabox. 1 for first, etc
@@ -738,11 +821,14 @@ class CMB2 {
 
 		list( $field_id, $sub_field_id ) = $ids;
 
+		unset( $this->fields[ implode( '', $ids ) ] );
+
 		if ( ! $sub_field_id ) {
 			unset( $this->meta_box['fields'][ $field_id ] );
 			return true;
 		}
 
+		unset( $this->fields[ $field_id ]->args['fields'][ $sub_field_id ] );
 		unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
 		return true;
 	}

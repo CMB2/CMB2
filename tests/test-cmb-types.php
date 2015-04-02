@@ -470,7 +470,7 @@ class CMB2_Types_Test extends CMB2_Test {
 		$formatted_val_to_update = $field->format_timestamp( $val_to_update );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><p class="cmb2-metabox-description">This is a description</p>', $formatted_val_to_update ),
+			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><span class="cmb2-metabox-description">This is a description</span>', $formatted_val_to_update ),
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
@@ -501,34 +501,37 @@ class CMB2_Types_Test extends CMB2_Test {
 
 	public function test_text_datetime_timestamp_timezone_field_after_value_update() {
 
-		$tzstring = cmb2_utils()->timezone_string();
-		$offset = cmb2_utils()->timezone_offset( $tzstring );
-		if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
-			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+		if ( version_compare( PHP_VERSION, '5.3' ) >= 0 ) {
+
+			$tzstring = cmb2_utils()->timezone_string();
+			$offset = cmb2_utils()->timezone_offset( $tzstring );
+			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
+				$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+			}
+			$today_stamp = strtotime( 'today' );
+
+			$field = $this->get_field_object( 'text_datetime_timestamp_timezone' );
+			$date_val = $field->format_timestamp( $today_stamp );
+			$time_val = $field->format_timestamp( $today_stamp, 'time_format' );
+
+			$value_to_save = new DateTime( $date_val . ' ' . $time_val, new DateTimeZone( $tzstring ) );
+			$value_to_save = serialize( $value_to_save );
+
+
+			update_post_meta( $this->post_id, $this->text_type_field['id'], $value_to_save );
+
+			$get_val = get_post_meta( $this->post_id, $this->text_type_field['id'], 1 );
+			$this->assertEquals( $value_to_save, $get_val );
+
+			$zones = wp_timezone_choice( $tzstring );
+
+			$this->assertHTMLstringsAreEqual(
+				sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="%s"/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="%s"/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone">%s</select><p class="cmb2-metabox-description">This is a description</p>', $date_val, $time_val, $zones ),
+				$this->capture_render( array( $this->get_field_type_object( 'text_datetime_timestamp_timezone' ), 'render' ) )
+			);
+
+			delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		}
-		$today_stamp = strtotime( 'today' );
-
-		$field = $this->get_field_object( 'text_datetime_timestamp_timezone' );
-		$date_val = $field->format_timestamp( $today_stamp );
-		$time_val = $field->format_timestamp( $today_stamp, 'time_format' );
-
-		$value_to_save = new DateTime( $date_val . ' ' . $time_val, new DateTimeZone( $tzstring ) );
-		$value_to_save = serialize( $value_to_save );
-
-
-		update_post_meta( $this->post_id, $this->text_type_field['id'], $value_to_save );
-
-		$get_val = get_post_meta( $this->post_id, $this->text_type_field['id'], 1 );
-		$this->assertEquals( $value_to_save, $get_val );
-
-		$zones = wp_timezone_choice( $tzstring );
-
-		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="%s"/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="%s"/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone">%s</select><span class="cmb2-metabox-description">This is a description</span>', $date_val, $time_val, $zones ),
-			$this->capture_render( array( $this->get_field_type_object( 'text_datetime_timestamp_timezone' ), 'render' ) )
-		);
-
-		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
 	public function test_select_timezone_field_after_value_update() {
@@ -796,19 +799,6 @@ class CMB2_Types_Test extends CMB2_Test {
 	private function get_field_type_object( $args = '' ) {
 		$field = is_a( $args, 'CMB2_Field' ) ? $args : $this->get_field_object( $args );
 		return new CMB2_Types( $field );
-	}
-
-	private function capture_render( $cb ) {
-		ob_start();
-		call_user_func( $cb );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
-	}
-
-	private function render_field( $field ) {
-		return $this->capture_render( array( $field, 'render_field' ) );
 	}
 
 	/**

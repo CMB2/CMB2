@@ -78,7 +78,7 @@ class CMB2_Field {
 	/**
 	 * Constructs our field object
 	 * @since 1.1.0
-	 * @param array $args  Field arguments
+	 * @param array $args Field arguments
 	 */
 	public function __construct( $args ) {
 
@@ -87,12 +87,82 @@ class CMB2_Field {
 			$this->object_id   = $this->group->object_id;
 			$this->object_type = $this->group->object_type;
 		} else {
-			$this->object_id   = $args['object_id'];
+			$this->object_id   = isset( $args['object_id'] ) && '_' !== $args['object_id'] ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
 		}
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
+		if ( $this->object_id ) {
+			$this->set_value();
+		}
+	}
+
+	/**
+	 * Non-existent methods fallback to checking for field arguments of the same name
+	 * @since  1.1.0
+	 * @param  string $name     Method name
+	 * @param  array  $arguments Array of passed-in arguments
+	 * @return mixed             Value of field argument
+	 */
+	public function __call( $name, $arguments ) {
+		$key = isset( $arguments[0] ) ? $arguments[0] : false;
+		return $this->args( $name, $key );
+	}
+
+	/**
+	 * Retrieves the field id
+	 * @since  1.1.0
+	 * @param  boolean $raw Whether to retrieve pre-modidifed id
+	 * @return string       Field id
+	 */
+	public function id( $raw = false ) {
+		$id = $raw ? '_id' : 'id';
+		return $this->args( $id );
+	}
+
+	/**
+	 * Get a field argument
+	 * @since  1.1.0
+	 * @param  string $key Argument to check
+	 * @param  string $key Sub argument to check
+	 * @return mixed       Argument value or false if non-existent
+	 */
+	public function args( $key = '', $_key = '' ) {
+		$arg = $this->_data( 'args', $key );
+
+		if ( 'default' == $key ) {
+
+			$arg = $this->get_param_callback_result( 'default', false );
+
+		} elseif ( $_key ) {
+
+			$arg = isset( $arg[ $_key ] ) ? $arg[ $_key ] : false;
+		}
+
+		return $arg;
+	}
+
+	/**
+	 * Retrieve a portion of a field property
+	 * @since  1.1.0
+	 * @param  string  $var Field property to check
+	 * @param  string  $key Field property array key to check
+	 * @return mixed        Queried property value or false
+	 */
+	public function _data( $var, $key = '' ) {
+		$vars = $this->$var;
+		if ( $key ) {
+			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
+		}
+		return $vars;
+	}
+
+	/**
+	 * Fetches this field's value and sets as an object property
+	 * @since  2.0.3
+	 */
+	public function set_value() {
 		/**
 		 * Filter whether to override getting of meta value.
 		 * Returning a non 'cmb2_field_no_override_val' value
@@ -129,48 +199,10 @@ class CMB2_Field {
 		 */
 		$this->value = apply_filters( "cmb2_override_{$this->id( true )}_meta_value", $this->value, $this->object_id, $this->args(), $this->object_type, $this );
 
-		// If no override, get our meta
+		// If no override, get our data
 		$this->value = 'cmb2_field_no_override_val' === $this->value
 			? $this->get_data()
 			: $this->value;
-	}
-
-	/**
-	 * Non-existent methods fallback to checking for field arguments of the same name
-	 * @since  1.1.0
-	 * @param  string $name     Method name
-	 * @param  array  $arguments Array of passed-in arguments
-	 * @return mixed             Value of field argument
-	 */
-	public function __call( $name, $arguments ) {
-		$key = isset( $arguments[0] ) ? $arguments[0] : false;
-		return $this->args( $name, $key );
-	}
-
-	/**
-	 * Retrieves the field id
-	 * @since  1.1.0
-	 * @param  boolean $raw Whether to retrieve pre-modidifed id
-	 * @return string       Field id
-	 */
-	public function id( $raw = false ) {
-		$id = $raw ? '_id' : 'id';
-		return $this->args( $id );
-	}
-
-	/**
-	 * Get a field argument
-	 * @since  1.1.0
-	 * @param  string $key Argument to check
-	 * @param  string $key Sub argument to check
-	 * @return mixed       Argument value or false if non-existent
-	 */
-	public function args( $key = '', $_key = '' ) {
-		$vars = $this->_data( 'args', $key );
-		if ( $_key ) {
-			return isset( $vars[ $_key ] ) ? $vars[ $_key ] : false;
-		}
-		return $vars;
 	}
 
 	/**
@@ -181,21 +213,6 @@ class CMB2_Field {
 	 */
 	public function value( $key = '' ) {
 		return $this->_data( 'value', $key );
-	}
-
-	/**
-	 * Retrieve a portion of a field property
-	 * @since  1.1.0
-	 * @param  string  $var Field property to check
-	 * @param  string  $key Field property array key to check
-	 * @return mixed        Queried property value or false
-	 */
-	public function _data( $var, $key = '' ) {
-		$vars = $this->$var;
-		if ( $key ) {
-			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
-		}
-		return $vars;
 	}
 
 	/**
@@ -281,10 +298,11 @@ class CMB2_Field {
 		if ( null !== $override ) {
 			return $override;
 		}
-		// Options page handling
-		if ( 'options-page' === $a['type'] ) {
+		// Options page handling (or temp data store)
+		if ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
 		}
+
 		// Add metadata if not single
 		if ( ! $a['single'] ) {
 			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ], false );
@@ -352,7 +370,7 @@ class CMB2_Field {
 			return $override;
 		}
 		// Option page handling
-		elseif ( 'options-page' === $a['type'] ) {
+		elseif ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
 		}
 
@@ -402,20 +420,31 @@ class CMB2_Field {
 
 		$clean = new CMB2_Sanitize( $this, $meta_value );
 		// Validation via 'CMB2_Sanitize' (with fallback filter)
-		return $clean->{$this->type()}( $meta_value );
+		return $clean->{$this->type()}();
 	}
 
 	/**
 	 * Process $_POST data to save this field's value
-	 * @since  2.0.0
+	 * @since  2.0.3
 	 * @param  array $data_to_save $_POST data to check
 	 * @return bool                Result of save
 	 */
-	public function save_field( $data_to_save ) {
+	public function save_field_from_data( $data_to_save ) {
 
 		$meta_value = isset( $data_to_save[ $this->id( true ) ] )
 			? $data_to_save[ $this->id( true ) ]
 			: null;
+
+		$this->save_field( $meta_value );
+	}
+
+	/**
+	 * Sanitize/store a value to this field
+	 * @since  2.0.0
+	 * @param  array $meta_value Desired value to sanitize/store
+	 * @return bool              Result of save
+	 */
+	public function save_field( $meta_value ) {
 
 		$new_value = $this->sanitization_cb( $meta_value );
 		$old       = $this->get_data();
@@ -507,7 +536,7 @@ class CMB2_Field {
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
 
-		if ( ! is_null( $this->escaped_value ) ) {
+		if ( null !== $this->escaped_value ) {
 			return $this->escaped_value;
 		}
 
@@ -553,7 +582,7 @@ class CMB2_Field {
 	 * @return mixed             Field value, or default value
 	 */
 	public function val_or_default( $meta_value ) {
-		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->args( 'default' );
+		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->get_param_callback_result( 'default', false );
 	}
 
 	/**
@@ -660,6 +689,9 @@ class CMB2_Field {
 		echo "\n\t</div>\n</div>";
 
 		$this->peform_param_callback( 'after_row' );
+
+		// For chaining
+		return $this;
 	}
 
 	/**
@@ -758,7 +790,7 @@ class CMB2_Field {
 		}
 
 		// Otherwise just get whatever is there
-		$this->callback_results[ $param ] = $this->args( $param );
+		$this->callback_results[ $param ] = isset( $this->args[ $param ] ) ? $this->args[ $param ] : false;
 
 		return $this->callback_results[ $param ];
 	}
@@ -868,12 +900,17 @@ class CMB2_Field {
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
-		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
+		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
 
 		if ( in_array( $args['type'], $option_types, true ) ) {
 
-			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : __( 'None', 'cmb2' );
-			$args['show_option_all']  = isset( $args['show_option_all'] ) ? $args['show_option_all'] : __( 'All', 'cmb2' ); // @todo: implementation
+			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : false;
+			$args['show_option_none'] = true === $args['show_option_none'] ? __( 'None', 'cmb2' ) : $args['show_option_none'];
+
+			if ( ! $args['show_option_none'] ) {
+				$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
+				$args['show_option_none'] = $off_by_default ? false : __( 'None', 'cmb2' );
+			}
 
 		}
 

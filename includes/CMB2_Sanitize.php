@@ -14,7 +14,7 @@ class CMB2_Sanitize {
 	public $field;
 
 	/**
-	 * Field's $_POST value
+	 * Field's value
 	 * @var mixed
 	 */
 	public $value;
@@ -37,16 +37,14 @@ class CMB2_Sanitize {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		list( $value ) = $arguments;
-		return $this->default_sanitization( $value );
+		return $this->default_sanitization( $this->value );
 	}
 
 	/**
 	 * Default fallback sanitization method. Applies filters.
 	 * @since  1.0.2
-	 * @param  mixed $value Meta value
 	 */
-	public function default_sanitization( $value ) {
+	public function default_sanitization() {
 
 		/**
 		 * Filter the value before it is saved.
@@ -63,11 +61,11 @@ class CMB2_Sanitize {
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 		/**
 		 * DEPRECATED. See documentation above.
 		 */
-		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;
@@ -75,102 +73,98 @@ class CMB2_Sanitize {
 
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':
-				// $value = wp_kses( $value );
+				// $value = wp_kses( $this->value );
 				// break;
 			case 'textarea_small':
-				return $this->textarea( $value );
+				return $this->textarea( $this->value );
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
 			case 'taxonomy_multicheck':
 				if ( $this->field->args( 'taxonomy' ) ) {
-					return wp_set_object_terms( $this->field->object_id, $value, $this->field->args( 'taxonomy' ) );
+					return wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
 				}
 			case 'multicheck':
 			case 'file_list':
 			case 'oembed':
 				// no filtering
-				return $value;
+				return $this->value;
 			default:
 				// Handle repeatable fields array
 				// We'll fallback to 'sanitize_text_field'
-				return is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : call_user_func( 'sanitize_text_field', $value );
+				return is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : call_user_func( 'sanitize_text_field', $this->value );
 		}
 	}
 
 	/**
 	 * Simple checkbox validation
 	 * @since  1.0.1
-	 * @param  mixed $value 'on' or false
 	 * @return string|false 'on' or false
 	 */
-	public function checkbox( $value ) {
-		return $value === 'on' ? 'on' : false;
+	public function checkbox() {
+		return $this->value === 'on' ? 'on' : false;
 	}
 
 	/**
 	 * Validate url in a meta value
 	 * @since  1.0.1
-	 * @param  string $value  Meta value
 	 * @return string        Empty string or escaped url
 	 */
-	public function text_url( $value ) {
+	public function text_url() {
 		$protocols = $this->field->args( 'protocols' );
 		// for repeatable
-		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $val ) {
-				$value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->args( 'default' );
+		if ( is_array( $this->value ) ) {
+			foreach ( $this->value as $key => $val ) {
+				$this->value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->args( 'default' );
 			}
 		} else {
-			$value = $value ? esc_url_raw( $value, $protocols ) : $this->field->args( 'default' );
+			$this->value = $this->value ? esc_url_raw( $this->value, $protocols ) : $this->field->args( 'default' );
 		}
 
-		return $value;
+		return $this->value;
 	}
 
-	public function colorpicker( $value ) {
+	public function colorpicker() {
 		// for repeatable
-		if ( is_array( $value ) ) {
-			$check = $value;
-			$value = array();
+		if ( is_array( $this->value ) ) {
+			$check = $this->value;
+			$this->value = array();
 			foreach ( $check as $key => $val ) {
 				if ( $val && '#' != $val ) {
-					$value[ $key ] = esc_attr( $val );
+					$this->value[ $key ] = esc_attr( $val );
 				}
 			}
 		} else {
-			$value = ! $value || '#' == $value ? '' : esc_attr( $value );
+			$this->value = ! $this->value || '#' == $this->value ? '' : esc_attr( $this->value );
 		}
-		return $value;
+		return $this->value;
 	}
 
 	/**
 	 * Validate email in a meta value
 	 * @since  1.0.1
-	 * @param  string $value Meta value
 	 * @return string       Empty string or sanitized email
 	 */
-	public function text_email( $value ) {
+	public function text_email() {
 		// for repeatable
-		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $val ) {
+		if ( is_array( $this->value ) ) {
+			foreach ( $this->value as $key => $val ) {
 				$val = trim( $val );
-				$value[ $key ] = is_email( $val ) ? $val : '';
+				$this->value[ $key ] = is_email( $val ) ? $val : '';
 			}
 		} else {
-			$value = trim( $value );
-			$value = is_email( $value ) ? $value : '';
+			$this->value = trim( $this->value );
+			$this->value = is_email( $this->value ) ? $this->value : '';
 		}
 
-		return $value;
+		return $this->value;
 	}
 
 	/**
 	 * Validate money in a meta value
 	 * @since  1.0.1
-	 * @param  string $value Meta value
 	 * @return string       Empty string or sanitized money value
 	 */
-	public function text_money( $value ) {
+	public function text_money() {
 
 		global $wp_locale;
 
@@ -178,74 +172,71 @@ class CMB2_Sanitize {
 		$replace = array( '', '.' );
 
 		// for repeatable
-		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $val ) {
-				$value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
+		if ( is_array( $this->value ) ) {
+			foreach ( $this->value as $key => $val ) {
+				$this->value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 			}
 		} else {
-			$value = number_format_i18n( (float) str_ireplace( $search, $replace, $value ), 2 );
+			$this->value = number_format_i18n( (float) str_ireplace( $search, $replace, $this->value ), 2 );
 		}
 
-		return $value;
+		return $this->value;
 	}
 
 	/**
 	 * Converts text date to timestamp
 	 * @since  1.0.2
-	 * @param  string $value Meta value
 	 * @return string       Timestring
 	 */
-	public function text_date_timestamp( $value ) {
-		return is_array( $value ) ? array_map( 'strtotime', $value ) : strtotime( $value );
+	public function text_date_timestamp() {
+		return is_array( $this->value ) ? array_map( 'strtotime', $this->value ) : strtotime( $this->value );
 	}
 
 	/**
 	 * Datetime to timestamp
 	 * @since  1.0.1
-	 * @param  string $value Meta value
 	 * @return string       Timestring
 	 */
-	public function text_datetime_timestamp( $value, $repeat = false ) {
+	public function text_datetime_timestamp( $repeat = false ) {
 
-		$test = is_array( $value ) ? array_filter( $value ) : '';
+		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
 		if ( empty( $test ) ) {
 			return '';
 		}
 
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
+		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
 		}
 
-		$value = strtotime( $value['date'] . ' ' . $value['time'] );
+		$this->value = strtotime( $this->value['date'] . ' ' . $this->value['time'] );
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
-			$value += $tz_offset;
+			$this->value += $tz_offset;
 		}
 
-		return $value;
+		return $this->value;
 	}
 
 	/**
 	 * Datetime to imestamp with timezone
 	 * @since  1.0.1
-	 * @param  string $value Meta value
 	 * @return string       Timestring
 	 */
-	public function text_datetime_timestamp_timezone( $value, $repeat = false ) {
+	public function text_datetime_timestamp_timezone( $repeat = false ) {
 
-		$test = is_array( $value ) ? array_filter( $value ) : '';
+		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
 		if ( empty( $test ) ) {
 			return '';
 		}
 
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
+		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
 		}
 
 		$tzstring = null;
 
-		if ( is_array( $value ) && array_key_exists( 'timezone', $value ) ) {
-			$tzstring = $value['timezone'];
+		if ( is_array( $this->value ) && array_key_exists( 'timezone', $this->value ) ) {
+			$tzstring = $this->value['timezone'];
 		}
 
 		if ( empty( $tzstring ) ) {
@@ -258,42 +249,39 @@ class CMB2_Sanitize {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}
 
-		$value = new DateTime( $value['date'] . ' ' . $value['time'], new DateTimeZone( $tzstring ) );
-		$value = serialize( $value );
+		$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
+		$this->value = serialize( $this->value );
 
-		return $value;
+		return $this->value;
 	}
 
 	/**
 	 * Sanitize textareas and wysiwyg fields
 	 * @since  1.0.1
-	 * @param  string $value Meta value
 	 * @return string       Sanitized data
 	 */
-	public function textarea( $value ) {
-		return is_array( $value ) ? array_map( 'wp_kses_post', $value ) : wp_kses_post( $value );
+	public function textarea() {
+		return is_array( $this->value ) ? array_map( 'wp_kses_post', $this->value ) : wp_kses_post( $this->value );
 	}
 
 	/**
 	 * Sanitize code textareas
 	 * @since  1.0.2
-	 * @param  string $value Meta value
 	 * @return string       Sanitized data
 	 */
-	public function textarea_code( $value, $repeat = false ) {
-		if ( $repeat_value = $this->_check_repeat( $value, __FUNCTION__, $repeat ) ) {
+	public function textarea_code( $repeat = false ) {
+		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
 			return $repeat_value;
 		}
 
-		return htmlspecialchars_decode( stripslashes( $value ) );
+		return htmlspecialchars_decode( stripslashes( $this->value ) );
 	}
 
 	/**
 	 * Peforms saving of `file` attachement's ID
 	 * @since  1.1.0
-	 * @param  string $value File url
 	 */
-	public function _save_file_id( $value ) {
+	public function _save_file_id() {
 		$group      = $this->field->group;
 		$args       = $this->field->args();
 		$args['id'] = $args['_id'] . '_id';
@@ -322,8 +310,8 @@ class CMB2_Sanitize {
 		}
 
 		// If there is no ID saved yet, try to get it from the url
-		if ( $value && ! $id_val ) {
-			$id_val = cmb2_utils()->image_id_from_url( $value );
+		if ( $this->value && ! $id_val ) {
+			$id_val = cmb2_utils()->image_id_from_url( $this->value );
 		}
 
 		if ( $group ) {
@@ -343,31 +331,29 @@ class CMB2_Sanitize {
 	/**
 	 * Handles saving of attachment post ID and sanitizing file url
 	 * @since  1.1.0
-	 * @param  string $value File url
 	 * @return string        Sanitized url
 	 */
-	public function file( $value ) {
-		$id_value = $this->_save_file_id( $value );
-		$clean = $this->text_url( $value );
+	public function file() {
+		$id_value = $this->_save_file_id( $this->value );
+		$clean = $this->text_url( $this->value );
 
 		// Return an array with url/id if saving a group field
-		return $this->field->group ? array_merge( array( 'url' => $clean), $id_value ) : $clean;
+		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;
 	}
 
 	/**
 	 * If repeating, loop through and re-apply sanitization method
 	 * @since  1.1.0
-	 * @param  mixed  $value  Meta value
 	 * @param  string $method Class method
 	 * @param  bool   $repeat Whether repeating or not
 	 * @return mixed          Sanitized value
 	 */
-	public function _check_repeat( $value, $method, $repeat ) {
+	public function _check_repeat( $method, $repeat ) {
 		if ( $repeat || ! $this->field->args( 'repeatable' ) ) {
 			return;
 		}
 		$new_value = array();
-		foreach ( $value as $iterator => $val ) {
+		foreach ( $this->value as $iterator => $val ) {
 			$new_value[] = $this->$method( $val, true );
 		}
 		return $new_value;

@@ -157,12 +157,13 @@ function yourprefix_register_demo_metabox() {
 	// This text_datetime_timestamp_timezone field type
 	// is only compatible with PHP versions 5.3 or above.
 	// Feel free to uncomment and use if your server meets the requirement
-	// array(
+	// $cmb_demo->add_field( array(
 	// 	'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb2' ),
 	// 	'desc' => __( 'field description (optional)', 'cmb2' ),
 	// 	'id'   => $prefix . 'datetime_timestamp_timezone',
 	// 	'type' => 'text_datetime_timestamp_timezone',
-	// ),
+	// ) );
+
 	$cmb_demo->add_field( array(
 		'name' => __( 'Test Money', 'cmb2' ),
 		'desc' => __( 'field description (optional)', 'cmb2' ),
@@ -209,11 +210,12 @@ function yourprefix_register_demo_metabox() {
 	) );
 
 	$cmb_demo->add_field( array(
-		'name'    => __( 'Test Select', 'cmb2' ),
-		'desc'    => __( 'field description (optional)', 'cmb2' ),
-		'id'      => $prefix . 'select',
-		'type'    => 'select',
-		'options' => array(
+		'name'             => __( 'Test Select', 'cmb2' ),
+		'desc'             => __( 'field description (optional)', 'cmb2' ),
+		'id'               => $prefix . 'select',
+		'type'             => 'select',
+		'show_option_none' => true,
+		'options'          => array(
 			'standard' => __( 'Option One', 'cmb2' ),
 			'custom'   => __( 'Option Two', 'cmb2' ),
 			'none'     => __( 'Option Three', 'cmb2' ),
@@ -221,11 +223,12 @@ function yourprefix_register_demo_metabox() {
 	) );
 
 	$cmb_demo->add_field( array(
-		'name'    => __( 'Test Radio inline', 'cmb2' ),
-		'desc'    => __( 'field description (optional)', 'cmb2' ),
-		'id'      => $prefix . 'radio_inline',
-		'type'    => 'radio_inline',
-		'options' => array(
+		'name'             => __( 'Test Radio inline', 'cmb2' ),
+		'desc'             => __( 'field description (optional)', 'cmb2' ),
+		'id'               => $prefix . 'radio_inline',
+		'type'             => 'radio_inline',
+		'show_option_none' => 'No Selection',
+		'options'          => array(
 			'standard' => __( 'Option One', 'cmb2' ),
 			'custom'   => __( 'Option Two', 'cmb2' ),
 			'none'     => __( 'Option Three', 'cmb2' ),

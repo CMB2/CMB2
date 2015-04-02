@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * Helper function to provide directory path to CMB
+ * @since  2.0.0
+ * @param  string  $path Path to append
+ * @return string        Directory with optional path appended
+ */
+function cmb2_dir( $path = '' ) {
+	return CMB2_DIR . $path;
+}
+
+/**
  * Autoloads files with CMB2 classes when needed
  * @since  1.0.0
  * @param  string $class_name Name of the class being requested
  */
 function cmb2_autoload_classes( $class_name ) {
-	if ( class_exists( $class_name, false ) || false === strpos( $class_name, 'CMB2' ) ) {
+	if ( 0 !== strpos( $class_name, 'CMB2' ) ) {
 		return;
 	}
 
-	$file = cmb2_dir( "includes/{$class_name}.php" );
-	if ( file_exists( $file ) ) {
-		include_once( $file );
-	}
+	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
 }
-spl_autoload_register( 'cmb2_autoload_classes' );
 
 /**
  * Get instance of the CMB2_Utils class
@@ -114,27 +120,9 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
 
 	$object_type = $object_type ? $object_type : $cmb->mb_object_type();
 	$cmb->object_type( $object_type );
+	$cmb->object_id( $object_id );
 
-	if ( is_array( $field_id ) && isset( $field_id['id'] ) ) {
-		return new CMB2_Field( array(
-			'field_args'  => $field_id,
-			'object_id'   => $object_id,
-			'object_type' => $object_type,
-		) );
-	}
-
-	$fields = (array) $cmb->prop( 'fields' );
-	foreach ( $fields as $field ) {
-		if ( $field['id'] == $field_id || $field['name'] == $field_id ) {
-			// Send back field object
-			return new CMB2_Field( array(
-				'field_args'  => $field,
-				'object_id'   => $object_id,
-				'object_type' => $object_type,
-			) );
-
-		}
-	}
+	return $cmb->get_field( $field_id );
 }
 
 /**
@@ -189,6 +177,18 @@ function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 }
 
 /**
+ * Returns array of sanitized field values from a metabox (without saving them)
+ * @since  2.0.3
+ * @param  mixed $meta_box         Metabox ID or Metabox config array
+ * @param  array $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
+ * @return mixed                   Array of sanitized values or false if no CMB2 object found
+ */
+function cmb2_get_metabox_sanitized_values( $meta_box, array $data_to_sanitize ) {
+	$cmb = cmb2_get_metabox( $meta_box );
+	return $cmb ? $cmb->get_sanitized_values( $data_to_sanitize ) : false;
+}
+
+/**
  * Retrieve a metabox form
  * @since  2.0.0
  * @param  mixed   $meta_box  Metabox config array or Metabox ID
@@ -234,8 +234,9 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	// check permissions
 	// @todo more hardening?
 	if (
+		$cmb->prop( 'save_fields' )
 		// check nonce
-		isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
+		&& isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
 		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
 		&& $object_id && $_POST['object_id'] == $object_id
 	) {

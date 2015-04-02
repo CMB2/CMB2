@@ -1,0 +1,40 @@
+{
+	"containers": [
+		{
+			"prettyName": "PHP 5.2 on Ubuntu on Latest WP",
+			"image": "tlovett1/php-5.2-phpunit-3.5",
+			"beforeScripts": [
+				"service mysql start",
+				"bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest"
+			],
+			"testCommand": "phpunit"
+		},
+		{
+			"prettyName": "PHP 5.2 on Ubuntu on WP 3.8",
+			"image": "tlovett1/php-5.2-phpunit-3.5",
+			"beforeScripts": [
+				"service mysql start",
+				"bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost 3.8"
+			],
+			"testCommand": "phpunit"
+		},
+		{
+			"prettyName": "PHP 5.5 FPM WordPress Latest WP",
+			"image": "tlovett1/php-fpm-phpunit-wp",
+			"beforeScripts": [
+				"service mysql start",
+				"bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest"
+			],
+			"testCommand": "phpunit"
+		},
+		{
+			"prettyName": "PHP 5.5 FPM WordPress WP 3.8",
+			"image": "tlovett1/php-fpm-phpunit-wp",
+			"beforeScripts": [
+				"service mysql start",
+				"bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost 3.8"
+			],
+			"testCommand": "phpunit"
+		}
+	]
+}

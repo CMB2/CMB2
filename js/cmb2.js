@@ -23,6 +23,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
+		neweditor_id    : [],
 		defaults : {
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
@@ -306,13 +307,13 @@ window.CMB2 = (function(window, document, $, undefined){
 		return false;
 	};
 
-	$.fn.cleanRow = function( prevNum, group ) {
-		var $self = $(this);
-		var $inputs = $self.find( 'input:not([type="button"]), select, textarea, label' );
-		var $other  = $self.find('[id]').not( 'input:not([type="button"]), select, textarea, label' );
+	cmb.cleanRow = function( $row, prevNum, group ) {
+
+		var $inputs = $row.find( 'input:not([type="button"]), select, textarea, label' );
+		var $other  = $row.find('[id]').not( 'input:not([type="button"]), select, textarea, label' );
 		if ( group ) {
 			// Remove extra ajaxed rows
-			$self.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
+			$row.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
 
 			// Update all elements w/ an ID
 			if ( $other.length ) {
@@ -320,7 +321,7 @@ window.CMB2 = (function(window, document, $, undefined){
 					var $_this = $( this );
 					var oldID = $_this.attr( 'id' );
 					var newID = oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber );
-					var $buttons = $self.find('[data-selector="'+ oldID +'"]');
+					var $buttons = $row.find('[data-selector="'+ oldID +'"]');
 					$_this.attr( 'id', newID );
 
 					// Replace data-selector vars
@@ -335,8 +336,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		$inputs.filter(':checked').prop( 'checked', false );
 		$inputs.filter(':selected').prop( 'selected', false );
 
-		if ( $self.find('h3.cmb-group-title').length ) {
-			$self.find( 'h3.cmb-group-title' ).text( $self.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
+		if ( $row.find('h3.cmb-group-title').length ) {
+			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
 
 		$inputs.each( function(){
@@ -385,11 +386,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		});
 
-		return this;
+		return cmb;
 	};
 
-	$.fn.newRowHousekeeping = function() {
-		var $row         = $(this);
+	cmb.newRowHousekeeping = function( $row ) {
+
 		var $colorPicker = $row.find( '.wp-picker-container' );
 		var $list        = $row.find( '.cmb2-media-status' );
 
@@ -406,21 +407,10 @@ window.CMB2 = (function(window, document, $, undefined){
 			$list.empty();
 		}
 
-		return this;
+		return cmb;
 	};
 
-	cmb.afterRowInsert = function( $row, group ) {
-
-		var $focus = $row.find('input:not([type="button"]), textarea, select').first();
-		if ( $focus.length ) {
-			if ( group ) {
-				$('html, body').animate({
-					scrollTop: Math.round( $focus.offset().top - 150 )
-				}, 1000);
-			}
-			$focus.focus();
-		}
-
+	cmb.afterRowInsert = function( $row ) {
 		var _prop;
 
 		// Need to re-init wp_editor instances
@@ -499,12 +489,13 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.idNumber = prevNum + 1;
 		var $row     = $oldRow.clone();
 
-		$row.data( 'title', $self.data( 'grouptitle' ) ).newRowHousekeeping().cleanRow( prevNum, true ).find( '.cmb-add-row-button' ).prop( 'disabled', false );
+		cmb.newRowHousekeeping( $row.data( 'title', $self.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
+		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
 
 		var $newRow = $( '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
 		$oldRow.after( $newRow );
 
-		cmb.afterRowInsert( $newRow, true );
+		cmb.afterRowInsert( $newRow );
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
@@ -525,7 +516,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.idNumber      = prevNum + 1;
 		var $row          = $emptyrow.clone();
 
-		$row.newRowHousekeeping().cleanRow( prevNum );
+		cmb.newRowHousekeeping( $row ).cleanRow( $row, prevNum );
 
 		$emptyrow.removeClass('empty-row hidden').addClass('cmb-repeat-row');
 		$emptyrow.after( $row );
@@ -679,7 +670,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.timePicker( cmb.defaults.time_picker );
+		$selector.timepicker( 'destroy' );
+		$selector.timepicker( cmb.defaults.time_picker );
 	};
 
 	cmb.initDatePickers = function( $selector ) {
@@ -687,7 +679,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.datepicker( "destroy" );
+		$selector.datepicker( 'destroy' );
 		$selector.datepicker( cmb.defaults.date_picker );
 	};
 
@@ -716,7 +708,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.makeListSortable = function() {
 		var $filelist = cmb.metabox().find( '.cmb2-media-status.cmb-attach-list' );
 		if ( $filelist.length ) {
-			$filelist.sortable({ cursor: "move" }).disableSelection();
+			$filelist.sortable({ cursor: 'move' }).disableSelection();
 		}
 	};
 

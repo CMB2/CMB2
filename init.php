@@ -11,7 +11,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.0.2
+ * Version:      2.0.5
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -42,19 +42,19 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
+if ( ! class_exists( 'cmb2_bootstrap_205', false ) ) {
 
 	/**
 	 * Check for newest version of CMB
 	 */
-	class cmb2_bootstrap_202 {
+	class cmb2_bootstrap_205 {
 
 		/**
 		 * Current version number
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.2';
+		const VERSION = '2.0.4';
 
 		/**
 		 * Current version hook priority
@@ -63,7 +63,7 @@ if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9997;
+		const PRIORITY = 9994;
 
 		public static $single = null;
 
@@ -87,10 +87,22 @@ if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
 
 		public function include_cmb() {
 			if ( ! class_exists( 'CMB2', false ) ) {
+
 				if ( ! defined( 'CMB2_VERSION' ) ) {
 					define( 'CMB2_VERSION', self::VERSION );
 				}
+
+				if ( ! defined( 'CMB2_DIR' ) ) {
+					define( 'CMB2_DIR', trailingslashit( dirname( __FILE__ ) ) );
+				}
+
 				$this->l10ni18n();
+
+				// Include helper functions
+				require_once 'includes/helper-functions.php';
+				// Now kick off the class autoloader
+				spl_autoload_register( 'cmb2_autoload_classes' );
+				// Kick the whole thing off
 				require_once 'bootstrap.php';
 			}
 		}
@@ -116,6 +128,6 @@ if ( ! class_exists( 'cmb2_bootstrap_202', false ) ) {
 		}
 
 	}
-	cmb2_bootstrap_202::go();
+	cmb2_bootstrap_205::go();
 
 } // class exists check

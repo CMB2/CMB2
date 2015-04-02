@@ -1,26 +1,6 @@
 <?php
 
 /**
- * Helper function to provide directory path to CMB
- * @since  2.0.0
- * @param  string  $path Path to append
- * @return string        Directory with optional path appended
- */
-function cmb2_dir( $path = '' ) {
-	static $cmb2_dir = null;
-	if ( is_null( $cmb2_dir ) ) {
-		$cmb2_dir = trailingslashit( dirname( __FILE__ ) );
-	}
-	return $cmb2_dir . $path;
-}
-
-/**
- * Include helper functions,
- * and more importantly, the class/file autoloader
- */
-require_once cmb2_dir( 'includes/helper-functions.php' );
-
-/**
  * Fires when CMB2 is included/loaded
  *
  * Should be used to to add metaboxes. See example-functions.php
