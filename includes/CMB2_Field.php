@@ -235,8 +235,8 @@ class CMB2_Field {
 			: get_metadata( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
 
 		if ( $this->group && $data ) {
-			$data = isset( $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ] )
-				? $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ]
+			$data = isset( $data[ $this->group->index ][ $this->args( '_id' ) ] )
+				? $data[ $this->group->index ][ $this->args( '_id' ) ]
 				: false;
 		}
 
@@ -901,8 +901,8 @@ class CMB2_Field {
 
 		if ( $this->group ) {
 
-			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->args( 'count' ) . '_' . $args['id'];
-			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->args( 'count' ) . '][' . $args['_name'] . ']';
+			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
+			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
 		}
 
 		if ( 'wysiwyg' == $args['type'] ) {
