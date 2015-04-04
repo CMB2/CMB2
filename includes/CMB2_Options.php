@@ -57,7 +57,7 @@ class CMB2_Option {
 	public function delete_option() {
 		$deleted = $this->key ? delete_option( $this->key ) : true;
 		$this->options = $deleted ? array() : $this->options;
-		return $result;
+		return $this->options;
 	}
 
 	/**
