@@ -239,6 +239,7 @@ class CMB2_Field {
 				? $data[ $this->group->args( 'count' ) ][ $this->args( '_id' ) ]
 				: false;
 		}
+
 		return $data;
 	}
 
@@ -435,7 +436,7 @@ class CMB2_Field {
 			? $data_to_save[ $this->id( true ) ]
 			: null;
 
-		$this->save_field( $meta_value );
+		return $this->save_field( $meta_value );
 	}
 
 	/**
