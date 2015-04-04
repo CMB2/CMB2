@@ -448,17 +448,16 @@ class CMB2_Field {
 
 		$new_value = $this->sanitization_cb( $meta_value );
 		$old       = $this->get_data();
-		// $name      = $this->id();
-		// if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
-		// 	$this->remove_data();
-		// 	if ( ! empty( $new_value ) ) {
-		// 		foreach ( $new_value as $add_new ) {
-		// 			$this->updated[] = $name;
-		// 			$this->update_data( $add_new, $name, false );
-		// 		}
-		// 	}
-		// } else
-		if ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
+		$name      = $this->id();
+		if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
+			$this->remove_data();
+			if ( ! empty( $new_value ) ) {
+				foreach ( $new_value as $add_new ) {
+					$this->updated[] = $name;
+					$this->update_data( $add_new, false );
+				}
+			}
+		} elseif ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
 			return $this->update_data( $new_value );
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			return $this->remove_data();
