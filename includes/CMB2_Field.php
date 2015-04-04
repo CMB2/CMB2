@@ -449,7 +449,6 @@ class CMB2_Field {
 
 		$new_value = $this->sanitization_cb( $meta_value );
 		$old       = $this->get_data();
-		$name      = $this->id();
 		$updated   = false;
 
 		if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
