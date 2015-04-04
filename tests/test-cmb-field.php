@@ -188,6 +188,49 @@ class CMB2_Field_Test extends CMB2_Test {
 
 	}
 
+	public function test_multiple_meta_rows() {
+		$prefix    = 'testing';
+		$post_id   = $this->post_id;
+		$array_val = array( 'check1', 'check2' );
+
+		$cmb_demo = cmb2_get_metabox( array(
+			'id'            => $prefix . 'metabox',
+			'title'         => __( 'Test Metabox', 'cmb2' ),
+			'object_types'  => array( 'page', ), // Post type
+			'show_on_cb'    => 'yourprefix_show_if_front_page', // function should return a bool value
+			'context'       => 'normal',
+			'priority'      => 'high',
+			'show_names'    => true, // Show field names on the left
+			// 'cmb_styles' => false, // false to disable the CMB stylesheet
+			// 'closed'     => true, // true to keep the metabox closed by default
+		), $post_id );
+
+		$field_id = $cmb_demo->add_field( array(
+			'name'    => __( 'Test Multi Checkbox', 'cmb2' ),
+			'desc'    => __( 'field description (optional)', 'cmb2' ),
+			'id'      => $prefix . 'multicheckbox',
+			'type'    => 'multicheck',
+			'multiple' => true, // Store values in individual rows
+			'options' => array(
+				'check1' => __( 'Check One', 'cmb2' ),
+				'check2' => __( 'Check Two', 'cmb2' ),
+				'check3' => __( 'Check Three', 'cmb2' ),
+			),
+		) );
+
+		$field = $cmb_demo->get_field( $field_id );
+
+		$saved = $field->save_field( $array_val );
+
+		$this->assertEquals( 2, $saved );
+
+		$this->assertEquals( $array_val, $field->get_data() );
+		$this->assertEquals( $array_val, get_post_meta( $post_id, $field_id ) );
+
+		$val = get_post_meta( $post_id, $field_id, 1 );
+		$this->assertEquals( reset( $array_val ), $val );
+
+	}
 
 	public function before_field_cb( $args ) {
 		echo 'before_field_cb_' . $args['id'];
