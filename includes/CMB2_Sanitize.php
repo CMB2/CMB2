@@ -89,6 +89,7 @@ class CMB2_Sanitize {
 			case 'multicheck':
 			case 'file_list':
 			case 'oembed':
+			case 'group':
 				// no filtering
 				$sanitized_value = $this->value;
 				break;

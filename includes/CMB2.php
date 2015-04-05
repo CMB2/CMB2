@@ -489,7 +489,8 @@ class CMB2 {
 		) );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
-		$group_vals         = $this->data_to_save[ $base_id ];
+		// Check if group field has sanitization_cb
+		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved              = array();
 		$field_group->index = 0;
 
