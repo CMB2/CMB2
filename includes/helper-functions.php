@@ -178,7 +178,7 @@ function cmb2_get_metabox( $meta_box, $object_id = 0, $object_type = '' ) {
 	}
 
 	if ( $cmb && $object_type ) {
-		$cmb->object_id( $object_type );
+		$cmb->object_type( $object_type );
 	}
 
 	return $cmb;
