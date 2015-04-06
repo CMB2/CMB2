@@ -742,7 +742,7 @@ Misc.
 	margin: 0;
 }
 
-/* line 13, sass/partials/_misc.scss */
+/* line 12, sass/partials/_misc.scss */
 
 .edit-tags-php .cmb2-metabox-title,
 .profile-php .cmb2-metabox-title,
@@ -751,6 +751,20 @@ Misc.
 }
 
 /* line 18, sass/partials/_misc.scss */
+
+.cmb2-options-page .cmb2-metabox-title {
+	font-size: 1.3em;
+	margin: 1em 0;
+}
+
+/* line 21, sass/partials/_misc.scss */
+
+.cmb2-options-page .cmb2-metabox-title + p.cmb2-metabox-description {
+	margin-top: -1.6em;
+	margin-bottom: .8em;
+}
+
+/* line 27, sass/partials/_misc.scss */
 
 .postbox .cmb-spinner {
 	float: left;
