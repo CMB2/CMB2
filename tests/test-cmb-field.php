@@ -232,6 +232,36 @@ class CMB2_Field_Test extends CMB2_Test {
 
 	}
 
+	public function test_set_get_filters() {
+		$array_val = array( 'check1', 'check2' );
+
+		$this->field->save_field( $array_val );
+		$this->assertEquals( $array_val, get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		delete_post_meta( $this->field->object_id, $this->field->_id() );
+
+		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( $this, 'override_set' ), 10, 4 );
+		$this->field->save_field( $array_val );
+
+		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		$opt_key = 'test-'. $this->field->object_id . '-' . $this->field->_id();
+		error_log( '$opt_key: '. print_r( $opt_key, true ) );
+		$opt = get_option( $opt_key );
+		$this->assertEquals( $array_val, $opt );
+
+		$value = $this->field->get_data();
+
+		$this->assertFalse( !! $value );
+
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( $this, 'override_get' ), 10, 4 );
+		$value = $this->field->get_data();
+
+		$this->assertEquals( $array_val, $value );
+	}
+
 	public function before_field_cb( $args ) {
 		echo 'before_field_cb_' . $args['id'];
 	}
@@ -252,6 +282,17 @@ class CMB2_Field_Test extends CMB2_Test {
 		 * Side benefit: this will call out when default args change
 		 */
 		return implode( ', ', array_keys( $args ) );
+	}
+
+	public function override_set( $override, $args, $field_args, $field ) {
+		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		$updated = update_option( $opt_key, $args['value'] );
+		return true;
+	}
+
+	public function override_get( $override_val, $object_id, $args, $field ) {
+		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		return get_option( $opt_key );
 	}
 
 }

@@ -14,6 +14,13 @@ All notable changes to this project will be documented in this file.
 
 * Fix issue with oembed fields in repeatable groups where changing video changed it for all fields in a group.
 * Fix empty arrays (like in the group field) saving as a value.
+* Move `'cmb2_override_meta_value'` and `"cmb2_override_{$field_id}_meta_value"` filters to the `CMB2_Field::get_data()` method so that the filters are applied every time the data is requested. **THIS IS A BREAKING CHANGE:** The parameters for those filters have changed a bit. Previously, the filters accepted 5 arguments, `$value`, `$object_id`, `$field_args`, `$object_type`, `$field`. They have changed to accept 4 arguments instead, `$value`, `$object_id`, `$args`, `$field`, where `$args` is an array that contains the following:
+	*     @type string $type     The current object type
+	*     @type int    $id       The current object ID
+	*     @type string $field_id The ID of the field being requested
+	*     @type bool   $repeat   Whether current field is repeatable
+	*     @type bool   $single   Whether current field is a single database row
+
 
 ## 2.0.5 - 2015-03-17
 
