@@ -233,32 +233,49 @@ class CMB2_Field_Test extends CMB2_Test {
 	}
 
 	public function test_set_get_filters() {
+		// Value to set
 		$array_val = array( 'check1', 'check2' );
 
+		// Set the field value normally
 		$this->field->save_field( $array_val );
+
+		// Verify that field was saved succesfully to post-meta
 		$this->assertEquals( $array_val, get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
+		// Now delete the post-meta
 		delete_post_meta( $this->field->object_id, $this->field->_id() );
 
+		// Verify that the post-meta no longer exists
 		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
+		// Now filter the setting of the meta.. will use update_option instead
 		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( $this, 'override_set' ), 10, 4 );
+		// Set the value
 		$this->field->save_field( $array_val );
 
+		// Verify that the post-meta is still empty
 		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
+		// Re-create the option key that we used to save the data
 		$opt_key = 'test-'. $this->field->object_id . '-' . $this->field->_id();
-		error_log( '$opt_key: '. print_r( $opt_key, true ) );
+		// And retrieve the option
 		$opt = get_option( $opt_key );
+
+		// Verify it is the value we set
 		$this->assertEquals( $array_val, $opt );
 
+		// Now retireve the value.. will default to getting from post-meta
 		$value = $this->field->get_data();
 
+		// Verify that there's still nothing there in post-meta
 		$this->assertFalse( !! $value );
 
+		// Now filter the getting of the meta, which will use get_option
 		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( $this, 'override_get' ), 10, 4 );
+		// Get the value
 		$value = $this->field->get_data();
 
+		// Verify that the data we retrieved now matches the value we set
 		$this->assertEquals( $array_val, $value );
 	}
 
