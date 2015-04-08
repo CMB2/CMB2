@@ -54,7 +54,7 @@ if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.4';
+		const VERSION = '2.0.5';
 
 		/**
 		 * Current version hook priority
