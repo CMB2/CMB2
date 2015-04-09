@@ -51,7 +51,7 @@
 if ( ! class_exists( 'CMB2_Bootstrap_205_Trunk', false ) ) {
 
 	/**
-	 * Checks for newest version of CMB2
+	 * Handles checking for and loading the newest version of CMB2
 	 *
 	 * @since  2.0.0
 	 *
