@@ -1,6 +1,12 @@
 <?php
 /**
- * Create meta boxes
+ * CMB2 - The core metabox object
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  *
  * @property-read string $cmb_id
  * @property-read array $meta_box
@@ -20,11 +26,11 @@ class CMB2 {
 	 * @var   array
 	 * @since 0.9.0
 	 */
-	protected $meta_box;
+	protected $meta_box = array();
 
 	/**
 	 * Object ID for metabox meta retrieving/saving
-	 * @var   int
+	 * @var   mixed
 	 * @since 1.0.0
 	 */
 	protected $object_id = 0;

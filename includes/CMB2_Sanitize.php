@@ -1,8 +1,15 @@
 <?php
-
 /**
- * CMB field validation
+ * CMB field sanitization
+ *
  * @since  0.0.4
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ *
  * @method string _id()
  */
 class CMB2_Sanitize {

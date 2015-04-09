@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
+ * and handles hooking in and saving those fields.
+ *
+ * @since  2.0.0
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 class CMB2_hookup {
 
 	/**

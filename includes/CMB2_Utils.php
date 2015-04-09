@@ -1,8 +1,14 @@
 <?php
-
 /**
- * CMB field class
+ * CMB2 Utilities
+ *
  * @since  1.1.0
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  */
 class CMB2_Utils {
 

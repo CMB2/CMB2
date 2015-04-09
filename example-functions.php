@@ -6,7 +6,7 @@
  * http://nacin.com/2010/05/11/in-wordpress-prefix-everything/
  *
  * @category YourThemeOrPlugin
- * @package  Metaboxes
+ * @package  CMB2_Metabox_Configuration_Demo
  * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
  * @link     https://github.com/WebDevStudios/CMB2
  */

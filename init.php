@@ -1,5 +1,11 @@
 <?php
 /**
+ * @category     WordPress_Plugin
+ * @package      CMB2
+ * @author       WebDevStudios
+ * @license      GPL-2.0+
+ * @link         http://webdevstudios.com
+ *
  * Plugin Name:  CMB2
  * Plugin URI:   https://github.com/WebDevStudios/CMB2
  * Description:  CMB2 will create metaboxes and forms with custom fields that will blow your mind.
@@ -45,7 +51,15 @@
 if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
 
 	/**
-	 * Check for newest version of CMB
+	 * Checks for newest version of CMB2
+	 *
+	 * @since  2.0.0
+	 *
+	 * @category  WordPress_Plugin
+	 * @package   CMB2
+	 * @author    WebDevStudios
+	 * @license   GPL-2.0+
+	 * @link      http://webdevstudios.com
 	 */
 	class cmb2_bootstrap_205_trunk {
 

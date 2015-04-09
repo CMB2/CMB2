@@ -1,4 +1,13 @@
 <?php
+/**
+ * CMB2 Helper Functions
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 /**
  * Helper function to provide directory path to CMB
