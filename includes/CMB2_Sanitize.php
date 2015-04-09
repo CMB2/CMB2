@@ -70,7 +70,9 @@ class CMB2_Sanitize {
 		 */
 		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 		/**
-		 * DEPRECATED. See documentation above.
+		 * This exists for back-compatibility, but validation
+		 * is not what happens here.
+		 * @deprecated See documentation above.
 		 */
 		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
 
