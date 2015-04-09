@@ -48,7 +48,7 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_205_Trunk', false ) ) {
 
 	/**
 	 * Checks for newest version of CMB2
@@ -61,7 +61,7 @@ if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      http://webdevstudios.com
 	 */
-	class cmb2_bootstrap_205_trunk {
+	class CMB2_Bootstrap_205_Trunk {
 
 		/**
 		 * Current version number
@@ -142,6 +142,6 @@ if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
 		}
 
 	}
-	cmb2_bootstrap_205_trunk::go();
+	CMB2_Bootstrap_205_Trunk::go();
 
 } // class exists check
