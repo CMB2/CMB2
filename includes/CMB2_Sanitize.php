@@ -1,6 +1,6 @@
 <?php
 /**
- * CMB field sanitization
+ * CMB2 field sanitization
  *
  * @since  0.0.4
  *
@@ -29,7 +29,7 @@ class CMB2_Sanitize {
 	/**
 	 * Setup our class vars
 	 * @since 1.1.0
-	 * @param CMB2_Field $field A CMB field object
+	 * @param CMB2_Field $field A CMB2 field object
 	 * @param mixed      $value Field value
 	 */
 	public function __construct( CMB2_Field $field, $value ) {

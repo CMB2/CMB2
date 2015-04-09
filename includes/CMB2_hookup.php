@@ -120,7 +120,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Registers scripts and styles for CMB
+	 * Registers scripts and styles for CMB2
 	 * @since  1.0.0
 	 */
 	public static function register_scripts() {
@@ -204,7 +204,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Enqueues scripts and styles for CMB
+	 * Enqueues scripts and styles for CMB2
 	 * @since  1.0.0
 	 */
 	public function do_scripts( $hook ) {
@@ -411,7 +411,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Includes CMB styles
+	 * Includes CMB2 styles
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css() {
@@ -424,7 +424,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Includes CMB JS
+	 * Includes CMB2 JS
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {

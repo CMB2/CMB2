@@ -148,7 +148,7 @@ class CMB2 {
 
 		$this->nonce_field();
 
-		echo "\n<!-- Begin CMB Fields -->\n";
+		echo "\n<!-- Begin CMB2 Fields -->\n";
 
 		/**
 		 * Hook before form table begins
@@ -238,7 +238,7 @@ class CMB2 {
 		 */
 		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
-		echo "\n<!-- End CMB Fields -->\n";
+		echo "\n<!-- End CMB2 Fields -->\n";
 
 	}
 

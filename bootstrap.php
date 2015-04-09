@@ -1,6 +1,6 @@
 <?php
 /**
- * Bootstraps the CMB process
+ * Bootstraps the CMB2 process
  *
  * @category  WordPress_Plugin
  * @package   CMB2

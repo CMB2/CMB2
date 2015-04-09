@@ -153,7 +153,7 @@ class CMB2_Utils {
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
 	 * @since  1.0.1
-	 * @return string URL to CMB resources
+	 * @return string URL to CMB2 resources
 	 */
 	public function url( $path = '' ) {
 		if ( $this->url ) {

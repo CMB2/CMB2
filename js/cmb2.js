@@ -15,7 +15,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	var l10n = window.cmb2_l10;
 	var setTimeout = window.setTimeout;
 
-	// CMB functionality object
+	// CMB2 functionality object
 	var cmb = {
 		formfield       : '',
 		idNumber        : false,

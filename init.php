@@ -122,7 +122,7 @@ if ( ! class_exists( 'cmb2_bootstrap_205_trunk', false ) ) {
 		}
 
 		/**
-		 * Load CMB text domain
+		 * Load CMB2 text domain
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {

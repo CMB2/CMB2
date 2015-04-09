@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CMB ajax methods
+ * CMB2 ajax methods
  * (i.e. a lot of work to get oEmbeds to work with non-post objects)
  *
  * @since  0.9.5

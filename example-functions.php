@@ -1,6 +1,6 @@
 <?php
 /**
- * Include and setup custom metaboxes and fields. (make sure you copy this file to outside the CMB directory)
+ * Include and setup custom metaboxes and fields. (make sure you copy this file to outside the CMB2 directory)
  *
  * Be sure to replace all instances of 'yourprefix_' with your project's prefix.
  * http://nacin.com/2010/05/11/in-wordpress-prefix-everything/
@@ -465,7 +465,7 @@ function yourprefix_register_user_profile_metabox() {
 	$cmb_user = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
 		'title'            => __( 'User Profile Metabox', 'cmb2' ),
-		'object_types'     => array( 'user' ), // Tells CMB to use user_meta vs post_meta
+		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 	) );

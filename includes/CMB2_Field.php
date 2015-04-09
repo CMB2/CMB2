@@ -703,7 +703,7 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Defines the classes for the current CMB field row
+	 * Defines the classes for the current CMB2 field row
 	 *
 	 * @since  2.0.0
 	 * @return string Space concatenated list of classes

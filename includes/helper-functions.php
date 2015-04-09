@@ -10,7 +10,7 @@
  */
 
 /**
- * Helper function to provide directory path to CMB
+ * Helper function to provide directory path to CMB2
  * @since  2.0.0
  * @param  string  $path Path to append
  * @return string        Directory with optional path appended
@@ -35,7 +35,7 @@ function cmb2_autoload_classes( $class_name ) {
 /**
  * Get instance of the CMB2_Utils class
  * @since  2.0.0
- * @return CMB2_Utils object CMB utilities class
+ * @return CMB2_Utils object CMB2 utilities class
  */
 function cmb2_utils() {
 	static $cmb2_utils;
@@ -46,7 +46,7 @@ function cmb2_utils() {
 /**
  * Get instance of the CMB2_Ajax class
  * @since  2.0.0
- * @return CMB2_Ajax object CMB utilities class
+ * @return CMB2_Ajax object CMB2 utilities class
  */
 function cmb2_ajax() {
 	static $cmb2_ajax;
@@ -82,7 +82,7 @@ function cmb2_get_oembed( $args = array() ) {
 }
 
 /**
- * A helper function to get an option from a CMB options array
+ * A helper function to get an option from a CMB2 options array
  * @since  1.0.1
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
@@ -93,7 +93,7 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
 }
 
 /**
- * A helper function to update an option in a CMB options array
+ * A helper function to update an option in a CMB2 options array
  * @since  2.0.0
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
@@ -110,7 +110,7 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
 }
 
 /**
- * Get a CMB field object.
+ * Get a CMB2 field object.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
  * @param  array  $field_id    Field ID or all field arguments
@@ -159,7 +159,7 @@ function new_cmb2_box( array $meta_box_config ) {
 }
 
 /**
- * Retrieve a CMB instance by the metabox ID
+ * Retrieve a CMB2 instance by the metabox ID
  * @since  2.0.0
  * @param  mixed  $meta_box    Metabox ID or Metabox config array
  * @param  int    $object_id   Object ID
@@ -211,7 +211,7 @@ function cmb2_get_metabox_sanitized_values( $meta_box, array $data_to_sanitize )
  * @param  mixed   $meta_box  Metabox config array or Metabox ID
  * @param  int     $object_id Object ID
  * @param  array   $args      Optional arguments array
- * @return string             CMB html form markup
+ * @return string             CMB2 html form markup
  */
 function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
