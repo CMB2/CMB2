@@ -85,7 +85,6 @@ class CMB2_Ajax {
 
 		$this->embed_args =& $args;
 
-
 		/**
 		 * Set the post_ID so oEmbed won't fail
 		 * wp-includes/class-wp-embed.php, WP_Embed::shortcode()

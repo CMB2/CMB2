@@ -50,7 +50,7 @@ class CMB2_Field_Test extends CMB2_Test {
 	}
 
 	public function test_cmb2_field_instance() {
-		$this->assertInstanceOf( 'CMB2_Field', $this->field  );
+		$this->assertInstanceOf( 'CMB2_Field', $this->field );
 	}
 
 	public function test_cmb2_before_and_after_field_callbacks() {

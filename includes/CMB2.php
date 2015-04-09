@@ -263,12 +263,12 @@ class CMB2 {
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row', $class, '"><div class="cmb-th">';
-				if ( $label ) {
-					echo '<h2 class="cmb-group-name">', $label, '</h2>';
-				}
-				if ( $desc ) {
-					echo '<p class="cmb2-metabox-description">', $desc, '</p>';
-				}
+			if ( $label ) {
+				echo '<h2 class="cmb-group-name">', $label, '</h2>';
+			}
+			if ( $desc ) {
+				echo '<p class="cmb2-metabox-description">', $desc, '</p>';
+			}
 			echo '</div></div>';
 		}
 
@@ -304,23 +304,23 @@ class CMB2 {
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
-				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
-					if ( 'hidden' == $field_args['type'] ) {
+		foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
+			if ( 'hidden' == $field_args['type'] ) {
 
-						// Save rendering for after the metabox
-						$this->add_hidden_field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
+				// Save rendering for after the metabox
+				$this->add_hidden_field( array(
+					'field_args'  => $field_args,
+					'group_field' => $field_group,
+				) );
 
-					} else {
+			} else {
 
-						$field_args['show_names'] = $field_group->args( 'show_names' );
-						$field_args['context']    = $field_group->args( 'context' );
+				$field_args['show_names'] = $field_group->args( 'show_names' );
+				$field_args['context']    = $field_group->args( 'context' );
 
-						$field = $this->get_field( $field_args, $field_group )->render_field();
-					}
-				}
+				$field = $this->get_field( $field_args, $field_group )->render_field();
+			}
+		}
 				echo '
 				<div class="cmb-row cmb-remove-field-row">
 					<div class="cmb-remove-row">

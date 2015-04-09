@@ -911,7 +911,6 @@ class CMB2_Field {
 				$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
 				$args['show_option_none'] = $off_by_default ? false : __( 'None', 'cmb2' );
 			}
-
 		}
 
 		return $args;

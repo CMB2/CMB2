@@ -120,7 +120,6 @@ class CMB2_Option {
 			} else {
 				$this->options[ $field_id ] = $value;
 			}
-
 		}
 
 		if ( $resave || true === $field_id ) {
