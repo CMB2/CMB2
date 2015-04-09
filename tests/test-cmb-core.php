@@ -1,8 +1,16 @@
 <?php
+/**
+ * CMB2 core tests
+ *
+ * @package   Tests_CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 require_once( 'cmb-tests-base.php' );
 
-class CMB2_Core_Test extends CMB2_Test {
+class Test_CMB2_Core extends Test_CMB2 {
 
 	/**
 	 * Set up the test fixture
@@ -107,7 +115,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	/**
-	 * @expectedException CMB2_Test_Exception
+	 * @expectedException Test_CMB2_Exception
 	 */
 	public function test_set_metabox_after_offlimits() {
 		try {
@@ -115,7 +123,7 @@ class CMB2_Core_Test extends CMB2_Test {
 			$this->cmb->metabox['title'] = 'title';
 		} catch ( Exception $e ) {
 			if ( 'Exception' === get_class( $e ) ) {
-				throw new CMB2_Test_Exception( $e->getMessage(), $e->getCode() );
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
 			}
 		}
 	}
@@ -277,7 +285,7 @@ class CMB2_Core_Test extends CMB2_Test {
 	}
 
 	public function test_boxes_get() {
-		new CMB2_for_testing( $this->metabox_array2 );
+		new Test_CMB2_Object( $this->metabox_array2 );
 
 		// Retrieve the instance
 		$cmb = cmb2_get_metabox( 'test2' );
@@ -534,7 +542,7 @@ class CMB2_Core_Test extends CMB2_Test {
 /**
  * Simply allows access to the mb_defaults protected property (for testing)
  */
-class CMB2_for_testing extends CMB2 {
+class Test_CMB2_Object extends CMB2 {
 	public function get_metabox_defaults() {
 		return $this->mb_defaults;
 	}
@@ -546,7 +554,7 @@ class CMB2_for_testing extends CMB2 {
  *
  * @link http://stackoverflow.com/a/10744841
  */
-class CMB2_Test_Exception extends Exception {
+class Test_CMB2_Exception extends Exception {
 	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
 		parent::__construct( $message, $code );
 	}

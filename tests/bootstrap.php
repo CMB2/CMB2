@@ -24,10 +24,10 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 require_once $test_root . '/includes/functions.php';
 
 // Activates this plugin in WordPress so it can be tested.
-function _manually_load_plugin() {
+function _tests_cmb2_manually_load_plugin() {
 	require dirname( __FILE__ ) . '/../init.php';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+tests_add_filter( 'muplugins_loaded', '_tests_cmb2_manually_load_plugin' );
 
 require $test_root . '/includes/bootstrap.php';
 

@@ -1,8 +1,16 @@
 <?php
+/**
+ * CMB2_Field tests
+ *
+ * @package   Tests_CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 require_once( 'cmb-tests-base.php' );
 
-class CMB2_Field_Test extends CMB2_Test {
+class Test_CMB2_Field extends Test_CMB2 {
 
 	/**
 	 * Set up the test fixture

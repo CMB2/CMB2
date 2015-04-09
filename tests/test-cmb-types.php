@@ -1,8 +1,16 @@
 <?php
+/**
+ * CMB2_Types tests
+ *
+ * @package   Tests_CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 require_once( 'cmb-tests-base.php' );
 
-class CMB2_Types_Test extends CMB2_Test {
+class Test_CMB2_Types extends Test_CMB2 {
 
 	/**
 	 * Set up the test fixture
@@ -776,7 +784,7 @@ class CMB2_Types_Test extends CMB2_Test {
 
 
 	/**
-	 * CMB2_Types_Test helper methods
+	 * Test_CMB2_Types helper methods
 	 */
 
 	private function get_field_object( $type = '' ) {
