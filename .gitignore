@@ -63,3 +63,6 @@ ocular.phar
 
 # PHPunit config
 phpunit.xml
+
+# General
+NOTES.md
