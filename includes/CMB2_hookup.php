@@ -72,7 +72,6 @@ class CMB2_hookup {
 			if ( $has_upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) ) {
 				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
 			}
-
 		} elseif ( 'user' == $type ) {
 
 			$priority = $this->cmb->prop( 'priority' );

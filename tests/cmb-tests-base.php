@@ -18,11 +18,11 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 			'/[\t\n\r]/', // Remove tabs and newlines
 			'/\s{2,}/', // Replace repeating spaces with one space
 			'/> </', // Remove spaces between carats
-		), array(
+			), array(
 			'',
 			' ',
 			'><',
-		), $string ) );
+			), $string ) );
 	}
 
 	public function is_connected() {

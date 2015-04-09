@@ -158,10 +158,10 @@ function yourprefix_register_demo_metabox() {
 	// is only compatible with PHP versions 5.3 or above.
 	// Feel free to uncomment and use if your server meets the requirement
 	// $cmb_demo->add_field( array(
-	// 	'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb2' ),
-	// 	'desc' => __( 'field description (optional)', 'cmb2' ),
-	// 	'id'   => $prefix . 'datetime_timestamp_timezone',
-	// 	'type' => 'text_datetime_timestamp_timezone',
+	//  'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb2' ),
+	//  'desc' => __( 'field description (optional)', 'cmb2' ),
+	//  'id'   => $prefix . 'datetime_timestamp_timezone',
+	//  'type' => 'text_datetime_timestamp_timezone',
 	// ) );
 
 	$cmb_demo->add_field( array(

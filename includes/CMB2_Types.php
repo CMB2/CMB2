@@ -923,33 +923,33 @@ class CMB2_Types {
 			'desc'  => '',
 		) ),
 		'<div id="', $this->_id( '-status' ), '" class="cmb2-media-status">';
-			if ( ! empty( $meta_value ) ) {
+		if ( ! empty( $meta_value ) ) {
 
-				if ( $this->is_valid_img_ext( $meta_value ) ) {
+			if ( $this->is_valid_img_ext( $meta_value ) ) {
 
-					if ( $_id_value ) {
-						$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
-					} else {
-						$size = is_array( $img_size ) ? $img_size[0] : 350;
-						$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
-					}
-
-					$this->img_status_output( array(
-						'image'     => $image,
-						'tag'       => 'div',
-						'cached_id' => $cached_id,
-					) );
-
+				if ( $_id_value ) {
+					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
 				} else {
-
-					$this->file_status_output( array(
-						'value'     => $meta_value,
-						'tag'       => 'div',
-						'cached_id' => $cached_id,
-					) );
-
+					$size = is_array( $img_size ) ? $img_size[0] : 350;
+					$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
 				}
+
+				$this->img_status_output( array(
+					'image'     => $image,
+					'tag'       => 'div',
+					'cached_id' => $cached_id,
+				) );
+
+			} else {
+
+				$this->file_status_output( array(
+					'value'     => $meta_value,
+					'tag'       => 'div',
+					'cached_id' => $cached_id,
+				) );
+
 			}
+		}
 		echo '</div>';
 	}
 

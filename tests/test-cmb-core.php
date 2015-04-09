@@ -168,7 +168,6 @@ class CMB2_Core_Test extends CMB2_Test {
 		$cmb = cmb2_get_metabox( $this->metabox_array );
 		$this->assertEquals( $this->cmb, $cmb );
 
-
 		// Test successful creation of new MB
 		$cmb1 = cmb2_get_metabox( $this->metabox_array2 );
 		$cmb2 = new CMB2( $this->metabox_array2 );
