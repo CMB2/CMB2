@@ -163,7 +163,7 @@ class CMB2_hookup {
 				'date_picker'  => array(
 					'changeMonth'     => true,
 					'changeYear'      => true,
-					'dateFormat'      => __( 'mm/dd/yy', 'cmb2' ),
+					'dateFormat'      => _x( 'mm/dd/yy', 'Valid formatDate string for jquery-ui datepicker','cmb2' ),
 					'dayNames'        => explode( ',', __( 'Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday', 'cmb2' ) ),
 					'dayNamesMin'     => explode( ',', __( 'Su, Mo, Tu, We, Th, Fr, Sa', 'cmb2' ) ),
 					'dayNamesShort'   => explode( ',', __( 'Sun, Mon, Tue, Wed, Thu, Fri, Sat', 'cmb2' ) ),
@@ -183,7 +183,7 @@ class CMB2_hookup {
 					'secondText'    => __( 'Second', 'cmb2' ),
 					'currentText'   => __( 'Now', 'cmb2' ),
 					'closeText'     => __( 'Done', 'cmb2' ),
-					'timeFormat'    => __( 'hh:mm TT', 'cmb2' ),
+					'timeFormat'    => _x( 'hh:mm TT', 'Valid formatting string, as per http://trentrichardson.com/examples/timepicker/', 'cmb2' ),
 					'controlType'   => 'select',
 					'stepMinute'    => 5,
 				),
