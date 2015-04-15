@@ -306,15 +306,13 @@ class CMB2 {
 				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
-
-						// Save rendering for after the metabox
-						$this->add_hidden_field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
-
+						$hidden_args = array(
+								'field_args'  => $field_args,
+								'group_field' => $field_group,
+							);
+						$hidden_field = new CMB2_Types( new CMB2_Field( $hidden_args ) );
+						$hidden_field->render();
 					} else {
-
 						$field_args['show_names'] = $field_group->args( 'show_names' );
 						$field_args['context']    = $field_group->args( 'context' );
 
