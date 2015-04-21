@@ -387,7 +387,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	}
 
-	public function test_add_group_field() {
+	public function test_add_group_field( $do_assertions = null ) {
 
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
@@ -420,6 +420,86 @@ class Test_CMB2_Core extends Test_CMB2 {
 		), 1 ); // Test that the position argument is working
 
 		$this->assertEquals( array( 'group_field', 'colorpicker' ), $sub_field_id );
+
+	}
+
+	public function test_group_field_param_callbacks() {
+
+		// Retrieve a CMB2 instance
+		$cmb = cmb2_get_metabox( 'test2' );
+
+		$field_id = $cmb->update_field_property( 'group_field', 'before_group', 'before_group output' );
+		$this->assertTrue( ! empty( $field_id ) );
+
+		$cmb->update_field_property( 'group_field', 'before_group_row', 'before_group_row output' );
+		$cmb->update_field_property( 'group_field', 'after_group_row', 'after_group_row output' );
+		$cmb->update_field_property( 'group_field', 'after_group', 'after_group output' );
+
+		$fields = $cmb->prop( 'fields' );
+		$field = new CMB2_Field( array(
+			'field_args'  => $fields['group_field'],
+			'object_type' => $cmb->object_type(),
+			'object_id'   => $cmb->object_id(),
+		) );
+
+		$expected_group_render = '
+		before_group output
+		<div class="cmb-row cmb-repeat-group-wrap">
+			<div class="cmb-td">
+				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group" style="width:100%;">
+					<div class="cmb-row cmb-group-description">
+						<div class="cmb-th">
+							<h2 class="cmb-group-name">Group</h2>
+							<p class="cmb2-metabox-description">Group description</p>
+						</div>
+					</div>
+					before_group_row output
+					<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
+						<button disabled="disabled" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+						<div class="cmbhandle" title="Click to toggle"><br></div>
+						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
+						<div class="inside cmb-td cmb-nested cmb-field-list">
+							<div class="cmb-row cmb-type-colorpicker cmb2-id-group-field-0-colorpicker cmb-repeat-group-field">
+								<div class="cmb-th">
+									<label for="group_field_0_colorpicker">Colorpicker</label>
+								</div>
+								<div class="cmb-td">
+									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
+								</div>
+							</div>
+							<div class="cmb-row cmb-type-group cmb2-id-group-field-0-first-field cmb-repeat-group-field">
+								<div class="cmb-th">
+									<label for="group_field_0_first_field">Field 1</label>
+								</div>
+								<div class="cmb-td"></div>
+							</div>
+							<div class="cmb-row cmb-remove-field-row">
+								<div class="cmb-remove-row">
+									<button disabled="disabled" data-selector="group_field_repeat" class="button cmb-remove-group-row alignright">Remove Group</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					after_group_row output
+					<div class="cmb-row">
+						<div class="cmb-td">
+						<p class="cmb-add-row">
+						<button data-selector="group_field_repeat" data-grouptitle="" class="cmb-add-group-row button">Add Group</button>
+						</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		after_group output
+		';
+
+		ob_start();
+		$cmb->render_group( $field->args );
+		// grab the data from the output buffer and add it to our $content variable
+		$rendered_group = ob_get_clean();
+
+		$this->assertHTMLstringsAreEqual( $expected_group_render, $rendered_group );
 
 	}
 

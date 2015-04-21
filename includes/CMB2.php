@@ -266,6 +266,8 @@ class CMB2 {
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
+		$field_group->peform_param_callback( 'before_group' );
+
 		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, '" style="width:100%;">';
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -293,6 +295,8 @@ class CMB2 {
 
 		echo '</div></div></div>';
 
+		$field_group->peform_param_callback( 'after_group' );
+
 	}
 
 	/**
@@ -302,6 +306,8 @@ class CMB2 {
 	 * @param  string  $remove_disabled Attribute string to disable the remove button
 	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
+
+		$field_group->peform_param_callback( 'before_group_row' );
 
 		echo '
 		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">
@@ -339,6 +345,8 @@ class CMB2 {
 			</div>
 		</div>
 		';
+
+		$field_group->peform_param_callback( 'after_group_row' );
 	}
 
 	/**
