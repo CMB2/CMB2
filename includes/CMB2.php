@@ -307,11 +307,11 @@ class CMB2 {
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
 
-						// Save rendering for after the metabox
-						$this->add_hidden_field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
+						$hidden_args = array(
+                'field_args'  => $field_args,
+                'group_field' => $field_group,
+              );
+            $hidden_fields[] = new CMB2_Types( new CMB2_Field( $hidden_args ) );
 
 					} else {
 
@@ -321,6 +321,13 @@ class CMB2 {
 						$field = $this->get_field( $field_args, $field_group )->render_field();
 					}
 				}
+				echo '
+				<div class="cmb-hidden-fields-box">';
+				  foreach ($hidden_fields as $hidden_field) {
+				    $hidden_field->render();
+				  }
+				echo '
+				</div>';
 				echo '
 				<div class="cmb-row cmb-remove-field-row">
 					<div class="cmb-remove-row">
