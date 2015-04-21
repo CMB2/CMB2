@@ -38,7 +38,10 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 Additional Resources
 ---
+
+* [CMB2 Documentation Wiki](https://github.com/WebDevStudios/CMB2/wiki)
 * [CMB2 Snippet Library](https://github.com/WebDevStudios/CMB2-Snippet-Library)
+* [CMB2 API Documentation](http://cmb2.io/api/)
 * [General GitHub Documentation](http://help.github.com/)
 * [GitHub Pull Request documentation](http://help.github.com/send-pull-requests/)
 * [PHPUnit Tests Guide](http://phpunit.de/manual/current/en/writing-tests-for-phpunit.html)
