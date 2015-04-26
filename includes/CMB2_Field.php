@@ -810,8 +810,20 @@ class CMB2_Field {
 	 * @return string        Updated value
 	 */
 	public function replace_hash( $value ) {
-		// Replace hash with 1 based count
-		return str_ireplace( '{#}', ( $this->count() + 1 ), $value );
+		if ( ! is_null( $this->escaped_value ) ) {
+		    // Replace hash with 1 based count
+		    return str_ireplace( '{#}', ( $this->count() + 1 ), $value );
+		} else {
+		    $fields = array();
+		    foreach ( array_values( $this->args( 'fields' ) ) as $field_args ) {
+			$field = new CMB2_Field( array(
+			     'field_args'  => $field_args,
+			     'group_field' => $this,
+			 ) );
+			 $fields[$field_args['id']] = $field->value;
+		     }
+		     return call_user_func($this->options('group_title_callback'), $fields);
+		 }
 	}
 
 	/**
