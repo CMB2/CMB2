@@ -344,6 +344,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
+			var oldVal    = $newInput.val();
 			// var $next  = $newInput.next();
 			var attrs     = {};
 			var newID, oldID;
@@ -358,14 +359,22 @@ window.CMB2 = (function(window, document, $, undefined){
 				attrs       = {
 					id: newID,
 					name: newName,
-					// value: '',
+					value: '',
 					'data-iterator': cmb.idNumber,
 				};
+				if ( ($newInput.is(':checkbox') || $newInput.is(':radio') ) ) {
+					if (oldVal == "") {
+						attrs.checked = "checked";
+					} else {
+						attrs.value = oldVal;
+						$newInput.removeAttr("checked");
+					}
+				}
 			}
 
 			$newInput
 				.removeClass( 'hasDatepicker' )
-				.attr( attrs ).val('');
+				.attr( attrs );
 
 			// wysiwyg field
 			if ( isEditor ) {
