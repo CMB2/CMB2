@@ -362,12 +362,13 @@ window.CMB2 = (function(window, document, $, undefined){
 					value: '',
 					'data-iterator': cmb.idNumber,
 				};
-				if ( ($newInput.is(':checkbox') || $newInput.is(':radio') ) ) {
-					if (oldVal == "") {
-						attrs.checked = "checked";
+				// Keep checkbox and radio values
+				if ( $newInput.is(':checkbox') || $newInput.is(':radio') ) {
+					if ( oldVal === "" ) {
+						attrs.checked = true;
 					} else {
-						attrs.value = oldVal;
-						$newInput.removeAttr("checked");
+						attrs.value   = oldVal;
+						attrs.checked = false;
 					}
 				}
 			}
