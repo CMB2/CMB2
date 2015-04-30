@@ -1,13 +1,16 @@
 <?php
-
 /**
- * CMB field types
+ * CMB field type objects
  *
- * @todo test taxonomy methods with non-post objects
- * @todo test all methods with non-post objects
  * @todo Date/Time fields should store date format as data attribute for JS
  *
  * @since  1.0.0
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  */
 class CMB2_Types {
 

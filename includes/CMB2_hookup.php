@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
+ * and handles hooking in and saving those fields.
+ *
+ * @since  2.0.0
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 class CMB2_hookup {
 
 	/**
@@ -109,7 +120,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Registers scripts and styles for CMB
+	 * Registers scripts and styles for CMB2
 	 * @since  1.0.0
 	 */
 	public static function register_scripts() {
@@ -152,7 +163,7 @@ class CMB2_hookup {
 				'date_picker'  => array(
 					'changeMonth'     => true,
 					'changeYear'      => true,
-					'dateFormat'      => __( 'mm/dd/yy', 'cmb2' ),
+					'dateFormat'      => _x( 'mm/dd/yy', 'Valid formatDate string for jquery-ui datepicker', 'cmb2' ),
 					'dayNames'        => explode( ',', __( 'Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday', 'cmb2' ) ),
 					'dayNamesMin'     => explode( ',', __( 'Su, Mo, Tu, We, Th, Fr, Sa', 'cmb2' ) ),
 					'dayNamesShort'   => explode( ',', __( 'Sun, Mon, Tue, Wed, Thu, Fri, Sat', 'cmb2' ) ),
@@ -172,7 +183,7 @@ class CMB2_hookup {
 					'secondText'    => __( 'Second', 'cmb2' ),
 					'currentText'   => __( 'Now', 'cmb2' ),
 					'closeText'     => __( 'Done', 'cmb2' ),
-					'timeFormat'    => __( 'hh:mm TT', 'cmb2' ),
+					'timeFormat'    => _x( 'hh:mm TT', 'Valid formatting string, as per http://trentrichardson.com/examples/timepicker/', 'cmb2' ),
 					'controlType'   => 'select',
 					'stepMinute'    => 5,
 				),
@@ -193,7 +204,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Enqueues scripts and styles for CMB
+	 * Enqueues scripts and styles for CMB2
 	 * @since  1.0.0
 	 */
 	public function do_scripts( $hook ) {
@@ -233,10 +244,10 @@ class CMB2_hookup {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $page ) {
+		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
 
 			if ( $this->cmb->prop( 'closed' ) ) {
-				add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
+				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
 			/**
@@ -249,7 +260,7 @@ class CMB2_hookup {
 			 * Somewhere else in the post-screen
 			 */
 			if ( $this->cmb->prop( 'title' ) ) {
-				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $page, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 			}
 		}
 	}
@@ -358,10 +369,26 @@ class CMB2_hookup {
 	/**
 	 * Determines if metabox should be shown in current context
 	 * @since  2.0.0
-	 * @return bool
+	 * @return bool Whether metabox should be added/shown
 	 */
 	public function show_on() {
-		return (bool) apply_filters( 'cmb2_show_on', true, $this->cmb->meta_box, $this->cmb );
+		$show = true;
+
+		// If metabox is requesting to be conditionally shown
+		if ( is_callable( $this->cmb->prop( 'show_on_cb' ) ) ) {
+			$show = (bool) call_user_func( $this->cmb->prop( 'show_on_cb' ), $this->cmb );
+		}
+
+		/**
+		 * Filter to determine if metabox should show. Default is true
+		 *
+		 * @param array  $show          Default is true, show the metabox
+		 * @param mixed  $meta_box_args Array of the metabox arguments
+		 * @param mixed  $cmb           The CMB2 instance
+		 */
+		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
+
+		return $show;
 	}
 
 	/**
@@ -384,7 +411,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Includes CMB styles
+	 * Includes CMB2 styles
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css() {
@@ -397,7 +424,7 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Includes CMB JS
+	 * Includes CMB2 JS
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {

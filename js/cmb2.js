@@ -15,7 +15,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	var l10n = window.cmb2_l10;
 	var setTimeout = window.setTimeout;
 
-	// CMB functionality object
+	// CMB2 functionality object
 	var cmb = {
 		formfield       : '',
 		idNumber        : false,
@@ -730,7 +730,7 @@ window.CMB2 = (function(window, document, $, undefined){
 				// Only Ajax on normal keystrokes
 				if ( betw( 48, 90 ) || betw( 96, 111 ) || betw( 8, 9 ) || evt.which === 187 || evt.which === 190 ) {
 					// fire our ajax function
-					cmb.doAjax( $self, evt);
+					cmb.doAjax( $self, evt );
 				}
 			},
 			paste : function() {
@@ -817,7 +817,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	// function for running our ajax
-	cmb.doAjax = function($obj) {
+	cmb.doAjax = function( $obj ) {
 		// get typed value
 		var oembed_url = $obj.val();
 		// only proceed if the field contains more than 6 characters
@@ -825,55 +825,49 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		// only proceed if the user has pasted, pressed a number, letter, or whitelisted characters
+		// get field id
+		var field_id         = $obj.attr('id');
+		var $context         = $obj.closest( '.cmb-td' );
+		var $embed_container = $context.find( '.embed-status' );
+		var $embed_wrap      = $context.find( '.embed_wrap' );
+		var $child_el        = $embed_container.find( ':first-child' );
+		var oembed_width     = $embed_container.length && $child_el.length ? $child_el.width() : $obj.width();
 
-			// get field id
-			var field_id = $obj.attr('id');
-			// get our inputs $context for pinpointing
-			var $context = $obj.parents('.cmb-repeat-table  .cmb-row .cmb-td');
-			$context = $context.length ? $context : $obj.parents('.cmb2-metabox .cmb-row .cmb-td');
+		cmb.log( 'oembed_url', oembed_url, field_id );
 
-			var embed_container = $('.embed-status', $context);
-			var oembed_width = $obj.width();
-			var child_el = $(':first-child', embed_container);
-
-			// http://www.youtube.com/watch?v=dGG7aru2S6U
-			cmb.log( 'oembed_url', oembed_url, field_id );
-			oembed_width = ( embed_container.length && child_el.length ) ? child_el.width() : $obj.width();
-
-			// show our spinner
-			cmb.spinner( $context );
-			// clear out previous results
-			$('.embed_wrap', $context).html('');
-			// and run our ajax function
-			setTimeout( function() {
-				// if they haven't typed in 500 ms
-				if ( $('.cmb2-oembed:focus').val() !== oembed_url ) {
-					return;
+		// show our spinner
+		cmb.spinner( $context );
+		// clear out previous results
+		$embed_wrap.html('');
+		// and run our ajax function
+		setTimeout( function() {
+			// if they haven't typed in 500 ms
+			if ( $( '.cmb2-oembed:focus' ).val() !== oembed_url ) {
+				return;
+			}
+			$.ajax({
+				type : 'post',
+				dataType : 'json',
+				url : l10n.ajaxurl,
+				data : {
+					'action'          : 'cmb2_oembed_handler',
+					'oembed_url'      : oembed_url,
+					'oembed_width'    : oembed_width > 300 ? oembed_width : 300,
+					'field_id'        : field_id,
+					'object_id'       : $obj.data( 'objectid' ),
+					'object_type'     : $obj.data( 'objecttype' ),
+					'cmb2_ajax_nonce' : l10n.ajax_nonce
+				},
+				success: function(response) {
+					cmb.log( response );
+					// hide our spinner
+					cmb.spinner( $context, true );
+					// and populate our results from ajax response
+					$embed_wrap.html( response.data );
 				}
-				$.ajax({
-					type : 'post',
-					dataType : 'json',
-					url : l10n.ajaxurl,
-					data : {
-						'action': 'cmb2_oembed_handler',
-						'oembed_url': oembed_url,
-						'oembed_width': oembed_width > 300 ? oembed_width : 300,
-						'field_id': field_id,
-						'object_id': $obj.data('objectid'),
-						'object_type': $obj.data('objecttype'),
-						'cmb2_ajax_nonce': l10n.ajax_nonce
-					},
-					success: function(response) {
-						cmb.log( response );
-						// hide our spinner
-						cmb.spinner( $context, true );
-						// and populate our results from ajax response
-						$('.embed_wrap', $context).html(response.data);
-					}
-				});
+			});
 
-			}, 500);
+		}, 500);
 	};
 
 	$(document).ready(cmb.init);

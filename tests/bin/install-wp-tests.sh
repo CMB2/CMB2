@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+# To install temp. test suite
 # bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest
+
 if [ $# -lt 3 ]; then
 	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version]"
 	exit 1

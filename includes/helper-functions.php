@@ -1,7 +1,16 @@
 <?php
+/**
+ * CMB2 Helper Functions
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 /**
- * Helper function to provide directory path to CMB
+ * Helper function to provide directory path to CMB2
  * @since  2.0.0
  * @param  string  $path Path to append
  * @return string        Directory with optional path appended
@@ -26,7 +35,7 @@ function cmb2_autoload_classes( $class_name ) {
 /**
  * Get instance of the CMB2_Utils class
  * @since  2.0.0
- * @return CMB2_Utils object CMB utilities class
+ * @return CMB2_Utils object CMB2 utilities class
  */
 function cmb2_utils() {
 	static $cmb2_utils;
@@ -37,7 +46,7 @@ function cmb2_utils() {
 /**
  * Get instance of the CMB2_Ajax class
  * @since  2.0.0
- * @return CMB2_Ajax object CMB utilities class
+ * @return CMB2_Ajax object CMB2 utilities class
  */
 function cmb2_ajax() {
 	static $cmb2_ajax;
@@ -73,7 +82,7 @@ function cmb2_get_oembed( $args = array() ) {
 }
 
 /**
- * A helper function to get an option from a CMB options array
+ * A helper function to get an option from a CMB2 options array
  * @since  1.0.1
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
@@ -84,7 +93,7 @@ function cmb2_get_option( $option_key, $field_id = '' ) {
 }
 
 /**
- * A helper function to update an option in a CMB options array
+ * A helper function to update an option in a CMB2 options array
  * @since  2.0.0
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
@@ -101,26 +110,25 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
 }
 
 /**
- * Get a CMB field object.
+ * Get a CMB2 field object.
  * @since  1.1.0
  * @param  array  $meta_box    Metabox ID or Metabox config array
  * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
- * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
+ * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
+ *                             Defaults to metabox object type.
  * @return CMB2_Field|null     CMB2_Field object unless metabox config cannot be found
  */
-function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
+function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = '' ) {
 
 	$object_id = $object_id ? $object_id : get_the_ID();
-	$cmb = ( $meta_box instanceof CMB2 ) ? $meta_box : cmb2_get_metabox( $meta_box, $object_id );
+	$cmb = $meta_box instanceof CMB2 ? $meta_box : cmb2_get_metabox( $meta_box, $object_id );
 
 	if ( ! $cmb ) {
 		return;
 	}
 
-	$object_type = $object_type ? $object_type : $cmb->mb_object_type();
-	$cmb->object_type( $object_type );
-	$cmb->object_id( $object_id );
+	$cmb->object_type( $object_type ? $object_type : $cmb->mb_object_type() );
 
 	return $cmb->get_field( $field_id );
 }
@@ -131,10 +139,11 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = 'p
  * @param  array  $meta_box    Metabox ID or Metabox config array
  * @param  array  $field_id    Field ID or all field arguments
  * @param  int    $object_id   Object ID
- * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page)
+ * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
+ *                             Defaults to metabox object type.
  * @return mixed               Maybe escaped value
  */
-function cmb2_get_field_value( $meta_box, $field_id, $object_id = 0, $object_type = 'post' ) {
+function cmb2_get_field_value( $meta_box, $field_id, $object_id = 0, $object_type = '' ) {
 	$field = cmb2_get_field( $meta_box, $field_id, $object_id, $object_type );
 	return $field->escaped_value();
 }
@@ -150,12 +159,15 @@ function new_cmb2_box( array $meta_box_config ) {
 }
 
 /**
- * Retrieve a CMB instance by the metabox ID
+ * Retrieve a CMB2 instance by the metabox ID
  * @since  2.0.0
- * @param  mixed $meta_box  Metabox ID or Metabox config array
+ * @param  mixed  $meta_box    Metabox ID or Metabox config array
+ * @param  int    $object_id   Object ID
+ * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
+ *                             Defaults to metabox object type.
  * @return CMB2 object
  */
-function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
+function cmb2_get_metabox( $meta_box, $object_id = 0, $object_type = '' ) {
 
 	if ( $meta_box instanceof CMB2 ) {
 		return $meta_box;
@@ -173,6 +185,11 @@ function cmb2_get_metabox( $meta_box, $object_id = 0 ) {
 	if ( $cmb && $object_id ) {
 		$cmb->object_id( $object_id );
 	}
+
+	if ( $cmb && $object_type ) {
+		$cmb->object_type( $object_type );
+	}
+
 	return $cmb;
 }
 
@@ -194,7 +211,7 @@ function cmb2_get_metabox_sanitized_values( $meta_box, array $data_to_sanitize )
  * @param  mixed   $meta_box  Metabox config array or Metabox ID
  * @param  int     $object_id Object ID
  * @param  array   $args      Optional arguments array
- * @return string             CMB html form markup
+ * @return string             CMB2 html form markup
  */
 function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
@@ -227,8 +244,15 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		return;
 	}
 
-	// Set object type to what is declared in the metabox (rather than trying to guess from context)
-	$cmb->object_type( $cmb->mb_object_type() );
+	$args = wp_parse_args( $args, array(
+		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
+		'save_button' => __( 'Save', 'cmb2' ),
+		'object_type' => $cmb->mb_object_type(),
+		'enqueue_js'  => true,
+	) );
+
+	// Set object type explicitly (rather than trying to guess from context)
+	$cmb->object_type( $args['object_type'] );
 
 	// Save the metabox if it's been submitted
 	// check permissions
@@ -247,12 +271,10 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	if ( $cmb->prop( 'cmb_styles' ) ) {
 		CMB2_hookup::enqueue_cmb_css();
 	}
-	CMB2_hookup::enqueue_cmb_js();
 
-	$args = wp_parse_args( $args, array(
-		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
-		'save_button' => __( 'Save', 'cmb2' ),
-	) );
+	if ( $args['enqueue_js'] ) {
+		CMB2_hookup::enqueue_cmb_js();
+	}
 
 	$form_format = apply_filters( 'cmb2_get_metabox_form_format', $args['form_format'], $object_id, $cmb );
 

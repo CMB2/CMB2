@@ -1,8 +1,15 @@
 <?php
-
 /**
- * CMB field validation
+ * CMB2 field sanitization
+ *
  * @since  0.0.4
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ *
  * @method string _id()
  */
 class CMB2_Sanitize {
@@ -22,7 +29,7 @@ class CMB2_Sanitize {
 	/**
 	 * Setup our class vars
 	 * @since 1.1.0
-	 * @param CMB2_Field $field A CMB field object
+	 * @param CMB2_Field $field A CMB2 field object
 	 * @param mixed      $value Field value
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
@@ -63,7 +70,9 @@ class CMB2_Sanitize {
 		 */
 		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 		/**
-		 * DEPRECATED. See documentation above.
+		 * This exists for back-compatibility, but validation
+		 * is not what happens here.
+		 * @deprecated See documentation above.
 		 */
 		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
 
@@ -71,28 +80,36 @@ class CMB2_Sanitize {
 			return $override_value;
 		}
 
+		$sanitized_value = '';
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':
 				// $value = wp_kses( $this->value );
 				// break;
 			case 'textarea_small':
-				return $this->textarea( $this->value );
+				$sanitized_value = $this->textarea( $this->value );
+				break;
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
 			case 'taxonomy_multicheck':
 				if ( $this->field->args( 'taxonomy' ) ) {
-					return wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+					break;
 				}
 			case 'multicheck':
 			case 'file_list':
 			case 'oembed':
+			case 'group':
 				// no filtering
-				return $this->value;
+				$sanitized_value = $this->value;
+				break;
 			default:
 				// Handle repeatable fields array
 				// We'll fallback to 'sanitize_text_field'
-				return is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : call_user_func( 'sanitize_text_field', $this->value );
+				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : call_user_func( 'sanitize_text_field', $this->value );
+				break;
 		}
+
+		return $this->_is_empty_array( $sanitized_value ) ? '' : $sanitized_value;
 	}
 
 	/**
@@ -357,6 +374,20 @@ class CMB2_Sanitize {
 			$new_value[] = $this->$method( $val, true );
 		}
 		return $new_value;
+	}
+
+	/**
+	 * Determine if passed value is an empty array
+	 * @since  2.0.6
+	 * @param  mixed  $to_check Value to check
+	 * @return boolean          Whether value is an array that's empty
+	 */
+	public function _is_empty_array( $to_check ) {
+		if ( is_array( $to_check ) ) {
+			$cleaned_up = array_filter( $to_check );
+			return empty( $cleaned_up );
+		}
+		return false;
 	}
 
 }

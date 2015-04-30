@@ -1,6 +1,12 @@
 <?php
 /**
- * Create meta boxes
+ * CMB2 - The core metabox object
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  *
  * @property-read string $cmb_id
  * @property-read array $meta_box
@@ -20,11 +26,11 @@ class CMB2 {
 	 * @var   array
 	 * @since 0.9.0
 	 */
-	protected $meta_box;
+	protected $meta_box = array();
 
 	/**
 	 * Object ID for metabox meta retrieving/saving
-	 * @var   int
+	 * @var   mixed
 	 * @since 1.0.0
 	 */
 	protected $object_id = 0;
@@ -63,7 +69,8 @@ class CMB2 {
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on'      => array(), // Specific post IDs or page templates to display this metabox
+		'show_on_cb'   => null, // Callback to determine if metabox should display.
+		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
 		'cmb_styles'   => true, // Include cmb bundled stylesheet
 		'fields'       => array(),
 		'hookup'       => true,
@@ -141,7 +148,7 @@ class CMB2 {
 
 		$this->nonce_field();
 
-		echo "\n<!-- Begin CMB Fields -->\n";
+		echo "\n<!-- Begin CMB2 Fields -->\n";
 
 		/**
 		 * Hook before form table begins
@@ -231,7 +238,7 @@ class CMB2 {
 		 */
 		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
-		echo "\n<!-- End CMB Fields -->\n";
+		echo "\n<!-- End CMB2 Fields -->\n";
 
 	}
 
@@ -250,7 +257,6 @@ class CMB2 {
 			return;
 		}
 
-		$args['count']   = 0;
 		$field_group     = $this->get_field( $args );
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
@@ -258,6 +264,9 @@ class CMB2 {
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
+		$field_group->index = 0;
+
+		$field_group->peform_param_callback( 'before_group' );
 
 		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, '" style="width:100%;">';
 		if ( $desc || $label ) {
@@ -274,8 +283,9 @@ class CMB2 {
 
 		if ( ! empty( $group_val ) ) {
 
-			foreach ( $group_val as $field_group->index => $field_id ) {
+			foreach ( $group_val as $group_key => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
+				$field_group->index++;
 			}
 		} else {
 			$this->render_group_row( $field_group, $remove_disabled );
@@ -284,6 +294,8 @@ class CMB2 {
 		echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field_group->id(), '_repeat" data-grouptitle="', $field_group->options( 'group_title' ), '" class="cmb-add-group-row button">', $field_group->options( 'add_button' ), '</button></p></div></div>';
 
 		echo '</div></div></div>';
+
+		$field_group->peform_param_callback( 'after_group' );
 
 	}
 
@@ -295,8 +307,10 @@ class CMB2 {
 	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
 
+		$field_group->peform_param_callback( 'before_group_row' );
+
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->count(), '">
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">
 
 			<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 			<div class="cmbhandle" title="' , __( 'Click to toggle', 'cmb2' ), '"><br></div>
@@ -332,7 +346,7 @@ class CMB2 {
 		</div>
 		';
 
-		$field_group->args['count']++;
+		$field_group->peform_param_callback( 'after_group_row' );
 	}
 
 	/**
@@ -489,7 +503,8 @@ class CMB2 {
 		) );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
-		$group_vals         = $this->data_to_save[ $base_id ];
+		// Check if group field has sanitization_cb
+		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved              = array();
 		$field_group->index = 0;
 
@@ -937,6 +952,8 @@ class CMB2 {
 			case 'meta_box':
 			case 'updated':
 				return $this->{$field};
+			case 'object_id':
+				return $this->object_id();
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
