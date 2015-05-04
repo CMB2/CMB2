@@ -408,7 +408,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$sub_field_id = $cmb->add_group_field( $field_id, array(
 			'name' => 'Field 1',
 			'id'   => 'first_field',
-			'type' => 'group',
+			'type' => 'text',
 		) );
 
 		$this->assertEquals( array( 'group_field', 'first_field' ), $sub_field_id );
@@ -467,11 +467,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
 								</div>
 							</div>
-							<div class="cmb-row cmb-type-group cmb2-id-group-field-0-first-field cmb-repeat-group-field">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value=""/></div>
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
@@ -518,7 +518,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
-				'type' => 'group',
+				'type' => 'text',
 			),
 		);
 
@@ -536,7 +536,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
-				'type' => 'group',
+				'type' => 'text',
 			),
 		);
 
