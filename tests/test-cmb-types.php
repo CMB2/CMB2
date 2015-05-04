@@ -779,7 +779,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
-		$src = 'http' . ( $wp_version > 3.9 ? 's' : '' ) . '://www.youtube.com/embed/' . $vid . '?feature=oembed';
+		$src = 'http' . ( $wp_version > 3.7 ? 's' : '' ) . '://www.youtube.com/embed/' . $vid . '?feature=oembed';
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
  		$results = $this->is_connected()
