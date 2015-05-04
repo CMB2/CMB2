@@ -534,7 +534,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 						</div>
 					</div>
 					<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
-						<button disabled="disabled" data-selector="group_field2_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">

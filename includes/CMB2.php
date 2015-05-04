@@ -314,9 +314,13 @@ class CMB2 {
 		$field_group->peform_param_callback( 'before_group_row' );
 
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">';
 
-			<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+			if ( $field_group->args( 'repeatable' ) ) {
+				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
+			}
+
+			echo '
 			<div class="cmbhandle" title="' , __( 'Click to toggle', 'cmb2' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
