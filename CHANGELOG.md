@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-* 
+### Enhancements
+
+* Ability to use non-repeatable group fields by setting the `'repeatable'` field param to `false` when registering a group field type. Props [marcusbattle](https://github.com/marcusbattle), ([#159](https://github.com/WebDevStudios/CMB2/pull/159)).
 
 ## 2.0.6 - 2015-04-30
 
