@@ -446,7 +446,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		before_group output
 		<div class="cmb-row cmb-repeat-group-wrap">
 			<div class="cmb-td">
-				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group repeatable" style="width:100%;">
+				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable" style="width:100%;">
 					<div class="cmb-row cmb-group-description">
 						<div class="cmb-th">
 							<h2 class="cmb-group-name">Group</h2>
