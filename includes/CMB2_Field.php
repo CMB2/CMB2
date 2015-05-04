@@ -524,7 +524,6 @@ class CMB2_Field {
 			'file', // Use file_list
 			'radio',
 			'title',
-			'group',
 			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
 			'wysiwyg',
 			'checkbox',
@@ -867,7 +866,7 @@ class CMB2_Field {
 			'default'           => null,
 			'select_all_button' => true,
 			'multiple'          => false,
-			'repeatable'        => false,
+			'repeatable'        => isset( $args['type'] ) && 'group' == $args['type'],
 			'inline'            => false,
 			'on_front'          => true,
 			'show_names'        => true,

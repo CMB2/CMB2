@@ -408,7 +408,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$sub_field_id = $cmb->add_group_field( $field_id, array(
 			'name' => 'Field 1',
 			'id'   => 'first_field',
-			'type' => 'group',
+			'type' => 'text',
 		) );
 
 		$this->assertEquals( array( 'group_field', 'first_field' ), $sub_field_id );
@@ -446,7 +446,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		before_group output
 		<div class="cmb-row cmb-repeat-group-wrap">
 			<div class="cmb-td">
-				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group" style="width:100%;">
+				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable" style="width:100%;">
 					<div class="cmb-row cmb-group-description">
 						<div class="cmb-th">
 							<h2 class="cmb-group-name">Group</h2>
@@ -467,11 +467,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
 								</div>
 							</div>
-							<div class="cmb-row cmb-type-group cmb2-id-group-field-0-first-field cmb-repeat-group-field">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value=""/></div>
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
@@ -503,6 +503,63 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	}
 
+	public function test_disable_group_repeat() {
+
+		// Retrieve a CMB2 instance
+		$cmb = cmb2_get_metabox( 'test2' );
+
+		$other_field = $cmb->get_field( 'group_field' );
+		$field_id = $cmb->add_field( array(
+			'name' => 'group 2',
+			'type' => 'group',
+			'id'   => 'group_field2',
+			'repeatable' => false,
+		) );
+
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
+			'name' => 'Field 1',
+			'id'   => 'first_field',
+			'type' => 'text',
+		) );
+
+		$field = $cmb->get_field( 'group_field2' );
+
+		$expected_group_render = '
+		<div class="cmb-row cmb-repeat-group-wrap">
+			<div class="cmb-td">
+				<div id="group_field2_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable non-repeatable" style="width:100%;">
+					<div class="cmb-row">
+						<div class="cmb-th">
+							<h2 class="cmb-group-name">group 2</h2>
+						</div>
+					</div>
+					<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
+						<div class="cmbhandle" title="Click to toggle"><br></div>
+						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
+						<div class="inside cmb-td cmb-nested cmb-field-list">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field2-0-first-field cmb-repeat-group-field table-layout">
+								<div class="cmb-th">
+									<label for="group_field2_0_first_field">Field 1</label>
+								</div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field2[0][first_field]" id="group_field2_0_first_field" value=""/></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		';
+
+		ob_start();
+		$cmb->render_group( $field->args() );
+		// grab the data from the output buffer and add it to our $content variable
+		$rendered_group = ob_get_clean();
+
+		$this->assertHTMLstringsAreEqual( $expected_group_render, $rendered_group );
+
+	}
+
+
 	public function test_added_group_field() {
 
 		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
@@ -518,7 +575,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
-				'type' => 'group',
+				'type' => 'text',
 			),
 		);
 
@@ -536,7 +593,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
-				'type' => 'group',
+				'type' => 'text',
 			),
 		);
 
@@ -546,6 +603,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	public function test_remove_field() {
 		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'group_field' );
+		$cmb->remove_field( 'group_field2' );
 		$this->assertEquals( array(
 			array(
 				'name'       => 'Test Name',
