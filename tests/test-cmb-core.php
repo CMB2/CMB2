@@ -508,7 +508,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
-		$other_field = $cmb->get_field( 'group_field' );
 		$field_id = $cmb->add_field( array(
 			'name' => 'group 2',
 			'type' => 'group',
@@ -516,7 +515,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'repeatable' => false,
 		) );
 
-		$sub_field_id = $cmb->add_group_field( $field_id, array(
+		$cmb->add_group_field( $field_id, array(
 			'name' => 'Field 1',
 			'id'   => 'first_field',
 			'type' => 'text',
