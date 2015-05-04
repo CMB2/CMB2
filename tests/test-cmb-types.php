@@ -230,12 +230,11 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$field = cmb2_get_field( $this->options_test['id'], 'options_test_field', $this->post_id );
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
-		$this->assertEquals( $field->options('one'), 'One' );
-		$this->assertEquals( $field->options('two'), 'Two' );
-		$this->assertTrue( $field->options('true') );
-		$this->assertFalse( $field->options('false') );
-		$this->assertNull( $field->options('random_string') );
-
+		$this->assertEquals( $field->options( 'one' ), 'One' );
+		$this->assertEquals( $field->options( 'two' ), 'Two' );
+		$this->assertTrue( $field->options( 'true' ) );
+		$this->assertFalse( $field->options( 'false' ) );
+		$this->assertFalse( $field->options( 'random_string' ) );
 	}
 
 	public function test_field_attributes() {
