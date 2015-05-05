@@ -344,6 +344,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
+			var oldVal    = $newInput.attr( 'value' );
 			// var $next  = $newInput.next();
 			var attrs     = {};
 			var newID, oldID;
@@ -361,6 +362,17 @@ window.CMB2 = (function(window, document, $, undefined){
 					// value: '',
 					'data-iterator': cmb.idNumber,
 				};
+
+			}
+
+			// Clear out old values
+			if ( undefined !== typeof( oldVal ) && oldVal ) {
+				attrs.value = '';
+			}
+
+			// Clear out textarea values
+			if ( 'TEXTAREA' === $newInput.prop('tagName') ) {
+				$newInput.html( '' );
 			}
 
 			$newInput
