@@ -1082,15 +1082,16 @@ Sidebar Placement Adjustments
 	top: .5em;
 	line-height: 1em;
 	cursor: pointer;
+	padding: 2px 6px 3px;
 }
 
-/* line 45, sass/partials/_collapsible_ui.scss */
+/* line 46, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
 	color: #a00;
 }
 
-/* line 47, sass/partials/_collapsible_ui.scss */
+/* line 48, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
 	color: #f00;

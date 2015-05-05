@@ -198,7 +198,8 @@ class CMB2_hookup {
 			),
 		) ) );
 
-		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$min}.css" ), $styles );
+		$front = is_admin() ? '' : '-front';
+		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$front}{$min}.css" ), $styles );
 
 		self::$registration_done = true;
 	}

@@ -96,6 +96,7 @@ module.exports = function(grunt) {
 				},
 				files: {
 				  'css/cmb2.css': 'css/sass/cmb2.scss',
+				  'css/cmb2-front.css': 'css/sass/cmb2-front.scss'
 				}
 			}
 		},
