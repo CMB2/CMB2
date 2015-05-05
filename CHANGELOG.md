@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Fix incorrect repeatable group title number. ([#310](https://github.com/WebDevStudios/CMB2/pull/310))
+* Fix obscure bug which prevented group field arguments from being passed to the sub-fields (like `show_names` and `context`).
 
 ## 2.0.6 - 2015-04-30
 
