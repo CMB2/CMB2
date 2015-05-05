@@ -741,23 +741,44 @@ class CMB2 {
 			return $this->fields[ $index ];
 		}
 
-		$field_array = $this->prop( 'fields' );
-
-		// Check if group is passed and if fields were added in the old-school fields array
-		$args = $field_group && ( $sub_field_id || 0 === $sub_field_id )
-			? array(
-				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
-				'group_field' => $field_group,
-			)
-			: array(
-				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
-				'object_type' => $this->object_type(),
-				'object_id'   => $this->object_id(),
-			);
-
-		$this->fields[ $index ] = new CMB2_Field( $args );
+		$this->fields[ $index ] = new CMB2_Field( $this->get_field_args( $field_id, $field, $sub_field_id, $field_group ) );
 
 		return $this->fields[ $index ];
+	}
+
+	/**
+	 * Handles determining which type of arguments to pass to CMB2_Field
+	 * @since  2.0.7
+	 * @param  mixed  $field_id     Field (or group field) ID
+	 * @param  mixed  $field_args   Array of field arguments
+	 * @param  mixed  $sub_field_id Sub field ID (if field_group exists)
+	 * @param  mixed  $field_group  If a sub-field, will be the parent group CMB2_Field object
+	 * @return array                Array of CMB2_Field arguments
+	 */
+	public function get_field_args( $field_id, $field_args, $sub_field_id, $field_group ) {
+
+		// Check if group is passed and if fields were added in the old-school fields array
+		if ( $field_group && ( $sub_field_id || 0 === $sub_field_id ) ) {
+
+			// Update the fields array w/ any modified properties inherited from the group field
+			$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] = $field_args;
+
+			return array(
+				'field_args'  => $field_args,
+				'group_field' => $field_group,
+			);
+
+		}
+
+		if ( is_array( $field_args ) ) {
+			$this->meta_box['fields'][ $field_id ] = array_merge( $field_args, $this->meta_box['fields'][ $field_id ] );
+		}
+
+		return array(
+			'field_args'  => $this->meta_box['fields'][ $field_id ],
+			'object_type' => $this->object_type(),
+			'object_id'   => $this->object_id(),
+		);
 	}
 
 	/**
