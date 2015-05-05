@@ -794,6 +794,16 @@ class Test_CMB2_Types extends Test_CMB2 {
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
+	public function test_js_dependencies() {
+		$this->assertEquals( array(
+			'jquery'                   => 'jquery',
+			'jquery-ui-core'           => 'jquery-ui-core',
+			'jquery-ui-datepicker'     => 'jquery-ui-datepicker',
+			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
+			'media-editor'             => 'media-editor',
+		), Test_CMB2_JS::dependencies() );
+	}
+
 
 	/**
 	 * Test_CMB2_Types helper methods
@@ -846,4 +856,13 @@ class Test_CMB2_Types extends Test_CMB2 {
 		return '£ ' . $field_args['type'];
 	}
 
+}
+
+/**
+ * Simply allows access to the dependencies protected property (for testing)
+ */
+class Test_CMB2_JS extends CMB2_JS {
+	public static function dependencies() {
+		return parent::$dependencies;
+	}
 }

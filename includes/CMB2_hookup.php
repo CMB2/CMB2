@@ -30,9 +30,16 @@ class CMB2_hookup {
 	/**
 	 * Only allow JS registration once
 	 * @var   bool
-	 * @since 2.0.0
+	 * @since 2.0.7
 	 */
-	protected static $registration_done = false;
+	protected static $js_registration_done = false;
+
+	/**
+	 * Only allow CSS registration once
+	 * @var   bool
+	 * @since 2.0.7
+	 */
+	protected static $css_registration_done = false;
 
 	/**
 	 * Metabox Form ID
@@ -108,88 +115,47 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Registers scripts and styles for CMB2
-	 * @since  1.0.0
+	 * Registers styles for CMB2
+	 * @since 2.0.7
 	 */
-	public static function register_scripts() {
-		if ( self::$registration_done ) {
+	protected static function register_styles() {
+		if ( self::$css_registration_done ) {
 			return;
 		}
 
 		// Only use minified files if SCRIPT_DEBUG is off
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-		if ( ! is_admin() ) {
-			// we need to register colorpicker on the front-end
-			wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), CMB2_VERSION );
-			wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'iris' ), CMB2_VERSION );
-			wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', array(
-				'clear'         => __( 'Clear', 'cmb2' ),
-				'defaultString' => __( 'Default', 'cmb2' ),
-				'pick'          => __( 'Select Color', 'cmb2' ),
-				'current'       => __( 'Current Color', 'cmb2' ),
-			) );
-		}
-
-		wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
-
-		// scripts required for cmb
-		$scripts = array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'wp-color-picker' );
-		// styles required for cmb
-		$styles = array( 'wp-color-picker' );
-
-		wp_register_script( 'cmb2-scripts', cmb2_utils()->url( "js/cmb2{$min}.js" ), $scripts, CMB2_VERSION );
-
-		wp_localize_script( 'cmb2-scripts', 'cmb2_l10', apply_filters( 'cmb2_localized_data', array(
-			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
-			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
-			'script_debug'     => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
-			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
-			'defaults'         => array(
-				'color_picker' => false,
-				'date_picker'  => array(
-					'changeMonth'     => true,
-					'changeYear'      => true,
-					'dateFormat'      => _x( 'mm/dd/yy', 'Valid formatDate string for jquery-ui datepicker', 'cmb2' ),
-					'dayNames'        => explode( ',', __( 'Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday', 'cmb2' ) ),
-					'dayNamesMin'     => explode( ',', __( 'Su, Mo, Tu, We, Th, Fr, Sa', 'cmb2' ) ),
-					'dayNamesShort'   => explode( ',', __( 'Sun, Mon, Tue, Wed, Thu, Fri, Sat', 'cmb2' ) ),
-					'monthNames'      => explode( ',', __( 'January, February, March, April, May, June, July, August, September, October, November, December', 'cmb2' ) ),
-					'monthNamesShort' => explode( ',', __( 'Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec', 'cmb2' ) ),
-					'nextText'        => __( 'Next', 'cmb2' ),
-					'prevText'        => __( 'Prev', 'cmb2' ),
-					'currentText'     => __( 'Today', 'cmb2' ),
-					'closeText'       => __( 'Done', 'cmb2' ),
-					'clearText'       => __( 'Clear', 'cmb2' ),
-				),
-				'time_picker'  => array(
-					'timeOnlyTitle' => __( 'Choose Time', 'cmb2' ),
-					'timeText'      => __( 'Time', 'cmb2' ),
-					'hourText'      => __( 'Hour', 'cmb2' ),
-					'minuteText'    => __( 'Minute', 'cmb2' ),
-					'secondText'    => __( 'Second', 'cmb2' ),
-					'currentText'   => __( 'Now', 'cmb2' ),
-					'closeText'     => __( 'Done', 'cmb2' ),
-					'timeFormat'    => _x( 'hh:mm TT', 'Valid formatting string, as per http://trentrichardson.com/examples/timepicker/', 'cmb2' ),
-					'controlType'   => 'select',
-					'stepMinute'    => 5,
-				),
-			),
-			'strings' => array(
-				'upload_file'  => __( 'Use this file', 'cmb2' ),
-				'remove_image' => __( 'Remove Image', 'cmb2' ),
-				'remove_file'  => __( 'Remove', 'cmb2' ),
-				'file'         => __( 'File:', 'cmb2' ),
-				'download'     => __( 'Download', 'cmb2' ),
-				'check_toggle' => __( 'Select / Deselect All', 'cmb2' ),
-			),
-		) ) );
-
+		$min   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$front = is_admin() ? '' : '-front';
+
+		// Filter required styles and register stylesheet
+		$styles = apply_filters( 'cmb2_style_dependencies', array() );
 		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$front}{$min}.css" ), $styles );
 
-		self::$registration_done = true;
+		self::$css_registration_done = true;
+	}
+
+	/**
+	 * Registers scripts for CMB2
+	 * @since  2.0.7
+	 */
+	protected static function register_js() {
+		if ( self::$js_registration_done ) {
+			return;
+		}
+
+		$hook = is_admin() ? 'admin_footer' : 'wp_footer';
+		add_action( $hook, array( 'CMB2_JS', 'enqueue' ), 8 );
+
+		self::$js_registration_done = true;
+	}
+
+	/**
+	 * Registers scripts and styles for CMB2
+	 * @since  1.0.0
+	 */
+	public static function register_scripts() {
+		self::register_styles();
+		self::register_js();
 	}
 
 	/**
@@ -394,7 +360,7 @@ class CMB2_hookup {
 			return false;
 		}
 
-		self::register_scripts();
+		self::register_styles();
 		return wp_enqueue_style( 'cmb2-styles' );
 	}
 
@@ -407,9 +373,8 @@ class CMB2_hookup {
 			return false;
 		}
 
-		self::register_scripts();
-		wp_enqueue_media();
-		return wp_enqueue_script( 'cmb2-scripts' );
+		self::register_js();
+		return true;
 	}
 
 }

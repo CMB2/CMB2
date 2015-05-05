@@ -505,6 +505,8 @@ class CMB2_Types {
 			'desc'  => $this->_desc(),
 		) );
 
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker' ) );
+
 		return $this->input( $args );
 	}
 
@@ -519,6 +521,8 @@ class CMB2_Types {
 			'value' => $this->field->get_timestamp_format( 'time_format' ),
 			'desc' => $this->_desc(),
 		) );
+
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ) );
 
 		return $this->input( $args );
 	}
@@ -557,6 +561,8 @@ class CMB2_Types {
 			'value' => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
 			'desc'  => $args['desc'],
 		) );
+
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ) );
 
 		return $this->input( $date_args ) . "\n" . $this->input( $time_args );
 	}
@@ -621,6 +627,8 @@ class CMB2_Types {
 			// Value doesn't match #123abc, so sanitize to just #
 			$meta_value = '#';
 		}
+
+		wp_enqueue_style( 'wp-color-picker' );
 
 		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
@@ -875,6 +883,8 @@ class CMB2_Types {
 		}
 
 		echo '</ul>';
+
+		CMB2_JS::add_dependencies( 'media-editor' );
 	}
 
 	public function file() {
@@ -954,6 +964,8 @@ class CMB2_Types {
 				}
 			}
 		echo '</div>';
+
+		CMB2_JS::add_dependencies( 'media-editor' );
 	}
 
 	/**
