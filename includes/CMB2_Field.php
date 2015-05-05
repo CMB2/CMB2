@@ -13,7 +13,6 @@
  * @method string _id()
  * @method string type()
  * @method mixed fields()
- * @method mixed count()
  */
 class CMB2_Field {
 
@@ -803,14 +802,14 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Replaces a hash key - {#} - with the repeatable count
+	 * Replaces a hash key - {#} - with the repeatable index
 	 * @since  1.2.0
 	 * @param  string $value Value to update
 	 * @return string        Updated value
 	 */
 	public function replace_hash( $value ) {
 		// Replace hash with 1 based count
-		return str_ireplace( '{#}', ( $this->count() + 1 ), $value );
+		return str_ireplace( '{#}', ( $this->index + 1 ), $value );
 	}
 
 	/**
