@@ -71,7 +71,8 @@ class CMB2 {
 		'show_names'   => true, // Show field names on the left
 		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
-		'cmb_styles'   => true, // Include cmb bundled stylesheet
+		'cmb_styles'   => true, // Include CMB2 stylesheet
+		'enqueue_js'   => true, // Include CMB2 JS
 		'fields'       => array(),
 		'hookup'       => true,
 		'save_fields'  => true, // Will not save during hookup if false

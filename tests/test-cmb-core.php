@@ -72,6 +72,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'show_on'      => array(), // Specific post IDs or page templates to display this metabox
 			'show_on_cb'   => null, // Callback to determine if metabox should display. Overrides 'show_on'
 			'cmb_styles'   => true, // Include cmb bundled stylesheet
+			'enqueue_js'   => true, // Include CMB2 JS
 			'fields'       => array(),
 			'hookup'       => true,
 			'save_fields'  => true, // Will not save during hookup if false

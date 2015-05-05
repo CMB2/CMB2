@@ -202,7 +202,9 @@ class CMB2_hookup {
 			if ( $this->cmb->prop( 'cmb_styles' ) ) {
 				self::enqueue_cmb_css();
 			}
-			self::enqueue_cmb_js();
+			if ( $this->cmb->prop( 'enqueue_js' ) ) {
+				self::enqueue_cmb_js();
+			}
 		}
 	}
 
@@ -284,7 +286,9 @@ class CMB2_hookup {
 		if ( $this->cmb->prop( 'cmb_styles' ) ) {
 			self::enqueue_cmb_css();
 		}
-		self::enqueue_cmb_js();
+		if ( $this->cmb->prop( 'enqueue_js' ) ) {
+			self::enqueue_cmb_js();
+		}
 
 		$this->cmb->show_form( 0, 'user' );
 	}
