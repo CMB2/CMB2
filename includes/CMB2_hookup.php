@@ -62,10 +62,6 @@ class CMB2_hookup {
 	}
 
 	public function admin_hooks() {
-
-		$field_types = (array) wp_list_pluck( $this->cmb->prop( 'fields', array() ), 'type' );
-		$has_upload = in_array( 'file', $field_types ) || in_array( 'file_list', $field_types );
-
 		global $pagenow;
 
 		// register our scripts and styles for cmb
@@ -79,10 +75,6 @@ class CMB2_hookup {
 			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 
 			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
-
-			if ( $has_upload && in_array( $pagenow, array( 'page.php', 'page-new.php', 'post.php', 'post-new.php' ) ) ) {
-				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
-			}
 
 		} elseif ( 'user' == $type ) {
 
@@ -112,10 +104,6 @@ class CMB2_hookup {
 			add_action( 'personal_options_update', array( $this, 'save_user' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
 			add_action( 'user_register', array( $this, 'save_user' ) );
-			if ( $has_upload && in_array( $pagenow, array( 'profile.php', 'user-edit.php', 'user-add.php' ) ) ) {
-				$this->form_id = 'your-profile';
-				$this->once( 'admin_head', array( $this, 'add_post_enctype' ) );
-			}
 		}
 	}
 
@@ -216,24 +204,6 @@ class CMB2_hookup {
 			}
 			self::enqueue_cmb_js();
 		}
-	}
-
-	/**
-	 * Add encoding attribute
-	 */
-	public function add_post_enctype() {
-		echo '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
-			$form = jQuery("#' . $this->form_id . '");
-			if ( $form.length ) {
-				$form.attr( {
-					"enctype" : "multipart/form-data",
-					"encoding" : "multipart/form-data"
-				} );
-			}
-		});
-		</script>';
 	}
 
 	/**
