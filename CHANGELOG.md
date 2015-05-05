@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 * Fix incorrect repeatable group title number. ([#310](https://github.com/WebDevStudios/CMB2/pull/310))
 * Fix obscure bug which prevented group field arguments from being passed to the sub-fields (like `show_names` and `context`).
+* Fixed occasional issue when adding a group row, the previous row's content would be cloned. ([#257](https://github.com/WebDevStudios/CMB2/pull/257))
 
 ## 2.0.6 - 2015-04-30
 
