@@ -249,16 +249,17 @@ class CMB2 {
 	 */
 	public function render_group( $args ) {
 
-		// If field is requesting to be conditionally shown
-		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
-			return;
-		}
-
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
 
-		$field_group     = $this->get_field( $args );
+		$field_group = $this->get_field( $args );
+
+		// If field is requesting to be conditionally shown
+		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $field_group ) ) {
+			return;
+		}
+
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
 		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
