@@ -315,8 +315,18 @@ class CMB2 {
 
 		$field_group->peform_param_callback( 'before_group_row' );
 
+		$classes = "postbox cmb-row cmb-repeatable-grouping";
+
+		if ( is_callable( $field_group->args( 'row_classes_cb' ) ) ) {
+
+			$classes .= " ".call_user_func( $field_group->args( 'row_classes_cb' ), $field_group );
+		} elseif ( $row_classes = $field_group->row_classes() ) {
+
+			$classes .= " ".$row_classes;
+		}
+
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">';
+		<div class="', $classes, '" data-iterator="', $field_group->index, '">';
 
 			if ( $field_group->args( 'repeatable' ) ) {
 				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
