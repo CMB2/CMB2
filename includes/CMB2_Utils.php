@@ -205,7 +205,7 @@ class CMB2_Utils {
 	public function php_to_js_dateformat( $format ) {
 
 		// order is relevant here, since the replacement will be done sequentially.
-		$supported_options = [
+		$supported_options = array(
 			'd' => 'dd',  // Day, leading 0
 			'j' => 'd',   // Day, no 0
 			'z' => 'o',   // Day of the year, no leading zeroes,
@@ -225,7 +225,7 @@ class CMB2_Utils {
 			's' => 'ss',  // Second with leading 0,
 			'a' => 'tt',  // am/pm
 			'A' => 'TT'   // AM/PM
-		];
+		);
 
 		foreach ( $supported_options as $php => $js ) {
 			// replaces every instance of a supported option, but skips escaped characters
