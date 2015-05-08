@@ -232,9 +232,7 @@ class CMB2_Utils {
 			$format = preg_replace( "~(?<!\\\\)$php~", $js, $format );
 		}
 
-		$format = preg_replace_callback( '~(?:\\\.)+~', function ( $m ) {
-			return "&#39;" . str_replace( '\\', '', $m[0] ) . "&#39;";
-		}, $format );
+		$format = preg_replace_callback( '~(?:\\\.)+~', 'wrap_escaped_chars', $format );
 
 		return $format;
 	}

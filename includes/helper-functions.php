@@ -305,3 +305,14 @@ function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		return cmb2_get_metabox_form( $meta_box, $object_id, $args );
 	}
 }
+
+/**
+ * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+ *
+ * @param $wrap
+ *
+ * @return string
+ */
+function wrap_escaped_chars( $wrapped ) {
+	return "&#39;" . str_replace( '\\', '', $wrapped[0] ) . "&#39;";
+}
