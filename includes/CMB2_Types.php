@@ -514,10 +514,13 @@ class CMB2_Types {
 	}
 
 	public function text_time( $args = array() ) {
+		$timeFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) );
+
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-timepicker text-time',
-			'value' => $this->field->get_timestamp_format( 'time_format' ),
+			'value' => $this->field->escaped_value(),
 			'desc' => $this->_desc(),
+			'data-timepicker' => '{ "timeFormat": "' . $timeFormat  . '" }'
 		) );
 
 		return $this->input( $args );
