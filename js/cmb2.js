@@ -679,8 +679,13 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		$selector.datepicker( 'destroy' );
-		$selector.datepicker( cmb.defaults.date_picker );
+        $selector.each(function() {
+            var options = cmb.defaults.date_picker;
+            $(this).datepicker( 'destroy' );
+            var additionalOptions = $(this).data("datepicker");
+            $.extend( options, additionalOptions );
+            $(this).datepicker( options );
+        });
 	};
 
 	cmb.initColorPickers = function( $selector ) {

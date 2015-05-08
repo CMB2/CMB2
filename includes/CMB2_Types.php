@@ -5,7 +5,7 @@
  *
  * @todo test taxonomy methods with non-post objects
  * @todo test all methods with non-post objects
- * @todo Date/Time fields should store date format as data attribute for JS
+ * @todo Time fields should store date format as data attribute for JS
  *
  * @since  1.0.0
  */
@@ -496,10 +496,13 @@ class CMB2_Types {
 	}
 
 	public function text_date( $args = array() ) {
+		$dateFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-text-small cmb2-datepicker',
 			'value' => $this->field->get_timestamp_format(),
 			'desc'  => $this->_desc(),
+			'data-datepicker' => '{ "dateFormat": "' . $dateFormat  . '" }'
 		) );
 
 		return $this->input( $args );
