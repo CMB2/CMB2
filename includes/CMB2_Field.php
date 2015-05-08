@@ -245,9 +245,13 @@ class CMB2_Field {
 
 	/**
 	 * Updates metadata/option data
+	 *
 	 * @since  1.0.1
+	 *
 	 * @param  mixed $new_value Value to update data with
 	 * @param  bool  $single    Whether data is an array (add_metadata)
+	 *
+	 * @return bool
 	 */
 	public function update_data( $new_value, $single = true ) {
 		$a = $this->data_args( array( 'single' => $single ) );
@@ -319,8 +323,12 @@ class CMB2_Field {
 
 	/**
 	 * Removes/updates metadata/option data
+	 *
 	 * @since  1.0.1
+	 *
 	 * @param  string $old Old value
+	 *
+	 * @return array
 	 */
 	public function remove_data( $old = '' ) {
 		$a = $this->data_args( array( 'old' => $old ) );
@@ -540,8 +548,8 @@ class CMB2_Field {
 	/**
 	 * Escape the value before output. Defaults to 'esc_attr()'
 	 * @since  1.0.1
-	 * @param  mixed    $meta_value Meta value
 	 * @param  callable $func       Escaping function (if not esc_attr())
+	 * @param  mixed    $meta_value Meta value
 	 * @return mixed                Final value
 	 */
 	public function escaped_value( $func = 'esc_attr', $meta_value = '' ) {
@@ -850,8 +858,12 @@ class CMB2_Field {
 
 	/**
 	 * Fills in empty field parameters with defaults
+	 *
 	 * @since 1.1.0
+	 *
 	 * @param array $args Metabox field config array
+	 *
+	 * @return array
 	 */
 	public function _set_field_defaults( $args ) {
 
@@ -929,8 +941,12 @@ class CMB2_Field {
 
 	/**
 	 * Updates attributes array values unless they exist from the field config array
+	 *
 	 * @since 1.1.0
+	 *
 	 * @param array $attrs Array of attributes to update
+	 *
+	 * @return array
 	 */
 	public function maybe_set_attributes( $attrs = array() ) {
 		return wp_parse_args( $this->args['attributes'], $attrs );
