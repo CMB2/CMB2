@@ -156,7 +156,7 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			$check       = $this->value;
-			$this->value = [ ];
+			$this->value = array();
 			foreach ( $check as $key => $val ) {
 				if ( $val && '#' != $val ) {
 					$this->value[ $key ] = esc_attr( $val );
