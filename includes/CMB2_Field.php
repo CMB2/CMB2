@@ -631,7 +631,7 @@ class CMB2_Field {
 	 * @return string             Formatted date
 	 */
 	public function format_timestamp( $meta_value, $format = 'date_format' ) {
-		return date( stripslashes( $this->args( $format ) ), $meta_value );
+		return date( $this->args( $format ) , $meta_value );
 	}
 
 	/**
