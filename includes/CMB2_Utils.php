@@ -211,6 +211,14 @@ class CMB2_Utils {
 			// 'F' => 'MM',  // Month, full name,
 			'y' => 'y',   // Year, two digit
 			'Y' => 'yy',  // Year, full
+			'H' => 'HH',  // Hour with leading 0 (24 hour)
+			'G' => 'H',   // Hour with no leading 0 (24 hour)
+			'h' => 'hh',  // Hour with leading 0 (12 hour)
+			'g' => 'h',   // Hour with no leading 0 (12 hour),
+			'i' => 'mm',  // Minute with leading 0,
+			's' => 'ss',  // Second with leading 0,
+			'a' => 'tt',  // am/pm
+			'A' => 'TT'   // AM/PM
 		];
 
 		foreach ( $supported_options as $php => $js ) {
