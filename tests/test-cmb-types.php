@@ -360,7 +360,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$value = $field->format_timestamp( strtotime( 'today' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><span class="cmb2-metabox-description">This is a description</span>', $value ),
+			sprintf( "<input type=\"text\" class=\"cmb2-text-small cmb2-datepicker\" name=\"field_test_field\" id=\"field_test_field\" value=\"%s\" data-datepicker='{ \"dateFormat\": \"mm&#39;/&#39;dd&#39;/&#39;yy\" }'/><span class=\"cmb2-metabox-description\">This is a description</span>", $value ),
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -369,7 +369,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_text_time_field_after_value_update() {
 
-		update_post_meta( $this->post_id, $this->text_type_field['id'], 'today' );
+		update_post_meta( $this->post_id, $this->text_type_field['id'], '12:00 AM' );
 
 		$field = $this->get_field_object( 'text_time' );
 		$type = $this->get_field_type_object( $field );
@@ -377,11 +377,10 @@ class Test_CMB2_Types extends Test_CMB2 {
 		// Check that time format is set to the default (since we didn't set it)
 		$this->assertEquals( 'h:i A', $field->args( 'time_format' ) );
 
-		$value = $field->format_timestamp( strtotime( 'today' ), 'time_format' );
-
+		$value = '12:00 AM';
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-timepicker text-time" name="field_test_field" id="field_test_field" value="%s"/><span class="cmb2-metabox-description">This is a description</span>', $value ),
+			sprintf( "<input type=\"text\" class=\"cmb2-timepicker text-time\" name=\"field_test_field\" id=\"field_test_field\" value=\"%s\" data-timepicker='{ \"timeFormat\": \"hh:mm TT\" }'/><span class=\"cmb2-metabox-description\">This is a description</span>", $value ),
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -490,7 +489,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$formatted_val_to_update = $field->format_timestamp( $val_to_update );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s"/><span class="cmb2-metabox-description">This is a description</span>', $formatted_val_to_update ),
+			sprintf( "<input type=\"text\" class=\"cmb2-text-small cmb2-datepicker\" name=\"field_test_field\" id=\"field_test_field\" value=\"%s\" data-datepicker='{ \"dateFormat\": \"mm&#39;/&#39;dd&#39;/&#39;yy\" }'/><span class=\"cmb2-metabox-description\">This is a description</span>", $formatted_val_to_update ),
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
