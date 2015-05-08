@@ -1,13 +1,17 @@
 <?php
 
 /**
- * CMB ajax methods
+ * CMB2 ajax methods
  * (i.e. a lot of work to get oEmbeds to work with non-post objects)
  *
  * @since  0.9.5
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
  */
 class CMB2_Ajax {
-
 
 	// Whether to hijack the oembed cache system
 	protected $hijack      = false;
@@ -15,7 +19,6 @@ class CMB2_Ajax {
 	protected $embed_args  = array();
 	protected $object_type = 'post';
 	protected $ajax_update = false;
-
 
 	/**
 	 * Handles our oEmbed ajax request
@@ -59,7 +62,6 @@ class CMB2_Ajax {
 
 		wp_send_json_success( $html );
 	}
-
 
 	/**
 	 * Retrieves oEmbed from url/object ID
@@ -138,7 +140,6 @@ class CMB2_Ajax {
 
 	}
 
-
 	/**
 	 * Hijacks retrieving of cached oEmbed.
 	 * Returns cached data from relevant object metadata (vs postmeta)
@@ -166,7 +167,6 @@ class CMB2_Ajax {
 
 	}
 
-
 	/**
 	 * Hijacks saving of cached oEmbed.
 	 * Saves cached data to relevant object metadata (vs postmeta)
@@ -189,7 +189,6 @@ class CMB2_Ajax {
 		// Anything other than `null` to cancel saving to postmeta
 		return true;
 	}
-
 
 	/**
 	 * Saves the cached oEmbed value to relevant object metadata (vs postmeta)

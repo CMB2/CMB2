@@ -1,8 +1,16 @@
 <?php
+/**
+ * CMB2_Field tests
+ *
+ * @package   Tests_CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 require_once( 'cmb-tests-base.php' );
 
-class CMB2_Field_Test extends CMB2_Test {
+class Test_CMB2_Field extends Test_CMB2 {
 
 	/**
 	 * Set up the test fixture
@@ -232,6 +240,53 @@ class CMB2_Field_Test extends CMB2_Test {
 
 	}
 
+	public function test_set_get_filters() {
+		// Value to set
+		$array_val = array( 'check1', 'check2' );
+
+		// Set the field value normally
+		$this->field->save_field( $array_val );
+
+		// Verify that field was saved succesfully to post-meta
+		$this->assertEquals( $array_val, get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		// Now delete the post-meta
+		delete_post_meta( $this->field->object_id, $this->field->_id() );
+
+		// Verify that the post-meta no longer exists
+		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		// Now filter the setting of the meta.. will use update_option instead
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( $this, 'override_set' ), 10, 4 );
+		// Set the value
+		$this->field->save_field( $array_val );
+
+		// Verify that the post-meta is still empty
+		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+
+		// Re-create the option key that we used to save the data
+		$opt_key = 'test-'. $this->field->object_id . '-' . $this->field->_id();
+		// And retrieve the option
+		$opt = get_option( $opt_key );
+
+		// Verify it is the value we set
+		$this->assertEquals( $array_val, $opt );
+
+		// Now retireve the value.. will default to getting from post-meta
+		$value = $this->field->get_data();
+
+		// Verify that there's still nothing there in post-meta
+		$this->assertFalse( !! $value );
+
+		// Now filter the getting of the meta, which will use get_option
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( $this, 'override_get' ), 10, 4 );
+		// Get the value
+		$value = $this->field->get_data();
+
+		// Verify that the data we retrieved now matches the value we set
+		$this->assertEquals( $array_val, $value );
+	}
+
 	public function before_field_cb( $args ) {
 		echo 'before_field_cb_' . $args['id'];
 	}
@@ -252,6 +307,17 @@ class CMB2_Field_Test extends CMB2_Test {
 		 * Side benefit: this will call out when default args change
 		 */
 		return implode( ', ', array_keys( $args ) );
+	}
+
+	public function override_set( $override, $args, $field_args, $field ) {
+		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		$updated = update_option( $opt_key, $args['value'] );
+		return true;
+	}
+
+	public function override_get( $override_val, $object_id, $args, $field ) {
+		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		return get_option( $opt_key );
 	}
 
 }

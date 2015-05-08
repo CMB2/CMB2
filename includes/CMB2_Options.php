@@ -1,7 +1,19 @@
 <?php
+/**
+ * CMB2 Utility classes for handling multi-dimensional array data for options
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
 
 /**
  * Retrieves an instance of CMB2_Option based on the option key
+ *
+ * @package   CMB2
+ * @author    WebDevStudios
  */
 class CMB2_Options {
 	/**
@@ -24,6 +36,9 @@ class CMB2_Options {
 /**
  * Handles getting/setting of values to an option array
  * for a specific option key
+ *
+ * @package   CMB2
+ * @author    WebDevStudios
  */
 class CMB2_Option {
 
@@ -57,7 +72,7 @@ class CMB2_Option {
 	public function delete_option() {
 		$deleted = $this->key ? delete_option( $this->key ) : true;
 		$this->options = $deleted ? array() : $this->options;
-		return $result;
+		return $this->options;
 	}
 
 	/**

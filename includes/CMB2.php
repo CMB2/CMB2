@@ -1,6 +1,12 @@
 <?php
 /**
- * Create meta boxes
+ * CMB2 - The core metabox object
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  *
  * @property-read string $cmb_id
  * @property-read array $meta_box
@@ -20,11 +26,11 @@ class CMB2 {
 	 * @var   array
 	 * @since 0.9.0
 	 */
-	protected $meta_box;
+	protected $meta_box = array();
 
 	/**
 	 * Object ID for metabox meta retrieving/saving
-	 * @var   int
+	 * @var   mixed
 	 * @since 1.0.0
 	 */
 	protected $object_id = 0;
@@ -65,7 +71,8 @@ class CMB2 {
 		'show_names'   => true, // Show field names on the left
 		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
-		'cmb_styles'   => true, // Include cmb bundled stylesheet
+		'cmb_styles'   => true, // Include CMB2 stylesheet
+		'enqueue_js'   => true, // Include CMB2 JS
 		'fields'       => array(),
 		'hookup'       => true,
 		'save_fields'  => true, // Will not save during hookup if false
@@ -142,7 +149,7 @@ class CMB2 {
 
 		$this->nonce_field();
 
-		echo "\n<!-- Begin CMB Fields -->\n";
+		echo "\n<!-- Begin CMB2 Fields -->\n";
 
 		/**
 		 * Hook before form table begins
@@ -232,7 +239,7 @@ class CMB2 {
 		 */
 		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
-		echo "\n<!-- End CMB Fields -->\n";
+		echo "\n<!-- End CMB2 Fields -->\n";
 
 	}
 
@@ -242,25 +249,30 @@ class CMB2 {
 	 */
 	public function render_group( $args ) {
 
-		// If field is requesting to be conditionally shown
-		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $this ) ) {
-			return;
-		}
-
 		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
 
-		$field_group     = $this->get_field( $args );
+		$field_group = $this->get_field( $args );
+
+		// If field is requesting to be conditionally shown
+		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $field_group ) ) {
+			return;
+		}
+
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
-		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : '';
+		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
+		$repeat_class    = $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, '" style="width:100%;">';
+		$field_group->peform_param_callback( 'before_group' );
+
+		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row', $class, '"><div class="cmb-th">';
@@ -283,9 +295,13 @@ class CMB2 {
 			$this->render_group_row( $field_group, $remove_disabled );
 		}
 
-		echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field_group->id(), '_repeat" data-grouptitle="', $field_group->options( 'group_title' ), '" class="cmb-add-group-row button">', $field_group->options( 'add_button' ), '</button></p></div></div>';
+		if ( $field_group->args( 'repeatable' ) ) {
+			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field_group->id(), '_repeat" data-grouptitle="', $field_group->options( 'group_title' ), '" class="cmb-add-group-row button">', $field_group->options( 'add_button' ), '</button></p></div></div>';
+		}
 
 		echo '</div></div></div>';
+
+		$field_group->peform_param_callback( 'after_group' );
 
 	}
 
@@ -297,10 +313,16 @@ class CMB2 {
 	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
 
-		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">
+		$field_group->peform_param_callback( 'before_group_row' );
 
-			<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+		echo '
+		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">';
+
+			if ( $field_group->args( 'repeatable' ) ) {
+				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
+			}
+
+			echo '
 			<div class="cmbhandle" title="' , __( 'Click to toggle', 'cmb2' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
@@ -323,16 +345,21 @@ class CMB2 {
 						$field = $this->get_field( $field_args, $field_group )->render_field();
 					}
 				}
-				echo '
-				<div class="cmb-row cmb-remove-field-row">
-					<div class="cmb-remove-row">
-						<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
+				if ( $field_group->args( 'repeatable' ) ) {
+					echo '
+					<div class="cmb-row cmb-remove-field-row">
+						<div class="cmb-remove-row">
+							<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
+						</div>
 					</div>
-				</div>
-
+					';
+				}
+			echo '
 			</div>
 		</div>
 		';
+
+		$field_group->peform_param_callback( 'after_group_row' );
 	}
 
 	/**
@@ -489,7 +516,8 @@ class CMB2 {
 		) );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
-		$group_vals         = $this->data_to_save[ $base_id ];
+		// Check if group field has sanitization_cb
+		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved              = array();
 		$field_group->index = 0;
 
@@ -713,23 +741,44 @@ class CMB2 {
 			return $this->fields[ $index ];
 		}
 
-		$field_array = $this->prop( 'fields' );
-
-		// Check if group is passed and if fields were added in the old-school fields array
-		$args = $field_group && ( $sub_field_id || 0 === $sub_field_id )
-			? array(
-				'field_args'  => $field_array[ $field_id ]['fields'][ $sub_field_id ],
-				'group_field' => $field_group,
-			)
-			: array(
-				'field_args'  => is_array( $field ) ? array_merge( $field, $field_array[ $field_id ] ) : $field_array[ $field_id ],
-				'object_type' => $this->object_type(),
-				'object_id'   => $this->object_id(),
-			);
-
-		$this->fields[ $index ] = new CMB2_Field( $args );
+		$this->fields[ $index ] = new CMB2_Field( $this->get_field_args( $field_id, $field, $sub_field_id, $field_group ) );
 
 		return $this->fields[ $index ];
+	}
+
+	/**
+	 * Handles determining which type of arguments to pass to CMB2_Field
+	 * @since  2.0.7
+	 * @param  mixed  $field_id     Field (or group field) ID
+	 * @param  mixed  $field_args   Array of field arguments
+	 * @param  mixed  $sub_field_id Sub field ID (if field_group exists)
+	 * @param  mixed  $field_group  If a sub-field, will be the parent group CMB2_Field object
+	 * @return array                Array of CMB2_Field arguments
+	 */
+	public function get_field_args( $field_id, $field_args, $sub_field_id, $field_group ) {
+
+		// Check if group is passed and if fields were added in the old-school fields array
+		if ( $field_group && ( $sub_field_id || 0 === $sub_field_id ) ) {
+
+			// Update the fields array w/ any modified properties inherited from the group field
+			$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] = $field_args;
+
+			return array(
+				'field_args'  => $field_args,
+				'group_field' => $field_group,
+			);
+
+		}
+
+		if ( is_array( $field_args ) ) {
+			$this->meta_box['fields'][ $field_id ] = array_merge( $field_args, $this->meta_box['fields'][ $field_id ] );
+		}
+
+		return array(
+			'field_args'  => $this->meta_box['fields'][ $field_id ],
+			'object_type' => $this->object_type(),
+			'object_id'   => $this->object_id(),
+		);
 	}
 
 	/**

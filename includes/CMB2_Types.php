@@ -1,13 +1,16 @@
 <?php
-
 /**
- * CMB field types
+ * CMB field type objects
  *
- * @todo test taxonomy methods with non-post objects
- * @todo test all methods with non-post objects
- * @todo Time fields should store date format as data attribute for JS
+ * @todo Date/Time fields should store date format as data attribute for JS
  *
  * @since  1.0.0
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
  */
 class CMB2_Types {
 
@@ -505,6 +508,8 @@ class CMB2_Types {
 			'data-datepicker' => '{ "dateFormat": "' . $dateFormat  . '" }'
 		) );
 
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker' ) );
+
 		return $this->input( $args );
 	}
 
@@ -522,6 +527,8 @@ class CMB2_Types {
 			'desc' => $this->_desc(),
 			'data-timepicker' => '{ "timeFormat": "' . $timeFormat  . '" }'
 		) );
+
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ) );
 
 		return $this->input( $args );
 	}
@@ -560,6 +567,8 @@ class CMB2_Types {
 			'value' => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
 			'desc'  => $args['desc'],
 		) );
+
+		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ) );
 
 		return $this->input( $date_args ) . "\n" . $this->input( $time_args );
 	}
@@ -624,6 +633,8 @@ class CMB2_Types {
 			// Value doesn't match #123abc, so sanitize to just #
 			$meta_value = '#';
 		}
+
+		wp_enqueue_style( 'wp-color-picker' );
 
 		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
@@ -878,6 +889,8 @@ class CMB2_Types {
 		}
 
 		echo '</ul>';
+
+		CMB2_JS::add_dependencies( 'media-editor' );
 	}
 
 	public function file() {
@@ -957,6 +970,8 @@ class CMB2_Types {
 				}
 			}
 		echo '</div>';
+
+		CMB2_JS::add_dependencies( 'media-editor' );
 	}
 
 	/**

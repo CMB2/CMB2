@@ -1,6 +1,13 @@
 <?php
-
-abstract class CMB2_Test extends WP_UnitTestCase {
+/**
+ * CMB2 tests base
+ *
+ * @package   Tests_CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
+abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	/**
 	 * Set up the test fixture
@@ -59,7 +66,7 @@ abstract class CMB2_Test extends WP_UnitTestCase {
 		if ( 0 !== $compare ) {
 
 			$compare       = strspn( $expected_string ^ $string_to_test, "\0" );
-			$chars_to_show = 50;
+			$chars_to_show = 75;
 			$start         = ( $compare - 5 );
 			$pointer       = '|--->>';
 			$sep           = "\n". str_repeat( '-', 75 );
