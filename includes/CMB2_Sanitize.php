@@ -394,7 +394,7 @@ class CMB2_Sanitize {
 		$clean    = $this->text_url( $this->value );
 
 		// Return an array with url/id if saving a group field
-		return $this->field->group ? array_merge( [ 'url' => $clean ], $id_value ) : $clean;
+		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;
 	}
 
 	/**
