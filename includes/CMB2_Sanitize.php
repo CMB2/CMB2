@@ -343,12 +343,12 @@ class CMB2_Sanitize {
 
 		unset( $args['_id'], $args['_name'] );
 		// And get new field object
-		$field      = new CMB2_Field( [
+		$field      = new CMB2_Field( array(
 			'field_args'  => $args,
 			'group_field' => $group,
 			'object_id'   => $this->field->object_id,
 			'object_type' => $this->field->object_type,
-		] );
+		) );
 		$id_key     = $field->_id();
 		$id_val_old = $field->escaped_value( 'absint' );
 
@@ -411,7 +411,7 @@ class CMB2_Sanitize {
 		if ( $repeat || ! $this->field->args( 'repeatable' ) ) {
 			return;
 		}
-		$new_value = [ ];
+		$new_value = array();
 		foreach ( $this->value as $iterator => $val ) {
 			$new_value[] = $this->$method( $val, true );
 		}
