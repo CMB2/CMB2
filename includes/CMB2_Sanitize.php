@@ -1,8 +1,9 @@
 <?php
+
 /**
  * CMB2 field sanitization
  *
- * @since  0.0.4
+ * @since     0.0.4
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -32,6 +33,7 @@ class CMB2_Sanitize {
 	 * Setup our class vars
 	 *
 	 * @since 1.1.0
+	 *
 	 * @param CMB2_Field $field A CMB2 field object
 	 * @param mixed      $value Field value
 	 */
@@ -47,6 +49,7 @@ class CMB2_Sanitize {
 	 *
 	 * @param  string $name      Non-existent method name
 	 * @param  array  $arguments All arguments passed to the method
+	 *
 	 * @return mixed
 	 */
 	public function __call( $name, $arguments ) {
@@ -80,6 +83,7 @@ class CMB2_Sanitize {
 		/**
 		 * This exists for back-compatibility, but validation
 		 * is not what happens here.
+		 *
 		 * @deprecated See documentation above.
 		 */
 		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value,
@@ -200,8 +204,8 @@ class CMB2_Sanitize {
 
 		global $wp_locale;
 
-		$search  = [ $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] ];
-		$replace = [ '', '.' ];
+		$search  = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
+		$replace = array( '', '.' );
 
 		// for repeatable
 		if ( is_array( $this->value ) ) {
