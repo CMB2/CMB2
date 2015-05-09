@@ -370,10 +370,10 @@ class CMB2_Sanitize {
 		}
 
 		if ( $group ) {
-			return [
+			return array(
 				'attach_id' => $id_val,
 				'field_id'  => $id_key,
-			];
+			);
 		}
 
 		if ( $id_val && $id_val != $id_val_old ) {
