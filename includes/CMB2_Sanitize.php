@@ -227,7 +227,7 @@ class CMB2_Sanitize {
 	 */
 	public function text_date_timestamp() {
 		if ( is_array( $this->value ) ) {
-			$returnee = [ ];
+			$returnee = array();
 			foreach ( $this->value as $value ) {
 				$date_object = DateTime::createFromFormat( $this->field->args['date_format'], $value );
 				$returnee[]  = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
