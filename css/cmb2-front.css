@@ -2405,6 +2405,9 @@ Sidebar Placement Adjustments
   color: #ccc;
 }
 
+/**
+ * CMB2 Frontend
+ */
 /* line 1, sass/partials/_front.scss */
 .closed .inside {
   display: none;
