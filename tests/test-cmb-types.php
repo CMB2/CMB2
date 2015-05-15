@@ -225,6 +225,18 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	public function test_field_options_bools() {
+		$cmb   = new CMB2( $this->options_test );
+		$field = cmb2_get_field( $this->options_test['id'], 'options_test_field', $this->post_id );
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+
+		$this->assertEquals( $field->options( 'one' ), 'One' );
+		$this->assertEquals( $field->options( 'two' ), 'Two' );
+		$this->assertTrue( $field->options( 'true' ) );
+		$this->assertFalse( $field->options( 'false' ) );
+		$this->assertFalse( $field->options( 'random_string' ) );
+	}
+
 	public function test_field_attributes() {
 		$cmb   = new CMB2( $this->attributes_test );
 		$field = cmb2_get_field( $this->attributes_test['id'], 'attributes_test_field', $this->post_id );
@@ -767,7 +779,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
-		$src = 'http' . ( $wp_version > 3.9 ? 's' : '' ) . '://www.youtube.com/embed/' . $vid . '?feature=oembed';
+		$src = 'http' . ( $wp_version > 3.7 ? 's' : '' ) . '://www.youtube.com/embed/' . $vid . '?feature=oembed';
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
  		$results = $this->is_connected()
@@ -780,6 +792,16 @@ class Test_CMB2_Types extends Test_CMB2 {
 		);
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_js_dependencies() {
+		$this->assertEquals( array(
+			'jquery'                   => 'jquery',
+			'jquery-ui-core'           => 'jquery-ui-core',
+			'jquery-ui-datepicker'     => 'jquery-ui-datepicker',
+			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
+			'media-editor'             => 'media-editor',
+		), Test_CMB2_JS::dependencies() );
 	}
 
 
@@ -834,4 +856,13 @@ class Test_CMB2_Types extends Test_CMB2 {
 		return '£ ' . $field_args['type'];
 	}
 
+}
+
+/**
+ * Simply allows access to the dependencies protected property (for testing)
+ */
+class Test_CMB2_JS extends CMB2_JS {
+	public static function dependencies() {
+		return parent::$dependencies;
+	}
 }

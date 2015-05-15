@@ -4,9 +4,11 @@ Post Metaboxes
 #poststuff .cmb-group-title {
 	margin-left: -1em;
 	margin-right: -1em;
-	padding-left: 2.2em;
-	// cursor: move;
 	min-height: 1.5em;
+}
+
+#poststuff .repeatable .cmb-group-title {
+	padding-left: 2.2em;
 }
 
 .postbox-container, .cmb-repeat-group-wrap {
