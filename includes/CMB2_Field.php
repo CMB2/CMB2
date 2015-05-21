@@ -908,6 +908,10 @@ class CMB2_Field {
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
+		if( 'text_money' === $args['type'] ) {
+			$args['before_field'] = apply_filters( 'cmb2_text_money_before_field_filter', ( isset($args['before_field']) ? $args['before_field'] : '$' ), $this );
+		}
+
 		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
 
 		if ( in_array( $args['type'], $option_types, true ) ) {
