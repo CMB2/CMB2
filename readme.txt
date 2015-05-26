@@ -1,12 +1,12 @@
-=== CMB2 ===  
-Contributors:      webdevstudios, jtsternberg, gregrickaby, tw2113, patrickgarman  
-Donate link:       http://webdevstudios.com  
-Tags:              metaboxes, forms, fields, options, settings  
-Requires at least: 3.8.0  
-Tested up to:      4.2.1  
-Stable tag:        2.0.6  
-License:           GPLv2 or later  
-License URI:       http://www.gnu.org/licenses/gpl-2.0.html  
+=== CMB2 ===
+Contributors:      webdevstudios, jtsternberg, gregrickaby, tw2113, patrickgarman
+Donate link:       http://webdevstudios.com
+Tags:              metaboxes, forms, fields, options, settings
+Requires at least: 3.8.0
+Tested up to:      4.2.1
+Stable tag:        2.0.6
+License:           GPLv2 or later
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
 CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.
 
@@ -52,6 +52,7 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 
 * [CMB Field Type: Gallery](https://github.com/mustardBees/cmb-field-gallery) from [mustardBees](https://github.com/mustardBees): Adds a WordPress gallery field.
 * [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [mattkrupnik](https://github.com/mattkrupnik/): Adds a jQuery UI Slider field.
+* [WDS CMB2 Date Range Field](https://github.com/WebDevStudios/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
 
 ##### Other Helpful Resources
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
