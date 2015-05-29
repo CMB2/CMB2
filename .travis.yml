@@ -18,6 +18,10 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
+    - env: WP_VERSION=latest WP_MULTISITE=0
+      php: nightly
+    - env: WP_VERSION=latest WP_MULTISITE=1
+      php: nightly
     - env: WP_VERSION=3.8 WP_MULTISITE=0
       php: nightly
     - env: WP_VERSION=3.8 WP_MULTISITE=1
