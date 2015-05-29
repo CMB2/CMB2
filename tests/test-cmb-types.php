@@ -779,16 +779,20 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
-		$src = 'http' . ( $wp_version > 3.7 ? 's' : '' ) . '://www.youtube.com/embed/' . $vid . '?feature=oembed';
+		$src = 'http://www.youtube.com/embed/' . $vid . '?feature=oembed';
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
  		$results = $this->is_connected()
  			? sprintf( '<div class="embed-status"><iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $src )
- 			: sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $value, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $value ) ) );
+ 			: sprintf( '<p class="ui-state-error-text">%2$s <a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $value, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $value ) ) );
+
+ 		$expected_field = sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="%1$s" data-objectid=\'%2$d\' data-objecttype=\'post\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner" style="display:none;"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap">%3$s</div>', $value, $this->post_id, $results );
+
+ 		$actual_field = $this->capture_render( array( $this->get_field_type_object( 'oembed' ), 'render' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="%1$s" data-objectid=\'%2$d\' data-objecttype=\'post\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner" style="display:none;"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap">%3$s</div>', $value, $this->post_id, $results ),
-			$this->capture_render( array( $this->get_field_type_object( 'oembed' ), 'render' ) )
+			preg_replace( '~https?://~', '', $expected_field ), // normalize http differences
+			preg_replace( '~https?://~', '', $actual_field ) // normalize http differences
 		);
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
