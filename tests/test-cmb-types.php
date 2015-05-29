@@ -775,7 +775,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 	}
 
 	public function test_oembed_field_after_value_update() {
-		global $wp_version, $wp_embed;
+		global $wp_embed;
 
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;

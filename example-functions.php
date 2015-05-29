@@ -81,10 +81,10 @@ function yourprefix_register_demo_metabox() {
 		'id'            => $prefix . 'metabox',
 		'title'         => __( 'Test Metabox', 'cmb2' ),
 		'object_types'  => array( 'page', ), // Post type
-		'show_on_cb'    => 'yourprefix_show_if_front_page', // function should return a bool value
-		'context'       => 'normal',
-		'priority'      => 'high',
-		'show_names'    => true, // Show field names on the left
+		// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
+		// 'context'    => 'normal',
+		// 'priority'   => 'high',
+		// 'show_names' => true, // Show field names on the left
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // true to keep the metabox closed by default
 	) );
