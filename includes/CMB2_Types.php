@@ -629,6 +629,7 @@ class CMB2_Types {
 		}
 
 		wp_enqueue_style( 'wp-color-picker' );
+		CMB2_JS::add_dependencies( array( 'wp-color-picker' ) );
 
 		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
