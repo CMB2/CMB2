@@ -805,6 +805,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 			'jquery-ui-datepicker'     => 'jquery-ui-datepicker',
 			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
 			'media-editor'             => 'media-editor',
+			'wp-color-picker'          => 'wp-color-picker',
 		), Test_CMB2_JS::dependencies() );
 	}
 
