@@ -25,7 +25,7 @@ Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/con
 
 CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.
 
-**[Plugin available on wordpress.org](http://wordpress.org/plugins/cmb2/)**
+**[Download plugin on wordpress.org](http://wordpress.org/plugins/cmb2/)**
 
 CMB2 is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). To get started, please follow the examples in the included `example-functions.php` file and have a look at the [basic usage instructions](https://github.com/WebDevStudios/CMB2/wiki/Basic-Usage).
 
