@@ -11,7 +11,7 @@
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Tested up to:**      4.2.2  
-**Stable tag:**        2.0.7  
+**Stable tag:**        2.0.8  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
 
@@ -95,7 +95,15 @@ If including the library in your plugin or theme:
 2. Edit to only include the fields you need and rename the functions (CMB2 directory should be left unedited in order to easily update the library).
 4. Profit.
 
-## Most Recent Changes - 2.0.7
+## Most Recent Changes
+
+### 2.0.8
+
+#### Bug Fixes
+
+* Fix color-picker field not enqueueing the colorpicker script. ([#333](https://github.com/WebDevStudios/CMB2/issues/333))
+
+### 2.0.7
 
 #### Enhancements
 

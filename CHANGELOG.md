@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 * 
 
+## 2.0.8 - 2015-06-01
+
+### Bug Fixes
+
+* Fix color-picker field not enqueueing the colorpicker script. ([#333](https://github.com/WebDevStudios/CMB2/issues/333))
+
 ## 2.0.7 - 2015-05-28
 
 ### Enhancements
