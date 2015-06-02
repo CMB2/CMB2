@@ -6,464 +6,448 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-03-17 14:35:40+00:00\n"
-"PO-Revision-Date: 2015-04-15 09:12-0400\n"
-"Last-Translator: Lucas Carvalho <lucas.cdsilva@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/cmb2/"
-"language/pt_BR/)\n"
+"POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
+"PO-Revision-Date: 2015-06-02 16:10+0000\n"
+"Last-Translator: FxB <fxb@wp-translations.org>\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/cmb2/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
-"_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
-"esc_html_x:1,2c\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Textdomain-Support: yes\n"
-"X-Poedit-SearchPath-0: .\n"
 
-#: example-functions.php:67
+#: example-functions.php:82 tests/test-cmb-field.php:206
 msgid "Test Metabox"
 msgstr "Metabox de teste "
 
-#: example-functions.php:77 example-functions.php:363
+#: example-functions.php:93 example-functions.php:380
 msgid "Test Text"
 msgstr "Teste Texto"
 
-#: example-functions.php:78 example-functions.php:90 example-functions.php:98
-#: example-functions.php:106 example-functions.php:115
-#: example-functions.php:123 example-functions.php:137
-#: example-functions.php:144 example-functions.php:152
-#: example-functions.php:169 example-functions.php:178
-#: example-functions.php:186 example-functions.php:193
-#: example-functions.php:200 example-functions.php:214
-#: example-functions.php:227 example-functions.php:240
-#: example-functions.php:252 example-functions.php:261
-#: example-functions.php:269 example-functions.php:278
-#: example-functions.php:285 example-functions.php:298
-#: example-functions.php:364 example-functions.php:458
-#: example-functions.php:466 example-functions.php:473
-#: example-functions.php:480 example-functions.php:487
-#: example-functions.php:494 example-functions.php:501
-#: example-functions.php:539
+#: example-functions.php:94 example-functions.php:106
+#: example-functions.php:114 example-functions.php:122
+#: example-functions.php:131 example-functions.php:139
+#: example-functions.php:153 example-functions.php:160
+#: example-functions.php:168 example-functions.php:185
+#: example-functions.php:194 example-functions.php:202
+#: example-functions.php:209 example-functions.php:216
+#: example-functions.php:230 example-functions.php:243
+#: example-functions.php:256 example-functions.php:268
+#: example-functions.php:277 example-functions.php:285
+#: example-functions.php:294 example-functions.php:301
+#: example-functions.php:315 example-functions.php:381
+#: example-functions.php:475 example-functions.php:483
+#: example-functions.php:490 example-functions.php:497
+#: example-functions.php:504 example-functions.php:511
+#: example-functions.php:518 example-functions.php:556
+#: tests/test-cmb-field.php:218
 msgid "field description (optional)"
 msgstr "Campo de descrição (opcional)"
 
-#: example-functions.php:89
+#: example-functions.php:105
 msgid "Test Text Small"
 msgstr "Teste Texto Pequeno"
 
-#: example-functions.php:97
+#: example-functions.php:113
 msgid "Test Text Medium"
 msgstr "Teste Texto Médio"
 
-#: example-functions.php:105
+#: example-functions.php:121
 msgid "Website URL"
 msgstr "URL do Website"
 
-#: example-functions.php:114
+#: example-functions.php:130
 msgid "Test Text Email"
 msgstr "Teste Texto Email"
 
-#: example-functions.php:122
+#: example-functions.php:138
 msgid "Test Time"
 msgstr "Teste Horário "
 
-#: example-functions.php:129 example-functions.php:130
+#: example-functions.php:145 example-functions.php:146
 msgid "Time zone"
 msgstr "Fuso horário"
 
-#: example-functions.php:136
+#: example-functions.php:152
 msgid "Test Date Picker"
 msgstr "Teste Selecionador Data"
 
-#: example-functions.php:143
+#: example-functions.php:159
 msgid "Test Date Picker (UNIX timestamp)"
 msgstr "Teste Selecionador Data (UNIX timestamp)"
 
-#: example-functions.php:151
+#: example-functions.php:167
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
 msgstr "Teste Date/ Selecionador Hora Combo (UNIX timestamp)"
 
-#: example-functions.php:168
+#: example-functions.php:184
 msgid "Test Money"
 msgstr "Teste Preço"
 
-#: example-functions.php:177
+#: example-functions.php:193
 msgid "Test Color Picker"
 msgstr "Teste Selecionador Cor "
 
-#: example-functions.php:185
+#: example-functions.php:201
 msgid "Test Text Area"
 msgstr "Teste Área de Texto"
 
-#: example-functions.php:192
+#: example-functions.php:208
 msgid "Test Text Area Small"
 msgstr "Teste Área de Texto Pequena"
 
-#: example-functions.php:199
+#: example-functions.php:215
 msgid "Test Text Area for Code"
 msgstr "Teste Área de Texto para código"
 
-#: example-functions.php:206
+#: example-functions.php:222
 msgid "Test Title Weeeee"
 msgstr "Teste Título Weeeee"
 
-#: example-functions.php:207
+#: example-functions.php:223
 msgid "This is a title description"
 msgstr "Essa é a descrição do título"
 
-#: example-functions.php:213
+#: example-functions.php:229
 msgid "Test Select"
 msgstr "Teste Selecionador"
 
-#: example-functions.php:219 example-functions.php:232
-#: example-functions.php:244
+#: example-functions.php:235 example-functions.php:248
+#: example-functions.php:260
 msgid "Option One"
 msgstr "primeira opção"
 
-#: example-functions.php:220 example-functions.php:233
-#: example-functions.php:245
+#: example-functions.php:236 example-functions.php:249
+#: example-functions.php:261
 msgid "Option Two"
 msgstr "segunda opção"
 
-#: example-functions.php:221 example-functions.php:234
-#: example-functions.php:246
+#: example-functions.php:237 example-functions.php:250
+#: example-functions.php:262
 msgid "Option Three"
 msgstr "terceira opção"
 
-#: example-functions.php:226
+#: example-functions.php:242
 msgid "Test Radio inline"
 msgstr "Texte Radio em linha"
 
-#: example-functions.php:239
+#: example-functions.php:255
 msgid "Test Radio"
 msgstr "Teste Radio"
 
-#: example-functions.php:251
+#: example-functions.php:267
 msgid "Test Taxonomy Radio"
 msgstr "Teste Radio Taxonomia"
 
-#: example-functions.php:260
+#: example-functions.php:276
 msgid "Test Taxonomy Select"
 msgstr "Teste Selecionador Taxonomia"
 
-#: example-functions.php:268
+#: example-functions.php:284
 msgid "Test Taxonomy Multi Checkbox"
 msgstr "Teste Multi Checkbox Taxonomia"
 
-#: example-functions.php:277
+#: example-functions.php:293
 msgid "Test Checkbox"
 msgstr "Teste Checkbox"
 
-#: example-functions.php:284
+#: example-functions.php:300 tests/test-cmb-field.php:217
 msgid "Test Multi Checkbox"
 msgstr "Teste Multi Checkbox"
 
-#: example-functions.php:289
+#: example-functions.php:306 tests/test-cmb-field.php:223
 msgid "Check One"
 msgstr "Caixa de Seleção 1"
 
-#: example-functions.php:290
+#: example-functions.php:307 tests/test-cmb-field.php:224
 msgid "Check Two"
 msgstr "Caixa de Seleção 2"
 
-#: example-functions.php:291
+#: example-functions.php:308 tests/test-cmb-field.php:225
 msgid "Check Three"
 msgstr "Caixa de Seleção 3"
 
-#: example-functions.php:297
+#: example-functions.php:314
 msgid "Test wysiwyg"
 msgstr "Teste wysiwyg"
 
-#: example-functions.php:305
+#: example-functions.php:322
 msgid "Test Image"
 msgstr "Teste Imagem"
 
-#: example-functions.php:306
+#: example-functions.php:323
 msgid "Upload an image or enter a URL."
 msgstr "Faça o upload de uma imagem ou digite uma URL."
 
-#: example-functions.php:312
+#: example-functions.php:329
 msgid "Multiple Files"
 msgstr "Múltiplos Arquivos "
 
-#: example-functions.php:313
+#: example-functions.php:330
 msgid "Upload or add multiple images/attachments."
 msgstr "Carregar ou adicionar várias imagens / anexos."
 
-#: example-functions.php:320
+#: example-functions.php:337
 msgid "oEmbed"
 msgstr "oEmbed"
 
-#: example-functions.php:321
+#: example-functions.php:338
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
-msgstr ""
-"Digite um youtube, twitter, ou URL instagram. Suporta serviços listados no "
-"<a href=\"http://codex.wordpress.org/Embeds\"> http://codex.wordpress.org/"
-"Embeds </a>"
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+msgstr "Digite um youtube, twitter, ou URL instagram. Suporta serviços listados no <a href=\"http://codex.wordpress.org/Embeds\"> http://codex.wordpress.org/Embeds </a>"
 
-#: example-functions.php:354
+#: example-functions.php:371
 msgid "About Page Metabox"
 msgstr "Página Sobre  Metabox"
 
-#: example-functions.php:385
+#: example-functions.php:402
 msgid "Repeating Field Group"
 msgstr "Repetir Grupo de Campos"
 
-#: example-functions.php:393
+#: example-functions.php:410
 msgid "Generates reusable form entries"
 msgstr "Gera entradas de formulários reutilizáveis"
 
-#: example-functions.php:395
+#: example-functions.php:412
 msgid "Entry {#}"
 msgstr "Entrada {#}"
 
-#: example-functions.php:396
+#: example-functions.php:413
 msgid "Add Another Entry"
 msgstr "Adicionar outra entrada"
 
-#: example-functions.php:397
+#: example-functions.php:414
 msgid "Remove Entry"
 msgstr "Remover Entrada"
 
-#: example-functions.php:409
+#: example-functions.php:426
 msgid "Entry Title"
 msgstr "Título Entrada"
 
-#: example-functions.php:416
+#: example-functions.php:433
 msgid "Description"
 msgstr "Descrição"
 
-#: example-functions.php:417
+#: example-functions.php:434
 msgid "Write a short description for this entry"
 msgstr "Faça uma breve descrição para esta entrada"
 
-#: example-functions.php:423
+#: example-functions.php:440
 msgid "Entry Image"
 msgstr "Imagem entrada "
 
-#: example-functions.php:429
+#: example-functions.php:446
 msgid "Image Caption"
 msgstr "Descrição da imagem"
 
-#: example-functions.php:450
+#: example-functions.php:467
 msgid "User Profile Metabox"
 msgstr "Perfil de usuário Metabox"
 
-#: example-functions.php:457
+#: example-functions.php:474
 msgid "Extra Info"
 msgstr "Informação extra"
 
-#: example-functions.php:465
+#: example-functions.php:482
 msgid "Avatar"
 msgstr "Avatar"
 
-#: example-functions.php:472
+#: example-functions.php:489
 msgid "Facebook URL"
 msgstr "URL do Facebook"
 
-#: example-functions.php:479
+#: example-functions.php:496
 msgid "Twitter URL"
 msgstr "URL do Twitter "
 
-#: example-functions.php:486
+#: example-functions.php:503
 msgid "Google+ URL"
 msgstr "URL do Google+"
 
-#: example-functions.php:493
+#: example-functions.php:510
 msgid "Linkedin URL"
 msgstr "URL do Linkedin"
 
-#: example-functions.php:500
+#: example-functions.php:517
 msgid "User Field"
 msgstr "Campo de Usuário"
 
-#: example-functions.php:523
+#: example-functions.php:540
 msgid "Theme Options Metabox"
 msgstr "Metabox Opções do Tema"
 
-#: example-functions.php:538
+#: example-functions.php:555
 msgid "Site Background Color"
 msgstr "Cor de fundo do site"
 
-#: includes/CMB2.php:112
+#: includes/CMB2.php:120
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr "﻿Configuração Metabox é necessário para ter um parâmetro de ID"
 
-#: includes/CMB2.php:302
+#: includes/CMB2.php:326
 msgid "Click to toggle"
 msgstr "Clique para expandir ou recolher."
 
-#: includes/CMB2_Ajax.php:37
+#: includes/CMB2_Ajax.php:40
 msgid "Please Try Again"
 msgstr "Tente novamente."
 
-#: includes/CMB2_Ajax.php:133 tests/test-cmb-types.php:766
+#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:786
 msgid "Remove Embed"
 msgstr "Remover Embed"
 
-#: includes/CMB2_Ajax.php:137 tests/test-cmb-types.php:767
+#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:787
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr "Nenhum resultado oEmbed Encontrado para %s. Ver mais informações"
 
-#: includes/CMB2_Field.php:885
+#: includes/CMB2_Field.php:891
 msgid "Add Group"
 msgstr "Adicionar Grupo"
 
-#: includes/CMB2_Field.php:886
+#: includes/CMB2_Field.php:892
 msgid "Remove Group"
 msgstr "Remove Grupo"
 
-#: includes/CMB2_Field.php:908 includes/CMB2_Field.php:912
-#: tests/test-cmb-field.php:170
+#: includes/CMB2_Field.php:914 includes/CMB2_Field.php:918
+#: tests/test-cmb-field.php:178
 msgid "None"
 msgstr "Nenhum"
 
-#: includes/CMB2_Types.php:294
-msgid "Add Row"
-msgstr "Adicionar Linha"
-
-#: includes/CMB2_Types.php:353 includes/CMB2_Types.php:986
-#: includes/CMB2_hookup.php:183 tests/test-cmb-types.php:147
-#: tests/test-cmb-types.php:155 tests/test-cmb-types.php:715
-#: tests/test-cmb-types.php:740
-msgid "Remove"
-msgstr "Remover"
-
-#: includes/CMB2_Types.php:722 includes/CMB2_Types.php:770
-msgid "No terms"
-msgstr "nenhum termo"
-
-#: includes/CMB2_Types.php:835 tests/test-cmb-types.php:691
-#: tests/test-cmb-types.php:717
-msgid "Add or Upload Files"
-msgstr "Adicionar ou carregar arquivos"
-
-#: includes/CMB2_Types.php:893 tests/test-cmb-types.php:727
-#: tests/test-cmb-types.php:742
-msgid "Add or Upload File"
-msgstr "Adicionar ou carregar arquivo"
-
-#: includes/CMB2_Types.php:967 includes/CMB2_hookup.php:182
-msgid "Remove Image"
-msgstr "Remover a imagem"
-
-#: includes/CMB2_Types.php:981 includes/CMB2_hookup.php:184
-#: tests/test-cmb-types.php:716 tests/test-cmb-types.php:741
-msgid "File:"
-msgstr "Arquivo:"
-
-#: includes/CMB2_Types.php:984 includes/CMB2_hookup.php:185
-#: tests/test-cmb-types.php:714 tests/test-cmb-types.php:739
-msgid "Download"
-msgstr "Download"
-
-#: includes/CMB2_hookup.php:128 includes/CMB2_hookup.php:165
+#: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"
 msgstr "Limpar"
 
-#: includes/CMB2_hookup.php:129
+#: includes/CMB2_JS.php:87
 msgid "Default"
 msgstr "Padrão"
 
-#: includes/CMB2_hookup.php:130
+#: includes/CMB2_JS.php:88
 msgid "Select Color"
 msgstr "Selecionar Cor"
 
-#: includes/CMB2_hookup.php:131
+#: includes/CMB2_JS.php:89
 msgid "Current Color"
 msgstr "Cor atual"
 
-#: includes/CMB2_hookup.php:155
-msgid "mm/dd/yy"
-msgstr "dd/mm/yy"
-
-#: includes/CMB2_hookup.php:156
+#: includes/CMB2_JS.php:110
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
-"Domingo, Segunda-feira, Terça-feira, Quarta-feira, Quinta-feira, Sexta-"
-"feira, Sábado"
+msgstr "Domingo, Segunda-feira, Terça-feira, Quarta-feira, Quinta-feira, Sexta-feira, Sábado"
 
-#: includes/CMB2_hookup.php:157
+#: includes/CMB2_JS.php:111
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
 msgstr "Dm, Sg, Tr, Qua, Qui, Sx, Sb"
 
-#: includes/CMB2_hookup.php:158
+#: includes/CMB2_JS.php:112
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
 msgstr "Dom, Seg, Ter, Qua, Qui, Sex, Sab"
 
-#: includes/CMB2_hookup.php:159
+#: includes/CMB2_JS.php:113
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr ""
-"Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, "
-"Outubro, Novembro, Dezembro"
+msgstr "Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro"
 
-#: includes/CMB2_hookup.php:160
+#: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
 msgstr "Jan, Fev, Mar, Abr, Maio, Jun, Jul, Ago, Set, Out, Nov, Dez"
 
-#: includes/CMB2_hookup.php:161
+#: includes/CMB2_JS.php:115
 msgid "Next"
 msgstr "Seguinte"
 
-#: includes/CMB2_hookup.php:162
+#: includes/CMB2_JS.php:116
 msgid "Prev"
 msgstr "Anterior"
 
-#: includes/CMB2_hookup.php:163
+#: includes/CMB2_JS.php:117
 msgid "Today"
 msgstr "Hoje"
 
-#: includes/CMB2_hookup.php:164 includes/CMB2_hookup.php:174
+#: includes/CMB2_JS.php:118 includes/CMB2_JS.php:128
 msgid "Done"
 msgstr "Concluído"
 
-#: includes/CMB2_hookup.php:168
+#: includes/CMB2_JS.php:122
 msgid "Choose Time"
 msgstr "Escolha tempo"
 
-#: includes/CMB2_hookup.php:169
+#: includes/CMB2_JS.php:123
 msgid "Time"
 msgstr "Hora"
 
-#: includes/CMB2_hookup.php:170
+#: includes/CMB2_JS.php:124
 msgid "Hour"
 msgstr "Hora"
 
-#: includes/CMB2_hookup.php:171
+#: includes/CMB2_JS.php:125
 msgid "Minute"
 msgstr "Minuto"
 
-#: includes/CMB2_hookup.php:172
+#: includes/CMB2_JS.php:126
 msgid "Second"
 msgstr "Segundo"
 
-#: includes/CMB2_hookup.php:173
+#: includes/CMB2_JS.php:127
 msgid "Now"
 msgstr "Agora"
 
-#: includes/CMB2_hookup.php:175
-msgid "hh:mm TT"
-msgstr "hh:mm TT"
-
-#: includes/CMB2_hookup.php:181
+#: includes/CMB2_JS.php:135
 msgid "Use this file"
 msgstr "Utilizar esse arquivo"
 
-#: includes/CMB2_hookup.php:186
+#: includes/CMB2_JS.php:136 includes/CMB2_Types.php:983
+msgid "Remove Image"
+msgstr "Remover a imagem"
+
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:356
+#: includes/CMB2_Types.php:1002 tests/test-cmb-types.php:155
+#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:735
+#: tests/test-cmb-types.php:760
+msgid "Remove"
+msgstr "Remover"
+
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:997
+#: tests/test-cmb-types.php:736 tests/test-cmb-types.php:761
+msgid "File:"
+msgstr "Arquivo:"
+
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1000
+#: tests/test-cmb-types.php:734 tests/test-cmb-types.php:759
+msgid "Download"
+msgstr "Download"
+
+#: includes/CMB2_JS.php:140
 msgid "Select / Deselect All"
 msgstr "Selecione / Remove tudo"
 
-#: includes/helper-functions.php:254
+#: includes/CMB2_Types.php:297
+msgid "Add Row"
+msgstr "Adicionar Linha"
+
+#: includes/CMB2_Types.php:734 includes/CMB2_Types.php:782
+msgid "No terms"
+msgstr "nenhum termo"
+
+#: includes/CMB2_Types.php:847 tests/test-cmb-types.php:711
+#: tests/test-cmb-types.php:737
+msgid "Add or Upload Files"
+msgstr "Adicionar ou carregar arquivos"
+
+#: includes/CMB2_Types.php:907 tests/test-cmb-types.php:747
+#: tests/test-cmb-types.php:762
+msgid "Add or Upload File"
+msgstr "Adicionar ou carregar arquivo"
+
+#: includes/helper-functions.php:249
 msgid "Save"
 msgstr "Salvar"
 
@@ -479,9 +463,7 @@ msgstr "https://github.com/WebDevStudios/CMB2"
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
-"CMB2 irá criar caixas de meta e os formulários com campos personalizados que "
-"vai explodir sua mente."
+msgstr "CMB2 irá criar caixas de meta e os formulários com campos personalizados que vai explodir sua mente."
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
@@ -490,3 +472,15 @@ msgstr "WebDevStudios"
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
 msgstr "http://webdevstudios.com"
+
+#: includes/CMB2_JS.php:109
+msgctxt "Valid formatDate string for jquery-ui datepicker"
+msgid "mm/dd/yy"
+msgstr "dd/mm/yy"
+
+#: includes/CMB2_JS.php:129
+msgctxt ""
+"Valid formatting string, as per "
+"http://trentrichardson.com/examples/timepicker/"
+msgid "hh:mm TT"
+msgstr "hh:mm TT"
