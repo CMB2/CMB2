@@ -1,26 +1,28 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
+# Translators:
+# Florian <florian@gabele-web.de>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 2.0.6\n"
+"Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-05-28 17:50+0100\n"
+"POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
+"PO-Revision-Date: 2015-06-02 16:10+0000\n"
+"Last-Translator: FxB <fxb@wp-translations.org>\n"
+"Language-Team: German (Germany) (http://www.transifex.com/projects/p/cmb2/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-05-28 18:11+0100\n"
-"Last-Translator: Friedhelm Jost <Friedhelm.Jost@lkc-lueneburg.de>\n"
-"Language-Team: Friedhelm Jost <Friedhelm.Jost@lkc-lueneburg.de>\n"
-"X-Generator: Poedit 1.8.1\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
-"_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
-"esc_html_x:1,2c\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../\n"
-"X-Textdomain-Support: yes\n"
 "Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: grunt-wp-i18n 0.4.9\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Textdomain-Support: yes\n"
 
 #: example-functions.php:82 tests/test-cmb-field.php:206
 msgid "Test Metabox"
@@ -200,12 +202,8 @@ msgstr "oEmbed"
 #: example-functions.php:338
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
-msgstr ""
-"Eingabe einer URL für Youtube, Twitter oder Instagram. Unterstützt alle "
-"Zugänge die wie im Beispiel eingebunden werden können. <a href=\"http://"
-"codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>"
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+msgstr "Eingabe einer URL für Youtube, Twitter oder Instagram. Unterstützt alle Zugänge die wie im Beispiel eingebunden werden können. <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>"
 
 #: example-functions.php:371
 msgid "About Page Metabox"
@@ -291,11 +289,11 @@ msgstr "Theme Options Metabox"
 msgid "Site Background Color"
 msgstr "Hintergrundfarbe der Seite"
 
-#: includes/CMB2.php:119
+#: includes/CMB2.php:120
 msgid "Metabox configuration is required to have an ID parameter"
 msgstr "Bei der Metabox Konfiguration ist die Eingabe einer ID erforderlich"
 
-#: includes/CMB2.php:316
+#: includes/CMB2.php:326
 msgid "Click to toggle"
 msgstr "Zum umschalten klicken"
 
@@ -303,153 +301,151 @@ msgstr "Zum umschalten klicken"
 msgid "Please Try Again"
 msgstr "Bitte versuche es noch einmal"
 
-#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:774
+#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:786
 msgid "Remove Embed"
 msgstr "Eingebettete Datei entfernen"
 
-#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:775
+#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:787
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr "Keine oEmbed Einträge für %s gefunden. Weitere Infos unter"
 
-#: includes/CMB2_Field.php:893
+#: includes/CMB2_Field.php:891
 msgid "Add Group"
 msgstr "Füge eine Gruppe hinzu"
 
-#: includes/CMB2_Field.php:894
+#: includes/CMB2_Field.php:892
 msgid "Remove Group"
 msgstr "Gruppe entfernen"
 
-#: includes/CMB2_Field.php:916 includes/CMB2_Field.php:920
+#: includes/CMB2_Field.php:914 includes/CMB2_Field.php:918
 #: tests/test-cmb-field.php:178
 msgid "None"
 msgstr "Nichts"
+
+#: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
+msgid "Clear"
+msgstr "Leeren"
+
+#: includes/CMB2_JS.php:87
+msgid "Default"
+msgstr "Standard"
+
+#: includes/CMB2_JS.php:88
+msgid "Select Color"
+msgstr "Farbe wählen"
+
+#: includes/CMB2_JS.php:89
+msgid "Current Color"
+msgstr "Aktuelle Farbe"
+
+#: includes/CMB2_JS.php:110
+msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+msgstr "Sonntag, Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag"
+
+#: includes/CMB2_JS.php:111
+msgid "Su, Mo, Tu, We, Th, Fr, Sa"
+msgstr "So, Mo, Di, Mi, Do, Fr, Sa"
+
+#: includes/CMB2_JS.php:112
+msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
+msgstr "Son, Mon, Die, Mit, Don, Fre, Sam"
+
+#: includes/CMB2_JS.php:113
+msgid ""
+"January, February, March, April, May, June, July, August, September, "
+"October, November, December"
+msgstr "Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember"
+
+#: includes/CMB2_JS.php:114
+msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
+msgstr "Jan, Feb, Mär, Apr, Mai, Jun, Jul, Aug, Sep, Okt, Nov, Dez"
+
+#: includes/CMB2_JS.php:115
+msgid "Next"
+msgstr "Weiter"
+
+#: includes/CMB2_JS.php:116
+msgid "Prev"
+msgstr "Vorheriger Text"
+
+#: includes/CMB2_JS.php:117
+msgid "Today"
+msgstr "Heute"
+
+#: includes/CMB2_JS.php:118 includes/CMB2_JS.php:128
+msgid "Done"
+msgstr "Fertig"
+
+#: includes/CMB2_JS.php:122
+msgid "Choose Time"
+msgstr "Zeit auswählen"
+
+#: includes/CMB2_JS.php:123
+msgid "Time"
+msgstr "Zeit"
+
+#: includes/CMB2_JS.php:124
+msgid "Hour"
+msgstr "Stunde"
+
+#: includes/CMB2_JS.php:125
+msgid "Minute"
+msgstr "Minute"
+
+#: includes/CMB2_JS.php:126
+msgid "Second"
+msgstr "Sekunde"
+
+#: includes/CMB2_JS.php:127
+msgid "Now"
+msgstr "Jetzt"
+
+#: includes/CMB2_JS.php:135
+msgid "Use this file"
+msgstr "Benutze diese Datei"
+
+#: includes/CMB2_JS.php:136 includes/CMB2_Types.php:983
+msgid "Remove Image"
+msgstr "Bild entfernen"
+
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:356
+#: includes/CMB2_Types.php:1002 tests/test-cmb-types.php:155
+#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:735
+#: tests/test-cmb-types.php:760
+msgid "Remove"
+msgstr "Entfernen"
+
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:997
+#: tests/test-cmb-types.php:736 tests/test-cmb-types.php:761
+msgid "File:"
+msgstr "Datei:"
+
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1000
+#: tests/test-cmb-types.php:734 tests/test-cmb-types.php:759
+msgid "Download"
+msgstr "Download"
+
+#: includes/CMB2_JS.php:140
+msgid "Select / Deselect All"
+msgstr "Alle auswählen oder ausschliessen"
 
 #: includes/CMB2_Types.php:297
 msgid "Add Row"
 msgstr "Zeile hinzufügen"
 
-#: includes/CMB2_Types.php:356 includes/CMB2_Types.php:989
-#: includes/CMB2_hookup.php:194 tests/test-cmb-types.php:155
-#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:723
-#: tests/test-cmb-types.php:748
-msgid "Remove"
-msgstr "Entfernen"
-
-#: includes/CMB2_Types.php:725 includes/CMB2_Types.php:773
+#: includes/CMB2_Types.php:734 includes/CMB2_Types.php:782
 msgid "No terms"
 msgstr "Keine Einträge"
 
-#: includes/CMB2_Types.php:838 tests/test-cmb-types.php:699
-#: tests/test-cmb-types.php:725
+#: includes/CMB2_Types.php:847 tests/test-cmb-types.php:711
+#: tests/test-cmb-types.php:737
 msgid "Add or Upload Files"
 msgstr "Datei hinzufügen oder hochladen"
 
-#: includes/CMB2_Types.php:896 tests/test-cmb-types.php:735
-#: tests/test-cmb-types.php:750
+#: includes/CMB2_Types.php:907 tests/test-cmb-types.php:747
+#: tests/test-cmb-types.php:762
 msgid "Add or Upload File"
 msgstr "Datei hinzufügen oder hochladen"
-
-#: includes/CMB2_Types.php:970 includes/CMB2_hookup.php:193
-msgid "Remove Image"
-msgstr "Bild entfernen"
-
-#: includes/CMB2_Types.php:984 includes/CMB2_hookup.php:195
-#: tests/test-cmb-types.php:724 tests/test-cmb-types.php:749
-msgid "File:"
-msgstr "Datei:"
-
-#: includes/CMB2_Types.php:987 includes/CMB2_hookup.php:196
-#: tests/test-cmb-types.php:722 tests/test-cmb-types.php:747
-msgid "Download"
-msgstr "Download"
-
-#: includes/CMB2_hookup.php:139 includes/CMB2_hookup.php:176
-msgid "Clear"
-msgstr "Leeren"
-
-#: includes/CMB2_hookup.php:140
-msgid "Default"
-msgstr "Standard"
-
-#: includes/CMB2_hookup.php:141
-msgid "Select Color"
-msgstr "Farbe wählen"
-
-#: includes/CMB2_hookup.php:142
-msgid "Current Color"
-msgstr "Aktuelle Farbe"
-
-#: includes/CMB2_hookup.php:167
-msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr "Sonntag, Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag"
-
-#: includes/CMB2_hookup.php:168
-msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr "So, Mo, Di, Mi, Do, Fr, Sa"
-
-#: includes/CMB2_hookup.php:169
-msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr "Son, Mon, Die, Mit, Don, Fre, Sam"
-
-#: includes/CMB2_hookup.php:170
-msgid ""
-"January, February, March, April, May, June, July, August, September, "
-"October, November, December"
-msgstr ""
-"Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, "
-"November, Dezember"
-
-#: includes/CMB2_hookup.php:171
-msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr "Jan, Feb, Mär, Apr, Mai, Jun, Jul, Aug, Sep, Okt, Nov, Dez"
-
-#: includes/CMB2_hookup.php:172
-msgid "Next"
-msgstr "Weiter"
-
-#: includes/CMB2_hookup.php:173
-msgid "Prev"
-msgstr "Vorheriger Text"
-
-#: includes/CMB2_hookup.php:174
-msgid "Today"
-msgstr "Heute"
-
-#: includes/CMB2_hookup.php:175 includes/CMB2_hookup.php:185
-msgid "Done"
-msgstr "Fertig"
-
-#: includes/CMB2_hookup.php:179
-msgid "Choose Time"
-msgstr "Zeit auswählen"
-
-#: includes/CMB2_hookup.php:180
-msgid "Time"
-msgstr "Zeit"
-
-#: includes/CMB2_hookup.php:181
-msgid "Hour"
-msgstr "Stunde"
-
-#: includes/CMB2_hookup.php:182
-msgid "Minute"
-msgstr "Minute"
-
-#: includes/CMB2_hookup.php:183
-msgid "Second"
-msgstr "Sekunde"
-
-#: includes/CMB2_hookup.php:184
-msgid "Now"
-msgstr "Jetzt"
-
-#: includes/CMB2_hookup.php:192
-msgid "Use this file"
-msgstr "Benutze diese Datei"
-
-#: includes/CMB2_hookup.php:197
-msgid "Select / Deselect All"
-msgstr "Alle auswählen oder ausschliessen"
 
 #: includes/helper-functions.php:249
 msgid "Save"
@@ -467,9 +463,7 @@ msgstr "https://github.com/WebDevStudios/CMB2"
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
-"CNB2 erstellt Metaboxen und Formulare mit benutzer denfinierten Feldern, "
-"dies wird dich begeistern"
+msgstr "CNB2 erstellt Metaboxen und Formulare mit benutzer denfinierten Feldern, dies wird dich begeistern"
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
@@ -479,14 +473,14 @@ msgstr "WebDevStudios"
 msgid "http://webdevstudios.com"
 msgstr "http://webdevstudios.com"
 
-#: includes/CMB2_hookup.php:166
+#: includes/CMB2_JS.php:109
 msgctxt "Valid formatDate string for jquery-ui datepicker"
 msgid "mm/dd/yy"
 msgstr "dd.mm.yy"
 
-#: includes/CMB2_hookup.php:186
+#: includes/CMB2_JS.php:129
 msgctxt ""
-"Valid formatting string, as per http://trentrichardson.com/examples/"
-"timepicker/"
+"Valid formatting string, as per "
+"http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
 msgstr "mm:hh"
