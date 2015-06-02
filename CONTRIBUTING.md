@@ -36,6 +36,10 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 **Note:** You may gain more ground and avoid unecessary effort if you first open an issue with the proposed changes, but this step is not necessary.
 
+Translations
+---
+If you are looking to provide language translation files, Please do so via [WP-Translations](http://wp-translations.org/project/cmb2/).
+
 Additional Resources
 ---
 
