@@ -223,7 +223,7 @@ class CMB2_Sanitize {
 	 * Converts text date to timestamp
 	 *
 	 * @since  1.0.2
-	 * @return array/int       Timestring
+	 * @return array|int       Timestring
 	 */
 	public function text_date_timestamp() {
 		if ( is_array( $this->value ) ) {
