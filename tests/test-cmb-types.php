@@ -708,7 +708,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_file_list_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . __( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
+			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . __( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file_list', 'preview_size' => array( 120, 120 ) ) ), 'render' ) )
 		);
 	}
@@ -727,7 +727,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		) );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="%7$s"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"><li class="file-status"><span>%6$s <strong>?attachment_id=%1$d</strong></span>&nbsp;&nbsp; (<a href="%3$s/?attachment_id=%1$d" target="_blank" rel="external">%4$s</a> / <a href="#" class="cmb2-remove-file-button">%5$s</a>)<input type="hidden" name="field_test_field[%1$d]" id="filelist-%1$d" value="%3$s/?attachment_id=%1$d" data-id=\'%1$d\'/></li><li class="file-status"><span>%6$s <strong>?attachment_id=%2$d</strong></span>&nbsp;&nbsp; (<a href="%3$s/?attachment_id=%2$d" target="_blank" rel="external">%4$s</a> / <a href="#" class="cmb2-remove-file-button">%5$s</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s/?attachment_id=%2$d" data-id=\'%2$d\'/></li></ul>',
+			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="%7$s"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"><li class="file-status"><span>%6$s <strong>?attachment_id=%1$d</strong></span>&nbsp;&nbsp; (<a href="%3$s/?attachment_id=%1$d" target="_blank" rel="external">%4$s</a> / <a href="#" class="cmb2-remove-file-button">%5$s</a>)<input type="hidden" name="field_test_field[%1$d]" id="filelist-%1$d" value="%3$s/?attachment_id=%1$d" data-id=\'%1$d\'/></li><li class="file-status"><span>%6$s <strong>?attachment_id=%2$d</strong></span>&nbsp;&nbsp; (<a href="%3$s/?attachment_id=%2$d" target="_blank" rel="external">%4$s</a> / <a href="#" class="cmb2-remove-file-button">%5$s</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s/?attachment_id=%2$d" data-id=\'%2$d\'/></li></ul>',
 				$this->attachment_id,
 				$this->attachment_id2,
 				site_url(),
@@ -744,7 +744,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\'/><input class="cmb2-upload-button button" type="button" value="' . __( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . __( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file', 'preview_size' => array( 199, 199 ) ) ), 'render' ) )
 		);
 	}
@@ -753,7 +753,7 @@ class Test_CMB2_Types extends Test_CMB2 {
  		update_post_meta( $this->post_id, $this->text_type_field['id'], get_permalink( $this->attachment_id ) );
  		update_post_meta( $this->post_id, $this->text_type_field['id'] . '_id', $this->attachment_id );
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s/?attachment_id=%1$d" size="45" data-previewsize=\'[199,199]\'/><input class="cmb2-upload-button button" type="button" value="%6$s" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field_id-status" class="cmb2-media-status"><div class="file-status"><span>%5$s <strong>?attachment_id=%1$d</strong></span>&nbsp;&nbsp; (<a href="%2$s/?attachment_id=%1$d" target="_blank" rel="external">%3$s</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">%4$s</a>)</div></div>',
+			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s/?attachment_id=%1$d" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="%6$s" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field_id-status" class="cmb2-media-status"><div class="file-status"><span>%5$s <strong>?attachment_id=%1$d</strong></span>&nbsp;&nbsp; (<a href="%2$s/?attachment_id=%1$d" target="_blank" rel="external">%3$s</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">%4$s</a>)</div></div>',
 				$this->attachment_id,
 				site_url(),
 				__( 'Download','cmb2' ),
