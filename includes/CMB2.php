@@ -442,11 +442,27 @@ class CMB2 {
 		 *
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb_id      The current box ID
-		 * @param string $updated     All fields that were updated.
-		 *                            Will only include fields that had values change.
+		 * @param string $updated     Array of field ids that were updated.
+		 *                            Will only include field ids that had values change.
 		 * @param array  $cmb         This CMB2 object
 		 */
 		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->cmb_id, $this->updated, $this );
+
+		/**
+		 * Fires after all fields have been saved.
+		 *
+		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
+		 *
+		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
+		 * 	Usually `post` (this applies to all post-types).
+		 *  	Could also be `comment`, `user` or `options-page`.
+		 *
+		 * @param int    $object_id   The ID of the current object
+		 * @param string $updated     Array of field ids that were updated.
+		 *                            Will only include field ids that had values change.
+		 * @param array  $cmb         This CMB2 object
+		 */
+		do_action( "cmb2_save_{$object_type}_fields_{$this->cmb_id}", $object_id, $this->updated, $this );
 
 	}
 

@@ -153,9 +153,10 @@ class CMB2_Types {
 	public function is_valid_img_ext( $file ) {
 		$file_ext = $this->get_file_ext( $file );
 
-		$is_valid_types = (array) apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
+		$is_valid_types = apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
+		$is_valid = $file_ext && in_array( $file_ext, (array) $is_valid_types );
 
-		return ( $file_ext && in_array( $file_ext, $is_valid_types ) );
+		return (bool) apply_filters( 'cmb2_' . $this->field->id() . '_is_valid_img_ext', $is_valid, $file, $file_ext );
 	}
 
 	/**
@@ -635,6 +636,7 @@ class CMB2_Types {
 		}
 
 		wp_enqueue_style( 'wp-color-picker' );
+		CMB2_JS::add_dependencies( array( 'wp-color-picker' ) );
 
 		return $this->input( array( 'class' => 'cmb2-colorpicker cmb2-text-small', 'value' => $meta_value ) );
 	}
@@ -839,12 +841,14 @@ class CMB2_Types {
 		$meta_value = $this->field->escaped_value();
 		$name       = $this->_name();
 		$img_size   = $this->field->args( 'preview_size' );
+		$query_args = $this->field->args( 'query_args' );
 
 		echo $this->input( array(
 			'type'  => 'hidden',
 			'class' => 'cmb2-upload-file cmb2-upload-list',
 			'size'  => 45, 'desc'  => '', 'value'  => '',
 			'data-previewsize' => is_array( $img_size ) ? sprintf( '[%s]', implode( ',', $img_size ) ) : 50,
+			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 		) ),
 		$this->input( array(
 			'type'  => 'button',
@@ -897,6 +901,7 @@ class CMB2_Types {
 		$meta_value = $this->field->escaped_value();
 		$options    = (array) $this->field->options();
 		$img_size   = $this->field->args( 'preview_size' );
+		$query_args = $this->field->args( 'query_args' );
 
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
@@ -907,6 +912,7 @@ class CMB2_Types {
 			'size'  => 45,
 			'desc'  => '',
 			'data-previewsize' => is_array( $img_size ) ? '[' . implode( ',', $img_size ) . ']' : 350,
+			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 		) );
 
 		printf( '<input class="cmb2-upload-button button" type="button" value="%s" />', esc_attr( $this->_text( 'add_upload_file_text', __( 'Add or Upload File', 'cmb2' ) ) ) );

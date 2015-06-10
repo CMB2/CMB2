@@ -29,7 +29,7 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  * @return bool             True if metabox should show
  */
 function yourprefix_show_if_front_page( $cmb ) {
-	// Don't show this metabox if it's the front page template
+	// Don't show this metabox if it's not the front page template
 	if ( $cmb->object_id !== get_option( 'page_on_front' ) ) {
 		return false;
 	}
@@ -81,10 +81,10 @@ function yourprefix_register_demo_metabox() {
 		'id'            => $prefix . 'metabox',
 		'title'         => __( 'Test Metabox', 'cmb2' ),
 		'object_types'  => array( 'page', ), // Post type
-		'show_on_cb'    => 'yourprefix_show_if_front_page', // function should return a bool value
-		'context'       => 'normal',
-		'priority'      => 'high',
-		'show_names'    => true, // Show field names on the left
+		// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
+		// 'context'    => 'normal',
+		// 'priority'   => 'high',
+		// 'show_names' => true, // Show field names on the left
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // true to keep the metabox closed by default
 	) );
