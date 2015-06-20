@@ -189,7 +189,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			button: {
 				text: l10n.strings.upload_file
 			},
-			multiple: isList ? true : false
+			multiple: isList ? 'add' : false
 		});
 
 		cmb.mediaHandlers.list = function( selection, returnIt ) {
