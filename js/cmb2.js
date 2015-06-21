@@ -189,9 +189,9 @@ window.CMB2 = (function(window, document, $, undefined){
 			title: $metabox.find('label[for=' + cmb.formfield + ']').text(),
 			library : fieldData.queryargs || {},
 			button: {
-				text: l10n.strings.upload_file
+				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
 			},
-			multiple: isList ? true : false
+			multiple: isList ? 'add' : false
 		});
 
 		cmb.mediaHandlers.list = function( selection, returnIt ) {
