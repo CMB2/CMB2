@@ -2,13 +2,14 @@
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
 # Florian <florian@gabele-web.de>, 2015
+# superdummy <looking.for.cofounders.berlin@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-06-02 16:10+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2015-06-08 17:16+0000\n"
+"Last-Translator: superdummy <looking.for.cofounders.berlin@gmail.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/cmb2/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -483,4 +484,4 @@ msgctxt ""
 "Valid formatting string, as per "
 "http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
-msgstr "mm:hh"
+msgstr "HH:mm"
