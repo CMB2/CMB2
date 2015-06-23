@@ -730,7 +730,7 @@ class CMB2 {
 	}
 
 	/**
-	 * Add a field to the metabox
+	 * Get a field object
 	 * @since  2.0.3
 	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
 	 * @param  CMB2_Field object $field_group   (optional) CMB2_Field object (group parent)
@@ -819,7 +819,7 @@ class CMB2 {
 	}
 
 	/**
-	 * Add a field to the metabox
+	 * Add a field to a group
 	 * @since  2.0.0
 	 * @param  string $parent_field_id The field id of the group field to add the field
 	 * @param  array  $field           Metabox field config array
