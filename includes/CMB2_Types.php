@@ -713,7 +713,7 @@ class CMB2_Types {
 	}
 
 	public function multicheck_inline() {
-		$this->multicheck( 'multicheck_inline' );
+		return $this->multicheck( 'multicheck_inline' );
 	}
 
 	public function checkbox() {
