@@ -33,11 +33,12 @@ install_wp() {
 
 	wget -nv -O /tmp/wordpress.tar.gz https://wordpress.org/"${ARCHIVE_NAME}".tar.gz --no-check-certificate
 	tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C "$WP_CORE_DIR"
+
 	echo "<?php
 
 if ( ! defined( 'WP_USE_EXT_MYSQL' ) ) {
 	define( 'WP_USE_EXT_MYSQL', false );
-}" >> "$WP_CORE_DIR"/wp-content/db.php
+}" > "$WP_CORE_DIR"/wp-content/db.php
 }
 
 install_test_suite() {
