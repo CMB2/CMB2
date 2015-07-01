@@ -758,7 +758,7 @@ class CMB2_Field {
 	/**
 	 * Determine whether this field should show, based on the 'show_on_cb' callback.
 	 *
-	 * @since 2.1.0
+	 * @since 2.0.9
 	 *
 	 * @return bool Whether the field should be shown.
 	 */
