@@ -661,7 +661,7 @@ class CMB2_Field {
 		}
 
 		// If field is requesting to be conditionally shown
-		if ( is_callable( $this->args( 'show_on_cb' ) ) && ! call_user_func( $this->args( 'show_on_cb' ), $this ) ) {
+		if ( ! $this->should_show() ) {
 			return;
 		}
 
@@ -753,6 +753,25 @@ class CMB2_Field {
 		 * @param CMB2_Field object $field   This field object
 		 */
 		return apply_filters( 'cmb2_row_classes', implode( ' ', $classes ), $this );
+	}
+
+	/**
+	 * Determine whether this field should show, based on the 'show_on_cb' callback.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return bool Whether the field should be shown.
+	 */
+	public function should_show() {
+		// Default to showing the field
+		$show = true;
+
+		// Use the callback to determine showing the field, if it exists
+		if ( is_callable( $this->args( 'show_on_cb' ) ) ) {
+			$show = call_user_func( $this->args( 'show_on_cb' ), $this );
+		}
+
+		return $show;
 	}
 
 	/**
