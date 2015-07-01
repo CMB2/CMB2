@@ -730,10 +730,13 @@ class CMB2 {
 
 	/**
 	 * Get a field object
+	 *
 	 * @since  2.0.3
-	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
-	 * @param  CMB2_Field object $field_group   (optional) CMB2_Field object (group parent)
-	 * @return mixed                            CMB2_Field object (or false)
+	 *
+	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object
+	 * @param  CMB2_Field              $field_group (optional) CMB2_Field object (group parent)
+	 *
+	 * @return CMB2_Field|false CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $field_group = null ) {
 		if ( is_a( $field, 'CMB2_Field' ) ) {
