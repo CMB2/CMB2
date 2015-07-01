@@ -181,6 +181,7 @@ class CMB2 {
 		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$field = $this->get_field( $field_args );
 
 			$field_args['context'] = $this->prop( 'context' );
 
@@ -191,7 +192,7 @@ class CMB2 {
 				}
 				$this->render_group( $field_args );
 
-			} elseif ( 'hidden' == $field_args['type'] ) {
+			} elseif ( 'hidden' == $field_args['type'] && $field->should_show() ) {
 
 				// Save rendering for after the metabox
 				$this->add_hidden_field( array(
@@ -205,7 +206,7 @@ class CMB2 {
 				$field_args['show_names'] = $this->prop( 'show_names' );
 
 				// Render default fields
-				$field = $this->get_field( $field_args )->render_field();
+				$field->render_field();
 			}
 		}
 
