@@ -255,7 +255,7 @@ class CMB2 {
 		$field_group = $this->get_field( $args );
 
 		// If field is requesting to be conditionally shown
-		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $field_group ) ) {
+		if ( ! $field_group || ! $field_group->should_show() ) {
 			return;
 		}
 
