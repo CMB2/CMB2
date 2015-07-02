@@ -942,7 +942,6 @@ class CMB2_Types {
 			'class' => 'cmb2-upload-file-id',
 			'value' => $_id_value,
 			'desc'  => '',
-			'id'    => false,
 		) ),
 		'<div id="', $this->_id( '-status' ), '" class="cmb2-media-status">';
 			if ( ! empty( $meta_value ) ) {
