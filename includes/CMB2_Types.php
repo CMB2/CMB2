@@ -913,7 +913,9 @@ class CMB2_Types {
 
 		$this->_desc( true, true );
 
-		$cached_id = $this->_id();
+		// If we're looking at a file in a group, we need to get the non-prefixed id
+		$cached_id = $this->field->group ? $this->field->args( '_id' ) : $this->_id();
+
 		// Reset field args for attachment ID
 		$args = $this->field->args();
 		$args['id'] = $cached_id . '_id';
