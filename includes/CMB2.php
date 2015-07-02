@@ -971,6 +971,25 @@ class CMB2 {
 	}
 
 	/**
+	 * Determine whether this cmb object should show, based on the 'show_on_cb' callback.
+	 *
+	 * @since 2.0.9
+	 *
+	 * @return bool Whether this cmb should be shown.
+	 */
+	public function should_show() {
+		// Default to showing this cmb
+		$show = true;
+
+		// Use the callback to determine showing the cmb, if it exists
+		if ( is_callable( $this->prop( 'show_on_cb' ) ) ) {
+			$show = (bool) call_user_func( $this->prop( 'show_on_cb' ), $this );
+		}
+
+		return $show;
+	}
+
+	/**
 	 * Generate a unique nonce field for each registered meta_box
 	 * @since  2.0.0
 	 * @return string unique nonce hidden input
