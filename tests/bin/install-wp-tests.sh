@@ -56,6 +56,7 @@ install_test_suite() {
 
 	mkdir -p "$WP_TESTS_DIR"
 	cd "$WP_TESTS_DIR"
+	rm -rf 'includes/.svn'
 	svn co --quiet https://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
 
 	wget -nv -O wp-tests-config.php https://develop.svn.wordpress.org/trunk/wp-tests-config-sample.php --no-check-certificate
