@@ -173,8 +173,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.formfield    = formfield;
 		var $formfield   = $id( cmb.formfield );
 		var fieldData    = $formfield.data();
-		var previewSize  = fieldData.previewsize;
-		var formName     = $formfield.attr('name');
 		var uploadStatus = true;
 		var attachment   = true;
 
@@ -194,7 +192,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			multiple: isList ? 'add' : false
 		});
 
-		cmb.mediaHandlers.list = function( selection, returnIt ) {
+		cmb.mediaHandlers.list = function( selection, returnIt, $formfield, previewSize, formName ) {
 			// Get all of our selected files
 			attachment = selection.toJSON();
 
@@ -239,7 +237,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 
 		};
-		cmb.mediaHandlers.single = function( selection ) {
+		cmb.mediaHandlers.single = function( selection, returnIt, $formfield, previewSize ) {
 			// Only get one file from the uploader
 			attachment = selection.first().toJSON();
 
@@ -262,13 +260,16 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.mediaHandlers.selectFile = function() {
 			var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
 			var type = isList ? 'list' : 'single';
+			var $formfield = $id( cmb.formfield );
+			var previewSize = $formfield.data( 'previewsize' );
+			var formName = $formfield.attr('name');
 
 			if ( cmb.attach_id && isList ) {
-				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( cmb.mediaHandlers.list( selection, true ) );
+				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( cmb.mediaHandlers.list( selection, true, $formfield, previewSize, formName ) );
 				return;
 			}
 
-			cmb.mediaHandlers[type]( selection );
+			cmb.mediaHandlers[type]( selection, false, $formfield, previewSize, formName );
 		};
 
 		cmb.mediaHandlers.openModal = function() {
