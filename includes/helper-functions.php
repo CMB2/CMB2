@@ -29,7 +29,12 @@ function cmb2_autoload_classes( $class_name ) {
 		return;
 	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	$class = strtolower( str_replace( '_', '-', str_replace( 'CMB2_', '', $class_name ) ) );
+	$file  = cmb2_dir( "includes/class-{$class}.php" );
+
+	if ( file_exists( $file ) ) {
+		require_once( $file );
+	}
 }
 
 /**
