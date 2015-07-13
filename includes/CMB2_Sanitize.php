@@ -1,9 +1,8 @@
 <?php
-
 /**
  * CMB2 field sanitization
  *
- * @since     0.0.4
+ * @since  0.0.4
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -17,23 +16,19 @@ class CMB2_Sanitize {
 
 	/**
 	 * A CMB field object
-	 *
 	 * @var CMB2_Field object
 	 */
 	public $field;
 
 	/**
 	 * Field's value
-	 *
 	 * @var mixed
 	 */
 	public $value;
 
 	/**
 	 * Setup our class vars
-	 *
 	 * @since 1.1.0
-	 *
 	 * @param CMB2_Field $field A CMB2 field object
 	 * @param mixed      $value Field value
 	 */
@@ -44,13 +39,9 @@ class CMB2_Sanitize {
 
 	/**
 	 * Catchall method if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
-	 *
 	 * @since  1.0.0
-	 *
 	 * @param  string $name      Non-existent method name
 	 * @param  array  $arguments All arguments passed to the method
-	 *
-	 * @return mixed
 	 */
 	public function __call( $name, $arguments ) {
 		return $this->default_sanitization( $this->value );
@@ -58,7 +49,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Default fallback sanitization method. Applies filters.
-	 *
 	 * @since  1.0.2
 	 */
 	public function default_sanitization() {
@@ -73,21 +63,18 @@ class CMB2_Sanitize {
 		 *
 		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
 		 *                                   Default false to skip it.
-		 * @param mixed      $value          The value to be saved to this field.
-		 * @param int        $object_id      The ID of the object where the value will be saved
-		 * @param array      $field_args     The current field's arguments
-		 * @param object     $sanitizer      This `CMB2_Sanitize` object
+		 * @param mixed      $value      The value to be saved to this field.
+		 * @param int        $object_id  The ID of the object where the value will be saved
+		 * @param array      $field_args The current field's arguments
+		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value,
-			$this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 		/**
 		 * This exists for back-compatibility, but validation
 		 * is not what happens here.
-		 *
 		 * @deprecated See documentation above.
 		 */
-		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value,
-			$this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;
@@ -118,8 +105,7 @@ class CMB2_Sanitize {
 			default:
 				// Handle repeatable fields array
 				// We'll fallback to 'sanitize_text_field'
-				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value )
-					: call_user_func( 'sanitize_text_field', $this->value );
+				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : call_user_func( 'sanitize_text_field', $this->value );
 				break;
 		}
 
@@ -128,7 +114,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Simple checkbox validation
-	 *
 	 * @since  1.0.1
 	 * @return string|false 'on' or false
 	 */
@@ -138,7 +123,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Validate url in a meta value
-	 *
 	 * @since  1.0.1
 	 * @return string        Empty string or escaped url
 	 */
@@ -159,7 +143,7 @@ class CMB2_Sanitize {
 	public function colorpicker() {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
-			$check       = $this->value;
+			$check = $this->value;
 			$this->value = array();
 			foreach ( $check as $key => $val ) {
 				if ( $val && '#' != $val ) {
@@ -169,13 +153,11 @@ class CMB2_Sanitize {
 		} else {
 			$this->value = ! $this->value || '#' == $this->value ? '' : esc_attr( $this->value );
 		}
-
 		return $this->value;
 	}
 
 	/**
 	 * Validate email in a meta value
-	 *
 	 * @since  1.0.1
 	 * @return string       Empty string or sanitized email
 	 */
@@ -183,7 +165,7 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				$val                 = trim( $val );
+				$val = trim( $val );
 				$this->value[ $key ] = is_email( $val ) ? $val : '';
 			}
 		} else {
@@ -196,7 +178,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Validate money in a meta value
-	 *
 	 * @since  1.0.1
 	 * @return string       Empty string or sanitized money value
 	 */
@@ -204,7 +185,7 @@ class CMB2_Sanitize {
 
 		global $wp_locale;
 
-		$search  = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
+		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
 		$replace = array( '', '.' );
 
 		// for repeatable
@@ -221,9 +202,8 @@ class CMB2_Sanitize {
 
 	/**
 	 * Converts text date to timestamp
-	 *
 	 * @since  1.0.2
-	 * @return array|int       Timestring
+	 * @return string       Timestring
 	 */
 	public function text_date_timestamp() {
 		if ( is_array( $this->value ) ) {
@@ -244,7 +224,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Datetime to timestamp
-	 *
 	 * @since  1.0.1
 	 * @return string       Timestring
 	 */
@@ -269,8 +248,7 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Datetime to timestamp with timezone
-	 *
+	 * Datetime to imestamp with timezone
 	 * @since  1.0.1
 	 * @return string       Timestring
 	 */
@@ -309,7 +287,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Sanitize textareas and wysiwyg fields
-	 *
 	 * @since  1.0.1
 	 * @return string       Sanitized data
 	 */
@@ -319,7 +296,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Sanitize code textareas
-	 *
 	 * @since  1.0.2
 	 * @return string       Sanitized data
 	 */
@@ -333,7 +309,6 @@ class CMB2_Sanitize {
 
 	/**
 	 * Peforms saving of `file` attachement's ID
-	 *
 	 * @since  1.1.0
 	 */
 	public function _save_file_id() {
@@ -385,13 +360,12 @@ class CMB2_Sanitize {
 
 	/**
 	 * Handles saving of attachment post ID and sanitizing file url
-	 *
 	 * @since  1.1.0
 	 * @return string        Sanitized url
 	 */
 	public function file() {
 		$id_value = $this->_save_file_id( $this->value );
-		$clean    = $this->text_url( $this->value );
+		$clean = $this->text_url( $this->value );
 
 		// Return an array with url/id if saving a group field
 		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;
@@ -399,12 +373,9 @@ class CMB2_Sanitize {
 
 	/**
 	 * If repeating, loop through and re-apply sanitization method
-	 *
 	 * @since  1.1.0
-	 *
 	 * @param  string $method Class method
 	 * @param  bool   $repeat Whether repeating or not
-	 *
 	 * @return mixed          Sanitized value
 	 */
 	public function _check_repeat( $method, $repeat ) {
@@ -415,26 +386,20 @@ class CMB2_Sanitize {
 		foreach ( $this->value as $iterator => $val ) {
 			$new_value[] = $this->$method( $val, true );
 		}
-
 		return $new_value;
 	}
 
 	/**
 	 * Determine if passed value is an empty array
-	 *
 	 * @since  2.0.6
-	 *
-	 * @param  mixed $to_check Value to check
-	 *
+	 * @param  mixed  $to_check Value to check
 	 * @return boolean          Whether value is an array that's empty
 	 */
 	public function _is_empty_array( $to_check ) {
 		if ( is_array( $to_check ) ) {
 			$cleaned_up = array_filter( $to_check );
-
 			return empty( $cleaned_up );
 		}
-
 		return false;
 	}
 
