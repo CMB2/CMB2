@@ -1,8 +1,9 @@
 <?php
+
 /**
  * CMB2 Utilities
  *
- * @since  1.1.0
+ * @since     1.1.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -14,6 +15,7 @@ class CMB2_Utils {
 
 	/**
 	 * The url which is used to load local resources.
+	 *
 	 * @var   string
 	 * @since 2.0.0
 	 */
@@ -21,8 +23,11 @@ class CMB2_Utils {
 
 	/**
 	 * Utility method that attempts to get an attachment's ID by it's url
+	 *
 	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
+	 *
+	 * @param  string $img_url Attachment url
+	 *
 	 * @return mixed            Attachment ID or false
 	 */
 	public function image_id_from_url( $img_url ) {
@@ -36,7 +41,9 @@ class CMB2_Utils {
 		}
 
 		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
+		$attachment
+			= $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;",
+			$img_url ) );
 
 		// If we found an attachement ID, return it
 		if ( ! empty( $attachment ) && is_array( $attachment ) ) {
@@ -49,19 +56,25 @@ class CMB2_Utils {
 
 	/**
 	 * Utility method that returns time string offset by timezone
+	 *
 	 * @since  1.0.0
+	 *
 	 * @param  string $tzstring Time string
+	 *
 	 * @return string           Offset time string
 	 */
 	public function timezone_offset( $tzstring ) {
 		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
 			if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
-				$tzstring = str_replace( array( ':15', ':30', ':45' ), array( '.25', '.5', '.75' ), $tzstring );
+				$tzstring = str_replace( array( ':15', ':30', ':45' ),
+					array( '.25', '.5', '.75' ), $tzstring );
+
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
 			}
 
 			$date_time_zone_selected = new DateTimeZone( $tzstring );
-			$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+			$tz_offset               = timezone_offset_get( $date_time_zone_selected,
+				date_create() );
 
 			return $tz_offset;
 		}
@@ -99,9 +112,12 @@ class CMB2_Utils {
 
 	/**
 	 * Returns a timestamp, first checking if value already is a timestamp.
+	 *
 	 * @since  2.0.0
+	 *
 	 * @param  string|int $string Possible timestamp string
-	 * @return int   	            Time stamp
+	 *
+	 * @return int                Time stamp
 	 */
 	public function make_valid_time_stamp( $string ) {
 		if ( ! $string ) {
@@ -109,26 +125,33 @@ class CMB2_Utils {
 		}
 
 		return $this->is_valid_time_stamp( $string )
-			? (int) $string :
+			? (int) $string
+			:
 			strtotime( $string );
 	}
 
 	/**
 	 * Determine if a value is a valid timestamp
+	 *
 	 * @since  2.0.0
-	 * @param  mixed  $timestamp Value to check
+	 *
+	 * @param  mixed $timestamp Value to check
+	 *
 	 * @return boolean           Whether value is a valid timestamp
 	 */
 	public function is_valid_time_stamp( $timestamp ) {
 		return (string) (int) $timestamp === (string) $timestamp
-			&& $timestamp <= PHP_INT_MAX
-			&& $timestamp >= ~PHP_INT_MAX;
+		       && $timestamp <= PHP_INT_MAX
+		       && $timestamp >= ~PHP_INT_MAX;
 	}
 
 	/**
 	 * Checks if a value is 'empty'. Still accepts 0.
+	 *
 	 * @since  2.0.0
+	 *
 	 * @param  mixed $value Value to check
+	 *
 	 * @return bool         True or false
 	 */
 	public function isempty( $value ) {
@@ -137,9 +160,11 @@ class CMB2_Utils {
 
 	/**
 	 * Insert a single array item inside another array at a set position
+	 *
 	 * @since  2.0.2
-	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
-	 * @param  array $new      New array to insert
+	 *
+	 * @param  array &$array Array to modify. Is passed by reference, and no return is needed.
+	 * @param  array $new New array to insert
 	 * @param  int   $position Position in the main array to insert the new array
 	 */
 	public function array_insert( &$array, $new, $position ) {
@@ -152,7 +177,11 @@ class CMB2_Utils {
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
+	 *
 	 * @since  1.0.1
+	 *
+	 * @param string $path
+	 *
 	 * @return string URL to CMB2 resources
 	 */
 	public function url( $path = '' ) {
@@ -164,7 +193,7 @@ class CMB2_Utils {
 			// Windows
 			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
 			$content_url = str_replace( $content_dir, WP_CONTENT_URL, cmb2_dir() );
-			$cmb2_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
+			$cmb2_url    = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
 
 		} else {
 			$cmb2_url = str_replace(
@@ -179,7 +208,8 @@ class CMB2_Utils {
 		 *
 		 * @param string $cmb2_url Currently registered url
 		 */
-		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', set_url_scheme( $cmb2_url ), CMB2_VERSION ) );
+		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url',
+			set_url_scheme( $cmb2_url ), CMB2_VERSION ) );
 
 		return $this->url . $path;
 	}
