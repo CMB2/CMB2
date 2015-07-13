@@ -19,22 +19,26 @@ WP_CORE_DIR=/tmp/wordpress/
 set -ex
 
 install_wp() {
-	if [ $WP_CORE_DIR == '' ]; then
-		rm -rf $WP_CORE_DIR
+	if [ "$WP_CORE_DIR" == '' ]; then
+		rm -rf "$WP_CORE_DIR"
 	fi
 
-	mkdir -p $WP_CORE_DIR
+	mkdir -p "$WP_CORE_DIR"
 
-	if [ $WP_VERSION == 'latest' ]; then
+	if [ "$WP_VERSION" == 'latest' ]; then
 		local ARCHIVE_NAME='latest'
 	else
 		local ARCHIVE_NAME="wordpress-$WP_VERSION"
 	fi
 
-	wget -nv -O /tmp/wordpress.tar.gz https://wordpress.org/${ARCHIVE_NAME}.tar.gz --no-check-certificate
-	tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
+	wget -nv -O /tmp/wordpress.tar.gz https://wordpress.org/"${ARCHIVE_NAME}".tar.gz --no-check-certificate
+	tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C "$WP_CORE_DIR"
 
-	wget -nv -O $WP_CORE_DIR/wp-content/db.php https://raw.github.com/markoheijnen/wp-mysqli/master/db.php --no-check-certificate
+	echo "<?php
+
+if ( ! defined( 'WP_USE_EXT_MYSQL' ) ) {
+	define( 'WP_USE_EXT_MYSQL', false );
+}" > "$WP_CORE_DIR"/wp-content/db.php
 }
 
 install_test_suite() {
@@ -46,12 +50,13 @@ install_test_suite() {
 	fi
 
 	# set up testing suite
-	if [ $WP_TESTS_DIR == '' ]; then
-		rm -rf $WP_TESTS_DIR
+	if [ "$WP_TESTS_DIR" == '' ]; then
+		rm -rf "$WP_TESTS_DIR"
 	fi
 
-	mkdir -p $WP_TESTS_DIR
-	cd $WP_TESTS_DIR
+	mkdir -p "$WP_TESTS_DIR"
+	cd "$WP_TESTS_DIR"
+	rm -rf 'includes/.svn'
 	svn co --quiet https://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
 
 	wget -nv -O wp-tests-config.php https://develop.svn.wordpress.org/trunk/wp-tests-config-sample.php --no-check-certificate
@@ -70,12 +75,12 @@ install_db() {
 	local DB_SOCK_OR_PORT=${PARTS[1]};
 	local EXTRA=""
 
-	if ! [ -z $DB_HOSTNAME ] ; then
+	if ! [ -z "$DB_HOSTNAME" ] ; then
 		if [[ "$DB_SOCK_OR_PORT" =~ ^[0-9]+$ ]] ; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
-		elif ! [ -z $DB_SOCK_OR_PORT ] ; then
+		elif ! [ -z "$DB_SOCK_OR_PORT" ] ; then
 			EXTRA=" --socket=$DB_SOCK_OR_PORT"
-		elif ! [ -z $DB_HOSTNAME ] ; then
+		elif ! [ -z "$DB_HOSTNAME" ] ; then
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi

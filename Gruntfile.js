@@ -166,7 +166,7 @@ module.exports = function(grunt) {
 			},
 			minify: {
 				expand: true,
-				src: ['css/cmb2.css'],
+				src: ['css/cmb2.css','css/cmb2-front.css'],
 				// dest: '',
 				ext: '.min.css'
 			}

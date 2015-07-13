@@ -133,6 +133,7 @@ class CMB2_JS {
 			),
 			'strings' => array(
 				'upload_file'  => __( 'Use this file', 'cmb2' ),
+				'upload_files' => __( 'Use these files', 'cmb2' ),
 				'remove_image' => __( 'Remove Image', 'cmb2' ),
 				'remove_file'  => __( 'Remove', 'cmb2' ),
 				'file'         => __( 'File:', 'cmb2' ),

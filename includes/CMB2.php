@@ -191,8 +191,7 @@ class CMB2 {
 				}
 				$this->render_group( $field_args );
 
-			} elseif ( 'hidden' == $field_args['type'] ) {
-
+			} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
 				// Save rendering for after the metabox
 				$this->add_hidden_field( array(
 					'field_args'  => $field_args,
@@ -256,7 +255,7 @@ class CMB2 {
 		$field_group = $this->get_field( $args );
 
 		// If field is requesting to be conditionally shown
-		if ( isset( $args['show_on_cb'] ) && is_callable( $args['show_on_cb'] ) && ! call_user_func( $args['show_on_cb'], $field_group ) ) {
+		if ( ! $field_group || ! $field_group->should_show() ) {
 			return;
 		}
 
@@ -730,11 +729,14 @@ class CMB2 {
 	}
 
 	/**
-	 * Add a field to the metabox
+	 * Get a field object
+	 *
 	 * @since  2.0.3
-	 * @param  mixed             $field Metabox field id or field config array or CMB2_Field object
-	 * @param  CMB2_Field object $field_group   (optional) CMB2_Field object (group parent)
-	 * @return mixed                            CMB2_Field object (or false)
+	 *
+	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object
+	 * @param  CMB2_Field              $field_group (optional) CMB2_Field object (group parent)
+	 *
+	 * @return CMB2_Field|false CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $field_group = null ) {
 		if ( is_a( $field, 'CMB2_Field' ) ) {
@@ -819,7 +821,7 @@ class CMB2 {
 	}
 
 	/**
-	 * Add a field to the metabox
+	 * Add a field to a group
 	 * @since  2.0.0
 	 * @param  string $parent_field_id The field id of the group field to add the field
 	 * @param  array  $field           Metabox field config array
@@ -966,6 +968,25 @@ class CMB2 {
 		$ids = wp_list_pluck( $fields, 'id' );
 		$index = array_search( $field_id, $ids );
 		return false !== $index ? $index : false;
+	}
+
+	/**
+	 * Determine whether this cmb object should show, based on the 'show_on_cb' callback.
+	 *
+	 * @since 2.0.9
+	 *
+	 * @return bool Whether this cmb should be shown.
+	 */
+	public function should_show() {
+		// Default to showing this cmb
+		$show = true;
+
+		// Use the callback to determine showing the cmb, if it exists
+		if ( is_callable( $this->prop( 'show_on_cb' ) ) ) {
+			$show = (bool) call_user_func( $this->prop( 'show_on_cb' ), $this );
+		}
+
+		return $show;
 	}
 
 	/**

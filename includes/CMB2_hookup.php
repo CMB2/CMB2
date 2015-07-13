@@ -313,12 +313,8 @@ class CMB2_hookup {
 	 * @return bool Whether metabox should be added/shown
 	 */
 	public function show_on() {
-		$show = true;
-
 		// If metabox is requesting to be conditionally shown
-		if ( is_callable( $this->cmb->prop( 'show_on_cb' ) ) ) {
-			$show = (bool) call_user_func( $this->cmb->prop( 'show_on_cb' ), $this->cmb );
-		}
+		$show = $this->cmb->should_show();
 
 		/**
 		 * Filter to determine if metabox should show. Default is true

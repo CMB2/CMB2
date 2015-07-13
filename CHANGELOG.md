@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Enhancements
+
 * Updated/Added many translations. Props [fxbenard](https://github.com/fxbenard), ([#203](https://github.com/WebDevStudios/CMB2/pull/344)) and [Mte90](https://github.com/Mte90) for the Italian translation.
+* Updated `file_list` to have a more intutive selection in the media library, and updated the 'Use file' text in the button. Props [SteveHoneyNZ](https://github.com/SteveHoneyNZ) ([#357](https://github.com/WebDevStudios/CMB2/pull/357), [#358](https://github.com/WebDevStudios/CMB2/pull/358)).
+
+### Bug Fixes
+
+* `'multicheck_inline'` file type was not outputting anything since it's value was not being returned. Props [ediamin](https://github.com/ediamin), ([#367](https://github.com/WebDevStudios/CMB2/pull/367)).
+* `'hidden'` type fields were not honoring the `'show_on_cb'` callback. Props [JPry](https://github.com/JPry), ([commits](https://github.com/WebDevStudios/CMB2/compare/5a4146eec546089fbe1a1c859d680dfda3a86ee2...1ef5ef1e3b2260ab381090c4abe9dc7234cfa0a6)).
+* Fixed: There was no minified cmb2-front.min.css file.
 
 ## 2.0.8 - 2015-06-01
 
