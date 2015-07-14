@@ -209,12 +209,12 @@ class CMB2_Sanitize {
 		if ( is_array( $this->value ) ) {
 			$returnee = array();
 			foreach ( $this->value as $value ) {
-				$date_object = DateTime::createFromFormat( $this->field->args['date_format'], $value );
+				$date_object = date_create_from_format( $this->field->args['date_format'], $value );
 				$returnee[]  = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
 
 			}
 		} else {
-			$date_object = DateTime::createFromFormat( $this->field->args['date_format'], $this->value );
+			$date_object = date_create_from_format( $this->field->args['date_format'], $this->value );
 			$returnee    = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
 		}
 
