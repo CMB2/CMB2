@@ -266,8 +266,14 @@ class CMB2_Sanitize {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 		}
 
-		$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
-		$this->value = serialize( $this->value );
+		try {
+			$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
+			$this->value = serialize( $this->value );
+		} catch ( Exception $e ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
+			}
+		}
 
 		return $this->value;
 	}
