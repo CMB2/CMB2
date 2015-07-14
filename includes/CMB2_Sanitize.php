@@ -263,7 +263,10 @@ class CMB2_Sanitize {
 		$offset = cmb2_utils()->timezone_offset( $tzstring );
 
 		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
-			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+			// timezone_name_from_abbr() returns false if not found based on offset. 
+			// Since there are currently some invalid timezones in wp_timezone_dropdown(),
+			// fallback to an offset of 0 (UTC+0)
+			$tzstring = ( false !== timezone_name_from_abbr( '', $offset, 0 ) ) ? timezone_name_from_abbr( '', $offset, 0 ) : timezone_name_from_abbr( '', 0, 0 );
 		}
 
 		try {
