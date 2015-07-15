@@ -117,7 +117,7 @@ class CMB2_Utils {
 
 		return $this->is_valid_time_stamp( $string )
 			? (int) $string :
-			strtotime( $string );
+			strtotime( (string) $string );
 	}
 
 	/**
