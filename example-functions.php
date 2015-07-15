@@ -413,6 +413,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 			'add_button'    => __( 'Add Another Entry', 'cmb2' ),
 			'remove_button' => __( 'Remove Entry', 'cmb2' ),
 			'sortable'      => true, // beta
+			// 'closed'     => true, // true to have the groups closed by default
 		),
 	) );
 

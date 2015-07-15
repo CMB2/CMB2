@@ -430,6 +430,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb = cmb2_get_metabox( 'test2' );
 
 		$field_id = $cmb->update_field_property( 'group_field', 'before_group', 'before_group output' );
+		$field_id = $cmb->update_field_property( 'group_field', 'options', array( 'closed' => true ) );
+
 		$this->assertTrue( ! empty( $field_id ) );
 
 		$cmb->update_field_property( 'group_field', 'before_group_row', 'before_group_row output' );
@@ -455,7 +457,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						</div>
 					</div>
 					before_group_row output
-					<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
+					<div class="postbox cmb-row cmb-repeatable-grouping closed" data-iterator="0">
 						<button disabled="disabled" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>

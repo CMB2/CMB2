@@ -313,9 +313,10 @@ class CMB2 {
 	public function render_group_row( $field_group, $remove_disabled ) {
 
 		$field_group->peform_param_callback( 'before_group_row' );
+		$closed_class = $field_group->options( 'closed' ) ? ' closed' : '';
 
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="', $field_group->index, '">';
+		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
 			if ( $field_group->args( 'repeatable' ) ) {
 				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
