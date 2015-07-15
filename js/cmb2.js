@@ -469,19 +469,17 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $this = $(this);
 		var name  = $this.attr( 'name' ); // get current name
 
-		// No name? bail
-		if ( typeof name === 'undefined' ) {
-			return false;
+		// If name is defined
+		if ( typeof name !== 'undefined' ) {
+			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
+			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
+	
+			// Update field name attributes so data is not orphaned when a row is removed and post is saved
+			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
+	
+			// New name with replaced iterator
+			$this.attr( 'name', $newName );
 		}
-
-		var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
-		var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
-
-		// Update field name attributes so data is not orphaned when a row is removed and post is saved
-		var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
-
-		// New name with replaced iterator
-		$this.attr( 'name', $newName );
 
 	};
 
