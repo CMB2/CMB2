@@ -500,10 +500,13 @@ class CMB2_Types {
 	}
 
 	public function text_date( $args = array() ) {
+		$dateFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-text-small cmb2-datepicker',
 			'value' => $this->field->get_timestamp_format(),
 			'desc'  => $this->_desc(),
+			'data-datepicker' => '{ "dateFormat": "' . $dateFormat  . '" }'
 		) );
 
 		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker' ) );
@@ -517,10 +520,13 @@ class CMB2_Types {
 	}
 
 	public function text_time( $args = array() ) {
+		$timeFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) );
+
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-timepicker text-time',
-			'value' => $this->field->get_timestamp_format( 'time_format' ),
+			'value' => $this->field->escaped_value(),
 			'desc' => $this->_desc(),
+			'data-timepicker' => '{ "timeFormat": "' . $timeFormat  . '" }'
 		) );
 
 		CMB2_JS::add_dependencies( array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ) );
