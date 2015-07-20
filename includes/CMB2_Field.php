@@ -667,7 +667,7 @@ class CMB2_Field {
 
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\">\n", $this->row_classes() );
+		printf( "<div id=\"{$this->args('id')}\" class=\"cmb-row %s\">\n", $this->row_classes() );
 
 		if ( 'title' == $this->type() || ! $this->args( 'show_names' ) ) {
 			echo "\t<div class=\"cmb-td\">\n";

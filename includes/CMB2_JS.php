@@ -65,6 +65,9 @@ class CMB2_JS {
 			wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
 		}
 
+		// Use Tabs	
+		wp_enqueue_script('jquery-ui-tabs');
+
 		// Only use minified files if SCRIPT_DEBUG is off
 		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 		$min   = $debug ? '' : '.min';

@@ -64,6 +64,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		// Make File List drag/drop sortable:
 		cmb.makeListSortable();
 
+		// Enable tabs if defined
+		$metabox.find('.inside').tabs();
+
 		$metabox
 			.on( 'change', '.cmb2_upload_file', function() {
 				cmb.formfield = $(this).attr('id');

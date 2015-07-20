@@ -737,6 +737,55 @@ Post Metaboxes
 	padding-right: 0;
 }
 
+/* line 122, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside > ul {
+	width: 20%;
+	float: left;
+}
+
+/* line 128, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside > ul li > a {
+	padding: 7px;
+	display: block;
+	text-decoration: none;
+}
+
+/* line 133, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside > ul li > a:focus {
+	outline: none;
+}
+
+/* line 141, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside > ul li.ui-state-active a {
+	background-color: #e9e9e9;
+}
+
+/* line 151, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside .cmb-row {
+	width: 75%;
+	float: left;
+	border-bottom: none;
+	border-left: 1px solid #e9e9e9;
+	padding-left: 20px;
+	margin-bottom: 0;
+	min-height: 150px;
+}
+
+/* line 161, sass/partials/_post_metaboxes.scss */
+
+.tabbed .inside .cmb-remove-field-row {
+	width: 100%;
+	border-top: 1px solid #e9e9e9;
+	padding-left: 0;
+	border-left: none;
+	min-height: inherit;
+}
+
 /*--------------------------------------------------------------
 Misc.
 --------------------------------------------------------------*/

@@ -263,6 +263,7 @@ class CMB2 {
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
 		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
+		$tabbed        	 = $field_group->options( 'tabs' ) ? ' tabbed' : ' non-tabbed';
 		$repeat_class    = $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
 		$group_val       = (array) $field_group->value();
 		$nrows           = count( $group_val );
@@ -271,7 +272,7 @@ class CMB2 {
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, $tabbed, '" style="width:100%;">';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -327,6 +328,19 @@ class CMB2 {
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
+				
+				// If tabbbed = true, display tab menu
+				if ( $field_group->options( 'tabs' ) ) {
+					
+					echo "<ul>";
+
+					foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
+						echo "<li><a href=\"#{$field_group->args( 'id' )}_{$field_group->index}_{$field_args['id']}\">" . $field_args['name'] . "</a></li>";
+					}
+
+					echo "</ul>";
+				}
+
 				// Loop and render repeatable group fields
 				foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 					if ( 'hidden' == $field_args['type'] ) {
@@ -345,6 +359,7 @@ class CMB2 {
 						$field = $this->get_field( $field_args, $field_group )->render_field();
 					}
 				}
+
 				if ( $field_group->args( 'repeatable' ) ) {
 					echo '
 					<div class="cmb-row cmb-remove-field-row">
