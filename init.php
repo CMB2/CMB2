@@ -160,7 +160,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
 				$loaded = load_muplugin_textdomain( 'cmb2', '/languages/' );
 			}
 			if ( ! $loaded ) {
-				$loaded = load_theme_textdomain( 'cmb2', '/languages/' );
+				$loaded = load_theme_textdomain( 'cmb2', get_template_directory() . '/languages/' );
 			}
 
 			if ( ! $loaded ) {
