@@ -23,7 +23,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
-		neweditor_id    : [],
 		defaults : {
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
@@ -32,7 +31,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	// Because it's a more efficient way of getting an element by id.
-	var $id = function( selector ) {
+	var $id = cmb.$id = function( selector ) {
 		return $( document.getElementById( selector ) );
 	};
 
@@ -333,7 +332,6 @@ window.CMB2 = (function(window, document, $, undefined){
 				});
 			}
 		}
-		cmb.neweditor_id = [];
 
 		$inputs.filter(':checked').prop( 'checked', false );
 		$inputs.filter(':selected').prop( 'selected', false );
@@ -344,7 +342,6 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$inputs.each( function(){
 			var $newInput = $(this);
-			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
 			var oldVal    = $newInput.attr( 'value' );
 			// var $next  = $newInput.next();
@@ -381,23 +378,6 @@ window.CMB2 = (function(window, document, $, undefined){
 				.removeClass( 'hasDatepicker' )
 				.attr( attrs ).val('');
 
-			// wysiwyg field
-			if ( isEditor ) {
-				// Get new wysiwyg ID
-				newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
-				// Empty the contents
-				$newInput.html('');
-				// Get wysiwyg field
-				var $wysiwyg = $newInput.parents( '.cmb-type-wysiwyg' );
-				// Remove extra mce divs
-				$wysiwyg.find('.mce-tinymce:not(:first-child)').remove();
-				// Replace id instances
-				var html = $wysiwyg.html().replace( new RegExp( oldID, 'g' ), newID );
-				// Update field html
-				$wysiwyg.html( html );
-				// Save ids for later to re-init tinymce
-				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
-			}
 		});
 
 		return cmb;
@@ -425,41 +405,6 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.afterRowInsert = function( $row ) {
-		var _prop;
-
-		// Need to re-init wp_editor instances
-		if ( cmb.neweditor_id.length ) {
-			var i;
-			for ( i = cmb.neweditor_id.length - 1; i >= 0; i-- ) {
-				var id = cmb.neweditor_id[i].id;
-				var old = cmb.neweditor_id[i].old;
-
-				if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
-					var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ old ] );
-
-					for ( _prop in newSettings ) {
-						if ( 'string' === typeof( newSettings[_prop] ) ) {
-							newSettings[_prop] = newSettings[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.mceInit[ id ] = newSettings;
-				}
-				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
-					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
-					for ( _prop in newQTS ) {
-						if ( 'string' === typeof( newQTS[_prop] ) ) {
-							newQTS[_prop] = newQTS[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.qtInit[ id ] = newQTS;
-				}
-				tinyMCE.init({
-					id : tinyMCEPreInit.mceInit[ id ],
-				});
-
-			}
-		}
-
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
 	};
@@ -473,10 +418,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( typeof name !== 'undefined' ) {
 			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
-	
+
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
-	
+
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
 		}

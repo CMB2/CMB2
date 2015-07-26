@@ -488,6 +488,7 @@ class CMB2_Types {
 	}
 
 	public function wysiwyg( $args = array() ) {
+
 		$a = $this->parse_args( $args, 'input', array(
 			'id'      => $this->_id(),
 			'value'   => $this->field->escaped_value( 'stripslashes' ),
@@ -495,8 +496,38 @@ class CMB2_Types {
 			'options' => $this->field->options(),
 		) );
 
+		// If repeatable or repeat-group
+		if ( $this->field->args( 'repeatable' ) || $this->field->group ) {
+	 		$this->wysiwyg_template( $a );
+		}
+
 		wp_editor( $a['value'], $a['id'], $a['options'] );
 		echo $a['desc'];
+	}
+
+	public function wysiwyg_template( $a ) {
+		static $placeholder_done = false;
+
+		if ( $placeholder_done ) {
+			return;
+		}
+
+		CMB2_JS::add_dependents( array( 'cmb2-wysiwyg' => CMB2_JS::script_url( 'cmb2-wysiwyg' ) ) );
+
+		$id = str_replace( '_0', '', $a['id'] );
+
+		$a['options']['textarea_name'] = str_replace( '[0]', '[placeholder_key]', $a['options']['textarea_name'] );
+
+		ob_start();
+		wp_editor( '', $id . '_placeholder', $a['options'] );
+		$editor = ob_get_clean();
+		$editor = str_replace( array( "\n", "\r" ), "", $editor );
+		$editor = str_replace( array( "'" ), '"', $editor );
+
+		$pattern = '<script type="text/template" class="template-wysiwyg-placeholder" id="%1$s_template">%2$s%3$s</script>';
+		printf( $pattern, $id, $editor, $a['desc'] );
+
+		$placeholder_done = true;
 	}
 
 	public function text_date( $args = array() ) {

@@ -523,8 +523,6 @@ class CMB2_Field {
 			'file', // Use file_list
 			'radio',
 			'title',
-			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
-			'wysiwyg',
 			'checkbox',
 			'radio_inline',
 			'taxonomy_radio',
