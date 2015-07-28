@@ -1,21 +1,19 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
-# Juan Javier M Restituto <jjmrestituto@gmail.com>, 2015
-# Justin Sternberg <me@jtsternberg.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-07-18 18:02+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/cmb2/language/es_ES/)\n"
+"PO-Revision-Date: 2014-12-23 14:58+0000\n"
+"Last-Translator: WebDevStudios contact@webdevstudios.com\n"
+"Language-Team: Sanskrit (http://www.transifex.com/projects/p/cmb2/language/sa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_ES\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sa\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==2 ? 1:2);\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -27,11 +25,11 @@ msgstr ""
 
 #: example-functions.php:82 tests/test-cmb-field.php:206
 msgid "Test Metabox"
-msgstr "Prueba Metabox"
+msgstr ""
 
 #: example-functions.php:93 example-functions.php:380
 msgid "Test Text"
-msgstr "Texto de prueba"
+msgstr ""
 
 #: example-functions.php:94 example-functions.php:106
 #: example-functions.php:114 example-functions.php:122
@@ -51,437 +49,437 @@ msgstr "Texto de prueba"
 #: example-functions.php:518 example-functions.php:556
 #: tests/test-cmb-field.php:218
 msgid "field description (optional)"
-msgstr "campo de descripción (opcional)"
+msgstr ""
 
 #: example-functions.php:105
 msgid "Test Text Small"
-msgstr "Test Texto Pequeño"
+msgstr ""
 
 #: example-functions.php:113
 msgid "Test Text Medium"
-msgstr "Prueba de texto mediano"
+msgstr ""
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr "URL del sitio web"
+msgstr ""
 
 #: example-functions.php:130
 msgid "Test Text Email"
-msgstr "Prueba de texto Enviar"
+msgstr ""
 
 #: example-functions.php:138
 msgid "Test Time"
-msgstr "El tiempo de prueba"
+msgstr ""
 
 #: example-functions.php:145 example-functions.php:146
 msgid "Time zone"
-msgstr "Zona horaria"
+msgstr ""
 
 #: example-functions.php:152
 msgid "Test Date Picker"
-msgstr "Prueba Selector de fecha"
+msgstr ""
 
 #: example-functions.php:159
 msgid "Test Date Picker (UNIX timestamp)"
-msgstr "Prueba Selector de fecha (UNIX timestamp)"
+msgstr ""
 
 #: example-functions.php:167
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
-msgstr "Fecha de Prueba / Hora Picker Combo (UNIX timestamp)"
+msgstr ""
 
 #: example-functions.php:184
 msgid "Test Money"
-msgstr "Prueba de dinero"
+msgstr ""
 
 #: example-functions.php:193
 msgid "Test Color Picker"
-msgstr "Selector de color de prueba"
+msgstr ""
 
 #: example-functions.php:201
 msgid "Test Text Area"
-msgstr "Área de texto de prueba"
+msgstr ""
 
 #: example-functions.php:208
 msgid "Test Text Area Small"
-msgstr "Prueba de Texto Área Pequeño"
+msgstr ""
 
 #: example-functions.php:215
 msgid "Test Text Area for Code"
-msgstr "Área de texto de prueba para el código"
+msgstr ""
 
 #: example-functions.php:222
 msgid "Test Title Weeeee"
-msgstr "Test Título Weeeee"
+msgstr ""
 
 #: example-functions.php:223
 msgid "This is a title description"
-msgstr "Esta es una descripción del título"
+msgstr ""
 
 #: example-functions.php:229
 msgid "Test Select"
-msgstr "Test Seleccione"
+msgstr ""
 
 #: example-functions.php:235 example-functions.php:248
 #: example-functions.php:260
 msgid "Option One"
-msgstr "Una Opción"
+msgstr ""
 
 #: example-functions.php:236 example-functions.php:249
 #: example-functions.php:261
 msgid "Option Two"
-msgstr "Opción dos"
+msgstr ""
 
 #: example-functions.php:237 example-functions.php:250
 #: example-functions.php:262
 msgid "Option Three"
-msgstr "Opción Tres"
+msgstr ""
 
 #: example-functions.php:242
 msgid "Test Radio inline"
-msgstr "Radio de prueba en línea"
+msgstr ""
 
 #: example-functions.php:255
 msgid "Test Radio"
-msgstr "Prueba de Radio"
+msgstr ""
 
 #: example-functions.php:267
 msgid "Test Taxonomy Radio"
-msgstr "Prueba de Taxonomía de Radio"
+msgstr ""
 
 #: example-functions.php:276
 msgid "Test Taxonomy Select"
-msgstr "Prueba fields Seleccionar"
+msgstr ""
 
 #: example-functions.php:284
 msgid "Test Taxonomy Multi Checkbox"
-msgstr "Prueba Taxonomía Multi Casilla de verificación"
+msgstr ""
 
 #: example-functions.php:293
 msgid "Test Checkbox"
-msgstr "Prueba de Casilla de verificación"
+msgstr ""
 
 #: example-functions.php:300 tests/test-cmb-field.php:217
 msgid "Test Multi Checkbox"
-msgstr "Test Multi Casilla de verificación"
+msgstr ""
 
 #: example-functions.php:306 tests/test-cmb-field.php:223
 msgid "Check One"
-msgstr "Marque una"
+msgstr ""
 
 #: example-functions.php:307 tests/test-cmb-field.php:224
 msgid "Check Two"
-msgstr "Comprobar Dos"
+msgstr ""
 
 #: example-functions.php:308 tests/test-cmb-field.php:225
 msgid "Check Three"
-msgstr "Comprobar Tres"
+msgstr ""
 
 #: example-functions.php:314
 msgid "Test wysiwyg"
-msgstr "wysiwyg Test"
+msgstr ""
 
 #: example-functions.php:322
 msgid "Test Image"
-msgstr "Prueba de imagen"
+msgstr ""
 
 #: example-functions.php:323
 msgid "Upload an image or enter a URL."
-msgstr "Cargar una imagen o introducir una URL."
+msgstr ""
 
 #: example-functions.php:329
 msgid "Multiple Files"
-msgstr "varios archivos"
+msgstr ""
 
 #: example-functions.php:330
 msgid "Upload or add multiple images/attachments."
-msgstr "Subir o añadir varias imágenes / archivos adjuntos."
+msgstr ""
 
 #: example-functions.php:337
 msgid "oEmbed"
-msgstr "oEmbed"
+msgstr ""
 
 #: example-functions.php:338
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr "Introduzca un YouTube, Twitter, Instagram o URL. Es compatible con los servicios enumerados en el <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+msgstr ""
 
 #: example-functions.php:371
 msgid "About Page Metabox"
-msgstr "Acerca de Página Metabox"
+msgstr ""
 
 #: example-functions.php:402
 msgid "Repeating Field Group"
-msgstr "Repetir Grupo Campo"
+msgstr ""
 
 #: example-functions.php:410
 msgid "Generates reusable form entries"
-msgstr "Genera entradas de formulario reutilizables"
+msgstr ""
 
 #: example-functions.php:412
 msgid "Entry {#}"
-msgstr "Entrada {#}"
+msgstr ""
 
 #: example-functions.php:413
 msgid "Add Another Entry"
-msgstr "Añadir otra entrada"
+msgstr ""
 
 #: example-functions.php:414
 msgid "Remove Entry"
-msgstr "Eliminar entrada"
+msgstr ""
 
 #: example-functions.php:426
 msgid "Entry Title"
-msgstr "Título de la entrada"
+msgstr ""
 
 #: example-functions.php:433
 msgid "Description"
-msgstr "Descripción"
+msgstr ""
 
 #: example-functions.php:434
 msgid "Write a short description for this entry"
-msgstr "Escriba una descripción corta para esta entrada"
+msgstr ""
 
 #: example-functions.php:440
 msgid "Entry Image"
-msgstr "Imagen de la entrada"
+msgstr ""
 
 #: example-functions.php:446
 msgid "Image Caption"
-msgstr "Leyenda de la imagen"
+msgstr ""
 
 #: example-functions.php:467
 msgid "User Profile Metabox"
-msgstr "Perfil de Usuario Metabox"
+msgstr ""
 
 #: example-functions.php:474
 msgid "Extra Info"
-msgstr "Perfil de Usuario Metabox"
+msgstr ""
 
 #: example-functions.php:482
 msgid "Avatar"
-msgstr "Avatar"
+msgstr ""
 
 #: example-functions.php:489
 msgid "Facebook URL"
-msgstr "URL de Facebook"
+msgstr ""
 
 #: example-functions.php:496
 msgid "Twitter URL"
-msgstr "URL de Twitter"
+msgstr ""
 
 #: example-functions.php:503
 msgid "Google+ URL"
-msgstr "Google+ URL"
+msgstr ""
 
 #: example-functions.php:510
 msgid "Linkedin URL"
-msgstr "Linkedin URL"
+msgstr ""
 
 #: example-functions.php:517
 msgid "User Field"
-msgstr "El campo de usuario"
+msgstr ""
 
 #: example-functions.php:540
 msgid "Theme Options Metabox"
-msgstr "Tema Opciones Metabox"
+msgstr ""
 
 #: example-functions.php:555
 msgid "Site Background Color"
-msgstr "Antecedentes del sitio de color"
+msgstr ""
 
 #: includes/CMB2.php:120
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr "Se requiere de configuración Metabox tener un parámetro de identificación"
+msgstr ""
 
 #: includes/CMB2.php:326
 msgid "Click to toggle"
-msgstr "Haga clic para alternar"
+msgstr ""
 
 #: includes/CMB2_Ajax.php:40
 msgid "Please Try Again"
-msgstr "Vuelva a intentarlo"
+msgstr ""
 
 #: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:786
 msgid "Remove Embed"
-msgstr "Eliminar Insertar"
+msgstr ""
 
 #: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:787
 msgid "No oEmbed Results Found for %s. View more info at"
-msgstr "No oEmbed resultados encontrados por% s. Ver más información en "
+msgstr ""
 
 #: includes/CMB2_Field.php:891
 msgid "Add Group"
-msgstr "Agregar grupo"
+msgstr ""
 
 #: includes/CMB2_Field.php:892
 msgid "Remove Group"
-msgstr "Eliminar grupo"
+msgstr ""
 
 #: includes/CMB2_Field.php:914 includes/CMB2_Field.php:918
 #: tests/test-cmb-field.php:178
 msgid "None"
-msgstr "Ninguno"
+msgstr ""
 
 #: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"
-msgstr "Borrar"
+msgstr ""
 
 #: includes/CMB2_JS.php:87
 msgid "Default"
-msgstr "Por defecto"
+msgstr ""
 
 #: includes/CMB2_JS.php:88
 msgid "Select Color"
-msgstr "Seleccionar color"
+msgstr ""
 
 #: includes/CMB2_JS.php:89
 msgid "Current Color"
-msgstr "Seleccionar color"
+msgstr ""
 
 #: includes/CMB2_JS.php:110
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr "El domingo, lunes, martes, miércoles, jueves, viernes, sábado"
+msgstr ""
 
 #: includes/CMB2_JS.php:111
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr "Do, Lu, Ma, Mi, Ju, Vi, Sa"
+msgstr ""
 
 #: includes/CMB2_JS.php:112
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr "Sun, L, M, X, J, V, S"
+msgstr ""
 
 #: includes/CMB2_JS.php:113
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr "Enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, Octubre, Noviembre, Diciembre"
+msgstr ""
 
 #: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr "Enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre"
+msgstr ""
 
 #: includes/CMB2_JS.php:115
 msgid "Next"
-msgstr "Siguiente"
+msgstr ""
 
 #: includes/CMB2_JS.php:116
 msgid "Prev"
-msgstr "Anterior"
+msgstr ""
 
 #: includes/CMB2_JS.php:117
 msgid "Today"
-msgstr "Hoy"
+msgstr ""
 
 #: includes/CMB2_JS.php:118 includes/CMB2_JS.php:128
 msgid "Done"
-msgstr "Hecho"
+msgstr ""
 
 #: includes/CMB2_JS.php:122
 msgid "Choose Time"
-msgstr "Elegir Hora"
+msgstr ""
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr "Hora"
+msgstr ""
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"
-msgstr "Hora"
+msgstr ""
 
 #: includes/CMB2_JS.php:125
 msgid "Minute"
-msgstr "Minuto"
+msgstr ""
 
 #: includes/CMB2_JS.php:126
 msgid "Second"
-msgstr "Segundos"
+msgstr ""
 
 #: includes/CMB2_JS.php:127
 msgid "Now"
-msgstr "Ahora"
+msgstr ""
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
-msgstr "Usar este archivo"
+msgstr ""
 
 #: includes/CMB2_JS.php:136 includes/CMB2_Types.php:983
 msgid "Remove Image"
-msgstr "Eliminar imagen"
+msgstr ""
 
 #: includes/CMB2_JS.php:137 includes/CMB2_Types.php:356
 #: includes/CMB2_Types.php:1002 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:163 tests/test-cmb-types.php:735
 #: tests/test-cmb-types.php:760
 msgid "Remove"
-msgstr "Eliminar"
+msgstr ""
 
 #: includes/CMB2_JS.php:138 includes/CMB2_Types.php:997
 #: tests/test-cmb-types.php:736 tests/test-cmb-types.php:761
 msgid "File:"
-msgstr "Archivo:"
+msgstr ""
 
 #: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1000
 #: tests/test-cmb-types.php:734 tests/test-cmb-types.php:759
 msgid "Download"
-msgstr "Descargar"
+msgstr ""
 
 #: includes/CMB2_JS.php:140
 msgid "Select / Deselect All"
-msgstr "Seleccionar / Deseleccionar todo"
+msgstr ""
 
 #: includes/CMB2_Types.php:297
 msgid "Add Row"
-msgstr "Añadir fila"
+msgstr ""
 
 #: includes/CMB2_Types.php:734 includes/CMB2_Types.php:782
 msgid "No terms"
-msgstr "No hay términos"
+msgstr ""
 
 #: includes/CMB2_Types.php:847 tests/test-cmb-types.php:711
 #: tests/test-cmb-types.php:737
 msgid "Add or Upload Files"
-msgstr "Añadir o Subir archivos"
+msgstr ""
 
 #: includes/CMB2_Types.php:907 tests/test-cmb-types.php:747
 #: tests/test-cmb-types.php:762
 msgid "Add or Upload File"
-msgstr "Añadir o Cargar archivo"
+msgstr ""
 
 #: includes/helper-functions.php:249
 msgid "Save"
-msgstr "Guardar"
+msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2"
-msgstr "CMB2"
+msgstr ""
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr "https://github.com/WebDevStudios/CMB2"
+msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr "CMB2 creará metaboxes y formularios con campos personalizados que harán volar tu Mente."
+msgstr ""
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr "WebDevStudios"
+msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr "http://webdevstudios.com"
+msgstr ""
 
 #: includes/CMB2_JS.php:109
 msgctxt "Valid formatDate string for jquery-ui datepicker"
 msgid "mm/dd/yy"
-msgstr "dd/mm/yy"
+msgstr ""
 
 #: includes/CMB2_JS.php:129
 msgctxt ""
 "Valid formatting string, as per "
 "http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
-msgstr "hh:mm TT"
+msgstr ""
