@@ -267,6 +267,27 @@ class CMB2_hookup {
 	}
 
 	/**
+	 * Determines if metabox should be shown in current context
+	 * @since  2.0.0
+	 * @return bool Whether metabox should be added/shown
+	 */
+	public function show_on() {
+		// If metabox is requesting to be conditionally shown
+		$show = $this->cmb->should_show();
+
+		/**
+		 * Filter to determine if metabox should show. Default is true
+		 *
+		 * @param array  $show          Default is true, show the metabox
+		 * @param mixed  $meta_box_args Array of the metabox arguments
+		 * @param mixed  $cmb           The CMB2 instance
+		 */
+		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
+
+		return $show;
+	}
+
+	/**
 	 * Save data from post metabox
 	 * @since  1.0.0
 	 * @param  int    $post_id Post ID
@@ -338,27 +359,6 @@ class CMB2_hookup {
 			// get the metabox types & compare it to this type
 			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
 		);
-	}
-
-	/**
-	 * Determines if metabox should be shown in current context
-	 * @since  2.0.0
-	 * @return bool Whether metabox should be added/shown
-	 */
-	public function show_on() {
-		// If metabox is requesting to be conditionally shown
-		$show = $this->cmb->should_show();
-
-		/**
-		 * Filter to determine if metabox should show. Default is true
-		 *
-		 * @param array  $show          Default is true, show the metabox
-		 * @param mixed  $meta_box_args Array of the metabox arguments
-		 * @param mixed  $cmb           The CMB2 instance
-		 */
-		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
-
-		return $show;
 	}
 
 	/**
