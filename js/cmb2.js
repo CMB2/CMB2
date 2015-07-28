@@ -466,12 +466,12 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.addAjaxRow = function( evt ) {
 		evt.preventDefault();
 
-		var $self         = $(this);
-		var $table        = $id( $self.data('selector') );
-		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
-		cmb.idNumber      = prevNum + 1;
-		var $row          = $emptyrow.clone();
+		var $self     = $(this);
+		var $table    = $id( $self.data('selector') );
+		var $emptyrow = $table.find('.empty-row');
+		var prevNum   = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
+		cmb.idNumber  = prevNum + 1;
+		var $row      = $emptyrow.clone();
 
 		cmb.newRowHousekeeping( $row ).cleanRow( $row, prevNum );
 
@@ -503,11 +503,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			$parent.remove();
 
-			if ( number <= 2 ) {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-			} else {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-			}
+			$table.find('.cmb-remove-group-row').prop( 'disabled', ( number <= 2 ? true : false ) );
 
 			$table.trigger( 'cmb2_remove_row' );
 		}

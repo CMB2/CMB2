@@ -497,7 +497,14 @@ class CMB2_Types {
 		) );
 
 		// If repeatable or repeat-group
-		if ( $this->field->args( 'repeatable' ) || $this->field->group ) {
+		if ( $this->field->args( 'repeatable' ) ) {
+			$a['id'] = $this->field->id() . ( $this->field->args( 'repeatable' ) ? '_' . $this->iterator : '' );
+			$a['options']['textarea_name'] = $this->_name();
+
+	 		$this->wysiwyg_template( $a );
+		}
+
+		if ( $this->field->group ) {
 	 		$this->wysiwyg_template( $a );
 		}
 
@@ -506,6 +513,7 @@ class CMB2_Types {
 	}
 
 	public function wysiwyg_template( $a ) {
+		// @TODO static wil not work, or won't allow other wysiwygs on the page
 		static $placeholder_done = false;
 
 		if ( $placeholder_done ) {
