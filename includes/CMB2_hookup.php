@@ -14,13 +14,6 @@
 class CMB2_hookup {
 
 	/**
-	 * Metabox Form ID
-	 * @var   string
-	 * @since 0.9.4
-	 */
-	protected $form_id = 'post';
-
-	/**
 	 * Array of all hooks done (to be run once)
 	 * @var   array
 	 * @since 2.0.0
@@ -48,6 +41,13 @@ class CMB2_hookup {
 	 */
 	protected $cmb;
 
+	/**
+	 * The object type we are performing the hookup for
+	 * @var   string
+	 * @since 2.0.9
+	 */
+	protected $object_type = 'post';
+
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 
@@ -74,8 +74,8 @@ class CMB2_hookup {
 		// register our scripts and styles for cmb
 		$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
 
-		$type = $this->cmb->mb_object_type();
-		if ( 'post' == $type ) {
+		$this->object_type = $this->cmb->mb_object_type();
+		if ( 'post' == $this->object_type ) {
 			add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 			add_action( 'add_attachment', array( $this, 'save_post' ) );
 			add_action( 'edit_attachment', array( $this, 'save_post' ) );
@@ -83,7 +83,13 @@ class CMB2_hookup {
 
 			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 
-		} elseif ( 'user' == $type ) {
+		} elseif ( 'comment' == $this->object_type ) {
+			add_action( 'add_meta_boxes_comment', array( $this, 'add_metaboxes' ) );
+			add_action( 'edit_comment', array( $this, 'save_comment' ) );
+
+			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
+
+		} elseif ( 'user' == $this->object_type ) {
 
 			$priority = $this->cmb->prop( 'priority' );
 
@@ -164,7 +170,7 @@ class CMB2_hookup {
 	 */
 	public function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
-		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'page-new.php', 'page.php' ), true ) ) {
+		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'page-new.php', 'page.php', 'comment.php' ), true ) ) {
 			if ( $this->cmb->prop( 'cmb_styles' ) ) {
 				self::enqueue_cmb_css();
 			}
@@ -175,7 +181,8 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Add metaboxes (to 'post' object type)
+	 * Add metaboxes (to 'post' or 'comment' object types)
+	 * @since 1.0.0
 	 */
 	public function add_metaboxes() {
 
@@ -184,11 +191,6 @@ class CMB2_hookup {
 		}
 
 		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
-
-			if ( $this->cmb->prop( 'closed' ) ) {
-				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
-			}
-
 			/**
 			 * To keep from registering an actual post-screen metabox,
 			 * omit the 'title' attribute from the metabox registration array.
@@ -199,7 +201,12 @@ class CMB2_hookup {
 			 * Somewhere else in the post-screen
 			 */
 			if ( $this->cmb->prop( 'title' ) ) {
-				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'post_metabox' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+
+				if ( $this->cmb->prop( 'closed' ) ) {
+					add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
+				}
+
+				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 			}
 		}
 	}
@@ -216,11 +223,12 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Display metaboxes for a post object
+	 * Display metaboxes for a post or comment object
 	 * @since  1.0.0
 	 */
-	public function post_metabox() {
-		$this->cmb->show_form( get_the_ID(), 'post' );
+	public function metabox_callback() {
+		$object_id = 'comment' == $this->object_type ? get_comment_ID() : get_the_ID();
+		$this->cmb->show_form( $object_id, $this->object_type );
 	}
 
 	/**
@@ -260,54 +268,6 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Save data from metabox
-	 */
-	public function save_post( $post_id, $post = false ) {
-
-		$post_type = $post ? $post->post_type : get_post_type( $post_id );
-
-		$do_not_pass_go = (
-			! $this->cmb->prop( 'save_fields' )
-			// check nonce
-			|| ! isset( $_POST[ $this->cmb->nonce() ] )
-			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
-			// check if autosave
-			|| defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE
-			// check user editing permissions
-			|| ( 'page' == $post_type && ! current_user_can( 'edit_page', $post_id ) )
-			|| ! current_user_can( 'edit_post', $post_id )
-			// get the metabox post_types & compare it to this post_type
-			|| ! in_array( $post_type, $this->cmb->prop( 'object_types' ) )
-		);
-
-		if ( $do_not_pass_go ) {
-			// do not collect $200
-			return;
-		}
-
-		// take a trip to reading railroad – if you pass go collect $200
-		$this->cmb->save_fields( $post_id, 'post', $_POST );
-	}
-
-	/**
-	 * Save data from metabox
-	 */
-	public function save_user( $user_id ) {
-		// check permissions
-		if (
-			! $this->cmb->prop( 'save_fields' )
-			// check nonce
-			|| ! isset( $_POST[ $this->cmb->nonce() ] )
-			|| ! wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
-		) {
-			// @todo more hardening?
-			return;
-		}
-
-		$this->cmb->save_fields( $user_id, 'user', $_POST );
-	}
-
-	/**
 	 * Determines if metabox should be shown in current context
 	 * @since  2.0.0
 	 * @return bool Whether metabox should be added/shown
@@ -326,6 +286,80 @@ class CMB2_hookup {
 		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
 
 		return $show;
+	}
+
+	/**
+	 * Save data from post metabox
+	 * @since  1.0.0
+	 * @param  int    $post_id Post ID
+	 * @param  mixed  $post    Post object
+	 * @return null
+	 */
+	public function save_post( $post_id, $post = false ) {
+
+		$post_type = $post ? $post->post_type : get_post_type( $post_id );
+
+		$do_not_pass_go = (
+			! $this->can_save( $post_type )
+			// check user editing permissions
+			|| ( 'page' == $post_type && ! current_user_can( 'edit_page', $post_id ) )
+			|| ! current_user_can( 'edit_post', $post_id )
+		);
+
+		if ( $do_not_pass_go ) {
+			// do not collect $200
+			return;
+		}
+
+		// take a trip to reading railroad – if you pass go collect $200
+		$this->cmb->save_fields( $post_id, 'post', $_POST );
+	}
+
+	/**
+	 * Save data from comment metabox
+	 * @since  2.0.9
+	 * @param  int    $comment_id Comment ID
+	 * @return null
+	 */
+	public function save_comment( $comment_id ) {
+
+		$can_edit = current_user_can( 'moderate_comments', $comment_id );
+
+		if ( $this->can_save( get_comment_type( $comment_id ) ) && $can_edit ) {
+			$this->cmb->save_fields( $comment_id, 'comment', $_POST );
+		}
+	}
+
+	/**
+	 * Save data from user fields
+	 * @since  1.0.x
+	 * @param  int   $user_id  User ID
+	 * @return null
+	 */
+	public function save_user( $user_id ) {
+		// check permissions
+		if ( $this->can_save() ) {
+			$this->cmb->save_fields( $user_id, 'user', $_POST );
+		}
+	}
+
+	/**
+	 * Determines if the current object is able to be saved
+	 * @since  2.0.9
+	 * @param  string  $type Current post_type or comment_type
+	 * @return bool          Whether object can be saved
+	 */
+	public function can_save( $type = '' ) {
+		return (
+			$this->cmb->prop( 'save_fields' )
+			// check nonce
+			&& isset( $_POST[ $this->cmb->nonce() ] )
+			&& wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
+			// check if autosave
+			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			// get the metabox types & compare it to this type
+			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
+		);
 	}
 
 	/**
