@@ -278,10 +278,13 @@ module.exports = function(grunt) {
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
 	grunt.registerTask('default', ['styles', 'js', 'tests']);
-	//Checktextdomain and makepot task(s)
+
+	// Checktextdomain and makepot task(s)
 	grunt.registerTask('build:i18n', ['checktextdomain', 'makepot', 'newer:potomo']);
-	//Makepot and push it on Transifex task(s).
+
+	// Makepot and push it on Transifex task(s).
 	grunt.registerTask('tx-push', ['makepot', 'exec:txpush_s']);
-	//Pull from Transifex and create .mo task(s).
+
+	// Pull from Transifex and create .mo task(s).
 	grunt.registerTask('tx-pull', ['exec:txpull', 'newer:potomo']);
 };
