@@ -68,7 +68,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_209', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.8';
+		const VERSION = '2.0.9';
 
 		/**
 		 * Current version hook priority.
@@ -155,10 +155,13 @@ if ( ! class_exists( 'CMB2_Bootstrap_209', false ) ) {
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
+
 			$loaded = load_plugin_textdomain( 'cmb2', false, '/languages/' );
+
 			if ( ! $loaded ) {
 				$loaded = load_muplugin_textdomain( 'cmb2', '/languages/' );
 			}
+
 			if ( ! $loaded ) {
 				$loaded = load_theme_textdomain( 'cmb2', get_stylesheet_directory() . '/languages/' );
 			}
@@ -168,6 +171,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_209', false ) ) {
 				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}
+
 		}
 
 	}
