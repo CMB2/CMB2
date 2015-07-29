@@ -203,10 +203,8 @@ class CMB2_Utils {
 	 * Other options are ignored, because they would either bring compatibility problems between PHP and JS, or
 	 * bring even more translation troubles.
 	 *
-	 * @since 2.0.6
-	 *
+	 * @since 2.1.0
 	 * @param string $format php date format
-	 *
 	 * @return string reformatted string
 	 */
 	public function php_to_js_dateformat( $format ) {
@@ -239,9 +237,19 @@ class CMB2_Utils {
 			$format = preg_replace( "~(?<!\\\\)$php~", $js, $format );
 		}
 
-		$format = preg_replace_callback( '~(?:\\\.)+~', 'wrap_escaped_chars', $format );
+		$format = preg_replace_callback( '~(?:\\\.)+~', array( $this, 'wrap_escaped_chars' ), $format );
 
 		return $format;
+	}
+
+	/**
+	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+	 * @since  2.1.0
+	 * @param  $value Value to wrap/escape
+	 * @return string Modified value
+	 */
+	public function wrap_escaped_chars( $value ) {
+		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
 	}
 
 }

@@ -306,19 +306,7 @@ function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	}
 }
 
-/**
- * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
- *
- * @param $wrap
- *
- * @return string
- */
-function wrap_escaped_chars( $wrapped ) {
-	return "&#39;" . str_replace( '\\', '', $wrapped[0] ) . "&#39;";
-}
-
-
-if( !function_exists("date_create_from_format") ) {
+if ( ! function_exists( 'date_create_from_format' ) ) {
 
 	/**
 	 * Reimplementation of DateTime::createFromFormat for PHP < 5.3. :(
@@ -329,27 +317,35 @@ if( !function_exists("date_create_from_format") ) {
 	 *
 	 * @return DateTime
 	 */
-	function date_create_from_format( $date_format, $date_value )
-	{
+	function date_create_from_format( $date_format, $date_value ) {
 
-		$schedule_format = str_replace( array( 'M', 'Y', 'm', 'd', 'H', 'i', 'a' ), array('%b', '%Y', '%m', '%d', '%H', '%M', '%p'), $date_format);
-		// %Y, %m and %d correspond to date()'s Y m and d.
-		// %I corresponds to H, %M to i and %p to a
-		$ugly = strptime($date_value, $schedule_format);
-		$ymd = sprintf(
-		// This is a format string that takes six total decimal
-		// arguments, then left-pads them with zeros to either
-		// 4 or 2 characters, as needed
-			'%04d-%02d-%02d %02d:%02d:%02d',
-			$ugly['tm_year'] + 1900,  // This will be "111", so we need to add 1900.
-			$ugly['tm_mon'] + 1,      // This will be the month minus one, so we add one.
-			$ugly['tm_mday'],
-			$ugly['tm_hour'],
-			$ugly['tm_min'],
-			$ugly['tm_sec']
+		$schedule_format = str_replace(
+			array( 'M', 'Y', 'm', 'd', 'H', 'i', 'a' ),
+			array('%b', '%Y', '%m', '%d', '%H', '%M', '%p' ),
+			$date_format
 		);
-		$new_schedule = new DateTime($ymd);
 
-		return $new_schedule;
+		/*
+		 * %Y, %m and %d correspond to date()'s Y m and d.
+		 * %I corresponds to H, %M to i and %p to a
+		 */
+		$parsed_time = strptime( $date_value, $schedule_format );
+
+		$ymd = sprintf(
+			/*
+			 * This is a format string that takes six total decimal
+			 * arguments, then left-pads them with zeros to either
+			 * 4 or 2 characters, as needed
+			 */
+			'%04d-%02d-%02d %02d:%02d:%02d',
+			$parsed_time['tm_year'] + 1900,  // This will be "111", so we need to add 1900.
+			$parsed_time['tm_mon'] + 1,      // This will be the month minus one, so we add one.
+			$parsed_time['tm_mday'],
+			$parsed_time['tm_hour'],
+			$parsed_time['tm_min'],
+			$parsed_time['tm_sec']
+		);
+
+		return new DateTime($ymd);
 	}
 }

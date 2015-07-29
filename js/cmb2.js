@@ -473,10 +473,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( typeof name !== 'undefined' ) {
 			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
-	
+
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
-	
+
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
 		}
@@ -677,33 +677,31 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.initColorPickers( $colorPickers );
 	};
 
-    cmb.initTimePickers = function( $selector ) {
-        if ( ! $selector.length ) {
-            return;
-        }
+	cmb.initTimePickers = function( $selector ) {
+		if ( $selector.length ) {
 
-        $selector.each(function() {
-            var options = cmb.defaults.time_picker;
-            $(this).timepicker( 'destroy' );
-            var additionalOptions = $(this).data("timepicker");
-            $.extend( options, additionalOptions );
-            $(this).timepicker( options );
-        });
+			$selector.each(function() {
+				var $this = $(this);
+				var options = $.extend( {}, cmb.defaults.time_picker, $this.data( 'timepicker' ) );
+				$this.timepicker( 'destroy' );
+				$this.timepicker( options );
 
-    };
+			});
+
+		}
+	};
 
 	cmb.initDatePickers = function( $selector ) {
-		if ( ! $selector.length ) {
-			return;
-		}
+		if ( $selector.length ) {
 
-        $selector.each(function() {
-            var options = cmb.defaults.date_picker;
-            $(this).datepicker( 'destroy' );
-            var additionalOptions = $(this).data("datepicker");
-            $.extend( options, additionalOptions );
-            $(this).datepicker( options );
-        });
+			$selector.each(function() {
+				var $this = $(this);
+				var options = $.extend( {}, cmb.defaults.date_picker, $this.data( 'datepicker' ) );
+				$this.datepicker( 'destroy' );
+				$this.datepicker( options );
+			});
+
+		}
 	};
 
 	cmb.initColorPickers = function( $selector ) {

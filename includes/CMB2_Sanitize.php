@@ -206,20 +206,20 @@ class CMB2_Sanitize {
 	 * @return string       Timestring
 	 */
 	public function text_date_timestamp() {
-		if ( is_array( $this->value ) ) {
-			$returnee = array();
-			foreach ( $this->value as $value ) {
-				$date_object = date_create_from_format( $this->field->args['date_format'], $value );
-				$returnee[]  = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
+		return is_array( $this->value )
+			? array_map( array( $this, 'get_timestamp_from_value' ), $this->value )
+			: $this->get_timestamp_from_value( $this->value );
+	}
 
-			}
-		} else {
-			$date_object = date_create_from_format( $this->field->args['date_format'], $this->value );
-			$returnee    = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
-		}
-
-		return $returnee;
-
+	/**
+	 * Get timestamp from text date
+	 * @since  2.1.0
+	 * @param  string $value Date value
+	 * @return mixed         Date object or empty value
+	 */
+	public function get_timestamp_from_value( $value ) {
+		$date_object = date_create_from_format( $this->field->args['date_format'], $value );
+		return $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
 	}
 
 	/**
