@@ -677,22 +677,33 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.initColorPickers( $colorPickers );
 	};
 
-	cmb.initTimePickers = function( $selector ) {
-		if ( ! $selector.length ) {
-			return;
-		}
+    cmb.initTimePickers = function( $selector ) {
+        if ( ! $selector.length ) {
+            return;
+        }
 
-		$selector.timepicker( 'destroy' );
-		$selector.timepicker( cmb.defaults.time_picker );
-	};
+        $selector.each(function() {
+            var options = cmb.defaults.time_picker;
+            $(this).timepicker( 'destroy' );
+            var additionalOptions = $(this).data("timepicker");
+            $.extend( options, additionalOptions );
+            $(this).timepicker( options );
+        });
+
+    };
 
 	cmb.initDatePickers = function( $selector ) {
 		if ( ! $selector.length ) {
 			return;
 		}
 
-		$selector.datepicker( 'destroy' );
-		$selector.datepicker( cmb.defaults.date_picker );
+        $selector.each(function() {
+            var options = cmb.defaults.date_picker;
+            $(this).datepicker( 'destroy' );
+            var additionalOptions = $(this).data("datepicker");
+            $.extend( options, additionalOptions );
+            $(this).datepicker( options );
+        });
 	};
 
 	cmb.initColorPickers = function( $selector ) {
