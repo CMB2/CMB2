@@ -20,7 +20,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		formfield       : '',
 		idNumber        : false,
 		file_frames     : {},
-		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
+		repeatEls       : 'input:not([type="button"],[id^=filelist]),select,textarea,.cmb2-media-status',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
 		neweditor_id    : [],
@@ -379,7 +379,11 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			$newInput
 				.removeClass( 'hasDatepicker' )
-				.attr( attrs ).val('');
+				.attr( attrs );//.val('');
+				
+			if ($newInput.attr('type')!='radio' && $newInput.attr('type')!='checkbox') {
+				$newInput.val('');
+			}				
 
 			// wysiwyg field
 			if ( isEditor ) {
@@ -484,7 +488,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.emptyValue = function( evt, row ) {
-		$('input:not([type="button"]), textarea', row).val('');
+		$('input:not([type="button"],[type="radio"],[type="checkbox"]), textarea', row).val('');
 	};
 
 	cmb.addGroupRow = function( evt ) {
@@ -640,15 +644,39 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
+
+				var toRowId = $element.closest('.cmb-repeatable-grouping').attr('data-iterator');
+				var fromRowId = inputVals[ index ]['$'].closest('.cmb-repeatable-grouping').attr('data-iterator');
+				
 				val = $element.html();
 				$element.html( inputVals[ index ].val );
 				inputVals[ index ].$.html( val );
 
+				inputVals[ index ]['$'].find('input').each(function() {
+					var name = $(this).attr('name');
+					name = name.replace('['+toRowId+']', '['+fromRowId+']');
+					$(this).attr('name', name);
+				});
+				$element.find('input').each(function() {
+					var name = $(this).attr('name');
+					name = name.replace('['+fromRowId+']', '['+toRowId+']');
+					$(this).attr('name', name);
+				});
+
 			}
 			// handle checkbox swapping
-			else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr( 'type' )  ) {
+			else if ( 'checkbox' === $element.attr('type')  ) {
 				inputVals[ index ].$.prop( 'checked', $element.is(':checked') );
 				$element.prop( 'checked', inputVals[ index ].val );
+			}
+			// handle radio swapping
+			else if ( 'radio' === $element.attr( 'type' )  ) {
+				if ($element.is(':checked')) {
+					inputVals[ index ].$.attr('data-checked', 'true');
+				}
+				if (inputVals[ index ].$.is(':checked')) {
+					$element.attr('data-checked', 'true');	
+				}
 			}
 			// handle select swapping
 			else if ( 'select' === $element.prop('tagName') ) {
@@ -661,6 +689,9 @@ window.CMB2 = (function(window, document, $, undefined){
 				$element.val( inputVals[ index ].val );
 			}
 		});
+
+		$parent.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
+		$goto.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
 
 		// shift done
 		$self.trigger( 'cmb2_shift_rows_complete', $self );
