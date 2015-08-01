@@ -12,12 +12,12 @@
 /**
  * Fires when CMB2 is included/loaded
  *
- * Should be used to to add metaboxes. See example-functions.php
+ * Should be used to add metaboxes. See example-functions.php
  */
 do_action( 'cmb2_init' );
 
 /**
- * For back-compat. Does the dirtywork of instantiatiating all the
+ * For back-compat. Does the dirtywork of instantiating all the
  * CMB2 instances for the cmb2_meta_boxes filter
  * @since  2.0.2
  */

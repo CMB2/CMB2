@@ -1,0 +1,38 @@
+.closed .inside {
+	display: none;
+}
+
+.cmb-repeatable-grouping {
+	position: relative;
+
+	.cmb-group-title {
+		margin-left: -1em;
+		margin-right: -1em;
+		min-height: 1.5em;
+	}
+
+	h3 {
+		font-size: 14px;
+		padding: 8px 12px;
+		margin: 0;
+		line-height: 1.4;
+	}
+
+}
+
+.cmb-repeatable-group {
+
+	&.repeatable .cmb-group-title {
+		padding-left: 2.2em;
+	}
+
+	&.non-repeatable .cmb-group-title {
+		padding-left: 12px;
+	}
+
+}
+
+.cmb-repeat-group-wrap .cmb-row .cmbhandle {
+	right: 0;
+	position: absolute;
+}

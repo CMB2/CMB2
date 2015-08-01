@@ -13,7 +13,6 @@
  * @method string _id()
  * @method string type()
  * @method mixed fields()
- * @method mixed count()
  */
 class CMB2_Field {
 
@@ -524,7 +523,6 @@ class CMB2_Field {
 			'file', // Use file_list
 			'radio',
 			'title',
-			'group',
 			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
 			'wysiwyg',
 			'checkbox',
@@ -663,7 +661,7 @@ class CMB2_Field {
 		}
 
 		// If field is requesting to be conditionally shown
-		if ( is_callable( $this->args( 'show_on_cb' ) ) && ! call_user_func( $this->args( 'show_on_cb' ), $this ) ) {
+		if ( ! $this->should_show() ) {
 			return;
 		}
 
@@ -758,6 +756,25 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Determine whether this field should show, based on the 'show_on_cb' callback.
+	 *
+	 * @since 2.0.9
+	 *
+	 * @return bool Whether the field should be shown.
+	 */
+	public function should_show() {
+		// Default to showing the field
+		$show = true;
+
+		// Use the callback to determine showing the field, if it exists
+		if ( is_callable( $this->args( 'show_on_cb' ) ) ) {
+			$show = call_user_func( $this->args( 'show_on_cb' ), $this );
+		}
+
+		return $show;
+	}
+
+	/**
 	 * Displays the results of the param callbacks.
 	 *
 	 * @since 2.0.0
@@ -804,14 +821,14 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Replaces a hash key - {#} - with the repeatable count
+	 * Replaces a hash key - {#} - with the repeatable index
 	 * @since  1.2.0
 	 * @param  string $value Value to update
 	 * @return string        Updated value
 	 */
 	public function replace_hash( $value ) {
 		// Replace hash with 1 based count
-		return str_ireplace( '{#}', ( $this->count() + 1 ), $value );
+		return str_ireplace( '{#}', ( $this->index + 1 ), $value );
 	}
 
 	/**
@@ -867,7 +884,7 @@ class CMB2_Field {
 			'default'           => null,
 			'select_all_button' => true,
 			'multiple'          => false,
-			'repeatable'        => false,
+			'repeatable'        => isset( $args['type'] ) && 'group' == $args['type'],
 			'inline'            => false,
 			'on_front'          => true,
 			'show_names'        => true,

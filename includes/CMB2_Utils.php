@@ -54,19 +54,26 @@ class CMB2_Utils {
 	 * @return string           Offset time string
 	 */
 	public function timezone_offset( $tzstring ) {
+		$tz_offset = 0;
+
 		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
 			if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 				$tzstring = str_replace( array( ':15', ':30', ':45' ), array( '.25', '.5', '.75' ), $tzstring );
 				return intval( floatval( substr( $tzstring, 3 ) ) * HOUR_IN_SECONDS );
 			}
 
-			$date_time_zone_selected = new DateTimeZone( $tzstring );
-			$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+			try {
+				$date_time_zone_selected = new DateTimeZone( $tzstring );
+				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+			} catch ( Exception $e ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
+				}
+			}
 
-			return $tz_offset;
 		}
 
-		return 0;
+		return $tz_offset;
 	}
 
 	/**
@@ -110,7 +117,7 @@ class CMB2_Utils {
 
 		return $this->is_valid_time_stamp( $string )
 			? (int) $string :
-			strtotime( $string );
+			strtotime( (string) $string );
 	}
 
 	/**

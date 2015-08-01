@@ -124,6 +124,28 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout these are some classes', $classes );
 	}
 
+	public function test_cmb2_should_show() {
+
+		// Test with string
+		$args = $this->field_args;
+
+		// Add row classes statically as a string
+		$args['show_on_cb'] = '__return_false';
+
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'group' => $this->group,
+			'field_args' => $args,
+		) );
+
+		$this->assertFalse( $field->should_show() );
+
+		$field->args['show_on_cb'] = '__return_true';
+
+		$this->assertTrue( $field->should_show() );
+	}
+
 	public function test_empty_field_with_empty_object_id() {
 		$field = new CMB2_Field( array(
 			'field_args' => $this->field_args,

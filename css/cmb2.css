@@ -1,5 +1,5 @@
 /**
- * CMB Styling
+ * CMB2 Styling
  */
 
 /*--------------------------------------------------------------
@@ -568,32 +568,37 @@ Post Metaboxes
 #poststuff .cmb-group-title {
 	margin-left: -1em;
 	margin-right: -1em;
-	padding-left: 2.2em;
 	min-height: 1.5em;
 }
 
-/* line 14, sass/partials/_post_metaboxes.scss */
+/* line 10, sass/partials/_post_metaboxes.scss */
+
+#poststuff .repeatable .cmb-group-title {
+	padding-left: 2.2em;
+}
+
+/* line 16, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-wrap,
 .cmb-repeat-group-wrap .cmb2-wrap {
 	margin: 0;
 }
 
-/* line 17, sass/partials/_post_metaboxes.scss */
+/* line 19, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-wrap > .cmb-field-list > .cmb-row,
 .cmb-repeat-group-wrap .cmb2-wrap > .cmb-field-list > .cmb-row {
 	padding: 1.8em 0;
 }
 
-/* line 23, sass/partials/_post_metaboxes.scss */
+/* line 25, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-wrap input[type=text].cmb2-oembed,
 .cmb-repeat-group-wrap .cmb2-wrap input[type=text].cmb2-oembed {
 	width: 100%;
 }
 
-/* line 29, sass/partials/_post_metaboxes.scss */
+/* line 31, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-row,
 .cmb-repeat-group-wrap .cmb-row {
@@ -601,7 +606,7 @@ Post Metaboxes
 	margin: 0 0 0.8em;
 }
 
-/* line 33, sass/partials/_post_metaboxes.scss */
+/* line 35, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-row .cmbhandle,
 .cmb-repeat-group-wrap .cmb-row .cmbhandle {
@@ -609,7 +614,7 @@ Post Metaboxes
 	position: relative;
 }
 
-/* line 39, sass/partials/_post_metaboxes.scss */
+/* line 41, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-grouping,
 .cmb-repeat-group-wrap .cmb-repeatable-grouping {
@@ -618,14 +623,14 @@ Post Metaboxes
 	min-width: 1px !important;
 }
 
-/* line 45, sass/partials/_post_metaboxes.scss */
+/* line 47, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeatable-group > .cmb-row,
 .cmb-repeat-group-wrap .cmb-repeatable-group > .cmb-row {
 	padding-bottom: 0;
 }
 
-/* line 49, sass/partials/_post_metaboxes.scss */
+/* line 51, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th,
 .cmb-repeat-group-wrap .cmb-th {
@@ -633,7 +638,7 @@ Post Metaboxes
 	padding: 0 2% 0 0;
 }
 
-/* line 55, sass/partials/_post_metaboxes.scss */
+/* line 57, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-td,
 .cmb-repeat-group-wrap .cmb-td {
@@ -642,14 +647,14 @@ Post Metaboxes
 	line-height: 1.3;
 }
 
-/* line 61, sass/partials/_post_metaboxes.scss */
+/* line 63, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-row .cmb-td,
 .cmb-repeat-group-wrap .cmb-repeat-row .cmb-td {
 	padding-bottom: 1.8em;
 }
 
-/* line 65, sass/partials/_post_metaboxes.scss */
+/* line 67, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-th + .cmb-td,
 .cmb-repeat-group-wrap .cmb-th + .cmb-td {
@@ -657,7 +662,7 @@ Post Metaboxes
 	float: right;
 }
 
-/* line 70, sass/partials/_post_metaboxes.scss */
+/* line 72, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-row:not(:last-of-type),
 .postbox-container .cmb-repeatable-group:not(:last-of-type),
@@ -666,7 +671,7 @@ Post Metaboxes
 	border-bottom: 1px solid #e9e9e9;
 }
 
-/* line 79, sass/partials/_post_metaboxes.scss */
+/* line 81, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-repeat-group-field,
 .postbox-container .cmb-remove-field-row,
@@ -675,7 +680,7 @@ Post Metaboxes
 	padding-top: 1.8em;
 }
 
-/* line 86, sass/partials/_post_metaboxes.scss */
+/* line 88, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
@@ -685,7 +690,7 @@ Post Metaboxes
 	width: 100%;
 }
 
-/* line 90, sass/partials/_post_metaboxes.scss */
+/* line 92, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
@@ -694,7 +699,7 @@ Post Metaboxes
 	width: 100%;
 }
 
-/* line 94, sass/partials/_post_metaboxes.scss */
+/* line 96, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
@@ -703,7 +708,7 @@ Post Metaboxes
 	display: table-row;
 }
 
-/* line 98, sass/partials/_post_metaboxes.scss */
+/* line 100, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
@@ -714,7 +719,7 @@ Post Metaboxes
 	width: 100%;
 }
 
-/* line 104, sass/partials/_post_metaboxes.scss */
+/* line 106, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
@@ -723,7 +728,7 @@ Post Metaboxes
 	padding-top: 1.8em;
 }
 
-/* line 108, sass/partials/_post_metaboxes.scss */
+/* line 110, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
@@ -1077,15 +1082,16 @@ Sidebar Placement Adjustments
 	top: .5em;
 	line-height: 1em;
 	cursor: pointer;
+	padding: 2px 6px 3px;
 }
 
-/* line 45, sass/partials/_collapsible_ui.scss */
+/* line 46, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
 	color: #a00;
 }
 
-/* line 47, sass/partials/_collapsible_ui.scss */
+/* line 48, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
 	color: #f00;
@@ -3448,7 +3454,7 @@ Sidebar Placement Adjustments
 	width: 100%;
 }
 
-/* line 70, sass/partials/_post_metaboxes.scss */
+/* line 72, sass/partials/_post_metaboxes.scss */
 
 .postbox-container .cmb-row:not(:last-of-type),
 .postbox-container .cmb-repeatable-group:not(:last-of-type),

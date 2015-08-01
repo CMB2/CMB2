@@ -248,7 +248,8 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
 		'save_button' => __( 'Save', 'cmb2' ),
 		'object_type' => $cmb->mb_object_type(),
-		'enqueue_js'  => true,
+		'cmb_styles'  => $cmb->prop( 'cmb_styles' ),
+		'enqueue_js'  => $cmb->prop( 'enqueue_js' ),
 	) );
 
 	// Set object type explicitly (rather than trying to guess from context)
@@ -268,7 +269,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	}
 
 	// Enqueue JS/CSS
-	if ( $cmb->prop( 'cmb_styles' ) ) {
+	if ( $args['cmb_styles'] ) {
 		CMB2_hookup::enqueue_cmb_css();
 	}
 
