@@ -134,7 +134,7 @@ FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/
 
 == Changelog ==
 
-### 2.1.0
+### 2.1.0 - 2015-08-05
 
 #### Bug Fixes
 
@@ -504,7 +504,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.1.0
+### 2.1.0 - 2015-08-05
 
 #### Bug Fixes
 
