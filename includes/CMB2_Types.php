@@ -1004,7 +1004,7 @@ class CMB2_Types {
 			esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
 			$this->get_file_name_from_path( $args['value'] ),
 			$args['value'],
-			esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ),
+			esc_html( $this->_text( 'file_download_text', __( 'Download', 'cmb2' ) ) ),
 			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
 			esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ),
 			isset( $args['id_input'] ) ? $args['id_input'] : ''

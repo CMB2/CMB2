@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Tested up to:      4.3
-Stable tag:        2.0.9
+Stable tag:        2.1.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,7 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 * [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [mattkrupnik](https://github.com/mattkrupnik/): Adds a jQuery UI Slider field.
 * [WDS CMB2 Date Range Field](https://github.com/WebDevStudios/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
 * [CMB2 Remote Image Select](https://github.com/WebDevStudios/CMB2-Remote-Image-Select-Field) from [JayWood](https://github.com/JayWood) of [WebDevStudios](https://github.com/WebDevStudios): Allows users to enter a URL in a text field and select a single image for use in post meta. Similar to Facebook's featured image selector.
+* [CMB Field Type: Sorter](https://wordpress.org/plugins/cmb-field-type-sorter/): This plugin gives you two CMB field types based on the Sorter script.
 
 ##### Other Helpful Resources
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
@@ -74,6 +75,12 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
 ### Most Recent Changes
+
+#### 2.1.0
+
+##### Bug Fixes
+
+* Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/WebDevStudios/CMB2/pull/417)).
 
 #### 2.0.9
 
@@ -126,6 +133,12 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.1.0
+
+#### Bug Fixes
+
+* Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/WebDevStudios/CMB2/pull/417)).
 
 ### 2.0.9 - 2015-07-28
 
@@ -490,6 +503,12 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.1.0
+
+#### Bug Fixes
+
+* Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/WebDevStudios/CMB2/pull/417)).
 
 ### 2.0.9 - 2015-07-28
 

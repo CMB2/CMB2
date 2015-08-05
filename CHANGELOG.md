@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## 2.1.0 - 2015-00-05
+
+### Bug Fixes
+
+* Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/WebDevStudios/CMB2/pull/417)).
+
 ## 2.0.9 - 2015-07-28
 
 ### Enhancements
