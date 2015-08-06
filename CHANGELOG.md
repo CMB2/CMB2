@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-* Address issue where `'file'` and `'file_list'` field results were getting mixed. ([#382](https://github.com/WebDevStudios/CMB2/pull/382), [#250](https://github.com/WebDevStudios/CMB2/pull/250), [#296](https://github.com/WebDevStudios/CMB2/pull/296)).
+* Address issue where `'file'` and `'file_list'` field results were getting mixed. Props [augustuswm](https://github.com/augustuswm) ([#382](https://github.com/WebDevStudios/CMB2/pull/382), [#250](https://github.com/WebDevStudios/CMB2/pull/250), [#296](https://github.com/WebDevStudios/CMB2/pull/296)).
 
 ## 2.1.0 - 2015-00-05
 
