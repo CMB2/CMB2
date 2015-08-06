@@ -347,7 +347,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
-			var oldVal    = $newInput.attr( 'value' );
+			var oldVal    = $newInput.val();
 			// var $next  = $newInput.next();
 			var attrs     = {};
 			var newID, oldID;
@@ -362,25 +362,23 @@ window.CMB2 = (function(window, document, $, undefined){
 				attrs       = {
 					id: newID,
 					name: newName,
-					// value: '',
+					value: '',
 					'data-iterator': cmb.idNumber,
 				};
-
-			}
-
-			// Clear out old values
-			if ( undefined !== typeof( oldVal ) && oldVal ) {
-				attrs.value = '';
-			}
-
-			// Clear out textarea values
-			if ( 'TEXTAREA' === $newInput.prop('tagName') ) {
-				$newInput.html( '' );
+				// Keep checkbox and radio values
+				if ( $newInput.is(':checkbox') || $newInput.is(':radio') ) {
+					if ( oldVal === "" ) {
+						attrs.checked = true;
+					} else {
+						attrs.value   = oldVal;
+						attrs.checked = false;
+					}
+				}
 			}
 
 			$newInput
 				.removeClass( 'hasDatepicker' )
-				.attr( attrs ).val('');
+				.attr( attrs );
 
 			// wysiwyg field
 			if ( isEditor ) {
@@ -485,7 +483,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.emptyValue = function( evt, row ) {
-		$('input:not([type="button"]), textarea', row).val('');
+		$('input:not([type="button"],[type="checkbox"],[type="radio"]), textarea', row).val('');
 	};
 
 	cmb.addGroupRow = function( evt ) {
