@@ -18,6 +18,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	// CMB2 functionality object
 	var cmb = {
 		formfield       : '',
+		$formfield      : '',
 		idNumber        : false,
 		file_frames     : {},
 		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
@@ -171,10 +172,10 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		var $metabox     = cmb.metabox();
 		cmb.formfield    = formfield;
-		var $formfield   = $id( cmb.formfield );
-		var fieldData    = $formfield.data();
+		cmb.$formfield   = $id( cmb.formfield );
+		var fieldData    = cmb.$formfield.data();
 		var previewSize  = fieldData.previewsize;
-		var formName     = $formfield.attr('name');
+		var formName     = cmb.$formfield.attr('name');
 		var uploadStatus = true;
 		var attachment   = true;
 
@@ -198,7 +199,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Get all of our selected files
 			attachment = selection.toJSON();
 
-			$formfield.val(attachment.url);
+			cmb.$formfield.val(attachment.url);
 			$id( cmb.formfield +'_id' ).val(attachment.id);
 
 			// Setup our fileGroup array
@@ -232,7 +233,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( ! returnIt ) {
 				// Append each item from our fileGroup array to .cmb2-media-status
 				$( fileGroup ).each( function() {
-					$formfield.siblings('.cmb2-media-status').slideDown().append(this);
+					cmb.$formfield.siblings('.cmb2-media-status').slideDown().append(this);
 				});
 			} else {
 				return fileGroup;
@@ -243,7 +244,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Only get one file from the uploader
 			attachment = selection.first().toJSON();
 
-			$formfield.val(attachment.url);
+			cmb.$formfield.val(attachment.url);
 			$id( cmb.formfield +'_id' ).val(attachment.id);
 
 			if ( attachment.type && attachment.type === 'image' ) {
@@ -256,7 +257,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 
 			// add/display our output
-			$formfield.siblings('.cmb2-media-status').slideDown().html(uploadStatus);
+			cmb.$formfield.siblings('.cmb2-media-status').slideDown().html(uploadStatus);
 		};
 
 		cmb.mediaHandlers.selectFile = function() {
@@ -473,10 +474,10 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( typeof name !== 'undefined' ) {
 			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
-	
+
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
-	
+
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
 		}
