@@ -17,10 +17,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	// CMB2 functionality object
 	var cmb = {
-		formfield       : '',
-		$formfield      : '',
 		idNumber        : false,
-		file_frames     : {},
 		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
@@ -29,6 +26,9 @@ window.CMB2 = (function(window, document, $, undefined){
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
 			color_picker : l10n.defaults.color_picker || {},
+		},
+		media : {
+			frames : {},
 		},
 	};
 
@@ -67,8 +67,8 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$metabox
 			.on( 'change', '.cmb2_upload_file', function() {
-				cmb.formfield = $(this).attr('id');
-				$id( cmb.formfield + '_id' ).val('');
+				cmb.media.field = $(this).attr('id');
+				$id( cmb.media.field + '_id' ).val('');
 			})
 			// Media/file management
 			.on( 'click', '.cmb-multicheck-toggle', cmb.toggleCheckBoxes )
@@ -170,25 +170,25 @@ window.CMB2 = (function(window, document, $, undefined){
 			return;
 		}
 
-		var $metabox     = cmb.metabox();
-		cmb.formfield    = formfield;
-		cmb.$formfield   = $id( cmb.formfield );
-		var fieldData    = cmb.$formfield.data();
-		var previewSize  = fieldData.previewsize;
-		var formName     = cmb.$formfield.attr('name');
-		var uploadStatus = true;
-		var attachment   = true;
+		var media         = cmb.media;
+		media.field       = formfield;
+		media.$field      = $id( media.field );
+		media.fieldData   = media.$field.data();
+		media.previewSize = media.fieldData.previewsize;
+		media.fieldName   = media.$field.attr('name');
+
+		var uploadStatus, attachment;
 
 		// If this field's media frame already exists, reopen it.
-		if ( cmb.formfield in cmb.file_frames ) {
-			cmb.file_frames[ cmb.formfield ].open();
+		if ( media.field in media.frames ) {
+			media.frames[ media.field ].open();
 			return;
 		}
 
 		// Create the media frame.
-		cmb.file_frames[ cmb.formfield ] = wp.media({
-			title: $metabox.find('label[for=' + cmb.formfield + ']').text(),
-			library : fieldData.queryargs || {},
+		media.frames[ media.field ] = wp.media({
+			title: cmb.metabox().find('label[for=' + media.field + ']').text(),
+			library : media.fieldData.queryargs || {},
 			button: {
 				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
 			},
@@ -199,8 +199,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Get all of our selected files
 			attachment = selection.toJSON();
 
-			cmb.$formfield.val(attachment.url);
-			$id( cmb.formfield +'_id' ).val(attachment.id);
+			media.$field.val(attachment.url);
+			$id( media.field +'_id' ).val(attachment.id);
 
 			// Setup our fileGroup array
 			var fileGroup = [];
@@ -208,20 +208,20 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Loop through each attachment
 			$( attachment ).each( function() {
 				if ( this.type && this.type === 'image' ) {
-					var width = previewSize[0] ? previewSize[0] : 50;
-					var height = previewSize[1] ? previewSize[1] : 50;
+					var width = media.previewSize[0] ? media.previewSize[0] : 50;
+					var height = media.previewSize[1] ? media.previewSize[1] : 50;
 
 					// image preview
 					uploadStatus = '<li class="img-status">'+
 						'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
-						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
-						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
+						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
+						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
 					'</li>';
 
 				} else {
 					// Standard generic output if it's not an image.
-					uploadStatus = '<li class="file-status"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
-						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ formName +'['+ this.id +']" value="' + this.url + '">'+
+					uploadStatus = '<li class="file-status"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
+						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
 					'</li>';
 
 				}
@@ -233,7 +233,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( ! returnIt ) {
 				// Append each item from our fileGroup array to .cmb2-media-status
 				$( fileGroup ).each( function() {
-					cmb.$formfield.siblings('.cmb2-media-status').slideDown().append(this);
+					media.$field.siblings('.cmb2-media-status').slideDown().append(this);
 				});
 			} else {
 				return fileGroup;
@@ -244,24 +244,24 @@ window.CMB2 = (function(window, document, $, undefined){
 			// Only get one file from the uploader
 			attachment = selection.first().toJSON();
 
-			cmb.$formfield.val(attachment.url);
-			$id( cmb.formfield +'_id' ).val(attachment.id);
+			media.$field.val(attachment.url);
+			$id( media.field +'_id' ).val(attachment.id);
 
 			if ( attachment.type && attachment.type === 'image' ) {
 				// image preview
-				var width = previewSize[0] ? previewSize[0] : 350;
-				uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + cmb.formfield + '">'+ l10n.strings.remove_image +'</a></p></div>';
+				var width = media.previewSize[0] ? media.previewSize[0] : 350;
+				uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
 			} else {
 				// Standard generic output if it's not an image.
-				uploadStatus = '<div class="file-status"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ cmb.formfield +'">'+ l10n.strings.remove_file +'</a>)</div>';
+				uploadStatus = '<div class="file-status"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'">'+ l10n.strings.remove_file +'</a>)</div>';
 			}
 
 			// add/display our output
-			cmb.$formfield.siblings('.cmb2-media-status').slideDown().html(uploadStatus);
+			media.$field.siblings('.cmb2-media-status').slideDown().html(uploadStatus);
 		};
 
 		cmb.mediaHandlers.selectFile = function() {
-			var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
+			var selection = media.frames[ media.field ].state().get('selection');
 			var type = isList ? 'list' : 'single';
 
 			if ( cmb.attach_id && isList ) {
@@ -273,7 +273,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		};
 
 		cmb.mediaHandlers.openModal = function() {
-			var selection = cmb.file_frames[ cmb.formfield ].state().get('selection');
+			var selection = media.frames[ media.field ].state().get('selection');
 
 			if ( ! cmb.attach_id ) {
 				return selection.reset();
@@ -285,12 +285,12 @@ window.CMB2 = (function(window, document, $, undefined){
 		};
 
 		// When a file is selected, run a callback.
-		cmb.file_frames[ cmb.formfield ]
+		media.frames[ media.field ]
 			.on( 'select', cmb.mediaHandlers.selectFile )
 			.on( 'open', cmb.mediaHandlers.openModal );
 
 		// Finally, open the modal
-		cmb.file_frames[ cmb.formfield ].open();
+		media.frames[ media.field ].open();
 	};
 
 	cmb.handleRemoveMedia = function( evt ) {
@@ -301,10 +301,10 @@ window.CMB2 = (function(window, document, $, undefined){
 			return false;
 		}
 
-		cmb.formfield = $self.attr('rel');
+		cmb.media.field = $self.attr('rel');
 
-		cmb.metabox().find( 'input#' + cmb.formfield ).val('');
-		cmb.metabox().find( 'input#' + cmb.formfield + '_id' ).val('');
+		cmb.metabox().find( 'input#' + cmb.media.field ).val('');
+		cmb.metabox().find( 'input#' + cmb.media.field + '_id' ).val('');
 		$self.parents('.cmb2-media-status').html('');
 
 		return false;
