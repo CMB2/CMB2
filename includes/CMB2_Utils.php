@@ -28,17 +28,20 @@ class CMB2_Utils {
 	public function image_id_from_url( $img_url ) {
 		global $wpdb;
 
-		$img_url = esc_url_raw( $img_url );
-		// Get just the file name
-		if ( false !== strpos( $img_url, '/' ) ) {
-			$explode = explode( '/', $img_url );
-			$img_url = end( $explode );
+		$new_path = esc_url_raw($img_url);
+		
+		// Strip the baseurl from the full image url 
+		$uploads = wp_upload_dir();
+		if ( 0 === strpos( $new_path, $uploads['baseurl'] ) ) 
+		{
+			$new_path = str_replace( $uploads['baseurl'], '', $new_path );
+			$new_path = ltrim( $new_path, '/' );
 		}
+		
+		// Get the attachment ID from the postmeta table
+		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value = %s LIMIT 1;", $new_path ) );
 
-		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
-
-		// If we found an attachement ID, return it
+		// If we found an attachment ID, return it
 		if ( ! empty( $attachment ) && is_array( $attachment ) ) {
 			return $attachment[0];
 		}
