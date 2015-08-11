@@ -607,6 +607,7 @@ class CMB2 {
 	 * @return integer $object_id Object ID
 	 */
 	public function object_id( $object_id = 0 ) {
+		global $pagenow;
 
 		if ( $object_id ) {
 			$this->object_id = $object_id;
@@ -621,7 +622,7 @@ class CMB2 {
 		switch ( $this->object_type() ) {
 			case 'user':
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
-				$object_id = ! $object_id && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				$object_id = ! $object_id && 'user-new.php' != $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
