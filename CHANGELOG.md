@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 ### Enhancements
 
+### Enhancements
+
+* Make all CMB2::save_fields arguments optional to fall-back to $_POST data. Props [JPry](https://github.com/JPry).
+
 ### Bug Fixes
 
 * Address issue where `'file'` and `'file_list'` field results were getting mixed. Props [augustuswm](https://github.com/augustuswm) ([#382](https://github.com/WebDevStudios/CMB2/pull/382), [#250](https://github.com/WebDevStudios/CMB2/pull/250), [#296](https://github.com/WebDevStudios/CMB2/pull/296)).
