@@ -420,9 +420,10 @@ class CMB2 {
 	 * @param  string $object_type  Type of object being saved. (e.g., post, user, or comment)
 	 * @param  array  $data_to_save Array of key => value data for saving. Likely $_POST data.
 	 */
-	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
+	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		$this->data_to_save = $data_to_save;
+		// Fall-back to $_POST data
+		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
