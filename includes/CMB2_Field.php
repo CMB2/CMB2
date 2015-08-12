@@ -251,7 +251,7 @@ class CMB2_Field {
 	public function update_data( $new_value, $single = true ) {
 		$a = $this->data_args( array( 'single' => $single ) );
 
-		$a[ 'value' ] = $a['repeat'] ? array_values( $new_value ) : $new_value;
+		$a['value'] = $a['repeat'] ? array_values( $new_value ) : $new_value;
 
 		/**
 		 * Filter whether to override saving of meta value.
@@ -296,21 +296,21 @@ class CMB2_Field {
 
 		// Options page handling (or temp data store)
 		if ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
-			return cmb2_options( $a['id'] )->update( $a['field_id'], $a[ 'value' ], false, $a['single'] );
+			return cmb2_options( $a['id'] )->update( $a['field_id'], $a['value'], false, $a['single'] );
 		}
 
 		// Add metadata if not single
 		if ( ! $a['single'] ) {
-			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ], false );
+			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a['value'], false );
 		}
 
 		// Delete meta if we have an empty array
-		if ( is_array( $a[ 'value' ] ) && empty( $a[ 'value' ] ) ) {
+		if ( is_array( $a['value'] ) && empty( $a['value'] ) ) {
 			return delete_metadata( $a['type'], $a['id'], $a['field_id'], $this->value );
 		}
 
 		// Update metadata
-		return update_metadata( $a['type'], $a['id'], $a['field_id'], $a[ 'value' ] );
+		return update_metadata( $a['type'], $a['id'], $a['field_id'], $a['value'] );
 	}
 
 	/**
