@@ -544,7 +544,7 @@ class CMB2_Field {
 		 *                      and not values. The value can be anything, because it is meaningless. Example:
 		 *                      array( 'my_custom_field' => 1 )
 		 */
-		$all_fields = array_merge( $internal_fields, apply_filters( 'cmb2_non_repeatable_fields', array() ) );
+		$all_fields = array_merge( apply_filters( 'cmb2_non_repeatable_fields', array() ), $internal_fields );
 		return isset( $all_fields[ $type ] );
 	}
 
