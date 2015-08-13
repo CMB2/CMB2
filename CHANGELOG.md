@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 * Make all CMB2::save_fields arguments optional to fall-back to $_POST data. Props [JPry](https://github.com/JPry).
+* New filter, `cmb2_non_repeatable_fields` for adding additional fields to the blacklist of repeatable options. Props [JPry](https://github.com/JPry) ([#430](https://github.com/WebDevStudios/CMB2/pull/430)).
 
 ### Bug Fixes
 
