@@ -519,18 +519,33 @@ class CMB2_Field {
 	 */
 	public function repeatable_exception( $type ) {
 		// These types cannot be escaped
-		return in_array( $type, array(
-			'file', // Use file_list
-			'radio',
-			'title',
+		$internal_fields = array(
+			// Use file_list instead
+			'file'                => 1,
+			'radio'               => 1,
+			'title'               => 1,
 			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
-			'wysiwyg',
-			'checkbox',
-			'radio_inline',
-			'taxonomy_radio',
-			'taxonomy_select',
-			'taxonomy_multicheck',
-		) );
+			'wysiwyg'             => 1,
+			'checkbox'            => 1,
+			'radio_inline'        => 1,
+			'taxonomy_radio'      => 1,
+			'taxonomy_select'     => 1,
+			'taxonomy_multicheck' => 1,
+		);
+
+		/**
+		 * Filter field types that are non-repeatable.
+		 *
+		 * Note that this does *not* allow overriding the default non-repeatable types.
+		 *
+		 * @since 2.1.1
+		 *
+		 * @param array $fields Array of fields designated as non-repeatable. Note that the field names are *keys*,
+		 *                      and not values. The value can be anything, because it is meaningless. Example:
+		 *                      array( 'my_custom_field' => 1 )
+		 */
+		$all_fields = array_merge( $internal_fields, apply_filters( 'cmb2_non_repeatable_fields', array() ) );
+		return isset( $all_fields[ $type ] );
 	}
 
 	/**
