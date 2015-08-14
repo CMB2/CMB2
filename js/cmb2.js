@@ -346,7 +346,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $(this);
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
-			var oldVal    = $newInput.attr( 'value' );
+			var oldVal    = $newInput.prop( 'value' );
 			// var $next  = $newInput.next();
 			var attrs     = {};
 			var newID, oldID;
@@ -384,7 +384,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// wysiwyg field
 			if ( isEditor ) {
 				// Get new wysiwyg ID
-				newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
+				newID = newID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				// Empty the contents
 				$newInput.html('');
 				// Get wysiwyg field
@@ -444,19 +444,24 @@ window.CMB2 = (function(window, document, $, undefined){
 					}
 					tinyMCEPreInit.mceInit[ id ] = newSettings;
 				}
-				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
-					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
-					for ( _prop in newQTS ) {
-						if ( 'string' === typeof( newQTS[_prop] ) ) {
-							newQTS[_prop] = newQTS[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.qtInit[ id ] = newQTS;
-				}
-				tinyMCE.init({
-					id : tinyMCEPreInit.mceInit[ id ],
-				});
 
+				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' )
+				{
+					tinyMCEPreInit.qtInit[id] = $.extend( {}, tinyMCEPreInit.qtInit[ old ] );
+					tinyMCEPreInit.qtInit[id].id = id;
+
+					//Remove cloned toolbar
+					$('#qt_'+id+'_toolbar').remove();
+
+					// make the editor area visible
+					$('#'+id).addClass('wp-editor-area').show();
+
+					// initialize quicktags
+					new QTags(id);
+					QTags._buttonsInit();
+				}
+				switchEditors.go(id, tinyMCEPreInit.mceInit[id].mode);
+				tinymce.init(tinyMCEPreInit.mceInit[id]);
 			}
 		}
 
