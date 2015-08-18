@@ -653,9 +653,18 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			}
 			// handle checkbox swapping
-			else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr( 'type' )  ) {
+			else if ( 'checkbox' === $element.attr('type')  ) {
 				inputVals[ index ].$.prop( 'checked', $element.is(':checked') );
 				$element.prop( 'checked', inputVals[ index ].val );
+			}
+			// handle radio swapping
+			else if ( 'radio' === $element.attr( 'type' )  ) {
+				if ($element.is(':checked')) {
+					inputVals[ index ].$.attr('data-checked', 'true');
+				}
+				if (inputVals[ index ].$.is(':checked')) {
+					$element.attr('data-checked', 'true');	
+				}
 			}
 			// handle select swapping
 			else if ( 'select' === $element.prop('tagName') ) {
@@ -668,6 +677,9 @@ window.CMB2 = (function(window, document, $, undefined){
 				$element.val( inputVals[ index ].val );
 			}
 		});
+
+		$parent.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
+		$goto.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
 
 		// shift done
 		$self.trigger( 'cmb2_shift_rows_complete', $self );
