@@ -626,11 +626,13 @@ window.CMB2 = (function(window, document, $, undefined){
 		// Loop this items fields
 		$parent.find( cmb.repeatEls ).each( function() {
 			var $element = $(this);
+			var elType = $element.attr( 'type' );
 			var val;
+
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
-			} else if ( 'checkbox' === $element.attr('type') || 'radio' === $element.attr('type') ) {
+			} else if ( 'checkbox' === elType || 'radio' === elType ) {
 				val = $element.is(':checked');
 			} else if ( 'select' === $element.prop('tagName') ) {
 				val = $element.is(':selected');
@@ -643,6 +645,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		// And swap them all
 		$goto.find( cmb.repeatEls ).each( function( index ) {
 			var $element = $(this);
+			var elType = $element.attr( 'type' );
 			var val;
 
 			if ( $element.hasClass('cmb2-media-status') ) {
@@ -653,17 +656,17 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			}
 			// handle checkbox swapping
-			else if ( 'checkbox' === $element.attr('type')  ) {
+			else if ( 'checkbox' === elType  ) {
 				inputVals[ index ].$.prop( 'checked', $element.is(':checked') );
 				$element.prop( 'checked', inputVals[ index ].val );
 			}
 			// handle radio swapping
-			else if ( 'radio' === $element.attr( 'type' )  ) {
-				if ($element.is(':checked')) {
-					inputVals[ index ].$.attr('data-checked', 'true');
+			else if ( 'radio' === elType  ) {
+				if ( $element.is( ':checked' ) ) {
+					inputVals[ index ].$.attr( 'data-checked', 'true' );
 				}
-				if (inputVals[ index ].$.is(':checked')) {
-					$element.attr('data-checked', 'true');	
+				if ( inputVals[ index ].$.is( ':checked' ) ) {
+					$element.attr( 'data-checked', 'true' );
 				}
 			}
 			// handle select swapping
@@ -678,8 +681,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		});
 
-		$parent.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
-		$goto.find("input[data-checked=true]").prop('checked', true).removeAttr('data-checked');
+		$parent.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
+		$goto.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 
 		// shift done
 		$self.trigger( 'cmb2_shift_rows_complete', $self );
