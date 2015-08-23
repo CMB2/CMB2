@@ -38,6 +38,8 @@ class Test_CMB2_Field extends Test_CMB2 {
 			'after_field'  => 'after_field_static',
 			'row_classes'  => array( $this, 'row_classes_array_cb' ),
 			'default'      => array( $this, 'cb_to_set_default' ),
+			'render_cb'    => array( $this, 'render_cb_test' ),
+			'label_cb'    => array( $this, 'label_cb_test' ),
 		);
 
 		$this->object_id   = $this->post_id;
@@ -72,16 +74,30 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( 'before_field_cb_test_testafter_field_static', $content );
 	}
 
+	public function test_cmb2_render_cb_field_callback() {
+		ob_start();
+		$this->field->render_field();
+		$rendered = ob_get_clean();
+
+		$this->assertEquals( 'test render cb', $rendered );
+	}
+
+	public function test_cmb2_label_cb_field_callback() {
+		$label = $this->field->get_param_callback_result( 'label_cb' );
+
+		$this->assertEquals( 'test label cb', $label );
+	}
+
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size id before_field after_field row_classes _id _name', $classes );
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_cb label_cb id before_field after_field row_classes _id _name', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertEquals( 'type, name, desc, before, after, options_cb, options, attributes, protocols, default, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, id, before_field, after_field, row_classes, _id, _name', $default );
+		$this->assertEquals( 'type, name, desc, before, after, options_cb, options, attributes, protocols, default, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_cb, label_cb, id, before_field, after_field, row_classes, _id, _name', $default );
 	}
 
 	public function test_cmb2_row_classes_field_callback_with_string() {
@@ -322,6 +338,14 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 	public function row_classes_string_cb( $args ) {
 		return 'callback with string';
+	}
+
+	public function render_cb_test( $field_args ) {
+		echo 'test render cb';
+	}
+
+	public function label_cb_test( $field_args ) {
+		echo 'test label cb';
 	}
 
 	public function cb_to_set_default( $args ) {
