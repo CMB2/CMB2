@@ -704,8 +704,8 @@ class CMB2_Field {
 
 		} else {
 
-			if ( $label = $this->get_param_callback_result( 'label_cb' ) ) {
-				printf( '<div class="cmb-th">%s</div>', $label );
+			if ( $this->get_param_callback_result( 'label_cb', false ) ) {
+				echo '<div class="cmb-th">', $this->peform_param_callback( 'label_cb' ), '</div>';
 			}
 
 			echo "\n\t<div class=\"cmb-td\">\n";
