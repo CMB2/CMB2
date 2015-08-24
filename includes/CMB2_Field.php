@@ -671,7 +671,7 @@ class CMB2_Field {
 	 */
 	public function render_field() {
 		// Check if the field has a registered render_field callback
-		if ( $cb = $this->maybe_callback( 'render_cb' ) ) {
+		if ( $cb = $this->maybe_callback( 'render_row_cb' ) ) {
 			// Ok, callback is good, let's run it.
 			return call_user_func( $cb, $this->args(), $this );
 		}
@@ -934,7 +934,7 @@ class CMB2_Field {
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
 			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
-			'render_cb'         => array( $this, 'render_field_callback' ),
+			'render_row_cb'     => array( $this, 'render_field_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 		) );
 
