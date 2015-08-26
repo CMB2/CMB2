@@ -716,12 +716,26 @@ class CMB2_Types {
 		return $this->multicheck( 'multicheck_inline' );
 	}
 
-	public function checkbox() {
+	public function checkbox( $args = array(), $is_checked = null ) {
+		$defaults = array(
+			'type'  => 'checkbox',
+			'class' => 'cmb2-option cmb2-list',
+			'value' => 'on',
+			'desc'  => '',
+		);
+
 		$meta_value = $this->field->escaped_value();
-		$args = array( 'type' => 'checkbox', 'class' => 'cmb2-option cmb2-list', 'value' => 'on', 'desc' => '' );
-		if ( ! empty( $meta_value ) ) {
-			$args['checked'] = 'checked';
+
+		$is_checked = is_null( $is_checked )
+			? ! empty( $meta_value )
+			: $is_checked;
+
+		if ( $is_checked ) {
+			$defaults['checked'] = 'checked';
 		}
+
+		$args = $this->parse_args( $args, 'checkbox', $defaults );
+
 		return sprintf( '%s <label for="%s">%s</label>', $this->input( $args ), $this->_id(), $this->_desc() );
 	}
 
