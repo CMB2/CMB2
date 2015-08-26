@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 * New recommended hoook for adding metaboxes, `cmb2_admin_init`. Most metabox registration only needs to happen if in wp-admin, so there is no reason to register them when loading the front-end (and increase the memory usage). `cmb2_init` still exists to register metaboxes that will be used on the front-end or used on both the front and back-end. Instances of `cmb2_init` in example-functions.php have been switched to `cmb2_admin_init`.
 * Add `'render_cb'` field parameter for overriding the field render method.
 * Add `'label_cb'` field parameter for overriding the field label render method.
+* Allow `CMB2_Types::checkbox()` method to be more flexible for extending by taking an args array and an `$is_checked` second argument.
 
 ### Bug Fixes
 
