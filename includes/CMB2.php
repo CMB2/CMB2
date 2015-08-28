@@ -156,10 +156,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $cmb_id
+	 *
+	 * @return string
 	 */
 	public function set_cmb_id( $cmb_id ) {
 
 		$this->cmb_id = $cmb_id;
+		return $cmb_id;
 	}
 
 	/**
@@ -172,10 +175,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $title
+	 *
+	 * @return string
 	 */
 	public function set_title( $title ) {
 
 		$this->title = $title;
+		return $title;
 	}
 
 	/**
@@ -188,10 +194,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $type
+	 *
+	 * @return string
 	 */
 	public function set_type( $type ) {
 
 		$this->type = $type;
+		return $type;
 	}
 
 	/**
@@ -204,10 +213,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param array $object_types
+	 *
+	 * @return array
 	 */
 	public function set_object_types( $object_types ) {
 
 		$this->object_types = $object_types;
+		return $object_types;
 	}
 
 	/**
@@ -220,10 +232,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $context
+	 *
+	 * @return string
 	 */
 	public function set_context( $context ) {
 
 		$this->context = $context;
+		return $context;
 	}
 
 	/**
@@ -236,10 +251,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $priority
+	 *
+	 * @return string
 	 */
 	public function set_priority( $priority ) {
 
 		$this->priority = $priority;
+		return $priority;
 	}
 
 	/**
@@ -252,10 +270,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $show_names
+	 *
+	 * @return bool
 	 */
 	public function set_show_names( $show_names ) {
 
 		$this->show_names = $show_names;
+		return $show_names;
 	}
 
 	/**
@@ -268,10 +289,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param null $show_on_cb
+	 *
+	 * @return null
 	 */
 	public function set_show_on_cb( $show_on_cb ) {
 
 		$this->show_on_cb = $show_on_cb;
+		return $show_on_cb;
 	}
 
 	/**
@@ -284,10 +308,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param array $show_on
+	 *
+	 * @return array
 	 */
 	public function set_show_on( $show_on ) {
 
 		$this->show_on = $show_on;
+		return $show_on;
 	}
 
 	/**
@@ -300,10 +327,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $cmb_styles
+	 *
+	 * @return bool
 	 */
 	public function set_cmb_styles( $cmb_styles ) {
 
 		$this->cmb_styles = $cmb_styles;
+		return $cmb_styles;
 	}
 
 	/**
@@ -316,10 +346,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $enqueue_js
+	 *
+	 * @return bool
 	 */
 	public function set_enqueue_js( $enqueue_js ) {
 
 		$this->enqueue_js = $enqueue_js;
+		return $enqueue_js;
 	}
 
 	/**
@@ -332,10 +365,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $hookup
+	 *
+	 * @return bool
 	 */
 	public function set_hookup( $hookup ) {
 
 		$this->hookup = $hookup;
+		return $hookup;
 	}
 
 	/**
@@ -348,10 +384,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $save_fields
+	 *
+	 * @return bool
 	 */
 	public function set_save_fields( $save_fields ) {
 
 		$this->save_fields = $save_fields;
+		return $save_fields;
 	}
 
 	/**
@@ -364,10 +403,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param boolean $closed
+	 *
+	 * @return bool
 	 */
 	public function set_closed( $closed ) {
 
 		$this->closed = $closed;
+		return $closed;
 	}
 
 	/**
@@ -380,10 +422,13 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * @param string $new_user_section
+	 *
+	 * @return string
 	 */
 	public function set_new_user_section( $new_user_section ) {
 
 		$this->new_user_section = $new_user_section;
+		return $new_user_section;
 	}
 
 	/**

@@ -60,10 +60,13 @@ abstract class CMB2_Field_Group {
 
 	/**
 	 * @param array $updated
+	 *
+	 * @return array
 	 */
 	public function set_updated( $updated ) {
 
 		$this->updated = $updated;
+		return $updated;
 	}
 
 	/**
@@ -76,10 +79,13 @@ abstract class CMB2_Field_Group {
 
 	/**
 	 * @param CMB2_Types[] $hidden_fields
+	 *
+	 * @return CMB2_Types[]
 	 */
 	public function set_hidden_fields( $hidden_fields ) {
 
 		$this->hidden_fields = $hidden_fields;
+		return $hidden_fields;
 	}
 
 	/**
@@ -92,10 +98,13 @@ abstract class CMB2_Field_Group {
 
 	/**
 	 * @param array $data_to_save
+	 *
+	 * @return array
 	 */
 	public function set_data_to_save( $data_to_save ) {
 
 		$this->data_to_save = $data_to_save;
+		return $data_to_save;
 	}
 
 	/**
@@ -108,10 +117,13 @@ abstract class CMB2_Field_Group {
 
 	/**
 	 * @param array $fields
+	 *
+	 * @return array
 	 */
 	public function set_fields( $fields ) {
 
 		$this->fields_array = $fields;
+		return $fields;
 	}
 
 
