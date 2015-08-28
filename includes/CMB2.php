@@ -67,27 +67,6 @@ class CMB2 extends CMB2_Field_Group {
 	);
 
 	/**
-	 * Metabox field objects
-	 * @var   array
-	 * @since 2.0.3
-	 */
-	protected $fields = array();
-
-	/**
-	 * An array of hidden fields to output at the end of the form
-	 * @var   array
-	 * @since 2.0.0
-	 */
-	protected $hidden_fields = array();
-
-	/**
-	 * Array of key => value data for saving. Likely $_POST data.
-	 * @var   array
-	 * @since 2.0.0
-	 */
-	public $data_to_save = array();
-
-	/**
 	 * Array of key => value data for saving. Likely $_POST data.
 	 * @var   string
 	 * @since 2.0.0
