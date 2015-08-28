@@ -8,25 +8,8 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  *
- * @property-read string $cmb_id
- * @property-read array $meta_box
- * @property-read array $updated
  */
 class CMB2 extends CMB2_Field_Group {
-
-	/**
-	 * Current field's ID
-	 * @var   string
-	 * @since 2.0.0
-	 */
-	protected $cmb_id = '';
-
-	/**
-	 * Metabox Config array
-	 * @var   array
-	 * @since 0.9.0
-	 */
-	protected $meta_box = array();
 
 	/**
 	 * Type of object being saved. (e.g., post, user, or comment)
@@ -43,6 +26,58 @@ class CMB2 extends CMB2_Field_Group {
 	protected $mb_object_type = null;
 
 	/**
+	 * Current field's ID
+	 *
+	 * @var   string
+	 * @since 2.0.0
+	 */
+	protected $cmb_id = '';
+
+	protected $title = '';
+
+	protected $type = '';
+
+	// Post type
+	protected $object_types = array();
+
+	protected $context = 'normal';
+
+	protected $priority = 'high';
+
+	// Show field names on the left
+	protected $show_names = true;
+
+	// Callback to determine if metabox should display.
+	protected $show_on_cb = null;
+
+	// Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+	protected $show_on = array();
+
+	// Include CMB2 stylesheet
+	protected $cmb_styles = true;
+
+	// Include CMB2 JS
+	protected $enqueue_js = true;
+
+	protected $hookup = true;
+
+	// Will not save during hookup if false
+	protected $save_fields = true;
+
+	// Default to metabox being closed?
+	protected $closed = false;
+
+	// or 'add-existing-user'
+	protected $new_user_section = 'add-new-user';
+
+	/**
+	 * Array of key => value data for saving. Likely $_POST data.
+	 * @var   string
+	 * @since 2.0.0
+	 */
+	protected $generated_nonce = '';
+
+	/**
 	 * Metabox Defaults
 	 * @var   array
 	 * @since 1.0.1
@@ -55,8 +90,8 @@ class CMB2 extends CMB2_Field_Group {
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'cmb_styles'   => true, // Include CMB2 stylesheet
 		'enqueue_js'   => true, // Include CMB2 JS
 		'fields'       => array(),
@@ -65,13 +100,6 @@ class CMB2 extends CMB2_Field_Group {
 		'closed'       => false, // Default to metabox being closed?
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 	);
-
-	/**
-	 * Array of key => value data for saving. Likely $_POST data.
-	 * @var   string
-	 * @since 2.0.0
-	 */
-	protected $generated_nonce = '';
 
 	/**
 	 * Get started
@@ -85,10 +113,26 @@ class CMB2 extends CMB2_Field_Group {
 			wp_die( __( 'Metabox configuration is required to have an ID parameter', 'cmb2' ) );
 		}
 
-		$this->meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
+		$meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
 		$this->object_id( $object_id );
 		$this->mb_object_type();
-		$this->cmb_id = $meta_box['id'];
+
+		$this->set_cmb_id( $meta_box[ 'id' ] );
+		$this->set_title( $meta_box[ 'title' ] );
+		$this->set_type( $meta_box[ 'type' ] );
+		$this->set_object_types( $meta_box[ 'object_types' ] );
+		$this->set_context( $meta_box[ 'context' ] );
+		$this->set_priority( $meta_box[ 'priority' ] );
+		$this->set_show_names( $meta_box[ 'show_names' ] );
+		$this->set_show_on( $meta_box[ 'show_on' ] );
+		$this->set_show_on_cb( $meta_box[ 'show_on_cb' ] );
+		$this->set_cmb_styles( $meta_box[ 'cmb_styles' ] );
+		$this->set_enqueue_js( $meta_box[ 'enqueue_js' ] );
+		$this->set_fields( $meta_box[ 'fields' ] );
+		$this->set_hookup( $meta_box[ 'hookup' ] );
+		$this->set_save_fields( $meta_box[ 'save_fields' ] );
+		$this->set_closed( $meta_box[ 'closed' ] );
+		$this->set_new_user_section( $meta_box[ 'new_user_section' ] );
 
 		CMB2_Boxes::add( $this );
 
@@ -99,7 +143,247 @@ class CMB2 extends CMB2_Field_Group {
 		 *
 		 * @param array $cmb This CMB2 object
 		 */
-		do_action( "cmb2_init_{$this->cmb_id}", $this );
+		do_action( "cmb2_init_{$this->get_cmb_id()}", $this );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_cmb_id() {
+
+		return $this->cmb_id;
+	}
+
+	/**
+	 * @param string $cmb_id
+	 */
+	public function set_cmb_id( $cmb_id ) {
+
+		$this->cmb_id = $cmb_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_title() {
+
+		return $this->title;
+	}
+
+	/**
+	 * @param string $title
+	 */
+	public function set_title( $title ) {
+
+		$this->title = $title;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_type() {
+
+		return $this->type;
+	}
+
+	/**
+	 * @param string $type
+	 */
+	public function set_type( $type ) {
+
+		$this->type = $type;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_object_types() {
+
+		return $this->object_types;
+	}
+
+	/**
+	 * @param array $object_types
+	 */
+	public function set_object_types( $object_types ) {
+
+		$this->object_types = $object_types;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_context() {
+
+		return $this->context;
+	}
+
+	/**
+	 * @param string $context
+	 */
+	public function set_context( $context ) {
+
+		$this->context = $context;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_priority() {
+
+		return $this->priority;
+	}
+
+	/**
+	 * @param string $priority
+	 */
+	public function set_priority( $priority ) {
+
+		$this->priority = $priority;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_show_names() {
+
+		return $this->show_names;
+	}
+
+	/**
+	 * @param boolean $show_names
+	 */
+	public function set_show_names( $show_names ) {
+
+		$this->show_names = $show_names;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function get_show_on_cb() {
+
+		return $this->show_on_cb;
+	}
+
+	/**
+	 * @param null $show_on_cb
+	 */
+	public function set_show_on_cb( $show_on_cb ) {
+
+		$this->show_on_cb = $show_on_cb;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_show_on() {
+
+		return $this->show_on;
+	}
+
+	/**
+	 * @param array $show_on
+	 */
+	public function set_show_on( $show_on ) {
+
+		$this->show_on = $show_on;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_cmb_styles() {
+
+		return $this->cmb_styles;
+	}
+
+	/**
+	 * @param boolean $cmb_styles
+	 */
+	public function set_cmb_styles( $cmb_styles ) {
+
+		$this->cmb_styles = $cmb_styles;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_enqueue_js() {
+
+		return $this->enqueue_js;
+	}
+
+	/**
+	 * @param boolean $enqueue_js
+	 */
+	public function set_enqueue_js( $enqueue_js ) {
+
+		$this->enqueue_js = $enqueue_js;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_hookup() {
+
+		return $this->hookup;
+	}
+
+	/**
+	 * @param boolean $hookup
+	 */
+	public function set_hookup( $hookup ) {
+
+		$this->hookup = $hookup;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_save_fields() {
+
+		return $this->save_fields;
+	}
+
+	/**
+	 * @param boolean $save_fields
+	 */
+	public function set_save_fields( $save_fields ) {
+
+		$this->save_fields = $save_fields;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_closed() {
+
+		return $this->closed;
+	}
+
+	/**
+	 * @param boolean $closed
+	 */
+	public function set_closed( $closed ) {
+
+		$this->closed = $closed;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_new_user_section() {
+
+		return $this->new_user_section;
+	}
+
+	/**
+	 * @param string $new_user_section
+	 */
+	public function set_new_user_section( $new_user_section ) {
+
+		$this->new_user_section = $new_user_section;
 	}
 
 	/**
@@ -126,7 +410,7 @@ class CMB2 extends CMB2_Field_Group {
 		 *	                           Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_before_form', $this->cmb_id, $object_id, $object_type, $this );
+		do_action( 'cmb2_before_form', $this->get_cmb_id(), $object_id, $object_type, $this );
 
 		/**
 		 * Hook before form table begins
@@ -141,18 +425,18 @@ class CMB2 extends CMB2_Field_Group {
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_before_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
+		do_action( "cmb2_before_{$object_type}_form_{$this->get_cmb_id()}", $object_id, $this );
 
-		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
+		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->get_cmb_id() ), '" class="cmb2-metabox cmb-field-list">';
 
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
+		foreach ( $this->get_fields() as $field_args ) {
 
-			$field_args['context'] = $this->prop( 'context' );
+			$field_args['context'] = $this->get_context();
 
 			if ( 'group' == $field_args['type'] ) {
 
 				if ( ! isset( $field_args['show_names'] ) ) {
-					$field_args['show_names'] = $this->prop( 'show_names' );
+					$field_args['show_names'] = $this->get_show_names();
 				}
 				$this->render_group( $field_args );
 
@@ -166,7 +450,7 @@ class CMB2 extends CMB2_Field_Group {
 
 			} else {
 
-				$field_args['show_names'] = $this->prop( 'show_names' );
+				$field_args['show_names'] = $this->get_show_names();
 
 				// Render default fields
 				$field = $this->get_field( $field_args )->render_field();
@@ -187,7 +471,7 @@ class CMB2 extends CMB2_Field_Group {
 		 *	                           Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_after_form', $this->cmb_id, $object_id, $object_type, $this );
+		do_action( 'cmb2_after_form', $this->get_cmb_id(), $object_id, $object_type, $this );
 
 		/**
 		 * Hook after form form has been rendered
@@ -201,7 +485,7 @@ class CMB2 extends CMB2_Field_Group {
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
+		do_action( "cmb2_after_{$object_type}_form_{$this->get_cmb_id()}", $object_id, $this );
 
 		echo "\n<!-- End CMB2 Fields -->\n";
 
@@ -223,19 +507,19 @@ class CMB2 extends CMB2_Field_Group {
 			return $this->mb_object_type;
 		}
 
-		if ( ! $this->prop( 'object_types' ) ) {
+		if ( ! $this->get_object_types() ) {
 			$this->mb_object_type = 'post';
 			return $this->mb_object_type;
 		}
 
 		$type = false;
 		// check if 'object_types' is a string
-		if ( is_string( $this->prop( 'object_types' ) ) ) {
-			$type = $this->prop( 'object_types' );
+		if ( is_string( $this->get_object_types() ) ) {
+			$type = $this->get_object_types();
 		}
 		// if it's an array of one, extract it
-		elseif ( is_array( $this->prop( 'object_types' ) ) && 1 === count( $this->prop( 'object_types' ) ) ) {
-			$cpts = $this->prop( 'object_types' );
+		elseif ( is_array( $this->get_object_types() ) && 1 === count( $this->get_object_types() ) ) {
+			$cpts = $this->get_object_types();
 			$type = is_string( end( $cpts ) )
 				? end( $cpts )
 				: false;
@@ -268,7 +552,12 @@ class CMB2 extends CMB2_Field_Group {
 	 * @return boolean True/False
 	 */
 	public function is_options_page_mb() {
-		return ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] || array_key_exists( 'options-page', $this->meta_box['show_on'] ) );
+
+		return ( isset(
+		            $this->get_show_on()['key'] )
+		            && 'options-page' === $this->get_show_on()['key']
+		            || array_key_exists( 'options-page', $this->get_show_on()
+				) );
 	}
 
 	/**
@@ -314,10 +603,134 @@ class CMB2 extends CMB2_Field_Group {
 	 */
 	public function prop( $property, $fallback = null ) {
 
-		if ( array_key_exists( $property, $this->meta_box ) ) {
-			return $this->meta_box[ $property ];
-		} elseif ( $fallback ) {
-			return $this->meta_box[ $property ] = $fallback;
+		switch ( $property ) {
+			case 'id':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_cmb_id( $fallback );
+				} else {
+					return $this->get_cmb_id();
+				}
+				break;
+
+			case 'title':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_title( $fallback );
+				} else {
+					return $this->get_title();
+				}
+				break;
+
+			case 'type':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_type( $fallback );
+				} else {
+					return $this->get_type();
+				}
+				break;
+
+			case 'object_types':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_object_types( $fallback );
+				} else {
+					return $this->get_object_types();
+				}
+				break;
+
+			case 'context':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_context( $fallback );
+				} else {
+					return $this->get_context();
+				}
+				break;
+
+			case 'priority':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_priority( $fallback );
+				} else {
+					return $this->get_priority();
+				}
+				break;
+
+			case 'show_names':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_show_names( $fallback );
+				} else {
+					return $this->get_show_names();
+				}
+				break;
+
+			case 'show_on_cb':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_show_on_cb( $fallback );
+				} else {
+					return $this->get_show_on_cb();
+				}
+				break;
+
+			case 'show_on':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_show_on( $fallback );
+				} else {
+					return $this->get_show_on();
+				}
+				break;
+
+			case 'cmb_styles':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_cmb_styles( $fallback );
+				} else {
+					return $this->get_cmb_styles();
+				}
+				break;
+
+			case 'enqueue_js':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_enqueue_js( $fallback );
+				} else {
+					return $this->get_enqueue_js();
+				}
+				break;
+
+			case 'fields':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_fields( $fallback );
+				} else {
+					return $this->get_fields();
+				}
+				break;
+
+			case 'hookup':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_hookup( $fallback );
+				} else {
+					return $this->get_hookup();
+				}
+				break;
+
+			case 'save_fields':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_save_fields( $fallback );
+				} else {
+					return $this->get_save_fields();
+				}
+				break;
+
+			case 'closed':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_closed( $fallback );
+				} else {
+					return $this->get_closed();
+				}
+				break;
+
+			case 'new_user_section':
+				if ( ! is_null( $fallback ) ) {
+					$this->set_new_user_section( $fallback );
+				} else {
+					return $this->get_new_user_section();
+				}
+				break;
 		}
 
 		return null;
@@ -335,8 +748,8 @@ class CMB2 extends CMB2_Field_Group {
 		$show = true;
 
 		// Use the callback to determine showing the cmb, if it exists
-		if ( is_callable( $this->prop( 'show_on_cb' ) ) ) {
-			$show = (bool) call_user_func( $this->prop( 'show_on_cb' ), $this );
+		if ( is_callable( $this->get_show_on_cb() ) ) {
+			$show = (bool) call_user_func( $this->get_show_on_cb(), $this );
 		}
 
 		return $show;
@@ -360,7 +773,7 @@ class CMB2 extends CMB2_Field_Group {
 		if ( $this->generated_nonce ) {
 			return $this->generated_nonce;
 		}
-		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->cmb_id );
+		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->get_cmb_id() );
 		return $this->generated_nonce;
 	}
 
@@ -371,10 +784,32 @@ class CMB2 extends CMB2_Field_Group {
 	 * @return mixed
 	 */
 	public function __get( $field ) {
+
 		switch ( $field ) {
+
 			case 'cmb_id':
+				return $this->get_cmb_id();
+
 			case 'meta_box':
-				return $this->{$field};
+				return array(
+					'id'           => $this->get_cmb_id(),
+					'title'        => $this->get_title(),
+					'type'         => $this->get_type(),
+					'object_types' => $this->get_object_types(),
+					'context'      => $this->get_context(),
+					'priority'     => $this->get_priority(),
+					'show_names'   => $this->get_show_names(),
+					'show_on'      => $this->get_show_on(),
+					'show_on_cb'   => $this->get_show_on_cb(),
+					'cmb_styles'   => $this->get_cmb_styles(),
+					'enqueue_js'   => $this->get_enqueue_js(),
+					'fields'       => $this->get_fields(),
+					'hookup'       => $this->get_hookup(),
+					'save_fields'  => $this->get_save_fields(),
+					'closed'       => $this->get_closed(),
+					'new_user_section' => $this->get_new_user_section(),
+				);
+
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
