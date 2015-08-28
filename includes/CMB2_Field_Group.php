@@ -204,6 +204,8 @@ abstract class CMB2_Field_Group {
 	 *
 	 * @param  array $data_to_sanitize Array of field_id => value data for
 	 *                                 sanitizing (likely $_POST data).
+	 *
+	 * @return mixed
 	 */
 	public function get_sanitized_values( array $data_to_sanitize ) {
 
@@ -360,6 +362,8 @@ abstract class CMB2_Field_Group {
 
 	/**
 	 * Save a repeatable group
+	 *
+	 * @param array $args
 	 */
 	public function save_group( $args ) {
 
@@ -448,7 +452,7 @@ abstract class CMB2_Field_Group {
 		$field_id = is_string( $field ) ? $field : $field[ 'id' ];
 
 		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
-		$ids             = $this->get_field_ids( $field_id, $parent_field_id, true );
+		$ids             = $this->get_field_ids( $field_id, $parent_field_id );
 
 		if ( ! $ids ) {
 			return false;
