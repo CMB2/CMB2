@@ -273,7 +273,11 @@ class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * Returns the object type
+	 *
 	 * @since  1.0.0
+	 *
+	 * @param string $object_type
+	 *
 	 * @return string Object type
 	 */
 	public function object_type( $object_type = '' ) {
@@ -309,11 +313,14 @@ class CMB2 extends CMB2_Field_Group {
 	 * @return mixed            Metabox config property value or false
 	 */
 	public function prop( $property, $fallback = null ) {
+
 		if ( array_key_exists( $property, $this->meta_box ) ) {
 			return $this->meta_box[ $property ];
 		} elseif ( $fallback ) {
 			return $this->meta_box[ $property ] = $fallback;
 		}
+
+		return null;
 	}
 
 	/**
