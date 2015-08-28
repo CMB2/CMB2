@@ -55,10 +55,11 @@ class CMB2 extends CMB2_Field_Group {
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+		'show_on_cb'   => null, // Callback to determine if metabox should display.
 		'cmb_styles'   => true, // Include CMB2 stylesheet
 		'enqueue_js'   => true, // Include CMB2 JS
+		'fields'       => array(),
 		'hookup'       => true,
 		'save_fields'  => true, // Will not save during hookup if false
 		'closed'       => false, // Default to metabox being closed?
@@ -81,6 +82,12 @@ class CMB2 extends CMB2_Field_Group {
 		$this->object_id( $object_id );
 		$this->mb_object_type();
 		$this->cmb_id = $meta_box['id'];
+
+		// Todo: The is only duct-tape to see that we're capable of passing tests
+		// PGL: More work is needed here in the refactoring, but we can brute
+		// force copy the old fields array to the new one in the field group
+		// just to verify we're achieving back-compat to this point.
+		$this->fields_array = $this->meta_box[ 'fields' ];
 
 		CMB2_Boxes::add( $this );
 
