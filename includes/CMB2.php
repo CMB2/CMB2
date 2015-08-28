@@ -12,7 +12,7 @@
  * @property-read array $meta_box
  * @property-read array $updated
  */
-class CMB2 {
+class CMB2 extends CMB2_Field_Group {
 
 	/**
 	 * Current field's ID
@@ -29,13 +29,6 @@ class CMB2 {
 	protected $meta_box = array();
 
 	/**
-	 * Object ID for metabox meta retrieving/saving
-	 * @var   mixed
-	 * @since 1.0.0
-	 */
-	protected $object_id = 0;
-
-	/**
 	 * Type of object being saved. (e.g., post, user, or comment)
 	 * @var   string
 	 * @since 1.0.0
@@ -48,13 +41,6 @@ class CMB2 {
 	 * @since 1.0.0
 	 */
 	protected $mb_object_type = null;
-
-	/**
-	 * List of fields that are changed/updated on save
-	 * @var   array
-	 * @since 1.1.0
-	 */
-	protected $updated = array();
 
 	/**
 	 * Metabox Defaults
@@ -602,48 +588,6 @@ class CMB2 {
 	}
 
 	/**
-	 * Get object id from global space if no id is provided
-	 * @since  1.0.0
-	 * @param  integer $object_id Object ID
-	 * @return integer $object_id Object ID
-	 */
-	public function object_id( $object_id = 0 ) {
-		global $pagenow;
-
-		if ( $object_id ) {
-			$this->object_id = $object_id;
-			return $this->object_id;
-		}
-
-		if ( $this->object_id ) {
-			return $this->object_id;
-		}
-
-		// Try to get our object ID from the global space
-		switch ( $this->object_type() ) {
-			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
-				$object_id = ! $object_id && 'user-new.php' != $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
-				break;
-
-			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? $_REQUEST['c'] : $object_id;
-				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
-				break;
-
-			default:
-				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? $_REQUEST['post'] : $object_id;
-				break;
-		}
-
-		// reset to id or 0
-		$this->object_id = $object_id ? $object_id : 0;
-
-		return $this->object_id;
-	}
-
-	/**
 	 * Sets the $object_type based on metabox settings
 	 * @since  1.0.0
 	 * @return string Object type
@@ -1045,10 +989,7 @@ class CMB2 {
 		switch ( $field ) {
 			case 'cmb_id':
 			case 'meta_box':
-			case 'updated':
 				return $this->{$field};
-			case 'object_id':
-				return $this->object_id();
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
