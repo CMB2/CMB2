@@ -238,10 +238,12 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		$this->value = strtotime( $this->value['date'] . ' ' . $this->value['time'] );
+		if ( is_array( $this->value ) && isset( $this->value['date'] ) ) {
+			$this->value['date'] = $this->get_timestamp_from_value( $this->value['date'] );
+		}
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
-			$this->value += $tz_offset;
+			$this->value += (int) $tz_offset;
 		}
 
 		return $this->value;
