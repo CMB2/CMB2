@@ -700,7 +700,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'new_user_section' => 'add-new-user'
 		);
 		foreach( $prop_values as $prop_key => $expected_value ) {
-			$this->assertEquals( $cmb->prop( $prop_key ), $expected_value );
+			$this->assertEquals( $expected_value, $cmb->prop( $prop_key ) );
 		}
 
 		// Test adding a new property
@@ -710,19 +710,19 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		// Property is unset so the fallback should be used
 		$prop_value = $cmb->prop( $new_prop_name, $new_prop_value );
-		$this->assertEquals( $prop_value, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
 
 		// Property is now set so the fallback should not overwrite
 		$prop_value = $cmb->prop( $new_prop_name, $unused_fallback );
-		$this->assertEquals( $prop_value, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
 
 		// Test with no fallback specified
 		$prop_value = $cmb->prop( $new_prop_name );
-		$this->assertEquals( $prop_value, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
 
 		// The new property should show up in the meta_box array as well
 		$prop_value = $cmb->meta_box[ $new_prop_name ];
-		$this->assertEquals( $prop_value, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
 
 	}
 
