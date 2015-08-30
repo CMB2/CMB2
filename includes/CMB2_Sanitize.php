@@ -289,8 +289,12 @@ class CMB2_Sanitize {
 		}
 
 		try {
-			$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
-			$this->value = serialize( $this->value );
+			$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
+			$full_date   = $this->value['date'] . ' ' . $this->value['time'];
+			$datetime    = date_create_from_format( $full_format, $full_date );
+			$datetime->setTimezone( new DateTimeZone( $tzstring ) );
+			// $this->value = serialize( $datetime );
+			// Why serialize it? It'll get serialized by WP anyway...
 		} catch ( Exception $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );

@@ -538,7 +538,7 @@ class CMB2_Types {
 		$args = wp_parse_args( $args, array(
 			'value'      => $this->field->escaped_value(),
 			'desc'       => $this->_desc(),
-			'datepicker' => array(),
+			'datepicker' => array(), // estos dos sobran, creo yo
 			'timepicker' => array(),
 		) );
 
@@ -601,13 +601,16 @@ class CMB2_Types {
 			$args['value'] = '';
 		}
 
-		$datetime = unserialize( $args['value'] );
-		$args['value'] = $tzstring = '';
+		// $datetime = unserialize( $args['value'] ); // y entonces no necesitaríamos unserializarlo.
+		$datetime      = $args['value'];
+		$args['value'] = [ ];
+		$tzstring      = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz            = $datetime->getTimezone();
 			$tzstring      = $tz->getName();
-			$args['value'] = $datetime->getTimestamp() + $tz->getOffset( new DateTime( 'NOW' ) );
+			$args['value']['date'] = $datetime->getTimestamp() + $tz->getOffset( new DateTime( 'NOW' ) );
+			$args['value']['time'] = $datetime->format( $this->field->args( 'time_format' ) );
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
