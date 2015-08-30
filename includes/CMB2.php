@@ -77,6 +77,8 @@ class CMB2 extends CMB2_Field_Group {
 	 */
 	protected $generated_nonce = '';
 
+	protected $custom_properties = array();
+
 	/**
 	 * Metabox Defaults
 	 * @var   array
@@ -650,132 +652,59 @@ class CMB2 extends CMB2_Field_Group {
 
 		switch ( $property ) {
 			case 'id':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_cmb_id( $fallback );
-				} else {
-					return $this->get_cmb_id();
-				}
-				break;
+				return $this->get_cmb_id();
 
 			case 'title':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_title( $fallback );
-				} else {
-					return $this->get_title();
-				}
-				break;
+				return $this->get_title();
 
 			case 'type':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_type( $fallback );
-				} else {
-					return $this->get_type();
-				}
-				break;
+				return $this->get_type();
 
 			case 'object_types':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_object_types( $fallback );
-				} else {
-					return $this->get_object_types();
-				}
-				break;
+				return $this->get_object_types();
 
 			case 'context':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_context( $fallback );
-				} else {
-					return $this->get_context();
-				}
-				break;
+				return $this->get_context();
 
 			case 'priority':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_priority( $fallback );
-				} else {
-					return $this->get_priority();
-				}
-				break;
+				return $this->get_priority();
 
 			case 'show_names':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_show_names( $fallback );
-				} else {
-					return $this->get_show_names();
-				}
-				break;
+				return $this->get_show_names();
 
 			case 'show_on_cb':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_show_on_cb( $fallback );
-				} else {
-					return $this->get_show_on_cb();
-				}
-				break;
+				return $this->get_show_on_cb();
 
 			case 'show_on':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_show_on( $fallback );
-				} else {
-					return $this->get_show_on();
-				}
-				break;
+				return $this->get_show_on();
 
 			case 'cmb_styles':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_cmb_styles( $fallback );
-				} else {
-					return $this->get_cmb_styles();
-				}
-				break;
+				return $this->get_cmb_styles();
 
 			case 'enqueue_js':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_enqueue_js( $fallback );
-				} else {
-					return $this->get_enqueue_js();
-				}
-				break;
+				return $this->get_enqueue_js();
 
 			case 'fields':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_fields( $fallback );
-				} else {
-					return $this->get_fields();
-				}
-				break;
+				return $this->get_fields();
 
 			case 'hookup':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_hookup( $fallback );
-				} else {
-					return $this->get_hookup();
-				}
-				break;
+				return $this->get_hookup();
 
 			case 'save_fields':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_save_fields( $fallback );
-				} else {
-					return $this->get_save_fields();
-				}
-				break;
+				return $this->get_save_fields();
 
 			case 'closed':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_closed( $fallback );
-				} else {
-					return $this->get_closed();
-				}
-				break;
+				return $this->get_closed();
 
 			case 'new_user_section':
-				if ( ! is_null( $fallback ) ) {
-					$this->set_new_user_section( $fallback );
-				} else {
-					return $this->get_new_user_section();
+				return $this->get_new_user_section();
+
+			default:
+				if( array_key_exists( $property, $this->custom_properties ) ) {
+					return $this->custom_properties[ $property ];
+				} elseif ( ! is_null( $fallback ) ) {
+					return $this->custom_properties[ $property ] = $fallback;
 				}
-				break;
 		}
 
 		return null;
@@ -836,7 +765,7 @@ class CMB2 extends CMB2_Field_Group {
 				return $this->get_cmb_id();
 
 			case 'meta_box':
-				return array(
+				$meta_box = array(
 					'id'           => $this->get_cmb_id(),
 					'title'        => $this->get_title(),
 					'type'         => $this->get_type(),
@@ -854,6 +783,10 @@ class CMB2 extends CMB2_Field_Group {
 					'closed'       => $this->get_closed(),
 					'new_user_section' => $this->get_new_user_section(),
 				);
+				foreach( $this->custom_properties as $key => $value ) {
+					$meta_box[ $key ] = $value;
+				}
+				return $meta_box;
 
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
