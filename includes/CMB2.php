@@ -765,28 +765,27 @@ class CMB2 extends CMB2_Field_Group {
 				return $this->get_cmb_id();
 
 			case 'meta_box':
-				$meta_box = array(
-					'id'           => $this->get_cmb_id(),
-					'title'        => $this->get_title(),
-					'type'         => $this->get_type(),
-					'object_types' => $this->get_object_types(),
-					'context'      => $this->get_context(),
-					'priority'     => $this->get_priority(),
-					'show_names'   => $this->get_show_names(),
-					'show_on'      => $this->get_show_on(),
-					'show_on_cb'   => $this->get_show_on_cb(),
-					'cmb_styles'   => $this->get_cmb_styles(),
-					'enqueue_js'   => $this->get_enqueue_js(),
-					'fields'       => $this->get_fields(),
-					'hookup'       => $this->get_hookup(),
-					'save_fields'  => $this->get_save_fields(),
-					'closed'       => $this->get_closed(),
-					'new_user_section' => $this->get_new_user_section(),
+				return array_merge(
+					array(
+						'id'           => $this->get_cmb_id(),
+						'title'        => $this->get_title(),
+						'type'         => $this->get_type(),
+						'object_types' => $this->get_object_types(),
+						'context'      => $this->get_context(),
+						'priority'     => $this->get_priority(),
+						'show_names'   => $this->get_show_names(),
+						'show_on'      => $this->get_show_on(),
+						'show_on_cb'   => $this->get_show_on_cb(),
+						'cmb_styles'   => $this->get_cmb_styles(),
+						'enqueue_js'   => $this->get_enqueue_js(),
+						'fields'       => $this->get_fields(),
+						'hookup'       => $this->get_hookup(),
+						'save_fields'  => $this->get_save_fields(),
+						'closed'       => $this->get_closed(),
+						'new_user_section' => $this->get_new_user_section(),
+					),
+					$this->custom_properties
 				);
-				foreach( $this->custom_properties as $key => $value ) {
-					$meta_box[ $key ] = $value;
-				}
-				return $meta_box;
 
 			default:
 				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
