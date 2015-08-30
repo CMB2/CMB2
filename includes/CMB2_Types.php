@@ -601,8 +601,7 @@ class CMB2_Types {
 			$args['value'] = '';
 		}
 
-		// $datetime = unserialize( $args['value'] ); // y entonces no necesitaríamos unserializarlo.
-		$datetime      = $args['value'];
+		$datetime = unserialize( $args['value'] ); // y entonces no necesitaríamos unserializarlo.
 		$args['value'] = [ ];
 		$tzstring      = '';
 
