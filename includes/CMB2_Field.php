@@ -14,14 +14,7 @@
  * @method string type()
  * @method mixed fields()
  */
-class CMB2_Field {
-
-	/**
-	 * Metabox object id
-	 * @var   mixed
-	 * @since 1.1.0
-	 */
-	public $object_id = null;
+class CMB2_Field extends CMB2_Field_Group {
 
 	/**
 	 * Metabox object type
