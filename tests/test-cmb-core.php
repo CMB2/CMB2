@@ -677,6 +677,26 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertFalse( $cmb->prop( 'save_fields' ) );
 	}
 
+	public function test_cmb_magic_getters() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		$this->assertEquals( 'test', $cmb->cmb_id );
+		$this->assertEquals( array(), $cmb->updated );
+		$this->assertEquals( 0, $cmb->object_id );
+	}
+
+	/**
+	 * @expectedException Exception
+	 */
+	public function test_invalid_cmb_magic_getter() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		// Calling a non-existent getter property should generate an exception
+		$cmb->foo_bar_baz;
+	}
+
 	public function test_cmb2_props() {
 
 		$cmb = cmb2_get_metabox( 'test' );
