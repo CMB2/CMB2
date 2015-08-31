@@ -707,14 +707,21 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	/**
-	 * @expectedException Exception
+	 * @expectedException Test_CMB2_Exception
 	 */
 	public function test_invalid_cmb_magic_getter() {
 
 		$cmb = cmb2_get_metabox( 'test' );
 
-		// Calling a non-existent getter property should generate an exception
-		$cmb->foo_bar_baz;
+		try {
+			// Calling a non-existent getter property should generate an exception
+			$cmb->foo_bar_baz;
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
+
 	}
 
 	public function test_cmb2_props() {
