@@ -697,6 +697,82 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertFalse( $cmb->prop( 'save_fields' ) );
 	}
 
+	public function test_cmb_magic_getters() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		$this->assertEquals( 'test', $cmb->cmb_id );
+		$this->assertEquals( array(), $cmb->updated );
+		$this->assertEquals( 0, $cmb->object_id );
+	}
+
+	/**
+	 * @expectedException Test_CMB2_Exception
+	 */
+	public function test_invalid_cmb_magic_getter() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		try {
+			// Calling a non-existent getter property should generate an exception
+			$cmb->foo_bar_baz;
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
+
+	}
+
+	public function test_cmb2_props() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		// Test known state of all props except fields
+		$prop_values = array(
+			'id'               => 'test',
+			'title'            => '',
+			'type'             => '',
+			'object_types'     => array(),
+			'context'          => 'normal',
+			'priority'         => 'high',
+			'show_names'       => true,
+			'show_on_cb'       => null,
+			'show_on'          => array(),
+			'cmb_styles'       => true,
+			'enqueue_js'       => true,
+			'hookup'           => true,
+			'save_fields'      => true,
+			'closed'           => false,
+			'new_user_section' => 'add-new-user'
+		);
+		foreach( $prop_values as $prop_key => $expected_value ) {
+			$this->assertEquals( $expected_value, $cmb->prop( $prop_key ) );
+		}
+
+		// Test adding a new property
+		$new_prop_name   = 'new_prop';
+		$new_prop_value  = 'new value';
+		$unused_fallback = 'should not be used';
+
+		// Property is unset so the fallback should be used
+		$prop_value = $cmb->prop( $new_prop_name, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// Property is now set so the fallback should not overwrite
+		$prop_value = $cmb->prop( $new_prop_name, $unused_fallback );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// Test with no fallback specified
+		$prop_value = $cmb->prop( $new_prop_name );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// The new property should show up in the meta_box array as well
+		$prop_value = $cmb->meta_box[ $new_prop_name ];
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+	}
+
 }
 
 /**
