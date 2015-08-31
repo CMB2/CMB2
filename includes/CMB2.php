@@ -789,7 +789,7 @@ class CMB2 extends CMB2_Field_Group {
 				);
 
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				return parent::__get( $field );
 		}
 	}
 
