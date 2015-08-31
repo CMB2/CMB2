@@ -371,12 +371,13 @@ class CMB2 extends CMB2_Field_Group {
 	 * @return mixed
 	 */
 	public function __get( $field ) {
+
 		switch ( $field ) {
 			case 'cmb_id':
 			case 'meta_box':
 				return $this->{$field};
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				return parent::__get( $field );
 		}
 	}
 
