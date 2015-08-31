@@ -117,7 +117,6 @@ class CMB2 extends CMB2_Field_Group {
 
 		$meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
 		$this->object_id( $object_id );
-		$this->mb_object_type();
 
 		$this->set_cmb_id( $meta_box[ 'id' ] );
 		$this->set_title( $meta_box[ 'title' ] );
@@ -135,6 +134,8 @@ class CMB2 extends CMB2_Field_Group {
 		$this->set_save_fields( $meta_box[ 'save_fields' ] );
 		$this->set_closed( $meta_box[ 'closed' ] );
 		$this->set_new_user_section( $meta_box[ 'new_user_section' ] );
+
+		$this->mb_object_type();
 
 		CMB2_Boxes::add( $this );
 
