@@ -408,7 +408,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
-		$this->assertEquals( array(
+		$field_array = array(
 			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
@@ -421,9 +421,15 @@ class Test_CMB2_Core extends Test_CMB2 {
 				'id'         => 'demo_text2',
 				'type'       => 'text',
 				'attributes' => array( 'placeholder' => "I'm some placeholder text" ),
-			),
-		), $cmb->prop( 'fields' ) );
+			)
+		);
+		$test_fields = $cmb->prop( 'fields' );
 
+		foreach( $field_array as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value,  $test_fields[ $field_id ][ $prop_name] );
+			}
+		}
 	}
 
 	public function test_add_group_field( $do_assertions = null ) {
