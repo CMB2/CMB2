@@ -180,6 +180,14 @@ abstract class CMB2_Field_Group {
 	}
 
 	/**
+	 * @param string $field_id
+	 */
+	public function remove_field_object( $field_id ) {
+
+		unset( $this->field_objects[ $field_id ] );
+	}
+
+	/**
 	 * Render a repeatable group
 	 *
 	 * @param array|CMB2_Field $field Array of field arguments or a field
