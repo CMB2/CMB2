@@ -306,13 +306,25 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	public function test_boxes_get() {
+
 		new Test_CMB2_Object( $this->metabox_array2 );
 
 		// Retrieve the instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
 		$after_args_parsed = wp_parse_args( $this->metabox_array2, $cmb->get_metabox_defaults() );
-		$this->assertEquals( $after_args_parsed, $cmb->meta_box );
+		foreach ( $after_args_parsed as $key => $value ) {
+			// Field are tested separately, below
+			if ( 'fields' != $key ) {
+				$this->assertEquals( $value, $cmb->meta_box[ $key ] );
+			}
+		}
+
+		foreach( $after_args_parsed[ 'fields' ] as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $cmb->meta_box[ 'fields' ][ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_update_field_property() {
