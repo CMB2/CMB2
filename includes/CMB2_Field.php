@@ -226,8 +226,9 @@ class CMB2_Field extends CMB2_Field_Group {
 				: get_metadata( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
 		}
 
-		if ( $this->group && $data ) {
-			$data = isset( $data[ $this->group->index ][ $this->args( '_id' ) ] )
+		if ( $this->group ) {
+
+			$data = is_array( $data ) && isset( $data[ $this->group->index ][ $this->args( '_id' ) ] )
 				? $data[ $this->group->index ][ $this->args( '_id' ) ]
 				: false;
 		}
