@@ -435,6 +435,93 @@ class CMB2 extends CMB2_Field_Group {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_mb_object_type() {
+
+		return $this->mb_object_type;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_object_type() {
+
+		return $this->object_type;
+	}
+
+	public function set_object_type( $object_type ) {
+
+		$this->object_type = $object_type;
+		return $object_type;
+	}
+
+	/**
+	 * @param string $object_type
+	 *
+	 * @return string
+	 */
+	public function set_mb_object_type( $object_type ) {
+
+		$this->mb_object_type = $object_type;
+		return $object_type;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_custom_properties() {
+
+		return $this->custom_properties;
+	}
+
+	/**
+	 * @param $properties_array
+	 *
+	 * @return mixed
+	 */
+	public function set_custom_properties( $properties_array ) {
+
+		$this->custom_properties = $properties_array;
+		return $properties_array;
+	}
+
+	/**
+	 * @param string $key
+	 *
+	 * @return mixed|null
+	 */
+	public function get_custom_property( $key ) {
+
+		$value = null;
+		if( array_key_exists( $key, $this->custom_properties ) ) {
+			$value = $this->custom_properties[ $key ];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	public function set_custom_property( $key, $value ) {
+
+		$this->custom_properties[ $key ] = $value;
+		return $value;
+	}
+
+	/**
+	 * @param $key
+	 */
+	public function remove_custom_property( $key ) {
+
+		unset( $this->custom_properties[ $key ] );
+	}
+
+	/**
 	 * Loops through and displays fields
 	 * @since  1.0.0
 	 * @param  int    $object_id   Object ID
@@ -477,31 +564,36 @@ class CMB2 extends CMB2_Field_Group {
 
 		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->get_cmb_id() ), '" class="cmb2-metabox cmb-field-list">';
 
-		foreach ( $this->get_fields() as $field_args ) {
+		foreach( $this->get_field_objects() as $field_object ) {
 
-			$field_args['context'] = $this->get_context();
+			$field_object->args[ 'context' ] = $this->get_context();
 
-			if ( 'group' == $field_args['type'] ) {
+			if ( 'group' == $field_object->args['type'] ) {
 
-				if ( ! isset( $field_args['show_names'] ) ) {
-					$field_args['show_names'] = $this->get_show_names();
+				if ( ! isset( $field_object->args['show_names'] ) ) {
+					$field_object->args['show_names'] = $this->get_show_names();
 				}
-				$this->render_group( $field_args );
+				$this->render_group( $field_object );
 
-			} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
+			} elseif ( 'hidden' == $field_object->args['type'] && $this->get_field( $field_object->args )->should_show() ) {
 				// Save rendering for after the metabox
 				$this->add_hidden_field( array(
-					'field_args'  => $field_args,
+					'field_args'  => $field_object->args,
 					'object_type' => $this->object_type(),
 					'object_id'   => $this->object_id(),
 				) );
 
 			} else {
 
-				$field_args['show_names'] = $this->get_show_names();
+				$field_object->args['show_names'] = $this->get_show_names();
 
 				// Render default fields
-				$field = $this->get_field( $field_args )->render_field();
+				// Todo: Hacked the same way get_field() was to update field values that may have changed since instantiation
+				$field_object->object_id = $this->object_id;
+				$field_object->object_type = $this->object_type;
+				$field_object->escaped_value = null;
+				$field_object->value = $field_object->get_data();
+				$field_object->render_field();
 			}
 		}
 
@@ -546,18 +638,16 @@ class CMB2 extends CMB2_Field_Group {
 	 */
 	public function mb_object_type() {
 
-		if ( null !== $this->mb_object_type ) {
-			return $this->mb_object_type;
+		if ( null !== $this->get_mb_object_type() ) {
+			return $this->get_mb_object_type();
 		}
 
 		if ( $this->is_options_page_mb() ) {
-			$this->mb_object_type = 'options-page';
-			return $this->mb_object_type;
+			return $this->set_mb_object_type( 'options-page' );
 		}
 
 		if ( ! $this->get_object_types() ) {
-			$this->mb_object_type = 'post';
-			return $this->mb_object_type;
+			return $this->set_mb_object_type( 'post' );
 		}
 
 		$type = false;
@@ -574,8 +664,7 @@ class CMB2 extends CMB2_Field_Group {
 		}
 
 		if ( ! $type ) {
-			$this->mb_object_type = 'post';
-			return $this->mb_object_type;
+			return $this->set_mb_object_type( 'post' );
 		}
 
 		// Get our object type
@@ -583,15 +672,15 @@ class CMB2 extends CMB2_Field_Group {
 
 			case 'user':
 			case 'comment':
-				$this->mb_object_type = $type;
+				$this->set_mb_object_type( $type );
 				break;
 
 			default:
-				$this->mb_object_type = 'post';
+				$this->set_mb_object_type( 'post' );
 				break;
 		}
 
-		return $this->mb_object_type;
+		return $this->get_mb_object_type();
 	}
 
 	/**
@@ -601,11 +690,10 @@ class CMB2 extends CMB2_Field_Group {
 	 */
 	public function is_options_page_mb() {
 
-		return ( isset(
-		            $this->get_show_on()['key'] )
-		            && 'options-page' === $this->get_show_on()['key']
-		            || array_key_exists( 'options-page', $this->get_show_on()
-				) );
+		return ( isset( $this->get_show_on()['key'] )
+	        && 'options-page' === $this->get_show_on()['key']
+	        || array_key_exists( 'options-page', $this->get_show_on() )
+		);
 	}
 
 	/**
@@ -618,28 +706,28 @@ class CMB2 extends CMB2_Field_Group {
 	 * @return string Object type
 	 */
 	public function object_type( $object_type = '' ) {
+
 		if ( $object_type ) {
-			$this->object_type = $object_type;
-			return $this->object_type;
+			return $this->set_object_type( $object_type );
 		}
 
-		if ( $this->object_type ) {
-			return $this->object_type;
+		if ( $this->get_object_type() ) {
+			return $this->get_object_type();
 		}
 
 		global $pagenow;
 
 		if ( in_array( $pagenow, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
-			$this->object_type = 'user';
+			$this->set_object_type( 'user' );
 
 		} elseif ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
-			$this->object_type = 'comment';
+			$this->set_object_type( 'comment' );
 
 		} else {
-			$this->object_type = 'post';
+			$this->set_object_type( 'post' );
 		}
 
-		return $this->object_type;
+		return $this->get_object_type();
 	}
 
 	/**
@@ -701,10 +789,10 @@ class CMB2 extends CMB2_Field_Group {
 				return $this->get_new_user_section();
 
 			default:
-				if( array_key_exists( $property, $this->custom_properties ) ) {
-					return $this->custom_properties[ $property ];
+				if( $this->get_custom_property( $property ) ) {
+					return $this->get_custom_property( $property );
 				} elseif ( ! is_null( $fallback ) ) {
-					return $this->custom_properties[ $property ] = $fallback;
+					return $this->set_custom_property( $property, $fallback );
 				}
 		}
 
@@ -768,24 +856,24 @@ class CMB2 extends CMB2_Field_Group {
 			case 'meta_box':
 				return array_merge(
 					array(
-						'id'           => $this->get_cmb_id(),
-						'title'        => $this->get_title(),
-						'type'         => $this->get_type(),
-						'object_types' => $this->get_object_types(),
-						'context'      => $this->get_context(),
-						'priority'     => $this->get_priority(),
-						'show_names'   => $this->get_show_names(),
-						'show_on'      => $this->get_show_on(),
-						'show_on_cb'   => $this->get_show_on_cb(),
-						'cmb_styles'   => $this->get_cmb_styles(),
-						'enqueue_js'   => $this->get_enqueue_js(),
-						'fields'       => $this->get_fields(),
-						'hookup'       => $this->get_hookup(),
-						'save_fields'  => $this->get_save_fields(),
-						'closed'       => $this->get_closed(),
+						'id'               => $this->get_cmb_id(),
+						'title'            => $this->get_title(),
+						'type'             => $this->get_type(),
+						'object_types'     => $this->get_object_types(),
+						'context'          => $this->get_context(),
+						'priority'         => $this->get_priority(),
+						'show_names'       => $this->get_show_names(),
+						'show_on'          => $this->get_show_on(),
+						'show_on_cb'       => $this->get_show_on_cb(),
+						'cmb_styles'       => $this->get_cmb_styles(),
+						'enqueue_js'       => $this->get_enqueue_js(),
+						'fields'           => $this->get_fields(),
+						'hookup'           => $this->get_hookup(),
+						'save_fields'      => $this->get_save_fields(),
+						'closed'           => $this->get_closed(),
 						'new_user_section' => $this->get_new_user_section(),
 					),
-					$this->custom_properties
+					$this->get_custom_properties()
 				);
 
 			default:
