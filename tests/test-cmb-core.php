@@ -20,9 +20,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
-			'id' => $this->cmb_id,
+			'id'     => $this->cmb_id,
 			'fields' => array(
-				array(
+				'test_test' => array(
 					'name'        => 'Name',
 					'description' => 'Description',
 					'id'          => 'test_test',
@@ -36,9 +36,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->metabox_array2 = array(
-			'id' => 'test2',
+			'id'     => 'test2',
 			'fields' => array(
-				array(
+				'test_test' => array(
 					'name' => 'Name',
 					'id'   => 'test_test',
 					'type' => 'text',
@@ -47,11 +47,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->option_metabox_array = array(
-			'id'            => 'options_page',
-			'title'         => 'Theme Options Metabox',
-			'show_on'    => array( 'options-page' => array( 'theme_options', ), ),
-			'fields'        => array(
-				array(
+			'id'      => 'options_page',
+			'title'   => 'Theme Options Metabox',
+			'show_on' => array( 'options-page' => array( 'theme_options', ), ),
+			'fields'  => array(
+				'bg_color' => array(
 					'name'    => 'Site Background Color',
 					'desc'    => 'field description (optional)',
 					'id'      => 'bg_color',
@@ -323,7 +323,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$test = $cmb->update_field_property( 'test_test', 'type', 'textarea' );
 
-		$this->assertEquals( 0, $test );
+		$this->assertEquals( 'test_test', $test );
 
 		$field_id = $cmb->update_field_property( 'test_test', 'name', 'Test Name' );
 
@@ -355,7 +355,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertEquals( 'textarea', $field->type() );
 		$this->assertEquals( array( 'placeholder' => "I'm some placeholder text" ), $field->attributes() );
 		$this->assertEquals( array(
-			array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',
@@ -391,7 +391,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb = cmb2_get_metabox( 'test2' );
 
 		$this->assertEquals( array(
-			array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',
@@ -627,7 +627,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb->remove_field( 'group_field' );
 		$cmb->remove_field( 'group_field2' );
 		$this->assertEquals( array(
-			array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',

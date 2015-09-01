@@ -46,7 +46,7 @@ do_action( 'cmb2_init_before_hookup' );
  * @since  2.0.2
  */
 foreach ( CMB2_Boxes::get_all() as $cmb ) {
-	if ( $cmb->prop( 'hookup' ) ) {
+	if ( $cmb->get_hookup() ) {
 		$hookup = new CMB2_hookup( $cmb );
 	}
 }
