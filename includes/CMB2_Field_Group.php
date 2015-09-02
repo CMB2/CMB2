@@ -176,12 +176,18 @@ abstract class CMB2_Field_Group {
 	/**
 	 * @param string     $field_id
 	 * @param CMB2_Field $field_object
+	 * @param int        $position Optionally specify a position in the array to be inserted
 	 *
 	 * @return CMB2_Field[]
 	 */
-	public function set_field_object( $field_id, $field_object ) {
+	public function set_field_object( $field_id, $field_object, $position = 0 ) {
 
-		$this->field_objects[ $field_id ] = $field_object;
+		if ( $position ) {
+			cmb2_utils()->array_insert( $this->field_objects, array( $field_id => $field_object ), $position );
+		} else {
+			$this->field_objects[ $field_id ] = $field_object;
+		}
+
 		return $field_object;
 	}
 
@@ -698,7 +704,7 @@ abstract class CMB2_Field_Group {
 		    'object_type' => $this->object_type(),
 		    'object_id'   => $this->object_id(),
         ) );
-		$this->set_field_object( $field_id, $new_field );
+		$this->set_field_object( $field_id, $new_field, $position );
 
 		return $field_id;
 	}
