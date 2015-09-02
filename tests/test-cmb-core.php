@@ -436,7 +436,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
-		// This should return false because we don't have a 'demo_text2' field
+		// This should return false because we don't have a 'group_field' field
 		$field_id = $cmb->update_field_property( 'group_field', 'type', 'group' );
 		$this->assertFalse( $field_id );
 
@@ -611,7 +611,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$fields = $field->fields();
-		$mock = array(
+		$mock_fields = array(
 			'colorpicker' => array(
 				'name' => 'Colorpicker',
 				'id'   => 'colorpicker',
@@ -623,26 +623,33 @@ class Test_CMB2_Core extends Test_CMB2 {
 				'type' => 'text',
 			),
 		);
-
-		$this->assertEquals( $mock, $fields );
-		$this->assertEquals( array_shift( $mock ), array_shift( $fields ) );
+		foreach( $mock_fields as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $fields[ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_remove_group_field() {
+
 		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'colorpicker', 'group_field' );
 
 		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
 
-		$mock = array(
+		$fields = $field->fields();
+		$mock_fields = array(
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
 				'type' => 'text',
 			),
 		);
-
-		$this->assertEquals( $mock, $field->fields() );
+		foreach( $mock_fields as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $fields[ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_remove_field() {
