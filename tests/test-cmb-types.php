@@ -456,7 +456,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$version = 'ver=' . $wp_version;
 
-		$field = $this->get_field_object( 'wysiwyg' );
+		$field = $this->get_field_object( array( 'type' => 'wysiwyg', 'options' => array( 'quicktags' => false ) ) );
 		$type = $this->get_field_type_object( $field );
 
 		$this->assertHTMLstringsAreEqual(
@@ -656,9 +656,34 @@ class Test_CMB2_Types extends Test_CMB2 {
 	}
 
 	public function test_checkbox_field() {
+		$type_object = $this->get_field_type_object( 'checkbox' );
+		$this->check_box_assertion( array( $type_object, 'render' ) );
+
+		update_post_meta( $type_object->field->object_id, 'field_test_field', 'true' );
+
+		// Test when value exists
+		$this->check_box_assertion( array( $this->get_field_type_object( 'checkbox' ), 'render' ), true );
+
+		$type_object = $this->get_field_type_object( 'checkbox' );
+
+		// Test when value exists again
+		$this->check_box_assertion( $type_object->checkbox(), true );
+
+		// Test when value exists but we tell checkbox it's not checked
+		$this->check_box_assertion( $type_object->checkbox( array(), false ) );
+
+		delete_post_meta( $type_object->field->object_id, 'field_test_field' );
+
+		// Test when value doesn't exist but we tell checkbox it is checked
+		$this->check_box_assertion( $type_object->checkbox( array(), true ), true );
+
+	}
+
+	private function check_box_assertion( $output, $checked = false ) {
+		$checked = $checked ? ' checked="checked"' : '';
 		$this->assertHTMLstringsAreEqual(
-			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
-			$this->capture_render( array( $this->get_field_type_object( 'checkbox' ), 'render' ) )
+			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"'. $checked .'/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
+			is_string( $output ) ? $output : $this->capture_render( $output )
 		);
 	}
 

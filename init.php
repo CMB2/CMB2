@@ -17,7 +17,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.0.8
+ * Version:      2.1.0
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -48,7 +48,7 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_211_Trunk', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -61,14 +61,14 @@ if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      http://webdevstudios.com
 	 */
-	class CMB2_Bootstrap_209_Trunk {
+	class CMB2_Bootstrap_211_Trunk {
 
 		/**
 		 * Current version number
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.0.8';
+		const VERSION = '2.1.1';
 
 		/**
 		 * Current version hook priority.
@@ -77,20 +77,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9990;
+		const PRIORITY = 9988;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_209_Trunk object
+		 * Single instance of the CMB2_Bootstrap_211_Trunk object
 		 *
-		 * @var CMB2_Bootstrap_209_Trunk
+		 * @var CMB2_Bootstrap_211_Trunk
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_209_Trunk object
+		 * Creates/returns the single instance CMB2_Bootstrap_211_Trunk object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_209_Trunk Single instance object
+		 * @return CMB2_Bootstrap_211_Trunk Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -155,12 +155,15 @@ if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
+
 			$loaded = load_plugin_textdomain( 'cmb2', false, '/languages/' );
+
 			if ( ! $loaded ) {
 				$loaded = load_muplugin_textdomain( 'cmb2', '/languages/' );
 			}
+
 			if ( ! $loaded ) {
-				$loaded = load_theme_textdomain( 'cmb2', '/languages/' );
+				$loaded = load_theme_textdomain( 'cmb2', get_stylesheet_directory() . '/languages/' );
 			}
 
 			if ( ! $loaded ) {
@@ -168,11 +171,12 @@ if ( ! class_exists( 'CMB2_Bootstrap_209_Trunk', false ) ) {
 				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}
+
 		}
 
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_209_Trunk::initiate();
+	CMB2_Bootstrap_211_Trunk::initiate();
 
 }

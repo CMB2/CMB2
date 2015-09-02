@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-06-02 15:55+0000\n"
+"PO-Revision-Date: 2015-07-20 21:25+0000\n"
 "Last-Translator: FxB <fxb@wp-translations.org>\n"
 "Language-Team: Hungarian (Hungary) (http://www.transifex.com/projects/p/cmb2/language/hu_HU/)\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr ""
+msgstr "Weboldal URL"
 
 #: example-functions.php:130
 msgid "Test Text Email"
@@ -278,7 +278,7 @@ msgstr ""
 
 #: example-functions.php:517
 msgid "User Field"
-msgstr ""
+msgstr "Felhasználó mező"
 
 #: example-functions.php:540
 msgid "Theme Options Metabox"

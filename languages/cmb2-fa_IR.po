@@ -1,13 +1,14 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
+# wp-asia.ir <wpasia.ir@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-06-17 16:21+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2015-07-11 15:52+0000\n"
+"Last-Translator: wp-asia.ir <wpasia.ir@gmail.com>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/cmb2/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,7 +62,7 @@ msgstr ""
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr ""
+msgstr "آدرس وب سایت"
 
 #: example-functions.php:130
 msgid "Test Text Email"
@@ -73,7 +74,7 @@ msgstr ""
 
 #: example-functions.php:145 example-functions.php:146
 msgid "Time zone"
-msgstr ""
+msgstr "زمان محلی"
 
 #: example-functions.php:152
 msgid "Test Date Picker"
@@ -184,7 +185,7 @@ msgstr ""
 
 #: example-functions.php:323
 msgid "Upload an image or enter a URL."
-msgstr ""
+msgstr "فایل آپلود کنید یا URL را وارد کنید."
 
 #: example-functions.php:329
 msgid "Multiple Files"
@@ -258,11 +259,11 @@ msgstr ""
 
 #: example-functions.php:482
 msgid "Avatar"
-msgstr ""
+msgstr "چهرک"
 
 #: example-functions.php:489
 msgid "Facebook URL"
-msgstr ""
+msgstr "نشانی صفحه فیس بوک"
 
 #: example-functions.php:496
 msgid "Twitter URL"
@@ -381,7 +382,7 @@ msgstr ""
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr ""
+msgstr "زمان"
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"

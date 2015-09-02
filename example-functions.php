@@ -65,9 +65,9 @@ function yourprefix_before_row_if_2( $field_args, $field ) {
 	}
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_demo_metabox' );
+add_action( 'cmb2_admin_init', 'yourprefix_register_demo_metabox' );
 /**
- * Hook in and add a demo metabox. Can only happen on the 'cmb2_init' hook.
+ * Hook in and add a demo metabox. Can only happen on the 'cmb2_admin_init' or 'cmb2_init' hook.
  */
 function yourprefix_register_demo_metabox() {
 
@@ -354,7 +354,7 @@ function yourprefix_register_demo_metabox() {
 
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_about_page_metabox' );
+add_action( 'cmb2_admin_init', 'yourprefix_register_about_page_metabox' );
 /**
  * Hook in and add a metabox that only appears on the 'About' page
  */
@@ -385,7 +385,7 @@ function yourprefix_register_about_page_metabox() {
 
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_repeatable_group_field_metabox' );
+add_action( 'cmb2_admin_init', 'yourprefix_register_repeatable_group_field_metabox' );
 /**
  * Hook in and add a metabox to demonstrate repeatable grouped fields
  */
@@ -451,7 +451,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_user_profile_metabox' );
+add_action( 'cmb2_admin_init', 'yourprefix_register_user_profile_metabox' );
 /**
  * Hook in and add a metabox to add fields to the user profile pages
  */
@@ -523,7 +523,7 @@ function yourprefix_register_user_profile_metabox() {
 
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_theme_options_metabox' );
+add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
 /**
  * Hook in and register a metabox to handle a theme options page
  */

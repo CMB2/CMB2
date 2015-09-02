@@ -420,9 +420,10 @@ class CMB2 {
 	 * @param  string $object_type  Type of object being saved. (e.g., post, user, or comment)
 	 * @param  array  $data_to_save Array of key => value data for saving. Likely $_POST data.
 	 */
-	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
+	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		$this->data_to_save = $data_to_save;
+		// Fall-back to $_POST data
+		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
@@ -607,6 +608,7 @@ class CMB2 {
 	 * @return integer $object_id Object ID
 	 */
 	public function object_id( $object_id = 0 ) {
+		global $pagenow;
 
 		if ( $object_id ) {
 			$this->object_id = $object_id;
@@ -621,7 +623,12 @@ class CMB2 {
 		switch ( $this->object_type() ) {
 			case 'user':
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
-				$object_id = ! $object_id && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				$object_id = ! $object_id && 'user-new.php' != $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				break;
+
+			case 'comment':
+				$object_id = isset( $_REQUEST['c'] ) ? $_REQUEST['c'] : $object_id;
+				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			default:

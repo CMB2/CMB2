@@ -9,10 +9,19 @@
  * @link      http://webdevstudios.com
  */
 
+if ( is_admin() ) {
+	/**
+	 * Fires on the admin side when CMB2 is included/loaded.
+	 *
+	 * In most cases, this should be used to add metaboxes. See example-functions.php
+	 */
+	do_action( 'cmb2_admin_init' );
+}
+
 /**
  * Fires when CMB2 is included/loaded
  *
- * Should be used to add metaboxes. See example-functions.php
+ * Can be used to add metaboxes if needed on the front-end or needed on the front and backend.
  */
 do_action( 'cmb2_init' );
 

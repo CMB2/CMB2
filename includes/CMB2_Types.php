@@ -755,12 +755,26 @@ class CMB2_Types {
 		return $this->multicheck( 'multicheck_inline' );
 	}
 
-	public function checkbox() {
+	public function checkbox( $args = array(), $is_checked = null ) {
+		$defaults = array(
+			'type'  => 'checkbox',
+			'class' => 'cmb2-option cmb2-list',
+			'value' => 'on',
+			'desc'  => '',
+		);
+
 		$meta_value = $this->field->escaped_value();
-		$args = array( 'type' => 'checkbox', 'class' => 'cmb2-option cmb2-list', 'value' => 'on', 'desc' => '' );
-		if ( ! empty( $meta_value ) ) {
-			$args['checked'] = 'checked';
+
+		$is_checked = is_null( $is_checked )
+			? ! empty( $meta_value )
+			: $is_checked;
+
+		if ( $is_checked ) {
+			$defaults['checked'] = 'checked';
 		}
+
+		$args = $this->parse_args( $args, 'checkbox', $defaults );
+
 		return sprintf( '%s <label for="%s">%s</label>', $this->input( $args ), $this->_id(), $this->_desc() );
 	}
 
@@ -805,7 +819,7 @@ class CMB2_Types {
 	}
 
 	public function taxonomy_radio_inline() {
-		$this->taxonomy_radio();
+		return $this->taxonomy_radio();
 	}
 
 	public function taxonomy_multicheck() {
@@ -846,7 +860,7 @@ class CMB2_Types {
 	}
 
 	public function taxonomy_multicheck_inline() {
-		$this->taxonomy_multicheck();
+		return $this->taxonomy_multicheck();
 	}
 
 	public function oembed() {
@@ -952,12 +966,12 @@ class CMB2_Types {
 
 		$this->_desc( true, true );
 
-		// If we're looking at a file in a group, we need to get the non-prefixed id
-		$cached_id = $this->field->group ? $this->field->args( '_id' ) : $this->_id();
+		$cached_id = $this->_id();
 
 		// Reset field args for attachment ID
 		$args = $this->field->args();
-		$args['id'] = $cached_id . '_id';
+		// If we're looking at a file in a group, we need to get the non-prefixed id
+		$args['id'] = ( $this->field->group ? $this->field->args( '_id' ) : $cached_id ) . '_id';
 		unset( $args['_id'], $args['_name'] );
 
 		// And get new field object
@@ -1043,7 +1057,7 @@ class CMB2_Types {
 			esc_html( $this->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
 			$this->get_file_name_from_path( $args['value'] ),
 			$args['value'],
-			esc_html( $this->_text( 'file-download-text', __( 'Download', 'cmb2' ) ) ),
+			esc_html( $this->_text( 'file_download_text', __( 'Download', 'cmb2' ) ) ),
 			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
 			esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ),
 			isset( $args['id_input'] ) ? $args['id_input'] : ''
