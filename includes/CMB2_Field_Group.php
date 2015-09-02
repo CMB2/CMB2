@@ -109,7 +109,13 @@ abstract class CMB2_Field_Group {
 
 		$fields_array = array();
 		foreach ( $this->get_field_objects() as $key => $field_object ) {
-			$fields_array[ $key ] = $field_object->args;
+
+			$fields_array[ $key ] = $field_object->args();
+			$nested_fields = array();
+			foreach ( $field_object->args( 'fields' ) as $this_field ) {
+				$nested_fields[ $this_field[ 'id'] ] = $this_field;
+			}
+			$fields_array[ $key ] = array_merge( $fields_array[ $key ], array( 'fields' => $nested_fields) );
 		}
 
 		return $fields_array;
@@ -199,7 +205,7 @@ abstract class CMB2_Field_Group {
 		if ( ! is_a( $field, 'CMB2_Field' ) ) {
 
 			$field = (array) $field;
-			if ( ! isset( $field[ 'id' ], $field[ 'fields' ] ) || ! is_array( $field[ 'fields' ] ) ) {
+			if ( ! isset( $field[ 'id' ] ) ) {
 				return;
 			}
 
@@ -783,10 +789,7 @@ abstract class CMB2_Field_Group {
 
 		$field_object = $this->get_field_object( $field_id );
 		if ( ! $sub_field_id ) {
-			// Todo: some kludging going on here to see if we can finally clear tests
-			if ( 'group' != $field_object->args[ 'type'] ) {
-				$field_object->args[ $property ] = $value;
-			}
+			$field_object->args[ $property ] = $value;
 		} else {
 			$field_object->args[ $sub_field_id ][ $property ] = $value;
 		}
@@ -826,8 +829,8 @@ abstract class CMB2_Field_Group {
 			return false;
 		}
 
-		if ( ! array_key_exists( $sub_field_id, $field_object->args[ 'fields' ] ) ) {
-			$sub_field_id = $this->search_old_school_array( $sub_field_id, $field_object->args[ 'fields' ] );
+		if ( ! array_key_exists( $sub_field_id, $field_object->get_field_objects() ) ) {
+			$sub_field_id = $this->search_old_school_array( $sub_field_id, $field_object->args( 'fields' ) );
 		}
 
 		return false === $sub_field_id ? false : array(
