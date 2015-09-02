@@ -699,13 +699,27 @@ abstract class CMB2_Field_Group {
 
 		$field_id = is_string( $field ) ? $field : $field[ 'id' ];
 
-		$new_field = new CMB2_Field( array(
-		    'field_args'  => $field,
-		    'object_type' => $this->object_type(),
-		    'object_id'   => $this->object_id(),
-        ) );
-		$this->set_field_object( $field_id, $new_field, $position );
+		$parent_field_id = '';
+		$field_group = null;
+		if ( is_a( $this, 'CMB2_Field' ) && 'group' == $this->args( 'type' ) ) {
+			$parent_field_id = $this->args( 'id' );
 
+			$new_field = new CMB2_Field( array(
+				'field_args'  => $field,
+				'group_field' => $this,
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id()
+			) );
+		} else {
+			$new_field = new CMB2_Field( array(
+				'field_args'  => $field,
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+			) );
+		}
+
+
+		$this->set_field_object( $field_id, $new_field, $position );
 		return $field_id;
 	}
 

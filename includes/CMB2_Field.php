@@ -81,8 +81,6 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		if ( ! empty( $args['group_field'] ) ) {
 			$this->group       = $args['group_field'];
-			$this->object_id   = $this->group->object_id;
-			$this->object_type = $this->group->object_type;
 		} else {
 			$this->object_id   = isset( $args['object_id'] ) && '_' !== $args['object_id'] ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
