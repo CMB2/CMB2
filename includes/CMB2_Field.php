@@ -126,7 +126,13 @@ class CMB2_Field extends CMB2_Field_Group {
 	 * @return mixed        Argument value or false if non-existent
 	 */
 	public function args( $key = '', $_key = '' ) {
-		$arg = $this->_data( 'args', $key );
+
+		if ( $key != 'fields' ) {
+			$arg = $this->_data( 'args', $key );
+		} else {
+			$arg = $this->get_fields();
+		}
+
 
 		if ( 'default' == $key ) {
 
@@ -173,6 +179,11 @@ class CMB2_Field extends CMB2_Field_Group {
 	 * @return mixed            Meta/Option value
 	 */
 	public function get_data( $field_id = '', $args = array() ) {
+
+		if ( 'group' == $this->type() ) {
+			return $this->value();
+		}
+
 		if ( $field_id ) {
 			$args['field_id'] = $field_id;
 		} else if ( $this->group ) {
