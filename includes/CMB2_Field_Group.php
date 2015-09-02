@@ -239,12 +239,12 @@ abstract class CMB2_Field_Group {
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row', $class, '"><div class="cmb-th">';
-			if ( $label ) {
-				echo '<h2 class="cmb-group-name">', $label, '</h2>';
-			}
-			if ( $desc ) {
-				echo '<p class="cmb2-metabox-description">', $desc, '</p>';
-			}
+				if ( $label ) {
+					echo '<h2 class="cmb-group-name">', $label, '</h2>';
+				}
+				if ( $desc ) {
+					echo '<p class="cmb2-metabox-description">', $desc, '</p>';
+				}
 			echo '</div></div>';
 		}
 
@@ -285,49 +285,49 @@ abstract class CMB2_Field_Group {
 		echo '
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
-		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
-		}
+			if ( $field_group->args( 'repeatable' ) ) {
+				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
+			}
 
-		echo '
+			echo '
 			<div class="cmbhandle" title="', __( 'Click to toggle', 'cmb2' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
-		// Loop and render repeatable group fields
-		foreach ( $field_group->get_field_objects() as $field_object ) {
-			if ( 'hidden' == $field_object->args[ 'type' ] ) {
+				// Loop and render repeatable group fields
+				foreach ( $field_group->get_field_objects() as $field_object ) {
+					if ( 'hidden' == $field_object->args[ 'type' ] ) {
 
-				// Save rendering for after the metabox
-				$this->add_hidden_field( array(
-					'field_args'  => $field_object->args,
-					'group_field' => $field_group,
-				) );
+						// Save rendering for after the metabox
+						$this->add_hidden_field( array(
+							'field_args'  => $field_object->args,
+							'group_field' => $field_group,
+						) );
 
-			} elseif( 'group' == $field_object->args['type'] ) {
+					} elseif( 'group' == $field_object->args['type'] ) {
 
-				if ( ! isset( $field_object->args['show_names'] ) ) {
-					$field_object->args['show_names'] = $this->get_show_names();
+						if ( ! isset( $field_object->args['show_names'] ) ) {
+							$field_object->args['show_names'] = $this->get_show_names();
+						}
+						$this->render_group( $field_object );
+
+					} else {
+
+						$field_object->args[ 'show_names' ] = $field_group->args( 'show_names' );
+						$field_object->args[ 'context' ]    = $field_group->args( 'context' );
+						$field_object->render_field();
+					}
 				}
-				$this->render_group( $field_object );
-
-			} else {
-
-				$field_object->args[ 'show_names' ] = $field_group->args( 'show_names' );
-				$field_object->args[ 'context' ]    = $field_group->args( 'context' );
-				$field_object->render_field();
-			}
-		}
-		if ( $field_group->args( 'repeatable' ) ) {
-			echo '
+				if ( $field_group->args( 'repeatable' ) ) {
+					echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
 							<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';
-		}
-		echo '
+				}
+			echo '
 			</div>
 		</div>
 		';
