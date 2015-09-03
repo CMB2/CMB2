@@ -19,6 +19,8 @@ window.CMB2 = (function(window, document, $, undefined){
 	var cmb = {
 		idNumber        : false,
 		repeatEls       : 'input:not([type="button"],[id^=filelist]),select,textarea,.cmb2-media-status',
+		noEmpty         : 'input:not([type="button"]):not([type="radio"]):not([type="checkbox"]),textarea',
+		repeatUpdate    : 'input:not([type="button"]),select,textarea,label',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
 		neweditor_id    : [],
@@ -311,10 +313,11 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.cleanRow = function( $row, prevNum, group ) {
-
-		var $inputs = $row.find( 'input:not([type="button"]), select, textarea, label' );
-		var $other  = $row.find('[id]').not( 'input:not([type="button"]), select, textarea, label' );
+		var $inputs = $row.find( cmb.repeatUpdate );
 		if ( group ) {
+
+			var $other  = $row.find( '[id]' ).not( cmb.repeatUpdate );
+
 			// Remove extra ajaxed rows
 			$row.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
 
@@ -491,7 +494,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.emptyValue = function( evt, row ) {
-		$('input:not([type="button"]:not([type="radio"]):not([type="checkbox"]), textarea', row).val('');
+		$( cmb.noEmpty, row ).val( '' );
 	};
 
 	cmb.addGroupRow = function( evt ) {
