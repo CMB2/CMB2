@@ -128,7 +128,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.toggleCheckBoxes = function( evt ) {
 		evt.preventDefault();
 		var $self = $(this);
-		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]' );
+		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]:not([disabled])' );
 
 		// If the button has already been clicked once...
 		if ( $self.data( 'checked' ) ) {
