@@ -1,9 +1,10 @@
 # CMB2
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)](https://travis-ci.org/WebDevStudios/CMB2)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg?style=flat)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
-[![Scrutinizer Coverage](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
+[![Travis](https://img.shields.io/travis/WebDevStudios/CMB2.svg)](https://travis-ci.org/WebDevStudios/CMB2/)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/WebDevStudios/CMB2.svg)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
+[![Dockunit Status](https://dockunit.io/svg/WebDevStudios/CMB2?trunk)](https://dockunit.io/projects/WebDevStudios/CMB2#trunk)
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 **Contributors:**      [webdevstudios](https://github.com/webdevstudios), [jtsternberg](https://github.com/jtsternberg), [gregrickaby](https://github.com/gregrickaby), [tw2113](https://github.com/tw2113), [patrickgarman](https://github.com/pmgarman), [JPry](https://github.com/JPry)
@@ -11,13 +12,13 @@
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Tested up to:**      4.3  
-**Stable tag:**        2.0.9  
+**Stable tag:**        2.1.0  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
 
-[![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg?style=flat)](https://wordpress.org/plugins/cmb2/)
-[![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg?style=flat)](https://wordpress.org/plugins/cmb2/)
-[![Wordpress rating](http://img.shields.io/wordpress/plugin/r/cmb2.svg?style=flat)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress rating](http://img.shields.io/wordpress/plugin/r/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
 
 Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
 
@@ -51,6 +52,7 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 #### Custom Field Types
 * [CMB2 Field Type: CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): `custom_attached_posts`, for attaching posts to a page.
 * [CMB2 Field Type: CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
+* [CMB2 Field Type: CMB2 User Search field](https://github.com/Mte90/CMB2-User-Search-field) from [Mte90](https://github.com/Mte90): `user_search_text` adds a user-search dialog for searching/attaching other User IDs.
 * [CMB2 Field Type: CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) from [JayWood](https://github.com/JayWood): `rgba_colorpicker ` adds a color picker that supports RGBa, (RGB with transparency (alpha) value).
 * [CMB2 Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
 	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
@@ -63,6 +65,7 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 * [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [mattkrupnik](https://github.com/mattkrupnik/): Adds a jQuery UI Slider field.
 * [WDS CMB2 Date Range Field](https://github.com/WebDevStudios/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
 * [CMB2 Remote Image Select](https://github.com/WebDevStudios/CMB2-Remote-Image-Select-Field) from [JayWood](https://github.com/JayWood) of [WebDevStudios](https://github.com/WebDevStudios): Allows users to enter a URL in a text field and select a single image for use in post meta. Similar to Facebook's featured image selector.
+* [CMB Field Type: Sorter](https://wordpress.org/plugins/cmb-field-type-sorter/): This plugin gives you two CMB field types based on the Sorter script.
 
 #### Other Helpful Resources
 * [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
@@ -71,6 +74,9 @@ You can see a list of available field types [here](https://github.com/WebDevStud
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
 * [CMB2 Example Theme](https://github.com/WebDevStudios/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
 * [facetwp-cmb2](https://github.com/FacetWP/facetwp-cmb2): FacetWP integration with CMB2.
+* [CMB2-grid](https://github.com/origgami/CMB2-grid) from [origgami](https://github.com/origgami/): A grid system for WordPress CMB2 library that allows the creation of columns for a better layout in the admin.
+* [CMB2 Conditionals](https://github.com/jcchavezs/cmb2-conditionals) from [jcchavezs](https://github.com/jcchavezs/): Allows developers to relate fields so the display of one is conditional on the value of another.
+* [CMB2 Metabox Code Generator](http://hasinhayder.github.io/cmb2-metabox-generator/) from [hasinhayder](https://github.com/hasinhayder/): Use this code generator to generate fully functional CMB2 metaboxes by visually adding fields in the designer.
 
 ## Contribution
 All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/CMB2/tree/trunk) and pull request against it. Please read the [CONTRIBUTING](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md) doc for more details.
@@ -100,6 +106,12 @@ If including the library in your plugin or theme:
 4. Profit.
 
 ## Most Recent Changes
+
+### 2.1.0
+
+#### Bug Fixes
+
+* Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/WebDevStudios/CMB2/pull/417)).
 
 ### 2.0.9
 

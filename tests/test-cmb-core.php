@@ -22,7 +22,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->metabox_array = array(
 			'id' => $this->cmb_id,
 			'fields' => array(
-				array(
+				'test_test' => array(
 					'name'        => 'Name',
 					'description' => 'Description',
 					'id'          => 'test_test',
@@ -38,7 +38,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->metabox_array2 = array(
 			'id' => 'test2',
 			'fields' => array(
-				array(
+				'test_test' => array(
 					'name' => 'Name',
 					'id'   => 'test_test',
 					'type' => 'text',
@@ -51,7 +51,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'title'         => 'Theme Options Metabox',
 			'show_on'    => array( 'options-page' => array( 'theme_options', ), ),
 			'fields'        => array(
-				array(
+				'bg_color' => array(
 					'name'    => 'Site Background Color',
 					'desc'    => 'field description (optional)',
 					'id'      => 'bg_color',
@@ -59,6 +59,23 @@ class Test_CMB2_Core extends Test_CMB2 {
 					'default' => '#ffffff'
 				),
 			)
+		);
+
+		$this->user_metabox_array = array(
+			'id'               => 'user_metabox',
+			'title'            => 'User Profile Metabox',
+			'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
+			'show_names'       => true,
+			'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
+		    'fields'           => array(
+			    'extra_info' => array(
+				    'name'     => 'Extra Info',
+				    'desc'     => 'field description (optional)',
+				    'id'       => 'extra_info',
+				    'type'     => 'title',
+				    'on_front' => false,
+			    )
+		    )
 		);
 
 		$this->defaults = array(
@@ -183,6 +200,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb1 = cmb2_get_metabox( $this->metabox_array2 );
 		$cmb2 = new CMB2( $this->metabox_array2 );
 		$this->assertEquals( $cmb1, $cmb2 );
+
+		$cmb_user = cmb2_get_metabox( $this->user_metabox_array );
+		$this->assertEquals( 'user', $cmb_user->mb_object_type() );
 	}
 
 	public function test_cmb2_get_field() {
@@ -292,7 +312,18 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb = cmb2_get_metabox( 'test2' );
 
 		$after_args_parsed = wp_parse_args( $this->metabox_array2, $cmb->get_metabox_defaults() );
-		$this->assertEquals( $after_args_parsed, $cmb->meta_box );
+		foreach ( $after_args_parsed as $key => $value ) {
+			// Field are tested separately, below
+			if ( 'fields' != $key ) {
+				$this->assertEquals( $value, $cmb->meta_box[ $key ] );
+			}
+		}
+
+		foreach( $after_args_parsed[ 'fields' ] as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $cmb->meta_box[ 'fields' ][ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_update_field_property() {
@@ -303,7 +334,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$test = $cmb->update_field_property( 'test_test', 'type', 'textarea' );
 
-		$this->assertEquals( 0, $test );
+		$this->assertEquals( 'test_test', $test );
 
 		$field_id = $cmb->update_field_property( 'test_test', 'name', 'Test Name' );
 
@@ -334,15 +365,21 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->assertEquals( 'textarea', $field->type() );
 		$this->assertEquals( array( 'placeholder' => "I'm some placeholder text" ), $field->attributes() );
-		$this->assertEquals( array(
-			array(
+
+		$field_array = array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',
 				'attributes' => array( 'placeholder' => "I'm some placeholder text" ),
-			),
-		), $cmb->prop( 'fields' ) );
-
+			)
+		);
+		$test_fields = $cmb->prop( 'fields' );
+		foreach( $field_array as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value,  $test_fields[ $field_id ][ $prop_name] );
+			}
+		}
 	}
 
 	public function test_add_field() {
@@ -370,8 +407,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
-		$this->assertEquals( array(
-			array(
+		$field_array = array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',
@@ -383,9 +420,15 @@ class Test_CMB2_Core extends Test_CMB2 {
 				'id'         => 'demo_text2',
 				'type'       => 'text',
 				'attributes' => array( 'placeholder' => "I'm some placeholder text" ),
-			),
-		), $cmb->prop( 'fields' ) );
+			)
+		);
+		$test_fields = $cmb->prop( 'fields' );
 
+		foreach( $field_array as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value,  $test_fields[ $field_id ][ $prop_name] );
+			}
+		}
 	}
 
 	public function test_add_group_field( $do_assertions = null ) {
@@ -393,7 +436,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
 
-		// This should return false because we don't have a 'demo_text2' field
+		// This should return false because we don't have a 'group_field' field
 		$field_id = $cmb->update_field_property( 'group_field', 'type', 'group' );
 		$this->assertFalse( $field_id );
 
@@ -568,7 +611,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$fields = $field->fields();
-		$mock = array(
+		$mock_fields = array(
 			'colorpicker' => array(
 				'name' => 'Colorpicker',
 				'id'   => 'colorpicker',
@@ -580,34 +623,43 @@ class Test_CMB2_Core extends Test_CMB2 {
 				'type' => 'text',
 			),
 		);
-
-		$this->assertEquals( $mock, $fields );
-		$this->assertEquals( array_shift( $mock ), array_shift( $fields ) );
+		foreach( $mock_fields as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $fields[ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_remove_group_field() {
+
 		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'colorpicker', 'group_field' );
 
 		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
 
-		$mock = array(
+		$fields = $field->fields();
+		$mock_fields = array(
 			'first_field' => array(
 				'name' => 'Field 1',
 				'id'   => 'first_field',
 				'type' => 'text',
 			),
 		);
-
-		$this->assertEquals( $mock, $field->fields() );
+		foreach( $mock_fields as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value, $fields[ $field_id ][ $prop_name ] );
+			}
+		}
 	}
 
 	public function test_remove_field() {
+
 		$cmb = cmb2_get_metabox( 'test2' );
 		$cmb->remove_field( 'group_field' );
 		$cmb->remove_field( 'group_field2' );
-		$this->assertEquals( array(
-			array(
+
+		$field_array = array(
+			'test_test' => array(
 				'name'       => 'Test Name',
 				'id'         => 'test_test',
 				'type'       => 'textarea',
@@ -619,8 +671,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 				'id'         => 'demo_text2',
 				'type'       => 'text',
 				'attributes' => array( 'placeholder' => "I'm some placeholder text" ),
-			),
-		), $cmb->prop( 'fields' ) );
+			)
+		);
+		$test_fields = $cmb->prop( 'fields' );
+		foreach( $field_array as $field_id => $field_props_array ) {
+			foreach( $field_props_array as $prop_name => $prop_value ) {
+				$this->assertEquals( $prop_value,  $test_fields[ $field_id ][ $prop_name] );
+			}
+		}
 	}
 
 	public function test_get_sanitized_values() {
@@ -675,6 +733,82 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$args['save_fields'] = false;
 		$cmb = new CMB2( $args );
 		$this->assertFalse( $cmb->prop( 'save_fields' ) );
+	}
+
+	public function test_cmb_magic_getters() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		$this->assertEquals( 'test', $cmb->cmb_id );
+		$this->assertEquals( array(), $cmb->updated );
+		$this->assertEquals( 0, $cmb->object_id );
+	}
+
+	/**
+	 * @expectedException Test_CMB2_Exception
+	 */
+	public function test_invalid_cmb_magic_getter() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		try {
+			// Calling a non-existent getter property should generate an exception
+			$cmb->foo_bar_baz;
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
+
+	}
+
+	public function test_cmb2_props() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		// Test known state of all props except fields
+		$prop_values = array(
+			'id'               => 'test',
+			'title'            => '',
+			'type'             => '',
+			'object_types'     => array(),
+			'context'          => 'normal',
+			'priority'         => 'high',
+			'show_names'       => true,
+			'show_on_cb'       => null,
+			'show_on'          => array(),
+			'cmb_styles'       => true,
+			'enqueue_js'       => true,
+			'hookup'           => true,
+			'save_fields'      => true,
+			'closed'           => false,
+			'new_user_section' => 'add-new-user'
+		);
+		foreach( $prop_values as $prop_key => $expected_value ) {
+			$this->assertEquals( $expected_value, $cmb->prop( $prop_key ) );
+		}
+
+		// Test adding a new property
+		$new_prop_name   = 'new_prop';
+		$new_prop_value  = 'new value';
+		$unused_fallback = 'should not be used';
+
+		// Property is unset so the fallback should be used
+		$prop_value = $cmb->prop( $new_prop_name, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// Property is now set so the fallback should not overwrite
+		$prop_value = $cmb->prop( $new_prop_name, $unused_fallback );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// Test with no fallback specified
+		$prop_value = $cmb->prop( $new_prop_name );
+		$this->assertEquals( $new_prop_value, $prop_value);
+
+		// The new property should show up in the meta_box array as well
+		$prop_value = $cmb->meta_box[ $new_prop_name ];
+		$this->assertEquals( $new_prop_value, $prop_value);
+
 	}
 
 }
