@@ -20,7 +20,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
-			'id' => $this->cmb_id,
+			'id'     => $this->cmb_id,
 			'fields' => array(
 				'test_test' => array(
 					'name'        => 'Name',
@@ -36,7 +36,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->metabox_array2 = array(
-			'id' => 'test2',
+			'id'     => 'test2',
 			'fields' => array(
 				'test_test' => array(
 					'name' => 'Name',
@@ -47,10 +47,10 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->option_metabox_array = array(
-			'id'            => 'options_page',
-			'title'         => 'Theme Options Metabox',
-			'show_on'    => array( 'options-page' => array( 'theme_options', ), ),
-			'fields'        => array(
+			'id'      => 'options_page',
+			'title'   => 'Theme Options Metabox',
+			'show_on' => array( 'options-page' => array( 'theme_options', ), ),
+			'fields'  => array(
 				'bg_color' => array(
 					'name'    => 'Site Background Color',
 					'desc'    => 'field description (optional)',
@@ -306,6 +306,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	public function test_boxes_get() {
+
 		new Test_CMB2_Object( $this->metabox_array2 );
 
 		// Retrieve the instance

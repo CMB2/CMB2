@@ -248,8 +248,8 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 		'form_format' => '<form class="cmb-form" method="post" id="%1$s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%2$s">%3$s<input type="submit" name="submit-cmb" value="%4$s" class="button-primary"></form>',
 		'save_button' => __( 'Save', 'cmb2' ),
 		'object_type' => $cmb->mb_object_type(),
-		'cmb_styles'  => $cmb->prop( 'cmb_styles' ),
-		'enqueue_js'  => $cmb->prop( 'enqueue_js' ),
+		'cmb_styles'  => $cmb->get_cmb_styles(),
+		'enqueue_js'  => $cmb->get_enqueue_js(),
 	) );
 
 	// Set object type explicitly (rather than trying to guess from context)
@@ -259,7 +259,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	// check permissions
 	// @todo more hardening?
 	if (
-		$cmb->prop( 'save_fields' )
+		$cmb->get_save_fields()
 		// check nonce
 		&& isset( $_POST['submit-cmb'], $_POST['object_id'], $_POST[ $cmb->nonce() ] )
 		&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
@@ -282,7 +282,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$format_parts = explode( '%3$s', $form_format );
 
 	// Show cmb form
-	printf( $format_parts[0], $cmb->cmb_id, $object_id );
+	printf( $format_parts[0], $cmb->get_cmb_id(), $object_id );
 	$cmb->show_form();
 
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {

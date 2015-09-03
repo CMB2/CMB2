@@ -14,14 +14,7 @@
  * @method string type()
  * @method mixed fields()
  */
-class CMB2_Field {
-
-	/**
-	 * Metabox object id
-	 * @var   mixed
-	 * @since 1.1.0
-	 */
-	public $object_id = null;
+class CMB2_Field extends CMB2_Field_Group {
 
 	/**
 	 * Metabox object type
@@ -88,8 +81,6 @@ class CMB2_Field {
 
 		if ( ! empty( $args['group_field'] ) ) {
 			$this->group       = $args['group_field'];
-			$this->object_id   = $this->group->object_id;
-			$this->object_type = $this->group->object_type;
 		} else {
 			$this->object_id   = isset( $args['object_id'] ) && '_' !== $args['object_id'] ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
@@ -133,7 +124,13 @@ class CMB2_Field {
 	 * @return mixed        Argument value or false if non-existent
 	 */
 	public function args( $key = '', $_key = '' ) {
-		$arg = $this->_data( 'args', $key );
+
+		if ( $key != 'fields' ) {
+			$arg = $this->_data( 'args', $key );
+		} else {
+			$arg = $this->get_fields();
+		}
+
 
 		if ( 'default' == $key ) {
 
@@ -180,6 +177,11 @@ class CMB2_Field {
 	 * @return mixed            Meta/Option value
 	 */
 	public function get_data( $field_id = '', $args = array() ) {
+
+		if ( 'group' == $this->type() ) {
+			return $this->value();
+		}
+
 		if ( $field_id ) {
 			$args['field_id'] = $field_id;
 		} else if ( $this->group ) {

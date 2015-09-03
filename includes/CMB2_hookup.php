@@ -91,7 +91,7 @@ class CMB2_hookup {
 
 		} elseif ( 'user' == $this->object_type ) {
 
-			$priority = $this->cmb->prop( 'priority' );
+			$priority = $this->cmb->get_priority();
 
 			if ( ! is_numeric( $priority ) ) {
 				switch ( $priority ) {
@@ -171,10 +171,10 @@ class CMB2_hookup {
 	public function do_scripts( $hook ) {
 		// only enqueue our scripts/styles on the proper pages
 		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'page-new.php', 'page.php', 'comment.php' ), true ) ) {
-			if ( $this->cmb->prop( 'cmb_styles' ) ) {
+			if ( $this->cmb->get_cmb_styles() ) {
 				self::enqueue_cmb_css();
 			}
-			if ( $this->cmb->prop( 'enqueue_js' ) ) {
+			if ( $this->cmb->get_enqueue_js() ) {
 				self::enqueue_cmb_js();
 			}
 		}
@@ -190,7 +190,7 @@ class CMB2_hookup {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
+		foreach ( $this->cmb->get_object_types() as $post_type ) {
 			/**
 			 * To keep from registering an actual post-screen metabox,
 			 * omit the 'title' attribute from the metabox registration array.
@@ -200,13 +200,13 @@ class CMB2_hookup {
 			 * This is a good solution if you want to output your metaboxes
 			 * Somewhere else in the post-screen
 			 */
-			if ( $this->cmb->prop( 'title' ) ) {
+			if ( $this->cmb->get_title() ) {
 
-				if ( $this->cmb->prop( 'closed' ) ) {
-					add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
+				if ( $this->cmb->get_closed() ) {
+					add_filter( "postbox_classes_{$post_type}_{$this->cmb->get_cmb_id()}", array( $this, 'close_metabox_class' ) );
 				}
 
-				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+				add_meta_box( $this->cmb->get_cmb_id(), $this->cmb->get_title(), array( $this, 'metabox_callback' ), $post_type, $this->cmb->get_context(), $this->cmb->get_priority() );
 			}
 		}
 	}
@@ -236,7 +236,7 @@ class CMB2_hookup {
 	 * @since  1.0.0
 	 */
 	public function user_new_metabox( $section ) {
-		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
+		if ( $section == $this->cmb->get_new_user_section() ) {
 			$object_id = $this->cmb->object_id();
 			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
 			$this->user_metabox();
@@ -257,10 +257,10 @@ class CMB2_hookup {
 			return;
 		}
 
-		if ( $this->cmb->prop( 'cmb_styles' ) ) {
+		if ( $this->cmb->get_cmb_styles() ) {
 			self::enqueue_cmb_css();
 		}
-		if ( $this->cmb->prop( 'enqueue_js' ) ) {
+		if ( $this->cmb->get_enqueue_js() ) {
 			self::enqueue_cmb_js();
 		}
 
@@ -351,14 +351,14 @@ class CMB2_hookup {
 	 */
 	public function can_save( $type = '' ) {
 		return (
-			$this->cmb->prop( 'save_fields' )
+			$this->cmb->get_save_fields()
 			// check nonce
 			&& isset( $_POST[ $this->cmb->nonce() ] )
 			&& wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 			// check if autosave
 			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			// get the metabox types & compare it to this type
-			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
+			&& ( $type && in_array( $type, $this->cmb->get_object_types() ) )
 		);
 	}
 

@@ -27,7 +27,7 @@ class CMB2_Boxes {
 	 * @param CMB2 $cmb_instance CMB2 instance.
 	 */
 	public static function add( CMB2 $cmb_instance ) {
-		self::$cmb2_instances[ $cmb_instance->cmb_id ] = $cmb_instance;
+		self::$cmb2_instances[ $cmb_instance->get_cmb_id() ] = $cmb_instance;
 	}
 
 	/**
