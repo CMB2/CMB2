@@ -284,7 +284,7 @@ class CMB2_Types {
 	 * @since  1.0.0
 	 */
 	public function render_repeatable_field() {
-		$table_id = $this->field->id() . '_repeat';
+		$table_id = $this->field->args( '_id' ) . '_repeat';
 
 		$this->_desc( true, true, true );
 		?>
@@ -406,7 +406,7 @@ class CMB2_Types {
 	 * @return string          Id attribute
 	 */
 	public function _id( $suffix = '' ) {
-		return $this->field->id() . $suffix . ( $this->field->args( 'repeatable' ) ? '_' . $this->iterator . '" data-iterator="' . $this->iterator : '' );
+		return $this->field->args( '_id' ) . $suffix . ( $this->field->args( 'repeatable' ) ? '_' . $this->iterator . '" data-iterator="' . $this->iterator : '' );
 	}
 
 	/**

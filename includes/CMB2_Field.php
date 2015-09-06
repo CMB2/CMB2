@@ -178,10 +178,6 @@ class CMB2_Field extends CMB2_Field_Group {
 	 */
 	public function get_data( $field_id = '', $args = array() ) {
 
-		if ( 'group' == $this->type() ) {
-			return $this->value();
-		}
-
 		if ( $field_id ) {
 			$args['field_id'] = $field_id;
 		} else if ( $this->group ) {
@@ -742,7 +738,7 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		$style = ! $this->args( 'show_names' ) ? ' style="display:none;"' : '';
 
-		return sprintf( "\n" . '<label%1$s for="%2$s">%3$s</label>' . "\n", $style, $this->id(), $this->args( 'name' ) );
+		return sprintf( "\n" . '<label%1$s for="%2$s">%3$s</label>' . "\n", $style, $this->args( '_id' ), $this->args( 'name' ) );
 	}
 
 	/**
@@ -768,7 +764,7 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		$conditional_classes = array(
 			'cmb-type-' . str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
-			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->id() ) )    => true,
+			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->args( '_id' ) ) )    => true,
 			'cmb-repeat'             => $this->args( 'repeatable' ),
 			'cmb-repeat-group-field' => $this->group,
 			'cmb-inline'             => $this->args( 'inline' ),
@@ -963,7 +959,7 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		if ( $this->group ) {
 
-			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
+			$args['_id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
 			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
 		}
 
