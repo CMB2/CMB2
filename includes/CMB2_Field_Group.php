@@ -627,10 +627,17 @@ abstract class CMB2_Field_Group {
 		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
 		$field_object = $this->get_field_object( $index );
 		if ( ! is_null( $field_object ) ) {
-			// Todo: Hacked this to ensure field objects get updated if data was inserted after instantiation
+
+			// Todo: Hacked this to ensure field objects get updated if data was changed after instantiation
 			$field_object->object_id = $this->object_id;
 			$field_object->object_type = $this->object_type;
 			$field_object->escaped_value = null;
+
+			// Also Todo: duplication is getting messier and messier without a field object refactor.  Duct tape only here
+			if( is_array( $field ) && isset( $field[ 'options' ] ) ) {
+				$field_object->args[ 'options' ] = $field[ 'options' ];
+			}
+
 			$field_object->value = $field_object->get_data();
 		} else {
 			$field_object = new CMB2_Field( $this->get_field_args( $field_id, $field, $sub_field_id, $field_group ) );
