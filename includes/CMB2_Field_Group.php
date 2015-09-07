@@ -635,6 +635,10 @@ abstract class CMB2_Field_Group {
 
 			// Also Todo: duplication is getting messier and messier without a field object refactor.  Duct tape only here
 			if( is_array( $field ) && isset( $field[ 'options' ] ) ) {
+				// Here's the rub: we already had a field object tucked away but someone may have gotten an instance,
+				// changed some options, and then passed the arg array-- not the field object-- to something that calls
+				// through to here.  The expected behavior per unit tests is that those changed options persist, so we
+				// make sure to copy them over if they exist.  A better solution is badly needed.
 				$field_object->args[ 'options' ] = $field[ 'options' ];
 			}
 
