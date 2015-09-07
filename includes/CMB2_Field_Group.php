@@ -435,7 +435,7 @@ abstract class CMB2_Field_Group {
 		 *                            Will only include field ids that had values change.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->get_cmb_id(), $this->get_updated(), $this );
+		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->get_id(), $this->get_updated(), $this );
 
 		/**
 		 * Fires after all fields have been saved.
@@ -451,7 +451,7 @@ abstract class CMB2_Field_Group {
 		 *                            Will only include field ids that had values change.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_save_{$object_type}_fields_{$this->get_cmb_id()}", $object_id, $this->get_updated(), $this );
+		do_action( "cmb2_save_{$object_type}_fields_{$this->get_id()}", $object_id, $this->get_updated(), $this );
 
 	}
 
@@ -474,7 +474,7 @@ abstract class CMB2_Field_Group {
 		 * @param array $cmb       This CMB2 object
 		 * @param int   $object_id The ID of the current object
 		 */
-		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->get_cmb_id()}", $this, $this->object_id() );
+		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->get_id()}", $this, $this->object_id() );
 
 		// Remove the show_on properties so saving works
 		$this->set_show_on( array() );

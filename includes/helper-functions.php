@@ -282,7 +282,7 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$format_parts = explode( '%3$s', $form_format );
 
 	// Show cmb form
-	printf( $format_parts[0], $cmb->get_cmb_id(), $object_id );
+	printf( $format_parts[0], $cmb->get_id(), $object_id );
 	$cmb->show_form();
 
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
