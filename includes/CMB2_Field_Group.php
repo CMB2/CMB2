@@ -102,6 +102,17 @@ abstract class CMB2_Field_Group {
 		return $data_to_save;
 	}
 
+	public function get_field_data_to_save( $field_name ) {
+
+		$field_data_to_save = null;
+
+		if( isset( $this->data_to_save[ $field_name ] ) ) {
+			$field_data_to_save = $this->data_to_save[ $field_name ];
+		}
+
+		return $field_data_to_save;
+	}
+
 	/**
 	 * @return array
 	 */
@@ -549,28 +560,21 @@ abstract class CMB2_Field_Group {
 	 */
 	public function save_group( $args ) {
 
-		if ( ! isset( $args[ 'id' ], $args[ 'fields' ], $this->get_data_to_save()[ $args[ 'id' ] ] ) || ! is_array( $args[ 'fields' ] ) ) {
+		$field_data_to_save = $this->get_field_data_to_save( $args[ 'id' ] );
+		if ( ! isset( $args[ 'id' ] )  || is_null( $field_data_to_save ) ) {
 			return;
 		}
 
-		$field_group = new CMB2_Field( array(
-			'field_args'  => $args,
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		) );
+		$field_group = $this->get_field_object( $args[ 'id' ] );
 		$base_id     = $field_group->id();
 		$old         = $field_group->get_data();
 		// Check if group field has sanitization_cb
-		$group_vals         = $field_group->sanitization_cb( $this->get_data_to_save()[ $base_id ] );
+		$group_vals         = $field_group->sanitization_cb( $this->get_field_data_to_save( $base_id ) );
 		$saved              = array();
 		$field_group->index = 0;
 
-		foreach ( array_values( $field_group->fields() ) as $field_args ) {
-			$field  = new CMB2_Field( array(
-				'field_args'  => $field_args,
-				'group_field' => $field_group,
-			) );
-			$sub_id = $field->id( true );
+		foreach ( array_values( $field_group->get_field_objects() ) as $field_object ) {
+			$sub_id = $field_object->args( 'id' );
 
 			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
 
@@ -580,9 +584,9 @@ abstract class CMB2_Field_Group {
 					: false;
 
 				// Sanitize
-				$new_val = $field->sanitization_cb( $new_val );
+				$new_val = $field_object->sanitization_cb( $new_val );
 
-				if ( 'file' == $field->type() && is_array( $new_val ) ) {
+				if ( 'file' == $field_object->type() && is_array( $new_val ) ) {
 					// Add image ID to the array stack
 					$saved[ $field_group->index ][ $new_val[ 'field_id' ] ] = $new_val[ 'attach_id' ];
 					// Reset var to url string
