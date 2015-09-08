@@ -322,7 +322,7 @@ abstract class CMB2_Field_Group {
 						// but that is only called on instantiation of the field object.  Early instantiation is missing
 						// getting these set.
 						$field_object->args[ '_id' ] = $field_object->group->args( 'id' ) . '_' . $field_object->group->index . '_' . $field_object->args['id'];
-						$field_object->args[ '_name' ] = $field_object->group->args( 'id' ) . '[' . $field_object->group->index . '][' . $field_object->args['name'] . ']';
+						$field_object->args[ '_name' ] = $field_object->group->args( 'id' ) . '[' . $field_object->group->index . '][' . $field_object->args['id'] . ']';
 
 						// Todo: Same pattern as the get_field() hack again
 						// With early instantiation we don't need to call get_field() here any more but
