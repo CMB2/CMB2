@@ -316,6 +316,14 @@ abstract class CMB2_Field_Group {
 						$field_object->args[ 'show_names' ] = $field_group->args( 'show_names' );
 						$field_object->args[ 'context' ]    = $field_group->args( 'context' );
 
+						// Todo: Another puzzle to solve:
+						// To build the name and id attribs for the markup we need to know which row index this is among
+						// multiple records in a repeating group.  This is done in CMB2_Field::_set_field_defaults(),
+						// but that is only called on instantiation of the field object.  Early instantiation is missing
+						// getting these set.
+						$field_object->args[ '_id' ] = $field_object->group->args( 'id' ) . '_' . $field_object->group->index . '_' . $field_object->args['id'];
+						$field_object->args[ '_name' ] = $field_object->group->args( 'id' ) . '[' . $field_object->group->index . '][' . $field_object->args['name'] . ']';
+
 						// Todo: Same pattern as the get_field() hack again
 						// With early instantiation we don't need to call get_field() here any more but
 						// we do need to call get_data() in order to copy over this row's data for each
