@@ -932,7 +932,7 @@ class CMB2_Types {
 		// Reset field args for attachment ID
 		$args = $this->field->args();
 		// If we're looking at a file in a group, we need to get the non-prefixed id
-		$args['id'] = ( $this->field->group ? $this->field->args( '_id' ) : $cached_id ) . '_id';
+		$args['id'] = ( $this->field->group ? $this->field->args( 'id' ) : $cached_id ) . '_id';
 		unset( $args['_id'], $args['_name'] );
 
 		// And get new field object
