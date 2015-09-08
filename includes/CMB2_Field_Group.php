@@ -315,6 +315,16 @@ abstract class CMB2_Field_Group {
 
 						$field_object->args[ 'show_names' ] = $field_group->args( 'show_names' );
 						$field_object->args[ 'context' ]    = $field_group->args( 'context' );
+
+						// Todo: Same pattern as the get_field() hack again
+						// With early instantiation we don't need to call get_field() here any more but
+						// we do need to call get_data() in order to copy over this row's data for each
+						// individual field inside the group field.  But in order for get_data() to work
+						// we also need to copy a few other properties to keep them in sync.
+						$field_object->object_id = $this->object_id;
+						$field_object->object_type = $this->object_type;
+						$field_object->escaped_value = null;
+						$field_object->value = $field_object->get_data();
 						$field_object->render_field();
 					}
 				}
