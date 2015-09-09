@@ -56,7 +56,7 @@ class CMB2_Utils {
 			foreach ( $query->posts as $post_id ) {
 				$meta = wp_get_attachment_metadata( $post_id );
 				$original_file       = basename( $meta['file'] );
-				$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+				$cropped_image_files = isset( $meta['sizes'] ) ? wp_list_pluck( $meta['sizes'], 'file' ) : array();
 				if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
 					$attachment_id = $post_id;
 					break;
