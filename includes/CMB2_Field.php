@@ -28,7 +28,7 @@ class CMB2_Field extends CMB2_Field_Group {
 	 * @var   mixed
 	 * @since 1.1.0
 	 */
-	public $args = array();
+	protected $args = array();
 
 	/**
 	 * Field group object or false (if no group)
@@ -94,6 +94,38 @@ class CMB2_Field extends CMB2_Field_Group {
 	}
 
 	/**
+	 * Note: we have to return a reference in order to make the args array
+	 * writable for backward compatibility
+	 *
+	 * @param string $name
+	 *
+	 * @return array|mixed|null
+	 */
+	public function &__get( $name ) {
+
+		$value = null;
+
+		switch ( $name ) {
+			case 'args':
+				/**
+				 * Note: we have to get a reference here and return a reference
+				 * from the method in order for the returned copy of args to be
+				 * writeable
+				 */
+				$value = &$this->args;
+				$value[ '_id' ] = $this->get_html_id_attribute();
+				$value[ '_name' ] = $this->get_html_name_attribute();
+				break;
+
+			default:
+				$value = $this->{$name};
+				break;
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Non-existent methods fallback to checking for field arguments of the same name
 	 * @since  1.1.0
 	 * @param  string $name     Method name
@@ -118,27 +150,42 @@ class CMB2_Field extends CMB2_Field_Group {
 
 	/**
 	 * Get a field argument
+	 *
 	 * @since  1.1.0
-	 * @param  string $key  Argument to check
-	 * @param  string $_key Sub argument to check
+	 *
+	 * @param  string $key    Argument to check
+	 * @param  string $subkey Sub argument to check
+	 *
 	 * @return mixed        Argument value or false if non-existent
 	 */
-	public function args( $key = '', $_key = '' ) {
+	public function args( $key = '', $subkey = '' ) {
 
-		if ( $key != 'fields' ) {
-			$arg = $this->_data( 'args', $key );
-		} else {
-			$arg = $this->get_fields();
+		$arg = null;
+
+		switch ( $key ) {
+			case 'fields':
+				$arg = $this->get_fields();
+				break;
+
+			case 'default':
+				$arg = $this->get_param_callback_result( 'default', false );
+				break;
+
+			case '_id':
+				$arg = $this->get_html_id_attribute();
+				break;
+
+			case '_name':
+				$arg = $this->get_html_name_attribute();
+				break;
+
+			default:
+				$arg = $this->_data( 'args', $key );
+				break;
 		}
 
-
-		if ( 'default' == $key ) {
-
-			$arg = $this->get_param_callback_result( 'default', false );
-
-		} elseif ( $_key ) {
-
-			$arg = isset( $arg[ $_key ] ) ? $arg[ $_key ] : false;
+		if ( 'default' != $key && $subkey ) {
+			$arg = isset( $arg[ $subkey ] ) ? $arg[ $subkey ] : false;
 		}
 
 		return $arg;
