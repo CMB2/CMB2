@@ -1003,7 +1003,6 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		if ( 'wysiwyg' == $args['type'] ) {
 			$args['id'] = strtolower( str_ireplace( '-', '_', $args['id'] ) );
-			$args['options']['textarea_name'] = $this->get_html_name_attribute();
 		}
 
 		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
