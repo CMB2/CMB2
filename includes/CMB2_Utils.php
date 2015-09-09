@@ -23,13 +23,13 @@ class CMB2_Utils {
 	 * Utility method that attempts to get an attachment's ID by it's url
 	 * @since  1.0.0
 	 * @param  string  $img_url Attachment url
-	 * @return mixed            Attachment ID or false
+	 * @return int|false            Attachment ID or false
 	 */
 	public function image_id_from_url( $img_url ) {
 		$attachment_id = 0;
 		$dir = wp_upload_dir();
-		if ( false !== strpos( $url, $dir['baseurl'] . '/' ) ) { // Is URL in uploads directory?
-			$file = basename( $url );
+		if ( false !== strpos( $img_url, $dir['baseurl'] . '/' ) ) { // Is URL in uploads directory?
+			$file = basename( $img_url );
 			$query_args = array(
 				'post_type'   => 'attachment',
 				'post_status' => 'inherit',
