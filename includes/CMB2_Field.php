@@ -785,7 +785,7 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		$style = ! $this->args( 'show_names' ) ? ' style="display:none;"' : '';
 
-		return sprintf( "\n" . '<label%1$s for="%2$s">%3$s</label>' . "\n", $style, $this->args( '_id' ), $this->args( 'name' ) );
+		return sprintf( "\n" . '<label%1$s for="%2$s">%3$s</label>' . "\n", $style, $this->get_html_id_attribute(), $this->args( 'name' ) );
 	}
 
 	/**
@@ -811,7 +811,7 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		$conditional_classes = array(
 			'cmb-type-' . str_replace( '_', '-', sanitize_html_class( $this->type() ) ) => true,
-			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->args( '_id' ) ) )    => true,
+			'cmb2-id-' . str_replace( '_', '-', sanitize_html_class( $this->get_html_id_attribute() ) )    => true,
 			'cmb-repeat'             => $this->args( 'repeatable' ),
 			'cmb-repeat-group-field' => $this->group,
 			'cmb-inline'             => $this->args( 'inline' ),
@@ -1001,18 +1001,9 @@ class CMB2_Field extends CMB2_Field_Group {
 			'remove_button' => __( 'Remove Group', 'cmb2' ),
 		) ) : $args['options'];
 
-		$args['_id']        = $args['id'];
-		$args['_name']      = $args['id'];
-
-		if ( $this->group ) {
-
-			$args['_id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
-			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
-		}
-
 		if ( 'wysiwyg' == $args['type'] ) {
 			$args['id'] = strtolower( str_ireplace( '-', '_', $args['id'] ) );
-			$args['options']['textarea_name'] = $args['_name'];
+			$args['options']['textarea_name'] = $this->get_html_name_attribute();
 		}
 
 		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
