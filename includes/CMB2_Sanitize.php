@@ -308,6 +308,8 @@ class CMB2_Sanitize {
 	}
 
 	/**
+	 * Todo [PGL] This needs looked over on the _id and _name references
+	 *
 	 * Peforms saving of `file` attachement's ID
 	 * @since  1.1.0
 	 */
