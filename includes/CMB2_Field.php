@@ -292,8 +292,8 @@ class CMB2_Field extends CMB2_Field_Group {
 
 		if ( $this->group ) {
 
-			$data = is_array( $data ) && isset( $data[ $this->group->index ][ $this->args( 'id' ) ] )
-				? $data[ $this->group->index ][ $this->args( 'id' ) ]
+			$data = is_array( $data ) && isset( $data[ $this->group->index ][ $this->id() ] )
+				? $data[ $this->group->index ][ $this->id() ]
 				: false;
 		}
 

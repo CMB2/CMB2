@@ -55,10 +55,10 @@ abstract class CMB2_Field_Group {
 		if ( $this->group ) {
 			$parent_path = $this->group->get_html_name_attribute();
 			$index = '[' . $this->group->index . ']';
-			$id = '[' . $this->args( 'id' ) . ']';
+			$id = '[' . $this->id() . ']';
 			$name = $parent_path .  $index . $id;
 		} else {
-			$name = $this->args( 'id' );
+			$name = $this->id();
 		}
 
 		return $name;
@@ -74,10 +74,10 @@ abstract class CMB2_Field_Group {
 		if ( $this->group ) {
 			$parent_path = $this->group->get_html_id_attribute();
 			$index = '_' . $this->group->index;
-			$id = '_' . $this->args( 'id' );
+			$id = '_' . $this->id();
 			$name = $parent_path .  $index . $id;
 		} else {
-			$name = $this->args( 'id' );
+			$name = $this->id();
 		}
 
 		return $name;
@@ -162,7 +162,7 @@ abstract class CMB2_Field_Group {
 			$fields_array[ $key ] = $field_object->args();
 			$nested_fields = array();
 			foreach ( $field_object->args( 'fields' ) as $this_field ) {
-				$nested_fields[ $this_field[ 'id'] ] = $this_field;
+				$nested_fields[ $this_field[ 'id' ] ] = $this_field;
 			}
 			$fields_array[ $key ] = array_merge( $fields_array[ $key ], array( 'fields' => $nested_fields) );
 		}
@@ -604,7 +604,7 @@ abstract class CMB2_Field_Group {
 		$field_group->index = 0;
 
 		foreach ( array_values( $field_group->get_field_objects() ) as $field_object ) {
-			$sub_id = $field_object->args( 'id' );
+			$sub_id = $field_object->id();
 
 			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
 
@@ -765,7 +765,7 @@ abstract class CMB2_Field_Group {
 		$parent_field_id = '';
 		$field_group = null;
 		if ( is_a( $this, 'CMB2_Field' ) && 'group' == $this->args( 'type' ) ) {
-			$parent_field_id = $this->args( 'id' );
+			$parent_field_id = $this->id();
 
 			$new_field = new CMB2_Field( array(
 				'field_args'  => $field,
