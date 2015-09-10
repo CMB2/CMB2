@@ -139,13 +139,25 @@ class CMB2_Field extends CMB2_Field_Group {
 
 	/**
 	 * Retrieves the field id
+	 *
 	 * @since  1.1.0
-	 * @param  boolean $raw Whether to retrieve pre-modidifed id
-	 * @return string       Field id
+	 *
+	 * @param  boolean $html Whether to retrieve the id for use as an html
+	 *                       attribute
+	 *
+	 * @return string  Field id
 	 */
-	public function id( $raw = false ) {
-		$id = $raw ? '_id' : 'id';
-		return $this->args( $id );
+	public function id( $html = false ) {
+
+		$value = null;
+
+		if ( $html ) {
+			$value = $this->get_html_id_attribute();
+		} else {
+			$value = $this->args( 'id' );
+		}
+
+		return $value;
 	}
 
 	/**
