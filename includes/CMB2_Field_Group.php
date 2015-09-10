@@ -103,6 +103,17 @@ abstract class CMB2_Field_Group {
 	}
 
 	/**
+	 * @param $field
+	 *
+	 * @return mixed
+	 */
+	public function add_updated( $field ) {
+
+		$this->updated[] = $field;
+		return $field;
+	}
+
+	/**
 	 * @return CMB2_Types[]
 	 */
 	public function get_hidden_fields() {
@@ -575,7 +586,7 @@ abstract class CMB2_Field_Group {
 				) );
 
 				if ( $field->save_field_from_data( $this->get_data_to_save() ) ) {
-					$this->get_updated()[] = $field->id();
+					$this->add_updated( $field->id() );
 				}
 
 				break;
@@ -632,7 +643,7 @@ abstract class CMB2_Field_Group {
 				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
-					$this->get_updated()[] = $base_id . '::' . $field_group->index . '::' . $sub_id;
+					$this->add_updated( $base_id . '::' . $field_group->index . '::' . $sub_id );
 				}
 
 				// Add to `$saved` array
