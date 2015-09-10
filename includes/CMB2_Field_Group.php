@@ -133,6 +133,22 @@ abstract class CMB2_Field_Group {
 	}
 
 	/**
+	 * Add a hidden field to the list of hidden fields to be rendered later
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $args Array of arguments to be passed to CMB2_Field
+	 *
+	 * @return CMB2_Types The newly created types object
+	 */
+	public function add_hidden_field( $args ) {
+
+		$types_object = new CMB2_Types( new CMB2_Field( $args ) );
+		$this->hidden_fields[] = $types_object;
+		return $types_object;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_data_to_save() {
@@ -403,18 +419,6 @@ abstract class CMB2_Field_Group {
 		';
 
 		$field_group->peform_param_callback( 'after_group_row' );
-	}
-
-	/**
-	 * Add a hidden field to the list of hidden fields to be rendered later
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param array $args Array of arguments to be passed to CMB2_Field
-	 */
-	public function add_hidden_field( $args ) {
-
-		$this->get_hidden_fields()[] = new CMB2_Types( new CMB2_Field( $args ) );
 	}
 
 	/**
