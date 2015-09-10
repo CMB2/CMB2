@@ -118,7 +118,7 @@ class CMB2_Field extends CMB2_Field_Group {
 				break;
 
 			default:
-				$value = $this->{$name};
+				$value = parent::__get( $name );
 				break;
 		}
 
