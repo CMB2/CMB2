@@ -371,7 +371,10 @@ abstract class CMB2_Field_Group {
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
+				$row_data = $field_group->value[ $field_group->index ];
 				foreach ( $field_group->get_field_objects() as $field_object ) {
+					$field_object->value = $row_data[ $field_object->id() ];
+
 					if ( 'hidden' == $field_object->args[ 'type' ] ) {
 
 						// Save rendering for after the metabox
@@ -386,9 +389,6 @@ abstract class CMB2_Field_Group {
 							$field_object->args['show_names'] = $this->get_show_names();
 						}
 
-						// Todo: copy over this group's portion of the data.
-						// 'value' shouldn't have to be copied around like this and below for atomic fields
-						$field_object->value = $field_group->value[ $field_group->index ][ $field_object->id() ];
 						$this->render_group( $field_object );
 
 					} else {
@@ -401,10 +401,8 @@ abstract class CMB2_Field_Group {
 						// we do need to call get_data() in order to copy over this row's data for each
 						// individual field inside the group field.  But in order for get_data() to work
 						// we also need to copy a few other properties to keep them in sync.
-						$field_object->object_id = $this->object_id;
-						$field_object->object_type = $this->object_type;
 						$field_object->escaped_value = null;
-						$field_object->value = $field_object->get_data();
+
 						$field_object->render_field();
 					}
 				}
