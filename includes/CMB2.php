@@ -588,11 +588,7 @@ class CMB2 extends CMB2_Field_Group {
 				$field_object->args['show_names'] = $this->get_show_names();
 
 				// Render default fields
-				// Todo: Hacked the same way get_field() was to update field values that may have changed since instantiation
-				$field_object->object_id = $this->object_id;
-				$field_object->object_type = $this->object_type;
 				$field_object->escaped_value = null;
-				$field_object->value = $field_object->get_data();
 				$field_object->render_field();
 			}
 		}
