@@ -385,6 +385,10 @@ abstract class CMB2_Field_Group {
 						if ( ! isset( $field_object->args['show_names'] ) ) {
 							$field_object->args['show_names'] = $this->get_show_names();
 						}
+
+						// Todo: copy over this group's portion of the data.
+						// 'value' shouldn't have to be copied around like this and below for atomic fields
+						$field_object->value = $field_group->value[ $field_group->index ][ $field_object->id() ];
 						$this->render_group( $field_object );
 
 					} else {
