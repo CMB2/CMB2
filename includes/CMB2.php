@@ -587,7 +587,7 @@ class CMB2 extends CMB2_Field_Group {
 
 				$field_object->args['show_names'] = $this->get_show_names();
 
-				// Render default fields
+				// Todo: escaped_value could be caching old data, revisit
 				$field_object->escaped_value = null;
 				$field_object->render_field();
 			}
