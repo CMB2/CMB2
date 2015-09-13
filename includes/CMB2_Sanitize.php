@@ -98,6 +98,7 @@ class CMB2_Sanitize {
 					break;
 				}
 			case 'multicheck':
+			case 'multicheck_inline':
 			case 'file_list':
 			case 'oembed':
 			case 'group':
