@@ -403,6 +403,15 @@ class CMB2_Field {
 
 		if ( $this->args( 'repeatable' ) && is_array( $meta_value ) ) {
 			// Remove empties
+			if ( is_array( $meta_value[0] ) ) {
+				foreach ( $meta_value as $key => $value ) {
+					$value = array_filter( $value );
+					if ( empty( $value ) ) {
+						unset( $meta_value[ $key ] );
+					}
+				}
+			}
+
 			$meta_value = array_filter( $meta_value );
 		}
 
