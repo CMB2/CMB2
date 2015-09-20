@@ -12,7 +12,7 @@
 // 2. Plugin installed inside of WordPress.org developer checkout
 // 3. Tests checked out to /tmp
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
-	$test_root = getenv( 'WP_DEVELOP_DIR' );
+	$test_root = getenv( 'WP_DEVELOP_DIR' ). '/tests/phpunit';
 } elseif ( false !== getenv( 'WP_TESTS_DIR' ) ) {
 	$test_root = getenv( 'WP_TESTS_DIR' );
 } else if ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
