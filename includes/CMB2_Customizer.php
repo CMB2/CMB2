@@ -1,5 +1,4 @@
 <?php
-require_once( 'CMB2_Customizer_Text_Control.php' );
 class CMB2_Customizer {
     
     /**
@@ -9,12 +8,16 @@ class CMB2_Customizer {
 	 */
 	protected $cmb;
 	
-    public function __construct( CMB2 $cmb ) {
-        $this->cmb = $cmb;
-        add_action( 'customize_register', array( $this, 'start_customizer' ), 20 );
+    public function __construct( $wp_customize ) {
+        require_once( 'CMB2_Customizer_Text_Control.php' );
+        $this->start_customizer( $wp_customize );
     }
     
     public function start_customizer( $wp_customize ) {
+        
+        
+        
+        
         /* Add Address Info to Customizer */
     $wp_customize->add_section( 
     	'cmb_address_options', 
@@ -32,11 +35,18 @@ class CMB2_Customizer {
 		'sanitize_callback' => 'sanitize_text_field'
         )
     );
+    $wp_customize->add_setting( 'nest_newline',
+	array(
+    	'default' => '',
+		'type' => 'theme_mod',
+		'sanitize_callback' => 'sanitize_text_field'
+        )
+    );
     
     
     $wp_customize->add_control( new CMB2_Customizer_Text_Control( 
     	$wp_customize, 
-    	'nest_street_id',
+    	'nest_street',
     	array(
     		'label'    => 'Street Address', 
     		'section'  => 'cmb_address_options',
@@ -45,6 +55,17 @@ class CMB2_Customizer {
     		'type' => 'text'
     	)
     )); 
+    $wp_customize->add_control( new CMB2_Customizer_Text_Control( 
+    	$wp_customize, 
+    	'nest_street',
+    	array(
+    		'label'    => 'Street Address', 
+    		'section'  => 'cmb_address_options',
+    		'settings' => 'nest_newline',
+    		'priority' => 12,
+    		'type' => 'text'
+    	)
+    ));
         return;
         
         $object_type = $this->cmb->prop( 'object_types' );

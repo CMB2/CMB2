@@ -16,6 +16,11 @@
  */
 do_action( 'cmb2_init' );
 
+add_action( 'customize_register', 'cmb2_customizer_init', 10, 1 );
+function cmb2_customizer_init( $customizer ) {
+    new CMB2_Customizer( $customizer );
+}
+
 /**
  * For back-compat. Does the dirtywork of instantiating all the
  * CMB2 instances for the cmb2_meta_boxes filter
