@@ -168,7 +168,6 @@ function new_cmb2_box( array $meta_box_config ) {
  * @return CMB2 object
  */
 function cmb2_get_metabox( $meta_box, $object_id = 0, $object_type = '' ) {
-
 	if ( $meta_box instanceof CMB2 ) {
 		return $meta_box;
 	}
