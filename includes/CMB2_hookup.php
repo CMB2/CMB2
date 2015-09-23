@@ -118,7 +118,7 @@ class CMB2_hookup {
 			add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
 			add_action( 'user_register', array( $this, 'save_user' ) );
 		} elseif( 'customizer' == $this->object_type ) {
-    		new CMB2_Customizer();
+    		new CMB2_Customizer( $this->cmb );
 		}
 	}
 
