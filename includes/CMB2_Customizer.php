@@ -14,6 +14,18 @@ class CMB2_Customizer {
             $customizer_objects[] = cmb2_get_metabox( $type, 0, 'customizer' );
         }
         
+        $field_type_mapping = array(
+            'title'         => 'WP_Customize_Control',
+            'text'          => 'WP_Customize_Control',
+            'text_small'    => 'WP_Customize_Control',
+            'text_medium'   => 'WP_Customize_Control',
+            'text_email'    => 'WP_Customize_Control',
+            'text_url'      => 'WP_Customize_Control',
+            'text_money'    => 'WP_Customize_Control',
+            'colorpicker'   => 'WP_Customize_Color_Control',
+            'file'          => 'WP_Customize_Media_Control',
+        );
+        
             
         foreach( $customizer_objects as $index => $cmb ) {
             /* Add Address Info to Customizer */
@@ -28,14 +40,19 @@ class CMB2_Customizer {
             );
             $fields = $cmb->prop( 'fields' );
             foreach( $fields as $field_type ) {
+                $type = $field_type[ 'type' ];
+                $type_class = isset( $field_type_mapping[ $type ] ) ? $field_type_mapping[ $type ] : false;
+                
                 /* Street */
                 $wp_customize->add_setting( $field_type[ 'id' ],
             	array(
             		'type' => 'option',
                     )
                 );
-    
-                $wp_customize->add_control( new WP_Customize_Control( 
+                
+                
+                
+                $wp_customize->add_control( new $type_class( 
             	$wp_customize, 
                 	$field_type[ 'id' ],
                 	array(
