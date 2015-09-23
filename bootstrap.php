@@ -9,6 +9,15 @@
  * @link      http://webdevstudios.com
  */
 
+/* Load customizer Options */
+add_action( 'cmb2_init', function() {
+    add_action( 'customize_register', 'cmb2_customizer_init', 10, 1 );
+    function cmb2_customizer_init( $customizer ) {
+        new CMB2_Customizer( $customizer );
+    }
+}, 1, 1 );
+
+
 /**
  * Fires when CMB2 is included/loaded
  *
@@ -16,10 +25,8 @@
  */
 do_action( 'cmb2_init' );
 
-add_action( 'customize_register', 'cmb2_customizer_init', 10, 1 );
-function cmb2_customizer_init( $customizer ) {
-    new CMB2_Customizer( $customizer );
-}
+
+
 
 /**
  * For back-compat. Does the dirtywork of instantiating all the
