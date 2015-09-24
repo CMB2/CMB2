@@ -34,6 +34,8 @@ class CMB2_Customizer {
             'radio'             => 'CMB_Customize_Radio'
         );
         /* Can't get to work: text_time, select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone , hidden*/
+        /* Radio is still buggy - needs 'data-customize-setting-link'   => $this->_name() */
+            
         
         
         
