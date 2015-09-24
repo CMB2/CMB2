@@ -1,7 +1,7 @@
 <?php
 require 'customizer/CMB2_Customizer_Checkbox.php';
 require 'customizer/CMB2_Customizer_Textarea.php';
-require 'customizer/CMB2_Customizer_Text_Time.php';
+require 'customizer/CMB2_Customizer_Radio.php';
 class CMB2_Customizer {
     
 	
@@ -31,8 +31,11 @@ class CMB2_Customizer {
             'textarea'          => 'CMB_Customize_Textarea',
             'textarea_small'    => 'CMB_Customize_Textarea',
             'textarea_code'     => 'CMB_Customize_Textarea',
-            'text_time'         => 'CMB_Customize_Text_Time',
+            'radio'             => 'CMB_Customize_Radio'
         );
+        /* Can't get to work: text_time, select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone , hidden*/
+        
+        
         
             
         foreach( $customizer_objects as $index => $cmb ) {
@@ -48,6 +51,9 @@ class CMB2_Customizer {
             );
             $fields = $cmb->prop( 'fields' );
             foreach( $fields as $field_type ) {
+                if ( !isset( $field_type[ 'options' ] ) ) {
+                    $field_type[ 'options' ] = array();
+                }
                 $type = $field_type[ 'type' ];
                 $type_class = isset( $field_type_mapping[ $type ] ) ? $field_type_mapping[ $type ] : false;
                 
@@ -58,8 +64,8 @@ class CMB2_Customizer {
                     )
                 );
                 
-                
-                $wp_customize->add_control( new $type_class( 
+                if ( class_exists( $type_class ) ) {
+                    $wp_customize->add_control( new $type_class( 
             	$wp_customize, 
                 	$field_type[ 'id' ],
                 	array(
@@ -67,9 +73,12 @@ class CMB2_Customizer {
                 		'section'  => $customizer_id,
                 		'settings' => $field_type[ 'id' ],
                 		'id'       => $field_type[ 'id' ],
-                		'priority' => 10,
-                	)
-                ));
+                		'priority'    => 10,
+                		'input_attrs' => $field_type[ 'options' ]
+                        )
+                    ));
+                }
+                
             
             }
         }    
