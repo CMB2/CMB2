@@ -1,4 +1,5 @@
 <?php
+require 'customizer/CMB2_Customizer_Checkbox.php';
 class CMB2_Customizer {
     
 	
@@ -24,6 +25,7 @@ class CMB2_Customizer {
             'text_money'    => 'WP_Customize_Control',
             'colorpicker'   => 'WP_Customize_Color_Control',
             'file'          => 'WP_Customize_Media_Control',
+            'checkbox'      => 'CMB_Customize_Checkbox'
         );
         
             
@@ -51,7 +53,6 @@ class CMB2_Customizer {
                 );
                 
                 
-                
                 $wp_customize->add_control( new $type_class( 
             	$wp_customize, 
                 	$field_type[ 'id' ],
@@ -59,6 +60,7 @@ class CMB2_Customizer {
                 		'label'    => $field_type[ 'name' ], 
                 		'section'  => $customizer_id,
                 		'settings' => $field_type[ 'id' ],
+                		'id'       => $field_type[ 'id' ],
                 		'priority' => 10,
                 	)
                 ));
