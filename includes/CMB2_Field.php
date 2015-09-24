@@ -64,6 +64,7 @@ class CMB2_Field {
 	 * @since 2.0.0
 	 */
 	public $index = 0;
+	
 
 	/**
 	 * Array of field options

@@ -423,6 +423,7 @@ class CMB2_Types {
 			'id'    => $this->_id(),
 			'value' => $this->field->escaped_value(),
 			'desc'  => $this->_desc( true ),
+			'data-customize-setting-link' => $this->_name()
 		) );
 
 		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
