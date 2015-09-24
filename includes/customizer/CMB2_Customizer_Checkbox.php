@@ -6,12 +6,14 @@ class CMB_Customize_Checkbox extends WP_Customize_Control {
     public function render_content() {
        /* Need help with this so we can use CMB2 native functions */
        /*
-       $field = new CMB2_Field( array( 'object_id' => $this->id, 'object_type' => 'checkbox' ) );
-       $type = new CMB_Types( $field );
+       $field = new CMB2_Field( array( 'object_id' => $this->id, 'object_type' => 'checkbox', 'field_args' => array( 'id' => $this->id, 'type' => 'checkbox', 'name' => $this->label ) ) );
+       
+       $type = new CMB2_Types( $field );
        
        echo $type->checkbox();
-       */
        
+       return;
+       */
        ?>
        <label for="cmb_<?php echo esc_attr( $this->id ); ?>">
         <input type="hidden" value="false" name="<?php echo esc_attr( $this->id ); ?>" />
