@@ -417,13 +417,13 @@ class CMB2_Types {
 	 */
 	public function input( $args = array() ) {
 		$a = $this->parse_args( $args, 'input', array(
-			'type'  => 'text',
-			'class' => 'regular-text',
-			'name'  => $this->_name(),
-			'id'    => $this->_id(),
-			'value' => $this->field->escaped_value(),
-			'desc'  => $this->_desc( true ),
-			'data-customize-setting-link' => $this->_name()
+			'type'                          => 'text',
+			'class'                         => 'regular-text',
+			'name'                          => $this->_name(),
+			'id'                            => $this->_id(),
+			'value'                         => $this->field->escaped_value(),
+			'desc'                          => $this->_desc( true ),
+			'data-customize-setting-link'   => $this->_name()
 		) );
 
 		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
@@ -437,13 +437,14 @@ class CMB2_Types {
 	 */
 	public function textarea( $args = array() ) {
 		$a = $this->parse_args( $args, 'textarea', array(
-			'class' => 'cmb2_textarea',
-			'name'  => $this->_name(),
-			'id'    => $this->_id(),
-			'cols'  => 60,
-			'rows'  => 10,
-			'value' => $this->field->escaped_value( 'esc_textarea' ),
-			'desc'  => $this->_desc( true ),
+			'class'                         => 'cmb2_textarea',
+			'name'                          => $this->_name(),
+			'id'                            => $this->_id(),
+			'data-customize-setting-link'   => $this->_name(),
+			'cols'                          => 60,
+			'rows'                          => 10,
+			'value'                         => $this->field->escaped_value( 'esc_textarea' ),
+			'desc'                          => $this->_desc( true ),
 		) );
 		return sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] );
 	}

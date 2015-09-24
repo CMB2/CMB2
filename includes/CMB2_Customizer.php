@@ -1,5 +1,6 @@
 <?php
 require 'customizer/CMB2_Customizer_Checkbox.php';
+require 'customizer/CMB2_Customizer_Textarea.php';
 class CMB2_Customizer {
     
 	
@@ -16,16 +17,19 @@ class CMB2_Customizer {
         }
         
         $field_type_mapping = array(
-            'title'         => 'WP_Customize_Control',
-            'text'          => 'WP_Customize_Control',
-            'text_small'    => 'WP_Customize_Control',
-            'text_medium'   => 'WP_Customize_Control',
-            'text_email'    => 'WP_Customize_Control',
-            'text_url'      => 'WP_Customize_Control',
-            'text_money'    => 'WP_Customize_Control',
-            'colorpicker'   => 'WP_Customize_Color_Control',
-            'file'          => 'WP_Customize_Media_Control',
-            'checkbox'      => 'CMB_Customize_Checkbox'
+            'title'             => 'WP_Customize_Control',
+            'text'              => 'WP_Customize_Control',
+            'text_small'        => 'WP_Customize_Control',
+            'text_medium'       => 'WP_Customize_Control',
+            'text_email'        => 'WP_Customize_Control',
+            'text_url'          => 'WP_Customize_Control',
+            'text_money'        => 'WP_Customize_Control',
+            'colorpicker'       => 'WP_Customize_Color_Control',
+            'file'              => 'WP_Customize_Media_Control',
+            'checkbox'          => 'CMB_Customize_Checkbox',
+            'textarea'          => 'CMB_Customize_Textarea',
+            'textarea_small'    => 'CMB_Customize_Textarea',
+            'textarea_code'     => 'CMB_Customize_Textarea',
         );
         
             
