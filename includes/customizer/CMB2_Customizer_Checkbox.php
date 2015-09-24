@@ -10,12 +10,6 @@ class CMB_Customize_Checkbox extends WP_Customize_Control {
        $type = new CMB2_Types( $field );
        
        echo $type->checkbox();
-       return;
-       
-       ?>
-       <label for="cmb_<?php echo esc_attr( $this->id ); ?>">
-        <input type="hidden" value="false" name="<?php echo esc_attr( $this->id ); ?>" />
-        <input id="cmb_<?php echo esc_attr( $this->id ); ?>" name="<?php echo esc_attr( $this->id ); ?>" type="checkbox" <?php $this->link();?> value="true" <?php checked( 'true', $this->value() ); ?> />&nbsp;&nbsp;<?php echo esc_html( $this->label ); ?></label>
-        <?php    
+       return; 
     }
 }
