@@ -1,6 +1,7 @@
 <?php
 require 'customizer/CMB2_Customizer_Checkbox.php';
 require 'customizer/CMB2_Customizer_Textarea.php';
+require 'customizer/CMB2_Customizer_Text_Time.php';
 class CMB2_Customizer {
     
 	
@@ -30,6 +31,7 @@ class CMB2_Customizer {
             'textarea'          => 'CMB_Customize_Textarea',
             'textarea_small'    => 'CMB_Customize_Textarea',
             'textarea_code'     => 'CMB_Customize_Textarea',
+            'text_time'         => 'CMB_Customize_Text_Time',
         );
         
             

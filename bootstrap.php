@@ -13,6 +13,8 @@
 add_action( 'cmb2_init', function() {
     add_action( 'customize_register', 'cmb2_customizer_init', 10, 1 );
     function cmb2_customizer_init( $customizer ) {
+        CMB2_hookup::enqueue_cmb_css();
+        CMB2_hookup::enqueue_cmb_js();
         new CMB2_Customizer( $customizer );
     }
 }, 1, 1 );
