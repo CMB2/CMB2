@@ -94,7 +94,7 @@ class CMB2_JS {
 	 * Localize the php variables for CMB2 JS
 	 * @since  2.0.7
 	 */
-	protected static function localize( $debug ) {
+	public static function localize( $debug ) {
 		$l10n = array(
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
