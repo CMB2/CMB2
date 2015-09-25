@@ -1,5 +1,94 @@
 # CMB2
 
+```php
+//Sample PHP for Customizer 
+add_action( 'cmb2_init', function() {
+    $cmb = new_cmb2_box( array(
+        'id'            => 'address',
+        'title'         => __( 'My Address', 'cmb2' ),
+        'object_types'  => 'customizer', // Post type
+        'context'       => 'normal',
+        'priority'      => 800,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Street Address', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_street_address',
+        'type'       => 'text',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'File', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_file_1',
+        'type'       => 'file',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Text URL', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_text_url',
+        'type'       => 'text_url',
+    ) );
+     // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Text File', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_file_2',
+        'type'       => 'file',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Color', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_color',
+        'type'       => 'colorpicker',
+    ) );
+     // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'My Checkbox', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_check',
+        'type'       => 'checkbox',
+    ) );
+    
+    $cmb2 = new_cmb2_box( array(
+        'id'            => 'my_custom',
+        'title'         => __( 'My Custom Textarea', 'cmb2' ),
+        'object_types'  => array( 'post' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $cmb2->add_field( array(
+        'name'       => __( 'My Textarea', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_textarea',
+        'type'       => 'textarea',
+    ) );
+    $cmb2->add_field( array(
+        'name'       => __( 'My Textarea Small', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_textarea_small',
+        'type'       => 'textarea_small',
+    ) );
+    $cmb2->add_field( array(
+    'name'             => 'Test Radio',
+    'id'               => 'wiki_test_radio',
+    'type'             => 'radio',
+    'show_option_none' => true,
+    'options'          => array(
+        'standard' => __( 'Option One', 'cmb' ),
+        'custom'   => __( 'Option Two', 'cmb' ),
+        'none'     => __( 'Option Three', 'cmb' ),
+    ),
+) );
+} );
+```
+
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)](https://travis-ci.org/WebDevStudios/CMB2)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg?style=flat)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
