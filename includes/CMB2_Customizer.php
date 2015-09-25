@@ -2,6 +2,7 @@
 require 'customizer/CMB2_Customizer_Checkbox.php';
 require 'customizer/CMB2_Customizer_Textarea.php';
 require 'customizer/CMB2_Customizer_Radio.php';
+require 'customizer/CMB2_Customizer_Radio_Taxonomy.php';
 class CMB2_Customizer {
     
 	
@@ -31,7 +32,10 @@ class CMB2_Customizer {
             'textarea'          => 'CMB_Customize_Textarea',
             'textarea_small'    => 'CMB_Customize_Textarea',
             'textarea_code'     => 'CMB_Customize_Textarea',
-            'radio'             => 'CMB_Customize_Radio'
+            'radio'             => 'CMB_Customize_Radio',
+            'radio_inline'      => 'CMB_Customize_Radio',
+            'taxonomy_radio'    => 'CMB_Customize_Radio_Taxonomy',
+            'taxonomy_inline'   => 'CMB_Customize_Radio_Taxonomy'
         );
         /* Can't get to work: text_time, select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone , hidden*/
         /* Radio is still buggy - needs 'data-customize-setting-link'   => $this->_name() */
@@ -67,6 +71,15 @@ class CMB2_Customizer {
                 );
                 
                 if ( class_exists( $type_class ) ) {
+                    $type = $field_type[ 'type' ];
+                    /* Detect Taxonomy names */
+                    if ( $type == 'taxonomy_radio' || $type == 'taxonomy_inline' ) {
+                        $type = $field_type[ 'taxonomy' ];
+                        if ( empty( $type ) ) {
+                            continue;
+                        }
+                    }
+                    
                     $wp_customize->add_control( new $type_class( 
             	$wp_customize, 
                 	$field_type[ 'id' ],
@@ -76,7 +89,8 @@ class CMB2_Customizer {
                 		'settings' => $field_type[ 'id' ],
                 		'id'       => $field_type[ 'id' ],
                 		'priority'    => 10,
-                		'input_attrs' => $field_type[ 'options' ]
+                		'input_attrs' => $field_type[ 'options' ],
+                		'type'        => $type
                         )
                     ));
                 }
