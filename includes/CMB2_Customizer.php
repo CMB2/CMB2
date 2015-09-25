@@ -3,6 +3,7 @@ require 'customizer/CMB2_Customizer_Checkbox.php';
 require 'customizer/CMB2_Customizer_Textarea.php';
 require 'customizer/CMB2_Customizer_Radio.php';
 require 'customizer/CMB2_Customizer_Radio_Taxonomy.php';
+require 'customizer/CMB2_Customizer_Taxonomy_Select.php';
 class CMB2_Customizer {
     
 	
@@ -19,23 +20,24 @@ class CMB2_Customizer {
         }
         
         $field_type_mapping = array(
-            'title'             => 'WP_Customize_Control',
-            'text'              => 'WP_Customize_Control',
-            'text_small'        => 'WP_Customize_Control',
-            'text_medium'       => 'WP_Customize_Control',
-            'text_email'        => 'WP_Customize_Control',
-            'text_url'          => 'WP_Customize_Control',
-            'text_money'        => 'WP_Customize_Control',
-            'colorpicker'       => 'WP_Customize_Color_Control',
-            'file'              => 'WP_Customize_Media_Control',
-            'checkbox'          => 'CMB_Customize_Checkbox',
-            'textarea'          => 'CMB_Customize_Textarea',
-            'textarea_small'    => 'CMB_Customize_Textarea',
-            'textarea_code'     => 'CMB_Customize_Textarea',
-            'radio'             => 'CMB_Customize_Radio',
-            'radio_inline'      => 'CMB_Customize_Radio',
-            'taxonomy_radio'    => 'CMB_Customize_Radio_Taxonomy',
-            'taxonomy_inline'   => 'CMB_Customize_Radio_Taxonomy'
+            'title'                   => 'WP_Customize_Control',
+            'text'                    => 'WP_Customize_Control',
+            'text_small'              => 'WP_Customize_Control',
+            'text_medium'             => 'WP_Customize_Control',
+            'text_email'              => 'WP_Customize_Control',
+            'text_url'                => 'WP_Customize_Control',
+            'text_money'              => 'WP_Customize_Control',
+            'colorpicker'             => 'WP_Customize_Color_Control',
+            'file'                    => 'WP_Customize_Media_Control',
+            'checkbox'                => 'CMB_Customize_Checkbox',
+            'textarea'                => 'CMB_Customize_Textarea',
+            'textarea_small'          => 'CMB_Customize_Textarea',
+            'textarea_code'           => 'CMB_Customize_Textarea',
+            'radio'                   => 'CMB_Customize_Radio',
+            'radio_inline'            => 'CMB_Customize_Radio',
+            'taxonomy_radio'          => 'CMB_Customize_Radio_Taxonomy',
+            'taxonomy_radio_inline'   => 'CMB_Customize_Radio_Taxonomy',
+            'taxonomy_select'         => 'CMB_Customize_Taxonomy_Select',
         );
         /* Can't get to work: text_time, select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone , hidden*/
         /* Radio is still buggy - needs 'data-customize-setting-link'   => $this->_name() */
@@ -73,7 +75,9 @@ class CMB2_Customizer {
                 if ( class_exists( $type_class ) ) {
                     $type = $field_type[ 'type' ];
                     /* Detect Taxonomy names */
-                    if ( $type == 'taxonomy_radio' || $type == 'taxonomy_inline' ) {
+                    
+                    if ( $type == 'taxonomy_radio' || $type == 'taxonomy_radio_inline' || $type == 'taxonomy_select' ) {
+                        
                         $type = $field_type[ 'taxonomy' ];
                         if ( empty( $type ) ) {
                             continue;
