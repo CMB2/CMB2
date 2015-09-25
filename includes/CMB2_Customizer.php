@@ -7,6 +7,7 @@ require 'customizer/CMB2_Customizer_Taxonomy_Select.php';
 require 'customizer/CMB2_Customizer_Select.php';
 require 'customizer/CMB2_Customizer_Text_Time.php';
 require 'customizer/CMB2_Customizer_Check_Multi.php';
+require 'customizer/CMB2_Customizer_Taxonomy_Multi.php';
 
 class CMB2_Customizer {
     
@@ -24,28 +25,30 @@ class CMB2_Customizer {
         }
         
         $field_type_mapping = array(
-            'title'                   => 'WP_Customize_Control',
-            'text'                    => 'WP_Customize_Control',
-            'text_small'              => 'WP_Customize_Control',
-            'text_medium'             => 'WP_Customize_Control',
-            'text_email'              => 'WP_Customize_Control',
-            'text_url'                => 'WP_Customize_Control',
-            'text_money'              => 'WP_Customize_Control',
-            'colorpicker'             => 'WP_Customize_Color_Control',
-            'file'                    => 'WP_Customize_Media_Control',
-            'checkbox'                => 'CMB_Customize_Checkbox',
-            'textarea'                => 'CMB_Customize_Textarea',
-            'textarea_small'          => 'CMB_Customize_Textarea',
-            'textarea_code'           => 'CMB_Customize_Textarea',
-            'radio'                   => 'CMB_Customize_Radio',
-            'radio_inline'            => 'CMB_Customize_Radio',
-            'taxonomy_radio'          => 'CMB_Customize_Radio_Taxonomy',
-            'taxonomy_radio_inline'   => 'CMB_Customize_Radio_Taxonomy',
-            'taxonomy_select'         => 'CMB_Customize_Taxonomy_Select',
-            'select'                  => 'CMB_Customize_Select',
-            'text_time'               => 'CMB_Customize_Text_Time',
-            'multicheck'              => 'CMB_Customize_Check_Multi',
-            'multicheck_inline'       => 'CMB_Customize_Check_Multi'
+            'title'                     => 'WP_Customize_Control',
+            'text'                      => 'WP_Customize_Control',
+            'text_small'                => 'WP_Customize_Control',
+            'text_medium'               => 'WP_Customize_Control',
+            'text_email'                => 'WP_Customize_Control',
+            'text_url'                  => 'WP_Customize_Control',
+            'text_money'                => 'WP_Customize_Control',
+            'colorpicker'               => 'WP_Customize_Color_Control',
+            'file'                      => 'WP_Customize_Media_Control',
+            'checkbox'                  => 'CMB_Customize_Checkbox',
+            'textarea'                  => 'CMB_Customize_Textarea',
+            'textarea_small'            => 'CMB_Customize_Textarea',
+            'textarea_code'             => 'CMB_Customize_Textarea',
+            'radio'                     => 'CMB_Customize_Radio',
+            'radio_inline'              => 'CMB_Customize_Radio',
+            'taxonomy_radio'            => 'CMB_Customize_Radio_Taxonomy',
+            'taxonomy_radio_inline'     => 'CMB_Customize_Radio_Taxonomy',
+            'taxonomy_select'           => 'CMB_Customize_Taxonomy_Select',
+            'select'                    => 'CMB_Customize_Select',
+            'text_time'                 => 'CMB_Customize_Text_Time',
+            'multicheck'                => 'CMB_Customize_Check_Multi',
+            'multicheck_inline'         => 'CMB_Customize_Check_Multi',
+            'taxonomy_multicheck'       => 'CMB_Customize_Taxonomy_Multi',
+            'taxonomy_multicheck_inline'=> 'CMB_Customize_Taxonomy_Multi'
         );
         $field_types_builtin = array(
             'WP_Customize_Color_Control',
@@ -88,7 +91,7 @@ class CMB2_Customizer {
                     $type = $field_type[ 'type' ];
                     /* Detect Taxonomy names */
                     
-                    if ( $type == 'taxonomy_radio' || $type == 'taxonomy_radio_inline' || $type == 'taxonomy_select' ) {
+                    if ( $type == 'taxonomy_radio' || $type == 'taxonomy_radio_inline' || $type == 'taxonomy_select' || $type == 'taxonomy_multicheck' || $type == 'taxonomy_multicheck_inline' ) {
                         
                         $type = $field_type[ 'taxonomy' ];
                         if ( empty( $type ) ) {

@@ -172,6 +172,49 @@ add_action( 'cmb2_init', function() {
         'type' => 'text_time',
         'time_format' => 'h:i:s A',
     ) );
+    $time_custom->add_field( array(
+        'name'    => 'Test Multi Checkbox',
+        'desc'    => 'field description (optional)',
+        'id'      => 'wiki_test_multicheckbox',
+        'type'    => 'multicheck',
+        'options' => array(
+            'check1' => 'Check One',
+            'check2' => 'Check Two',
+            'check3' => 'Check Three',
+        )
+    ) );
+    $time_custom->add_field( array(
+        'name'    => 'Test Multi Checkbox',
+        'desc'    => 'field description (optional)',
+        'id'      => 'wiki_test_multicheckboxes',
+        'type'    => 'multicheck_inline',
+        'options' => array(
+            'check1' => 'Check One',
+            'check2' => 'Check Two',
+            'check3' => 'Check Three',
+        )
+    ) );
+    
+    /* Pauli LOC */
+    $tax_multi = new_cmb2_box( array(
+        'id'            => 'tax_multi',
+        'title'         => __( 'Taxonomy Multi', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    $tax_multi->add_field( array(
+        'name'     => 'Test Taxonomy Multicheck',
+        'desc'     => 'Description Goes Here',
+        'id'       => 'wiki_test_taxonomy_multicheck',
+        'taxonomy' => 'category', //Enter Taxonomy Slug
+        'type'     => 'taxonomy_multicheck',
+        // Optional:
+        'options' => array(
+            'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
 
 } );
 
