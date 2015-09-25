@@ -6,6 +6,7 @@ require 'customizer/CMB2_Customizer_Radio_Taxonomy.php';
 require 'customizer/CMB2_Customizer_Taxonomy_Select.php';
 require 'customizer/CMB2_Customizer_Select.php';
 require 'customizer/CMB2_Customizer_Text_Time.php';
+require 'customizer/CMB2_Customizer_Check_Multi.php';
 
 class CMB2_Customizer {
     
@@ -42,7 +43,9 @@ class CMB2_Customizer {
             'taxonomy_radio_inline'   => 'CMB_Customize_Radio_Taxonomy',
             'taxonomy_select'         => 'CMB_Customize_Taxonomy_Select',
             'select'                  => 'CMB_Customize_Select',
-            'text_time'               => 'CMB_Customize_Text_Time'
+            'text_time'               => 'CMB_Customize_Text_Time',
+            'multicheck'              => 'CMB_Customize_Check_Multi',
+            'multicheck_inline'       => 'CMB_Customize_Check_Multi'
         );
         $field_types_builtin = array(
             'WP_Customize_Color_Control',
