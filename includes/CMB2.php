@@ -31,7 +31,7 @@ class CMB2 extends CMB2_Field_Group {
 	 * @var   string
 	 * @since 2.0.0
 	 */
-	protected $cmb_id = '';
+	protected $id = '';
 
 	protected $title = '';
 
@@ -118,7 +118,7 @@ class CMB2 extends CMB2_Field_Group {
 		$meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
 		$this->object_id( $object_id );
 
-		$this->set_cmb_id( $meta_box[ 'id' ] );
+		$this->set_id( $meta_box[ 'id' ] );
 		$this->set_title( $meta_box[ 'title' ] );
 		$this->set_type( $meta_box[ 'type' ] );
 		$this->set_object_types( $meta_box[ 'object_types' ] );
@@ -146,26 +146,26 @@ class CMB2 extends CMB2_Field_Group {
 		 *
 		 * @param array $cmb This CMB2 object
 		 */
-		do_action( "cmb2_init_{$this->get_cmb_id()}", $this );
+		do_action( "cmb2_init_{$this->get_id()}", $this );
 	}
 
 	/**
 	 * @return string
 	 */
-	public function get_cmb_id() {
+	public function get_id() {
 
-		return $this->cmb_id;
+		return $this->id;
 	}
 
 	/**
-	 * @param string $cmb_id
+	 * @param string $id
 	 *
 	 * @return string
 	 */
-	public function set_cmb_id( $cmb_id ) {
+	public function set_id( $id ) {
 
-		$this->cmb_id = $cmb_id;
-		return $cmb_id;
+		$this->id = $id;
+		return $id;
 	}
 
 	/**
@@ -545,7 +545,7 @@ class CMB2 extends CMB2_Field_Group {
 		 *	                           Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_before_form', $this->get_cmb_id(), $object_id, $object_type, $this );
+		do_action( 'cmb2_before_form', $this->get_id(), $object_id, $object_type, $this );
 
 		/**
 		 * Hook before form table begins
@@ -560,9 +560,9 @@ class CMB2 extends CMB2_Field_Group {
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_before_{$object_type}_form_{$this->get_cmb_id()}", $object_id, $this );
+		do_action( "cmb2_before_{$object_type}_form_{$this->get_id()}", $object_id, $this );
 
-		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->get_cmb_id() ), '" class="cmb2-metabox cmb-field-list">';
+		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->get_id() ), '" class="cmb2-metabox cmb-field-list">';
 
 		foreach( $this->get_field_objects() as $field_object ) {
 
@@ -587,12 +587,8 @@ class CMB2 extends CMB2_Field_Group {
 
 				$field_object->args['show_names'] = $this->get_show_names();
 
-				// Render default fields
-				// Todo: Hacked the same way get_field() was to update field values that may have changed since instantiation
-				$field_object->object_id = $this->object_id;
-				$field_object->object_type = $this->object_type;
+				// Todo: escaped_value could be caching old data, revisit
 				$field_object->escaped_value = null;
-				$field_object->value = $field_object->get_data();
 				$field_object->render_field();
 			}
 		}
@@ -611,7 +607,7 @@ class CMB2 extends CMB2_Field_Group {
 		 *	                           Could also be `comment`, `user` or `options-page`.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( 'cmb2_after_form', $this->get_cmb_id(), $object_id, $object_type, $this );
+		do_action( 'cmb2_after_form', $this->get_id(), $object_id, $object_type, $this );
 
 		/**
 		 * Hook after form form has been rendered
@@ -625,7 +621,7 @@ class CMB2 extends CMB2_Field_Group {
 		 * @param int    $object_id   The ID of the current object
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_after_{$object_type}_form_{$this->get_cmb_id()}", $object_id, $this );
+		do_action( "cmb2_after_{$object_type}_form_{$this->get_id()}", $object_id, $this );
 
 		echo "\n<!-- End CMB2 Fields -->\n";
 
@@ -741,7 +737,7 @@ class CMB2 extends CMB2_Field_Group {
 
 		switch ( $property ) {
 			case 'id':
-				return $this->get_cmb_id();
+				return $this->get_id();
 
 			case 'title':
 				return $this->get_title();
@@ -836,7 +832,7 @@ class CMB2 extends CMB2_Field_Group {
 		if ( $this->generated_nonce ) {
 			return $this->generated_nonce;
 		}
-		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->get_cmb_id() );
+		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->get_id() );
 		return $this->generated_nonce;
 	}
 
@@ -851,12 +847,12 @@ class CMB2 extends CMB2_Field_Group {
 		switch ( $field ) {
 
 			case 'cmb_id':
-				return $this->get_cmb_id();
+				return $this->get_id();
 
 			case 'meta_box':
 				return array_merge(
 					array(
-						'id'               => $this->get_cmb_id(),
+						'id'               => $this->get_id(),
 						'title'            => $this->get_title(),
 						'type'             => $this->get_type(),
 						'object_types'     => $this->get_object_types(),

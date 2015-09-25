@@ -203,10 +203,10 @@ class CMB2_hookup {
 			if ( $this->cmb->get_title() ) {
 
 				if ( $this->cmb->get_closed() ) {
-					add_filter( "postbox_classes_{$post_type}_{$this->cmb->get_cmb_id()}", array( $this, 'close_metabox_class' ) );
+					add_filter( "postbox_classes_{$post_type}_{$this->cmb->get_id()}", array( $this, 'close_metabox_class' ) );
 				}
 
-				add_meta_box( $this->cmb->get_cmb_id(), $this->cmb->get_title(), array( $this, 'metabox_callback' ), $post_type, $this->cmb->get_context(), $this->cmb->get_priority() );
+				add_meta_box( $this->cmb->get_id(), $this->cmb->get_title(), array( $this, 'metabox_callback' ), $post_type, $this->cmb->get_context(), $this->cmb->get_priority() );
 			}
 		}
 	}

@@ -46,6 +46,44 @@ abstract class CMB2_Field_Group {
 	public $data_to_save = array();
 
 	/**
+	 * @return null|string
+	 */
+	public function get_html_name_attribute() {
+
+		$name = null;
+
+		if ( $this->group ) {
+			$parent_path = $this->group->get_html_name_attribute();
+			$index = '[' . $this->group->index . ']';
+			$id = '[' . $this->id() . ']';
+			$name = $parent_path .  $index . $id;
+		} else {
+			$name = $this->id();
+		}
+
+		return $name;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function get_html_id_attribute() {
+
+		$name = null;
+
+		if ( $this->group ) {
+			$parent_path = $this->group->get_html_id_attribute();
+			$index = '_' . $this->group->index;
+			$id = '_' . $this->id();
+			$name = $parent_path .  $index . $id;
+		} else {
+			$name = $this->id();
+		}
+
+		return $name;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_updated() {
@@ -62,6 +100,17 @@ abstract class CMB2_Field_Group {
 
 		$this->updated = $updated;
 		return $updated;
+	}
+
+	/**
+	 * @param $field
+	 *
+	 * @return mixed
+	 */
+	public function add_updated( $field ) {
+
+		$this->updated[] = $field;
+		return $field;
 	}
 
 	/**
@@ -84,6 +133,22 @@ abstract class CMB2_Field_Group {
 	}
 
 	/**
+	 * Add a hidden field to the list of hidden fields to be rendered later
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $args Array of arguments to be passed to CMB2_Field
+	 *
+	 * @return CMB2_Types The newly created types object
+	 */
+	public function add_hidden_field( $args ) {
+
+		$types_object = new CMB2_Types( new CMB2_Field( $args ) );
+		$this->hidden_fields[] = $types_object;
+		return $types_object;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_data_to_save() {
@@ -102,6 +167,17 @@ abstract class CMB2_Field_Group {
 		return $data_to_save;
 	}
 
+	public function get_field_data_to_save( $field_name ) {
+
+		$field_data_to_save = null;
+
+		if( isset( $this->data_to_save[ $field_name ] ) ) {
+			$field_data_to_save = $this->data_to_save[ $field_name ];
+		}
+
+		return $field_data_to_save;
+	}
+
 	/**
 	 * @return array
 	 */
@@ -113,7 +189,7 @@ abstract class CMB2_Field_Group {
 			$fields_array[ $key ] = $field_object->args();
 			$nested_fields = array();
 			foreach ( $field_object->args( 'fields' ) as $this_field ) {
-				$nested_fields[ $this_field[ 'id'] ] = $this_field;
+				$nested_fields[ $this_field[ 'id' ] ] = $this_field;
 			}
 			$fields_array[ $key ] = array_merge( $fields_array[ $key ], array( 'fields' => $nested_fields) );
 		}
@@ -234,7 +310,7 @@ abstract class CMB2_Field_Group {
 
 		$field->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field->get_html_id_attribute(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -259,7 +335,7 @@ abstract class CMB2_Field_Group {
 		}
 
 		if ( $field->args( 'repeatable' ) ) {
-			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field->id(), '_repeat" data-grouptitle="', $field->options( 'group_title' ), '" class="cmb-add-group-row button">', $field->options( 'add_button' ), '</button></p></div></div>';
+			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button data-selector="', $field->get_html_id_attribute(), '_repeat" data-grouptitle="', $field->options( 'group_title' ), '" class="cmb-add-group-row button">', $field->options( 'add_button' ), '</button></p></div></div>';
 		}
 
 		echo '</div></div></div>';
@@ -286,7 +362,7 @@ abstract class CMB2_Field_Group {
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
 			if ( $field_group->args( 'repeatable' ) ) {
-				echo '<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
+				echo '<button ', $remove_disabled, 'data-selector="', $field_group->get_html_id_attribute(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>';
 			}
 
 			echo '
@@ -295,7 +371,10 @@ abstract class CMB2_Field_Group {
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields
+				$row_data = $field_group->value[ $field_group->index ];
 				foreach ( $field_group->get_field_objects() as $field_object ) {
+					$field_object->value = $row_data[ $field_object->id() ];
+
 					if ( 'hidden' == $field_object->args[ 'type' ] ) {
 
 						// Save rendering for after the metabox
@@ -309,12 +388,17 @@ abstract class CMB2_Field_Group {
 						if ( ! isset( $field_object->args['show_names'] ) ) {
 							$field_object->args['show_names'] = $this->get_show_names();
 						}
+
 						$this->render_group( $field_object );
 
 					} else {
 
 						$field_object->args[ 'show_names' ] = $field_group->args( 'show_names' );
 						$field_object->args[ 'context' ]    = $field_group->args( 'context' );
+
+						// Todo: escaped_value could be caching old data, revisit
+						$field_object->escaped_value = null;
+
 						$field_object->render_field();
 					}
 				}
@@ -322,7 +406,7 @@ abstract class CMB2_Field_Group {
 					echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
+							<button ', $remove_disabled, 'data-selector="', $field_group->get_html_id_attribute(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';
@@ -333,18 +417,6 @@ abstract class CMB2_Field_Group {
 		';
 
 		$field_group->peform_param_callback( 'after_group_row' );
-	}
-
-	/**
-	 * Add a hidden field to the list of hidden fields to be rendered later
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param array $args Array of arguments to be passed to CMB2_Field
-	 */
-	public function add_hidden_field( $args ) {
-
-		$this->get_hidden_fields()[] = new CMB2_Types( new CMB2_Field( $args ) );
 	}
 
 	/**
@@ -436,7 +508,7 @@ abstract class CMB2_Field_Group {
 		 *                            Will only include field ids that had values change.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->get_cmb_id(), $this->get_updated(), $this );
+		do_action( "cmb2_save_{$object_type}_fields", $object_id, $this->get_id(), $this->get_updated(), $this );
 
 		/**
 		 * Fires after all fields have been saved.
@@ -452,7 +524,7 @@ abstract class CMB2_Field_Group {
 		 *                            Will only include field ids that had values change.
 		 * @param array  $cmb         This CMB2 object
 		 */
-		do_action( "cmb2_save_{$object_type}_fields_{$this->get_cmb_id()}", $object_id, $this->get_updated(), $this );
+		do_action( "cmb2_save_{$object_type}_fields_{$this->get_id()}", $object_id, $this->get_updated(), $this );
 
 	}
 
@@ -475,7 +547,7 @@ abstract class CMB2_Field_Group {
 		 * @param array $cmb       This CMB2 object
 		 * @param int   $object_id The ID of the current object
 		 */
-		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->get_cmb_id()}", $this, $this->object_id() );
+		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->get_id()}", $this, $this->object_id() );
 
 		// Remove the show_on properties so saving works
 		$this->set_show_on( array() );
@@ -517,7 +589,7 @@ abstract class CMB2_Field_Group {
 				) );
 
 				if ( $field->save_field_from_data( $this->get_data_to_save() ) ) {
-					$this->get_updated()[] = $field->id();
+					$this->add_updated( $field->id() );
 				}
 
 				break;
@@ -532,28 +604,21 @@ abstract class CMB2_Field_Group {
 	 */
 	public function save_group( $args ) {
 
-		if ( ! isset( $args[ 'id' ], $args[ 'fields' ], $this->get_data_to_save()[ $args[ 'id' ] ] ) || ! is_array( $args[ 'fields' ] ) ) {
+		$field_data_to_save = $this->get_field_data_to_save( $args[ 'id' ] );
+		if ( ! isset( $args[ 'id' ] )  || is_null( $field_data_to_save ) ) {
 			return;
 		}
 
-		$field_group = new CMB2_Field( array(
-			'field_args'  => $args,
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		) );
+		$field_group = $this->get_field_object( $args[ 'id' ] );
 		$base_id     = $field_group->id();
 		$old         = $field_group->get_data();
 		// Check if group field has sanitization_cb
-		$group_vals         = $field_group->sanitization_cb( $this->get_data_to_save()[ $base_id ] );
+		$group_vals         = $field_group->sanitization_cb( $this->get_field_data_to_save( $base_id ) );
 		$saved              = array();
 		$field_group->index = 0;
 
-		foreach ( array_values( $field_group->fields() ) as $field_args ) {
-			$field  = new CMB2_Field( array(
-				'field_args'  => $field_args,
-				'group_field' => $field_group,
-			) );
-			$sub_id = $field->id( true );
+		foreach ( array_values( $field_group->get_field_objects() ) as $field_object ) {
+			$sub_id = $field_object->id();
 
 			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
 
@@ -563,9 +628,9 @@ abstract class CMB2_Field_Group {
 					: false;
 
 				// Sanitize
-				$new_val = $field->sanitization_cb( $new_val );
+				$new_val = $field_object->sanitization_cb( $new_val );
 
-				if ( 'file' == $field->type() && is_array( $new_val ) ) {
+				if ( 'file' == $field_object->type() && is_array( $new_val ) ) {
 					// Add image ID to the array stack
 					$saved[ $field_group->index ][ $new_val[ 'field_id' ] ] = $new_val[ 'attach_id' ];
 					// Reset var to url string
@@ -581,7 +646,7 @@ abstract class CMB2_Field_Group {
 				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
-					$this->get_updated()[] = $base_id . '::' . $field_group->index . '::' . $sub_id;
+					$this->add_updated( $base_id . '::' . $field_group->index . '::' . $sub_id );
 				}
 
 				// Add to `$saved` array
@@ -628,10 +693,21 @@ abstract class CMB2_Field_Group {
 		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
 		$field_object = $this->get_field_object( $index );
 		if ( ! is_null( $field_object ) ) {
-			// Todo: Hacked this to ensure field objects get updated if data was inserted after instantiation
+
+			// Todo: Hacked this to ensure field objects get updated if data was changed after instantiation
 			$field_object->object_id = $this->object_id;
 			$field_object->object_type = $this->object_type;
 			$field_object->escaped_value = null;
+
+			// Also Todo: duplication is getting messier and messier without a field object refactor.  Duct tape only here
+			if( is_array( $field ) && isset( $field[ 'options' ] ) ) {
+				// Here's the rub: we already had a field object tucked away but someone may have gotten an instance,
+				// changed some options, and then passed the arg array-- not the field object-- to something that calls
+				// through to here.  The expected behavior per unit tests is that those changed options persist, so we
+				// make sure to copy them over if they exist.  A better solution is badly needed.
+				$field_object->args[ 'options' ] = $field[ 'options' ];
+			}
+
 			$field_object->value = $field_object->get_data();
 		} else {
 			$field_object = new CMB2_Field( $this->get_field_args( $field_id, $field, $sub_field_id, $field_group ) );
@@ -703,7 +779,7 @@ abstract class CMB2_Field_Group {
 		$parent_field_id = '';
 		$field_group = null;
 		if ( is_a( $this, 'CMB2_Field' ) && 'group' == $this->args( 'type' ) ) {
-			$parent_field_id = $this->args( 'id' );
+			$parent_field_id = $this->id();
 
 			$new_field = new CMB2_Field( array(
 				'field_args'  => $field,

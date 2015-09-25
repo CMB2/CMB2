@@ -284,7 +284,7 @@ class CMB2_Types {
 	 * @since  1.0.0
 	 */
 	public function render_repeatable_field() {
-		$table_id = $this->field->id() . '_repeat';
+		$table_id = $this->field->get_html_id_attribute() . '_repeat';
 
 		$this->_desc( true, true, true );
 		?>
@@ -396,7 +396,7 @@ class CMB2_Types {
 	 * @return string          Name attribute
 	 */
 	public function _name( $suffix = '' ) {
-		return $this->field->args( '_name' ) . ( $this->field->args( 'repeatable' ) ? '[' . $this->iterator . ']' : '' ) . $suffix;
+		return $this->field->get_html_name_attribute() . ( $this->field->args( 'repeatable' ) ? '[' . $this->iterator . ']' : '' ) . $suffix;
 	}
 
 	/**
@@ -406,7 +406,7 @@ class CMB2_Types {
 	 * @return string          Id attribute
 	 */
 	public function _id( $suffix = '' ) {
-		return $this->field->id() . $suffix . ( $this->field->args( 'repeatable' ) ? '_' . $this->iterator . '" data-iterator="' . $this->iterator : '' );
+		return $this->field->get_html_id_attribute() . $suffix . ( $this->field->args( 'repeatable' ) ? '_' . $this->iterator . '" data-iterator="' . $this->iterator : '' );
 	}
 
 	/**
@@ -488,12 +488,17 @@ class CMB2_Types {
 	}
 
 	public function wysiwyg( $args = array() ) {
+
 		$a = $this->parse_args( $args, 'input', array(
 			'id'      => $this->_id(),
 			'value'   => $this->field->escaped_value( 'stripslashes' ),
 			'desc'    => $this->_desc( true ),
 			'options' => $this->field->options(),
 		) );
+
+		// Todo: This needs to be updated dynamically but only for wysiwyg fields
+		// Better solution?
+		$a[ 'options' ][ 'textarea_name' ] = $this->_name();
 
 		wp_editor( $a['value'], $a['id'], $a['options'] );
 		echo $a['desc'];
@@ -932,8 +937,7 @@ class CMB2_Types {
 		// Reset field args for attachment ID
 		$args = $this->field->args();
 		// If we're looking at a file in a group, we need to get the non-prefixed id
-		$args['id'] = ( $this->field->group ? $this->field->args( '_id' ) : $cached_id ) . '_id';
-		unset( $args['_id'], $args['_name'] );
+		$args['id'] = ( $this->field->group ? $this->field->id() : $cached_id ) . '_id';
 
 		// And get new field object
 		$this->field = new CMB2_Field( array(

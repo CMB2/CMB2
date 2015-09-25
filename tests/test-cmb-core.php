@@ -105,7 +105,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'bg_color' => '#ffffff',
 			'my_name' => 'Justin',
 		);
-		add_option( $this->options_cmb->cmb_id, $this->opt_set );
+		add_option( $this->options_cmb->get_id(), $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
 
@@ -148,7 +148,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_id_get() {
 		$cmb = new CMB2( array( 'id' => $this->cmb_id ) );
-		$this->assertEquals( $cmb->cmb_id, $this->cmb_id );
+		$this->assertEquals( $cmb->get_id(), $this->cmb_id );
 	}
 
 	public function test_defaults_set() {
@@ -740,7 +740,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$cmb = cmb2_get_metabox( 'test' );
 
-		$this->assertEquals( 'test', $cmb->cmb_id );
+		$this->assertEquals( 'test', $cmb->get_id() );
 		$this->assertEquals( array(), $cmb->updated );
 		$this->assertEquals( 0, $cmb->object_id );
 	}

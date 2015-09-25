@@ -308,15 +308,14 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Peforms saving of `file` attachement's ID
+	 * Performs saving of `file` attachment's ID
 	 * @since  1.1.0
 	 */
 	public function _save_file_id() {
 		$group      = $this->field->group;
 		$args       = $this->field->args();
-		$args['id'] = $args['_id'] . '_id';
+		$args[ 'id' ] = $args[ 'id' ] . '_id';
 
-		unset( $args['_id'], $args['_name'] );
 		// And get new field object
 		$field      = new CMB2_Field( array(
 			'field_args'  => $args,
@@ -324,13 +323,13 @@ class CMB2_Sanitize {
 			'object_id'   => $this->field->object_id,
 			'object_type' => $this->field->object_type,
 		) );
-		$id_key     = $field->_id();
+		$id_key     = $field->id();
 		$id_val_old = $field->escaped_value( 'absint' );
 
 		if ( $group ) {
 			// Check group $_POST data
 			$i       = $group->index;
-			$base_id = $group->_id();
+			$base_id = $group->id();
 			$id_val  = isset( $_POST[ $base_id ][ $i ][ $id_key ] ) ? absint( $_POST[ $base_id ][ $i ][ $id_key ] ) : 0;
 
 		} else {
