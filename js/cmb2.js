@@ -40,7 +40,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( cmb.$metabox ) {
 			return cmb.$metabox;
 		}
-		cmb.$metabox = $('.cmb2-wrap > .cmb2-metabox, .wp-customizer .customize-control' );
+		cmb.$metabox = $('.cmb2-wrap > .cmb2-metabox, .customize-control' );
 		return cmb.$metabox;
 	};
 
