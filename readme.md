@@ -2,7 +2,8 @@
 
 ```php
 //Sample PHP for Customizer 
-$cmb = new_cmb2_box( array(
+add_action( 'cmb2_init', function() {
+    $cmb = new_cmb2_box( array(
         'id'            => 'address',
         'title'         => __( 'My Address', 'cmb2' ),
         'object_types'  => 'customizer', // Post type
@@ -155,6 +156,25 @@ $cmb = new_cmb2_box( array(
             'none'     => __( 'Option Three', 'cmb' ),
         ),
     ) );
+    
+    /* Pauli LOC */
+    $time_custom = new_cmb2_box( array(
+        'id'            => 'time_custom',
+        'title'         => __( 'Time Custon', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    $time_custom->add_field( array(
+        'name' => 'Test Date Picker',
+        'id' => 'wiki_test_texttime',
+        'type' => 'text_time',
+        'time_format' => 'h:i:s A',
+    ) );
+
+} );
+
 ```
 
 ```php
