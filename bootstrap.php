@@ -19,7 +19,10 @@ function cmb2_customizer_start( $customizer ) {
     new CMB2_Customizer( $customizer );
 }
 function cmb2_customizer_enqueue() {
-    //happy
+    wp_enqueue_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-core', 'jquery-ui-slider', 'jquery-ui-datepicker' ), CMB2_VERSION, true );
+    wp_enqueue_script( 'cmb2-scripts', cmb2_utils()->url( "js/cmb2.js" ), array( 'jquery-ui-datetimepicker' ), CMB2_VERSION, true );
+    CMB2_JS::localize( false );
+    CMB2_hookup::enqueue_cmb_css();
 }
 
 
