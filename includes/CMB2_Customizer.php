@@ -4,6 +4,8 @@ require 'customizer/CMB2_Customizer_Textarea.php';
 require 'customizer/CMB2_Customizer_Radio.php';
 require 'customizer/CMB2_Customizer_Radio_Taxonomy.php';
 require 'customizer/CMB2_Customizer_Taxonomy_Select.php';
+require 'customizer/CMB2_Customizer_Select.php';
+
 class CMB2_Customizer {
     
 	
@@ -38,9 +40,14 @@ class CMB2_Customizer {
             'taxonomy_radio'          => 'CMB_Customize_Radio_Taxonomy',
             'taxonomy_radio_inline'   => 'CMB_Customize_Radio_Taxonomy',
             'taxonomy_select'         => 'CMB_Customize_Taxonomy_Select',
+            'select'                  => 'CMB_Customize_Select'
+        );
+        $field_types_builtin = array(
+            'WP_Customize_Color_Control',
+            'WP_Customize_Media_Control',
+            'WP_Customize_Control'
         );
         /* Can't get to work: text_time, select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone , hidden*/
-        /* Radio is still buggy - needs 'data-customize-setting-link'   => $this->_name() */
             
         
         
@@ -84,20 +91,26 @@ class CMB2_Customizer {
                         }
                     }
                     
+                    $customize_args = array(
+                		'label'         => $field_type[ 'name' ], 
+                		'section'       => $customizer_id,
+                		'settings'      => $field_type[ 'id' ],
+                		'id'            => $field_type[ 'id' ],
+                		'priority'      => 10,
+                		'input_attrs'   => $field_type[ 'options' ],
+                		'type'          => $type
+                    );
+                    if ( in_array( $type_class, $field_types_builtin ) ) {
+                        unset( $customize_args[ 'type' ] );
+                    }
+                     
+                    
                     $wp_customize->add_control( new $type_class( 
-            	$wp_customize, 
-                	$field_type[ 'id' ],
-                	array(
-                		'label'    => $field_type[ 'name' ], 
-                		'section'  => $customizer_id,
-                		'settings' => $field_type[ 'id' ],
-                		'id'       => $field_type[ 'id' ],
-                		'priority'    => 10,
-                		'input_attrs' => $field_type[ 'options' ],
-                		'type'        => $type
-                        )
-                    ));
-                }
+                        $wp_customize, 
+                    	$field_type[ 'id' ], 
+                    	$customize_args
+                    ) );
+                } 
                 
             
             }

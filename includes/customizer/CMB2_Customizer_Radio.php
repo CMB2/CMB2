@@ -4,7 +4,6 @@ class CMB_Customize_Radio extends WP_Customize_Control {
     public $type = 'radio';
     
     public function render_content() {       
-       ob_start();
        $counter = 0;
        echo sprintf( '<div id="customize-control-%s" class="customize-control customize-control-radio" style="display: list-item;">', esc_attr( $this->id ) );
        echo sprintf( '<span class="customize-control-title">%s</span>', esc_html( $this->label ) );

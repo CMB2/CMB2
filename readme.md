@@ -2,8 +2,7 @@
 
 ```php
 //Sample PHP for Customizer 
-add_action( 'cmb2_init', function() {
-    $cmb = new_cmb2_box( array(
+$cmb = new_cmb2_box( array(
         'id'            => 'address',
         'title'         => __( 'My Address', 'cmb2' ),
         'object_types'  => 'customizer', // Post type
@@ -57,7 +56,7 @@ add_action( 'cmb2_init', function() {
     $cmb2 = new_cmb2_box( array(
         'id'            => 'my_custom',
         'title'         => __( 'My Custom Textarea', 'cmb2' ),
-        'object_types'  => array( 'post' ), // Post type
+        'object_types'  => 'customizer', // Post type
         'context'       => 'normal',
         'priority'      => 200,
         'show_names'    => true, // Show field names on the left
@@ -85,8 +84,102 @@ add_action( 'cmb2_init', function() {
         'custom'   => __( 'Option Two', 'cmb' ),
         'none'     => __( 'Option Three', 'cmb' ),
     ),
-) );
-} );
+    ) );
+    $cmb2->add_field( array(
+    'name'             => 'Test Radio',
+    'id'               => 'wiki_my_radio',
+    'type'             => 'radio_inline',
+    'show_option_none' => true,
+    'options'          => array(
+        'standard' => __( 'Option One', 'cmb' ),
+        'custom'   => __( 'Option Two', 'cmb' ),
+        'none'     => __( 'Option Three', 'cmb' ),
+    ),
+    ) );
+    $cmb2->add_field( array(
+    'name'     => 'Test Taxonomy Radio',
+    'desc'     => 'Description Goes Here',
+    'id'       => 'wiki_test_taxonomy_radio',
+    'taxonomy' => 'category', // Enter Taxonomy Slug
+    'type'     => 'taxonomy_radio',
+    // Optional:
+    'options' => array(
+        'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
+    $cmb->add_field( array(
+    'name'     => 'Test Taxonomy Radio Inline',
+    'desc'     => 'Description Goes Here',
+    'id'       => 'wiki_test_taxonomy_radio_inline',
+    'taxonomy' => 'category', // Enter Taxonomy Slug
+    'type'     => 'taxonomy_radio_inline',
+    // Optional:
+    'options' => array(
+        'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
+    
+    /* Pauli LOC */
+    $pauli = new_cmb2_box( array(
+        'id'            => 'pauli_custom',
+        'title'         => __( 'Info for Pauli', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $pauli->add_field( array(
+        'name'       => __( 'Age', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_pauli_age',
+        'type'       => 'text_url',
+    ) );
+    $pauli->add_field( array(
+        'name'     => 'Test Taxonomy Select',
+        'desc'     => 'Description Goes Here',
+        'id'       => 'wiki_test_taxonomy_select',
+        'taxonomy' => 'category', //Enter Taxonomy Slug
+        'type'     => 'taxonomy_select',
+    ) );
+    $pauli->add_field( array(
+        'name'             => 'Test Select',
+        'desc'             => 'Select an option',
+        'id'               => 'wiki_test_select',
+        'type'             => 'select',
+        'show_option_none' => true,
+        'default'          => 'custom',
+        'options'          => array(
+            'standard' => __( 'Option One', 'cmb' ),
+            'custom'   => __( 'Option Two', 'cmb' ),
+            'none'     => __( 'Option Three', 'cmb' ),
+        ),
+    ) );
+```
+
+```php
+/* Test Outputs */
+<?php echo get_option( 'cmb_street_address', 'd' ); ?>
+<br />
+<?php echo get_option( 'cmb_street_field', 'd' ); ?>
+<br />
+<?php echo get_option( 'cmb_check' ); ?>
+<br />
+<?php echo get_option( 'cmb_textarea' ); ?>
+<br />
+<?php echo get_option( 'cmb_textarea_small' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_radio' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_radio' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_radio_inline' ); ?>
+<br />
+<?php echo get_option( 'cmb_pauli_age' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_select' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_select' ); ?>
 ```
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
