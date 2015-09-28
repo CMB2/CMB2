@@ -104,15 +104,15 @@ class CMB2_Customizer {
 				'type'  => 'select',
 			),
 			'taxonomy_radio'                   => array(
-				'class' => 'CMB2_Customize_Taxonomy_Control',
+				'class' => 'CMB2_Customizer_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_radio_inline'            => array(
-				'class' => 'CMB2_Customize_Taxonomy_Control',
+				'class' => 'CMB2_Customizer_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_select'                  => array(
-				'class' => 'CMB2_Customize_Taxonomy_Control',
+				'class' => 'CMB2_Customizer_Taxonomy_Control',
 				'type'  => 'select',
 			),
 			'taxonomy_multicheck'              => array(
@@ -145,10 +145,9 @@ class CMB2_Customizer {
 		$field_type_mapping = apply_filters( 'cmb2_customizer_field_type_mapping', $field_type_mapping );
 
 		// Load classes
-		foreach ( $field_type_mapping as $field_type => $field_data ) {
-    		$type_class = $field_data[ 'class' ];
-			if ( ! class_exists( $type_class ) && 0 === strpos( $type_class, 'CMB2_' ) ) {
-				include_once cmb2_dir( 'includes/customizer/' . $type_class . '.php' );
+		foreach ( $field_type_mapping as $mapping ) {
+			if ( ! class_exists( $mapping['class'] ) && 0 === strpos( $mapping['class'], 'CMB2_' ) ) {
+				include_once cmb2_dir( 'includes/customizer/' . $mapping['class'] . '.php' );
 			}
 		}
 
@@ -161,8 +160,6 @@ class CMB2_Customizer {
 		foreach ( $customizer_boxes as $type => $instance ) {
 			$customizer_objects[] = cmb2_get_metabox( $type, 0, 'customizer' );
 		}
-
-		/* Can't get to work: select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone */
 
 		foreach ( $customizer_objects as $index => $cmb ) {
 			/* Add Address Info to Customizer */
@@ -181,30 +178,32 @@ class CMB2_Customizer {
 
 				$field_type = $field->type();
 				$field_id   = $field->_id();
-				$field_label = $field->name();
+				$field_name = $field->args( 'name' );
 
 				// Skip if it doesn't exist
 				if ( ! isset( $field_type_mapping[ $field_type ] ) ) {
 					continue;
 				}
-				$type_class = $field_type_mapping[ $field_type ][ 'class' ];
+
+				$mapping = $field_type_mapping[ $field_type ];
+
+				$type_class = $mapping['class'];
 
 				$setting_args = array(
 					'type' => 'option',
 				);
+
 				$wp_customize->add_setting( $field_id, $setting_args );
 
 				if ( class_exists( $type_class ) ) {
-					$type = $field_type_mapping[ $field_type ][ 'type' ];;
-
 					$customize_args = array(
-						'label'    => $field_label,
+						'label'    => $field_name,
 						'section'  => $customizer_id,
 						'settings' => $field_id,
 						'id'       => $field_id,
 						'priority' => 10,
 						'choices'  => $field->options(),
-						'type'     => $type,
+						'type'     => $mapping['type'],
 					);
 
 					$control = new $type_class( $wp_customize, $field_id, $customize_args );
