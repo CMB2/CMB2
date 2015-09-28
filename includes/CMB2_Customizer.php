@@ -145,9 +145,9 @@ class CMB2_Customizer {
 		$field_type_mapping = apply_filters( 'cmb2_customizer_field_type_mapping', $field_type_mapping );
 
 		// Load classes
-		foreach ( $field_type_mapping as $type_class ) {
-			if ( ! class_exists( $type_class ) && 0 === strpos( $type_class, 'CMB2_' ) ) {
-				include_once cmb2_dir( 'includes/customizer/' . $type_class . '.php' );
+		foreach ( $field_type_mapping as $mapping ) {
+			if ( ! class_exists( $mapping['class'] ) && 0 === strpos( $mapping['class'], 'CMB2_' ) ) {
+				include_once cmb2_dir( 'includes/customizer/' . $mapping['class'] . '.php' );
 			}
 		}
 
@@ -186,7 +186,9 @@ class CMB2_Customizer {
 					continue;
 				}
 
-				$type_class = $field_type_mapping[ $field_type ];
+				$mapping = $field_type_mapping[ $field_type ];
+
+				$type_class = $mapping['class'];
 
 				$setting_args = array(
 					'type' => 'option',
@@ -195,8 +197,6 @@ class CMB2_Customizer {
 				$wp_customize->add_setting( $field_id, $setting_args );
 
 				if ( class_exists( $type_class ) ) {
-					$type = $field_type['type'];
-
 					$customize_args = array(
 						'label'    => $field_type['name'],
 						'section'  => $customizer_id,
@@ -204,7 +204,7 @@ class CMB2_Customizer {
 						'id'       => $field_id,
 						'priority' => 10,
 						'choices'  => $field->options(),
-						'type'     => $type,
+						'type'     => $mapping['type'],
 					);
 
 					$control = new $type_class( $wp_customize, $field_id, $customize_args );
