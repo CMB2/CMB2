@@ -1,5 +1,4 @@
 <?php
-
 class CMB2_Customizer {
 
 	/**
