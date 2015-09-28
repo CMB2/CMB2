@@ -47,9 +47,9 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 		add_filter( 'cmb2_types_input_wrap', array( $this, 'cmb2_input' ), 10, 3 );
 
 		$this->cmb2_rendered = false;
-
+		
 		$this_type = new CMB2_Types( $this->cmb2_field );
-		$this_type->{$field_type}( $args );
+		echo $this_type->{$field_type}( $this->cmb2_field->args );
 
 		// Remove override
 		remove_filter( 'cmb2_types_input', array( $this, 'cmb2_input' ) );
