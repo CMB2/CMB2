@@ -104,15 +104,15 @@ class CMB2_Customizer {
 				'type'  => 'select',
 			),
 			'taxonomy_radio'                   => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_radio_inline'            => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_select'                  => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'select',
 			),
 			'taxonomy_multicheck'              => array(
