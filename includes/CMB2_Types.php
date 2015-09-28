@@ -696,12 +696,14 @@ class CMB2_Types {
 			) );
 		}
 
-		foreach ( $terms as $term ) {
-			$options .= $this->select_option( array(
-				'label'   => $term->name,
-				'value'   => $term->slug,
-				'checked' => $saved_term == $term->slug,
-			) );
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			foreach ( $terms as $term ) {
+				$options .= $this->select_option( array(
+					'label'   => $term->name,
+					'value'   => $term->slug,
+					'checked' => $saved_term == $term->slug,
+				) );
+			}
 		}
 
 		return $this->select( array( 'options' => $options ) );
@@ -758,7 +760,7 @@ class CMB2_Types {
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = ''; $i = 1;
 
-		if ( ! $terms ) {
+		if ( ! $terms || is_wp_error( $terms ) ) {
 			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
 		} else {
 			$option_none  = $this->field->args( 'show_option_none' );
@@ -806,7 +808,7 @@ class CMB2_Types {
 		$name        = $this->_name() . '[]';
 		$options     = ''; $i = 1;
 
-		if ( ! $terms ) {
+		if ( ! $terms || is_wp_error( $terms ) ) {
 			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
 		} else {
 
