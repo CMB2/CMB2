@@ -146,6 +146,9 @@ if ( ! class_exists( 'CMB2_Bootstrap_210', false ) ) {
 			// Now kick off the class autoloader
 			spl_autoload_register( 'cmb2_autoload_classes' );
 
+			// Register Customizer integration
+			add_action( 'customize_register', array( $this, 'customize_register' ) );
+
 			// Kick the whole thing off
 			require_once 'bootstrap.php';
 		}
@@ -171,6 +174,17 @@ if ( ! class_exists( 'CMB2_Bootstrap_210', false ) ) {
 				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}
+
+		}
+
+		/**
+		 * Setup CMB2 integration for the Customizer
+		 *
+		 * @param WP_Customize_Manager $wp_customize
+		 */
+		function customize_register( $wp_customize ) {
+
+			new CMB2_Customizer( $wp_customize );
 
 		}
 

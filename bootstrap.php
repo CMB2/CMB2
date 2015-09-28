@@ -9,32 +9,12 @@
  * @link      http://webdevstudios.com
  */
 
-/* Load customizer Options */
-add_action( 'cmb2_init', 'cmb2_customizer_init', 1, 1 );
-function cmb2_customizer_init() {
-    add_action( 'customize_register', 'cmb2_customizer_start', 10, 1 );
-    add_action( 'customize_controls_enqueue_scripts', 'cmb2_customizer_enqueue' );
-}
-function cmb2_customizer_start( $customizer ) {
-    new CMB2_Customizer( $customizer );
-}
-function cmb2_customizer_enqueue() {
-    wp_enqueue_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-core', 'jquery-ui-slider', 'jquery-ui-datepicker' ), CMB2_VERSION, true );
-    wp_enqueue_script( 'cmb2-scripts', cmb2_utils()->url( "js/cmb2.js" ), array( 'jquery-ui-datetimepicker' ), CMB2_VERSION, true );
-    CMB2_JS::localize( false );
-    CMB2_hookup::enqueue_cmb_css();
-}
-
-
 /**
  * Fires when CMB2 is included/loaded
  *
  * Should be used to add metaboxes. See example-functions.php
  */
 do_action( 'cmb2_init' );
-
-
-
 
 /**
  * For back-compat. Does the dirtywork of instantiating all the
