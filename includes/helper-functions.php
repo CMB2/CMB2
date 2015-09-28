@@ -28,8 +28,14 @@ function cmb2_autoload_classes( $class_name ) {
 	if ( 0 !== strpos( $class_name, 'CMB2' ) ) {
 		return;
 	}
+	
+	if ( file_exists( cmb2_dir( "includes/{$class_name}.php"  ) ) ) {
+        include_once( cmb2_dir( "includes/{$class_name}.php" ) );	
+	} elseif( file_exists( cmb2_dir( "includes/customizer/{$class_name}.php" ) ) ) {
+    	include_once( cmb2_dir( "includes/customizer/{$class_name}.php" ) );
+	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	
 }
 
 /**

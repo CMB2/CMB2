@@ -104,15 +104,15 @@ class CMB2_Customizer {
 				'type'  => 'select',
 			),
 			'taxonomy_radio'                   => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_radio_inline'            => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'radio',
 			),
 			'taxonomy_select'                  => array(
-				'class' => 'CMB2_Customizer_Taxonomy_Control',
+				'class' => 'CMB2_Customize_Taxonomy_Control',
 				'type'  => 'select',
 			),
 			'taxonomy_multicheck'              => array(
@@ -145,7 +145,8 @@ class CMB2_Customizer {
 		$field_type_mapping = apply_filters( 'cmb2_customizer_field_type_mapping', $field_type_mapping );
 
 		// Load classes
-		foreach ( $field_type_mapping as $type_class ) {
+		foreach ( $field_type_mapping as $field_type => $field_data ) {
+    		$type_class = $field_data[ 'class' ];
 			if ( ! class_exists( $type_class ) && 0 === strpos( $type_class, 'CMB2_' ) ) {
 				include_once cmb2_dir( 'includes/customizer/' . $type_class . '.php' );
 			}
@@ -180,25 +181,24 @@ class CMB2_Customizer {
 
 				$field_type = $field->type();
 				$field_id   = $field->_id();
+				$field_label = $field->name();
 
 				// Skip if it doesn't exist
 				if ( ! isset( $field_type_mapping[ $field_type ] ) ) {
 					continue;
 				}
-
-				$type_class = $field_type_mapping[ $field_type ];
+				$type_class = $field_type_mapping[ $field_type ][ 'class' ];
 
 				$setting_args = array(
 					'type' => 'option',
 				);
-
 				$wp_customize->add_setting( $field_id, $setting_args );
 
 				if ( class_exists( $type_class ) ) {
-					$type = $field_type['type'];
+					$type = $field_type_mapping[ $field_type ][ 'type' ];;
 
 					$customize_args = array(
-						'label'    => $field_type['name'],
+						'label'    => $field_label,
 						'section'  => $customizer_id,
 						'settings' => $field_id,
 						'id'       => $field_id,
