@@ -161,8 +161,6 @@ class CMB2_Customizer {
 			$customizer_objects[] = cmb2_get_metabox( $type, 0, 'customizer' );
 		}
 
-		/* Can't get to work: select_timezone, text_date_timestamp, text_datetime_timestamp, text_datetime_timestamp_timezone */
-
 		foreach ( $customizer_objects as $index => $cmb ) {
 			/* Add Address Info to Customizer */
 			$customizer_id = $cmb->prop( 'id' );
@@ -180,6 +178,7 @@ class CMB2_Customizer {
 
 				$field_type = $field->type();
 				$field_id   = $field->_id();
+				$field_name = $field->args( 'name' );
 
 				// Skip if it doesn't exist
 				if ( ! isset( $field_type_mapping[ $field_type ] ) ) {
@@ -198,7 +197,7 @@ class CMB2_Customizer {
 
 				if ( class_exists( $type_class ) ) {
 					$customize_args = array(
-						'label'    => $field_type['name'],
+						'label'    => $field_name,
 						'section'  => $customizer_id,
 						'settings' => $field_id,
 						'id'       => $field_id,
