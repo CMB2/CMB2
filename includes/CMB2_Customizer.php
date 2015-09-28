@@ -185,6 +185,11 @@ class CMB2_Customizer {
 					continue;
 				}
 
+				// Skip repeatable fields
+				if ( $field->args( 'repeatable' ) ) {
+					continue;
+				}
+
 				$mapping = $field_type_mapping[ $field_type ];
 
 				$type_class = $mapping['class'];
