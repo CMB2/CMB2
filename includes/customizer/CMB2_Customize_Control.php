@@ -10,6 +10,11 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 	public $cmb2_field;
 
 	/**
+	 * @var bool
+	 */
+	public $cmb2_rendered = false;
+
+	/**
 	 * Render content
 	 */
 	public function render_content() {
@@ -39,12 +44,18 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 
 		// Override default CMB2 input
 		add_filter( 'cmb2_types_input', array( $this, 'cmb2_input' ), 10, 3 );
+		add_filter( 'cmb2_types_input_wrap', array( $this, 'cmb2_input' ), 10, 3 );
+
+		$this->cmb2_rendered = false;
 
 		$this_type = new CMB2_Types( $this->cmb2_field );
 		$this_type->{$field_type}( $args );
 
 		// Remove override
 		remove_filter( 'cmb2_types_input', array( $this, 'cmb2_input' ) );
+		remove_filter( 'cmb2_types_input_wrap', array( $this, 'cmb2_input' ) );
+
+		$this->cmb2_rendered = false;
 
 	}
 
@@ -56,6 +67,12 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 	 * @param string $field_type
 	 */
 	public function cmb2_input( $input, $args, $field_type ) {
+
+		// When hooking into wrapping function, we don't normally get the
+		// same final $args to work with, so we'll use the first input instead
+		if ( $this->cmb2_rendered ) {
+			return $this->cmb2_rendered;
+		}
 
 		if ( $field_type !== $this->cmb2_field->type() ) {
 			return $input;
@@ -69,12 +86,14 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 		// Render base customizer input
 		parent::render_content();
 
-		return ob_get_clean();
+		$this->cmb2_rendered = ob_get_clean();
+
+		return $this->cmb2_rendered;
 
 	}
 
 	/**
-	 * Get term choices from taxonomy field
+	 * Get term choices for taxonomy fields
 	 *
 	 * @return array Term choices
 	 */
