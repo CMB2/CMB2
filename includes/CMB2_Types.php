@@ -423,10 +423,13 @@ class CMB2_Types {
 			'id'                            => $this->_id(),
 			'value'                         => $this->field->escaped_value(),
 			'desc'                          => $this->_desc( true ),
-			'data-customize-setting-link'   => $this->_name()
 		) );
 
-		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
+		$input = sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] );
+
+		$input = apply_filters( 'cmb2_types_input', $input, $a, $this->field->type() );
+
+		return $input;
 	}
 
 	/**
@@ -440,13 +443,17 @@ class CMB2_Types {
 			'class'                         => 'cmb2_textarea',
 			'name'                          => $this->_name(),
 			'id'                            => $this->_id(),
-			'data-customize-setting-link'   => $this->_name(),
 			'cols'                          => 60,
 			'rows'                          => 10,
 			'value'                         => $this->field->escaped_value( 'esc_textarea' ),
 			'desc'                          => $this->_desc( true ),
 		) );
-		return sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] );
+
+		$input = sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] );
+
+		$input = apply_filters( 'cmb2_types_input', $input, $a, $this->field->type() );
+
+		return $input;
 	}
 
 	/**
@@ -645,7 +652,11 @@ class CMB2_Types {
 			'desc'  => $this->_desc( true ),
 		) );
 
-		return sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $a['tag'], $a['class'], $a['name'], $a['desc'] );
+		$input = sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $a['tag'], $a['class'], $a['name'], $a['desc'] );
+
+		$input = apply_filters( 'cmb2_types_input', $input, $a, $this->field->type() );
+
+		return $input;
 	}
 
 	public function select( $args = array() ) {
@@ -658,7 +669,12 @@ class CMB2_Types {
 		) );
 
 		$attrs = $this->concat_attrs( $a, array( 'desc', 'options' ) );
-		return sprintf( '<select%s>%s</select>%s', $attrs, $a['options'], $a['desc'] );
+
+		$input = sprintf( '<select%s>%s</select>%s', $attrs, $a['options'], $a['desc'] );
+
+		$input = apply_filters( 'cmb2_types_input', $input, $a, $this->field->type() );
+
+		return $input;
 	}
 
 	public function taxonomy_select() {
@@ -698,7 +714,11 @@ class CMB2_Types {
 			'desc'    => $this->_desc( true ),
 		) );
 
-		return sprintf( '<ul class="%s">%s</ul>%s', $a['class'], $a['options'], $a['desc'] );
+		$input = sprintf( '<ul class="%s">%s</ul>%s', $a['class'], $a['options'], $a['desc'] );
+
+		$input = apply_filters( 'cmb2_types_input_wrap', $input, $a, $this->field->type() );
+
+		return $input;
 	}
 
 	public function radio_inline() {
@@ -724,7 +744,12 @@ class CMB2_Types {
 		if ( ! empty( $meta_value ) ) {
 			$args['checked'] = 'checked';
 		}
-		return sprintf( '%s <label for="%s">%s</label>', $this->input( $args ), $this->_id(), $this->_desc() );
+
+		$input = sprintf( '%s <label for="%s">%s</label>', $this->input( $args ), $this->_id(), $this->_desc() );
+
+		$input = apply_filters( 'cmb2_types_checkbox_input', $input, $args, $this->field->type() );
+
+		return $input;
 	}
 
 	public function taxonomy_radio() {
@@ -824,13 +849,18 @@ class CMB2_Types {
 			) )
 			: '';
 
-		echo $this->input( array(
+		$input = $this->input( array(
 			'class'           => 'cmb2-oembed regular-text',
 			'data-objectid'   => $this->field->object_id,
 			'data-objecttype' => $this->field->object_type,
-		) ),
-		'<p class="cmb-spinner spinner" style="display:none;"></p>',
-		'<div id="', $this->_id( '-status' ), '" class="cmb2-media-status ui-helper-clearfix embed_wrap">', $oembed, '</div>';
+		) );
+
+		$input .= '<p class="cmb-spinner spinner" style="display:none;"></p>';
+		$input .= '<div id="' . $this->_id( '-status' ) . '" class="cmb2-media-status ui-helper-clearfix embed_wrap">' . $oembed . '</div>';
+
+		$input = apply_filters( 'cmb2_types_input_wrap', $input, array(), $this->field->type() );
+
+		return $input;
 	}
 
 	public function file_list() {
