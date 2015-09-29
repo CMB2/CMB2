@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class CMB2_Customizer
+ */
 class CMB2_Customizer {
 
 	/**
@@ -209,9 +212,9 @@ class CMB2_Customizer {
 						'choices'  => $field->options(),
 						'type'     => $mapping['type'],
 					);
-					
-					$control = new $type_class( $wp_customize, $field_id, $customize_args );           
-					
+
+					$control = new $type_class( $wp_customize, $field_id, $customize_args );
+
 					// Add field to control for further reference
 					$control->cmb2_field = $field;
 
