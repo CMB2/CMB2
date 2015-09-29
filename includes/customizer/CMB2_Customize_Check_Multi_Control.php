@@ -30,7 +30,7 @@ class CMB2_Customize_Check_Multi_Control extends CMB2_Customize_Control {
 
 		echo sprintf( '<span class="customize-control-title">%s</span>', esc_html( $this->label ) );
 
-		foreach ( $this->input_attrs as $label => $value ) {
+		foreach ( $this->choices as $value => $label ) {
 			$input = sprintf( '<label for="%1$s"><input type="checkbox" value="%2$s" id="%1$s" name="%3$s[]"%4$s />&nbsp;%5$s</label>', esc_attr( $this->id . '_' . $counter ), esc_attr( $value ), esc_attr( $this->id ), checked( true, in_array( $value, $field_value ), false ), esc_html( $label ) );
 
 			echo $input . '<br />';
