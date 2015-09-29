@@ -34,10 +34,6 @@ class CMB2_Customize_Control extends WP_Customize_Control {
 		$field_type = $this->cmb2_field->type();
 		$setting_id = $this->cmb2_field->_id();
 
-		if ( ! empty( $this->settings['default'] ) ) {
-			$setting_id = $this->settings['default']->id;
-		}
-
 		$args = array(
 			'data-customize-setting-link' => $setting_id,
 		);
