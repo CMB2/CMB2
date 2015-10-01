@@ -838,12 +838,18 @@ class CMB2 {
 	protected function add_fields( $fields, $parent_field_id = null ) {
 		foreach ( $fields as $field ) {
 
+			$sub_fields = false;
+			if ( array_key_exists( 'fields', $field ) ) {
+				$sub_fields = $field['fields'];
+				unset( $field['fields'] );
+			}
+
 			$field_id = $parent_field_id
 				? $this->add_group_field( $parent_field_id, $field )
 				: $this->add_field( $field );
 
-			if ( array_key_exists( 'fields', $field ) ) {
-				$this->add_fields( $field['fields'], $field_id );
+			if ( $sub_fields ) {
+				$this->add_fields( $sub_fields, $field_id );
 			}
 		}
 	}

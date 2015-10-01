@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## 2.1.2 - 2015-10-01
+
+### Bug Fixes
+
+* Fixes back-compatibility issue when adding fields array to the metabox registration. ([#472](https://github.com/WebDevStudios/CMB2/pull/472))
+
 ## 2.1.1 - 2015-09-30
 
 ### Enhancements
