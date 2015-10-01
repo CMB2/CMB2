@@ -495,35 +495,34 @@ class CMB2_Field {
 			$action  = 'removed';
 		}
 
-		$field_args = $this->args();
-		
+		$field_id = $this->id( true );
+
 		/**
 		 * Hooks after save field action.
 		 *
-		 * @since 2.2.0
+		 * @since 2.1.3
 		 *
-		 * @param bool              $updated    Whether the metadata update action occurred.
-		 * @param string            $action     Action performed. Could be "repeatable", "updated", or "removed".
-		 * @param array             $field_args All field arguments
-		 * @param CMB2_Field object $field      This field object
+		 * @param string            $field_id the current field id paramater.
+		 * @param bool              $updated  Whether the metadata update action occurred.
+		 * @param string            $action   Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param CMB2_Field object $field    This field object
 		 */
-		do_action( 'cmb2_save_field', $updated, $action, $field_args, $this );
-		
+		do_action( 'cmb2_save_field', $field_id, $updated, $action, $this );
+
 		/**
 		 * Hooks after save field action.
 		 *
-		 * The dynamic portion of the hook, $field_args['field_id'], refers to the current
-		 * field id paramater.
+		 * The dynamic portion of the hook, $field_id, refers to the
+		 * current field id paramater.
 		 *
-		 * @since 2.2.0
+		 * @since 2.1.3
 		 *
-		 * @param bool              $updated    Whether the metadata update action occurred.
-		 * @param string            $action     Action performed. Could be "repeatable", "updated", or "removed".
-		 * @param array             $field_args All field arguments
-		 * @param CMB2_Field object $field      This field object
+		 * @param bool              $updated Whether the metadata update action occurred.
+		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param CMB2_Field object $field   This field object
 		 */
-		do_action( 'cmb2_save_field_' . $field_args['field_id'], $updated, $action, $field_args, $this );
-		
+		do_action( "cmb2_save_field_{$field_id}", $updated, $action, $this );
+
 		return $updated;
 	}
 
