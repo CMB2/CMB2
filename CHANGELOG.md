@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## 2.1.0 - 2015-10-30
+
 ### Enhancements
 
 * Make all CMB2::save_fields arguments optional to fall-back to `$_POST` data. Props [JPry](https://github.com/JPry).
@@ -25,7 +27,7 @@ All notable changes to this project will be documented in this file.
 * Fixes issue with `'file_list'` fields not saving properly when in repeatable groups display. Props [jamiechong](https://github.com/jamiechong) ([#433](https://github.com/WebDevStudios/CMB2/pull/433),[#187](https://github.com/WebDevStudios/CMB2/pull/187)).
 * Update `'taxonomy_radio_inline'` and `'taxonomy_multicheck_inline'` fields sanitization method to use the same method as the non-inline versions. Props [superfreund](https://github.com/superfreund) ([#454](https://github.com/WebDevStudios/CMB2/pull/454)).
 
-## 2.1.0 - 2015-00-05
+## 2.1.0 - 2015-08-05
 
 ### Bug Fixes
 
