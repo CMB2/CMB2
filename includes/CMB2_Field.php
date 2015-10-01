@@ -500,7 +500,7 @@ class CMB2_Field {
 		 * @param array             $field_args All field arguments
 		 * @param CMB2_Field object $field      This field object
 		 */
-		do_action( 'cmb2_override_save_field_' . $field_args['field_id'], $updated, $action, $field_args, $this );
+		do_action( 'cmb2_save_field_' . $field_args['field_id'], $updated, $action, $field_args, $this );
 		
 		
 		return $updated;
