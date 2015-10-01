@@ -469,6 +469,7 @@ class CMB2_Field {
 		$new_value = $this->sanitization_cb( $meta_value );
 		$old       = $this->get_data();
 		$updated   = false;
+		$action    = '';
 
 		if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
 
@@ -484,12 +485,43 @@ class CMB2_Field {
 			}
 
 			$updated = $count ? $count : false;
+			$action  = 'repeatable';
 
 		} elseif ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
 			$updated = $this->update_data( $new_value );
+			$action  = 'updated';
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			$updated = $this->remove_data();
+			$action  = 'removed';
 		}
+
+		$field_id = $this->id( true );
+
+		/**
+		 * Hooks after save field action.
+		 *
+		 * @since 2.1.3
+		 *
+		 * @param string            $field_id the current field id paramater.
+		 * @param bool              $updated  Whether the metadata update action occurred.
+		 * @param string            $action   Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param CMB2_Field object $field    This field object
+		 */
+		do_action( 'cmb2_save_field', $field_id, $updated, $action, $this );
+
+		/**
+		 * Hooks after save field action.
+		 *
+		 * The dynamic portion of the hook, $field_id, refers to the
+		 * current field id paramater.
+		 *
+		 * @since 2.1.3
+		 *
+		 * @param bool              $updated Whether the metadata update action occurred.
+		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param CMB2_Field object $field   This field object
+		 */
+		do_action( "cmb2_save_field_{$field_id}", $updated, $action, $this );
 
 		return $updated;
 	}

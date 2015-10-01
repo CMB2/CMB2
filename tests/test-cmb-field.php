@@ -184,6 +184,34 @@ class Test_CMB2_Field extends Test_CMB2 {
 		return 'modified string';
 	}
 
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_cmb2_save_field_action() {
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'field_args' => $this->field_args,
+		) );
+
+		add_action( 'cmb2_save_field', 'wp_die' );
+		$modified = $field->save_field( 'some value to be modified' );
+	}
+
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_cmb2_save_field_field_id_action() {
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'field_args' => $this->field_args,
+		) );
+
+		add_action( 'cmb2_save_field_test_test', 'wp_die' );
+		$modified = $field->save_field( 'some value to be modified' );
+	}
+
 	public function test_empty_field_with_empty_object_id() {
 		$field = new CMB2_Field( array(
 			'field_args' => $this->field_args,
