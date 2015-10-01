@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Tested up to:      4.3.1
-Stable tag:        2.1.1
+Stable tag:        2.1.2
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,12 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 
 ### Most Recent Changes
 
+#### 2.1.2
+
+##### Bug Fixes
+
+* Fixes back-compatibility issue when adding fields array to the metabox registration. ([#472](https://github.com/WebDevStudios/CMB2/pull/472))
+
 #### 2.1.1
 
 ##### Enhancements
@@ -133,6 +139,12 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.1.2 - 2015-10-01
+
+#### Bug Fixes
+
+* Fixes back-compatibility issue when adding fields array to the metabox registration. ([#472](https://github.com/WebDevStudios/CMB2/pull/472))
 
 ### 2.1.1 - 2015-09-30
 
@@ -527,6 +539,12 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.1.2 - 2015-10-01
+
+#### Bug Fixes
+
+* Fixes back-compatibility issue when adding fields array to the metabox registration. ([#472](https://github.com/WebDevStudios/CMB2/pull/472))
 
 ### 2.1.1 - 2015-09-30
 
