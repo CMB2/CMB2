@@ -502,7 +502,6 @@ class CMB2_Field {
 		 */
 		do_action( 'cmb2_save_field_' . $field_args['field_id'], $updated, $action, $field_args, $this );
 		
-		
 		return $updated;
 	}
 
