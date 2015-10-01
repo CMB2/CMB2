@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-06-05 09:12+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: Portuguese (Portugal) (http://www.transifex.com/projects/p/cmb2/language/pt_PT/)\n"
+"POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
+"PO-Revision-Date: 2015-09-23 20:02+0000\n"
+"Last-Translator: Luis Martins <luis.martins@multiweb.pt>\n"
+"Language-Team: Portuguese (Portugal) (http://www.transifex.com/wp-translations/cmb2/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +25,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: example-functions.php:82 tests/test-cmb-field.php:206
+#: example-functions.php:82 tests/test-cmb-field.php:228
 msgid "Test Metabox"
 msgstr "Testar Metabox"
 
@@ -45,11 +45,11 @@ msgstr "Texto de teste"
 #: example-functions.php:277 example-functions.php:285
 #: example-functions.php:294 example-functions.php:301
 #: example-functions.php:315 example-functions.php:381
-#: example-functions.php:475 example-functions.php:483
-#: example-functions.php:490 example-functions.php:497
-#: example-functions.php:504 example-functions.php:511
-#: example-functions.php:518 example-functions.php:556
-#: tests/test-cmb-field.php:218
+#: example-functions.php:476 example-functions.php:484
+#: example-functions.php:491 example-functions.php:498
+#: example-functions.php:505 example-functions.php:512
+#: example-functions.php:519 example-functions.php:557
+#: tests/test-cmb-field.php:240
 msgid "field description (optional)"
 msgstr "descrição do campo (opcional)"
 
@@ -160,19 +160,19 @@ msgstr "Teste Checkbox múltipla para Taxonomia"
 msgid "Test Checkbox"
 msgstr "Teste Checkbox"
 
-#: example-functions.php:300 tests/test-cmb-field.php:217
+#: example-functions.php:300 tests/test-cmb-field.php:239
 msgid "Test Multi Checkbox"
 msgstr "Teste Checkbox múltipla"
 
-#: example-functions.php:306 tests/test-cmb-field.php:223
+#: example-functions.php:306 tests/test-cmb-field.php:245
 msgid "Check One"
 msgstr "Opção Um"
 
-#: example-functions.php:307 tests/test-cmb-field.php:224
+#: example-functions.php:307 tests/test-cmb-field.php:246
 msgid "Check Two"
 msgstr "Opção Dois"
 
-#: example-functions.php:308 tests/test-cmb-field.php:225
+#: example-functions.php:308 tests/test-cmb-field.php:247
 msgid "Check Three"
 msgstr "Opção Três"
 
@@ -230,63 +230,63 @@ msgstr "Adicionar Outra Entrada"
 msgid "Remove Entry"
 msgstr "Remover Entrada"
 
-#: example-functions.php:426
+#: example-functions.php:427
 msgid "Entry Title"
 msgstr "Título da Entrada"
 
-#: example-functions.php:433
+#: example-functions.php:434
 msgid "Description"
 msgstr "Descrição"
 
-#: example-functions.php:434
+#: example-functions.php:435
 msgid "Write a short description for this entry"
 msgstr "Escreva uma breve descrição sobre esta entrada"
 
-#: example-functions.php:440
+#: example-functions.php:441
 msgid "Entry Image"
 msgstr "Imagem da Entrada"
 
-#: example-functions.php:446
+#: example-functions.php:447
 msgid "Image Caption"
 msgstr "Legenda da Imagem"
 
-#: example-functions.php:467
+#: example-functions.php:468
 msgid "User Profile Metabox"
 msgstr "Metabox no Perfil de Utilizador"
 
-#: example-functions.php:474
+#: example-functions.php:475
 msgid "Extra Info"
 msgstr "Informação Extra"
 
-#: example-functions.php:482
+#: example-functions.php:483
 msgid "Avatar"
 msgstr "Avatar"
 
-#: example-functions.php:489
+#: example-functions.php:490
 msgid "Facebook URL"
 msgstr "Endereço Facebook"
 
-#: example-functions.php:496
+#: example-functions.php:497
 msgid "Twitter URL"
 msgstr "Endereço Twitter"
 
-#: example-functions.php:503
+#: example-functions.php:504
 msgid "Google+ URL"
 msgstr "Endereço Google+"
 
-#: example-functions.php:510
+#: example-functions.php:511
 msgid "Linkedin URL"
 msgstr "Endereço LinkedIn"
 
-#: example-functions.php:517
+#: example-functions.php:518
 msgid "User Field"
 msgstr "Campo Utilizador"
 
-#: example-functions.php:540
+#: example-functions.php:541
 msgid "Theme Options Metabox"
 msgstr "Metabox para Opções de Tema"
 
-#: example-functions.php:555
+#: example-functions.php:556
 msgid "Site Background Color"
 msgstr "Cor de Fundo do Site"
 
@@ -302,24 +302,24 @@ msgstr "Clique para alternar"
 msgid "Please Try Again"
 msgstr "Por favor tente novamente"
 
-#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:786
+#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:785
 msgid "Remove Embed"
 msgstr "Remover Embed"
 
-#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:787
+#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:786
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr "Não foram encontrados resultados oEmbed para %s. Mais informações em"
 
-#: includes/CMB2_Field.php:891
+#: includes/CMB2_Field.php:910
 msgid "Add Group"
 msgstr "Adicionar Grupo"
 
-#: includes/CMB2_Field.php:892
+#: includes/CMB2_Field.php:911
 msgid "Remove Group"
 msgstr "Remover Grupo"
 
-#: includes/CMB2_Field.php:914 includes/CMB2_Field.php:918
-#: tests/test-cmb-field.php:178
+#: includes/CMB2_Field.php:933 includes/CMB2_Field.php:937
+#: tests/test-cmb-field.php:200
 msgid "None"
 msgstr "Nenhum"
 
@@ -405,46 +405,50 @@ msgstr "Agora"
 msgid "Use this file"
 msgstr "Utilizar este ficheiro"
 
-#: includes/CMB2_JS.php:136 includes/CMB2_Types.php:983
+#: includes/CMB2_JS.php:136
+msgid "Use these files"
+msgstr "Use estes ficheiros"
+
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"
 msgstr "Remover imagem"
 
-#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:356
-#: includes/CMB2_Types.php:1002 tests/test-cmb-types.php:155
-#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:735
-#: tests/test-cmb-types.php:760
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:357
+#: includes/CMB2_Types.php:1015 tests/test-cmb-types.php:155
+#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:734
+#: tests/test-cmb-types.php:759
 msgid "Remove"
 msgstr "Remover"
 
-#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:997
-#: tests/test-cmb-types.php:736 tests/test-cmb-types.php:761
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1010
+#: tests/test-cmb-types.php:735 tests/test-cmb-types.php:760
 msgid "File:"
 msgstr "Ficheiro:"
 
-#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1000
-#: tests/test-cmb-types.php:734 tests/test-cmb-types.php:759
+#: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1013
+#: tests/test-cmb-types.php:733 tests/test-cmb-types.php:758
 msgid "Download"
 msgstr "Download"
 
-#: includes/CMB2_JS.php:140
+#: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
 msgstr "Seleccionar / Desseleccionar Tudo"
 
-#: includes/CMB2_Types.php:297
+#: includes/CMB2_Types.php:298
 msgid "Add Row"
 msgstr "Adicionar Linha"
 
-#: includes/CMB2_Types.php:734 includes/CMB2_Types.php:782
+#: includes/CMB2_Types.php:741 includes/CMB2_Types.php:789
 msgid "No terms"
 msgstr "Não existem termos"
 
-#: includes/CMB2_Types.php:847 tests/test-cmb-types.php:711
-#: tests/test-cmb-types.php:737
+#: includes/CMB2_Types.php:856 tests/test-cmb-types.php:710
+#: tests/test-cmb-types.php:736
 msgid "Add or Upload Files"
 msgstr "Adicionar ou carregar ficheiros"
 
-#: includes/CMB2_Types.php:907 tests/test-cmb-types.php:747
-#: tests/test-cmb-types.php:762
+#: includes/CMB2_Types.php:918 tests/test-cmb-types.php:746
+#: tests/test-cmb-types.php:761
 msgid "Add or Upload File"
 msgstr "Adicionar ou Enviar Ficheiro"
 

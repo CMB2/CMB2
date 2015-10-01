@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
 # Franck, 2015
-# FxB <fxb@wp-translations.org>, 2014-2015
+# FX Bénard <fxb@wp-translations.org>, 2014-2015
 # Justin Sternberg <me@jtsternberg.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-06-02 16:12:19+00:00\n"
-"PO-Revision-Date: 2015-07-25 07:56+0000\n"
-"Last-Translator: FxB <fxb@wp-translations.org>\n"
-"Language-Team: French (France) (http://www.transifex.com/projects/p/cmb2/language/fr_FR/)\n"
+"POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
+"PO-Revision-Date: 2015-08-28 13:07+0000\n"
+"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"Language-Team: French (France) (http://www.transifex.com/wp-translations/cmb2/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +26,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: example-functions.php:82 tests/test-cmb-field.php:206
+#: example-functions.php:82 tests/test-cmb-field.php:228
 msgid "Test Metabox"
 msgstr "Test Metabox"
 
@@ -46,11 +46,11 @@ msgstr "Test Texte"
 #: example-functions.php:277 example-functions.php:285
 #: example-functions.php:294 example-functions.php:301
 #: example-functions.php:315 example-functions.php:381
-#: example-functions.php:475 example-functions.php:483
-#: example-functions.php:490 example-functions.php:497
-#: example-functions.php:504 example-functions.php:511
-#: example-functions.php:518 example-functions.php:556
-#: tests/test-cmb-field.php:218
+#: example-functions.php:476 example-functions.php:484
+#: example-functions.php:491 example-functions.php:498
+#: example-functions.php:505 example-functions.php:512
+#: example-functions.php:519 example-functions.php:557
+#: tests/test-cmb-field.php:240
 msgid "field description (optional)"
 msgstr "﻿description du champ (facultatif)"
 
@@ -68,7 +68,7 @@ msgstr "﻿URL site Internet"
 
 #: example-functions.php:130
 msgid "Test Text Email"
-msgstr "﻿Test Texte Email"
+msgstr "﻿Test Texte E-mail"
 
 #: example-functions.php:138
 msgid "Test Time"
@@ -139,7 +139,7 @@ msgstr "Option Trois"
 
 #: example-functions.php:242
 msgid "Test Radio inline"
-msgstr "Test ﻿Boutons radio <Inline>"
+msgstr "Test ﻿Bouton radio inline"
 
 #: example-functions.php:255
 msgid "Test Radio"
@@ -147,33 +147,33 @@ msgstr "Test Boutons radio"
 
 #: example-functions.php:267
 msgid "Test Taxonomy Radio"
-msgstr "Test Catégories (bouton radio)"
+msgstr "Test Taxonomie (bouton radio)"
 
 #: example-functions.php:276
 msgid "Test Taxonomy Select"
-msgstr "Test Sélection de catégories"
+msgstr "Test Sélection de taxonomies"
 
 #: example-functions.php:284
 msgid "Test Taxonomy Multi Checkbox"
-msgstr "Test Catégories (Cases à cocher - Multi)"
+msgstr "Test Taxonomies (Cases à cocher - Multi)"
 
 #: example-functions.php:293
 msgid "Test Checkbox"
 msgstr "Test Cases à cocher"
 
-#: example-functions.php:300 tests/test-cmb-field.php:217
+#: example-functions.php:300 tests/test-cmb-field.php:239
 msgid "Test Multi Checkbox"
 msgstr "Test Cases à cocher (multi)"
 
-#: example-functions.php:306 tests/test-cmb-field.php:223
+#: example-functions.php:306 tests/test-cmb-field.php:245
 msgid "Check One"
 msgstr "Case à cocher Une"
 
-#: example-functions.php:307 tests/test-cmb-field.php:224
+#: example-functions.php:307 tests/test-cmb-field.php:246
 msgid "Check Two"
 msgstr "Case à cocher Deux"
 
-#: example-functions.php:308 tests/test-cmb-field.php:225
+#: example-functions.php:308 tests/test-cmb-field.php:247
 msgid "Check Three"
 msgstr "Case à cocher Trois"
 
@@ -187,7 +187,7 @@ msgstr "Test d'image"
 
 #: example-functions.php:323
 msgid "Upload an image or enter a URL."
-msgstr "﻿Ajoutez une image ou insérez une URL."
+msgstr "﻿Mettre une image en ligne ou saisir une URL."
 
 #: example-functions.php:329
 msgid "Multiple Files"
@@ -195,7 +195,7 @@ msgstr "﻿Sélection de fichiers multiples"
 
 #: example-functions.php:330
 msgid "Upload or add multiple images/attachments."
-msgstr "﻿Télécharger ou ajouter plusieurs images / pièces jointes."
+msgstr "Mettre en ligne ou ajouter plusieurs images / pièces jointes."
 
 #: example-functions.php:337
 msgid "oEmbed"
@@ -205,7 +205,7 @@ msgstr "oEmbed"
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr "﻿Entrez une URL youtube, twitter ou Instagram. Prise en charge des services listé ici : <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a> ."
+msgstr "﻿Entrez une URL YouTube, Twitter ou Instagram. Prise en charge des services listée ici : <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a> ."
 
 #: example-functions.php:371
 msgid "About Page Metabox"
@@ -231,63 +231,63 @@ msgstr "﻿Ajouter une nouvelle entrée"
 msgid "Remove Entry"
 msgstr "﻿Supprimer cette entrée"
 
-#: example-functions.php:426
+#: example-functions.php:427
 msgid "Entry Title"
 msgstr "Titre de l'entrée"
 
-#: example-functions.php:433
+#: example-functions.php:434
 msgid "Description"
 msgstr "Description"
 
-#: example-functions.php:434
+#: example-functions.php:435
 msgid "Write a short description for this entry"
 msgstr "Rédigez une courte description pour cette entrée"
 
-#: example-functions.php:440
+#: example-functions.php:441
 msgid "Entry Image"
 msgstr "Image de l'entrée"
 
-#: example-functions.php:446
+#: example-functions.php:447
 msgid "Image Caption"
 msgstr "Légende de l&rsquo;image"
 
-#: example-functions.php:467
+#: example-functions.php:468
 msgid "User Profile Metabox"
 msgstr "Metabox Profil de l'utilisateur"
 
-#: example-functions.php:474
+#: example-functions.php:475
 msgid "Extra Info"
 msgstr "Info supplémentaire"
 
-#: example-functions.php:482
+#: example-functions.php:483
 msgid "Avatar"
 msgstr "﻿Avatar"
 
-#: example-functions.php:489
+#: example-functions.php:490
 msgid "Facebook URL"
 msgstr "﻿URL Facebook"
 
-#: example-functions.php:496
+#: example-functions.php:497
 msgid "Twitter URL"
 msgstr "﻿URL Twitter"
 
-#: example-functions.php:503
+#: example-functions.php:504
 msgid "Google+ URL"
 msgstr "URL Google+"
 
-#: example-functions.php:510
+#: example-functions.php:511
 msgid "Linkedin URL"
 msgstr "﻿URL LinkedIn"
 
-#: example-functions.php:517
+#: example-functions.php:518
 msgid "User Field"
 msgstr "﻿Champ de l'utilisateur"
 
-#: example-functions.php:540
+#: example-functions.php:541
 msgid "Theme Options Metabox"
 msgstr "Metabox d'Options du thème "
 
-#: example-functions.php:555
+#: example-functions.php:556
 msgid "Site Background Color"
 msgstr "Couleur d'arrière-plan du site"
 
@@ -297,30 +297,30 @@ msgstr "﻿Configuration de Metabox requise pour l'obtention d'un paramètre ID"
 
 #: includes/CMB2.php:326
 msgid "Click to toggle"
-msgstr "Cliquer pour inverser."
+msgstr "Cliquer pour inverser"
 
 #: includes/CMB2_Ajax.php:40
 msgid "Please Try Again"
 msgstr "﻿Veuillez réessayer"
 
-#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:786
+#: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:785
 msgid "Remove Embed"
 msgstr "﻿Supprimer l'intégration"
 
-#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:787
+#: includes/CMB2_Ajax.php:139 tests/test-cmb-types.php:786
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr "﻿Aucun résultat oEmbed trouvé pour %s. Plus d'infos sur"
 
-#: includes/CMB2_Field.php:891
+#: includes/CMB2_Field.php:910
 msgid "Add Group"
 msgstr "﻿Ajouter un groupe"
 
-#: includes/CMB2_Field.php:892
+#: includes/CMB2_Field.php:911
 msgid "Remove Group"
 msgstr "﻿Supprimer le groupe"
 
-#: includes/CMB2_Field.php:914 includes/CMB2_Field.php:918
-#: tests/test-cmb-field.php:178
+#: includes/CMB2_Field.php:933 includes/CMB2_Field.php:937
+#: tests/test-cmb-field.php:200
 msgid "None"
 msgstr "Aucun"
 
@@ -404,48 +404,52 @@ msgstr "Maintenant"
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
-msgstr "﻿Utilisez ce fichier"
+msgstr "﻿Utiliser ce fichier"
 
-#: includes/CMB2_JS.php:136 includes/CMB2_Types.php:983
+#: includes/CMB2_JS.php:136
+msgid "Use these files"
+msgstr "﻿Utiliser ces fichiers"
+
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"
 msgstr "﻿Supprimer l'image"
 
-#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:356
-#: includes/CMB2_Types.php:1002 tests/test-cmb-types.php:155
-#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:735
-#: tests/test-cmb-types.php:760
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:357
+#: includes/CMB2_Types.php:1015 tests/test-cmb-types.php:155
+#: tests/test-cmb-types.php:163 tests/test-cmb-types.php:734
+#: tests/test-cmb-types.php:759
 msgid "Remove"
 msgstr "﻿Supprimer"
 
-#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:997
-#: tests/test-cmb-types.php:736 tests/test-cmb-types.php:761
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1010
+#: tests/test-cmb-types.php:735 tests/test-cmb-types.php:760
 msgid "File:"
 msgstr "﻿Fichier :"
 
-#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1000
-#: tests/test-cmb-types.php:734 tests/test-cmb-types.php:759
+#: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1013
+#: tests/test-cmb-types.php:733 tests/test-cmb-types.php:758
 msgid "Download"
 msgstr "﻿Télécharger"
 
-#: includes/CMB2_JS.php:140
+#: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
 msgstr "﻿Tout sélectionner / Désélectionner"
 
-#: includes/CMB2_Types.php:297
+#: includes/CMB2_Types.php:298
 msgid "Add Row"
 msgstr "Ajouter un rang"
 
-#: includes/CMB2_Types.php:734 includes/CMB2_Types.php:782
+#: includes/CMB2_Types.php:741 includes/CMB2_Types.php:789
 msgid "No terms"
 msgstr "Aucune expression"
 
-#: includes/CMB2_Types.php:847 tests/test-cmb-types.php:711
-#: tests/test-cmb-types.php:737
+#: includes/CMB2_Types.php:856 tests/test-cmb-types.php:710
+#: tests/test-cmb-types.php:736
 msgid "Add or Upload Files"
-msgstr "﻿Ajouter ou mettre un fichier en ligne"
+msgstr "﻿Ajouter ou mettre des fichiers en ligne"
 
-#: includes/CMB2_Types.php:907 tests/test-cmb-types.php:747
-#: tests/test-cmb-types.php:762
+#: includes/CMB2_Types.php:918 tests/test-cmb-types.php:746
+#: tests/test-cmb-types.php:761
 msgid "Add or Upload File"
 msgstr "﻿Ajouter ou mettre un fichier en ligne"
 
@@ -465,7 +469,7 @@ msgstr "https://github.com/WebDevStudios/CMB2"
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr "CMB2 will create metaboxes and forms with custom fields that will blow your mind."
+msgstr "CMB2 créera des boites à méta et des formulaires avec des champs personnalisés à vous couper le souffle."
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
