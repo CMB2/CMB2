@@ -54,27 +54,11 @@ class CMB2_Sanitize {
 	public function default_sanitization() {
 
 		/**
-		 * Filter the value before it is saved.
-		 *
-		 * The dynamic portion of the hook name, $this->field->type(), refers to the field type.
-		 *
-		 * Passing a non-null value to the filter will short-circuit saving
-		 * the field value, saving the passed value instead.
-		 *
-		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
-		 *                                   Default false to skip it.
-		 * @param mixed      $value      The value to be saved to this field.
-		 * @param int        $object_id  The ID of the object where the value will be saved
-		 * @param array      $field_args The current field's arguments
-		 * @param object     $sanitizer  This `CMB2_Sanitize` object
-		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
-		/**
 		 * This exists for back-compatibility, but validation
 		 * is not what happens here.
-		 * @deprecated See documentation above.
+		 * @deprecated See documentation for "cmb2_sanitize_{$this->type()}".
 		 */
-		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;

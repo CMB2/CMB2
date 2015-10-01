@@ -416,9 +416,31 @@ class CMB2_Field {
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
 
-		$clean = new CMB2_Sanitize( $this, $meta_value );
-		// Validation via 'CMB2_Sanitize' (with fallback filter)
-		return $clean->{$this->type()}();
+		$sanitizer = new CMB2_Sanitize( $this, $meta_value );
+
+		/**
+		 * Filter the value before it is saved.
+		 *
+		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 *
+		 * Passing a non-null value to the filter will short-circuit saving
+		 * the field value, saving the passed value instead.
+		 *
+		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
+		 *                                   Default false to skip it.
+		 * @param mixed      $value      The value to be saved to this field.
+		 * @param int        $object_id  The ID of the object where the value will be saved
+		 * @param array      $field_args The current field's arguments
+		 * @param object     $sanitizer  This `CMB2_Sanitize` object
+		 */
+		$override_value = apply_filters( "cmb2_sanitize_{$this->type()}", null, $sanitizer->value, $this->object_id, $this->args(), $sanitizer );
+
+		if ( null !== $override_value ) {
+			return $override_value;
+		}
+
+		// Sanitization via 'CMB2_Sanitize'
+		return $sanitizer->{$this->type()}();
 	}
 
 	/**

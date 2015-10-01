@@ -162,6 +162,28 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertTrue( $field->should_show() );
 	}
 
+	public function test_filtering_field_type_sanitization_filtering() {
+		$field = new CMB2_Field( array(
+			'object_id' => $this->object_id,
+			'object_type' => $this->object_type,
+			'field_args' => $this->field_args,
+		) );
+
+		add_filter( 'cmb2_sanitize_text', array( $this, '_return_different_value' ) );
+		$modified = $field->save_field( 'some value to be modified' );
+		$this->assertTrue( !! $modified );
+		remove_filter( 'cmb2_sanitize_text', array( $this, '_return_different_value' ) );
+
+		// $val = $field->get_data();
+		$val = get_post_meta( $this->object_id, 'test_test', 1 );
+		error_log( '$val: '. print_r( $val, true ) );
+		$this->assertEquals( 'modified string', $val );
+		$this->assertEquals( $val, $field->get_data() );
+	}
+	public function _return_different_value( $null ) {
+		return 'modified string';
+	}
+
 	public function test_empty_field_with_empty_object_id() {
 		$field = new CMB2_Field( array(
 			'field_args' => $this->field_args,
