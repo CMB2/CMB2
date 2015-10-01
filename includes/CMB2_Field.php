@@ -468,8 +468,9 @@ class CMB2_Field {
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
 			$updated = $this->remove_data();
 		}
-
-		return $updated;
+		
+		$args = $this->args();
+		return apply_filters( 'cmb2_override_save_field_' . $args['field_id'], apply_filters( 'cmb2_override_save_field', $updated, $args, $this ), $args, $this );
 	}
 
 	/**
