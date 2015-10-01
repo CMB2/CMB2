@@ -682,7 +682,7 @@ class CMB2_Types {
 			$options .= $this->select_option( array(
 				'label'   => $term->name,
 				'value'   => $term->slug,
-				'checked' => $saved_term == $term->slug,
+				'checked' => $saved_term === $term->slug,
 			) );
 		}
 
