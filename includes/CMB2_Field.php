@@ -473,7 +473,7 @@ class CMB2_Field {
 			$action  = 'removed';
 		}
 
-		$args = $this->args();
+		$field_args = $this->args();
 		
 		/**
 		 * Hooks after save field action.
@@ -485,12 +485,12 @@ class CMB2_Field {
 		 * @param array             $field_args All field arguments
 		 * @param CMB2_Field object $field      This field object
 		 */
-		do_action( 'cmb2_save_field', $updated, $action, $args, $this );
+		do_action( 'cmb2_save_field', $updated, $action, $field_args, $this );
 		
 		/**
 		 * Hooks after save field action.
 		 *
-		 * The dynamic portion of the hook, $args['field_id'], refers to the current
+		 * The dynamic portion of the hook, $field_args['field_id'], refers to the current
 		 * field id paramater.
 		 *
 		 * @since 2.2.0
@@ -500,7 +500,7 @@ class CMB2_Field {
 		 * @param array             $field_args All field arguments
 		 * @param CMB2_Field object $field      This field object
 		 */
-		do_action( 'cmb2_override_save_field_' . $args['field_id'], $updated, $action, $args, $this );
+		do_action( 'cmb2_override_save_field_' . $field_args['field_id'], $updated, $action, $field_args, $this );
 		
 		
 		return $updated;
