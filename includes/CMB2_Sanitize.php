@@ -351,8 +351,8 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file() {
-		$id_value = $this->_save_file_id( $this->value );
-		$clean = $this->text_url( $this->value );
+		$id_value = $this->_save_file_id();
+		$clean = $this->text_url();
 
 		// Return an array with url/id if saving a group field
 		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;
