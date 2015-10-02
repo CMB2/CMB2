@@ -67,10 +67,8 @@ class CMB2_Sanitize {
 		$sanitized_value = '';
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':
-				// $value = wp_kses( $this->value );
-				// break;
 			case 'textarea_small':
-				$sanitized_value = $this->textarea( $this->value );
+				$sanitized_value = $this->textarea();
 				break;
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
@@ -79,8 +77,8 @@ class CMB2_Sanitize {
 			case 'taxonomy_multicheck_inline':
 				if ( $this->field->args( 'taxonomy' ) ) {
 					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
-					break;
 				}
+				break;
 			case 'multicheck':
 			case 'multicheck_inline':
 			case 'file_list':
