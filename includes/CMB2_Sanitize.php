@@ -44,7 +44,7 @@ class CMB2_Sanitize {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		return $this->default_sanitization( $this->value );
+		return $this->default_sanitization();
 	}
 
 	/**
@@ -77,6 +77,8 @@ class CMB2_Sanitize {
 			case 'taxonomy_multicheck_inline':
 				if ( $this->field->args( 'taxonomy' ) ) {
 					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+				} else {
+					$this->log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
 				}
 				break;
 			case 'multicheck':
@@ -262,9 +264,7 @@ class CMB2_Sanitize {
 			$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
 			$this->value = serialize( $this->value );
 		} catch ( Exception $e ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
-			}
+			cmb2_utils()->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 		}
 
 		return $this->value;
