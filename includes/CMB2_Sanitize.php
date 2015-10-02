@@ -312,15 +312,17 @@ class CMB2_Sanitize {
 		$id_key     = $field->_id();
 		$id_val_old = $field->escaped_value( 'absint' );
 
+		$alldata = $this->field->data_to_save;
+
 		if ( $group ) {
-			// Check group $_POST data
+			// Check group $alldata data
 			$i       = $group->index;
 			$base_id = $group->_id();
-			$id_val  = isset( $_POST[ $base_id ][ $i ][ $id_key ] ) ? absint( $_POST[ $base_id ][ $i ][ $id_key ] ) : 0;
+			$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] ) ? absint( $alldata[ $base_id ][ $i ][ $id_key ] ) : 0;
 
 		} else {
-			// Check standard $_POST data
-			$id_val = isset( $_POST[ $field->id() ] ) ? $_POST[ $field->id() ] : null;
+			// Check standard $alldata data
+			$id_val = isset( $alldata[ $field->id() ] ) ? $alldata[ $field->id() ] : null;
 
 		}
 

@@ -80,6 +80,13 @@ class CMB2_Field {
 	protected $callback_results = array();
 
 	/**
+	 * Array of key => value data for saving. Likely $_POST data.
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	public $data_to_save = array();
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args Field arguments
@@ -449,10 +456,11 @@ class CMB2_Field {
 	 * @param  array $data_to_save $_POST data to check
 	 * @return bool                Result of save
 	 */
-	public function save_field_from_data( $data_to_save ) {
+	public function save_field_from_data( array $data_to_save ) {
+		$this->data_to_save = $data_to_save;
 
-		$meta_value = isset( $data_to_save[ $this->id( true ) ] )
-			? $data_to_save[ $this->id( true ) ]
+		$meta_value = isset( $this->data_to_save[ $this->id( true ) ] )
+			? $this->data_to_save[ $this->id( true ) ]
 			: null;
 
 		return $this->save_field( $meta_value );
