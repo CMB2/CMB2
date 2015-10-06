@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Fixed issue with `'taxonomy_select'` field type where a term which evaluated falsey would not be displayed properly. Props [adamcapriola](https://github.com/adamcapriola) ([#477](https://github.com/WebDevStudios/CMB2/pull/477)).
+* Fix issue with colorpickers not changing when sorting groups.
 
 ## 2.1.2 - 2015-10-01
 
