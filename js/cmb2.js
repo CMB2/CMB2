@@ -642,6 +642,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			} else {
 				val = $element.val();
 			}
+
 			// Get all the current values per element
 			inputVals.push( { val: val, $: $element } );
 		});
@@ -653,7 +654,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			if ( $element.hasClass('cmb2-media-status') ) {
 				var toRowId = $element.closest('.cmb-repeatable-grouping').attr('data-iterator');
-				var fromRowId = inputVals[ index ]['$'].closest('.cmb-repeatable-grouping').attr('data-iterator');
+				var fromRowId = inputVals[ index ].$.closest('.cmb-repeatable-grouping').attr('data-iterator');
 
 				// special case for image previews
 				val = $element.html();
@@ -700,6 +701,10 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$parent.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 		$goto.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
+
+		// trigger color picker change event
+		$parent.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
+		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 
 		// shift done
 		$self.trigger( 'cmb2_shift_rows_complete', $self );
