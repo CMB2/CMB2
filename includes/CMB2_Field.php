@@ -259,7 +259,14 @@ class CMB2_Field {
 	public function update_data( $new_value, $single = true ) {
 		$a = $this->data_args( array( 'single' => $single ) );
 
-		$a['value'] = $a['repeat'] ? array_values( $new_value ) : $new_value;
+		if($a['repeat']){
+			$new_value = array_values( $new_value );
+		}
+		if(empty($new_value)){
+			$new_value = '';
+		}
+		
+		$a[ 'value' ] = $new_value;
 
 		/**
 		 * Filter whether to override saving of meta value.
