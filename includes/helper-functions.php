@@ -86,10 +86,11 @@ function cmb2_get_oembed( $args = array() ) {
  * @since  1.0.1
  * @param  string  $option_key Option key
  * @param  string  $field_id   Option array field key
+ * @param  mixed   $default    Optional default fallback value
  * @return array               Options array or specific field
  */
-function cmb2_get_option( $option_key, $field_id = '' ) {
-	return cmb2_options( $option_key )->get( $field_id );
+function cmb2_get_option( $option_key, $field_id = '', $default = false ) {
+	return cmb2_options( $option_key )->get( $field_id, $default );
 }
 
 /**

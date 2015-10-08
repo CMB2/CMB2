@@ -44,7 +44,7 @@ class CMB2_Sanitize {
 	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function __call( $name, $arguments ) {
-		return $this->default_sanitization( $this->value );
+		return $this->default_sanitization();
 	}
 
 	/**
@@ -54,27 +54,11 @@ class CMB2_Sanitize {
 	public function default_sanitization() {
 
 		/**
-		 * Filter the value before it is saved.
-		 *
-		 * The dynamic portion of the hook name, $this->field->type(), refers to the field type.
-		 *
-		 * Passing a non-null value to the filter will short-circuit saving
-		 * the field value, saving the passed value instead.
-		 *
-		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
-		 *                                   Default false to skip it.
-		 * @param mixed      $value      The value to be saved to this field.
-		 * @param int        $object_id  The ID of the object where the value will be saved
-		 * @param array      $field_args The current field's arguments
-		 * @param object     $sanitizer  This `CMB2_Sanitize` object
-		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
-		/**
 		 * This exists for back-compatibility, but validation
 		 * is not what happens here.
-		 * @deprecated See documentation above.
+		 * @deprecated See documentation for "cmb2_sanitize_{$this->type()}".
 		 */
-		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", $override_value, $this->value, $this->field->object_id, $this->field->args(), $this );
+		$override_value = apply_filters( "cmb2_validate_{$this->field->type()}", null, $this->value, $this->field->object_id, $this->field->args(), $this );
 
 		if ( null !== $override_value ) {
 			return $override_value;
@@ -83,19 +67,22 @@ class CMB2_Sanitize {
 		$sanitized_value = '';
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':
-				// $value = wp_kses( $this->value );
-				// break;
 			case 'textarea_small':
-				$sanitized_value = $this->textarea( $this->value );
+				$sanitized_value = $this->textarea();
 				break;
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
+			case 'taxonomy_radio_inline':
 			case 'taxonomy_multicheck':
+			case 'taxonomy_multicheck_inline':
 				if ( $this->field->args( 'taxonomy' ) ) {
 					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
-					break;
+				} else {
+					cmb2_utils()->log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
 				}
+				break;
 			case 'multicheck':
+			case 'multicheck_inline':
 			case 'file_list':
 			case 'oembed':
 			case 'group':
@@ -295,9 +282,7 @@ class CMB2_Sanitize {
 			$datetime->setTimezone( new DateTimeZone( $tzstring ) );
 			$this->value = serialize( $datetime );
 		} catch ( Exception $e ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
-			}
+			cmb2_utils()->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 		}
 
 		return $this->value;
@@ -345,15 +330,17 @@ class CMB2_Sanitize {
 		$id_key     = $field->_id();
 		$id_val_old = $field->escaped_value( 'absint' );
 
+		$alldata = $this->field->data_to_save;
+
 		if ( $group ) {
-			// Check group $_POST data
+			// Check group $alldata data
 			$i       = $group->index;
 			$base_id = $group->_id();
-			$id_val  = isset( $_POST[ $base_id ][ $i ][ $id_key ] ) ? absint( $_POST[ $base_id ][ $i ][ $id_key ] ) : 0;
+			$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] ) ? absint( $alldata[ $base_id ][ $i ][ $id_key ] ) : 0;
 
 		} else {
-			// Check standard $_POST data
-			$id_val = isset( $_POST[ $field->id() ] ) ? $_POST[ $field->id() ] : null;
+			// Check standard $alldata data
+			$id_val = isset( $alldata[ $field->id() ] ) ? $alldata[ $field->id() ] : null;
 
 		}
 
@@ -382,8 +369,8 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file() {
-		$id_value = $this->_save_file_id( $this->value );
-		$clean = $this->text_url( $this->value );
+		$id_value = $this->_save_file_id();
+		$clean = $this->text_url();
 
 		// Return an array with url/id if saving a group field
 		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;

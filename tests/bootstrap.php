@@ -25,6 +25,7 @@ require_once $test_root . '/includes/functions.php';
 
 // Activates this plugin in WordPress so it can be tested.
 function _tests_cmb2_manually_load_plugin() {
+	define( 'CMB2_TESTDATA', dirname( __FILE__ ) . '/data' );
 	require dirname( __FILE__ ) . '/../init.php';
 }
 tests_add_filter( 'muplugins_loaded', '_tests_cmb2_manually_load_plugin' );

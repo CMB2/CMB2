@@ -121,9 +121,15 @@ class CMB2 {
 		}
 
 		$this->meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
+		$this->meta_box['fields'] = array();
+
 		$this->object_id( $object_id );
 		$this->mb_object_type();
 		$this->cmb_id = $meta_box['id'];
+
+		if ( ! empty( $meta_box['fields'] ) && is_array( $meta_box['fields'] ) ) {
+			$this->add_fields( $meta_box['fields'] );
+		}
 
 		CMB2_Boxes::add( $this );
 
@@ -139,9 +145,9 @@ class CMB2 {
 
 	/**
 	 * Loops through and displays fields
-	 * @since  1.0.0
-	 * @param  int    $object_id   Object ID
-	 * @param  string $object_type Type of object being saved. (e.g., post, user, or comment)
+	 * @since 1.0.0
+	 * @param int    $object_id   Object ID
+	 * @param string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
 	public function show_form( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
@@ -420,9 +426,10 @@ class CMB2 {
 	 * @param  string $object_type  Type of object being saved. (e.g., post, user, or comment)
 	 * @param  array  $data_to_save Array of key => value data for saving. Likely $_POST data.
 	 */
-	public function save_fields( $object_id = 0, $object_type = '', $data_to_save ) {
+	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		$this->data_to_save = $data_to_save;
+		// Fall-back to $_POST data
+		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
@@ -607,6 +614,7 @@ class CMB2 {
 	 * @return integer $object_id Object ID
 	 */
 	public function object_id( $object_id = 0 ) {
+		global $pagenow;
 
 		if ( $object_id ) {
 			$this->object_id = $object_id;
@@ -621,7 +629,7 @@ class CMB2 {
 		switch ( $this->object_type() ) {
 			case 'user':
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
-				$object_id = ! $object_id && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				$object_id = ! $object_id && 'user-new.php' != $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
@@ -819,6 +827,31 @@ class CMB2 {
 			'object_type' => $this->object_type(),
 			'object_id'   => $this->object_id(),
 		);
+	}
+
+	/**
+	 * When fields are added in the old-school way, intitate them as they should be
+	 * @since 2.1.0
+	 * @param array $fields          Array of fields to add
+	 * @param mixed $parent_field_id Parent field id or null
+	 */
+	protected function add_fields( $fields, $parent_field_id = null ) {
+		foreach ( $fields as $field ) {
+
+			$sub_fields = false;
+			if ( array_key_exists( 'fields', $field ) ) {
+				$sub_fields = $field['fields'];
+				unset( $field['fields'] );
+			}
+
+			$field_id = $parent_field_id
+				? $this->add_group_field( $parent_field_id, $field )
+				: $this->add_field( $field );
+
+			if ( $sub_fields ) {
+				$this->add_fields( $sub_fields, $field_id );
+			}
+		}
 	}
 
 	/**

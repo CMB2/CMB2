@@ -338,7 +338,7 @@ class CMB2_hookup {
 	 */
 	public function save_user( $user_id ) {
 		// check permissions
-		if ( $this->can_save() ) {
+		if ( $this->can_save( 'user' ) ) {
 			$this->cmb->save_fields( $user_id, 'user', $_POST );
 		}
 	}

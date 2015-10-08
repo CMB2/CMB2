@@ -23,28 +23,49 @@ class CMB2_Utils {
 	 * Utility method that attempts to get an attachment's ID by it's url
 	 * @since  1.0.0
 	 * @param  string  $img_url Attachment url
-	 * @return mixed            Attachment ID or false
+	 * @return int|false            Attachment ID or false
 	 */
 	public function image_id_from_url( $img_url ) {
-		global $wpdb;
+		$attachment_id = 0;
+		$dir = wp_upload_dir();
 
-		$img_url = esc_url_raw( $img_url );
-		// Get just the file name
-		if ( false !== strpos( $img_url, '/' ) ) {
-			$explode = explode( '/', $img_url );
-			$img_url = end( $explode );
+		// Is URL in uploads directory?
+		if ( false === strpos( $img_url, $dir['baseurl'] . '/' ) ) {
+			return false;
 		}
 
-		// And search for a fuzzy match of the file name
-		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE '%%%s%%' LIMIT 1;", $img_url ) );
+		$file = basename( $img_url );
 
-		// If we found an attachement ID, return it
-		if ( ! empty( $attachment ) && is_array( $attachment ) ) {
-			return $attachment[0];
+		$query_args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'fields'      => 'ids',
+			'meta_query'  => array(
+				array(
+					'value'   => $file,
+					'compare' => 'LIKE',
+					'key'     => '_wp_attachment_metadata',
+				),
+			)
+		);
+
+		$query = new WP_Query( $query_args );
+
+		if ( $query->have_posts() ) {
+
+			foreach ( $query->posts as $post_id ) {
+				$meta = wp_get_attachment_metadata( $post_id );
+				$original_file       = basename( $meta['file'] );
+				$cropped_image_files = isset( $meta['sizes'] ) ? wp_list_pluck( $meta['sizes'], 'file' ) : array();
+				if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+					$attachment_id = $post_id;
+					break;
+				}
+			}
+
 		}
 
-		// No luck
-		return false;
+		return 0 === $attachment_id ? false : $attachment_id;
 	}
 
 	/**
@@ -66,9 +87,7 @@ class CMB2_Utils {
 				$date_time_zone_selected = new DateTimeZone( $tzstring );
 				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
 			} catch ( Exception $e ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
-				}
+				$this->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}
 
 		}
@@ -252,4 +271,19 @@ class CMB2_Utils {
 		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
 	}
 
+	/**
+	 * Send to debug.log if WP_DEBUG is defined and true
+	 *
+	 * @since  2.1.3
+	 *
+	 * @param  string  $function Function name
+	 * @param  int     $line     Line number
+	 * @param  mixed   $msg      Message to output
+	 * @param  mixed   $debug    Variable to print_r
+	 */
+	public function log_if_debug( $function, $line, $msg, $debug = null ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
+		}
+	}
 }
