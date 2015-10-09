@@ -103,6 +103,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
+		$(document).trigger( 'cmb_init', cmb );
 	};
 
 	cmb.resetTitlesAndIterator = function() {
@@ -926,7 +927,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		}, 500);
 	};
 
-	$(document).ready(cmb.init);
+	$( cmb.init );
 
 	return cmb;
 
