@@ -13,7 +13,8 @@ class CMB2_Customizer {
 
 		$this->start_customizer( $wp_customize );
 
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customize_controls_enqueue_scripts' ) );
+		add_action( 'customize_controls_print_footer_scripts', array( $this, 'customize_controls_enqueue_scripts' ) );
+        add_action( 'cmb2_script_dependencies', array( $this, 'script_dependencies' ) );
 
 	}
 
@@ -229,10 +230,29 @@ class CMB2_Customizer {
 	 * Enqueue scripts needed for CMB2
 	 */
 	function customize_controls_enqueue_scripts() {
-
-		CMB2_hookup::enqueue_cmb_css();
-		CMB2_hookup::enqueue_cmb_js();
-
+        global $wp_customize;
+		//Check to see if customizer is active or not
+		$is_customizer = false;
+		if ( is_object( $wp_customize ) && is_a( $wp_customize, 'WP_Customize_Manager' ) ) {
+    	    	$is_customizer = true;
+        }
+        if ( !$is_customizer ) {
+            $hook = is_admin() ? 'admin_footer' : 'wp_footer';
+        } else {
+            $hook = 'customize_controls_init';   
+        }
+        CMB2_hookup::enqueue_cmb_css();
+		CMB2_JS::enqueue();
 	}
+	
+	function script_dependencies( $args ) {
+    	$args[ 'jquery-ui-core' ] = 'jquery-ui-core';
+    	$args[ 'jquery-ui-datepicker' ] = 'jquery-ui-datepicker';
+    	$args[ 'jquery-ui-slider' ] = 'jquery-ui-slider';
+    	$args[ 'jquery-ui-datetimepicker' ] = 'jquery-ui-datetimepicker';
+    	return $args;
+    	
+    	
+    }
 
 }
