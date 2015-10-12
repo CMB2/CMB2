@@ -529,7 +529,7 @@ class CMB2_Field {
 		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".
 		 * @param CMB2_Field object $field   This field object
 		 */
-		do_action( "cmb2_save_field_{$field_id}", $updated, $action, $this );
+		do_action( "cmb2_save_field_{$this->args['type']}", $updated, $action, $new_value, $this );
 
 		return $updated;
 	}
