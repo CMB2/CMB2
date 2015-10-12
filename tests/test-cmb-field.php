@@ -194,7 +194,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 			'field_args' => $this->field_args,
 		) );
 
-		add_action( 'cmb2_save_field', 'wp_die' );
+		$this->hook_to_wp_die( 'cmb2_save_field' );
 		$modified = $field->save_field( 'some value to be modified' );
 	}
 
@@ -208,7 +208,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 			'field_args' => $this->field_args,
 		) );
 
-		add_action( 'cmb2_save_field_test_test', 'wp_die' );
+		$this->hook_to_wp_die( 'cmb2_save_field_test_test' );
 		$modified = $field->save_field( 'some value to be modified' );
 	}
 

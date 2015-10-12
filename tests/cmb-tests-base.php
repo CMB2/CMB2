@@ -9,6 +9,8 @@
  */
 abstract class Test_CMB2 extends WP_UnitTestCase {
 
+	public $hooks_to_die = array();
+
 	/**
 	 * Set up the test fixture
 	 */
@@ -55,6 +57,17 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	protected function render_field( $field ) {
 		return $this->capture_render( array( $field, 'render_field' ) );
+	}
+
+	protected function hook_to_wp_die( $hook ) {
+		$this->hooks_to_die[] = $hook;
+		add_action( $hook, array( $this, 'wp_die' ) );
+	}
+
+	public function wp_die() {
+		$hook = array_pop( $this->hooks_to_die );
+		remove_action( $hook, array( $this, 'wp_die' ) );
+		wp_die( $hook . ' die' );
 	}
 
 	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
