@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # To install temp. test suite
-# bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest
+# bash tests/bin/install-wp-tests.sh wordpress_test root ''
 
 if [ $# -lt 3 ]; then
 	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version]"
@@ -42,8 +42,9 @@ set -ex
 
 install_wp() {
 
-	if [ -d $WP_CORE_DIR ]; then
-		return;
+	# delete existing
+	if [ $WP_CORE_DIR == '' ]; then
+		rm -rf $WP_CORE_DIR
 	fi
 
 	mkdir -p $WP_CORE_DIR
@@ -68,25 +69,24 @@ install_test_suite() {
 		local ioption='-i'
 	fi
 
-	# set up testing suite if it doesn't yet exist
-	if [ ! -d $WP_TESTS_DIR ]; then
-		# set up testing suite
-		mkdir -p $WP_TESTS_DIR
-		svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
+	# delete existing
+	if [ $WP_TESTS_DIR == '' ]; then
+		rm -rf $WP_TESTS_DIR
 	fi
+
+	# set up testing suite
+	mkdir -p $WP_TESTS_DIR
+	svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
 
 	cd $WP_TESTS_DIR
 
-	if [ ! -f wp-tests-config.php ]; then
-		download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR':" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s:define( 'WP_DEBUG', true );:define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );:" wp-tests-config.php
-		sed $ioption "s/youremptytestdbnamehere/$DB_NAME/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
-	fi
-
+	download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR':" "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s:define( 'WP_DEBUG', true );:define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );:" "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s/youremptytestdbnamehere/$DB_NAME/" "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR"/wp-tests-config.php
+	sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
 }
 
 install_db() {
@@ -105,6 +105,9 @@ install_db() {
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi
+
+	# drop database
+	mysql --user="$DB_USER" --password="$DB_PASS"$EXTRA -e "DROP DATABASE IF EXISTS $DB_NAME"
 
 	# create database
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
