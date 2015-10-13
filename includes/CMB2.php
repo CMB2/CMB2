@@ -682,7 +682,7 @@ class CMB2 {
 
 		// Get our object type
 		switch ( $type ) {
-
+			case 'customizer':
 			case 'user':
 			case 'comment':
 				$this->mb_object_type = $type;

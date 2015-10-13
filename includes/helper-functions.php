@@ -28,8 +28,14 @@ function cmb2_autoload_classes( $class_name ) {
 	if ( 0 !== strpos( $class_name, 'CMB2' ) ) {
 		return;
 	}
+	
+	if ( file_exists( cmb2_dir( "includes/{$class_name}.php"  ) ) ) {
+        include_once( cmb2_dir( "includes/{$class_name}.php" ) );	
+	} elseif( file_exists( cmb2_dir( "includes/customizer/{$class_name}.php" ) ) ) {
+    	include_once( cmb2_dir( "includes/customizer/{$class_name}.php" ) );
+	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	
 }
 
 /**
@@ -168,7 +174,6 @@ function new_cmb2_box( array $meta_box_config ) {
  * @return CMB2 object
  */
 function cmb2_get_metabox( $meta_box, $object_id = 0, $object_type = '' ) {
-
 	if ( $meta_box instanceof CMB2 ) {
 		return $meta_box;
 	}

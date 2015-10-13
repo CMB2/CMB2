@@ -1,5 +1,250 @@
 # CMB2
 
+```php
+//Sample PHP for Customizer 
+add_action( 'cmb2_init', function() {
+    $cmb = new_cmb2_box( array(
+        'id'            => 'address',
+        'title'         => __( 'My Address', 'cmb2' ),
+        'object_types'  => 'customizer', // Post type
+        'context'       => 'normal',
+        'priority'      => 800,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Street Address', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_street_address',
+        'type'       => 'text',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'File', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_file_1',
+        'type'       => 'file',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Text URL', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_text_url',
+        'type'       => 'text_url',
+    ) );
+     // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Text File', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_file_2',
+        'type'       => 'file',
+    ) );
+    // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'Color', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_color',
+        'type'       => 'colorpicker',
+    ) );
+     // Regular text field
+    $cmb->add_field( array(
+        'name'       => __( 'My Checkbox', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_check',
+        'type'       => 'checkbox',
+    ) );
+    
+    $cmb2 = new_cmb2_box( array(
+        'id'            => 'my_custom',
+        'title'         => __( 'My Custom Textarea', 'cmb2' ),
+        'object_types'  => 'customizer', // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $cmb2->add_field( array(
+        'name'       => __( 'My Textarea', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_textarea',
+        'type'       => 'textarea',
+    ) );
+    $cmb2->add_field( array(
+        'name'       => __( 'My Textarea Small', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_textarea_small',
+        'type'       => 'textarea_small',
+    ) );
+    $cmb2->add_field( array(
+    'name'             => 'Test Radio',
+    'id'               => 'wiki_test_radio',
+    'type'             => 'radio',
+    'show_option_none' => true,
+    'options'          => array(
+        'standard' => __( 'Option One', 'cmb' ),
+        'custom'   => __( 'Option Two', 'cmb' ),
+        'none'     => __( 'Option Three', 'cmb' ),
+    ),
+    ) );
+    $cmb2->add_field( array(
+    'name'             => 'Test Radio',
+    'id'               => 'wiki_my_radio',
+    'type'             => 'radio_inline',
+    'show_option_none' => true,
+    'options'          => array(
+        'standard' => __( 'Option One', 'cmb' ),
+        'custom'   => __( 'Option Two', 'cmb' ),
+        'none'     => __( 'Option Three', 'cmb' ),
+    ),
+    ) );
+    $cmb2->add_field( array(
+    'name'     => 'Test Taxonomy Radio',
+    'desc'     => 'Description Goes Here',
+    'id'       => 'wiki_test_taxonomy_radio',
+    'taxonomy' => 'category', // Enter Taxonomy Slug
+    'type'     => 'taxonomy_radio',
+    // Optional:
+    'options' => array(
+        'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
+    $cmb->add_field( array(
+    'name'     => 'Test Taxonomy Radio Inline',
+    'desc'     => 'Description Goes Here',
+    'id'       => 'wiki_test_taxonomy_radio_inline',
+    'taxonomy' => 'category', // Enter Taxonomy Slug
+    'type'     => 'taxonomy_radio_inline',
+    // Optional:
+    'options' => array(
+        'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
+    
+    /* Pauli LOC */
+    $pauli = new_cmb2_box( array(
+        'id'            => 'pauli_custom',
+        'title'         => __( 'Info for Pauli', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    // Regular text field
+    $pauli->add_field( array(
+        'name'       => __( 'Age', 'cmb2' ),
+        'desc'       => __( 'field description (optional)', 'cmb2' ),
+        'id'         => 'cmb_pauli_age',
+        'type'       => 'text_url',
+    ) );
+    $pauli->add_field( array(
+        'name'     => 'Test Taxonomy Select',
+        'desc'     => 'Description Goes Here',
+        'id'       => 'wiki_test_taxonomy_select',
+        'taxonomy' => 'category', //Enter Taxonomy Slug
+        'type'     => 'taxonomy_select',
+    ) );
+    $pauli->add_field( array(
+        'name'             => 'Test Select',
+        'desc'             => 'Select an option',
+        'id'               => 'wiki_test_select',
+        'type'             => 'select',
+        'show_option_none' => true,
+        'default'          => 'custom',
+        'options'          => array(
+            'standard' => __( 'Option One', 'cmb' ),
+            'custom'   => __( 'Option Two', 'cmb' ),
+            'none'     => __( 'Option Three', 'cmb' ),
+        ),
+    ) );
+    
+    /* Pauli LOC */
+    $time_custom = new_cmb2_box( array(
+        'id'            => 'time_custom',
+        'title'         => __( 'Time Custon', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    $time_custom->add_field( array(
+        'name' => 'Test Date Picker',
+        'id' => 'wiki_test_texttime',
+        'type' => 'text_time',
+        'time_format' => 'h:i:s A',
+    ) );
+    $time_custom->add_field( array(
+        'name'    => 'Test Multi Checkbox',
+        'desc'    => 'field description (optional)',
+        'id'      => 'wiki_test_multicheckbox',
+        'type'    => 'multicheck',
+        'options' => array(
+            'check1' => 'Check One',
+            'check2' => 'Check Two',
+            'check3' => 'Check Three',
+        )
+    ) );
+    $time_custom->add_field( array(
+        'name'    => 'Test Multi Checkbox',
+        'desc'    => 'field description (optional)',
+        'id'      => 'wiki_test_multicheckboxes',
+        'type'    => 'multicheck_inline',
+        'options' => array(
+            'check1' => 'Check One',
+            'check2' => 'Check Two',
+            'check3' => 'Check Three',
+        )
+    ) );
+    
+    /* Pauli LOC */
+    $tax_multi = new_cmb2_box( array(
+        'id'            => 'tax_multi',
+        'title'         => __( 'Taxonomy Multi', 'cmb2' ),
+        'object_types'  => array( 'customizer' ), // Post type
+        'context'       => 'normal',
+        'priority'      => 200,
+        'show_names'    => true, // Show field names on the left
+    ) );
+    $tax_multi->add_field( array(
+        'name'     => 'Test Taxonomy Multicheck',
+        'desc'     => 'Description Goes Here',
+        'id'       => 'wiki_test_taxonomy_multicheck',
+        'taxonomy' => 'category', //Enter Taxonomy Slug
+        'type'     => 'taxonomy_multicheck',
+        // Optional:
+        'options' => array(
+            'no_terms_text' => 'Sorry, no terms could be found.' // Change default text. Default: "No terms"
+        ),
+    ) );
+
+} );
+
+```
+
+```php
+/* Test Outputs */
+<?php echo get_option( 'cmb_street_address', 'd' ); ?>
+<br />
+<?php echo get_option( 'cmb_street_field', 'd' ); ?>
+<br />
+<?php echo get_option( 'cmb_check' ); ?>
+<br />
+<?php echo get_option( 'cmb_textarea' ); ?>
+<br />
+<?php echo get_option( 'cmb_textarea_small' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_radio' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_radio' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_radio_inline' ); ?>
+<br />
+<?php echo get_option( 'cmb_pauli_age' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_taxonomy_select' ); ?>
+<br />
+<?php echo get_option( 'wiki_test_select' ); ?>
+```
+
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)](https://travis-ci.org/WebDevStudios/CMB2)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg?style=flat)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)

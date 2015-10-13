@@ -40,7 +40,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		if ( cmb.$metabox ) {
 			return cmb.$metabox;
 		}
-		cmb.$metabox = $('.cmb2-wrap > .cmb2-metabox');
+		cmb.$metabox = $('.cmb2-wrap > .cmb2-metabox, .customize-control' );
 		return cmb.$metabox;
 	};
 
@@ -57,6 +57,12 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
 		$id( 'ui-datepicker-div' ).wrap('<div class="cmb2-element" />');
+		
+		if ( jQuery( '.wp-customizer ' ).length > 0 ) {
+            var date_objs = jQuery( '.cmb2-element' ).detach();
+            jQuery( '.wp-full-overlay ' ).prepend( date_objs );
+        }
+		
 
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
 		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
