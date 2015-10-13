@@ -230,17 +230,6 @@ class CMB2_Customizer {
 	 * Enqueue scripts needed for CMB2
 	 */
 	function customize_controls_enqueue_scripts() {
-        global $wp_customize;
-		//Check to see if customizer is active or not
-		$is_customizer = false;
-		if ( is_object( $wp_customize ) && is_a( $wp_customize, 'WP_Customize_Manager' ) ) {
-    	    	$is_customizer = true;
-        }
-        if ( !$is_customizer ) {
-            $hook = is_admin() ? 'admin_footer' : 'wp_footer';
-        } else {
-            $hook = 'customize_controls_init';   
-        }
         CMB2_hookup::enqueue_cmb_css();
 		CMB2_JS::enqueue();
 	}
