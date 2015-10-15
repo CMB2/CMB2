@@ -176,7 +176,6 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		// $val = $field->get_data();
 		$val = get_post_meta( $this->object_id, 'test_test', 1 );
-		error_log( '$val: '. print_r( $val, true ) );
 		$this->assertEquals( 'modified string', $val );
 		$this->assertEquals( $val, $field->get_data() );
 	}
