@@ -209,7 +209,19 @@ class CMB2_Sanitize {
 	 * @return string       Timestring
 	 */
 	public function text_date_timestamp() {
-		return is_array( $this->value ) ? array_map( 'strtotime', $this->value ) : strtotime( $this->value );
+		if ( is_array( $this->value ) ) {
+			$returnValue = [ ];
+			foreach ( $this->value as $value ) {
+				$date_object   = DateTime::createFromFormat( $this->field->args['date_format'], $value );
+				$returnValue[] = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
+
+			}
+		} else {
+			$date_object = DateTime::createFromFormat( $this->field->args['date_format'], $this->value );
+			$returnValue = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
+		}
+
+		return $returnValue;
 	}
 
 	/**
@@ -228,13 +240,13 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		$this->value = strtotime( $this->value['date'] . ' ' . $this->value['time'] );
+		$this->value = DateTime::createFromFormat( $this->field->args['date_format'] .' ' .$this->field->args['time_format'], $this->value['date']. ' ' .$this->value['time'] );
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
 			$this->value += $tz_offset;
 		}
 
-		return $this->value;
+		return $this->value->getTimeStamp();
 	}
 
 	/**
