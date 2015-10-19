@@ -219,7 +219,7 @@ class CMB2_Utils {
 	 */
 	public function get_timestamp_from_value( $value, $date_format ) {
 		$date_object = date_create_from_format( $date_format, $value );
-		return $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : strtotime( $value );
+		return $date_object ? $date_object->getTimeStamp() : strtotime( $value );
 	}
 
 	/**

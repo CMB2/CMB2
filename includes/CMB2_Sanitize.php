@@ -193,9 +193,18 @@ class CMB2_Sanitize {
 	 * @return string Timestring
 	 */
 	public function text_date_timestamp() {
-		return is_array( $this->value )
-			? array_map( array( $this->field, 'get_timestamp_from_value' ), $this->value )
-			: $this->field->get_timestamp_from_value( $this->value );
+		if (is_array($this->value)) {
+			$returnValue = [];
+			foreach ($this->value as $value) {
+				$date_object   = DateTime::createFromFormat($this->field->args['date_format'], $value);
+				$returnValue[] = $date_object ? $date_object->setTime(0, 0, 0)->getTimeStamp() : '';
+			}
+		} else {
+			$date_object = DateTime::createFromFormat($this->field->args['date_format'], $this->value);
+			$returnValue = $date_object ? $date_object->setTime(0, 0, 0)->getTimeStamp() : '';
+		}
+
+ 		return $returnValue;
 	}
 
 	/**
