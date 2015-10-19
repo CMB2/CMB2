@@ -103,6 +103,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		// and on window resize
 		$(window).on( 'resize', cmb.resizeoEmbeds );
 
+		$(document).trigger( 'cmb_init', cmb );
 	};
 
 	cmb.resetTitlesAndIterator = function() {
@@ -128,7 +129,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	cmb.toggleCheckBoxes = function( evt ) {
 		evt.preventDefault();
 		var $self = $(this);
-		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]' );
+		var $multicheck = $self.closest( '.cmb-td' ).find( 'input[type=checkbox]:not([disabled])' );
 
 		// If the button has already been clicked once...
 		if ( $self.data( 'checked' ) ) {
@@ -642,6 +643,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			} else {
 				val = $element.val();
 			}
+
 			// Get all the current values per element
 			inputVals.push( { val: val, $: $element } );
 		});
@@ -653,7 +655,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			if ( $element.hasClass('cmb2-media-status') ) {
 				var toRowId = $element.closest('.cmb-repeatable-grouping').attr('data-iterator');
-				var fromRowId = inputVals[ index ]['$'].closest('.cmb-repeatable-grouping').attr('data-iterator');
+				var fromRowId = inputVals[ index ].$.closest('.cmb-repeatable-grouping').attr('data-iterator');
 
 				// special case for image previews
 				val = $element.html();
@@ -700,6 +702,10 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		$parent.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 		$goto.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
+
+		// trigger color picker change event
+		$parent.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
+		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 
 		// shift done
 		$self.trigger( 'cmb2_shift_rows_complete', $self );
@@ -930,7 +936,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		}, 500);
 	};
 
-	$(document).ready(cmb.init);
+	$( cmb.init );
 
 	return cmb;
 
