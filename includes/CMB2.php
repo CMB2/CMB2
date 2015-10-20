@@ -500,8 +500,31 @@ class CMB2 {
 		$this->updated = array();
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
-			$this->process_field( $field_args );
+			if ( $this->eligible_to_save( $field_args ) ) {
+				$this->process_field( $field_args );
+			}
 		}
+	}
+
+	/**
+	 * Determine if field is eligible to be saved
+	 * @since  2.1.3
+	 * @param  array  $field_args Array of field arguments
+	 */
+	private function eligible_to_save( $field_args ) {
+		$eligible = true;
+
+		if ( isset( $field_args[ 'attributes' ] ) ) {
+			$attributes = $field_args[ 'attributes' ];
+			if ( isset( $attributes[ 'readonly' ] ) && 'readonly' === $attributes[ 'readonly' ] ) {
+				$eligible = false;
+			} elseif ( isset( $attributes[ 'disabled' ] ) && 'disabled' === $attributes[ 'disabled' ] ) {
+				$eligible = false;
+			}
+		}
+
+		// Add filter here to allow override?
+		return $eligible;
 	}
 
 	/**
