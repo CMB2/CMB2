@@ -503,6 +503,10 @@ class CMB2_Field {
 			$action  = 'removed';
 		}
 
+		if ( $updated ) {
+			$this->value = $this->get_data();
+		}
+
 		$field_id = $this->id( true );
 
 		/**
