@@ -67,15 +67,32 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 			'show_names'       => true,
 			'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
-		    'fields'           => array(
-			    'extra_info' => array(
-				    'name'     => 'Extra Info',
-				    'desc'     => 'field description (optional)',
-				    'id'       => 'extra_info',
-				    'type'     => 'title',
-				    'on_front' => false,
-			    )
-		    )
+			'fields'           => array(
+				'extra_info' => array(
+					'name'     => 'Extra Info',
+					'desc'     => 'field description (optional)',
+					'id'       => 'extra_info',
+					'type'     => 'title',
+					'on_front' => false,
+				)
+			)
+		);
+
+		$this->term_metabox_array = array(
+			'id'           => 'term_metabox',
+			'title'        => 'User Profile Metabox',
+			'object_types' => array( 'term' ), // Tells CMB2 to use term_meta vs post_meta
+			'show_names'   => true,
+			'taxonomies'   => 'category', // where form will show on new user page. 'add-existing-user' is only other valid option.
+			'fields'       => array(
+				'extra_info' => array(
+					'name'     => 'Extra Info',
+					'desc'     => 'field description (optional)',
+					'id'       => 'extra_info',
+					'type'     => 'title',
+					'on_front' => false,
+				)
+			)
 		);
 
 		$this->defaults = array(
@@ -205,6 +222,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$cmb_user = cmb2_get_metabox( $this->user_metabox_array );
 		$this->assertEquals( 'user', $cmb_user->mb_object_type() );
+
+		$cmb_term = cmb2_get_metabox( $this->term_metabox_array );
+		$this->assertEquals( 'term', $cmb_term->mb_object_type() );
 	}
 
 	public function test_cmb2_get_field() {
