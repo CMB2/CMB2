@@ -79,22 +79,24 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->defaults = array(
-			'id'           => $this->cmb_id,
-			'title'        => '',
-			'type'         => '',
-			'object_types' => array(), // Post type
-			'context'      => 'normal',
-			'priority'     => 'high',
-			'show_names'   => true, // Show field names on the left
-			'show_on'      => array(), // Specific post IDs or page templates to display this metabox
-			'show_on_cb'   => null, // Callback to determine if metabox should display. Overrides 'show_on'
-			'cmb_styles'   => true, // Include cmb bundled stylesheet
-			'enqueue_js'   => true, // Include CMB2 JS
-			'fields'       => array(),
-			'hookup'       => true,
-			'save_fields'  => true, // Will not save during hookup if false
-			'closed'       => false, // Default to metabox being closed?
+			'id'               => $this->cmb_id,
+			'title'            => '',
+			'type'             => '',
+			'object_types'     => array(), // Post type
+			'context'          => 'normal',
+			'priority'         => 'high',
+			'show_names'       => true, // Show field names on the left
+			'show_on'          => array(), // Specific post IDs or page templates to display this metabox
+			'show_on_cb'       => null, // Callback to determine if metabox should display. Overrides 'show_on'
+			'cmb_styles'       => true, // Include cmb bundled stylesheet
+			'enqueue_js'       => true, // Include CMB2 JS
+			'fields'           => array(),
+			'hookup'           => true,
+			'save_fields'      => true, // Will not save during hookup if false
+			'closed'           => false, // Default to metabox being closed?
+			'taxonomies'       => array(),
 			'new_user_section' => 'add-new-user', // or 'add-existing-user'
+			'new_term_section' => true,
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );

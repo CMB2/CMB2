@@ -515,6 +515,48 @@ function yourprefix_register_user_profile_metabox() {
 
 }
 
+add_action( 'cmb2_admin_init', 'yourprefix_register_taxonomy_metabox' );
+/**
+ * Hook in and add a metabox to add fields to taxonomy terms
+ */
+function yourprefix_register_taxonomy_metabox() {
+	$prefix = 'yourprefix_term_';
+
+	/**
+	 * Metabox to add fields to categories and tags
+	 */
+	$cmb_term = new_cmb2_box( array(
+		'id'               => $prefix . 'edit',
+		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'object_types'     => array( 'term' ), // Tells CMB2 to use term_meta vs post_meta
+		'taxonomies'       => array( 'category', 'post_tag' ), // Tells CMB2 which taxonomies should have these fields
+		// 'new_term_section' => true, // Will display in the "Add New Category" section
+	) );
+
+	$cmb_term->add_field( array(
+		'name'     => __( 'Extra Info', 'cmb2' ),
+		'desc'     => __( 'field description (optional)', 'cmb2' ),
+		'id'       => $prefix . 'extra_info',
+		'type'     => 'title',
+		'on_front' => false,
+	) );
+
+	$cmb_term->add_field( array(
+		'name' => __( 'Term Image', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'avatar',
+		'type' => 'file',
+	) );
+
+	$cmb_term->add_field( array(
+		'name' => __( 'Arbitrary Term Field', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'term_text_field',
+		'type' => 'text',
+	) );
+
+}
+
 add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
 /**
  * Hook in and register a metabox to handle a theme options page

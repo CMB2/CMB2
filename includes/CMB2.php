@@ -62,22 +62,24 @@ class CMB2 {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'           => '',
-		'title'        => '',
-		'type'         => '',
-		'object_types' => array(), // Post type
-		'context'      => 'normal',
-		'priority'     => 'high',
-		'show_names'   => true, // Show field names on the left
-		'show_on_cb'   => null, // Callback to determine if metabox should display.
-		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
-		'cmb_styles'   => true, // Include CMB2 stylesheet
-		'enqueue_js'   => true, // Include CMB2 JS
-		'fields'       => array(),
-		'hookup'       => true,
-		'save_fields'  => true, // Will not save during hookup if false
-		'closed'       => false, // Default to metabox being closed?
+		'id'               => '',
+		'title'            => '',
+		'type'             => '',
+		'object_types'     => array(), // Post type
+		'context'          => 'normal',
+		'priority'         => 'high',
+		'show_names'       => true, // Show field names on the left
+		'show_on_cb'       => null, // Callback to determine if metabox should display.
+		'show_on'          => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+		'cmb_styles'       => true, // Include CMB2 stylesheet
+		'enqueue_js'       => true, // Include CMB2 JS
+		'fields'           => array(),
+		'hookup'           => true,
+		'save_fields'      => true, // Will not save during hookup if false
+		'closed'           => false, // Default to metabox being closed?
+		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
+		'new_term_section' => true,
 	);
 
 	/**
@@ -637,6 +639,10 @@ class CMB2 {
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
+			case 'term':
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? $_REQUEST['tag_ID'] : $object_id;
+				break;
+
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
 				$object_id = isset( $_REQUEST['post'] ) ? $_REQUEST['post'] : $object_id;
@@ -693,6 +699,7 @@ class CMB2 {
 
 			case 'user':
 			case 'comment':
+			case 'term':
 				$this->mb_object_type = $type;
 				break;
 
@@ -735,6 +742,9 @@ class CMB2 {
 
 		} elseif ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
 			$this->object_type = 'comment';
+
+		} elseif ( 'edit-tags.php' == $pagenow ) {
+			$this->object_type = 'term';
 
 		} else {
 			$this->object_type = 'post';
