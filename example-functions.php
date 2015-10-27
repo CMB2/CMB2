@@ -70,9 +70,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_demo_metabox' );
  * Hook in and add a demo metabox. Can only happen on the 'cmb2_admin_init' or 'cmb2_init' hook.
  */
 function yourprefix_register_demo_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_demo_';
+	$prefix = 'yourprefix_demo_';
 
 	/**
 	 * Sample metabox to demonstrate each field type included
@@ -359,9 +357,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_about_page_metabox' );
  * Hook in and add a metabox that only appears on the 'About' page
  */
 function yourprefix_register_about_page_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_about_';
+	$prefix = 'yourprefix_about_';
 
 	/**
 	 * Metabox to be displayed on a single page ID
@@ -390,9 +386,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_repeatable_group_field_metab
  * Hook in and add a metabox to demonstrate repeatable grouped fields
  */
 function yourprefix_register_repeatable_group_field_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_group_';
+	$prefix = 'yourprefix_group_';
 
 	/**
 	 * Repeatable Field Groups
@@ -456,9 +450,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_user_profile_metabox' );
  * Hook in and add a metabox to add fields to the user profile pages
  */
 function yourprefix_register_user_profile_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_user_';
+	$prefix = 'yourprefix_user_';
 
 	/**
 	 * Metabox for the user profile screen
@@ -529,8 +521,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
  */
 function yourprefix_register_theme_options_metabox() {
 
-	// Start with an underscore to hide fields from custom fields list
-	$option_key = '_yourprefix_theme_options';
+	$option_key = 'yourprefix_theme_options';
 
 	/**
 	 * Metabox for an options page. Will not be added automatically, but needs to be called with
