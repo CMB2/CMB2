@@ -110,7 +110,6 @@ class CMB2_hookup {
 	}
 
 	public function user_hooks() {
-
 		$priority = $this->cmb->prop( 'priority' );
 
 		if ( ! is_numeric( $priority ) ) {
@@ -298,23 +297,7 @@ class CMB2_hookup {
 	 * @since  1.0.0
 	 */
 	public function user_metabox() {
-
-		if ( 'user' != $this->cmb->mb_object_type() ) {
-			return;
-		}
-
-		if ( ! $this->show_on() ) {
-			return;
-		}
-
-		if ( $this->cmb->prop( 'cmb_styles' ) ) {
-			self::enqueue_cmb_css();
-		}
-		if ( $this->cmb->prop( 'enqueue_js' ) ) {
-			self::enqueue_cmb_js();
-		}
-
-		$this->cmb->show_form( 0, 'user' );
+		$this->show_form_for_type( 'user' );
 	}
 
 	/**
@@ -322,8 +305,17 @@ class CMB2_hookup {
 	 * @since  2.1.3
 	 */
 	public function term_metabox() {
+		$this->show_form_for_type( 'term' );
+	}
 
-		if ( 'term' != $this->cmb->mb_object_type() ) {
+	/**
+	 * Display metaboxes for an object type
+	 * @since  2.1.3
+	 * @param  string $type Object type
+	 * @return void
+	 */
+	public function show_form_for_type( $type ) {
+		if ( $type != $this->cmb->mb_object_type() ) {
 			return;
 		}
 
@@ -338,7 +330,7 @@ class CMB2_hookup {
 			self::enqueue_cmb_js();
 		}
 
-		$this->cmb->show_form( 0, 'term' );
+		$this->cmb->show_form( 0, $type );
 	}
 
 	/**
