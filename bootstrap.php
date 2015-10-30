@@ -56,6 +56,9 @@ function cmb2_bootstrap() {
 		if ( $cmb->prop( 'hookup' ) ) {
 			$hookup = new CMB2_hookup( $cmb );
 		}
+		if ( $cmb->prop( 'show_in_rest' ) ) {
+			add_action( 'rest_api_init', array( new CMB2_REST( $cmb ), 'register_fields' ) );
+		}
 	}
 
 	/**
