@@ -1042,7 +1042,7 @@ class CMB2_Field {
 			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : null;
 			$args['show_option_none'] = true === $args['show_option_none'] ? __( 'None', 'cmb2' ) : $args['show_option_none'];
 
-			if ( is_null( $args['show_option_none'] ) ) {
+			if ( null === $args['show_option_none'] ) {
 				$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
 				$args['show_option_none'] = $off_by_default ? false : __( 'None', 'cmb2' );
 			}
