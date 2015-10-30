@@ -23,15 +23,14 @@ function cmb2_bootstrap() {
 		 * In most cases, this should be used to add metaboxes. See example-functions.php
 		 */
 		do_action( 'cmb2_admin_init' );
-
-	} else {
-		/**
-		 * Fires when CMB2 is included/loaded
-		 *
-		 * Can be used to add metaboxes if needed on the front-end (or the front and backend).
-		 */
-		do_action( 'cmb2_init' );
 	}
+
+	/**
+	 * Fires when CMB2 is included/loaded
+	 *
+	 * Can be used to add metaboxes if needed on the front-end or WP-API (or the front and backend).
+	 */
+	do_action( 'cmb2_init' );
 
 	/**
 	 * For back-compat. Does the dirty-work of instantiating all the
