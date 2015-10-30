@@ -127,7 +127,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
-
 	}
 
 	public function tearDown() {
@@ -163,6 +162,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
 			}
 		}
+	}
+
+	public function test_cmb2_init_hook() {
+		$this->assertTrue( (bool) did_action( 'cmb2_init' ) );
+	}
+
+	public function test_cmb2_admin_init_hook() {
+		$this->assertTrue( (bool) did_action( 'cmb2_admin_init' ) );
 	}
 
 	public function test_id_get() {
