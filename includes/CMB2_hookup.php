@@ -35,12 +35,10 @@ class CMB2_hookup {
 	protected static $css_registration_done = false;
 
 	/**
-	 * Metabox Form ID
 	 * @var   CMB2 object
 	 * @since 2.0.2
 	 */
 	protected $cmb;
-
 
 	/**
 	 * CMB taxonomies array for term meta
