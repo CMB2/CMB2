@@ -148,6 +148,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_213_Trunk', false ) ) {
 
 			// Kick the whole thing off
 			require_once 'bootstrap.php';
+			cmb2_bootstrap();
 		}
 
 		/**
