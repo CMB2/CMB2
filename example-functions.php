@@ -124,6 +124,7 @@ function yourprefix_register_demo_metabox() {
 		// 'closed'     => true, // true to keep the metabox closed by default
 		// 'classes'    => 'extra-class', // Extra cmb2-wrap classes
 		// 'classes_cb' => 'yourprefix_add_some_classes', // Add classes through a callback.
+		// 'show_in_rest' => true, // true to show fields in the WP-API. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(
@@ -137,6 +138,7 @@ function yourprefix_register_demo_metabox() {
 		// 'on_front'        => false, // Optionally designate a field to wp-admin only
 		// 'repeatable'      => true,
 		// 'column'          => true, // Display field value in the admin post-listing columns
+		// 'show_in_rest'    => false, // false to remove field from WP-API, if cmb 'show_in_rest' is true. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(

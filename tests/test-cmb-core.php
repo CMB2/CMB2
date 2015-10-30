@@ -111,6 +111,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'enqueue_js'       => true, // Include CMB2 JS
 			'fields'           => array(),
 			'hookup'           => true,
+			'show_in_rest'     => false,
 			'save_fields'      => true, // Will not save during hookup if false
 			'closed'           => false, // Default to metabox being closed?
 			'taxonomies'       => array(),
