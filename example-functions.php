@@ -76,15 +76,16 @@ function yourprefix_register_demo_metabox() {
 	 * Sample metabox to demonstrate each field type included
 	 */
 	$cmb_demo = new_cmb2_box( array(
-		'id'            => $prefix . 'metabox',
-		'title'         => __( 'Test Metabox', 'cmb2' ),
-		'object_types'  => array( 'page', ), // Post type
-		// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
-		// 'context'    => 'normal',
-		// 'priority'   => 'high',
-		// 'show_names' => true, // Show field names on the left
-		// 'cmb_styles' => false, // false to disable the CMB stylesheet
-		// 'closed'     => true, // true to keep the metabox closed by default
+		'id'              => $prefix . 'metabox',
+		'title'           => __( 'Test Metabox', 'cmb2' ),
+		'object_types'    => array( 'page', ), // Post type
+		// 'show_on_cb'   => 'yourprefix_show_if_front_page', // function should return a bool value
+		// 'context'      => 'normal',
+		// 'priority'     => 'high',
+		// 'show_names'   => true, // Show field names on the left
+		// 'cmb_styles'   => false, // false to disable the CMB stylesheet
+		// 'closed'       => true, // true to keep the metabox closed by default
+		// 'show_in_rest' => true, // true to show fields in the WP-API. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(
@@ -97,6 +98,7 @@ function yourprefix_register_demo_metabox() {
 		// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 		// 'on_front'        => false, // Optionally designate a field to wp-admin only
 		// 'repeatable'      => true,
+		// 'show_in_rest'    => false, // false to remove field from WP-API, if cmb 'show_in_rest' is true. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(

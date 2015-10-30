@@ -164,7 +164,7 @@ class CMB2_Field {
 	public function _data( $var, $key = '' ) {
 		$vars = $this->$var;
 		if ( $key ) {
-			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
+			return array_key_exists( $key, $vars ) ? $vars[ $key ] : false;
 		}
 		return $vars;
 	}
@@ -1003,6 +1003,7 @@ class CMB2_Field {
 			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
 			'render_row_cb'     => array( $this, 'render_field_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
+			'show_in_rest'      => null,
 		) );
 
 		// Allow a filter override of the default value

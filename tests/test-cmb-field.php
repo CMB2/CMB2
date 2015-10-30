@@ -91,13 +91,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_row_cb label_cb id before_field after_field row_classes _id _name', $classes );
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_row_cb label_cb show_in_rest id before_field after_field row_classes _id _name', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertEquals( 'type, name, desc, before, after, options_cb, options, attributes, protocols, default, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_row_cb, label_cb, id, before_field, after_field, row_classes, _id, _name', $default );
+		$this->assertEquals( 'type, name, desc, before, after, options_cb, options, attributes, protocols, default, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_row_cb, label_cb, show_in_rest, id, before_field, after_field, row_classes, _id, _name', $default );
 	}
 
 	public function test_cmb2_row_classes_field_callback_with_string() {
