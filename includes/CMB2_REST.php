@@ -27,6 +27,20 @@ class CMB2_REST {
 	protected $can_read = true;
 
 	/**
+	 * Array of readable field objects.
+	 * @var   CMB2_Field[]
+	 * @since 2.1.3
+	 */
+	protected $read_fields = array();
+
+	/**
+	 * Array of writeable field objects.
+	 * @var   CMB2_Field[]
+	 * @since 2.1.3
+	 */
+	protected $write_fields = array();
+
+	/**
 	 * Whether metabox fields can be written via REST API
 	 * @var   bool
 	 * @since 2.1.3
@@ -42,6 +56,10 @@ class CMB2_REST {
 	}
 
 	public function register_fields() {
+		$this->read_write_fields();
+
+		add_filter( 'is_protected_meta', array( $this, 'is_protected_meta' ), 10, 3 );
+
 		register_api_field(
 			$this->cmb->prop( 'object_types' ),
 			'cmb2:'. $this->cmb->cmb_id,
@@ -57,6 +75,39 @@ class CMB2_REST {
 		);
 	}
 
+	public function read_write_fields() {
+		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
+			$show_in_rest = isset( $field['show_in_rest'] ) ? $field['show_in_rest'] : null;
+
+			if ( false === $show_in_rest ) {
+				continue;
+			}
+
+			$this->maybe_add_read_field( $field['id'], $show_in_rest );
+			// $this->maybe_add_write_field( $field['id'], $show_in_rest );
+		}
+	}
+
+	public function maybe_add_read_field( $field_id, $show_in_rest ) {
+		$can_read = $this->can_read
+			? 'write_only' !== $show_in_rest
+			: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
+
+		if ( $can_read ) {
+			$this->read_fields[] = $field_id;
+		}
+	}
+
+	public function maybe_add_write_field( $field_id, $show_in_rest ) {
+		$can_update = $this->can_write
+			? 'read_only' !== $show_in_rest
+			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
+
+		if ( $can_update ) {
+			$this->write_fields[] = $field_id;
+		}
+	}
+
 	/**
 	 * Handler for getting custom field data.
 	 * @since  2.1.3
@@ -68,6 +119,12 @@ class CMB2_REST {
 	public function get_restable_field_values( $object, $field_name, $request ) {
 
 		$values = array();
+		foreach ( $this->read_fields as $field_id ) {
+			$field = $this->cmb->get_field( $field_id );
+			$values[ $field->id() ] = $field->escaped_value();
+		}
+
+		return $values;
 		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
 			$field = $this->cmb->get_field( $field['id'] );
 
@@ -98,12 +155,35 @@ class CMB2_REST {
 			return;
 		}
 
-		$field        = $this->cmb->get_field( $field_id );
-		$show_in_rest = $field ? $field->args( 'show_in_rest' ) : 'no';
-
-		if ( in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true ) ) {
+		if ( $field = $this->field_can_update( $field_id ) ) {
 			return $field->save_field( $value );
 		}
+	}
+
+	/**
+	 * Filter whether a meta key is protected.
+	 * @since 2.1.3
+	 * @param bool   $protected Whether the key is protected. Default false.
+	 * @param string $meta_key  Meta key.
+	 * @param string $meta_type Meta type.
+	 */
+	public function is_protected_meta( $protected, $meta_key, $meta_type ) {
+		if ( $this->field_can_update( $meta_key ) ) {
+			return false;
+		}
+
+		return $protected;
+	}
+
+	public function field_can_update( $field_id ) {
+
+		$field        = $this->cmb->get_field( $field_id );
+		$show_in_rest = $field ? $field->args( 'show_in_rest' ) : 'no';
+		$can_update   = $this->can_write
+			? 'read_only' !== $show_in_rest
+			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
+
+		return $can_update ? $field : false;
 	}
 
 }
