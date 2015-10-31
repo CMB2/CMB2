@@ -185,5 +185,4 @@ class CMB2_REST {
 
 		return $can_update ? $field : false;
 	}
-
 }
