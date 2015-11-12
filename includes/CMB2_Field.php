@@ -507,6 +507,7 @@ class CMB2_Field extends CMB2_Base {
 
 		if ( $updated ) {
 			$this->value = $this->get_data();
+			$this->escaped_value = null;
 		}
 
 		$field_id = $this->id( true );
