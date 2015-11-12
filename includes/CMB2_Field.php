@@ -80,6 +80,30 @@ class CMB2_Field extends CMB2_Base {
 	public $render_context = 'edit';
 
 	/**
+	 * All CMB2_Field callable field arguments.
+	 * Can be used to determine if a field argument is callable.
+	 *
+	 * @var array
+	 */
+	public static $callable_fields = array(
+		'default',
+		'row_classes',
+		'options_cb',
+		'label_cb',
+		'render_row_cb',
+		'before_group',
+		'before_group_row',
+		'before_row',
+		'before',
+		'before_field',
+		'after_field',
+		'after',
+		'after_row',
+		'after_group_row',
+		'after_group',
+	);
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args Field arguments
