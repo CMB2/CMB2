@@ -51,9 +51,9 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 		$this->cmb = $cmb;
 		self::$boxes[ $cmb->cmb_id ] = $cmb;
 
-		$show_value      = $this->cmb->prop( 'show_in_rest' );
-		$this->can_read  = 'write_only' !== $show_value;
-		$this->can_write = in_array( $show_value, array( 'read_and_write', 'write_only' ), true );
+		$show_value = $this->cmb->prop( 'show_in_rest' );
+		$this->cmb->rest_read  = 'write_only' !== $show_value;
+		$this->cmb->rest_write = in_array( $show_value, array( 'read_and_write', 'write_only' ), true );
 	}
 
 	public function universal_hooks() {
@@ -100,7 +100,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 	}
 
 	protected function maybe_add_read_field( $field_id, $show_in_rest ) {
-		$can_read = $this->can_read
+		$can_read = $this->cmb->rest_read
 			? 'write_only' !== $show_in_rest
 			: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
 
@@ -110,7 +110,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 	}
 
 	protected function maybe_add_write_field( $field_id, $show_in_rest ) {
-		$can_update = $this->can_write
+		$can_update = $this->cmb->rest_write
 			? 'read_only' !== $show_in_rest
 			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
 
@@ -237,7 +237,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 
 		$field        = $this->cmb->get_field( $field_id );
 		$show_in_rest = $field ? $field->args( 'show_in_rest' ) : 'no';
-		$can_update   = $this->can_write
+		$can_update   = $this->cmb->rest_write
 			? 'read_only' !== $show_in_rest
 			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
 
