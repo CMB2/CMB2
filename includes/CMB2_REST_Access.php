@@ -3,7 +3,7 @@
  * Handles hooking CMB2 objects/fields into the WordPres REST API
  * which can allow fields to be read and/or updated.
  *
- * @since  2.1.3
+ * @since  2.2.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -15,35 +15,35 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 
 	/**
 	 * @var   CMB2[] objects
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected static $boxes;
 
 	/**
 	 * Whether metabox fields can be read via REST API
 	 * @var   bool
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected $can_read = true;
 
 	/**
 	 * Array of readable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected static $read_fields = array();
 
 	/**
 	 * Array of writeable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected static $write_fields = array();
 
 	/**
 	 * Whether metabox fields can be written via REST API
 	 * @var   bool
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected $can_write = false;
 
@@ -121,7 +121,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 
 	/**
 	 * Handler for getting custom field data.
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  array           $object   The object from the response
 	 * @param  string          $field_id Name of field
 	 * @param  WP_REST_Request $request  Current request
@@ -151,7 +151,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 
 	/**
 	 * Handler for updating custom field data.
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  mixed    $value    The value of the field
 	 * @param  object   $object   The object from the response
 	 * @param  string   $field_id Name of field
@@ -220,7 +220,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 
 	/**
 	 * Filter whether a meta key is protected.
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 * @param bool   $protected Whether the key is protected. Default false.
 	 * @param string $meta_key  Meta key.
 	 * @param string $meta_type Meta type.

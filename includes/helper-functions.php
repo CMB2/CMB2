@@ -60,7 +60,7 @@ function cmb2_ajax() {
 
 /**
  * Get instance of the CMB2_REST_Endpoints class
- * @since  2.1.3
+ * @since  2.2.0
  * @return CMB2_REST_Endpoints object CMB2 REST Endpoints class
  */
 function cmb2_rest_endpoints() {
