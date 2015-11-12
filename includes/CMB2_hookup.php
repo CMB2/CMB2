@@ -43,7 +43,7 @@ class CMB2_hookup {
 	/**
 	 * CMB taxonomies array for term meta
 	 * @var   array
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	protected $taxonomies = array();
 
@@ -300,7 +300,7 @@ class CMB2_hookup {
 
 	/**
 	 * Display metaboxes for a taxonomy term object
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 */
 	public function term_metabox() {
 		$this->show_form_for_type( 'term' );
@@ -308,7 +308,7 @@ class CMB2_hookup {
 
 	/**
 	 * Display metaboxes for an object type
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  string $type Object type
 	 * @return void
 	 */
@@ -464,7 +464,7 @@ class CMB2_hookup {
 
 	/**
 	 * Determine if taxonomy of term being modified is cmb2-editable.
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  string $taxonomy Taxonomy of term being modified.
 	 * @return bool             Whether taxonomy is editable.
 	 */

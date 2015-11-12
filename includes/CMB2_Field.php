@@ -512,7 +512,7 @@ class CMB2_Field {
 		/**
 		 * Hooks after save field action.
 		 *
-		 * @since 2.1.3
+		 * @since 2.2.0
 		 *
 		 * @param string            $field_id the current field id paramater.
 		 * @param bool              $updated  Whether the metadata update action occurred.
@@ -527,7 +527,7 @@ class CMB2_Field {
 		 * The dynamic portion of the hook, $field_id, refers to the
 		 * current field id paramater.
 		 *
-		 * @since 2.1.3
+		 * @since 2.2.0
 		 *
 		 * @param bool              $updated Whether the metadata update action occurred.
 		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".

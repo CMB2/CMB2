@@ -164,7 +164,7 @@ class CMB2 {
 	/**
 	 * Outputs the opening form markup and runs corresponding hooks:
 	 * 'cmb2_before_form' and "cmb2_before_{$object_type}_form_{$this->cmb_id}"
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  integer $object_id   Object ID
 	 * @param  string  $object_type Object type
 	 * @return void
@@ -211,7 +211,7 @@ class CMB2 {
 	/**
 	 * Outputs the closing form markup and runs corresponding hooks:
 	 * 'cmb2_after_form' and "cmb2_after_{$object_type}_form_{$this->cmb_id}"
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  integer $object_id   Object ID
 	 * @param  string  $object_type Object type
 	 * @return void
@@ -256,7 +256,7 @@ class CMB2 {
 
 	/**
 	 * Renders a field based on the field type
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  array $field_args A field configuration array.
 	 * @return mixed CMB2_Field object if successful.
 	 */

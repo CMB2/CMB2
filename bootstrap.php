@@ -11,7 +11,7 @@
 
 /**
  * Function to encapsulate the CMB2 bootstrap process.
- * @since  2.1.3
+ * @since  2.2.0
  * @return void
  */
 function cmb2_bootstrap() {
