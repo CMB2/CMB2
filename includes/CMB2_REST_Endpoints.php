@@ -1,7 +1,7 @@
 <?php
 /**
- * Creates CMB2 objects/fields endpoint for WordPres REST API
- * allows access to what fields are registered to a specific post type and more.
+ * Creates CMB2 objects/fields endpoint for WordPres REST API.
+ * Allows access to fields registered to a specific post type and more.
  *
  * @since  2.1.3
  *
@@ -11,7 +11,6 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-
 class CMB2_REST_Endpoints extends WP_REST_Controller {
 
 	/**
@@ -132,7 +131,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data = $this->filter_response_by_context( $data, $context );
 
-		return apply_filters( 'rest_prepare_cmb2', $data, $request );
+		return apply_filters( 'cmb2_rest_prepare', $data, $request );
 	}
 
 	/**
@@ -142,27 +141,23 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 */
 	public function get_item_schema() {
 		$schema = array(
-			'$schema'              => 'http://json-schema.org/draft-04/schema#',
-			'title'                => 'CMB2',
-			'type'                 => 'object',
-			'properties'           => array(
+			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'title'      => 'CMB2',
+			'type'       => 'object',
+			'properties' => array(
 				'description'      => array(
-					'description'  => 'A human-readable description of the object.',
-					'type'         => 'string',
-					'context'      => array( 'view' ),
-					),
-					'name'             => array(
-						'description'  => 'The id for the object.',
-						'type'         => 'integer',
-						'context'      => array( 'view' ),
-						),
-				'name'             => array(
-					'description'  => 'The title for the object.',
-					'type'         => 'string',
-					'context'      => array( 'view' ),
-					),
+					'description' => 'A human-readable description of the object.',
+					'type'        => 'string',
+					'context'     => array( 'view' ),
 				),
-			);
+				'name'    => array(
+					'description' => 'The title for the object.',
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+			),
+		);
+
 		return $this->add_additional_fields_schema( $schema );
 	}
 
