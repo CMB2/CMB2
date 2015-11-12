@@ -485,6 +485,81 @@ class CMB2 {
 			cmb2_options( $object_id )->set();
 		}
 
+		$this->after_save();
+	}
+
+	/**
+	 * Process and save form fields
+	 * @since  2.0.0
+	 */
+	public function process_fields() {
+
+		$this->pre_process();
+
+		// Remove the show_on properties so saving works
+		$this->prop( 'show_on', array() );
+
+		// save field ids of those that are updated
+		$this->updated = array();
+
+		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$this->process_field( $field_args );
+		}
+	}
+
+	/**
+	 * Process and save a field
+	 * @since  2.0.0
+	 * @param  array  $field_args Array of field arguments
+	 */
+	public function process_field( $field_args ) {
+
+		switch ( $field_args['type'] ) {
+
+			case 'group':
+				if ( $this->save_group( $field_args ) ) {
+					$this->updated[] = $field_args['id'];
+				}
+
+				break;
+
+			case 'title':
+				// Don't process title fields
+				break;
+
+			default:
+
+				$field = $this->get_new_field( $field_args );
+
+				if ( $field->save_field_from_data( $this->data_to_save ) ) {
+					$this->updated[] = $field->id();
+				}
+
+				break;
+		}
+
+	}
+
+	public function pre_process() {
+		/**
+		 * Fires before fields have been processed/saved.
+		 *
+		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
+		 *
+		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
+		 * 	Usually `post` (this applies to all post-types).
+		 *  	Could also be `comment`, `user` or `options-page`.
+		 *
+		 * @param array $cmb       This CMB2 object
+		 * @param int   $object_id The ID of the current object
+		 */
+		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
+	}
+
+	public function after_save() {
+		$object_type = $this->object_type();
+		$object_id   = $this->object_id();
+
 		/**
 		 * Fires after all fields have been saved.
 		 *
@@ -515,85 +590,40 @@ class CMB2 {
 		 * @param array  $cmb         This CMB2 object
 		 */
 		do_action( "cmb2_save_{$object_type}_fields_{$this->cmb_id}", $object_id, $this->updated, $this );
-
-	}
-
-	/**
-	 * Process and save form fields
-	 * @since  2.0.0
-	 */
-	public function process_fields() {
-
-		/**
-		 * Fires before fields have been processed/saved.
-		 *
-		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
-		 *
-		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
-		 * 	Usually `post` (this applies to all post-types).
-		 *  	Could also be `comment`, `user` or `options-page`.
-		 *
-		 * @param array $cmb       This CMB2 object
-		 * @param int   $object_id The ID of the current object
-		 */
-		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
-
-		// Remove the show_on properties so saving works
-		$this->prop( 'show_on', array() );
-
-		// save field ids of those that are updated
-		$this->updated = array();
-
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
-			$this->process_field( $field_args );
-		}
-	}
-
-	/**
-	 * Process and save a field
-	 * @since  2.0.0
-	 * @param  array  $field_args Array of field arguments
-	 */
-	public function process_field( $field_args ) {
-
-		switch ( $field_args['type'] ) {
-
-			case 'group':
-				$this->save_group( $field_args );
-				break;
-
-			case 'title':
-				// Don't process title fields
-				break;
-
-			default:
-
-				$field = $this->get_new_field( $field_args );
-
-				if ( $field->save_field_from_data( $this->data_to_save ) ) {
-					$this->updated[] = $field->id();
-				}
-
-				break;
-		}
-
 	}
 
 	/**
 	 * Save a repeatable group
+	 * @since  1.x.x
+	 * @param  array  $args Field arguments array
+	 * @return mixed        Return of CMB2_Field::update_data()
 	 */
 	public function save_group( $args ) {
-
-		if ( ! isset( $args['id'], $args['fields'], $this->data_to_save[ $args['id'] ] ) || ! is_array( $args['fields'] ) ) {
+		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
 
-		$field_group        = $this->get_new_field( $args );
-		$base_id            = $field_group->id();
-		$old                = $field_group->get_data();
+		return $this->save_group_field( $this->get_new_field( $args ) );
+	}
+
+	/**
+	 * Save a repeatable group
+	 * @since  1.x.x
+	 * @param  array $field_group CMB2_Field group field object
+	 * @return mixed              Return of CMB2_Field::update_data()
+	 */
+	public function save_group_field( $field_group ) {
+		$base_id = $field_group->id();
+
+		if ( ! isset( $this->data_to_save[ $base_id ] ) ) {
+			return;
+		}
+
+		$old        = $field_group->get_data();
 		// Check if group field has sanitization_cb
-		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
-		$saved              = array();
+		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
+		$saved      = array();
+
 		$field_group->index = 0;
 		$field_group->data_to_save = $this->data_to_save;
 
@@ -650,7 +680,7 @@ class CMB2 {
 		}
 		$saved = array_filter( $saved );
 
-		$field_group->update_data( $saved, true );
+		return $field_group->update_data( $saved, true );
 	}
 
 	/**
