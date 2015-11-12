@@ -53,12 +53,17 @@ function cmb2_bootstrap() {
 	 * @since  2.0.2
 	 */
 	foreach ( CMB2_Boxes::get_all() as $cmb ) {
+
 		if ( $cmb->prop( 'hookup' ) ) {
 			$hookup = new CMB2_hookup( $cmb );
+			$hookup->universal_hooks();
 		}
+
 		if ( $cmb->prop( 'show_in_rest' ) ) {
-			add_action( 'rest_api_init', array( new CMB2_REST( $cmb ), 'register_fields' ) );
+			$rest = new CMB2_REST_Access( $cmb );
+			$rest->universal_hooks();
 		}
+
 	}
 
 	/**
