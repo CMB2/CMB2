@@ -6,7 +6,7 @@
  * @todo  Add better documentation.
  * @todo  Research proper schema.
  *
- * @since 2.1.3
+ * @since 2.2.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -19,20 +19,20 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	/**
 	 * The current CMB2 REST endpoint version
 	 * @var string
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	public $version = '1';
 
 	/**
 	 * The CMB2 REST namespace
 	 * @var string
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	public $namespace = 'cmb2/v';
 
 	/**
 	 * Constructor
-	 * @since 2.1.3
+	 * @since 2.2.0
 	 */
 	public function __construct() {
 		$this->namespace .= $this->version;

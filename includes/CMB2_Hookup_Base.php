@@ -2,7 +2,7 @@
 /**
  * Base class for hooking CMB2 into WordPress.
  *
- * @since  2.1.3
+ * @since  2.2.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2

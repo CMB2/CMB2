@@ -72,7 +72,7 @@ class CMB2_Boxes {
 
 	/**
 	 * Retrieve all CMB2 instances that have the specified property set.
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 * @param  string $property Property name.
 	 * @param  mixed  $ignore   The value to ignore.
 	 * @return CMB2[]           Array of matching cmb2 instances.
