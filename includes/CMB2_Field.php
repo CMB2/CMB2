@@ -505,6 +505,7 @@ class CMB2_Field {
 
 		if ( $updated ) {
 			$this->value = $this->get_data();
+			$this->escaped_value = null;
 		}
 
 		$field_id = $this->id( true );
