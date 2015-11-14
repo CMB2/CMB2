@@ -141,7 +141,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout">
+		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout" data-fieldtype="text">
 			<div class="cmb-th"><label for="field_test_field">Name</label></div>
 			<div class="cmb-td">
 				<p class="cmb2-metabox-description">This is a description</p>
@@ -181,7 +181,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-select cmb2-id-options-cb-test-field">
+		<div class="cmb-row cmb-type-select cmb2-id-options-cb-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_cb_test_field">Name</label></div>
 			<div class="cmb-td">
 				<select class="cmb2_select" name="options_cb_test_field" id="options_cb_test_field">
@@ -207,7 +207,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-select cmb2-id-options-test-field">
+		<div class="cmb-row cmb-type-select cmb2-id-options-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_test_field">Name</label></div>
 			<div class="cmb-td">
 				<select class="cmb2_select" name="options_test_field" id="options_test_field">
@@ -243,7 +243,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout">
+		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout" data-fieldtype="text">
 			<div class="cmb-th"><label for="attributes_test_field">Name</label></div>
 			<div class="cmb-td">
 				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>

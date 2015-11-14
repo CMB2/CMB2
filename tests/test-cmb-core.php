@@ -264,7 +264,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			<div class="cmb2-wrap form-table">
 				<div id="cmb2-metabox-' . $this->cmb_id . '" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
-					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout">
+					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout" data-fieldtype="text">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
@@ -514,7 +514,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$expected_group_render = '
 		before_group output
-		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field cmb-repeat">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field cmb-repeat" data-fieldtype="group">
 			<div class="cmb-td">
 				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable" style="width:100%;">
 					<div class="cmb-row cmb-group-description">
@@ -529,7 +529,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
-							<div class="cmb-row cmb-type-colorpicker cmb2-id-group-field-0-colorpicker cmb-repeat-group-field">
+							<div class="cmb-row cmb-type-colorpicker cmb2-id-group-field-0-colorpicker cmb-repeat-group-field" data-fieldtype="colorpicker">
 								<div class="cmb-th">
 									<label for="group_field_0_colorpicker">Colorpicker</label>
 								</div>
@@ -537,7 +537,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
 								</div>
 							</div>
-							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
@@ -594,7 +594,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$field = $cmb->get_field( 'group_field2' );
 
 		$expected_group_render = '
-		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field2">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field2" data-fieldtype="group">
 			<div class="cmb-td">
 				<div id="group_field2_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable non-repeatable" style="width:100%;">
 					<div class="cmb-row">
@@ -606,7 +606,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
-							<div class="cmb-row cmb-type-text cmb2-id-group-field2-0-first-field cmb-repeat-group-field table-layout">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field2-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field2_0_first_field">Field 1</label>
 								</div>
