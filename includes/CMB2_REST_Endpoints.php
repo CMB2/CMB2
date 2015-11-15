@@ -120,11 +120,11 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 			if( isset( $cmb->meta_box['show_in_rest'] ) && true === $cmb->meta_box['show_in_rest'] ) {
 				return $this->prepare_item_for_response( $this->get_rest_box( $cmb ), $request );
 			} else{
-				return $this->prepare_item_for_response( array( 'error' => __( 'Box requested hidden from rest.', 'cmb2' ) ), $request );
+				return $this->prepare_item_for_response( new WP_Error( 'cmb2_no_permission', __( 'You don\'t have permission to view this box.', 'cmb2' ) , array( 'status' => 403 ) ), $request );
 			}
 		}
 
-		return $this->prepare_item_for_response( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ), $request );
+		return $this->prepare_item_for_response( new WP_Error( 'cmb2_no_box', __( 'No box found by that id.', 'cmb2' ) , array( 'status' => 404 ) ), $request );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 			return $this->prepare_item_for_response( $fields, $request );
 		}
 
-		return $this->prepare_item_for_response( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ), $request );
+		return $this->prepare_item_for_response( new WP_Error( 'cmb2_no_box', __( 'No box found by that id.', 'cmb2' ) , array( 'status' => 404 ) ), $request );
 	}
 
 	/**
@@ -199,13 +199,13 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		$cmb = cmb2_get_metabox( $request->get_param( 'cmb_id' ) );
 
 		if ( ! $cmb ) {
-			return $this->prepare_item_for_response( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ), $request );
+				return $this->prepare_item_for_response( new WP_Error( 'cmb2_no_box', __( 'No field found by that id.', 'cmb2' ) , array( 'status' => 404 ) ), $request );
 		}
 
 		$field = $this->get_rest_field( $cmb, $request->get_param( 'field_id' ) );
 
 		if ( is_wp_error( $field ) ) {
-			return $this->prepare_item_for_response( array( 'error' => $field->get_error_message() ), $request );
+			return $this->prepare_item_for_response( new WP_Error( 'cmb2_no_field', $field->get_error_message() , array( 'status' => 404 ) ), $request );
 		}
 
 		return $this->prepare_item_for_response( $field, $request );
