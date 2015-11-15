@@ -135,12 +135,13 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id ) ) ) {
 			$fields = array();
 			foreach ( $cmb->prop( 'fields', array() ) as $field ) {
-				$field = $this->get_rest_field( $cmb, $field['id'] );
-
-				if ( ! is_wp_error( $field ) ) {
-					$fields[ $field['id'] ] = $field;
-				} else {
-					$fields[ $field['id'] ] = array( 'error' => $field->get_error_message() );
+				if( isset( $field['show_in_rest'] ) && true === $field['show_in_rest'] ) {
+					$field = $this->get_rest_field( $cmb, $field['id'] );
+					if ( ! is_wp_error( $field ) ) {
+						$fields[ $field['id'] ] = $field;
+					} else {
+						$fields[ $field['id'] ] = array( 'error' => $field->get_error_message() );
+					}
 				}
 			}
 
