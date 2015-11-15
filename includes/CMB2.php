@@ -62,22 +62,27 @@ class CMB2 {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'           => '',
-		'title'        => '',
-		'type'         => '',
-		'object_types' => array(), // Post type
-		'context'      => 'normal',
-		'priority'     => 'high',
-		'show_names'   => true, // Show field names on the left
-		'show_on_cb'   => null, // Callback to determine if metabox should display.
-		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
-		'cmb_styles'   => true, // Include CMB2 stylesheet
-		'enqueue_js'   => true, // Include CMB2 JS
-		'fields'       => array(),
-		'hookup'       => true,
-		'save_fields'  => true, // Will not save during hookup if false
-		'closed'       => false, // Default to metabox being closed?
+		'id'               => '',
+		'title'            => '',
+		'type'             => '',
+		'object_types'     => array(), // Post type
+		'context'          => 'normal',
+		'priority'         => 'high',
+		'show_names'       => true, // Show field names on the left
+		'show_on_cb'       => null, // Callback to determine if metabox should display.
+		'show_on'          => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+		'cmb_styles'       => true, // Include CMB2 stylesheet
+		'enqueue_js'       => true, // Include CMB2 JS
+		'fields'           => array(),
+		'hookup'           => true,
+		'show_in_rest'     => false,
+		'save_fields'      => true, // Will not save during hookup if false
+		'closed'           => false, // Default to metabox being closed?
+		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
+		'new_term_section' => true,
+		'rest_read'        => false,
+		'rest_write'       => false,
 	);
 
 	/**
@@ -150,6 +155,24 @@ class CMB2 {
 	 * @param string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
 	public function show_form( $object_id = 0, $object_type = '' ) {
+		$this->render_form_open( $object_id, $object_type );
+
+		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$this->render_field( $field_args );
+		}
+
+		$this->render_form_close( $object_id, $object_type );
+	}
+
+	/**
+	 * Outputs the opening form markup and runs corresponding hooks:
+	 * 'cmb2_before_form' and "cmb2_before_{$object_type}_form_{$this->cmb_id}"
+	 * @since  2.2.0
+	 * @param  integer $object_id   Object ID
+	 * @param  string  $object_type Object type
+	 * @return void
+	 */
+	public function render_form_open( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
 		$object_id = $this->object_id( $object_id );
 
@@ -186,33 +209,19 @@ class CMB2 {
 
 		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
+	}
 
-			$field_args['context'] = $this->prop( 'context' );
-
-			if ( 'group' == $field_args['type'] ) {
-
-				if ( ! isset( $field_args['show_names'] ) ) {
-					$field_args['show_names'] = $this->prop( 'show_names' );
-				}
-				$this->render_group( $field_args );
-
-			} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
-				// Save rendering for after the metabox
-				$this->add_hidden_field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
-
-			} else {
-
-				$field_args['show_names'] = $this->prop( 'show_names' );
-
-				// Render default fields
-				$field = $this->get_field( $field_args )->render_field();
-			}
-		}
+	/**
+	 * Outputs the closing form markup and runs corresponding hooks:
+	 * 'cmb2_after_form' and "cmb2_after_{$object_type}_form_{$this->cmb_id}"
+	 * @since  2.2.0
+	 * @param  integer $object_id   Object ID
+	 * @param  string  $object_type Object type
+	 * @return void
+	 */
+	public function render_form_close( $object_id = 0, $object_type = '' ) {
+		$object_type = $this->object_type( $object_type );
+		$object_id = $this->object_id( $object_id );
 
 		echo '</div></div>';
 
@@ -249,8 +258,44 @@ class CMB2 {
 	}
 
 	/**
-	 * Render a repeatable group
-	 * @param array $args Array of field arguments for a group field parent
+	 * Renders a field based on the field type
+	 * @since  2.2.0
+	 * @param  array $field_args A field configuration array.
+	 * @return mixed CMB2_Field object if successful.
+	 */
+	public function render_field( $field_args ) {
+		$field_args['context'] = $this->prop( 'context' );
+
+		if ( 'group' == $field_args['type'] ) {
+
+			if ( ! isset( $field_args['show_names'] ) ) {
+				$field_args['show_names'] = $this->prop( 'show_names' );
+			}
+			$field = $this->render_group( $field_args );
+
+		} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
+			// Save rendering for after the metabox
+			$field = $this->add_hidden_field( array(
+				'field_args'  => $field_args,
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+			) );
+
+		} else {
+
+			$field_args['show_names'] = $this->prop( 'show_names' );
+
+			// Render default fields
+			$field = $this->get_field( $field_args )->render_field();
+		}
+
+		return $field;
+	}
+
+	/**
+	 * Render a repeatable group.
+	 * @param array $args Array of field arguments for a group field parent.
+	 * @return CMB2_Field|null Group field object.
 	 */
 	public function render_group( $args ) {
 
@@ -276,7 +321,7 @@ class CMB2 {
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap" data-fieldtype="group"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -308,6 +353,7 @@ class CMB2 {
 
 		$field_group->peform_param_callback( 'after_group' );
 
+		return $field_group;
 	}
 
 	/**
@@ -374,7 +420,10 @@ class CMB2 {
 	 * @param array  $args Array of arguments to be passed to CMB2_Field
 	 */
 	public function add_hidden_field( $args ) {
-		$this->hidden_fields[] = new CMB2_Types( new CMB2_Field( $args ) );
+		$field = new CMB2_Field( $args );
+		$this->hidden_fields[] = new CMB2_Types( $field );
+
+		return $field;
 	}
 
 	/**
@@ -440,6 +489,86 @@ class CMB2 {
 			cmb2_options( $object_id )->set();
 		}
 
+		$this->after_save();
+	}
+
+	/**
+	 * Process and save form fields
+	 * @since  2.0.0
+	 */
+	public function process_fields() {
+
+		$this->pre_process();
+
+		// Remove the show_on properties so saving works
+		$this->prop( 'show_on', array() );
+
+		// save field ids of those that are updated
+		$this->updated = array();
+
+		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$this->process_field( $field_args );
+		}
+	}
+
+	/**
+	 * Process and save a field
+	 * @since  2.0.0
+	 * @param  array  $field_args Array of field arguments
+	 */
+	public function process_field( $field_args ) {
+
+		switch ( $field_args['type'] ) {
+
+			case 'group':
+				if ( $this->save_group( $field_args ) ) {
+					$this->updated[] = $field_args['id'];
+				}
+
+				break;
+
+			case 'title':
+				// Don't process title fields
+				break;
+
+			default:
+
+				// Save default fields
+				$field = new CMB2_Field( array(
+					'field_args'  => $field_args,
+					'object_type' => $this->object_type(),
+					'object_id'   => $this->object_id(),
+				) );
+
+				if ( $field->save_field_from_data( $this->data_to_save ) ) {
+					$this->updated[] = $field->id();
+				}
+
+				break;
+		}
+
+	}
+
+	public function pre_process() {
+		/**
+		 * Fires before fields have been processed/saved.
+		 *
+		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
+		 *
+		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
+		 * 	Usually `post` (this applies to all post-types).
+		 *  	Could also be `comment`, `user` or `options-page`.
+		 *
+		 * @param array $cmb       This CMB2 object
+		 * @param int   $object_id The ID of the current object
+		 */
+		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
+	}
+
+	public function after_save() {
+		$object_type = $this->object_type();
+		$object_id   = $this->object_id();
+
 		/**
 		 * Fires after all fields have been saved.
 		 *
@@ -470,94 +599,44 @@ class CMB2 {
 		 * @param array  $cmb         This CMB2 object
 		 */
 		do_action( "cmb2_save_{$object_type}_fields_{$this->cmb_id}", $object_id, $this->updated, $this );
-
-	}
-
-	/**
-	 * Process and save form fields
-	 * @since  2.0.0
-	 */
-	public function process_fields() {
-
-		/**
-		 * Fires before fields have been processed/saved.
-		 *
-		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
-		 *
-		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
-		 * 	Usually `post` (this applies to all post-types).
-		 *  	Could also be `comment`, `user` or `options-page`.
-		 *
-		 * @param array $cmb       This CMB2 object
-		 * @param int   $object_id The ID of the current object
-		 */
-		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
-
-		// Remove the show_on properties so saving works
-		$this->prop( 'show_on', array() );
-
-		// save field ids of those that are updated
-		$this->updated = array();
-
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
-			$this->process_field( $field_args );
-		}
-	}
-
-	/**
-	 * Process and save a field
-	 * @since  2.0.0
-	 * @param  array  $field_args Array of field arguments
-	 */
-	public function process_field( $field_args ) {
-
-		switch ( $field_args['type'] ) {
-
-			case 'group':
-				$this->save_group( $field_args );
-				break;
-
-			case 'title':
-				// Don't process title fields
-				break;
-
-			default:
-
-				// Save default fields
-				$field = new CMB2_Field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
-
-				if ( $field->save_field_from_data( $this->data_to_save ) ) {
-					$this->updated[] = $field->id();
-				}
-
-				break;
-		}
-
 	}
 
 	/**
 	 * Save a repeatable group
+	 * @since  1.x.x
+	 * @param  array  $args Field arguments array
+	 * @return mixed        Return of CMB2_Field::update_data()
 	 */
 	public function save_group( $args ) {
-
-		if ( ! isset( $args['id'], $args['fields'], $this->data_to_save[ $args['id'] ] ) || ! is_array( $args['fields'] ) ) {
+		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
 			return;
 		}
 
-		$field_group        = new CMB2_Field( array(
+		return $this->save_group_field( new CMB2_Field( array(
 			'field_args'  => $args,
 			'object_type' => $this->object_type(),
 			'object_id'   => $this->object_id(),
-		) );
-		$base_id            = $field_group->id();
-		$old                = $field_group->get_data();
+		) ) );
+	}
+
+	/**
+	 * Save a repeatable group
+	 * @since  1.x.x
+	 * @param  array $field_group CMB2_Field group field object
+	 * @return mixed              Return of CMB2_Field::update_data()
+	 */
+	public function save_group_field( $field_group ) {
+		$base_id = $field_group->id();
+
+		if ( ! isset( $this->data_to_save[ $base_id ] ) ) {
+			return;
+		}
+
+		$old        = $field_group->get_data();
 		// Check if group field has sanitization_cb
-		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
-		$saved              = array();
+		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
+		$saved      = array();
+
 		$field_group->index = 0;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
@@ -604,7 +683,7 @@ class CMB2 {
 		}
 		$saved = array_filter( $saved );
 
-		$field_group->update_data( $saved, true );
+		return $field_group->update_data( $saved, true );
 	}
 
 	/**
@@ -635,6 +714,10 @@ class CMB2 {
 			case 'comment':
 				$object_id = isset( $_REQUEST['c'] ) ? $_REQUEST['c'] : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
+				break;
+
+			case 'term':
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? $_REQUEST['tag_ID'] : $object_id;
 				break;
 
 			default:
@@ -693,6 +776,7 @@ class CMB2 {
 
 			case 'user':
 			case 'comment':
+			case 'term':
 				$this->mb_object_type = $type;
 				break;
 
@@ -735,6 +819,9 @@ class CMB2 {
 
 		} elseif ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
 			$this->object_type = 'comment';
+
+		} elseif ( 'edit-tags.php' == $pagenow ) {
+			$this->object_type = 'term';
 
 		} else {
 			$this->object_type = 'post';

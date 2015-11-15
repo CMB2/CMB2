@@ -46,12 +46,23 @@ function cmb2_utils() {
 /**
  * Get instance of the CMB2_Ajax class
  * @since  2.0.0
- * @return CMB2_Ajax object CMB2 utilities class
+ * @return CMB2_Ajax object CMB2 ajax class
  */
 function cmb2_ajax() {
 	static $cmb2_ajax;
 	$cmb2_ajax = $cmb2_ajax ? $cmb2_ajax : new CMB2_Ajax();
 	return $cmb2_ajax;
+}
+
+/**
+ * Get instance of the CMB2_REST_Endpoints class
+ * @since  2.2.0
+ * @return CMB2_REST_Endpoints object CMB2 REST Endpoints class
+ */
+function cmb2_rest_endpoints() {
+	static $endpoints;
+	$endpoints = $endpoints ? $endpoints : new CMB2_REST_Endpoints();
+	return $endpoints;
 }
 
 /**

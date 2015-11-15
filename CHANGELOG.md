@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Enhancements
+
+* New hooks which hook in after save field action: `'cmb2_save_field'` and `"cmb2_save_field_{$field_id}"`. Props [wpsmith](https://github.com/wpsmith) ([#475](https://github.com/WebDevStudios/CMB2/pull/475)).
+* The "cmb2_sanitize_{$field_type}" hook now runs for every field type (not just custom types) so you can override the sanitization for all field types via a filter.
+* Term Meta! As of WordPress 4.4, [WordPress will have the ability to use term metadata](https://make.wordpress.org/core/2015/10/23/4-4-taxonomy-roundup/). CMB2 will work with term meta out of the box. To do so, see the example cmb registration in the `yourprefix_register_taxonomy_metabox` function in [example-functions.php](https://github.com/WebDevStudios/CMB2/blob/master/example-functions.php).
+* `CMB2::show_form()` is now composed of 3 smaller methods, `CMB2::render_form_open()`, `CMB2::render_field()`, `CMB2::render_form_close()` ([#506](https://github.com/WebDevStudios/CMB2/pull/506)).
+
+### Bug Fixes
+
+* Fixed issue with `'taxonomy_select'` field type where a term which evaluated falsey would not be displayed properly. Props [adamcapriola](https://github.com/adamcapriola) ([#477](https://github.com/WebDevStudios/CMB2/pull/477)).
+* Fix issue with colorpickers not changing when sorting groups.
+* `'show_option_none'` field parameter now works on taxonomy fields when explicitly setting to false.
+
 ## 2.1.2 - 2015-10-01
 
 ### Bug Fixes
@@ -15,7 +28,7 @@ All notable changes to this project will be documented in this file.
 
 * Make all CMB2::save_fields arguments optional to fall-back to `$_POST` data. Props [JPry](https://github.com/JPry).
 * New filter, `cmb2_non_repeatable_fields` for adding additional fields to the blacklist of repeatable field-types. Props [JPry](https://github.com/JPry) ([#430](https://github.com/WebDevStudios/CMB2/pull/430)).
-* New recommended hoook for adding metaboxes, `cmb2_admin_init`. Most metabox registration only needs to happen if in wp-admin, so there is no reason to register them when loading the front-end (and increase the memory usage). `cmb2_init` still exists to register metaboxes that will be used on the front-end or used on both the front and back-end. Instances of `cmb2_init` in example-functions.php have been switched to `cmb2_admin_init`.
+* New recommended hook for adding metaboxes, `cmb2_admin_init`. Most metabox registration only needs to happen if in wp-admin, so there is no reason to register them when loading the front-end (and increase the memory usage). `cmb2_init` still exists to register metaboxes that will be used on the front-end or used on both the front and back-end. Instances of `cmb2_init` in example-functions.php have been switched to `cmb2_admin_init`.
 * Add `'render_row_cb'` field parameter for overriding the field render method.
 * Add `'label_cb'` field parameter for overriding the field label render method.
 * Allow `CMB2_Types::checkbox()` method to be more flexible for extending by taking an args array and an `$is_checked` second argument.

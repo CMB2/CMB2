@@ -87,9 +87,7 @@ class CMB2_Utils {
 				$date_time_zone_selected = new DateTimeZone( $tzstring );
 				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
 			} catch ( Exception $e ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( 'CMB2_Sanitize:::text_datetime_timestamp_timezone, ' . __LINE__ . ': ' . print_r( $e->getMessage(), true ) );
-				}
+				$this->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}
 
 		}
@@ -210,6 +208,22 @@ class CMB2_Utils {
 		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', set_url_scheme( $cmb2_url ), CMB2_VERSION ) );
 
 		return $this->url . $path;
+	}
+
+	/**
+	 * Send to debug.log if WP_DEBUG is defined and true
+	 *
+	 * @since  2.2.0
+	 *
+	 * @param  string  $function Function name
+	 * @param  int     $line     Line number
+	 * @param  mixed   $msg      Message to output
+	 * @param  mixed   $debug    Variable to print_r
+	 */
+	public function log_if_debug( $function, $line, $msg, $debug = null ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
+		}
 	}
 
 }

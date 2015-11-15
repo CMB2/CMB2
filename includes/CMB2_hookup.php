@@ -11,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-class CMB2_hookup {
+class CMB2_hookup extends CMB2_Hookup_Base {
 
 	/**
 	 * Array of all hooks done (to be run once)
@@ -35,29 +35,23 @@ class CMB2_hookup {
 	protected static $css_registration_done = false;
 
 	/**
-	 * Metabox Form ID
-	 * @var   CMB2 object
-	 * @since 2.0.2
+	 * CMB taxonomies array for term meta
+	 * @var   array
+	 * @since 2.2.0
 	 */
-	protected $cmb;
+	protected $taxonomies = array();
 
 	/**
-	 * The object type we are performing the hookup for
-	 * @var   string
-	 * @since 2.0.9
+	 * Constructor
+	 * @since 2.0.0
+	 * @param CMB2 $cmb The CMB2 object to hookup
 	 */
-	protected $object_type = 'post';
-
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
-
-		$this->hooks();
-		if ( is_admin() ) {
-			$this->admin_hooks();
-		}
+		$this->object_type = $this->cmb->mb_object_type();
 	}
 
-	public function hooks() {
+	public function universal_hooks() {
 		// Handle oembed Ajax
 		$this->once( 'wp_ajax_cmb2_oembed_handler', array( cmb2_ajax(), 'oembed_handler' ) );
 		$this->once( 'wp_ajax_nopriv_cmb2_oembed_handler', array( cmb2_ajax(), 'oembed_handler' ) );
@@ -66,58 +60,98 @@ class CMB2_hookup {
 			add_filter( 'cmb2_show_on', array( 'CMB2_Show_Filters', $filter ), 10, 3 );
 		}
 
-	}
+		if ( is_admin() ) {
+			// register our scripts and styles for cmb
+			$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
 
-	public function admin_hooks() {
-		global $pagenow;
-
-		// register our scripts and styles for cmb
-		$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
-
-		$this->object_type = $this->cmb->mb_object_type();
-		if ( 'post' == $this->object_type ) {
-			add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
-			add_action( 'add_attachment', array( $this, 'save_post' ) );
-			add_action( 'edit_attachment', array( $this, 'save_post' ) );
-			add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
-
-			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
-
-		} elseif ( 'comment' == $this->object_type ) {
-			add_action( 'add_meta_boxes_comment', array( $this, 'add_metaboxes' ) );
-			add_action( 'edit_comment', array( $this, 'save_comment' ) );
-
-			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
-
-		} elseif ( 'user' == $this->object_type ) {
-
-			$priority = $this->cmb->prop( 'priority' );
-
-			if ( ! is_numeric( $priority ) ) {
-				switch ( $priority ) {
-
-					case 'high':
-						$priority = 5;
-						break;
-
-					case 'low':
-						$priority = 20;
-						break;
-
-					default:
-						$priority = 10;
-						break;
-				}
+			switch ( $this->object_type ) {
+				case 'post':
+					return $this->post_hooks();
+				case 'comment':
+					return $this->comment_hooks();
+				case 'user':
+					return $this->user_hooks();
+				case 'term':
+					return $this->term_hooks();
 			}
 
-			add_action( 'show_user_profile', array( $this, 'user_metabox' ), $priority );
-			add_action( 'edit_user_profile', array( $this, 'user_metabox' ), $priority );
-			add_action( 'user_new_form', array( $this, 'user_new_metabox' ), $priority );
-
-			add_action( 'personal_options_update', array( $this, 'save_user' ) );
-			add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
-			add_action( 'user_register', array( $this, 'save_user' ) );
 		}
+	}
+
+	public function post_hooks() {
+		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+		add_action( 'add_attachment', array( $this, 'save_post' ) );
+		add_action( 'edit_attachment', array( $this, 'save_post' ) );
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
+
+		$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
+	}
+
+	public function comment_hooks() {
+		add_action( 'add_meta_boxes_comment', array( $this, 'add_metaboxes' ) );
+		add_action( 'edit_comment', array( $this, 'save_comment' ) );
+
+		$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
+	}
+
+	public function user_hooks() {
+		$priority = $this->cmb->prop( 'priority' );
+
+		if ( ! is_numeric( $priority ) ) {
+			switch ( $priority ) {
+
+				case 'high':
+					$priority = 5;
+					break;
+
+				case 'low':
+					$priority = 20;
+					break;
+
+				default:
+					$priority = 10;
+					break;
+			}
+		}
+
+		add_action( 'show_user_profile', array( $this, 'user_metabox' ), $priority );
+		add_action( 'edit_user_profile', array( $this, 'user_metabox' ), $priority );
+		add_action( 'user_new_form', array( $this, 'user_new_metabox' ), $priority );
+
+		add_action( 'personal_options_update', array( $this, 'save_user' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save_user' ) );
+		add_action( 'user_register', array( $this, 'save_user' ) );
+	}
+
+	public function term_hooks() {
+		if ( ! function_exists( 'get_term_meta' ) || ! $this->cmb->prop( 'taxonomies' ) ) {
+			wp_die( __( 'Term metaboxes configuration requires a \'taxonomies\' parameter', 'cmb2' ) );
+		}
+
+		$this->taxonomies = (array) $this->cmb->prop( 'taxonomies' );
+		$show_on_term_add = $this->cmb->prop( 'new_term_section' );
+
+		foreach ( $this->taxonomies as $taxonomy ) {
+			// Display our form data
+			add_action( "{$taxonomy}_edit_form", array( $this, 'term_metabox' ), 8, 2 );
+
+			$show_on_add = is_array( $show_on_term_add )
+				? in_array( $taxonomy, $show_on_term_add )
+				: (bool) $show_on_term_add;
+
+			$show_on_add = apply_filters( "cmb2_show_on_term_add_form_{$this->cmb->cmb_id}", $show_on_add, $this->cmb );
+
+			// Display form in add-new section (unless specified not to)
+			if ( $show_on_add ) {
+				add_action( "{$taxonomy}_add_form_fields", array( $this, 'term_metabox' ), 8, 2 );
+			}
+
+		}
+
+		add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
+		add_action( 'edited_terms', array( $this, 'save_term' ), 10, 2 );
+
+		add_action( 'delete_term', array( $this, 'delete_term' ), 10, 3 );
 	}
 
 	/**
@@ -248,8 +282,25 @@ class CMB2_hookup {
 	 * @since  1.0.0
 	 */
 	public function user_metabox() {
+		$this->show_form_for_type( 'user' );
+	}
 
-		if ( 'user' != $this->cmb->mb_object_type() ) {
+	/**
+	 * Display metaboxes for a taxonomy term object
+	 * @since  2.2.0
+	 */
+	public function term_metabox() {
+		$this->show_form_for_type( 'term' );
+	}
+
+	/**
+	 * Display metaboxes for an object type
+	 * @since  2.2.0
+	 * @param  string $type Object type
+	 * @return void
+	 */
+	public function show_form_for_type( $type ) {
+		if ( $type != $this->cmb->mb_object_type() ) {
 			return;
 		}
 
@@ -264,7 +315,7 @@ class CMB2_hookup {
 			self::enqueue_cmb_js();
 		}
 
-		$this->cmb->show_form( 0, 'user' );
+		$this->cmb->show_form( 0, $type );
 	}
 
 	/**
@@ -344,6 +395,42 @@ class CMB2_hookup {
 	}
 
 	/**
+	 * Save data from term fields
+	 * @since  1.0.x
+	 * @param  int    $term_id  Term ID
+	 * @param  int    $tt_id    Term Taxonomy ID
+	 * @param  string $taxonomy Taxonomy
+	 * @return null
+	 */
+	public function save_term( $term_id, $tt_id, $taxonomy = '' ) {
+		$taxonomy = $taxonomy ? $taxonomy : $tt_id;
+
+		// check permissions
+		if ( $this->taxonomy_can_save( $taxonomy ) && $this->can_save( 'term' ) ) {
+			$this->cmb->save_fields( $term_id, 'term', $_POST );
+		}
+	}
+
+	/**
+	 * Delete term meta when a term is deleted.
+	 * @since  1.0.x
+	 * @param  int    $term_id  Term ID
+	 * @param  int    $tt_id    Term Taxonomy ID
+	 * @param  string $taxonomy Taxonomy
+	 * @return null
+	 */
+	public function delete_term( $term_id, $tt_id, $taxonomy = '' ) {
+		if ( $this->taxonomy_can_save( $taxonomy ) ) {
+
+			foreach ( $this->cmb->prop( 'fields' ) as $field ) {
+				$data_to_delete[ $field['id'] ] = '';
+			}
+
+			$this->cmb->save_fields( $term_id, 'term', $data_to_delete );
+		}
+	}
+
+	/**
 	 * Determines if the current object is able to be saved
 	 * @since  2.0.9
 	 * @param  string  $type Current post_type or comment_type
@@ -363,22 +450,25 @@ class CMB2_hookup {
 	}
 
 	/**
-	 * Ensures WordPress hook only gets fired once
-	 * @since  2.0.0
-	 * @param string   $action        The name of the filter to hook the $hook callback to.
-	 * @param callback $hook          The callback to be run when the filter is applied.
-	 * @param integer  $priority      Order the functions are executed
-	 * @param int      $accepted_args The number of arguments the function accepts.
+	 * Determine if taxonomy of term being modified is cmb2-editable.
+	 * @since  2.2.0
+	 * @param  string $taxonomy Taxonomy of term being modified.
+	 * @return bool             Whether taxonomy is editable.
 	 */
-	public function once( $action, $hook, $priority = 10, $accepted_args = 1 ) {
-		$key = md5( serialize( func_get_args() ) );
+	public function taxonomy_can_save( $taxonomy ) {
+		$taxonomy = $taxonomy ? $taxonomy : $tt_id;
 
-		if ( in_array( $key, self::$hooks_completed ) ) {
-			return;
+		if ( empty( $this->taxonomies ) || ! in_array( $taxonomy, $this->taxonomies ) ) {
+			return false;
 		}
 
-		self::$hooks_completed[] = $key;
-		add_filter( $action, $hook, $priority, $accepted_args );
+		$taxonomy_object = get_taxonomy( $taxonomy );
+		// Can the user edit this term?
+		if ( ! isset( $taxonomy_object->cap ) || ! current_user_can( $taxonomy_object->cap->edit_terms ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

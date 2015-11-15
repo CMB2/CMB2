@@ -70,23 +70,22 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_demo_metabox' );
  * Hook in and add a demo metabox. Can only happen on the 'cmb2_admin_init' or 'cmb2_init' hook.
  */
 function yourprefix_register_demo_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_demo_';
+	$prefix = 'yourprefix_demo_';
 
 	/**
 	 * Sample metabox to demonstrate each field type included
 	 */
 	$cmb_demo = new_cmb2_box( array(
-		'id'            => $prefix . 'metabox',
-		'title'         => __( 'Test Metabox', 'cmb2' ),
-		'object_types'  => array( 'page', ), // Post type
-		// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
-		// 'context'    => 'normal',
-		// 'priority'   => 'high',
-		// 'show_names' => true, // Show field names on the left
-		// 'cmb_styles' => false, // false to disable the CMB stylesheet
-		// 'closed'     => true, // true to keep the metabox closed by default
+		'id'              => $prefix . 'metabox',
+		'title'           => __( 'Test Metabox', 'cmb2' ),
+		'object_types'    => array( 'page', ), // Post type
+		// 'show_on_cb'   => 'yourprefix_show_if_front_page', // function should return a bool value
+		// 'context'      => 'normal',
+		// 'priority'     => 'high',
+		// 'show_names'   => true, // Show field names on the left
+		// 'cmb_styles'   => false, // false to disable the CMB stylesheet
+		// 'closed'       => true, // true to keep the metabox closed by default
+		// 'show_in_rest' => true, // true to show fields in the WP-API. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(
@@ -99,6 +98,7 @@ function yourprefix_register_demo_metabox() {
 		// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 		// 'on_front'        => false, // Optionally designate a field to wp-admin only
 		// 'repeatable'      => true,
+		// 'show_in_rest'    => false, // false to remove field from WP-API, if cmb 'show_in_rest' is true. More here: <docs link>
 	) );
 
 	$cmb_demo->add_field( array(
@@ -359,9 +359,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_about_page_metabox' );
  * Hook in and add a metabox that only appears on the 'About' page
  */
 function yourprefix_register_about_page_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_about_';
+	$prefix = 'yourprefix_about_';
 
 	/**
 	 * Metabox to be displayed on a single page ID
@@ -390,9 +388,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_repeatable_group_field_metab
  * Hook in and add a metabox to demonstrate repeatable grouped fields
  */
 function yourprefix_register_repeatable_group_field_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_group_';
+	$prefix = 'yourprefix_group_';
 
 	/**
 	 * Repeatable Field Groups
@@ -456,9 +452,7 @@ add_action( 'cmb2_admin_init', 'yourprefix_register_user_profile_metabox' );
  * Hook in and add a metabox to add fields to the user profile pages
  */
 function yourprefix_register_user_profile_metabox() {
-
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_yourprefix_user_';
+	$prefix = 'yourprefix_user_';
 
 	/**
 	 * Metabox for the user profile screen
@@ -523,14 +517,55 @@ function yourprefix_register_user_profile_metabox() {
 
 }
 
+add_action( 'cmb2_admin_init', 'yourprefix_register_taxonomy_metabox' );
+/**
+ * Hook in and add a metabox to add fields to taxonomy terms
+ */
+function yourprefix_register_taxonomy_metabox() {
+	$prefix = 'yourprefix_term_';
+
+	/**
+	 * Metabox to add fields to categories and tags
+	 */
+	$cmb_term = new_cmb2_box( array(
+		'id'               => $prefix . 'edit',
+		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'object_types'     => array( 'term' ), // Tells CMB2 to use term_meta vs post_meta
+		'taxonomies'       => array( 'category', 'post_tag' ), // Tells CMB2 which taxonomies should have these fields
+		// 'new_term_section' => true, // Will display in the "Add New Category" section
+	) );
+
+	$cmb_term->add_field( array(
+		'name'     => __( 'Extra Info', 'cmb2' ),
+		'desc'     => __( 'field description (optional)', 'cmb2' ),
+		'id'       => $prefix . 'extra_info',
+		'type'     => 'title',
+		'on_front' => false,
+	) );
+
+	$cmb_term->add_field( array(
+		'name' => __( 'Term Image', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'avatar',
+		'type' => 'file',
+	) );
+
+	$cmb_term->add_field( array(
+		'name' => __( 'Arbitrary Term Field', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'term_text_field',
+		'type' => 'text',
+	) );
+
+}
+
 add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
 /**
  * Hook in and register a metabox to handle a theme options page
  */
 function yourprefix_register_theme_options_metabox() {
 
-	// Start with an underscore to hide fields from custom fields list
-	$option_key = '_yourprefix_theme_options';
+	$option_key = 'yourprefix_theme_options';
 
 	/**
 	 * Metabox for an options page. Will not be added automatically, but needs to be called with
