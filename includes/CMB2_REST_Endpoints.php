@@ -117,7 +117,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		$cmb_id = $request->get_param( 'cmb_id' );
 
 		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id ) ) ) {
-			if( isset( $cmb ) && true === $cmb->meta_box['show_in_rest'] ) {
+			if( isset( $cmb->meta_box['show_in_rest'] ) && true === $cmb->meta_box['show_in_rest'] ) {
 				return $this->prepare_item_for_response( $this->get_rest_box( $cmb ), $request );
 			} else{
 				return $this->prepare_item_for_response( array( 'error' => __( 'Box requested hidden from rest.', 'cmb2' ) ), $request );
