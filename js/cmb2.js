@@ -59,7 +59,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		cmb.initPickers( $metabox.find('input[type="text"].cmb2-timepicker'), $metabox.find('input[type="text"].cmb2-datepicker'), $metabox.find('input[type="text"].cmb2-colorpicker') );
 
 		// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
-		$id( 'ui-datepicker-div' ).wrap('<div class="cmb2-element" />');
+		// $id( 'ui-datepicker-div' ).wrap('<div class="cmb2-element" />');
 
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
 		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
@@ -737,7 +737,30 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		$selector.datepicker( 'destroy' );
-		$selector.datepicker( cmb.defaults.date_picker );
+
+		var fieldOpts = $selector.data( 'datepicker' );
+		fieldOpts = fieldOpts ? fieldOpts : {};
+		var options = $.extend( {}, ( fieldOpts ? fieldOpts : {} ), cmb.defaults.date_picker );
+
+		options.beforeShow = function( input, inst ) {
+			// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
+			$id( 'ui-datepicker-div' ).addClass( 'cmb2-element' );
+			if ( fieldOpts.beforeShow ) {
+				fieldOpts.beforeShow( input, inst );
+			}
+		};
+
+		options.onClose = function( dateText, inst ) {
+			// Remove the wrap when we're done with it.
+			setTimeout( function() {
+				$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' );
+			}, 400 );
+			if ( fieldOpts.onClose ) {
+				fieldOpts.onClose( dateText, inst );
+			}
+		};
+
+		$selector.datepicker( options );
 	};
 
 	cmb.initColorPickers = function( $selector ) {
