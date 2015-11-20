@@ -751,7 +751,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		};
 
 		options.onClose = function( dateText, inst ) {
-			// Remove the wrap when we're done with it.
+			// Remove the class when we're done with it.
 			setTimeout( function() {
 				$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' );
 			}, 400 );
