@@ -183,10 +183,11 @@ class CMB2_hookup {
 		// Only use minified files if SCRIPT_DEBUG is off
 		$min   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$front = is_admin() ? '' : '-front';
+		$rtl = is_rtl() ? '-rtl' : '';
 
 		// Filter required styles and register stylesheet
 		$styles = apply_filters( 'cmb2_style_dependencies', array() );
-		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$front}{$min}.css" ), $styles );
+		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$front}{$rtl}{$min}.css" ), $styles );
 
 		self::$css_registration_done = true;
 	}

@@ -166,7 +166,7 @@ module.exports = function(grunt) {
 			},
 			minify: {
 				expand: true,
-				src: ['css/cmb2.css','css/cmb2-front.css'],
+				src: ['css/cmb2.css','css/cmb2-front.css','css/cmb2-rtl.css','css/cmb2-front-rtl.css'],
 				// dest: '',
 				ext: '.min.css'
 			}
@@ -270,11 +270,23 @@ module.exports = function(grunt) {
 						dest: '/'
 				} ]
 			}
-		}
+		},
+
+		cssjanus: {
+			i18n: {
+				options: {
+					swapLtrRtlInUrl: false
+				},
+				files: [
+					{ src: 'css/cmb2-front.css', dest: 'css/cmb2-front-rtl.css' },
+					{ src: 'css/cmb2.css', dest: 'css/cmb2-rtl.css' }
+				]
+			}
+		},
 
 	});
 
-	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssmin']);
+	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssjanus','cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
 	grunt.registerTask('default', ['styles', 'js', 'tests']);
