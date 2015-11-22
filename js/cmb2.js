@@ -712,40 +712,31 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.initPickers = function( $timePickers, $datePickers, $colorPickers ) {
-		// Initialize timepicker
-		cmb.initTimePickers( $timePickers );
-
-		// Initialize jQuery UI datepicker
-		cmb.initDatePickers( $datePickers );
-
+		// Initialize jQuery UI timepickers
+		cmb.initDateTimePickers( $timePickers, 'timepicker', 'time_picker' );
+		// Initialize jQuery UI datepickers
+		cmb.initDateTimePickers( $datePickers, 'datepicker', 'date_picker' );
 		// Initialize color picker
 		cmb.initColorPickers( $colorPickers );
 	};
 
-	cmb.initTimePickers = function( $selector ) {
-		if ( ! $selector.length ) {
-			return;
+	cmb.initDateTimePickers = function( $selector, method, defaultKey ) {
+		if ( $selector.length ) {
+			$selector[ method ]( 'destroy' ).each( function() {
+				var $this     = $( this );
+				var fieldOpts = $this.data( method ) || {};
+				var options   = $.extend( {}, cmb.defaults[ defaultKey ], fieldOpts );
+				$this[ method ]( cmb.datePickerSetupOpts( fieldOpts, options ) );
+			} );
 		}
-
-		$selector.timepicker( 'destroy' );
-		$selector.timepicker( cmb.defaults.time_picker );
 	};
 
-	cmb.initDatePickers = function( $selector ) {
-		if ( ! $selector.length ) {
-			return;
-		}
-
-		$selector.datepicker( 'destroy' );
-
-		var fieldOpts = $selector.data( 'datepicker' );
-		fieldOpts = fieldOpts ? fieldOpts : {};
-		var options = $.extend( {}, ( fieldOpts ? fieldOpts : {} ), cmb.defaults.date_picker );
-
+	cmb.datePickerSetupOpts = function( fieldOpts, options ) {
 		options.beforeShow = function( input, inst ) {
-			// Wrap date picker in class to narrow the scope of jQuery UI CSS and prevent conflicts
+			// Wrap datepicker w/ class to narrow the scope of jQuery UI CSS and prevent conflicts
 			$id( 'ui-datepicker-div' ).addClass( 'cmb2-element' );
-			if ( fieldOpts.beforeShow ) {
+			// Let's be sure to call beforeShow if it was added
+			if ( 'function' === typeof fieldOpts.beforeShow ) {
 				fieldOpts.beforeShow( input, inst );
 			}
 		};
@@ -755,21 +746,26 @@ window.CMB2 = (function(window, document, $, undefined){
 			setTimeout( function() {
 				$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' );
 			}, 400 );
-			if ( fieldOpts.onClose ) {
+			// Let's be sure to call onClose if it was added
+			if ( 'function' === typeof fieldOpts.onClose ) {
 				fieldOpts.onClose( dateText, inst );
 			}
 		};
 
-		$selector.datepicker( options );
+		return options;
 	};
 
 	cmb.initColorPickers = function( $selector ) {
 		if ( ! $selector.length ) {
 			return;
 		}
-		if (typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function') {
+		if ( typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function' ) {
 
-			$selector.wpColorPicker( cmb.defaults.color_picker );
+			$selector.each( function() {
+				var $this = $( this );
+				var fieldOpts = $this.data( 'colorpicker' ) || {};
+				$this.wpColorPicker( $.extend( {}, cmb.defaults.color_picker, fieldOpts ) );
+			} );
 
 		} else {
 			$selector.each( function(i) {
