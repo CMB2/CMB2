@@ -540,7 +540,7 @@ class CMB2_Types {
 		$args = wp_parse_args( $args, array(
 			'value'      => $this->field->escaped_value(),
 			'desc'       => $this->_desc(),
-			'datepicker' => array(),
+			'datepicker' => array(), // estos dos sobran, creo yo
 			'timepicker' => array(),
 		) );
 
@@ -553,24 +553,39 @@ class CMB2_Types {
 			}
 		}
 
-		$has_good_value = ! empty( $args['value'] ) && ! is_array( $args['value'] );
+		// since the value is saved serialized, it should be an array containing 'date' and 'time'
+		$has_good_value = is_array( $args['value'] ) && isset( $args['value']['date'] )
+		                  && isset( $args['value']['time'] );
 
 		$date_args = wp_parse_args( $args['datepicker'], array(
 			'class' => 'cmb2-text-small cmb2-datepicker',
 			'name'  => $this->_name( '[date]' ),
 			'id'    => $this->_id( '_date' ),
-			'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
+			'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value']['date'] ) : '',
 			'desc'  => '',
 		) );
 
+		// let's get the date-format if the user chose one, and set it up as a data attr for the field
+		$dateFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+		if ( ! empty ( $dateFormat ) ) {
+			$date_args['data-datepicker'] = '{ "dateFormat": "' . $dateFormat . '" }';
+		}
+
 		$time_args = wp_parse_args( $args['timepicker'], array(
-			'class'           => 'cmb2-timepicker text-time',
-			'name'            => $this->_name( '[time]' ),
-			'id'              => $this->_id( '_time' ),
-			'value'           => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
-			'desc'            => $args['desc'],
+
+			'class' => 'cmb2-timepicker text-time',
+			'name'  => $this->_name( '[time]' ),
+			'id'    => $this->_id( '_time' ),
+			'value' => $has_good_value ? $args['value']['time']  : '',
+			'desc'  => $args['desc'],
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
 		) );
+
+		// let's get the time-format if the user chose one, and set it up as a data attr for the field
+		$timeFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) );
+		if ( ! empty ( $timeFormat ) ) {
+			$time_args['data-timepicker'] = '{ "timeFormat": "' . $timeFormat . '" }';
+		}
 
 		return $this->input( $date_args ) . "\n" . $this->input( $time_args );
 	}
@@ -588,13 +603,15 @@ class CMB2_Types {
 			$args['value'] = '';
 		}
 
-		$datetime = unserialize( $args['value'] );
-		$args['value'] = $tzstring = '';
+		$datetime = unserialize( $args['value'] ); // y entonces no necesitaríamos unserializarlo.
+		$args['value'] = [ ];
+		$tzstring      = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz            = $datetime->getTimezone();
 			$tzstring      = $tz->getName();
-			$args['value'] = $datetime->getTimestamp() + $tz->getOffset( new DateTime( 'NOW' ) );
+			$args['value']['date'] = $datetime->getTimestamp() + $tz->getOffset( new DateTime( 'NOW' ) );
+			$args['value']['time'] = $datetime->format( $this->field->args( 'time_format' ) );
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(

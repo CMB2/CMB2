@@ -211,23 +211,6 @@ class CMB2_Utils {
 	}
 
 	/**
-	 * Send to debug.log if WP_DEBUG is defined and true
-	 *
-	 * @since  2.1.3
-	 *
-	 * @param  string  $function Function name
-	 * @param  int     $line     Line number
-	 * @param  mixed   $msg      Message to output
-	 * @param  mixed   $debug    Variable to print_r
-	 */
-	public function log_if_debug( $function, $line, $msg, $debug = null ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
-		}
-	}
-
-
-	/**
 	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
 	 * It will work with only with the following subset ot date() options:
 	 *
@@ -285,6 +268,22 @@ class CMB2_Utils {
 	 */
 	public function wrap_escaped_chars( $value ) {
 		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
+	}
+
+	/**
+	 * Send to debug.log if WP_DEBUG is defined and true
+	 *
+	 * @since  2.1.3
+	 *
+	 * @param  string  $function Function name
+	 * @param  int     $line     Line number
+	 * @param  mixed   $msg      Message to output
+	 * @param  mixed   $debug    Variable to print_r
+	 */
+	public function log_if_debug( $function, $line, $msg, $debug = null ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( "In $function, $line:" . print_r( $msg, true ) . ( $debug ? print_r( $debug, true ) : '' ) );
+		}
 	}
 
 }

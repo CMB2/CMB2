@@ -225,10 +225,12 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		$this->value = strtotime( $this->value['date'] . ' ' . $this->value['time'] );
+		if ( is_array( $this->value ) && isset( $this->value['date'] ) ) {
+			$this->value['date'] = $this->get_timestamp_from_value( $this->value['date'] );
+		}
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
-			$this->value += $tz_offset;
+			$this->value += (int) $tz_offset;
 		}
 
 		return $this->value;
@@ -274,8 +276,11 @@ class CMB2_Sanitize {
 		}
 
 		try {
-			$this->value = new DateTime( $this->value['date'] . ' ' . $this->value['time'], new DateTimeZone( $tzstring ) );
-			$this->value = serialize( $this->value );
+			$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
+			$full_date   = $this->value['date'] . ' ' . $this->value['time'];
+			$datetime    = date_create_from_format( $full_format, $full_date );
+			$datetime->setTimezone( new DateTimeZone( $tzstring ) );
+			$this->value = serialize( $datetime );
 		} catch ( Exception $e ) {
 			cmb2_utils()->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 		}
