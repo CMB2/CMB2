@@ -512,8 +512,11 @@ class CMB2_Types {
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
 		) );
 
-		if ( $js_date_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) ) ) {
-			$args['data-datepicker'] = '{ "dateFormat": "' . $js_date_format . '" }';
+		if ( false === strpos( $args['class'], 'timepicker' ) ) {
+			$js_date_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+			if ( $js_date_format ) {
+				$args['data-datepicker'] = '{ "dateFormat": "' . $js_date_format . '" }';
+			}
 		}
 
 		return $this->input( $args );
@@ -532,7 +535,7 @@ class CMB2_Types {
 		) );
 
 		if ( $js_time_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) ) ) {
-			$time_args['data-timepicker'] = '{ "timeFormat": "' . $js_time_format . '" }';
+			$args['data-timepicker'] = '{ "timeFormat": "' . $js_time_format . '" }';
 		}
 
 		return $this->text_date( $args );

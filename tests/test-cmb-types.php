@@ -381,7 +381,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-timepicker text-time" name="field_test_field" id="field_test_field" value="%s" data-datepicker=\'{ "dateFormat": "mm&#39;/&#39;dd&#39;/&#39;yy" }\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
+			sprintf( '<input type="text" class="cmb2-timepicker text-time" name="field_test_field" id="field_test_field" value="%s" data-timepicker=\'{ "timeFormat": "hh:mm TT" }\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
