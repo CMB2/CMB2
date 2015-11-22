@@ -535,7 +535,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $self         = $(this);
 		var $table        = $id( $self.data('selector') );
 		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
+		var prevNum       = parseInt( $emptyrow.find(':input[data-iterator]').data('iterator') );
 		cmb.idNumber      = prevNum + 1;
 		var $row          = $emptyrow.clone();
 
