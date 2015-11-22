@@ -756,7 +756,7 @@ class CMB2_Types {
 
 		$meta_value = $this->field->escaped_value();
 
-		$is_checked = is_null( $is_checked )
+		$is_checked = null === $is_checked
 			? ! empty( $meta_value )
 			: $is_checked;
 

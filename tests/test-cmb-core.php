@@ -67,34 +67,53 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 			'show_names'       => true,
 			'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
-		    'fields'           => array(
-			    'extra_info' => array(
-				    'name'     => 'Extra Info',
-				    'desc'     => 'field description (optional)',
-				    'id'       => 'extra_info',
-				    'type'     => 'title',
-				    'on_front' => false,
-			    )
-		    )
+			'fields'           => array(
+				'extra_info' => array(
+					'name'     => 'Extra Info',
+					'desc'     => 'field description (optional)',
+					'id'       => 'extra_info',
+					'type'     => 'title',
+					'on_front' => false,
+				)
+			)
+		);
+
+		$this->term_metabox_array = array(
+			'id'           => 'term_metabox',
+			'title'        => 'User Profile Metabox',
+			'object_types' => array( 'term' ), // Tells CMB2 to use term_meta vs post_meta
+			'show_names'   => true,
+			'taxonomies'   => 'category', // where form will show on new user page. 'add-existing-user' is only other valid option.
+			'fields'       => array(
+				'extra_info' => array(
+					'name'     => 'Extra Info',
+					'desc'     => 'field description (optional)',
+					'id'       => 'extra_info',
+					'type'     => 'title',
+					'on_front' => false,
+				)
+			)
 		);
 
 		$this->defaults = array(
-			'id'           => $this->cmb_id,
-			'title'        => '',
-			'type'         => '',
-			'object_types' => array(), // Post type
-			'context'      => 'normal',
-			'priority'     => 'high',
-			'show_names'   => true, // Show field names on the left
-			'show_on'      => array(), // Specific post IDs or page templates to display this metabox
-			'show_on_cb'   => null, // Callback to determine if metabox should display. Overrides 'show_on'
-			'cmb_styles'   => true, // Include cmb bundled stylesheet
-			'enqueue_js'   => true, // Include CMB2 JS
-			'fields'       => array(),
-			'hookup'       => true,
-			'save_fields'  => true, // Will not save during hookup if false
-			'closed'       => false, // Default to metabox being closed?
+			'id'               => $this->cmb_id,
+			'title'            => '',
+			'type'             => '',
+			'object_types'     => array(), // Post type
+			'context'          => 'normal',
+			'priority'         => 'high',
+			'show_names'       => true, // Show field names on the left
+			'show_on'          => array(), // Specific post IDs or page templates to display this metabox
+			'show_on_cb'       => null, // Callback to determine if metabox should display. Overrides 'show_on'
+			'cmb_styles'       => true, // Include cmb bundled stylesheet
+			'enqueue_js'       => true, // Include CMB2 JS
+			'fields'           => array(),
+			'hookup'           => true,
+			'save_fields'      => true, // Will not save during hookup if false
+			'closed'           => false, // Default to metabox being closed?
+			'taxonomies'       => array(),
 			'new_user_section' => 'add-new-user', // or 'add-existing-user'
+			'new_term_section' => true,
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -108,7 +127,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
-
 	}
 
 	public function tearDown() {
@@ -144,6 +162,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
 			}
 		}
+	}
+
+	public function test_cmb2_init_hook() {
+		$this->assertTrue( (bool) did_action( 'cmb2_init' ) );
+	}
+
+	public function test_cmb2_admin_init_hook() {
+		$this->assertTrue( (bool) did_action( 'cmb2_admin_init' ) );
 	}
 
 	public function test_id_get() {
@@ -195,7 +221,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb = cmb2_get_metabox( $this->metabox_array );
 		$this->assertEquals( $this->cmb, $cmb );
 
-
 		// Test successful creation of new MB
 		$cmb1 = cmb2_get_metabox( $this->metabox_array2 );
 		$cmb2 = new CMB2( $this->metabox_array2 );
@@ -203,6 +228,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$cmb_user = cmb2_get_metabox( $this->user_metabox_array );
 		$this->assertEquals( 'user', $cmb_user->mb_object_type() );
+
+		$cmb_term = cmb2_get_metabox( $this->term_metabox_array );
+		$this->assertEquals( 'term', $cmb_term->mb_object_type() );
 	}
 
 	public function test_cmb2_get_field() {

@@ -76,7 +76,7 @@ Main Wrap
 .cmb2-wrap input:not([type="hidden"]) + input,
 .cmb2-wrap input:not([type="hidden"]) + .button,
 .cmb2-wrap input:not([type="hidden"]) + select {
-	margin-left: 20px;
+	margin-right: 20px;
 }
 
 /* line 67, sass/partials/_main_wrap.scss */
@@ -110,14 +110,14 @@ Main Wrap
 /* line 92, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap input[type="radio"] {
-	margin: 0 5px 0 0;
+	margin: 0 0 0 5px;
 	padding: 0;
 }
 
 /* line 97, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap input[type="checkbox"] {
-	margin: 0 5px 0 0;
+	margin: 0 0 0 5px;
 	padding: 0;
 }
 
@@ -163,7 +163,7 @@ Main Wrap
 
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-container {
-	margin: 0 10px 0 0;
+	margin: 0 0 0 10px;
 }
 
 /* line 136, sass/partials/_main_wrap.scss */
@@ -219,9 +219,9 @@ Main Wrap
 /* line 174, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox > .cmb-row .cmb-repeat-table .cmb-row > .cmb-td {
-	padding-right: 20px;
+	padding-left: 20px;
 	box-sizing: border-box;
-	float: left;
+	float: right;
 }
 
 /* line 182, sass/partials/_main_wrap.scss */
@@ -264,10 +264,10 @@ Main Wrap
 
 .cmb-th {
 	color: #222222;
-	float: left;
+	float: right;
 	font-weight: 600;
 	line-height: 1.3;
-	padding: 20px 10px 20px 0;
+	padding: 20px 0 20px 10px;
 	vertical-align: top;
 	width: 200px;
 }
@@ -297,7 +297,7 @@ Main Wrap
 /* line 242, sass/partials/_main_wrap.scss */
 
 .cmb-th + .cmb-td {
-	float: left;
+	float: right;
 }
 
 /* line 246, sass/partials/_main_wrap.scss */
@@ -309,7 +309,7 @@ Main Wrap
 /* line 250, sass/partials/_main_wrap.scss */
 
 .cmb-remove-row {
-	text-align: right;
+	text-align: left;
 }
 
 /* line 254, sass/partials/_main_wrap.scss */
@@ -328,7 +328,7 @@ Main Wrap
 
 .cmb-repeatable-group .cmb-group-title {
 	background-color: #e9e9e9;
-	padding: 8px 12px 8px 2.2em;
+	padding: 8px 2.2em 8px 12px;
 	margin: 0 -1em;
 	min-height: 1.5em;
 	font-size: 14px;
@@ -359,7 +359,7 @@ Main Wrap
 	display: block;
 	float: none;
 	padding-bottom: 1em;
-	text-align: left;
+	text-align: right;
 	width: 100%;
 }
 
@@ -385,7 +385,7 @@ Main Wrap
 
 .cmb-repeatable-group .cmb-shift-rows {
 	font-size: 1em;
-	margin-right: 1em;
+	margin-left: 1em;
 	text-decoration: none;
 }
 
@@ -407,7 +407,7 @@ Main Wrap
 /* line 308, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb2-upload-button {
-	float: right;
+	float: left;
 }
 
 /* line 314, sass/partials/_main_wrap.scss */
@@ -444,7 +444,7 @@ span.cmb2-metabox-description {
 
 .cmb-inline li {
 	display: inline-block;
-	padding-right: 18px;
+	padding-left: 18px;
 }
 
 /* line 341, sass/partials/_main_wrap.scss */
@@ -458,8 +458,8 @@ span.cmb2-metabox-description {
 .cmb2-media-status .img-status {
 	clear: none;
 	display: inline-block;
-	float: left;
-	margin-right: 10px;
+	float: right;
+	margin-left: 10px;
 	width: auto;
 }
 
@@ -484,7 +484,7 @@ span.cmb2-metabox-description {
 /* line 369, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .embed-status {
-	float: left;
+	float: right;
 	max-width: 800px;
 }
 
@@ -501,7 +501,7 @@ span.cmb2-metabox-description {
 .cmb2-media-status .embed-status .cmb2-remove-file-button {
 	background: url(../images/ico-delete.png);
 	height: 16px;
-	left: -5px;
+	right: -5px;
 	position: absolute;
 	text-indent: -9999px;
 	top: -5px;
@@ -525,8 +525,8 @@ span.cmb2-metabox-description {
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
-	float: left;
-	margin-right: 10px;
+	float: right;
+	margin-left: 10px;
 	width: auto;
 }
 
@@ -543,8 +543,8 @@ span.cmb2-metabox-description {
 
 .cmb-attach-list li img {
 	cursor: move;
-	float: left;
-	margin-right: 10px;
+	float: right;
+	margin-left: 10px;
 }
 
 /* line 422, sass/partials/_main_wrap.scss */
@@ -556,7 +556,7 @@ span.cmb2-metabox-description {
 /* line 426, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th {
-	text-align: left;
+	text-align: right;
 }
 
 /*--------------------------------------------------------------
@@ -566,15 +566,15 @@ Post Metaboxes
 /* line 4, sass/partials/_post_metaboxes.scss */
 
 #poststuff .cmb-group-title {
-	margin-left: -1em;
 	margin-right: -1em;
+	margin-left: -1em;
 	min-height: 1.5em;
 }
 
 /* line 10, sass/partials/_post_metaboxes.scss */
 
 #poststuff .repeatable .cmb-group-title {
-	padding-left: 2.2em;
+	padding-right: 2.2em;
 }
 
 /* line 16, sass/partials/_post_metaboxes.scss */
@@ -610,7 +610,7 @@ Post Metaboxes
 
 .postbox-container .cmb-row .cmbhandle,
 .cmb-repeat-group-wrap .cmb-row .cmbhandle {
-	right: -1em;
+	left: -1em;
 	position: relative;
 }
 
@@ -635,7 +635,7 @@ Post Metaboxes
 .postbox-container .cmb-th,
 .cmb-repeat-group-wrap .cmb-th {
 	width: 18%;
-	padding: 0 2% 0 0;
+	padding: 0 0 0 2%;
 }
 
 /* line 57, sass/partials/_post_metaboxes.scss */
@@ -659,7 +659,7 @@ Post Metaboxes
 .postbox-container .cmb-th + .cmb-td,
 .cmb-repeat-group-wrap .cmb-th + .cmb-td {
 	width: 80%;
-	float: right;
+	float: left;
 }
 
 /* line 72, sass/partials/_post_metaboxes.scss */
@@ -734,7 +734,7 @@ Post Metaboxes
 .postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
 .cmb-repeat-group-wrap .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
 .cmb-repeat-group-wrap .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row {
-	padding-right: 0;
+	padding-left: 0;
 }
 
 /*--------------------------------------------------------------
@@ -772,7 +772,7 @@ Misc.
 /* line 27, sass/partials/_misc.scss */
 
 .postbox .cmb-spinner {
-	float: left;
+	float: right;
 }
 
 /*--------------------------------------------------------------
@@ -799,7 +799,7 @@ Sidebar Placement Adjustments
 .inner-sidebar .cmb2-wrap input + select,
 #side-sortables .cmb2-wrap input + input:not(.wp-picker-clear),
 #side-sortables .cmb2-wrap input + select {
-	margin-left: 0;
+	margin-right: 0;
 	margin-top: 1em;
 	display: block;
 }
@@ -883,10 +883,10 @@ Sidebar Placement Adjustments
 	display: block;
 	float: none;
 	padding-bottom: 1em;
-	text-align: left;
+	text-align: right;
 	width: 100%;
-	padding-left: 0;
 	padding-right: 0;
+	padding-left: 0;
 }
 
 /* line 27, sass/partials/_mixins.scss */
@@ -1011,7 +1011,7 @@ Sidebar Placement Adjustments
 #side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td {
 	width: auto;
 	clear: none;
-	float: left;
+	float: right;
 	padding-top: 0;
 }
 
@@ -1019,7 +1019,7 @@ Sidebar Placement Adjustments
 
 .inner-sidebar .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row,
 #side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row {
-	float: right;
+	float: left;
 	margin: 0;
 }
 
@@ -1041,11 +1041,11 @@ Sidebar Placement Adjustments
 
 .cmb2-metabox .cmbhandle {
 	color: #aaa;
-	float: right;
+	float: left;
 	width: 27px;
 	height: 30px;
 	cursor: pointer;
-	right: -1em;
+	left: -1em;
 	position: relative;
 }
 
@@ -1053,7 +1053,7 @@ Sidebar Placement Adjustments
 
 .cmb2-metabox .cmbhandle:before {
 	content: '\f142';
-	right: 12px;
+	left: 12px;
 	font: normal 20px/1 'dashicons';
 	speak: none;
 	display: inline-block;
@@ -1078,7 +1078,7 @@ Sidebar Placement Adjustments
 	background: none !important;
 	border: none !important;
 	position: absolute;
-	left: 0;
+	right: 0;
 	top: .5em;
 	line-height: 1em;
 	cursor: pointer;
@@ -1173,7 +1173,7 @@ Sidebar Placement Adjustments
 	width: 100%;
 	height: 100%;
 	top: 0;
-	left: 0;
+	right: 0;
 	position: absolute;
 	opacity: 0;
 	filter: Alpha(Opacity=0);
@@ -1199,7 +1199,7 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-widget-overlay {
 	position: absolute;
 	top: 0;
-	left: 0;
+	right: 0;
 	width: 100%;
 	height: 100%;
 }
@@ -2498,9 +2498,9 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-corner-left,
 .cmb2-element .ui-corner-tl {
 	-moz-border-radius-topleft: 4px;
-	-webkit-border-top-left-radius: 4px;
-	-khtml-border-top-left-radius: 4px;
-	border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-khtml-border-top-right-radius: 4px;
+	border-top-right-radius: 4px;
 }
 
 /* line 229, sass/partials/_jquery_ui.scss */
@@ -2510,9 +2510,9 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-corner-right,
 .cmb2-element .ui-corner-tr {
 	-moz-border-radius-topright: 4px;
-	-webkit-border-top-right-radius: 4px;
-	-khtml-border-top-right-radius: 4px;
-	border-top-right-radius: 4px;
+	-webkit-border-top-left-radius: 4px;
+	-khtml-border-top-left-radius: 4px;
+	border-top-left-radius: 4px;
 }
 
 /* line 230, sass/partials/_jquery_ui.scss */
@@ -2522,9 +2522,9 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-corner-left,
 .cmb2-element .ui-corner-bl {
 	-moz-border-radius-bottomleft: 4px;
-	-webkit-border-bottom-left-radius: 4px;
-	-khtml-border-bottom-left-radius: 4px;
-	border-bottom-left-radius: 4px;
+	-webkit-border-bottom-right-radius: 4px;
+	-khtml-border-bottom-right-radius: 4px;
+	border-bottom-right-radius: 4px;
 }
 
 /* line 231, sass/partials/_jquery_ui.scss */
@@ -2534,9 +2534,9 @@ Sidebar Placement Adjustments
 .cmb2-element .ui-corner-right,
 .cmb2-element .ui-corner-br {
 	-moz-border-radius-bottomright: 4px;
-	-webkit-border-bottom-right-radius: 4px;
-	-khtml-border-bottom-right-radius: 4px;
-	border-bottom-right-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-khtml-border-bottom-left-radius: 4px;
+	border-bottom-left-radius: 4px;
 }
 
 /* line 232, sass/partials/_jquery_ui.scss */
@@ -2550,7 +2550,7 @@ Sidebar Placement Adjustments
 /* line 233, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-widget-shadow {
-	margin: -8px 0 0 -8px;
+	margin: -8px -8px 0 0;
 	padding: 8px;
 	background: #aaaaaa url(../images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
 	opacity: .30;
@@ -2596,25 +2596,25 @@ Sidebar Placement Adjustments
 /* line 238, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-prev {
-	left: 2px;
+	right: 2px;
 }
 
 /* line 239, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-next {
-	right: 2px;
+	left: 2px;
 }
 
 /* line 240, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover {
-	left: 1px;
+	right: 1px;
 }
 
 /* line 241, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover {
-	right: 1px;
+	left: 1px;
 }
 
 /* line 242, sass/partials/_jquery_ui.scss */
@@ -2623,8 +2623,8 @@ Sidebar Placement Adjustments
 .cmb2-element.ui-datepicker .ui-datepicker-next span {
 	display: block;
 	position: absolute;
-	left: 50%;
-	margin-left: -8px;
+	right: 50%;
+	margin-right: -8px;
 	top: 50%;
 	margin-top: -8px;
 }
@@ -2660,13 +2660,13 @@ Sidebar Placement Adjustments
 /* line 248, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker select.ui-datepicker-month {
-	margin-right: 1%;
+	margin-left: 1%;
 }
 
 /* line 249, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker select.ui-datepicker-year {
-	margin-left: 1%;
+	margin-right: 1%;
 }
 
 /* line 250, sass/partials/_jquery_ui.scss */
@@ -2700,7 +2700,7 @@ Sidebar Placement Adjustments
 .cmb2-element.ui-datepicker td a {
 	display: block;
 	padding: .2em;
-	text-align: right;
+	text-align: left;
 	text-decoration: none;
 }
 
@@ -2710,15 +2710,15 @@ Sidebar Placement Adjustments
 	background-image: none;
 	margin: .7em 0 0 0;
 	padding: 0 .2em;
-	border-left: 0;
 	border-right: 0;
+	border-left: 0;
 	border-bottom: 0;
 }
 
 /* line 255, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-buttonpane button {
-	float: right;
+	float: left;
 	margin: .5em .2em .4em;
 	cursor: pointer;
 	padding: .2em .6em .3em .6em;
@@ -2729,7 +2729,7 @@ Sidebar Placement Adjustments
 /* line 256, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
-	float: left;
+	float: right;
 }
 
 /* line 257, sass/partials/_jquery_ui.scss */
@@ -2741,7 +2741,7 @@ Sidebar Placement Adjustments
 /* line 258, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-multi .ui-datepicker-group {
-	float: left;
+	float: right;
 }
 
 /* line 259, sass/partials/_jquery_ui.scss */
@@ -2772,19 +2772,19 @@ Sidebar Placement Adjustments
 /* line 263, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header {
-	border-left-width: 0;
+	border-right-width: 0;
 }
 
 /* line 264, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
-	border-left-width: 0;
+	border-right-width: 0;
 }
 
 /* line 265, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-multi .ui-datepicker-buttonpane {
-	clear: left;
+	clear: right;
 }
 
 /* line 266, sass/partials/_jquery_ui.scss */
@@ -2798,73 +2798,73 @@ Sidebar Placement Adjustments
 /* line 267, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl {
-	direction: rtl;
+	direction: ltr;
 }
 
 /* line 269, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-prev {
-	right: 2px;
-	left: auto;
+	left: 2px;
+	right: auto;
 }
 
 /* line 270, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-next {
-	left: 2px;
-	right: auto;
+	right: 2px;
+	left: auto;
 }
 
 /* line 271, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-prev:hover {
-	right: 1px;
-	left: auto;
+	left: 1px;
+	right: auto;
 }
 
 /* line 272, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-next:hover {
-	left: 1px;
-	right: auto;
+	right: 1px;
+	left: auto;
 }
 
 /* line 273, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-buttonpane {
-	clear: right;
+	clear: left;
 }
 
 /* line 274, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-buttonpane button {
-	float: left;
+	float: right;
 }
 
 /* line 275, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current {
-	float: right;
+	float: left;
 }
 
 /* line 276, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-group {
-	float: right;
+	float: left;
 }
 
 /* line 277, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
+	border-left-width: 0;
+	border-right-width: 1px;
 }
 
 /* line 278, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
+	border-left-width: 0;
+	border-right-width: 1px;
 }
 
 /* line 280, sass/partials/_jquery_ui.scss */
@@ -2876,7 +2876,7 @@ Sidebar Placement Adjustments
 	z-index: -1; /*must have*/
 	filter: mask(); /*must have*/
 	top: -4px; /*must have*/
-	left: -4px; /*must have*/
+	right: -4px; /*must have*/
 	width: 200px; /*must have*/
 	height: 200px; /*must have*/
 }
@@ -2958,13 +2958,13 @@ Sidebar Placement Adjustments
 /* line 300, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover {
-	left: 2px;
+	right: 2px;
 }
 
 /* line 301, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover {
-	right: 2px;
+	left: 2px;
 }
 
 /* line 302, sass/partials/_jquery_ui.scss */
@@ -3079,21 +3079,21 @@ Sidebar Placement Adjustments
 /* line 315, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-div dl {
-	text-align: left;
+	text-align: right;
 }
 
 /* line 316, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-div dl dt {
-	float: left;
-	clear: left;
-	padding: 0 0 0 5px;
+	float: right;
+	clear: right;
+	padding: 0 5px 0 0;
 }
 
 /* line 317, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-div dl dd {
-	margin: 0 10px 10px 40%;
+	margin: 0 40% 10px 10px;
 }
 
 /* line 318, sass/partials/_jquery_ui.scss */
@@ -3108,27 +3108,27 @@ Sidebar Placement Adjustments
 /* line 319, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-rtl {
-	direction: rtl;
+	direction: ltr;
 }
 
 /* line 320, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-rtl dl {
-	text-align: right;
-	padding: 0 5px 0 0;
+	text-align: left;
+	padding: 0 0 0 5px;
 }
 
 /* line 321, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-rtl dl dt {
-	float: right;
-	clear: right;
+	float: left;
+	clear: left;
 }
 
 /* line 322, sass/partials/_jquery_ui.scss */
 
 .cmb2-element .ui-timepicker-rtl dl dd {
-	margin: 0 40% 10px 10px;
+	margin: 0 10px 10px 40%;
 }
 
 /* line 326, sass/partials/_jquery_ui.scss */
@@ -3422,7 +3422,7 @@ Sidebar Placement Adjustments
 	display: block;
 	float: none;
 	padding-bottom: 1em;
-	text-align: left;
+	text-align: right;
 	width: 100%;
 }
 

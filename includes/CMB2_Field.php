@@ -512,7 +512,7 @@ class CMB2_Field {
 		/**
 		 * Hooks after save field action.
 		 *
-		 * @since 2.1.3
+		 * @since 2.2.0
 		 *
 		 * @param string            $field_id the current field id paramater.
 		 * @param bool              $updated  Whether the metadata update action occurred.
@@ -527,7 +527,7 @@ class CMB2_Field {
 		 * The dynamic portion of the hook, $field_id, refers to the
 		 * current field id paramater.
 		 *
-		 * @since 2.1.3
+		 * @since 2.2.0
 		 *
 		 * @param bool              $updated Whether the metadata update action occurred.
 		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".
@@ -1039,10 +1039,10 @@ class CMB2_Field {
 
 		if ( in_array( $args['type'], $option_types, true ) ) {
 
-			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : false;
+			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : null;
 			$args['show_option_none'] = true === $args['show_option_none'] ? __( 'None', 'cmb2' ) : $args['show_option_none'];
 
-			if ( ! $args['show_option_none'] ) {
+			if ( null === $args['show_option_none'] ) {
 				$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
 				$args['show_option_none'] = $off_by_default ? false : __( 'None', 'cmb2' );
 			}

@@ -273,7 +273,7 @@ class CMB2_Utils {
 	/**
 	 * Send to debug.log if WP_DEBUG is defined and true
 	 *
-	 * @since  2.1.3
+	 * @since  2.2.0
 	 *
 	 * @param  string  $function Function name
 	 * @param  int     $line     Line number

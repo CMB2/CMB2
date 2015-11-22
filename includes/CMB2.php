@@ -62,22 +62,24 @@ class CMB2 {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'           => '',
-		'title'        => '',
-		'type'         => '',
-		'object_types' => array(), // Post type
-		'context'      => 'normal',
-		'priority'     => 'high',
-		'show_names'   => true, // Show field names on the left
-		'show_on_cb'   => null, // Callback to determine if metabox should display.
-		'show_on'      => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
-		'cmb_styles'   => true, // Include CMB2 stylesheet
-		'enqueue_js'   => true, // Include CMB2 JS
-		'fields'       => array(),
-		'hookup'       => true,
-		'save_fields'  => true, // Will not save during hookup if false
-		'closed'       => false, // Default to metabox being closed?
+		'id'               => '',
+		'title'            => '',
+		'type'             => '',
+		'object_types'     => array(), // Post type
+		'context'          => 'normal',
+		'priority'         => 'high',
+		'show_names'       => true, // Show field names on the left
+		'show_on_cb'       => null, // Callback to determine if metabox should display.
+		'show_on'          => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'
+		'cmb_styles'       => true, // Include CMB2 stylesheet
+		'enqueue_js'       => true, // Include CMB2 JS
+		'fields'           => array(),
+		'hookup'           => true,
+		'save_fields'      => true, // Will not save during hookup if false
+		'closed'           => false, // Default to metabox being closed?
+		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
+		'new_term_section' => true,
 	);
 
 	/**
@@ -150,6 +152,24 @@ class CMB2 {
 	 * @param string $object_type Type of object being saved. (e.g., post, user, or comment)
 	 */
 	public function show_form( $object_id = 0, $object_type = '' ) {
+		$this->render_form_open( $object_id, $object_type );
+
+		foreach ( $this->prop( 'fields' ) as $field_args ) {
+			$this->render_field( $field_args );
+		}
+
+		$this->render_form_close( $object_id, $object_type );
+	}
+
+	/**
+	 * Outputs the opening form markup and runs corresponding hooks:
+	 * 'cmb2_before_form' and "cmb2_before_{$object_type}_form_{$this->cmb_id}"
+	 * @since  2.2.0
+	 * @param  integer $object_id   Object ID
+	 * @param  string  $object_type Object type
+	 * @return void
+	 */
+	public function render_form_open( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
 		$object_id = $this->object_id( $object_id );
 
@@ -186,33 +206,19 @@ class CMB2 {
 
 		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
-		foreach ( $this->prop( 'fields' ) as $field_args ) {
+	}
 
-			$field_args['context'] = $this->prop( 'context' );
-
-			if ( 'group' == $field_args['type'] ) {
-
-				if ( ! isset( $field_args['show_names'] ) ) {
-					$field_args['show_names'] = $this->prop( 'show_names' );
-				}
-				$this->render_group( $field_args );
-
-			} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
-				// Save rendering for after the metabox
-				$this->add_hidden_field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
-
-			} else {
-
-				$field_args['show_names'] = $this->prop( 'show_names' );
-
-				// Render default fields
-				$field = $this->get_field( $field_args )->render_field();
-			}
-		}
+	/**
+	 * Outputs the closing form markup and runs corresponding hooks:
+	 * 'cmb2_after_form' and "cmb2_after_{$object_type}_form_{$this->cmb_id}"
+	 * @since  2.2.0
+	 * @param  integer $object_id   Object ID
+	 * @param  string  $object_type Object type
+	 * @return void
+	 */
+	public function render_form_close( $object_id = 0, $object_type = '' ) {
+		$object_type = $this->object_type( $object_type );
+		$object_id = $this->object_id( $object_id );
 
 		echo '</div></div>';
 
@@ -249,8 +255,44 @@ class CMB2 {
 	}
 
 	/**
-	 * Render a repeatable group
-	 * @param array $args Array of field arguments for a group field parent
+	 * Renders a field based on the field type
+	 * @since  2.2.0
+	 * @param  array $field_args A field configuration array.
+	 * @return mixed CMB2_Field object if successful.
+	 */
+	public function render_field( $field_args ) {
+		$field_args['context'] = $this->prop( 'context' );
+
+		if ( 'group' == $field_args['type'] ) {
+
+			if ( ! isset( $field_args['show_names'] ) ) {
+				$field_args['show_names'] = $this->prop( 'show_names' );
+			}
+			$field = $this->render_group( $field_args );
+
+		} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
+			// Save rendering for after the metabox
+			$field = $this->add_hidden_field( array(
+				'field_args'  => $field_args,
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+			) );
+
+		} else {
+
+			$field_args['show_names'] = $this->prop( 'show_names' );
+
+			// Render default fields
+			$field = $this->get_field( $field_args )->render_field();
+		}
+
+		return $field;
+	}
+
+	/**
+	 * Render a repeatable group.
+	 * @param array $args Array of field arguments for a group field parent.
+	 * @return CMB2_Field|null Group field object.
 	 */
 	public function render_group( $args ) {
 
@@ -308,6 +350,7 @@ class CMB2 {
 
 		$field_group->peform_param_callback( 'after_group' );
 
+		return $field_group;
 	}
 
 	/**
@@ -374,7 +417,10 @@ class CMB2 {
 	 * @param array  $args Array of arguments to be passed to CMB2_Field
 	 */
 	public function add_hidden_field( $args ) {
-		$this->hidden_fields[] = new CMB2_Types( new CMB2_Field( $args ) );
+		$field = new CMB2_Field( $args );
+		$this->hidden_fields[] = new CMB2_Types( $field );
+
+		return $field;
 	}
 
 	/**
@@ -637,6 +683,10 @@ class CMB2 {
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
+			case 'term':
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? $_REQUEST['tag_ID'] : $object_id;
+				break;
+
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
 				$object_id = isset( $_REQUEST['post'] ) ? $_REQUEST['post'] : $object_id;
@@ -693,6 +743,7 @@ class CMB2 {
 
 			case 'user':
 			case 'comment':
+			case 'term':
 				$this->mb_object_type = $type;
 				break;
 
@@ -735,6 +786,9 @@ class CMB2 {
 
 		} elseif ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
 			$this->object_type = 'comment';
+
+		} elseif ( 'edit-tags.php' == $pagenow ) {
+			$this->object_type = 'term';
 
 		} else {
 			$this->object_type = 'post';
