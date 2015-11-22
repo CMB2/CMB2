@@ -211,6 +211,20 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Get timestamp from text date
+	 * @since  2.2.0
+	 * @param  string $value       Date value
+	 * @param  string $date_format Expected date format
+	 * @return mixed               Unix timestamp representing the date.
+	 */
+	public function get_timestamp_from_value( $value, $date_format ) {
+		$date_object = date_create_from_format( $date_format, $value );
+		$timestamp = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : strtotime( $value );
+		error_log( '$timestamp: '. print_r( $timestamp, true ) );
+		return $timestamp;
+	}
+
+	/**
 	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
 	 * It will work with only with the following subset ot date() options:
 	 *
@@ -221,7 +235,7 @@ class CMB2_Utils {
 	 * Other options are ignored, because they would either bring compatibility problems between PHP and JS, or
 	 * bring even more translation troubles.
 	 *
-	 * @since 2.1.0
+	 * @since 2.2.0
 	 * @param string $format php date format
 	 * @return string reformatted string
 	 */
@@ -262,7 +276,7 @@ class CMB2_Utils {
 
 	/**
 	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
-	 * @since  2.1.0
+	 * @since  2.2.0
 	 * @param  $value Value to wrap/escape
 	 * @return string Modified value
 	 */

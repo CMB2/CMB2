@@ -190,29 +190,18 @@ class CMB2_Sanitize {
 	/**
 	 * Converts text date to timestamp
 	 * @since  1.0.2
-	 * @return string       Timestring
+	 * @return string Timestring
 	 */
 	public function text_date_timestamp() {
 		return is_array( $this->value )
-			? array_map( array( $this, 'get_timestamp_from_value' ), $this->value )
-			: $this->get_timestamp_from_value( $this->value );
-	}
-
-	/**
-	 * Get timestamp from text date
-	 * @since  2.1.0
-	 * @param  string $value Date value
-	 * @return mixed         Date object or empty value
-	 */
-	public function get_timestamp_from_value( $value ) {
-		$date_object = date_create_from_format( $this->field->args['date_format'], $value );
-		return $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : '';
+			? array_map( array( $this->field, 'get_timestamp_from_value' ), $this->value )
+			: $this->field->get_timestamp_from_value( $this->value );
 	}
 
 	/**
 	 * Datetime to timestamp
 	 * @since  1.0.1
-	 * @return string       Timestring
+	 * @return string Timestring
 	 */
 	public function text_datetime_timestamp( $repeat = false ) {
 
@@ -225,8 +214,8 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		if ( is_array( $this->value ) && isset( $this->value['date'] ) ) {
-			$this->value['date'] = $this->get_timestamp_from_value( $this->value['date'] );
+		if ( isset( $this->value['date'], $this->value['time'] ) ) {
+			$this->value = $this->field->get_timestamp_from_value( $this->value['date'] . ' ' . $this->value['time'] );
 		}
 
 		if ( $tz_offset = $this->field->field_timezone_offset() ) {
@@ -275,10 +264,11 @@ class CMB2_Sanitize {
 			$tzstring = false !== $tzstring ? $tzstring : timezone_name_from_abbr( '', 0, 0 );
 		}
 
+		$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
+		$full_date   = $this->value['date'] . ' ' . $this->value['time'];
+
 		try {
-			$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
-			$full_date   = $this->value['date'] . ' ' . $this->value['time'];
-			$datetime    = date_create_from_format( $full_format, $full_date );
+			$datetime = date_create_from_format( $full_format, $full_date );
 			$datetime->setTimezone( new DateTimeZone( $tzstring ) );
 			$this->value = serialize( $datetime );
 		} catch ( Exception $e ) {
