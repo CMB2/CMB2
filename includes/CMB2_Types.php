@@ -1071,7 +1071,9 @@ class CMB2_Types {
 				: array();
 
 			$data[ $arg . 'Format' ] = $js_format;
-			$atts[ $att ] = wp_json_encode( $data );
+			$atts[ $att ] = function_exists( 'wp_json_encode' )
+				? wp_json_encode( $data )
+				: json_encode( $data );
 		}
 
 		if ( $update ) {
