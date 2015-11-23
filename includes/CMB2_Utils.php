@@ -211,6 +211,80 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Get timestamp from text date
+	 * @since  2.2.0
+	 * @param  string $value       Date value
+	 * @param  string $date_format Expected date format
+	 * @return mixed               Unix timestamp representing the date.
+	 */
+	public function get_timestamp_from_value( $value, $date_format ) {
+		$date_object = date_create_from_format( $date_format, $value );
+		$timestamp = $date_object ? $date_object->setTime( 0, 0, 0 )->getTimeStamp() : strtotime( $value );
+		error_log( '$timestamp: '. print_r( $timestamp, true ) );
+		return $timestamp;
+	}
+
+	/**
+	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
+	 * It will work with only with the following subset ot date() options:
+	 *
+	 *  d, j, z, m, n, y, and Y.
+	 *
+	 * A slight effort is made to deal with escaped characters.
+	 *
+	 * Other options are ignored, because they would either bring compatibility problems between PHP and JS, or
+	 * bring even more translation troubles.
+	 *
+	 * @since 2.2.0
+	 * @param string $format php date format
+	 * @return string reformatted string
+	 */
+	public function php_to_js_dateformat( $format ) {
+
+		// order is relevant here, since the replacement will be done sequentially.
+		$supported_options = array(
+			'd' => 'dd',  // Day, leading 0
+			'j' => 'd',   // Day, no 0
+			'z' => 'o',   // Day of the year, no leading zeroes,
+			// 'D' => 'D',   // Day name short, not sure how it'll work with translations
+			// 'l' => 'DD',  // Day name full, idem before
+			'm' => 'mm',  // Month of the year, leading 0
+			'n' => 'm',   // Month of the year, no leading 0
+			// 'M' => 'M',   // Month, Short name
+			// 'F' => 'MM',  // Month, full name,
+			'y' => 'y',   // Year, two digit
+			'Y' => 'yy',  // Year, full
+			'H' => 'HH',  // Hour with leading 0 (24 hour)
+			'G' => 'H',   // Hour with no leading 0 (24 hour)
+			'h' => 'hh',  // Hour with leading 0 (12 hour)
+			'g' => 'h',   // Hour with no leading 0 (12 hour),
+			'i' => 'mm',  // Minute with leading 0,
+			's' => 'ss',  // Second with leading 0,
+			'a' => 'tt',  // am/pm
+			'A' => 'TT'   // AM/PM
+		);
+
+		foreach ( $supported_options as $php => $js ) {
+			// replaces every instance of a supported option, but skips escaped characters
+			$format = preg_replace( "~(?<!\\\\)$php~", $js, $format );
+		}
+
+		$format = preg_replace_callback( '~(?:\\\.)+~', array( $this, 'wrap_escaped_chars' ), $format );
+
+		return $format;
+	}
+
+	/**
+	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+	 * @since  2.2.0
+	 * @param  $value Value to wrap/escape
+	 * @return string Modified value
+	 */
+	public function wrap_escaped_chars( $value ) {
+		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
+	}
+
+	/**
 	 * Send to debug.log if WP_DEBUG is defined and true
 	 *
 	 * @since  2.2.0

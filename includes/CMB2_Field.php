@@ -733,6 +733,16 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Get timestamp from text date
+	 * @since  2.2.0
+	 * @param  string $value Date value
+	 * @return mixed         Unix timestamp representing the date.
+	 */
+	public function get_timestamp_from_value( $value ) {
+		return cmb2_utils()->get_timestamp_from_value( $value, $this->args( 'date_format' ) );
+	}
+
+	/**
 	 * Get field render callback and Render the field row
 	 * @since 1.0.0
 	 */
