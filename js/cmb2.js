@@ -740,10 +740,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		};
 
 		options.onClose = function( dateText, inst ) {
-			// Remove the class when we're done with it.
-			setTimeout( function() {
-				$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' );
-			}, 400 );
+			// Remove the class when we're done with it (and hide to remove FOUC).
+			$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
 			// Let's be sure to call onClose if it was added
 			if ( 'function' === typeof fieldOpts.onClose ) {
 				fieldOpts.onClose( dateText, inst );
