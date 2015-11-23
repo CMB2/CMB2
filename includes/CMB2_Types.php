@@ -513,10 +513,7 @@ class CMB2_Types {
 		) );
 
 		if ( false === strpos( $args['class'], 'timepicker' ) ) {
-			$js_date_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
-			if ( $js_date_format ) {
-				$args['data-datepicker'] = '{ "dateFormat": "' . $js_date_format . '" }';
-			}
+			$this->parse_picker_options( 'date' );
 		}
 
 		return $this->input( $args );
@@ -534,9 +531,7 @@ class CMB2_Types {
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
 		) );
 
-		if ( $js_time_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) ) ) {
-			$args['data-timepicker'] = '{ "timeFormat": "' . $js_time_format . '" }';
-		}
+		$this->parse_picker_options( 'time' );
 
 		return $this->text_date( $args );
 	}
@@ -558,7 +553,7 @@ class CMB2_Types {
 			}
 		}
 
-      $has_good_value = ! empty( $args['value'] ) && ! is_array( $args['value'] );
+		$has_good_value = ! empty( $args['value'] ) && ! is_array( $args['value'] );
 
 		$date_args = wp_parse_args( $args['datepicker'], array(
 			'class' => 'cmb2-text-small cmb2-datepicker',
@@ -569,12 +564,9 @@ class CMB2_Types {
 		) );
 
 		// Let's get the date-format, and set it up as a data attr for the field.
-		if ( $js_date_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) ) ) {
-			$date_args['data-datepicker'] = '{ "dateFormat": "' . $js_date_format . '" }';
-		}
+		$date_args = $this->parse_picker_options( 'date', $date_args );
 
 		$time_args = wp_parse_args( $args['timepicker'], array(
-
 			'class' => 'cmb2-timepicker text-time',
 			'name'  => $this->_name( '[time]' ),
 			'id'    => $this->_id( '_time' ),
@@ -584,9 +576,7 @@ class CMB2_Types {
 		) );
 
 		// Let's get the time-format, and set it up as a data attr for the field.
-		if ( $js_time_format = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'time_format' ) ) ) {
-			$time_args['data-timepicker'] = '{ "timeFormat": "' . $js_time_format . '" }';
-		}
+		$time_args = $this->parse_picker_options( 'time', $time_args );
 
 		return $this->input( $date_args ) . "\n" . $this->input( $time_args );
 	}
@@ -1050,6 +1040,45 @@ class CMB2_Types {
 			esc_html( $this->_text( 'remove_text', __( 'Remove', 'cmb2' ) ) ),
 			isset( $args['id_input'] ) ? $args['id_input'] : ''
 		);
+	}
+
+	/**
+	 * Parse the picker attributes.
+	 * @since  2.2.0
+	 * @param  string  $arg  'date' or 'time'
+	 * @param  array   $args Optional arguments to modify (else use $this->field->args['attributes'])
+	 * @return array         Array of field attributes
+	 */
+	public function parse_picker_options( $arg = 'date', $args = array() ) {
+		$att    = 'data-' . $arg . 'picker';
+		$update = empty( $args );
+		$atts   = array();
+		$format = $this->field->args( $arg . '_format' );
+
+		if ( $js_format = cmb2_utils()->php_to_js_dateformat( $format ) ) {
+
+			if ( $update ) {
+				$atts = $this->field->args( 'attributes' );
+			} else {
+				$atts = isset( $args['attributes'] )
+					? $args['attributes']
+					: $atts;
+			}
+
+			// Don't override user-provided datepicker values
+			$data = isset( $atts[ $att ] )
+				? json_decode( $atts[ $att ], true )
+				: array();
+
+			$data[ $arg . 'Format' ] = $js_format;
+			$atts[ $att ] = wp_json_encode( $data );
+		}
+
+		if ( $update ) {
+			$this->field->args['attributes'] = $atts;
+		}
+
+		return array_merge( $args, $atts );
 	}
 
 }

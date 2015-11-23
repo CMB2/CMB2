@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.1.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2015-11-22 00:15:38+00:00\n"
+"POT-Creation-Date: 2015-11-23 03:22:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-11-21 0:15+300\n"
+"PO-Revision-Date: 2015-11-22 3:22+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -319,15 +319,15 @@ msgstr ""
 msgid "No oEmbed Results Found for %s. View more info at"
 msgstr ""
 
-#: includes/CMB2_Field.php:1020
+#: includes/CMB2_Field.php:1030
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1021
+#: includes/CMB2_Field.php:1031
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1043 includes/CMB2_Field.php:1047
+#: includes/CMB2_Field.php:1053 includes/CMB2_Field.php:1057
 #: tests/test-cmb-field.php:265
 msgid "None"
 msgstr ""
@@ -418,23 +418,23 @@ msgstr ""
 msgid "Use these files"
 msgstr ""
 
-#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:1009
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:1021
 msgid "Remove Image"
 msgstr ""
 
 #: includes/CMB2_JS.php:138 includes/CMB2_Types.php:357
-#: includes/CMB2_Types.php:1028 tests/test-cmb-types.php:155
+#: includes/CMB2_Types.php:1040 tests/test-cmb-types.php:155
 #: tests/test-cmb-types.php:163 tests/test-cmb-types.php:779
 #: tests/test-cmb-types.php:806
 msgid "Remove"
 msgstr ""
 
-#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1023
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1035
 #: tests/test-cmb-types.php:779 tests/test-cmb-types.php:806
 msgid "File:"
 msgstr ""
 
-#: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1026
+#: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1038
 #: tests/test-cmb-types.php:779 tests/test-cmb-types.php:806
 msgid "Download"
 msgstr ""
@@ -447,16 +447,16 @@ msgstr ""
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_Types.php:756 includes/CMB2_Types.php:804
+#: includes/CMB2_Types.php:768 includes/CMB2_Types.php:816
 msgid "No terms"
 msgstr ""
 
-#: includes/CMB2_Types.php:872 tests/test-cmb-types.php:736
+#: includes/CMB2_Types.php:884 tests/test-cmb-types.php:736
 #: tests/test-cmb-types.php:760
 msgid "Add or Upload Files"
 msgstr ""
 
-#: includes/CMB2_Types.php:933 tests/test-cmb-types.php:788
+#: includes/CMB2_Types.php:945 tests/test-cmb-types.php:788
 #: tests/test-cmb-types.php:806
 msgid "Add or Upload File"
 msgstr ""
