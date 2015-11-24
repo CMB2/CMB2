@@ -594,18 +594,18 @@ class CMB2_Types {
 			$args['value'] = '';
 		}
 
-		$datetime = unserialize( $args['value'] );
-		$args['value'] = $tzstring = '';
+		$datetime = maybe_unserialize( $args['value'] );
+		$value = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
-			$tz            = $datetime->getTimezone();
-			$tzstring      = $tz->getName();
-			$args['value'] = $datetime->getTimestamp() + $tz->getOffset( new DateTime( 'NOW' ) );
+			$tz       = $datetime->getTimezone();
+			$tzstring = $tz->getName();
+			$value    = $datetime->getTimestamp();
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
 			'desc'  => '',
-			'value' => $args['value'],
+			'value' => $value,
 		) );
 
 		$timezone_args = wp_parse_args( $args['select_timezone'], array(

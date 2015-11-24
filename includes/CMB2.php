@@ -605,6 +605,7 @@ class CMB2 {
 		$group_vals         = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved              = array();
 		$field_group->index = 0;
+		$field_group->data_to_save = $this->data_to_save;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
 			$field = new CMB2_Field( array(
@@ -623,11 +624,22 @@ class CMB2 {
 				// Sanitize
 				$new_val = $field->sanitization_cb( $new_val );
 
-				if ( 'file' == $field->type() && is_array( $new_val ) ) {
-					// Add image ID to the array stack
-					$saved[ $field_group->index ][ $new_val['field_id'] ] = $new_val['attach_id'];
-					// Reset var to url string
-					$new_val = $new_val['url'];
+				if ( is_array( $new_val ) && $field->args( 'has_supporting_data' ) ) {
+					if ( $field->args( 'repeatable' ) ) {
+						$_new_val = array();
+						foreach ( $new_val as $group_index => $grouped_data ) {
+							// Add the supporting data to the $saved array stack
+							$saved[ $field_group->index ][ $grouped_data['supporting_field_id'] ][] = $grouped_data['supporting_field_value'];
+							// Reset var to the actual value
+							$_new_val[ $group_index ] = $grouped_data['value'];
+						}
+						$new_val = $_new_val;
+					} else {
+						// Add the supporting data to the $saved array stack
+						$saved[ $field_group->index ][ $new_val['supporting_field_id'] ] = $new_val['supporting_field_value'];
+						// Reset var to the actual value
+						$new_val = $new_val['value'];
+					}
 				}
 
 				// Get old value

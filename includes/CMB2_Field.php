@@ -1059,6 +1059,17 @@ class CMB2_Field {
 
 		}
 
+		$args['has_supporting_data'] = in_array(
+			$args['type'],
+			array(
+				// See CMB2_Sanitize::_save_utc_value()
+				'file',
+				// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array()
+				'text_datetime_timestamp_timezone',
+			),
+			true
+		);
+
 		return $args;
 	}
 

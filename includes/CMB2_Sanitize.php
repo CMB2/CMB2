@@ -210,7 +210,8 @@ class CMB2_Sanitize {
 			return '';
 		}
 
-		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
+		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
+		if ( false !== $repeat_value ) {
 			return $repeat_value;
 		}
 
@@ -231,13 +232,22 @@ class CMB2_Sanitize {
 	 * @return string       Timestring
 	 */
 	public function text_datetime_timestamp_timezone( $repeat = false ) {
+		static $utc_values = array();
 
 		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
 		if ( empty( $test ) ) {
 			return '';
 		}
 
-		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
+		$utc_key = $this->field->_id() . '_utc';
+
+		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
+		if ( false !== $repeat_value ) {
+			if ( ! empty( $utc_values[ $utc_key ] ) ) {
+				$this->_save_utc_value( $utc_key, $utc_values[ $utc_key ] );
+				unset( $utc_values[ $utc_key ] );
+			}
+
 			return $repeat_value;
 		}
 
@@ -268,10 +278,34 @@ class CMB2_Sanitize {
 		$full_date   = $this->value['date'] . ' ' . $this->value['time'];
 
 		try {
+
 			$datetime = date_create_from_format( $full_format, $full_date );
-			$datetime->setTimezone( new DateTimeZone( $tzstring ) );
-			$this->value = serialize( $datetime );
+
+			if ( ! is_object( $datetime ) ) {
+				$this->value = $utc_stamp = '';
+			} else {
+				$timestamp   = $datetime->setTimezone( new DateTimeZone( $tzstring ) )->getTimestamp();
+				$utc_stamp   = $timestamp - $offset;
+				$this->value = serialize( $datetime );
+			}
+
+			if ( $this->field->group ) {
+				$this->value = array(
+					'supporting_field_value' => $utc_stamp,
+					'supporting_field_id'    => $utc_key,
+					'value'                  => $this->value,
+				);
+			} else {
+				// Save the utc timestamp supporting field
+				if ( $repeat ) {
+					$utc_values[ $utc_key ][] = $utc_stamp;
+				} else {
+					$this->_save_utc_value( $utc_key, $utc_stamp );
+				}
+			}
+
 		} catch ( Exception $e ) {
+			$this->value = '';
 			cmb2_utils()->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 		}
 
@@ -293,64 +327,12 @@ class CMB2_Sanitize {
 	 * @return string       Sanitized data
 	 */
 	public function textarea_code( $repeat = false ) {
-		if ( $repeat_value = $this->_check_repeat( __FUNCTION__, $repeat ) ) {
+		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
+		if ( false !== $repeat_value ) {
 			return $repeat_value;
 		}
 
 		return htmlspecialchars_decode( stripslashes( $this->value ) );
-	}
-
-	/**
-	 * Peforms saving of `file` attachement's ID
-	 * @since  1.1.0
-	 */
-	public function _save_file_id() {
-		$group      = $this->field->group;
-		$args       = $this->field->args();
-		$args['id'] = $args['_id'] . '_id';
-
-		unset( $args['_id'], $args['_name'] );
-		// And get new field object
-		$field      = new CMB2_Field( array(
-			'field_args'  => $args,
-			'group_field' => $group,
-			'object_id'   => $this->field->object_id,
-			'object_type' => $this->field->object_type,
-		) );
-		$id_key     = $field->_id();
-		$id_val_old = $field->escaped_value( 'absint' );
-
-		$alldata = $this->field->data_to_save;
-
-		if ( $group ) {
-			// Check group $alldata data
-			$i       = $group->index;
-			$base_id = $group->_id();
-			$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] ) ? absint( $alldata[ $base_id ][ $i ][ $id_key ] ) : 0;
-
-		} else {
-			// Check standard $alldata data
-			$id_val = isset( $alldata[ $field->id() ] ) ? $alldata[ $field->id() ] : null;
-
-		}
-
-		// If there is no ID saved yet, try to get it from the url
-		if ( $this->value && ! $id_val ) {
-			$id_val = cmb2_utils()->image_id_from_url( $this->value );
-		}
-
-		if ( $group ) {
-			return array(
-				'attach_id' => $id_val,
-				'field_id'  => $id_key,
-			);
-		}
-
-		if ( $id_val && $id_val != $id_val_old ) {
-			return $field->update_data( $id_val );
-		} elseif ( empty( $id_val ) && $id_val_old ) {
-			return $field->remove_data( $id_val_old );
-		}
 	}
 
 	/**
@@ -359,11 +341,86 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file() {
-		$id_value = $this->_save_file_id();
-		$clean = $this->text_url();
+		$file_id_key = $this->field->_id() . '_id';
 
-		// Return an array with url/id if saving a group field
-		return $this->field->group ? array_merge( array( 'url' => $clean ), $id_value ) : $clean;
+		if ( $this->field->group ) {
+			// Return an array with url/id if saving a group field
+			$this->value = $this->_get_group_file_value_array( $file_id_key );
+		} else {
+			$this->_save_file_id_value( $file_id_key );
+			$this->text_url();
+		}
+
+		return $this->value;
+	}
+
+	/**
+	 * Gets the values for the `file` field type from the data being saved.
+	 * @since  2.2.0
+	 */
+	public function _get_group_file_value_array( $id_key ) {
+		$alldata = $this->field->group->data_to_save;
+		$base_id = $this->field->group->_id();
+		$i       = $this->field->group->index;
+
+		// Check group $alldata data
+		$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
+			? absint( $alldata[ $base_id ][ $i ][ $id_key ] )
+			: 0;
+
+		return array(
+			'value' => $this->text_url(),
+			'supporting_field_value' => $id_val,
+			'supporting_field_id'    => $id_key,
+		);
+	}
+
+	/**
+	 * Peforms saving of `file` attachement's ID
+	 * @since  1.1.0
+	 */
+	public function _save_file_id_value( $file_id_key ) {
+		$id_field = $this->_new_supporting_field( $file_id_key );
+
+		// Check standard data_to_save data
+		$id_val = isset( $this->field->data_to_save[ $file_id_key ] )
+			? $this->field->data_to_save[ $file_id_key ]
+			: null;
+
+		// If there is no ID saved yet, try to get it from the url
+		if ( $this->value && ! $id_val ) {
+			$id_val = cmb2_utils()->image_id_from_url( $this->value );
+		}
+
+		return $id_field->save_field( $id_val );
+	}
+
+	/**
+	 * Peforms saving of `text_datetime_timestamp_timezone` utc timestamp
+	 * @since  2.2.0
+	 */
+	public function _save_utc_value( $utc_key, $utc_stamp ) {
+		return $this->_new_supporting_field( $utc_key )->save_field( $utc_stamp );
+	}
+
+	/**
+	 * Returns a new, supporting CMB2_Field object based on a new field id.
+	 * @since  2.2.0
+	 */
+	public function _new_supporting_field( $new_field_id ) {
+		$args = $this->field->args();
+		unset( $args['_id'], $args['_name'] );
+
+		$args['id'] = $new_field_id;
+		$args['sanitization_cb'] = false;
+
+		// And get new field object
+		return new CMB2_Field( array(
+			'field_args'  => $args,
+			'group_field' => $this->field->group,
+			'object_id'   => $this->field->object_id,
+			'object_type' => $this->field->object_type,
+		) );
 	}
 
 	/**
@@ -375,13 +432,24 @@ class CMB2_Sanitize {
 	 */
 	public function _check_repeat( $method, $repeat ) {
 		if ( $repeat || ! $this->field->args( 'repeatable' ) ) {
-			return;
+			return false;
 		}
+
+		$values_array = $this->value;
+
 		$new_value = array();
-		foreach ( $this->value as $iterator => $val ) {
-			$new_value[] = $this->$method( $val, true );
+		foreach ( $values_array as $iterator => $this->value ) {
+			if ( $this->value ) {
+				$val = $this->$method( true );
+				if ( ! empty( $val ) ) {
+					$new_value[] = $val;
+				}
+			}
 		}
-		return $new_value;
+
+		$this->value = $new_value;
+
+		return empty( $this->value ) ? null : $this->value;
 	}
 
 	/**

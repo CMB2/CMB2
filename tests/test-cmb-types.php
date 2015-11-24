@@ -857,6 +857,78 @@ class Test_CMB2_Types extends Test_CMB2 {
 		), Test_CMB2_JS::dependencies() );
 	}
 
+	public function test_save_group() {
+		$cmb_group = new_cmb2_box( array(
+			'id'           => 'group_metabox',
+			'title'        => 'title',
+			'object_types' => array( 'page', ),
+		) );
+		$group_field_id = $cmb_group->add_field( array(
+			'id'   => 'group',
+			'type' => 'group',
+		) );
+		foreach ( array( 'text', 'textarea_small', 'file', ) as $type ) {
+			$cmb_group->add_group_field( $group_field_id, array(
+				'id'   => $type,
+				'type' => $type,
+			) );
+		}
+		$cmb_group->add_group_field( $group_field_id, array(
+			'id' => 'text_datetime_timestamp_timezone',
+			'type' => 'text_datetime_timestamp_timezone',
+			'time_format' => 'H:i',
+			'date_format' => 'Y-m-d',
+			'repeatable' => true,
+		) );
+
+		$to_save = array(
+			'group' => array(
+				array(
+					'text' => 'Entry Title',
+					'textarea_small' => 'Nullam id dolor id nibh ultricies vehicula ut id elit. ',
+					'file' => 'http://example.com/files/2015/07/IMG.jpg',
+					'file_id' => 518,
+					'text_datetime_timestamp_timezone' => array(
+						array(
+							'date' => '2015-11-20',
+							'time' => '17:00',
+							'timezone' => 'America/New_York',
+						),
+						array(
+							'date' => '2015-11-20',
+							'time' => '17:00',
+							'timezone' => 'America/Chicago',
+						),
+						array(
+							'date' => null,
+							'time' => null,
+							'timezone' => null,
+						),
+					),
+				),
+			),
+		);
+
+		$values = cmb2_get_metabox( $cmb_group->cmb_id, $this->post_id, 'post' )->get_sanitized_values( $to_save );
+
+		$expected = array(
+			'group' => array(
+				array(
+					'text' => 'Entry Title',
+					'textarea_small' => 'Nullam id dolor id nibh ultricies vehicula ut id elit. ',
+					'file_id' => 518,
+					'file' => 'http://example.com/files/2015/07/IMG.jpg',
+					'text_datetime_timestamp_timezone_utc' => array( 1448056800, 1448060400 ),
+					'text_datetime_timestamp_timezone' => array(
+						'O:8:"DateTime":3:{s:4:"date";s:26:"2015-11-20 12:00:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:16:"America/New_York";}',
+						'O:8:"DateTime":3:{s:4:"date";s:26:"2015-11-20 11:00:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:15:"America/Chicago";}',
+					),
+				),
+			),
+		);
+
+		$this->assertEquals( $expected, $values );
+	}
 
 	/**
 	 * Test_CMB2_Types helper methods
