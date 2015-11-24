@@ -212,4 +212,49 @@ class CMB2_Utils {
 		return $this->url . $path;
 	}
 
+	/**
+	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
+	 * It will work with only with the following subset ot date() options:
+	 *
+	 * d, j, z, m, n, y, Y, h, H and i.
+	 *
+	 * A slight effort is made to deal with escaped characters.
+	 *
+	 * Other options are ignored, because they would either bring compatibility problems between PHP and JS, or
+	 * bring even more translation troubles.
+	 *
+	 * @since 2.0.6
+	 *
+	 * @param string $format php date format
+	 *
+	 * @return string reformatted string
+	 */
+	public function php_to_js_dateformat( $format ) {
+
+		// order is relevant here, since the replacement will be done sequentially.
+		$supported_options = [
+			'd' => 'dd',  // Day, leading 0
+			'j' => 'd',   // Day, no 0
+			'z' => 'o',   // Day of the year, no leading zeroes,
+			'm' => 'mm',  // Month of the year, leading 0
+			'n' => 'm',   // Month of the year, no leading 0
+			'y' => 'y',   // Year, two digit
+			'Y' => 'yy',  // Year, full
+			'h' => 'H',   // 12-hour format of an hour with leading zeros
+			'H' => 'HH',  // 24-hour format of an hour with leading zeros
+			'i' => 'mm',  // Minutes with leading zeros
+		];
+
+		foreach ( $supported_options as $php => $js ) {
+			// replaces every instance of a supported option, but skips escaped characters
+			$format = preg_replace( "~(?<!\\\\)$php~", $js, $format );
+		}
+
+		$format = preg_replace_callback( '~(?:\\\.)+~', function ( $m ) {
+			return "&#39;" . str_replace( '\\', '', $m[0] ) . "&#39;";
+		}, $format );
+
+		return $format;
+	}
+
 }
