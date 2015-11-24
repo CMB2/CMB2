@@ -858,6 +858,8 @@ class Test_CMB2_Types extends Test_CMB2 {
 	}
 
 	public function test_save_group() {
+		$is_53 = version_compare( PHP_VERSION, '5.3' ) >= 0;
+
 		$cmb_group = new_cmb2_box( array(
 			'id'           => 'group_metabox',
 			'title'        => 'title',
@@ -873,13 +875,16 @@ class Test_CMB2_Types extends Test_CMB2 {
 				'type' => $type,
 			) );
 		}
-		$cmb_group->add_group_field( $group_field_id, array(
-			'id' => 'text_datetime_timestamp_timezone',
-			'type' => 'text_datetime_timestamp_timezone',
-			'time_format' => 'H:i',
-			'date_format' => 'Y-m-d',
-			'repeatable' => true,
-		) );
+		if ( $is_53 ) {
+			$date_args = array(
+				'id' => 'text_datetime_timestamp_timezone',
+				'type' => 'text_datetime_timestamp_timezone',
+				'time_format' => 'H:i',
+				'date_format' => 'Y-m-d',
+				'repeatable' => true,
+			);
+			$cmb_group->add_group_field( $group_field_id, $date_args );
+		}
 
 		$to_save = array(
 			'group' => array(
@@ -909,6 +914,37 @@ class Test_CMB2_Types extends Test_CMB2 {
 			),
 		);
 
+		if ( ! $is_53 ) {
+			unset( $to_save['group'][0]['text_datetime_timestamp_timezone'] );
+		} else {
+			$date_values = array();
+			foreach ( $to_save['group'][0]['text_datetime_timestamp_timezone'] as $key => $value ) {
+				if ( null === $value['date'] ) {
+					continue;
+				}
+
+				$tzstring = $value['timezone'];
+				$offset = cmb2_utils()->timezone_offset( $tzstring );
+
+				if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
+					$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+					$tzstring = false !== $tzstring ? $tzstring : timezone_name_from_abbr( '', 0, 0 );
+				}
+
+				$full_format = $date_args['date_format'] . ' ' . $date_args['time_format'];
+				$full_date   = $value['date'] . ' ' . $value['time'];
+
+				$datetime = date_create_from_format( $full_format, $full_date );
+
+				if ( ! is_object( $datetime ) ) {
+					$date_values[] = '';
+				} else {
+					$timestamp = $datetime->setTimezone( new DateTimeZone( $tzstring ) )->getTimestamp();
+					$date_values[] = serialize( $datetime );
+				}
+			}
+		}
+
 		$values = cmb2_get_metabox( $cmb_group->cmb_id, $this->post_id, 'post' )->get_sanitized_values( $to_save );
 
 		$expected = array(
@@ -918,14 +954,14 @@ class Test_CMB2_Types extends Test_CMB2 {
 					'textarea_small' => 'Nullam id dolor id nibh ultricies vehicula ut id elit. ',
 					'file_id' => 518,
 					'file' => 'http://example.com/files/2015/07/IMG.jpg',
-					'text_datetime_timestamp_timezone_utc' => array( 1448056800, 1448060400 ),
-					'text_datetime_timestamp_timezone' => array(
-						'O:8:"DateTime":3:{s:4:"date";s:26:"2015-11-20 12:00:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:16:"America/New_York";}',
-						'O:8:"DateTime":3:{s:4:"date";s:26:"2015-11-20 11:00:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:15:"America/Chicago";}',
-					),
 				),
 			),
 		);
+
+		if ( $is_53 ) {
+			$expected['group'][0]['text_datetime_timestamp_timezone_utc'] = array( 1448056800, 1448060400 );
+			$expected['group'][0]['text_datetime_timestamp_timezone'] = $date_values;
+		}
 
 		$this->assertEquals( $expected, $values );
 	}
