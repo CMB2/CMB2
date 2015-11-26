@@ -361,7 +361,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			} else {
 				var oldName = $newInput.attr( 'name' );
 				// Replace 'name' attribute key
-				var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+				var newName = oldName ? oldName.replace( ']['+ prevNum +']', ']['+ cmb.idNumber +']' ) : '';
 				oldID       = $newInput.attr( 'id' );
 				newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				attrs       = {
