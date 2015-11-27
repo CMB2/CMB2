@@ -361,7 +361,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			} else {
 				var oldName = $newInput.attr( 'name' );
 				// Replace 'name' attribute key
-				var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+				if(group){
+					var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+				} else {
+					var newName = oldName ? oldName.replace( ']['+ prevNum +']', ']['+ cmb.idNumber +']' ) : '';
+				}
 				oldID       = $newInput.attr( 'id' );
 				newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 				attrs       = {
@@ -534,7 +538,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $self         = $(this);
 		var $table        = $id( $self.data('selector') );
 		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
+		var prevNum       = parseInt( $emptyrow.find(':input[data-iterator]').data('iterator') );
 		cmb.idNumber      = prevNum + 1;
 		var $row          = $emptyrow.clone();
 
