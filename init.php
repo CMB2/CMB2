@@ -77,7 +77,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_220_Trunk', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9986;
+		const PRIORITY = 9985;
 
 		/**
 		 * Single instance of the CMB2_Bootstrap_220_Trunk object
