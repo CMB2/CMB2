@@ -29,7 +29,9 @@ function cmb2_autoload_classes( $class_name ) {
 		return;
 	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	$file = cmb2_dir( "includes/{$class_name}.php" );
+	if( file_exists( $file ) )
+		include_once( $file );
 }
 
 /**
