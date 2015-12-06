@@ -341,7 +341,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value="' . esc_url_raw( 'http://' . $value ) . '"/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value="' . esc_url_raw( $value ) . '"/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'text_url' ), 'render' ) )
 		);
 
