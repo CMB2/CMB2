@@ -81,7 +81,7 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 			array(
 				'get_callback' => array( __CLASS__, 'get_restable_field_values' ),
 				'update_callback' => array( __CLASS__, 'update_restable_field_values' ),
-				'schema' => apply_filters( 'cmb2_rest_schema', null, self::$boxes ),
+				'schema' => null,
 			)
 		);
 	}
