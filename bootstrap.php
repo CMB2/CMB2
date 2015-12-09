@@ -59,7 +59,7 @@ function cmb2_bootstrap() {
 			$hookup->universal_hooks();
 		}
 
-		if ( $cmb->prop( 'show_in_rest' ) ) {
+		if ( $cmb->prop( 'show_in_rest' ) && function_exists( 'register_api_field' ) ) {
 			$rest = new CMB2_REST_Access( $cmb );
 			$rest->universal_hooks();
 		}
