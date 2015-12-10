@@ -38,6 +38,20 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	public $request;
 
 	/**
+	 * Box object id
+	 * @var   mixed
+	 * @since 2.2.0
+	 */
+	public $object_id = null;
+
+	/**
+	 * Box object type
+	 * @var   string
+	 * @since 2.2.0
+	 */
+	public $object_type = '';
+
+	/**
 	 * Constructor
 	 * @since 2.2.0
 	 */
@@ -103,7 +117,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_all_boxes( $request ) {
-		$this->request = $request;
+		$this->initiate_request( $request );
 
 		$boxes = CMB2_Boxes::get_by_property( 'show_in_rest', false );
 
@@ -129,11 +143,11 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_box( $request ) {
-		$this->request = $request;
+		$this->initiate_request( $request );
 
 		$cmb_id = $this->request->get_param( 'cmb_id' );
 
-		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id ) ) ) {
+		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id, $this->object_id, $this->object_type ) ) ) {
 			return $this->prepare_item( $this->get_rest_box( $cmb ) );
 		}
 
@@ -149,11 +163,11 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_box_fields( $request ) {
-		$this->request = $request;
+		$this->initiate_request( $request );
 
 		$cmb_id = $this->request->get_param( 'cmb_id' );
 
-		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id ) ) ) {
+		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id, $this->object_id, $this->object_type ) ) ) {
 			$fields = array();
 			foreach ( $cmb->prop( 'fields', array() ) as $field ) {
 				$field = $this->get_rest_field( $cmb, $field['id'] );
@@ -180,10 +194,29 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_rest_box( $cmb ) {
-		// TODO: handle callable properties
+		$cmb->object_type( $this->object_id );
+		$cmb->object_id( $this->object_type );
+
 		$boxes_data = $cmb->meta_box;
 
+		if ( isset( $_GET['rendered'] ) ) {
+			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
+			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
+
+			global $wp_scripts, $wp_styles;
+			$before_css = $wp_styles->queue;
+			$before_js = $wp_scripts->queue;
+
+			CMB2_JS::enqueue();
+
+			$boxes_data['js_dependencies'] = array_values( array_diff( $wp_scripts->queue, $before_js ) );
+			$boxes_data['css_dependencies'] = array_values( array_diff( $wp_styles->queue, $before_css ) );
+		}
+
+		// TODO: look into 'embed' parameter.
 		unset( $boxes_data['fields'] );
+		// Handle callable properties.
+		unset( $boxes_data['show_on_cb'] );
 
 		$base = $this->namespace . '/boxes/' . $cmb->cmb_id;
 		$boxbase = $base . '/' . $cmb->cmb_id;
@@ -215,9 +248,9 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array|WP_Error
 	 */
 	public function get_field( $request ) {
-		$this->request = $request;
+		$this->initiate_request( $request );
 
-		$cmb = cmb2_get_metabox( $this->request->get_param( 'cmb_id' ) );
+		$cmb = cmb2_get_metabox( $this->request->get_param( 'cmb_id' ), $this->object_id, $this->object_type  );
 
 		if ( ! $cmb ) {
 			return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
@@ -241,6 +274,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return array|WP_Error
 	 */
 	public function get_rest_field( $cmb, $field_id ) {
+
 		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
 		if ( ! $cmb->prop( 'show_in_rest' ) ) {
 			return new WP_Error( 'cmb2_rest_error', __( "You don't have permission to view this field.", 'cmb2' ) );
@@ -265,20 +299,19 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 			'options_cb' => 'options',
 		);
 
+		// TODO: Use request get object
+		// Run this first so the js_dependencies arg is populated.
+		$rendered = isset( $_GET['rendered'] ) && ( $cb = $field->maybe_callback( 'render_row_cb' ) )
+			// Ok, callback is good, let's run it.
+			? $this->get_cb_results( $cb, $field->args(), $field )
+			: false;
+
 		foreach ( $field->args() as $key => $value ) {
 			if ( in_array( $key, $params_to_ignore, true ) ) {
 				continue;
 			}
 
 			if ( 'render_row_cb' === $key ) {
-				$value = '';
-				// TODO: Use request get object
-				if ( isset( $_GET['rendered'] ) && ( $cb = $field->maybe_callback( 'render_row_cb' ) ) ) {
-					// Ok, callback is good, let's run it.
-					ob_start();
-					call_user_func( $cb, $field->args(), $this );
-					$field_data[ 'rendered' ] = ob_get_clean();
-				}
 				continue;
 			}
 
@@ -296,12 +329,17 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 				$field_data[ $key ] = __( 'Value Error', 'cmb2' );
 			}
 		}
+
+		if ( isset( $_GET['rendered'] ) ) {
+			$field_data['rendered'] = $rendered;
+		}
+
 		$field_data['value'] = $field->get_data();
 
 		$base = $this->namespace . '/boxes/' . $cmb->cmb_id;
 
-		// Entity meta
-		$field_data['_links'] = array(
+		$response = new WP_REST_Response( $field_data );
+		$response->add_links( array(
 			'self' => array(
 				'href' => rest_url( trailingslashit( $base ) . 'fields/' . $field->_id() ),
 			),
@@ -311,7 +349,9 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 			'box' => array(
 				'href' => rest_url( trailingslashit( $base ) ),
 			),
-		);
+		) );
+
+		$field_data['_links'] = $response->get_links();
 
 		return $field_data;
 	}
@@ -326,7 +366,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_item_permissions_check( $request ) {
-		$this->request = $request;
+		$this->initiate_request( $request );
 
 		/**
 		 * By default, no special permissions needed.
@@ -349,6 +389,35 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 */
 	public function prepare_item( $post ) {
 		return $this->prepare_item_for_response( $post, $this->request );
+	}
+
+	/**
+	 * Output buffers a callback and returns the results.
+	 *
+	 * @since  2.2.0
+	 *
+	 * @param  mixed $cb Callable function/method.
+	 * @return mixed     Results of output buffer after calling function/method.
+	 */
+	public function get_cb_results( $cb ) {
+		$args = func_get_args();
+		array_shift( $args ); // ignore $cb
+		ob_start();
+		call_user_func_array( $cb, $args );
+
+		return ob_get_clean();
+	}
+
+	public function initiate_request( $request ) {
+		$this->request = $request;
+
+		if ( isset( $_REQUEST['object_id'] ) ) {
+			$this->object_id = absint( $_REQUEST['object_id'] );
+		}
+
+		if ( isset( $_REQUEST['object_type'] ) ) {
+			$this->object_type = absint( $_REQUEST['object_type'] );
+		}
 	}
 
 	/**
