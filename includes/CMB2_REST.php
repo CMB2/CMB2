@@ -11,7 +11,21 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-class CMB2_REST_Access extends CMB2_Hookup_Base {
+class CMB2_REST extends CMB2_Hookup_Base {
+
+	/**
+	 * The current CMB2 REST endpoint version
+	 * @var string
+	 * @since 2.2.0
+	 */
+	const VERSION = '1';
+
+	/**
+	 * The CMB2 REST base namespace (v should always be followed by $version)
+	 * @var string
+	 * @since 2.2.0
+	 */
+	const BASE = 'cmb2/v1';
 
 	/**
 	 * @var   CMB2[] objects
@@ -59,12 +73,22 @@ class CMB2_REST_Access extends CMB2_Hookup_Base {
 	public function universal_hooks() {
 		$this->once( 'rest_api_init', array( __CLASS__, 'register_fields' ), 50 );
 
-		// hook up the CMB rest endpoint class
-		$this->once( 'rest_api_init', array( cmb2_rest_endpoints(), 'register_routes' ), 0 );
+		// hook up the CMB rest endpoint classes
+		$this->once( 'rest_api_init', array( $this, 'init_routes' ), 0 );
 
 		$this->prepare_read_write_fields();
 
 		add_filter( 'is_protected_meta', array( $this, 'is_protected_meta' ), 10, 3 );
+	}
+
+	public function init_routes() {
+		global $wp_rest_server;
+
+		$boxes_controller = new CMB2_REST_Controller_Boxes( $wp_rest_server );
+		$boxes_controller->register_routes();
+
+		$fields_controller = new CMB2_REST_Controller_Fields( $wp_rest_server );
+		$fields_controller->register_routes();
 	}
 
 	public static function register_fields() {

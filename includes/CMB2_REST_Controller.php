@@ -14,21 +14,7 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-class CMB2_REST_Endpoints extends WP_REST_Controller {
-
-	/**
-	 * The current CMB2 REST endpoint version
-	 * @var string
-	 * @since 2.2.0
-	 */
-	public $version = '1';
-
-	/**
-	 * The CMB2 REST namespace
-	 * @var string
-	 * @since 2.2.0
-	 */
-	public $namespace = 'cmb2/v';
+abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * The current request object
@@ -36,6 +22,13 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * @since 2.2.0
 	 */
 	public $request;
+
+	/**
+	 * The current server object
+	 * @var WP_REST_Server $server
+	 * @since 2.2.0
+	 */
+	public $server;
 
 	/**
 	 * Box object id
@@ -55,134 +48,8 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 * Constructor
 	 * @since 2.2.0
 	 */
-	public function __construct() {
-		$this->namespace .= $this->version;
-	}
-
-	/**
-	 * Register the routes for the objects of the controller.
-	 *
-	 * @since 2.2.0
-	 */
-	public function register_routes() {
-
-		// Returns all boxes data.
-		register_rest_route( $this->namespace, '/boxes/', array(
-			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_all_boxes' ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
-
-		// Returns specific box's data.
-		register_rest_route( $this->namespace, '/boxes/(?P<cmb_id>[\w-]+)', array(
-			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_box' ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
-
-		// Returns specific box's fields.
-		register_rest_route( $this->namespace, '/boxes/(?P<cmb_id>[\w-]+)/fields/', array(
-			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_box_fields' ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
-
-		// Returns specific field data.
-		register_rest_route( $this->namespace, '/boxes/(?P<cmb_id>[\w-]+)/fields/(?P<field_id>[\w-]+)', array(
-			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_field' ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			'schema' => array( $this, 'get_item_schema' ),
-		) );
-
-	}
-
-	/**
-	 * Get all public fields
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param WP_REST_Request $request The API request object.
-	 * @return array
-	 */
-	public function get_all_boxes( $request ) {
-		$this->initiate_request( $request );
-
-		$boxes = CMB2_Boxes::get_by_property( 'show_in_rest', false );
-
-		if ( empty( $boxes ) ) {
-			return $this->prepare_item( array( 'error' => __( 'No boxes found.', 'cmb2' ) ), $this->request );
-		}
-
-		$boxes_data = array();
-		// Loop boxes and get specific field.
-		foreach ( $boxes as $key => $cmb ) {
-			$boxes_data[ $cmb->cmb_id ] = $this->get_rest_box( $cmb );
-		}
-
-		return $this->prepare_item( $boxes_data );
-	}
-
-	/**
-	 * Get all public fields
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param WP_REST_Request $request The API request object.
-	 * @return array
-	 */
-	public function get_box( $request ) {
-		$this->initiate_request( $request );
-
-		$cmb_id = $this->request->get_param( 'cmb_id' );
-
-		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id, $this->object_id, $this->object_type ) ) ) {
-			return $this->prepare_item( $this->get_rest_box( $cmb ) );
-		}
-
-		return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
-	}
-
-	/**
-	 * Get all box fields
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param WP_REST_Request $request The API request object.
-	 * @return array
-	 */
-	public function get_box_fields( $request ) {
-		$this->initiate_request( $request );
-
-		$cmb_id = $this->request->get_param( 'cmb_id' );
-
-		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id, $this->object_id, $this->object_type ) ) ) {
-			$fields = array();
-			foreach ( $cmb->prop( 'fields', array() ) as $field ) {
-				$field = $this->get_rest_field( $cmb, $field['id'] );
-
-				if ( ! is_wp_error( $field ) ) {
-					$fields[ $field['id'] ] = $field;
-				} else {
-					$fields[ $field['id'] ] = array( 'error' => $field->get_error_message() );
-				}
-			}
-
-			return $this->prepare_item( $fields );
-		}
-
-		return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
+	public function __construct( WP_REST_Server $wp_rest_server ) {
+		$this->server = $wp_rest_server;
 	}
 
 	/**
@@ -199,7 +66,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 
 		$boxes_data = $cmb->meta_box;
 
-		if ( isset( $_GET['rendered'] ) ) {
+		if ( isset( $_REQUEST['rendered'] ) ) {
 			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
 			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
 
@@ -214,11 +81,12 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		}
 
 		// TODO: look into 'embed' parameter.
+		// http://demo.wp-api.org/wp-json/wp/v2/posts?_embed
 		unset( $boxes_data['fields'] );
 		// Handle callable properties.
 		unset( $boxes_data['show_on_cb'] );
 
-		$base = $this->namespace . '/boxes/' . $cmb->cmb_id;
+		$base = CMB2_REST::BASE . '/boxes/' . $cmb->cmb_id;
 		$boxbase = $base . '/' . $cmb->cmb_id;
 
 		$response = new WP_REST_Response( $boxes_data );
@@ -244,38 +112,15 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param WP_REST_Request $request The API request object.
-	 * @return array|WP_Error
-	 */
-	public function get_field( $request ) {
-		$this->initiate_request( $request );
-
-		$cmb = cmb2_get_metabox( $this->request->get_param( 'cmb_id' ), $this->object_id, $this->object_type  );
-
-		if ( ! $cmb ) {
-			return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
-		}
-
-		$field = $this->get_rest_field( $cmb, $this->request->get_param( 'field_id' ) );
-
-		if ( is_wp_error( $field ) ) {
-			return $this->prepare_item( array( 'error' => $field->get_error_message() ) );
-		}
-
-		return $this->prepare_item( $field );
-	}
-
-	/**
-	 * Get a specific field
-	 *
-	 * @since 2.2.0
-	 *
 	 * @param CMB2 $cmb
 	 * @return array|WP_Error
 	 */
 	public function get_rest_field( $cmb, $field_id ) {
 
 		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
+		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
+		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
+
 		if ( ! $cmb->prop( 'show_in_rest' ) ) {
 			return new WP_Error( 'cmb2_rest_error', __( "You don't have permission to view this field.", 'cmb2' ) );
 		}
@@ -292,6 +137,29 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 		// 	: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
 
 
+		$field_data = $this->prepare_field_data( $field );
+
+		$base = CMB2_REST::BASE . '/boxes/' . $cmb->cmb_id;
+
+		$response = new WP_REST_Response( $field_data );
+		$response->add_links( array(
+			'self' => array(
+				'href' => rest_url( trailingslashit( $base ) . 'fields/' . $field->_id() ),
+			),
+			'collection' => array(
+				'href' => rest_url( trailingslashit( $base ) . 'fields/' ),
+			),
+			'box' => array(
+				'href' => rest_url( trailingslashit( $base ) ),
+			),
+		) );
+
+		$field_data['_links'] = $response->get_links();
+
+		return $field_data;
+	}
+
+	public function prepare_field_data( CMB2_Field $field ) {
 		$field_data = array();
 		$params_to_ignore = array( 'show_on_cb', 'show_in_rest', 'options' );
 		$params_to_rename = array(
@@ -301,7 +169,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 
 		// TODO: Use request get object
 		// Run this first so the js_dependencies arg is populated.
-		$rendered = isset( $_GET['rendered'] ) && ( $cb = $field->maybe_callback( 'render_row_cb' ) )
+		$rendered = isset( $_REQUEST['rendered'] ) && ( $cb = $field->maybe_callback( 'render_row_cb' ) )
 			// Ok, callback is good, let's run it.
 			? $this->get_cb_results( $cb, $field->args(), $field )
 			: false;
@@ -330,28 +198,11 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 			}
 		}
 
-		if ( isset( $_GET['rendered'] ) ) {
+		if ( isset( $_REQUEST['rendered'] ) ) {
 			$field_data['rendered'] = $rendered;
 		}
 
 		$field_data['value'] = $field->get_data();
-
-		$base = $this->namespace . '/boxes/' . $cmb->cmb_id;
-
-		$response = new WP_REST_Response( $field_data );
-		$response->add_links( array(
-			'self' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' . $field->_id() ),
-			),
-			'collection' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' ),
-			),
-			'box' => array(
-				'href' => rest_url( trailingslashit( $base ) ),
-			),
-		) );
-
-		$field_data['_links'] = $response->get_links();
 
 		return $field_data;
 	}
@@ -476,6 +327,7 @@ class CMB2_REST_Endpoints extends WP_REST_Controller {
 				),
 			),
 		);
+
 		return $this->add_additional_fields_schema( $schema );
 	}
 
