@@ -51,7 +51,7 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 		), $args );
 
 		if ( ! empty( $a['js_dependencies'] ) ) {
-			CMB2_JS::add_dependencies( $a['js_dependencies'] );
+			$this->field->add_js_dependencies( $a['js_dependencies'] );
 		}
 
 		return $this->rendered(

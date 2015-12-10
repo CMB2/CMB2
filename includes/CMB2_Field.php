@@ -864,7 +864,6 @@ class CMB2_Field extends CMB2_Base {
 			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
 		}
 
-
 		if ( $added_classes ) {
 			$classes[] = esc_attr( $added_classes );
 		}
@@ -1021,6 +1020,19 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Store JS dependencies as part of the field args.
+	 * @since 2.2.0
+	 * @param array $dependencies Dependies to register for this field.
+	 */
+	public function add_js_dependencies( $dependencies = array() ) {
+		foreach ( (array) $dependencies as $dependency ) {
+			$this->args['js_dependencies'][ $dependency ] = $dependency;
+		}
+
+		CMB2_JS::add_dependencies( $dependencies );
+	}
+
+	/**
 	 * Get CMB2_Field default value, either from default param or default_cb param.
 	 *
 	 * @since  0.2.2
@@ -1046,7 +1058,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
 	 */
-	public function _set_field_defaults( $args, $blah ) {
+	public function _set_field_defaults( $args ) {
 
 		/*
 		 * Deprecated parameters:
@@ -1089,6 +1101,7 @@ class CMB2_Field extends CMB2_Base {
 			'display_cb'        => array( $this, 'display_value_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 			'column'            => false,
+			'js_dependencies'   => array(),
 		) );
 
 		/*
