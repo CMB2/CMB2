@@ -63,12 +63,12 @@ class CMB2 extends CMB2_Base {
 		'enqueue_js'       => true, // Include CMB2 JS
 		'fields'           => array(),
 		'hookup'           => true,
-		'show_in_rest'     => false,
 		'save_fields'      => true, // Will not save during hookup if false
 		'closed'           => false, // Default to metabox being closed?
 		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 		'new_term_section' => true,
+		'show_in_rest'     => false,
 		'rest_read'        => false,
 		'rest_write'       => false,
 	);
