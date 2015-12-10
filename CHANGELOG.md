@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 * Fix issue with colorpickers not changing when sorting groups.
 * `'show_option_none'` field parameter now works on taxonomy fields when explicitly setting to false.
 * Fix so the date/time-picker javascript respects the `'date_format'` and `'time_format'` field parameters. Props [@yivi](https://github.com/yivi) ([#39](https://github.com/WebDevStudios/CMB2/pull/39), [#282](https://github.com/WebDevStudios/CMB2/pull/282), [#300](https://github.com/WebDevStudios/CMB2/pull/300), [#318](https://github.com/WebDevStudios/CMB2/pull/318), [#330](https://github.com/WebDevStudios/CMB2/pull/330), [#446](https://github.com/WebDevStudios/CMB2/pull/446), [#498](https://github.com/WebDevStudios/CMB2/pull/498)).
+* Fix a sometimes-broken unit test. Props [JPry](https://github.com/JPry) ([#539](https://github.com/WebDevStudios/CMB2/pull/539)).
 
 ## 2.1.2 - 2015-10-01
 
