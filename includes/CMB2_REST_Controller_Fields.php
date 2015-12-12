@@ -97,9 +97,6 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 			return $this->prepare_item( array( 'error' => $field->get_error_message() ) );
 		}
 
-		// wp_die( '<xmp>$field: '. print_r( $field, true ) .'</xmp>' );
-		// echo '<xmp>$field: '. print_r( $field, true ) .'</xmp>';
-		// $field = $this->prepare_item( $field );
 		return $this->prepare_item( $field );
 	}
 }
