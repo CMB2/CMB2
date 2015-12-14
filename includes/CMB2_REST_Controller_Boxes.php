@@ -17,6 +17,13 @@
 class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 	/**
+	 * CMB2 Instance
+	 *
+	 * @var CMB2
+	 */
+	protected $cmb;
+
+	/**
 	 * Register the routes for the objects of the controller.
 	 *
 	 * @since 2.2.0
@@ -26,7 +33,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		register_rest_route( CMB2_REST::BASE, '/boxes/', array(
 			array(
 				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_boxes' ),
+				'callback'        => array( $this, 'get_items' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			),
 			'schema' => array( $this, 'get_item_schema' ),
@@ -36,7 +43,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		register_rest_route( CMB2_REST::BASE, '/boxes/(?P<cmb_id>[\w-]+)', array(
 			array(
 				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_box' ),
+				'callback'        => array( $this, 'get_item' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			),
 			'schema' => array( $this, 'get_item_schema' ),
@@ -51,7 +58,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @param WP_REST_Request $request The API request object.
 	 * @return array
 	 */
-	public function get_boxes( $request ) {
+	public function get_items( $request ) {
 		$this->initiate_request( $request );
 
 		$boxes = CMB2_Boxes::get_by_property( 'show_in_rest', false );
@@ -77,7 +84,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @param WP_REST_Request $request The API request object.
 	 * @return array
 	 */
-	public function get_box( $request ) {
+	public function get_item( $request ) {
 		$this->initiate_request( $request );
 
 		$cmb_id = $this->request->get_param( 'cmb_id' );
@@ -88,4 +95,64 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 		return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
 	}
+
+	/**
+	 * Get a CMB2 box prepared for REST
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param CMB2 $cmb
+	 * @return array
+	 */
+	public function get_rest_box( $cmb ) {
+		$cmb->object_type( $this->object_id );
+		$cmb->object_id( $this->object_type );
+
+		$boxes_data = $cmb->meta_box;
+
+		if ( isset( $this->request['_rendered'] ) ) {
+			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
+			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
+
+			global $wp_scripts, $wp_styles;
+			$before_css = $wp_styles->queue;
+			$before_js = $wp_scripts->queue;
+
+			CMB2_JS::enqueue();
+
+			$boxes_data['js_dependencies'] = array_values( array_diff( $wp_scripts->queue, $before_js ) );
+			$boxes_data['css_dependencies'] = array_values( array_diff( $wp_styles->queue, $before_css ) );
+		}
+
+		// TODO: look into 'embed' parameter.
+		// http://demo.wp-api.org/wp-json/wp/v2/posts?_embed
+		unset( $boxes_data['fields'] );
+		// Handle callable properties.
+		unset( $boxes_data['show_on_cb'] );
+
+		$response = rest_ensure_response( $boxes_data );
+
+		$response->add_links( $this->prepare_links( $cmb ) );
+
+		return $response;
+	}
+
+	public function prepare_links( $cmb ) {
+		$base = CMB2_REST::BASE . '/boxes';
+		$boxbase = $base . '/' . $cmb->cmb_id;
+
+		return array(
+			'self' => array(
+				'href' => rest_url( $boxbase ),
+			),
+			'collection' => array(
+				'href' => rest_url( $base ),
+			),
+			'fields' => array(
+				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' ),
+				'embeddable' => true,
+			),
+		);
+	}
+
 }

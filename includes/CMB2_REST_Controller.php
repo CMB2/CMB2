@@ -53,161 +53,6 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Get a CMB2 box prepared for REST
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param CMB2 $cmb
-	 * @return array
-	 */
-	public function get_rest_box( $cmb ) {
-		$cmb->object_type( $this->object_id );
-		$cmb->object_id( $this->object_type );
-
-		$boxes_data = $cmb->meta_box;
-
-		if ( isset( $_REQUEST['rendered'] ) ) {
-			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
-			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
-
-			global $wp_scripts, $wp_styles;
-			$before_css = $wp_styles->queue;
-			$before_js = $wp_scripts->queue;
-
-			CMB2_JS::enqueue();
-
-			$boxes_data['js_dependencies'] = array_values( array_diff( $wp_scripts->queue, $before_js ) );
-			$boxes_data['css_dependencies'] = array_values( array_diff( $wp_styles->queue, $before_css ) );
-		}
-
-		// TODO: look into 'embed' parameter.
-		// http://demo.wp-api.org/wp-json/wp/v2/posts?_embed
-		unset( $boxes_data['fields'] );
-		// Handle callable properties.
-		unset( $boxes_data['show_on_cb'] );
-
-		$base = CMB2_REST::BASE . '/boxes/' . $cmb->cmb_id;
-		$boxbase = $base . '/' . $cmb->cmb_id;
-
-		$response = new WP_REST_Response( $boxes_data );
-		$response->add_links( array(
-			'self' => array(
-				'href' => rest_url( trailingslashit( $boxbase ) ),
-			),
-			'collection' => array(
-				'href' => rest_url( trailingslashit( $base ) ),
-			),
-			'fields' => array(
-				'href' => rest_url( trailingslashit( $boxbase ) . 'fields/' ),
-			),
-		) );
-
-		$boxes_data['_links'] = $response->get_links();
-
-		return $boxes_data;
-	}
-
-	/**
-	 * Get a specific field
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param CMB2 $cmb
-	 * @return array|WP_Error
-	 */
-	public function get_rest_field( $cmb, $field_id ) {
-
-		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
-		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
-		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
-
-		if ( ! $cmb->prop( 'show_in_rest' ) ) {
-			return new WP_Error( 'cmb2_rest_error', __( "You don't have permission to view this field.", 'cmb2' ) );
-		}
-
-		$field = $cmb->get_field( $field_id );
-
-		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
-		}
-
-		// TODO: check for show_in_rest property.
-		// $can_read = $this->can_read
-		// 	? 'write_only' !== $show_in_rest
-		// 	: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
-
-
-		$field_data = $this->prepare_field_data( $field );
-
-		$base = CMB2_REST::BASE . '/boxes/' . $cmb->cmb_id;
-
-		$response = new WP_REST_Response( $field_data );
-		$response->add_links( array(
-			'self' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' . $field->_id() ),
-			),
-			'collection' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' ),
-			),
-			'box' => array(
-				'href' => rest_url( trailingslashit( $base ) ),
-			),
-		) );
-
-		$field_data['_links'] = $response->get_links();
-
-		return $field_data;
-	}
-
-	public function prepare_field_data( CMB2_Field $field ) {
-		$field_data = array();
-		$params_to_ignore = array( 'show_on_cb', 'show_in_rest', 'options' );
-		$params_to_rename = array(
-			'label_cb' => 'label',
-			'options_cb' => 'options',
-		);
-
-		// TODO: Use request get object
-		// Run this first so the js_dependencies arg is populated.
-		$rendered = isset( $_REQUEST['rendered'] ) && ( $cb = $field->maybe_callback( 'render_row_cb' ) )
-			// Ok, callback is good, let's run it.
-			? $this->get_cb_results( $cb, $field->args(), $field )
-			: false;
-
-		foreach ( $field->args() as $key => $value ) {
-			if ( in_array( $key, $params_to_ignore, true ) ) {
-				continue;
-			}
-
-			if ( 'render_row_cb' === $key ) {
-				continue;
-			}
-
-			if ( 'options_cb' === $key ) {
-				$value = $field->options();
-			} elseif ( in_array( $key, CMB2_Field::$callable_fields ) ) {
-				$value = $field->get_param_callback_result( $key );
-			}
-
-			$key = isset( $params_to_rename[ $key ] ) ? $params_to_rename[ $key ] : $key;
-
-			if ( empty( $value ) || is_scalar( $value ) || is_array( $value ) ) {
-				$field_data[ $key ] = $value;
-			} else {
-				$field_data[ $key ] = __( 'Value Error', 'cmb2' );
-			}
-		}
-
-		if ( isset( $_REQUEST['rendered'] ) ) {
-			$field_data['rendered'] = $rendered;
-		}
-
-		$field_data['value'] = $field->get_data();
-
-		return $field_data;
-	}
-
-	/**
 	 * Check if a given request has access to a field or box.
 	 * By default, no special permissions needed, but filtering return value.
 	 *
@@ -280,7 +125,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @param  WP_REST_Request $request Request object
 	 * @return array $data
 	 */
-	public function prepare_item_for_response( $data, $request ) {
+	public function prepare_item_for_response( $data, $request = null ) {
 
 		$context = ! empty( $this->request['context'] ) ? $this->request['context'] : 'view';
 		$data = $this->filter_response_by_context( $data, $context );
@@ -294,7 +139,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param object $request        The WP_REST_Request object
 		 * @param object $cmb2_endpoints This endpoints object
 		 */
-		return apply_filters( 'cmb2_rest_prepare', $data, $this->request, $this );
+		return apply_filters( 'cmb2_rest_prepare', rest_ensure_response( $data ), $this->request, $this );
 	}
 
 	/**
