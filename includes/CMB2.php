@@ -184,7 +184,7 @@ class CMB2 {
 		 */
 		do_action( "cmb2_before_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
-		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
+		echo '<table class="form-table"><tbody><tr class="form-field"><td scope="row"><div class="cmb2-wrap"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 
@@ -214,7 +214,7 @@ class CMB2 {
 			}
 		}
 
-		echo '</div></div>';
+		echo '</div></div></td></tr></tbody></table>';
 
 		$this->render_hidden_fields();
 
