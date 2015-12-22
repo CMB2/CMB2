@@ -203,7 +203,7 @@ class CMB2_Types {
 		$method = isset( $args['method'] ) ? $args['method'] : 'select_option';
 		unset( $args['method'] );
 
-		$value = $this->field->escaped_value()
+		$value = $this->field->escaped_value() !== ''
 			? $this->field->escaped_value()
 			: $this->field->args( 'default' );
 
@@ -223,7 +223,7 @@ class CMB2_Types {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value == $opt_value ) {
+			if ( (string) $value === (string) $opt_value ) {
 				$a['checked'] = 'checked';
 			}
 
