@@ -223,7 +223,7 @@ class CMB2_Types {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( (string) $value === (string) $opt_value ) {
+			if ( !is_array( $value ) && (string) $value === (string) $opt_value ) {
 				$a['checked'] = 'checked';
 			}
 
