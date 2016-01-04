@@ -348,7 +348,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			var $newInput = $( this );
 			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 			var oldFor    = $newInput.attr( 'for' );
-			var oldVal    = $newInput.attr( 'value' );
+			var oldVal    = $newInput.val();
 			var type      = $newInput.prop( 'type' );
 			var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
 			// var $next  = $newInput.next();
