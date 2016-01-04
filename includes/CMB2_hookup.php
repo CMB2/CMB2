@@ -108,24 +108,7 @@ class CMB2_hookup {
 	}
 
 	public function user_hooks() {
-		$priority = $this->cmb->prop( 'priority' );
-
-		if ( ! is_numeric( $priority ) ) {
-			switch ( $priority ) {
-
-				case 'high':
-					$priority = 5;
-					break;
-
-				case 'low':
-					$priority = 20;
-					break;
-
-				default:
-					$priority = 10;
-					break;
-			}
-		}
+		$priority = $this->get_priority();
 
 		add_action( 'show_user_profile', array( $this, 'user_metabox' ), $priority );
 		add_action( 'edit_user_profile', array( $this, 'user_metabox' ), $priority );
@@ -147,10 +130,11 @@ class CMB2_hookup {
 
 		$this->taxonomies = (array) $this->cmb->prop( 'taxonomies' );
 		$show_on_term_add = $this->cmb->prop( 'new_term_section' );
+		$priority         = $this->get_priority( 8 );
 
 		foreach ( $this->taxonomies as $taxonomy ) {
 			// Display our form data
-			add_action( "{$taxonomy}_edit_form", array( $this, 'term_metabox' ), 8, 2 );
+			add_action( "{$taxonomy}_edit_form", array( $this, 'term_metabox' ), $priority, 2 );
 
 			$show_on_add = is_array( $show_on_term_add )
 				? in_array( $taxonomy, $show_on_term_add )
@@ -160,7 +144,7 @@ class CMB2_hookup {
 
 			// Display form in add-new section (unless specified not to)
 			if ( $show_on_add ) {
-				add_action( "{$taxonomy}_add_form_fields", array( $this, 'term_metabox' ), 8, 2 );
+				add_action( "{$taxonomy}_add_form_fields", array( $this, 'term_metabox' ), $priority, 2 );
 			}
 
 		}
@@ -355,6 +339,35 @@ class CMB2_hookup {
 		$show = (bool) apply_filters( 'cmb2_show_on', $show, $this->cmb->meta_box, $this->cmb );
 
 		return $show;
+	}
+
+	/**
+	 * Get the CMB priority property set to numeric hook priority.
+	 * @since  2.2.0
+	 * @param  integer $default Default display hook priority.
+	 * @return integer          Hook priority.
+	 */
+	public function get_priority( $default = 10 ) {
+		$priority = $this->cmb->prop( 'priority' );
+
+		if ( ! is_numeric( $priority ) ) {
+			switch ( $priority ) {
+
+				case 'high':
+					$priority = 5;
+					break;
+
+				case 'low':
+					$priority = 20;
+					break;
+
+				default:
+					$priority = $default;
+					break;
+			}
+		}
+
+		return $priority;
 	}
 
 	/**
