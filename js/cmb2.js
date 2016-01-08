@@ -383,7 +383,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	                	 * ( the last one is depend on whether the field is accepting multiple input or not )
 	                	 */
 	                	splitName = newName ? newName.split(/\[/) : false;
-				        lenName   = nameewName ? splitName.length : 0;
+				        lenName   = newName ? splitName.length : 0;
 
 	                    if( splitName[lenName-1] == "]" ) {
 	                    	/**
