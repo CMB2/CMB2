@@ -355,22 +355,94 @@ window.CMB2 = (function(window, document, $, undefined){
 			var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
 			// var $next  = $newInput.next();
 			var attrs     = {};
-			var newID, oldID;
+			var newID, oldID, newName, oldName, splitName, splitID, lenName;
+
 			if ( oldFor ) {
 				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
 			} else {
-				var oldName = $newInput.attr( 'name' );
-				// Replace 'name' attribute key
-				var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
-				oldID       = $newInput.attr( 'id' );
-				newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+				oldName = $newInput.attr( 'name' );
+				oldID   = $newInput.attr( 'id' );
+
+				/**
+				 * For cmb.AddGroupRow
+				 * if it's group we will check for repeatable fields to change the name and ID for $('.empty-row') field
+				 * example name="options_group[0][group_field][0]" or name="options_group[0][group_field[0][]" 
+				 * if the fields is repeatable and have multiple input such as multicheck, or file
+				 */
+				if ( group ) {
+
+	                newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+	                newID   = oldID   ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+
+	                // Fix row issues. 
+	                if ( $newInput.parents( '.empty-row' ).length > 0 ) {
+
+	                	/**
+	                	 * split the name into array so it will looks like this
+	                	 * [ "options_group", "0]", "group_field]", "0]", "]" ] 
+	                	 * ( the last one is depend on whether the field is accepting multiple input or not )
+	                	 */
+	                	splitName = newName ? newName.split(/\[/) : false;
+				        lenName   = newName ? splitName.length : 0;
+
+	                    if( splitName[lenName-1] == "]" ) {
+	                    	/**
+					         * check if the last index from the array have this value "]" which mean splitted from empty []
+					         * if it's true then its the multicheck or filelists, then the number we need to update from is the second from the last bracket
+					         * since the AddGroupRow remove all other repetable field accept the first one, the .empty-row will always in second index
+					         * eq: oldName = options_group[cmb.idNumber][group_field][nth][]  
+					         * eq: newName = options_group[cmb.idNumber][group_field][1][]
+					         */
+	                    	splitName[lenName-2] = '1]';
+	                    	newName = splitName.join( '[', splitName );
+	                    	newID = newID ? newID.substring(0, newID.lastIndexOf('_')) + '_1' : '';
+	                    } else {
+	                    	/**
+					         * if it's false then its just a repeatable field that accept single input such as 
+					         * text, select ( not multiple ), checkbox, etc.
+					         * eq: oldName = options_group[cmb.idNumber][group_field][nth]
+					         * eq: newName = options_group[cmb.idNumber][group_field][1]
+					         */
+	                    	splitName[lenName-1] = '1]';
+	                    	newName = splitName ? splitName.join( '[', splitName ) : '';
+	                    	newID   = newID ? newID.substring(0, newID.lastIndexOf('_')) + '_1' : '';
+	                    }
+	                }
+
+	            } else {
+
+	            	/**
+			         * For cmb.AddAjaxRow
+			         */
+	            	splitName = oldName ? oldName.split(/\[/) : false;
+				    lenName   = oldName ? splitName.length : 0;
+	            	if( splitName[lenName-1] == "]" ) {
+
+	            		/** 
+	            		 * multicheckbox, filelists, etc.
+				         * eq: newName = options_group[0][group_field][cmb.idNumber][]
+				         */
+	            		splitName[lenName-2] = cmb.idNumber + ']';
+	            		newName = splitName.join( '[', splitName );
+            			newID   = oldID ? oldID.substring(0, oldID.lastIndexOf('_')) + '_' + cmb.idNumber : '';
+	            	} else {
+	            		/** 
+	            		 * text, select not multiple, checkbox, etc.
+				         * eq: newName = options_group[0][group_field][cmb.idNumber]
+				         */
+	            		splitName[lenName-1] = cmb.idNumber + ']';
+                    	newName = splitName ? splitName.join( '[', splitName ) : '';
+	            		newID   = oldID ? oldID.substring(0, oldID.lastIndexOf('_')) + '_' + cmb.idNumber : '';
+	            	}
+	            }
+				
 				attrs       = {
 					id: newID,
 					name: newName,
 					// value: '',
 					'data-iterator': cmb.idNumber,
 				};
-
+				
 			}
 
 			// Clear out old values
