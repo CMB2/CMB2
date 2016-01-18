@@ -59,7 +59,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @return array
 	 */
 	public function get_items( $request ) {
-		$this->initiate_request( $request );
+		$this->initiate_request( $request, 'boxes_read' );
 
 		$boxes = CMB2_Boxes::get_by_property( 'show_in_rest', false );
 

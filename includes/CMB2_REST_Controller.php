@@ -62,7 +62,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_item_permissions_check( $request ) {
-		$this->initiate_request( $request );
+		$this->initiate_request( $request, 'permissions_check' );
 
 		/**
 		 * By default, no special permissions needed.
@@ -104,18 +104,6 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		return ob_get_clean();
 	}
 
-	public function initiate_request( $request ) {
-		$this->request = $request;
-
-		if ( isset( $_REQUEST['object_id'] ) ) {
-			$this->object_id = absint( $_REQUEST['object_id'] );
-		}
-
-		if ( isset( $_REQUEST['object_type'] ) ) {
-			$this->object_type = absint( $_REQUEST['object_type'] );
-		}
-	}
-
 	/**
 	 * Prepare a CMB2 object for serialization
 	 *
@@ -140,6 +128,24 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param object $cmb2_endpoints This endpoints object
 		 */
 		return apply_filters( 'cmb2_rest_prepare', rest_ensure_response( $data ), $this->request, $this );
+	}
+
+	public function initiate_request( $request, $request_type ) {
+		$this->request = $request;
+		$this->request['context'] = isset( $this->request['context'] ) && ! empty( $this->request['context'] )
+			? $this->request['context']
+			: 'view';
+
+		if ( isset( $_REQUEST['object_id'] ) ) {
+			$this->object_id = absint( $_REQUEST['object_id'] );
+		}
+
+		if ( isset( $_REQUEST['object_type'] ) ) {
+			$this->object_type = absint( $_REQUEST['object_type'] );
+		}
+
+		self::$request_type = self::$request_type ? self::$request_type : $request_type;
+		self::$route = self::$route ? self::$route : $this->request->get_route();
 	}
 
 	/**
