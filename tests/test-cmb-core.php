@@ -833,6 +833,13 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$prop_value = $cmb->meta_box[ $new_prop_name ];
 		$this->assertEquals( $new_prop_value, $prop_value);
 
+		// Test updating property
+		$new_prop_value = $cmb->set_prop( $new_prop_name, $unused_fallback );
+		$this->assertEquals( $unused_fallback, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $cmb->prop( $new_prop_name ) );
+
+		// Reset value
+		$prop_value = $cmb->set_prop( $new_prop_name, $new_prop_value );
 	}
 
 }
