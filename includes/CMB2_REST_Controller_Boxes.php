@@ -148,7 +148,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 			'collection' => array(
 				'href' => rest_url( $base ),
 			),
-			'fields' => array(
+			'https://cmb2.io/fields' => array(
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' ),
 				'embeddable' => true,
 			),
