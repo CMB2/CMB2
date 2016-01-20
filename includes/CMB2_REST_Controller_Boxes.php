@@ -137,17 +137,20 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		return $response;
 	}
 
-	public function prepare_links( $cmb ) {
+	protected function prepare_links( $cmb ) {
 		$base = CMB2_REST::BASE . '/boxes';
 		$boxbase = $base . '/' . $cmb->cmb_id;
 
 		return array(
+			// Standard Link Relations -- http://v2.wp-api.org/extending/linking/
 			'self' => array(
 				'href' => rest_url( $boxbase ),
 			),
 			'collection' => array(
 				'href' => rest_url( $base ),
 			),
+			// Custom Link Relations -- http://v2.wp-api.org/extending/linking/
+			// TODO URL should document relationship.
 			'https://cmb2.io/fields' => array(
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' ),
 				'embeddable' => true,

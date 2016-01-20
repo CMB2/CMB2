@@ -189,6 +189,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 			),
 		);
 
+		// TODO ?
 		error_log( '$this->request[context]: '. print_r( $this->request['context'], true ) );
 		error_log( 'CMB2_REST_Controller::get_intial_route(): '. print_r( CMB2_REST_Controller::get_intial_route(), true ) );
 		error_log( '$match: '. print_r( 'box_read' === CMB2_REST_Controller::get_intial_request_type(), true ) );

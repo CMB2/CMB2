@@ -228,4 +228,17 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		return $this->add_additional_fields_schema( $schema );
 	}
 
+	/**
+	 * Return an array of contextual links for endpoint/object
+	 * @link http://v2.wp-api.org/extending/linking/
+	 * @link http://www.iana.org/assignments/link-relations/link-relations.xhtml
+	 *
+	 * @since  2.2.0
+	 *
+	 * @param  mixed  $object Object to build links from.
+	 *
+	 * @return array          Array of links
+	 */
+	abstract protected function prepare_links( $object );
+
 }
