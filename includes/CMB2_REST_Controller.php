@@ -45,6 +45,20 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	public $object_type = '';
 
 	/**
+	 * The initial route
+	 * @var   string
+	 * @since 2.2.0
+	 */
+	protected static $route = '';
+
+	/**
+	 * Defines which endpoint the initial request is.
+	 * @var string $request_type
+	 * @since 2.2.0
+	 */
+	protected static $request_type = '';
+
+	/**
 	 * Constructor
 	 * @since 2.2.0
 	 */
@@ -114,9 +128,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @return array $data
 	 */
 	public function prepare_item_for_response( $data, $request = null ) {
-
-		$context = ! empty( $this->request['context'] ) ? $this->request['context'] : 'view';
-		$data = $this->filter_response_by_context( $data, $context );
+		$data = $this->filter_response_by_context( $data, $this->request['context'] );
 
 		/**
 		 * Filter the prepared CMB2 item response.
@@ -128,6 +140,32 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param object $cmb2_endpoints This endpoints object
 		 */
 		return apply_filters( 'cmb2_rest_prepare', rest_ensure_response( $data ), $this->request, $this );
+	}
+
+	protected function initiate_rest_read_box( $request, $request_type ) {
+		$this->initiate_rest_box( $request, $request_type );
+
+		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_read ) {
+			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have read permissions.', 'cmb2' ) );
+		}
+	}
+
+	protected function initiate_rest_write_box( $request, $request_type ) {
+		$this->initiate_rest_box( $request, $request_type );
+
+		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_write ) {
+			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have write permissions.', 'cmb2' ) );
+		}
+	}
+
+	protected function initiate_rest_box( $request, $request_type ) {
+		$this->initiate_request( $request, $request_type );
+
+		$this->rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
+
+		if ( ! $this->rest_box ) {
+			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ) );
+		}
 	}
 
 	public function initiate_request( $request, $request_type ) {
@@ -146,6 +184,14 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 		self::$request_type = self::$request_type ? self::$request_type : $request_type;
 		self::$route = self::$route ? self::$route : $this->request->get_route();
+	}
+
+	public static function get_intial_request_type() {
+		return self::$request_type;
+	}
+
+	public static function get_intial_route() {
+		return self::$route;
 	}
 
 	/**

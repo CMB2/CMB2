@@ -19,9 +19,9 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 	/**
 	 * CMB2 Instance
 	 *
-	 * @var CMB2
+	 * @var CMB2_REST
 	 */
-	protected $cmb;
+	protected $rest_box;
 
 	/**
 	 * Register the routes for the objects of the controller.
@@ -59,21 +59,19 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 	 * @return array
 	 */
 	public function get_items( $request ) {
-		$this->initiate_request( $request );
+		$this->initiate_rest_read_box( $request, 'fields_read' );
 
-		$this->cmb = cmb2_get_metabox( $this->request->get_param( 'cmb_id' ), $this->object_id, $this->object_type );
-
-		if ( ! $this->cmb ) {
-			return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
+		if ( is_wp_error( $this->rest_box ) ) {
+			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
 		}
 
 		$fields = array();
-		foreach ( $this->cmb->prop( 'fields', array() ) as $field ) {
+		foreach ( $this->rest_box->cmb->prop( 'fields', array() ) as $field ) {
 			$field_id = $field['id'];
 			$rest_field = $this->get_rest_field( $field_id );
 
 			if ( ! is_wp_error( $rest_field ) ) {
-				$fields[ $field_id ] = $rest_field;
+				$fields[ $field_id ] = $this->server->response_to_data( $rest_field, isset( $_GET['_embed'] ) );
 			} else {
 				$fields[ $field_id ] = array( 'error' => $rest_field->get_error_message() );
 			}
@@ -91,12 +89,10 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 	 * @return array|WP_Error
 	 */
 	public function get_item( $request ) {
-		$this->initiate_request( $request );
+		$this->initiate_rest_read_box( $request, 'field_read' );
 
-		$this->cmb = cmb2_get_metabox( $this->request->get_param( 'cmb_id' ), $this->object_id, $this->object_type );
-
-		if ( ! $this->cmb ) {
-			return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
+		if ( is_wp_error( $this->rest_box ) ) {
+			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
 		}
 
 		$field = $this->get_rest_field( $this->request->get_param( 'field_id' ) );
@@ -117,24 +113,11 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 	 * @return array|WP_Error
 	 */
 	public function get_rest_field( $field_id ) {
-
-		// TODO: more robust show_in_rest checking. use rest_read/rest_write properties.
-
-		if ( ! $this->cmb->prop( 'show_in_rest' ) ) {
-			return new WP_Error( 'cmb2_rest_error', __( "You don't have permission to view this field.", 'cmb2' ) );
-		}
-
-		$field = $this->cmb->get_field( $field_id );
+		$field = $this->rest_box->field_can_read( $field_id, true );
 
 		if ( ! $field ) {
 			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
 		}
-
-		// TODO: check for show_in_rest property.
-		// $can_read = $this->can_read
-		// 	? 'write_only' !== $show_in_rest
-		// 	: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
-
 
 		$field_data = $this->prepare_field_data( $field );
 		$response = rest_ensure_response( $field_data );
@@ -144,7 +127,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 		return $response;
 	}
 
-	public function prepare_field_data( CMB2_Field $field ) {
+	protected function prepare_field_data( CMB2_Field $field ) {
 		$field_data = array();
 		$params_to_ignore = array( 'show_on_cb', 'show_in_rest', 'options' );
 		$params_to_rename = array(
@@ -182,7 +165,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 			}
 		}
 
-		if ( isset( $this->request['_rendered'] ) ) {
+		if ( isset( $_REQUEST['_rendered'] ) ) {
 			$field_data['rendered'] = $rendered;
 		}
 
@@ -191,21 +174,32 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller {
 		return $field_data;
 	}
 
-	public function prepare_links( $field ) {
-		$base = CMB2_REST::BASE . '/boxes/' . $this->cmb->cmb_id;
+	protected function prepare_links( $field ) {
+		$boxbase = CMB2_REST::BASE . '/boxes/' . $this->rest_box->cmb->cmb_id;
 
-		return array(
+		$links = array(
 			'self' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' . $field->_id() ),
+				'href' => rest_url( trailingslashit( $boxbase ) . 'fields/' . $field->_id() ),
 			),
 			'collection' => array(
-				'href' => rest_url( trailingslashit( $base ) . 'fields/' ),
+				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' ),
 			),
-			'box' => array(
-				'href' => rest_url( $base ),
-				'embeddable' => true,
+			'up' => array(
+				'href' => rest_url( $boxbase ),
 			),
 		);
+
+		error_log( '$this->request[context]: '. print_r( $this->request['context'], true ) );
+		error_log( 'CMB2_REST_Controller::get_intial_route(): '. print_r( CMB2_REST_Controller::get_intial_route(), true ) );
+		error_log( '$match: '. print_r( 'box_read' === CMB2_REST_Controller::get_intial_request_type(), true ) );
+
+
+		// Don't embed boxes when looking at boxes route.
+		if ( '/cmb2/v1/boxes' !== CMB2_REST_Controller::get_intial_route() ) {
+			$links['up']['embeddable'] = true;
+		}
+
+		return $links;
 	}
 
 }

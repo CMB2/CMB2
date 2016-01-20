@@ -28,55 +28,63 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	const BASE = 'cmb2/v1';
 
 	/**
-	 * @var   CMB2[] objects
+	 * @var   CMB2 object
 	 * @since 2.2.0
 	 */
-	protected static $boxes;
+	public $cmb;
 
 	/**
-	 * Whether metabox fields can be read via REST API
-	 * @var   bool
+	 * @var   CMB2_REST[] objects
 	 * @since 2.2.0
 	 */
-	protected $can_read = true;
+	public static $boxes;
 
 	/**
 	 * Array of readable field objects.
 	 * @var   CMB2_Field[]
 	 * @since 2.2.0
 	 */
-	protected static $read_fields = array();
+	protected $read_fields = array();
 
 	/**
 	 * Array of writeable field objects.
 	 * @var   CMB2_Field[]
 	 * @since 2.2.0
 	 */
-	protected static $write_fields = array();
+	protected $write_fields = array();
 
 	/**
-	 * Whether metabox fields can be written via REST API
-	 * @var   bool
-	 * @since 2.2.0
+	 * whether CMB2 object is readable via the rest api
+	 * @var boolean
 	 */
-	protected $can_write = false;
+	protected $rest_read = false;
 
+	/**
+	 * whether CMB2 object is readable via the rest api
+	 * @var boolean
+	 */
+	protected $rest_write = false;
+
+	/**
+	 * Constructor
+	 * @since 2.2.0
+	 * @param CMB2 $cmb The CMB2 object to be registered for the API.
+	 */
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
-		self::$boxes[ $cmb->cmb_id ] = $cmb;
+		self::$boxes[ $cmb->cmb_id ] = $this;
 
 		$show_value = $this->cmb->prop( 'show_in_rest' );
-		$this->cmb->rest_read  = 'write_only' !== $show_value;
-		$this->cmb->rest_write = in_array( $show_value, array( 'read_and_write', 'write_only' ), true );
+		$this->rest_read  = 'write_only' !== $show_value;
+		$this->rest_write = in_array( $show_value, array( 'read_and_write', 'write_only' ), true );
 	}
 
 	public function universal_hooks() {
-		$this->once( 'rest_api_init', array( __CLASS__, 'register_fields' ), 50 );
-
 		// hook up the CMB rest endpoint classes
 		$this->once( 'rest_api_init', array( $this, 'init_routes' ), 0 );
+		$this->once( 'rest_api_init', array( __CLASS__, 'register_appended_fields' ), 50 );
 
-		$this->prepare_read_write_fields();
+		$this->declare_read_write_fields();
 
 		add_filter( 'is_protected_meta', array( $this, 'is_protected_meta' ), 10, 3 );
 	}
@@ -91,11 +99,11 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$fields_controller->register_routes();
 	}
 
-	public static function register_fields() {
+	public static function register_appended_fields() {
 
 		$types = array();
-		foreach ( self::$boxes as $cmb_id => $cmb ) {
-			$types = array_merge( $types, $cmb->prop( 'object_types' ) );
+		foreach ( self::$boxes as $cmb_id => $cmb_rest ) {
+			$types = array_merge( $types, $cmb_rest->cmb->prop( 'object_types' ) );
 		}
 		$types = array_unique( $types );
 
@@ -110,7 +118,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		);
 	}
 
-	protected function prepare_read_write_fields() {
+	protected function declare_read_write_fields() {
 		foreach ( $this->cmb->prop( 'fields' ) as $field ) {
 			$show_in_rest = isset( $field['show_in_rest'] ) ? $field['show_in_rest'] : null;
 
@@ -118,29 +126,27 @@ class CMB2_REST extends CMB2_Hookup_Base {
 				continue;
 			}
 
-			$this->maybe_add_read_field( $field['id'], $show_in_rest );
-			$this->maybe_add_write_field( $field['id'], $show_in_rest );
+			if ( $this->can_read( $show_in_rest ) ) {
+				$this->read_fields[] = $field['id'];
+			}
+
+			if ( $this->can_write( $show_in_rest ) ) {
+				$this->write_fields[] = $field['id'];
+			}
+
 		}
 	}
 
-	protected function maybe_add_read_field( $field_id, $show_in_rest ) {
-		$can_read = $this->cmb->rest_read
+	protected function can_read( $show_in_rest ) {
+		return $this->rest_read
 			? 'write_only' !== $show_in_rest
 			: in_array( $show_in_rest, array( 'read_and_write', 'read_only' ), true );
-
-		if ( $can_read ) {
-			self::$read_fields[ $this->cmb->cmb_id ][] = $field_id;
-		}
 	}
 
-	protected function maybe_add_write_field( $field_id, $show_in_rest ) {
-		$can_update = $this->cmb->rest_write
+	protected function can_write( $show_in_rest ) {
+		return $this->rest_write
 			? 'read_only' !== $show_in_rest
 			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
-
-		if ( $can_update ) {
-			self::$write_fields[ $this->cmb->cmb_id ][] = $field_id;
-		}
 	}
 
 	/**
@@ -157,11 +163,12 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return;
 		}
 
-		foreach ( self::$read_fields as $cmb_id => $fields ) {
-			foreach ( $fields as $field_id ) {
-				$field = self::$boxes[ $cmb_id ]->get_field( $field_id );
+		foreach ( self::$boxes as $cmb_id => $rest_box ) {
+			foreach ( $rest_box->read_fields as $field_id ) {
+				$field = $rest_box->cmb->get_field( $field_id );
 				$field->object_id = $object['id'];
 
+				// TODO: test other object types (users, comments, etc)
 				if ( isset( $object->type ) ) {
 					$field->object_type = $object->type;
 				}
@@ -191,55 +198,87 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$object_id   = $data['object_id'];
-		$object_type = $data['object_type'];
-		$updated     = array();
+		$updated = array();
 
-		foreach ( self::$write_fields as $cmb_id => $fields ) {
+		foreach ( self::$boxes as $cmb_id => $rest_box ) {
 			if ( ! array_key_exists( $cmb_id, $values ) ) {
 				continue;
 			}
 
-			$cmb = self::$boxes[ $cmb_id ];
+			$rest_box->cmb->object_id( $data['object_id'] );
+			$rest_box->cmb->object_type( $data['object_type'] );
 
-			$cmb->object_type( $object_id );
-			$cmb->object_type( $object_type );
-
-			$cmb->pre_process();
-
-			foreach ( $fields as $field_id ) {
-				if ( ! array_key_exists( $field_id, $values[ $cmb_id ] ) ) {
-					continue;
-				}
-
-				$field = $cmb->get_field( $field_id );
-
-				if ( 'title' == $field->type() ) {
-					continue;
-				}
-
-				$field->object_id   = $object_id;
-				$field->object_type = $object_type;
-
-				if ( 'group' == $field->type() ) {
-					$fields = $field->fields();
-					if ( empty( $fields ) ) {
-						continue;
-					}
-
-					$cmb->data_to_save[ $field_id ] = $values[ $cmb_id ][ $field_id ];
-					$updated[ $cmb_id ][ $field_id ] = $cmb->save_group_field( $field );
-
-				} else {
-					$updated[ $cmb_id ][ $field_id ] = $field->save_field( $values[ $cmb_id ][ $field_id ] );
-				}
-
-			}
-
-			$cmb->after_save();
+			// TODO: Test since refactor.
+			$updated[ $cmb_id ] = $rest_box->sanitize_box_values( $values );
 		}
 
 		return $updated;
+	}
+
+	/**
+	 * Loop through box fields and sanitize the values.
+	 * @since  2.2.o
+	 * @param  array   $values Array of values being provided.
+	 * @return array           Array of updated/sanitized values.
+	 */
+	public function sanitize_box_values( array $values ) {
+		$updated = array();
+
+		$this->cmb->pre_process();
+
+		foreach ( $this->write_fields as $field_id ) {
+			$updated[ $field_id ] = $this->sanitize_field_value( $values, $field_id );
+		}
+
+		$this->cmb->after_save();
+
+		return $updated;
+	}
+
+	/**
+	 * Handles returning a sanitized field value.
+	 * @since  2.2.0
+	 * @param  array   $values   Array of values being provided.
+	 * @param  string  $field_id The id of the field to update.
+	 * @return mixed             The results of saving/sanitizing a field value.
+	 */
+	protected function sanitize_field_value( array $values, $field_id ) {
+		if ( ! array_key_exists( $field_id, $values[ $this->cmb->cmb_id ] ) ) {
+			return;
+		}
+
+		$field = $this->cmb->get_field( $field_id );
+
+		if ( 'title' == $field->type() ) {
+			return;
+		}
+
+		$field->object_id   = $this->cmb->object_id();
+		$field->object_type = $this->cmb->object_type();
+
+		if ( 'group' == $field->type() ) {
+			return $this->sanitize_group_value( $values, $field );
+		}
+
+		return $field->save_field( $values[ $this->cmb->cmb_id ][ $field_id ] );
+	}
+
+	/**
+	 * Handles returning a sanitized group field value.
+	 * @since  2.2.0
+	 * @param  array       $values Array of values being provided.
+	 * @param  CMB2_Field  $field  CMB2_Field object.
+	 * @return mixed               The results of saving/sanitizing the group field value.
+	 */
+	protected function sanitize_group_value( array $values, CMB2_Field $field ) {
+		$fields = $field->fields();
+		if ( empty( $fields ) ) {
+			return;
+		}
+
+		$this->cmb->data_to_save[ $field->_id() ] = $values[ $this->cmb->cmb_id ][ $field->_id() ];
+
+		return $this->cmb->save_group_field( $field );
 	}
 
 	/**
@@ -250,22 +289,11 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @param string $meta_type Meta type.
 	 */
 	public function is_protected_meta( $protected, $meta_key, $meta_type ) {
-		if ( $this->field_can_update( $meta_key ) ) {
+		if ( $this->field_can_write( $meta_key ) ) {
 			return false;
 		}
 
 		return $protected;
-	}
-
-	public function field_can_update( $field_id ) {
-
-		$field        = $this->cmb->get_field( $field_id );
-		$show_in_rest = $field ? $field->args( 'show_in_rest' ) : 'no';
-		$can_update   = $this->cmb->rest_write
-			? 'read_only' !== $show_in_rest
-			: in_array( $show_in_rest, array( 'read_and_write', 'write_only' ), true );
-
-		return $can_update ? $field : false;
 	}
 
 	protected static function get_object_data( $object ) {
@@ -289,6 +317,53 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		}
 
 		return compact( 'object_id', 'object_type' );
+	}
+
+	public function field_can_read( $field_id, $return_object = false ) {
+		return $this->field_can( 'read_fields', $field_id, $return_object );
+	}
+
+	public function field_can_write( $field_id, $return_object = false ) {
+		return $this->field_can( 'write_fields', $field_id, $return_object );
+	}
+
+	protected function field_can( $type = 'read_fields', $field_id, $return_object = false ) {
+		if ( ! in_array( $field_id, $this->{$type}, true ) ) {
+			return false;
+		}
+
+		return $return_object ? $this->cmb->get_field( $field_id ) : true;
+	}
+
+	/**
+	 * Get an instance of this class by a CMB2 id
+	 *
+	 * @since  2.2.0
+	 *
+	 * @param  string  $cmb_id CMB2 config id
+	 *
+	 * @return CMB2_REST|false The CMB2_REST object or false.
+	 */
+	public static function get_rest_box( $cmb_id ) {
+		return isset( self::$boxes[ $cmb_id ] ) ? self::$boxes[ $cmb_id ] : false;
+	}
+
+	/**
+	 * Magic getter for our object.
+	 * @param string $field
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'read_fields':
+			case 'write_fields':
+			case 'rest_read':
+			case 'rest_write':
+				return $this->{$field};
+			default:
+				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+		}
 	}
 
 }

@@ -61,16 +61,17 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	public function get_items( $request ) {
 		$this->initiate_request( $request, 'boxes_read' );
 
-		$boxes = CMB2_Boxes::get_by_property( 'show_in_rest', false );
-
-		if ( empty( $boxes ) ) {
+		if ( empty( CMB2_REST::$boxes ) ) {
 			return $this->prepare_item( array( 'error' => __( 'No boxes found.', 'cmb2' ) ), $this->request );
 		}
 
 		$boxes_data = array();
 		// Loop boxes and get specific field.
-		foreach ( $boxes as $key => $cmb ) {
-			$boxes_data[ $cmb->cmb_id ] = $this->get_rest_box( $cmb );
+		foreach ( CMB2_REST::$boxes as $this->rest_box ) {
+			if ( $this->rest_box->rest_read ) {
+				$rest_box = $this->get_rest_box();
+				$boxes_data[ $this->rest_box->cmb->cmb_id ] = $this->server->response_to_data( $rest_box, isset( $_GET['_embed'] ) );
+			}
 		}
 
 		return $this->prepare_item( $boxes_data );
@@ -85,15 +86,13 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @return array
 	 */
 	public function get_item( $request ) {
-		$this->initiate_request( $request );
+		$this->initiate_rest_read_box( $request, 'box_read' );
 
-		$cmb_id = $this->request->get_param( 'cmb_id' );
-
-		if ( $cmb_id && ( $cmb = cmb2_get_metabox( $cmb_id, $this->object_id, $this->object_type ) ) ) {
-			return $this->prepare_item( $this->get_rest_box( $cmb ) );
+		if ( is_wp_error( $this->rest_box ) ) {
+			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
 		}
 
-		return $this->prepare_item( array( 'error' => __( 'No box found by that id.', 'cmb2' ) ) );
+		return $this->prepare_item( $this->get_rest_box() );
 	}
 
 	/**
@@ -104,13 +103,14 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @param CMB2 $cmb
 	 * @return array
 	 */
-	public function get_rest_box( $cmb ) {
+	public function get_rest_box() {
+		$cmb = $this->rest_box->cmb;
 		$cmb->object_type( $this->object_id );
 		$cmb->object_id( $this->object_type );
 
 		$boxes_data = $cmb->meta_box;
 
-		if ( isset( $this->request['_rendered'] ) ) {
+		if ( isset( $_REQUEST['_rendered'] ) && '/cmb2/v1/boxes' !== CMB2_REST_Controller::get_intial_route() ) {
 			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
 			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
 
