@@ -1,0 +1,23 @@
+# Export the same files as the wordpress.org plugin repository
+# Based on https://plugins.trac.wordpress.org/browser/cmb2/trunk
+
+.git               export-ignore
+.gitignore         export-ignore
+.gitattributes     export-ignore
+.sass-cache        export-ignore
+.travis.yml        export-ignore
+Gruntfile.js       export-ignore
+node_modules       export-ignore
+package.json       export-ignore
+phpunit.xml        export-ignore
+tests              export-ignore
+composer.json      export-ignore
+readme.md          export-ignore
+.idea              export-ignore
+.scrutinizer.yml   export-ignore
+coverage.clover    export-ignore
+ocular.phar        export-ignore
+.tx                export-ignore
+Dockunit.json      export-ignore
+phpunit.xml.dist   export-ignore
+NOTES.md           export-ignore
