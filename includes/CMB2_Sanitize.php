@@ -404,7 +404,7 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Returns a new, supporting CMB2_Field object based on a new field id.
+	 * Returns a new, supporting, CMB2_Field object based on a new field id.
 	 * @since  2.2.0
 	 */
 	public function _new_supporting_field( $new_field_id ) {
