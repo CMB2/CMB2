@@ -227,7 +227,7 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Datetime to imestamp with timezone
+	 * Datetime to timestamp with timezone
 	 * @since  1.0.1
 	 * @return string       Timestring
 	 */
