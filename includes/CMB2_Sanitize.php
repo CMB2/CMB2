@@ -169,6 +169,9 @@ class CMB2_Sanitize {
 	 * @return string       Empty string or sanitized money value
 	 */
 	public function text_money() {
+		if ( '' === $this->value ) {
+			return $this->value;
+		}
 
 		global $wp_locale;
 
@@ -178,6 +181,9 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
+				if ( '' === $val ) {
+					continue;
+				}
 				$this->value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 			}
 		} else {
