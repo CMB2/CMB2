@@ -200,9 +200,16 @@ class CMB2_hookup {
 	 * Enqueues scripts and styles for CMB2
 	 * @since  1.0.0
 	 */
-	public function do_scripts( $hook ) {
-		// only enqueue our scripts/styles on the proper pages
-		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'page-new.php', 'page.php', 'comment.php' ), true ) ) {
+	public function do_scripts() {
+		$screen = get_current_screen();
+
+		if ( ! property_exists( $screen, 'base' ) || ! property_exists( $screen, 'post_type' ) ) {
+			return;
+		}
+
+		// Only enqueue our scripts/styles on the proper pages.
+		if ( ( 'post' === $screen->base && ( is_string( $screen->post_type ) && '' !== $screen->post_type ) ) ||
+			'comment' === $screen->base ) {
 			if ( $this->cmb->prop( 'cmb_styles' ) ) {
 				self::enqueue_cmb_css();
 			}
