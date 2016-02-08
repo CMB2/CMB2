@@ -77,10 +77,6 @@ class CMB2_hookup {
 	}
 
 	public function universal_hooks() {
-		// Handle oembed Ajax
-		$this->once( 'wp_ajax_cmb2_oembed_handler', array( cmb2_ajax(), 'oembed_handler' ) );
-		$this->once( 'wp_ajax_nopriv_cmb2_oembed_handler', array( cmb2_ajax(), 'oembed_handler' ) );
-
 		foreach ( get_class_methods( 'CMB2_Show_Filters' ) as $filter ) {
 			add_filter( 'cmb2_show_on', array( 'CMB2_Show_Filters', $filter ), 10, 3 );
 		}

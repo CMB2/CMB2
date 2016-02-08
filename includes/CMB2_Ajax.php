@@ -21,6 +21,29 @@ class CMB2_Ajax {
 	protected $ajax_update = false;
 
 	/**
+	 * Constructor
+	 * @since 2.2.0
+	 */
+	public function __construct() {
+		self::hooks( $this );
+	}
+
+	/**
+	 * Hook in the oembed ajax handlers
+	 * @since  2.2.0
+	 * @param  CMB2_Ajax  $self This object (for hooking)
+	 */
+	public static function hooks( $self ) {
+		static $hooked = false;
+
+		if ( ! $hooked ) {
+			add_action( 'wp_ajax_cmb2_oembed_handler', array( $self, 'oembed_handler' ) );
+			add_action( 'wp_ajax_nopriv_cmb2_oembed_handler', array( $self, 'oembed_handler' ) );
+			$hooked = true;
+		}
+	}
+
+	/**
 	 * Handles our oEmbed ajax request
 	 * @since  0.9.5
 	 * @return object oEmbed embed code | fallback | error message

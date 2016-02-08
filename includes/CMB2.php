@@ -932,6 +932,11 @@ class CMB2 {
 			return false;
 		}
 
+		if ( 'oembed' === $field['type'] ) {
+			// Initiate oembed Ajax hooks
+			cmb2_ajax();
+		}
+
 		$this->_add_field_to_array(
 			$field,
 			$this->meta_box['fields'],
