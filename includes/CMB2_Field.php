@@ -1066,7 +1066,7 @@ class CMB2_Field extends CMB2_Base {
 	public function _set_field_defaults( $args ) {
 
 		// Set up blank or default values for empty ones
-		$args = wp_parse_args( $args, array(
+		$args = wp_parse_args( $args, apply_filters( 'cmb2_field_defaults', array(
 			'type'              => '',
 			'name'              => '',
 			'desc'              => '',
@@ -1098,7 +1098,10 @@ class CMB2_Field extends CMB2_Base {
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 			'column'            => false,
 			'js_dependencies'   => array(),
-		) );
+		), $args['id'], $args['type'], $this->object_type ) );
+
+		// Allow for filtering of the arguments once merged with the defaults, but before further processing.
+		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $args['id'], $args['type'], $this->object_type );
 
 		/*
 		 * Deprecated usage:
@@ -1156,7 +1159,7 @@ class CMB2_Field extends CMB2_Base {
 			true
 		);
 
-		return $args;
+		return apply_filters( 'cmb2_field_arguments', $args, $args['id'], $args['type'], $this->object_type );
 	}
 
 	/**
