@@ -1016,8 +1016,12 @@ class CMB2 {
 			return true;
 		}
 
-		unset( $this->fields[ $field_id ]->args['fields'][ $sub_field_id ] );
-		unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
+		if ( isset( $this->fields[ $field_id ]->args['fields'][ $sub_field_id ] ) ) {
+			unset( $this->fields[ $field_id ]->args['fields'][ $sub_field_id ] );
+		}
+		if ( isset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] ) ) {
+			unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
+		}
 		return true;
 	}
 
