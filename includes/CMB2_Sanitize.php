@@ -68,6 +68,7 @@ class CMB2_Sanitize {
 		switch ( $this->field->type() ) {
 			case 'wysiwyg':
 			case 'textarea_small':
+			case 'oembed':
 				$sanitized_value = $this->textarea();
 				break;
 			case 'taxonomy_select':
@@ -84,7 +85,6 @@ class CMB2_Sanitize {
 			case 'multicheck':
 			case 'multicheck_inline':
 			case 'file_list':
-			case 'oembed':
 			case 'group':
 				// no filtering
 				$sanitized_value = $this->value;
@@ -92,7 +92,7 @@ class CMB2_Sanitize {
 			default:
 				// Handle repeatable fields array
 				// We'll fallback to 'sanitize_text_field'
-				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : call_user_func( 'sanitize_text_field', $this->value );
+				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : sanitize_text_field( $this->value );
 				break;
 		}
 
