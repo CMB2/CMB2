@@ -46,6 +46,17 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
+	public function expected_oembed_results( $args ) {
+		return $this->is_connected()
+			? sprintf( '<div class="embed-status"><iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['src'], $args['field_id'] )
+			: $this->no_connection_oembed_result( $args['url'] );
+	}
+
+	public function no_connection_oembed_result( $url ) {
+		global $wp_embed;
+		return sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $url, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $url ) ) );
+	}
+
 	protected function capture_render( $cb ) {
 		ob_start();
 		call_user_func( $cb );

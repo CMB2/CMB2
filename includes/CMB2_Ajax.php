@@ -217,15 +217,16 @@ class CMB2_Ajax {
 	 * @param  string  $meta_key   Postmeta's key
 	 * @param  mixed   $meta_value (Optional) value of the postmeta to be saved
 	 */
-	protected function cache_action( $meta_key, $meta_value = 'nometavalue' ) {
-		$action = 'nometavalue' !== $meta_value ? 'update' : 'get';
+	protected function cache_action( $meta_key ) {
+		$func_args = func_get_args();
+		$action    = isset( $func_args[1] ) ? 'update' : 'get';
 
 		if ( 'options-page' === $this->object_type ) {
 
 			$args = array( $meta_key );
 
 			if ( 'update' === $action ) {
-				$args[] = $meta_value;
+				$args[] = $func_args[1];
 				$args[] = true;
 			}
 
@@ -234,12 +235,11 @@ class CMB2_Ajax {
 		} else {
 
 			$args = array( $this->object_type, $this->object_id, $meta_key );
-			$args[] = 'update' === $action ? $meta_value : true;
+			$args[] = 'update' === $action ? $func_args : true;
 
 			// Cache the result to our metadata
 			$status = call_user_func_array( $action . '_metadata', $args );
 		}
-
 
 		return $status;
 	}
@@ -280,7 +280,7 @@ class CMB2_Ajax {
 		}
 		// Update the option and remove stale cache data
 		if ( $modified ) {
-			cmb2_options( $option_key )->set( $options );
+			$updated = cmb2_options( $option_key )->set( $options );
 		}
 	}
 
