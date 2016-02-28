@@ -464,7 +464,7 @@ function yourprefix_register_user_profile_metabox() {
 	 */
 	$cmb_user = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
-		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'title'            => __( 'User Profile Metabox', 'cmb2' ), // Doesn't output for user boxes
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
@@ -534,7 +534,7 @@ function yourprefix_register_taxonomy_metabox() {
 	 */
 	$cmb_term = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
-		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'title'            => __( 'Category Metabox', 'cmb2' ), // Doesn't output for term boxes
 		'object_types'     => array( 'term' ), // Tells CMB2 to use term_meta vs post_meta
 		'taxonomies'       => array( 'category', 'post_tag' ), // Tells CMB2 which taxonomies should have these fields
 		// 'new_term_section' => true, // Will display in the "Add New Category" section
