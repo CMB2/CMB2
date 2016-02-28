@@ -529,7 +529,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 					</div>
 					before_group_row output
 					<div class="postbox cmb-row cmb-repeatable-grouping closed" data-iterator="0">
-						<button disabled="disabled" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
+						<button type="button" disabled="disabled" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row"></button>
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
@@ -549,7 +549,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
-									<button disabled="disabled" data-selector="group_field_repeat" class="button cmb-remove-group-row alignright">Remove Group</button>
+									<button type="button" disabled="disabled" data-selector="group_field_repeat" class="button cmb-remove-group-row alignright">Remove Group</button>
 								</div>
 							</div>
 						</div>
@@ -558,7 +558,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 					<div class="cmb-row">
 						<div class="cmb-td">
 						<p class="cmb-add-row">
-						<button data-selector="group_field_repeat" data-grouptitle="" class="cmb-add-group-row button">Add Group</button>
+						<button type="button" data-selector="group_field_repeat" data-grouptitle="" class="cmb-add-group-row button">Add Group</button>
 						</p>
 						</div>
 					</div>
