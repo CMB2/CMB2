@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-07-29 06:08+0000\n"
+"PO-Revision-Date: 2016-01-18 19:52+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/wp-translations/cmb2/language/ro_RO/)\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr ""
+msgstr "Adresă website (URL)"
 
 #: example-functions.php:130
 msgid "Test Text Email"
@@ -278,7 +278,7 @@ msgstr ""
 
 #: example-functions.php:518
 msgid "User Field"
-msgstr ""
+msgstr "Câmp utilizator"
 
 #: example-functions.php:541
 msgid "Theme Options Metabox"
@@ -381,7 +381,7 @@ msgstr ""
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr ""
+msgstr "Timp"
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-07-29 06:08+0000\n"
+"PO-Revision-Date: 2015-11-13 16:13+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Spanish (Chile) (http://www.transifex.com/wp-translations/cmb2/language/es_CL/)\n"
 "MIME-Version: 1.0\n"
@@ -369,7 +369,7 @@ msgstr "Anterior"
 
 #: includes/CMB2_JS.php:117
 msgid "Today"
-msgstr ""
+msgstr "Hoy"
 
 #: includes/CMB2_JS.php:118 includes/CMB2_JS.php:128
 msgid "Done"
@@ -381,7 +381,7 @@ msgstr ""
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr ""
+msgstr "Hora"
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"

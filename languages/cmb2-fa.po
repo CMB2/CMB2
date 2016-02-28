@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-07-29 06:08+0000\n"
+"PO-Revision-Date: 2015-11-12 05:15+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Persian (http://www.transifex.com/wp-translations/cmb2/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgstr ""
 
 #: example-functions.php:434
 msgid "Description"
-msgstr ""
+msgstr "توضیحات"
 
 #: example-functions.php:435
 msgid "Write a short description for this entry"
@@ -319,7 +319,7 @@ msgstr ""
 #: includes/CMB2_Field.php:933 includes/CMB2_Field.php:937
 #: tests/test-cmb-field.php:200
 msgid "None"
-msgstr ""
+msgstr "هیچ کدام"
 
 #: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"

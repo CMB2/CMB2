@@ -1,14 +1,15 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
+# Adil Elsaeed <adil.elsaeed@hotmail.com>, 2015
 # nabil eisa <nabilstudios@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-07-29 06:08+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2016-01-18 19:51+0000\n"
+"Last-Translator: Adil Elsaeed <adil.elsaeed@hotmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/wp-translations/cmb2/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -203,7 +204,7 @@ msgstr "مدرج oEmbed"
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr ""
+msgstr "أدخل رابط يوتيوب أو تويتر أو إنستجرام. يمكنك الإطلاع على قائمة المواقع المدعومة في <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
 
 #: example-functions.php:371
 msgid "About Page Metabox"
@@ -406,7 +407,7 @@ msgstr "استخدم هذا الملف"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "إستخدم هذه الملفات"
 
 #: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"
@@ -457,25 +458,25 @@ msgstr "حفظ"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2"
-msgstr ""
+msgstr "CMB2"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"
-msgstr ""
+msgstr "https://github.com/WebDevStudios/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
+msgstr "يمكنك من خلال CMB2 إنشاء حقول مخصصة ونماذج بحقول مختلفة."
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
 
 #: includes/CMB2_JS.php:109
 msgctxt "Valid formatDate string for jquery-ui datepicker"

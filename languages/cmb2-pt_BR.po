@@ -1,14 +1,15 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
+# Diego Medeiros <diego@magikal.com.br>, 2015
 # Lucas <lucas.cdsilva@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-07-29 06:08+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2016-02-26 18:20+0000\n"
+"Last-Translator: Diego Medeiros <diego@magikal.com.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/wp-translations/cmb2/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr "Metabox de teste "
 
 #: example-functions.php:93 example-functions.php:380
 msgid "Test Text"
-msgstr "Teste Texto"
+msgstr "Texto teste"
 
 #: example-functions.php:94 example-functions.php:106
 #: example-functions.php:114 example-functions.php:122
@@ -406,7 +407,7 @@ msgstr "Utilizar esse arquivo"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "Usar estes arquivos"
 
 #: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"

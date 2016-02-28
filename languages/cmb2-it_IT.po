@@ -4,13 +4,13 @@
 # Alessandro Curci <hantarex@gmail.com>, 2015
 # Andrea Brandi, 2015
 # Daniele Scasciafratte Mte90 <mte90net@gmail.com>, 2015
-# Emanuele <e@emanuelebartolomucci.com>, 2015
+# Emanuele <realbarnux@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-08-22 16:27+0000\n"
+"PO-Revision-Date: 2016-02-26 16:55+0000\n"
 "Last-Translator: Daniele Scasciafratte Mte90 <mte90net@gmail.com>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/wp-translations/cmb2/language/it_IT/)\n"
 "MIME-Version: 1.0\n"

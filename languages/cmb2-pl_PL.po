@@ -1,13 +1,15 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
+# Adam Brzozowski <inactive+adam_prohack@transifex.com>, 2015
+# Maciej Laskowski, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2015-09-12 20:51+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2016-01-18 19:52+0000\n"
+"Last-Translator: Maciej Laskowski\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/wp-translations/cmb2/language/pl_PL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,11 +27,11 @@ msgstr ""
 
 #: example-functions.php:82 tests/test-cmb-field.php:228
 msgid "Test Metabox"
-msgstr ""
+msgstr "Testowy metabox"
 
 #: example-functions.php:93 example-functions.php:380
 msgid "Test Text"
-msgstr ""
+msgstr "Tekst testowy"
 
 #: example-functions.php:94 example-functions.php:106
 #: example-functions.php:114 example-functions.php:122
@@ -49,43 +51,43 @@ msgstr ""
 #: example-functions.php:519 example-functions.php:557
 #: tests/test-cmb-field.php:240
 msgid "field description (optional)"
-msgstr ""
+msgstr "Opis pola (opcjonalny)"
 
 #: example-functions.php:105
 msgid "Test Text Small"
-msgstr ""
+msgstr "Tekst mały tymczasowy"
 
 #: example-functions.php:113
 msgid "Test Text Medium"
-msgstr ""
+msgstr "Tekst średni tymczasowy"
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr ""
+msgstr "Adres strony internetowej"
 
 #: example-functions.php:130
 msgid "Test Text Email"
-msgstr ""
+msgstr "Testowy adres email"
 
 #: example-functions.php:138
 msgid "Test Time"
-msgstr ""
+msgstr "Testowy czas"
 
 #: example-functions.php:145 example-functions.php:146
 msgid "Time zone"
-msgstr ""
+msgstr "Testowa strefa czasowa"
 
 #: example-functions.php:152
 msgid "Test Date Picker"
-msgstr ""
+msgstr "Testowy wybór daty"
 
 #: example-functions.php:159
 msgid "Test Date Picker (UNIX timestamp)"
-msgstr ""
+msgstr "Testowy wybór daty (UNIX)"
 
 #: example-functions.php:167
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
-msgstr ""
+msgstr "Testowy wybór daty i godziny (UNIX)"
 
 #: example-functions.php:184
 msgid "Test Money"
@@ -93,19 +95,19 @@ msgstr ""
 
 #: example-functions.php:193
 msgid "Test Color Picker"
-msgstr ""
+msgstr "Testowy wybór koloru"
 
 #: example-functions.php:201
 msgid "Test Text Area"
-msgstr ""
+msgstr "Testowe pole tekstowe"
 
 #: example-functions.php:208
 msgid "Test Text Area Small"
-msgstr ""
+msgstr "Testowe małe pole tekstowe"
 
 #: example-functions.php:215
 msgid "Test Text Area for Code"
-msgstr ""
+msgstr "Testowe pole tekstowe dla kodu"
 
 #: example-functions.php:222
 msgid "Test Title Weeeee"
@@ -180,7 +182,7 @@ msgstr ""
 
 #: example-functions.php:322
 msgid "Test Image"
-msgstr ""
+msgstr "Testowy obraz"
 
 #: example-functions.php:323
 msgid "Upload an image or enter a URL."
@@ -254,7 +256,7 @@ msgstr ""
 
 #: example-functions.php:475
 msgid "Extra Info"
-msgstr ""
+msgstr "Dodatkowe informacje"
 
 #: example-functions.php:483
 msgid "Avatar"
@@ -262,23 +264,23 @@ msgstr ""
 
 #: example-functions.php:490
 msgid "Facebook URL"
-msgstr ""
+msgstr "Facebook URL"
 
 #: example-functions.php:497
 msgid "Twitter URL"
-msgstr ""
+msgstr "Twitter URL"
 
 #: example-functions.php:504
 msgid "Google+ URL"
-msgstr ""
+msgstr "Google+ URL"
 
 #: example-functions.php:511
 msgid "Linkedin URL"
-msgstr ""
+msgstr "Linkedin URL"
 
 #: example-functions.php:518
 msgid "User Field"
-msgstr ""
+msgstr "Pole użytkownika"
 
 #: example-functions.php:541
 msgid "Theme Options Metabox"
@@ -286,7 +288,7 @@ msgstr ""
 
 #: example-functions.php:556
 msgid "Site Background Color"
-msgstr ""
+msgstr "Kolor tła strony"
 
 #: includes/CMB2.php:120
 msgid "Metabox configuration is required to have an ID parameter"
@@ -298,7 +300,7 @@ msgstr "Kliknij, aby przełączyć"
 
 #: includes/CMB2_Ajax.php:40
 msgid "Please Try Again"
-msgstr ""
+msgstr "Proszę spróbować ponownie"
 
 #: includes/CMB2_Ajax.php:135 tests/test-cmb-types.php:785
 msgid "Remove Embed"
@@ -310,11 +312,11 @@ msgstr ""
 
 #: includes/CMB2_Field.php:910
 msgid "Add Group"
-msgstr ""
+msgstr "Dodaj grupę"
 
 #: includes/CMB2_Field.php:911
 msgid "Remove Group"
-msgstr ""
+msgstr "Usuń grupę"
 
 #: includes/CMB2_Field.php:933 includes/CMB2_Field.php:937
 #: tests/test-cmb-field.php:200
@@ -377,7 +379,7 @@ msgstr "Gotowe"
 
 #: includes/CMB2_JS.php:122
 msgid "Choose Time"
-msgstr ""
+msgstr "Wybierz czas"
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
@@ -393,19 +395,19 @@ msgstr "Minuta"
 
 #: includes/CMB2_JS.php:126
 msgid "Second"
-msgstr ""
+msgstr "Sekunda"
 
 #: includes/CMB2_JS.php:127
 msgid "Now"
-msgstr ""
+msgstr "Teraz"
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
-msgstr ""
+msgstr "Użyj tego pliku"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "Użyj tych plików"
 
 #: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"
@@ -421,7 +423,7 @@ msgstr "Usuń"
 #: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1010
 #: tests/test-cmb-types.php:735 tests/test-cmb-types.php:760
 msgid "File:"
-msgstr ""
+msgstr "Plik:"
 
 #: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1013
 #: tests/test-cmb-types.php:733 tests/test-cmb-types.php:758
@@ -430,11 +432,11 @@ msgstr "Pobierz"
 
 #: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "Zaznacz / Odznacz Wszystkie"
 
 #: includes/CMB2_Types.php:298
 msgid "Add Row"
-msgstr ""
+msgstr "Dodaj wiersz"
 
 #: includes/CMB2_Types.php:741 includes/CMB2_Types.php:789
 msgid "No terms"
