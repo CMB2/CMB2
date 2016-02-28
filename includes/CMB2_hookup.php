@@ -423,7 +423,7 @@ class CMB2_hookup {
 
 	/**
 	 * Save data from term fields
-	 * @since  1.0.x
+	 * @since  2.2.0
 	 * @param  int    $term_id  Term ID
 	 * @param  int    $tt_id    Term Taxonomy ID
 	 * @param  string $taxonomy Taxonomy
@@ -440,7 +440,7 @@ class CMB2_hookup {
 
 	/**
 	 * Delete term meta when a term is deleted.
-	 * @since  1.0.x
+	 * @since  2.2.0
 	 * @param  int    $term_id  Term ID
 	 * @param  int    $tt_id    Term Taxonomy ID
 	 * @param  string $taxonomy Taxonomy
