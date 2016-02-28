@@ -90,6 +90,8 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * RTL Style generated. Props [@devinsays](https://github.com/devinsays) ([#510](https://github.com/WebDevStudios/CMB2/pull/510)).
 * Properly scope date/time-pickers styling by adding a class to only cmb2 picker instances. ([#527](https://github.com/WebDevStudios/CMB2/pull/527))
 * Allow per-field overrides for the date/time/color picker options (wiki documentation: [Modify Field Date, Time, or Color Picker options](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#modify-field-date-time-or-color-picker-options))
+* Fix some inline documentation issues. Props [@jrfnl](https://github.com/jrfnl) ([#579](https://github.com/WebDevStudios/CMB2/pull/579)).
+* Include `.gitattributes` file for excluding development resources when using Composer. Props [@benoitchantre](https://github.com/benoitchantre) ([#575](https://github.com/WebDevStudios/CMB2/pull/575), [#53](https://github.com/WebDevStudios/CMB2/pull/53)).
 
 ##### Bug Fixes
 
@@ -143,6 +145,9 @@ FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/
 * RTL Style generated. Props [@devinsays](https://github.com/devinsays) ([#510](https://github.com/WebDevStudios/CMB2/pull/510)).
 * Properly scope date/time-pickers styling by adding a class to only cmb2 picker instances. ([#527](https://github.com/WebDevStudios/CMB2/pull/527))
 * Allow per-field overrides for the date/time/color picker options (wiki documentation: [Modify Field Date, Time, or Color Picker options](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#modify-field-date-time-or-color-picker-options))
+* Fix some inline documentation issues. Props [@jrfnl](https://github.com/jrfnl) ([#579](https://github.com/WebDevStudios/CMB2/pull/579)).
+* Include `.gitattributes` file for excluding development resources when using Composer. Props [@benoitchantre](https://github.com/benoitchantre) ([#575](https://github.com/WebDevStudios/CMB2/pull/575), [#53](https://github.com/WebDevStudios/CMB2/pull/53)).
+
 
 #### Bug Fixes
 
@@ -565,6 +570,8 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * RTL Style generated. Props [@devinsays](https://github.com/devinsays) ([#510](https://github.com/WebDevStudios/CMB2/pull/510)).
 * Properly scope date/time-pickers styling by adding a class to only cmb2 picker instances. ([#527](https://github.com/WebDevStudios/CMB2/pull/527))
 * Allow per-field overrides for the date/time/color picker options (wiki documentation: [Modify Field Date, Time, or Color Picker options](https://github.com/WebDevStudios/CMB2/wiki/Tips-&-Tricks#modify-field-date-time-or-color-picker-options))
+* Fix some inline documentation issues. Props [@jrfnl](https://github.com/jrfnl) ([#579](https://github.com/WebDevStudios/CMB2/pull/579)).
+* Include `.gitattributes` file for excluding development resources when using Composer. Props [@benoitchantre](https://github.com/benoitchantre) ([#575](https://github.com/WebDevStudios/CMB2/pull/575), [#53](https://github.com/WebDevStudios/CMB2/pull/53)).
 
 #### Bug Fixes
 
