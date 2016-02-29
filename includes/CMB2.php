@@ -352,9 +352,24 @@ class CMB2 {
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
+		/**
+		 * Allow for adding additional HTML attributes to a group wrapper.
+		 *
+		 * If you use this filter, make sure the resulting string always starts with a space!
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param string Current attributes string.
+		 *
+		 * @param array $group_args All group arguments.
+		 *
+		 * @param string $id The group_id of the current group.
+		 */
+		$more_attributes = apply_filters( "cmb2_additional_group_attributes", '', $field_group->args, $args['id'] );
+
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;"', $more_attributes, '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
