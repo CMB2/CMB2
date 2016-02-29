@@ -573,7 +573,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 #### Bug Fixes
 
-* Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
+* CRITICAL UPDATE: Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
 
 ### 2.2.0 - 2016-02-27
 
