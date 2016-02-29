@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## 2.2.1 - 2016-02-29
+
+### Bug Fixes
+
+* Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
+
 ## 2.2.0 - 2016-02-27
 
 ### Enhancements
