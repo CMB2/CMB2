@@ -12,7 +12,7 @@
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Tested up to:**      4.4.2  
-**Stable tag:**        2.2.0  
+**Stable tag:**        2.2.1  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
 
@@ -104,6 +104,12 @@ If including the library in your plugin or theme:
 4. Profit.
 
 ## Most Recent Changes
+
+### 2.2.1 - 2016-02-29
+
+#### Bug Fixes
+
+* Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
 
 ### 2.2.0
 

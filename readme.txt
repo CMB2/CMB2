@@ -4,7 +4,7 @@ Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Tested up to:      4.4.2
-Stable tag:        2.2.0
+Stable tag:        2.2.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,12 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 
 ### Most Recent Changes
 
+#### 2.2.1
+
+##### Bug Fixes
+
+* Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
+
 #### 2.2.0
 
 ##### Enhancements
@@ -131,6 +137,12 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.2.1
+
+#### Bug Fixes
+
+* Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
 
 ### 2.2.0 - 2016-02-27
 
@@ -556,6 +568,12 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.2.1
+
+#### Bug Fixes
+
+* CRITICAL UPDATE: Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/WebDevStudios/CMB2/pull/520))
 
 ### 2.2.0 - 2016-02-27
 
