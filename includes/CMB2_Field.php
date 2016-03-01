@@ -1065,8 +1065,16 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function _set_field_defaults( $args ) {
 
-		// Set up blank or default values for empty ones
-		$args = wp_parse_args( $args, apply_filters( 'cmb2_field_defaults', array(
+		/**
+		 * Filter the CMB2 Field defaults.
+		 *
+		 * @since 2.x.x
+		 * @param array             $defaults Metabox field config array defaults.
+		 * @param string            $id       Field id for the current field to allow for selective filtering.
+		 * @param string            $type     Field type for the current field to allow for selective filtering.
+		 * @param CMB2_Field object $field    This field object.
+		 */
+		$defaults = apply_filters( 'cmb2_field_defaults', array(
 			'type'              => '',
 			'name'              => '',
 			'desc'              => '',
@@ -1098,10 +1106,20 @@ class CMB2_Field extends CMB2_Base {
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 			'column'            => false,
 			'js_dependencies'   => array(),
-		), $args['id'], $args['type'], $this->object_type ) );
+		), $args['id'], $args['type'], $this );
 
-		// Allow for filtering of the arguments once merged with the defaults, but before further processing.
-		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $args['id'], $args['type'], $this->object_type );
+
+		// Set up blank or default values for empty ones
+		$args = wp_parse_args( $args, $defaults );
+
+		/**
+		 * Filtering the CMB2 Field arguments once merged with the defaults, but before further processing.
+		 *
+		 * @since 2.x.x
+		 * @param array             $args  Metabox field config array defaults.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $this );
 
 		/*
 		 * Deprecated usage:
@@ -1159,7 +1177,14 @@ class CMB2_Field extends CMB2_Base {
 			true
 		);
 
-		return apply_filters( 'cmb2_field_arguments', $args, $args['id'], $args['type'], $this->object_type );
+		/**
+		 * Filter the CMB2 Field arguments after processing.
+		 *
+		 * @since 2.x.x
+		 * @param array             $args  Metabox field config array after processing.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		return apply_filters( 'cmb2_field_arguments', $args, $this );
 	}
 
 	/**
