@@ -71,6 +71,11 @@ class CMB2_Sanitize {
 			case 'oembed':
 				$sanitized_value = $this->textarea();
 				break;
+			case 'radio':
+			case 'radio_inline':
+			case 'select':
+				$sanitized_value = $this->validate_against_options();
+				break;
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
@@ -336,6 +341,27 @@ class CMB2_Sanitize {
 	}
 
 	/**
+	 * Validate a timezone against the available options.
+	 * @since  2.2.2
+	 * @return mixed  Timezone string or false if invalid.
+	 */
+	public function select_timezone() {
+		// Validate against timezone list.
+		$timezone = $this->validate_against_options( timezone_identifiers_list() );
+		if ( $timezone !== false ) {
+			return $timezone;
+		}
+
+		// Validate manual UTC offsets.
+		if ( preg_match( '`^UTC[+-][0-9]+(?:\.(?:5|75))?$`', $this->value ) === 1 ) {
+			return $this->value;
+		}
+
+		// Invalid.
+		return false;
+	}
+
+	/**
 	 * Handles saving of attachment post ID and sanitizing file url
 	 * @since  1.1.0
 	 * @return string        Sanitized url
@@ -454,6 +480,48 @@ class CMB2_Sanitize {
 			$cleaned_up = array_filter( $to_check );
 			return empty( $cleaned_up );
 		}
+		return false;
+	}
+
+	/**
+	 * Validate a value against a set of allowed options.
+	 *
+	 * @since  2.2.2
+	 * @param array    Options to validate against. Defaults to the `options` field argument.
+	 * @return mixed   Validated option or false if the value is invalid.
+	 *                 The validated option may be empty if `show_option_none` was set to true.
+	 */
+	protected function validate_against_options( $options = array() ) {
+		if ( '' === $this->value ) {
+			if ( true === $this->field->args( 'show_option_none' ) ) {
+				return $this->value;
+			} else {
+				return false;
+			}
+		}
+
+		if ( empty( $options ) ) {
+			$options = $this->field->options();
+			$options = array_keys( $options );
+		}
+
+		/**
+		 * Allow for dynamically altering the options array used for validation.
+		 *
+		 * The dynamic portion of the hook name, $this->field->type(), is the field type
+		 * of the current object. This will either be 'radio', 'radio_inline', 'select'
+		 * or 'select_timezone'.
+		 *
+		 * @since  2.2.2
+		 * @param array  $options     The options for the field.
+		 * @param int    $object_id   The ID of the current object
+		 */
+		$options = apply_filters( "cmb2_validate_{$this->field->type()}_options", $options, $this->field->object_id );
+
+		if ( in_array( $this->value, $options, true ) ) {
+			return $this->value;
+		}
+
 		return false;
 	}
 
