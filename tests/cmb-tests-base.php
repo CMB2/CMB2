@@ -65,19 +65,31 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	}
 
 	public function assertOEmbedResult( $args ) {
-		$expected = array(
-			sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] ),
-			$this->no_connection_oembed_result( $args['url'] ),
+		$possibilities = array(
+			$this->normalize_http_string( sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] ) ),
+			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
 		);
 
-		$actual = cmb2_get_oembed( $args );
+		$actual = $this->normalize_http_string( cmb2_get_oembed( $args ) );
 
-		// normalize http differences
-		$expected = preg_replace( '~https?://~', '', $expected );
-		$actual   = preg_replace( '~https?://~', '', $actual );
+		$results = array();
+		foreach ( $possibilities as $key => $expected ) {
+			$results[ $key ] = $this->compareHTMLstrings( $expected, $actual );
+		}
 
-		$this->assertTrue( in_array( $actual, $expected ) );
+		if ( ! empty( $results[0] ) && ! empty( $results[1] ) ) {
+			// If they both failed, this will tell us.
+			$this->assertEquals( $possibilities[0], $actual, $results[0] );
+			$this->assertEquals( $possibilities[1], $actual, $results[1] );
+		} elseif ( empty( $results[0] ) ) {
+			$this->assertEquals( $possibilities[0], $actual );
+		} else {
+			$this->assertEquals( $possibilities[1], $actual );
+		}
+	}
 
+	public function normalize_http_string( $string ) {
+		return preg_replace( '~https?://~', '', $this->normalize_string( $string ) );
 	}
 
 	protected function capture_render( $cb ) {
@@ -104,10 +116,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		wp_die( $hook . ' die' );
 	}
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
-		$expected_string = $this->normalize_string( $expected_string );
-		$string_to_test = $this->normalize_string( $string_to_test );
-
+	protected function compareHTMLstrings( $expected_string, $string_to_test ) {
 		$compare = strcmp( $expected_string, $string_to_test );
 
 		if ( 0 !== $compare ) {
@@ -125,6 +134,15 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			    substr( $string_to_test, $start, 5 ) . $pointer . substr( $string_to_test, $compare, $chars_to_show )
 			);
 		}
+
+		return $compare;
+	}
+
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
+		$expected_string = $this->normalize_string( $expected_string );
+		$string_to_test = $this->normalize_string( $string_to_test );
+
+		$compare = $this->compareHTMLstrings( $expected_string, $string_to_test );
 
 		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
 	}
