@@ -66,7 +66,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	public function assertOEmbedResult( $args ) {
 		$possibilities = array(
-			$this->normalize_http_string( sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] ) ),
+			$this->normalize_http_string( $this->expected_oembed_success_results( $args ) ),
 			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
 		);
 
