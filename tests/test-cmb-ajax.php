@@ -63,18 +63,14 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	public function test_get_oembed() {
 		$args = $this->oembed_args;
 
-		$expected = $this->expected_youtube_oembed_results( $args );
-		$actual = cmb2_get_oembed( $args );
-
-		$this->assertEquals(
-			preg_replace( '~https?://~', '', $expected ), // normalize http differences
-			preg_replace( '~https?://~', '', $actual ) // normalize http differences
-		);
+		$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
+		$this->assertOEmbedResult( $args );
 
 		// Test another oembed URL
 		$args['url'] = 'https://twitter.com/Jtsternberg/status/703434891518726144';
 
 		$args['oembed_result'] = '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+
 		$this->assertOEmbedResult( $args );
 	}
 

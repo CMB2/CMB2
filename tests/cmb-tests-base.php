@@ -66,11 +66,17 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	public function assertOEmbedResult( $args ) {
 		$expected = array(
-			sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['url'], $args['field_id'] ),
+			sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] ),
 			$this->no_connection_oembed_result( $args['url'] ),
 		);
 
-		$this->assertTrue( in_array( cmb2_get_oembed( $args ), $expected ) );
+		$actual = cmb2_get_oembed( $args );
+
+		// normalize http differences
+		$expected = preg_replace( '~https?://~', '', $expected );
+		$actual   = preg_replace( '~https?://~', '', $actual );
+
+		$this->assertTrue( in_array( $actual, $expected ) );
 
 	}
 
