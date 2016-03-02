@@ -63,7 +63,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	public function test_get_oembed() {
 		$args = $this->oembed_args;
 
-		$expected = $this->expected_oembed_results( $args );
+		$expected = $this->expected_youtube_oembed_results( $args );
 		$actual = cmb2_get_oembed( $args );
 
 		$this->assertEquals(
@@ -74,14 +74,8 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		// Test another oembed URL
 		$args['url'] = 'https://twitter.com/Jtsternberg/status/703434891518726144';
 
-		$expected = $this->is_connected() && ! $this->is_3_8()
-			? sprintf( '<div class="embed-status"><blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['url'], $args['field_id'] )
-			: $this->no_connection_oembed_result( $args['url'] );
-
-		$this->assertEquals(
-			$expected,
-			cmb2_get_oembed( $args )
-		);
+		$args['oembed_result'] = '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+		$this->assertOEmbedResult( $args );
 	}
 
 	public function test_values_cached() {

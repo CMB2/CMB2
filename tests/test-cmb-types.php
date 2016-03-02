@@ -828,7 +828,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
- 		$results = $this->expected_oembed_results( array(
+ 		$results = $this->expected_youtube_oembed_results( array(
 			'src'      => 'http://www.youtube.com/embed/' . $vid . '?feature=oembed',
 			'url'      => $value,
 			'field_id' => 'field_test_field',

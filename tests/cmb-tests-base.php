@@ -46,15 +46,32 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
-	public function expected_oembed_results( $args ) {
-		return $this->is_connected()
-			? sprintf( '<div class="embed-status"><iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['src'], $args['field_id'] )
-			: $this->no_connection_oembed_result( $args['url'] );
+	public function expected_youtube_oembed_results( $args ) {
+		if ( $this->is_connected() ) {
+			$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
+			return $this->expected_oembed_success_results( $args );
+		}
+
+		return $this->no_connection_oembed_result( $args['url'] );
+	}
+
+	public function expected_oembed_success_results( $args ) {
+		return sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
 	public function no_connection_oembed_result( $url ) {
 		global $wp_embed;
 		return sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $url, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $url ) ) );
+	}
+
+	public function assertOEmbedResult( $args ) {
+		$expected = array(
+			sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['url'], $args['field_id'] ),
+			$this->no_connection_oembed_result( $args['url'] ),
+		);
+
+		$this->assertTrue( in_array( cmb2_get_oembed( $args ), $expected ) );
+
 	}
 
 	protected function capture_render( $cb ) {
