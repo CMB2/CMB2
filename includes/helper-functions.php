@@ -49,9 +49,7 @@ function cmb2_utils() {
  * @return CMB2_Ajax object CMB2 utilities class
  */
 function cmb2_ajax() {
-	static $cmb2_ajax;
-	$cmb2_ajax = $cmb2_ajax ? $cmb2_ajax : new CMB2_Ajax();
-	return $cmb2_ajax;
+	return CMB2_Ajax::get_instance();
 }
 
 /**

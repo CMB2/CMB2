@@ -21,28 +21,34 @@ class CMB2_Ajax {
 	protected $ajax_update = false;
 
 	/**
-	 * Constructor
-	 * @since 2.2.0
+	 * Instance of this class
+	 * @since 2.2.2
+	 * @var object
 	 */
-	public function __construct() {
-		self::hooks( $this );
+	protected static $instance;
+
+	/**
+	 * Get the singleton instance of this class
+	 * @since 2.2.2
+	 * @return object
+	 */
+	public static function get_instance() {
+		if ( ! ( self::$instance instanceof self ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**
-	 * Hook in the oembed ajax handlers
-	 * @since  2.2.0
-	 * @param  CMB2_Ajax  $self This object (for hooking)
+	 * Constructor
+	 * @since 2.2.0
 	 */
-	public static function hooks( $self ) {
-		static $hooked = false;
-
-		if ( ! $hooked ) {
-			add_action( 'wp_ajax_cmb2_oembed_handler', array( $self, 'oembed_handler' ) );
-			add_action( 'wp_ajax_nopriv_cmb2_oembed_handler', array( $self, 'oembed_handler' ) );
-			// Need to occasionally clean stale oembed cache data from the option value.
-			add_action( 'cmb2_save_options-page_fields', array( __CLASS__, 'clean_stale_options_page_oembeds' ) );
-			$hooked = true;
-		}
+	protected function __construct() {
+		add_action( 'wp_ajax_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
+		add_action( 'wp_ajax_nopriv_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
+		// Need to occasionally clean stale oembed cache data from the option value.
+		add_action( 'cmb2_save_options-page_fields', array( __CLASS__, 'clean_stale_options_page_oembeds' ) );
 	}
 
 	/**
