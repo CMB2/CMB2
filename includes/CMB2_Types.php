@@ -2,8 +2,6 @@
 /**
  * CMB field type objects
  *
- * @todo Date/Time fields should store date format as data attribute for JS
- *
  * @since  1.0.0
  *
  * @category  WordPress_Plugin
