@@ -22,6 +22,8 @@
 
 Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
 
+![CMB2](https://plugins.trac.wordpress.org/export/HEAD/cmb2/assets/banner-1544x500.png)
+
 ## Description
 
 CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.
