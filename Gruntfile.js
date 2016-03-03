@@ -85,24 +85,15 @@ module.exports = function(grunt) {
 					'__ngettext_noop:1,2,3d',
 					'_c:1,2d',
 					'_nc:1,2,4c,5d'
-					]
-				},
-				files: {
-					src: [
-						'**/*.php', // Include all files
-						'!node_modules/**', // Exclude node_modules/
-						],
-					expand: true
-				}
+				]
 			},
-
-		exec: {
-			txpull: { // Pull Transifex translation - grunt exec:txpull
-				cmd: 'tx pull -a  -f' // Change the percentage with --minimum-perc=yourvalue
-			},
-			txpush_s: { // Push pot to Transifex - grunt exec:txpush_s
-				cmd: 'tx push -s'
-			},
+			files: {
+				src: [
+					'**/*.php', // Include all files
+					'!node_modules/**', // Exclude node_modules/
+					],
+				expand: true
+			}
 		},
 
 		// concat: {
@@ -284,12 +275,33 @@ module.exports = function(grunt) {
 			}
 		},
 
+		exec: {
+			txpull: { // Pull Transifex translation - grunt exec:txpull
+				cmd: 'tx pull -a  -f' // Change the percentage with --minimum-perc=yourvalue
+			},
+			txpush_s: { // Push pot to Transifex - grunt exec:txpush_s
+				cmd: 'tx push -s'
+			},
+			apigen: {
+				cmd: [
+					'rm -r ~/Sites/wpengine/api',
+					'echo "Old API docs removed"',
+					'apigen generate --config apigen/apigen.neon --debug',
+					'echo "Docs regenerated"',
+					'php apigen/hook-docs.php'
+				].join( '&&' )
+			}
+		},
+
 	});
 
 	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssjanus','cssmin']);
 	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
 	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
 	grunt.registerTask('default', ['styles', 'js', 'tests']);
+
+	// apigen
+	grunt.registerTask('apigen', ['exec:apigen']);
 
 	// Checktextdomain and makepot task(s)
 	grunt.registerTask('build:i18n', ['checktextdomain', 'makepot', 'newer:potomo']);
