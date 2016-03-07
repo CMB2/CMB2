@@ -483,8 +483,6 @@ class CMB2_hookup {
 	 * @return bool             Whether taxonomy is editable.
 	 */
 	public function taxonomy_can_save( $taxonomy ) {
-		$taxonomy = $taxonomy ? $taxonomy : $tt_id;
-
 		if ( empty( $this->taxonomies ) || ! in_array( $taxonomy, $this->taxonomies ) ) {
 			return false;
 		}
