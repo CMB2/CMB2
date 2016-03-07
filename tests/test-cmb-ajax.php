@@ -45,6 +45,8 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'field_id'    => 'test_embed',
 			'src'         => 'https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed',
 		);
+
+		delete_option( $this->oembed_args['object_id'] );
 	}
 
 	public function tearDown() {
@@ -120,7 +122,6 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		$this->cmb->save_fields();
 		$options = $this->get_option();
 
-		$this->assertTrue( $this->is_3_8() );
 		$this->assertEquals( $new, $options );
 	}
 
@@ -130,7 +131,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 
 	protected function is_3_8() {
 		global $wp_version;
-		return version_compare( $wp_version, '3.8' ) >= 0;
+		return version_compare( $wp_version, '3.8' ) <= 0;
 	}
 
 }
