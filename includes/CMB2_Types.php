@@ -221,7 +221,10 @@ class CMB2_Types {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value == $opt_value ) {
+			if ( is_array( $value ) && in_array( $opt_value, $value ) ) {
+				$a['checked'] = 'checked';
+			}
+			else if ( $value == $opt_value ) {
 				$a['checked'] = 'checked';
 			}
 
@@ -674,6 +677,18 @@ class CMB2_Types {
 
 		$attrs = $this->concat_attrs( $a, array( 'desc', 'options' ) );
 		return sprintf( '<select%s>%s</select>%s', $attrs, $a['options'], $a['desc'] );
+	}
+
+	public function multiselect( $args = array() ) {
+		$a = $this->parse_args( $args, 'multiselect', array(
+			'class'    => 'cmb2_multiselect',
+			'multiple' => 'multiple',
+			'name'     => $this->_name(),
+		) );
+
+		$a['name'] = $a['name'] . '[]';
+
+		return $this->select( $a );
 	}
 
 	public function taxonomy_select() {
