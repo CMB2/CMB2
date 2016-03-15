@@ -959,7 +959,18 @@ class Test_CMB2_Types extends Test_CMB2 {
 		);
 
 		if ( $is_53 ) {
+
+			date_default_timezone_set( 'America/New_York' );
+
 			$expected['group'][0]['text_datetime_timestamp_timezone_utc'] = array( 1448056800, 1448060400 );
+
+			// If DST, remove an hour.
+			if ( date( 'I' ) ) {
+				foreach ( $expected['group'][0]['text_datetime_timestamp_timezone_utc'] as $key => $value ) {
+					$expected['group'][0]['text_datetime_timestamp_timezone_utc'][ $key ] = $value - 3600;
+				}
+			}
+
 			$expected['group'][0]['text_datetime_timestamp_timezone'] = $date_values;
 		}
 
