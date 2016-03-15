@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 * Implement CMB2_Ajax as a singleton. Props [jrfnl](https://github.com/jrfnl) ([#602](https://github.com/WebDevStudios/CMB2/pull/602)).
 
+### Bug Fixes
+* Fix issue with 'default' callback not being applied in all instances. Introduced new `CMB2_Field::get_default()` method, and `'default_cb'` field parameter. Using the `'default'` field parameter with a callback will be deprecated in the next few releases. ([#572](https://github.com/WebDevStudios/CMB2/issues/572)).
+
 ## 2.2.1 - 2016-02-29
 
 ### Bug Fixes
