@@ -105,7 +105,6 @@ class CMB2_Types {
 
 		// WP caches internally so it's better to use
 		return get_the_terms( $post, $taxonomy );
-
 	}
 
 	/**
@@ -203,7 +202,7 @@ class CMB2_Types {
 
 		$value = $this->field->escaped_value()
 			? $this->field->escaped_value()
-			: $this->field->args( 'default' );
+			: $this->field->get_default();
 
 		$concatenated_items = ''; $i = 1;
 
@@ -308,7 +307,7 @@ class CMB2_Types {
 	public function repeatable_rows() {
 		$meta_value = array_filter( (array) $this->field->escaped_value() );
 		// check for default content
-		$default    = $this->field->args( 'default' );
+		$default    = $this->field->get_default();
 
 		// check for saved data
 		if ( ! empty( $meta_value ) ) {
@@ -618,8 +617,8 @@ class CMB2_Types {
 	}
 
 	public function select_timezone() {
-		$this->field->args['default'] = $this->field->args( 'default' )
-			? $this->field->args( 'default' )
+		$this->field->args['default'] = $this->field->get_default()
+			? $this->field->get_default()
 			: cmb2_utils()->timezone_string();
 
 		return $this->select( array(
@@ -679,7 +678,7 @@ class CMB2_Types {
 	public function taxonomy_select() {
 
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key( $names )]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->get_default() : $names[key( $names )]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$options    = '';
 
@@ -758,9 +757,10 @@ class CMB2_Types {
 
 	public function taxonomy_radio() {
 		$names      = $this->get_object_terms();
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->args( 'default' ) : $names[key( $names )]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->get_default() : $names[key( $names )]->slug;
 		$terms      = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
-		$options    = ''; $i = 1;
+		$options    = '';
+		$i = 1;
 
 		if ( ! $terms ) {
 			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
@@ -804,7 +804,7 @@ class CMB2_Types {
 
 		$names       = $this->get_object_terms();
 		$saved_terms = is_wp_error( $names ) || empty( $names )
-			? $this->field->args( 'default' )
+			? $this->field->get_default()
 			: wp_list_pluck( $names, 'slug' );
 		$terms       = get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 		$name        = $this->_name() . '[]';

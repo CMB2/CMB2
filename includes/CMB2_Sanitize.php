@@ -118,10 +118,10 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				$this->value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->args( 'default' );
+				$this->value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->get_default();
 			}
 		} else {
-			$this->value = $this->value ? esc_url_raw( $this->value, $protocols ) : $this->field->args( 'default' );
+			$this->value = $this->value ? esc_url_raw( $this->value, $protocols ) : $this->field->get_default();
 		}
 
 		return $this->value;

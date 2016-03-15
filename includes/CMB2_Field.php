@@ -142,9 +142,9 @@ class CMB2_Field {
 	public function args( $key = '', $_key = '' ) {
 		$arg = $this->_data( 'args', $key );
 
-		if ( 'default' == $key ) {
+		if ( in_array( $key, array( 'default', 'default_cb' ), true ) ) {
 
-			$arg = $this->get_param_callback_result( 'default', false );
+			$arg = $this->get_default();
 
 		} elseif ( $_key ) {
 
@@ -669,7 +669,7 @@ class CMB2_Field {
 	 * @return mixed             Field value, or default value
 	 */
 	public function val_or_default( $meta_value ) {
-		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->get_param_callback_result( 'default', false );
+		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->get_default();
 	}
 
 	/**
@@ -983,6 +983,27 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Get CMB2_Field default value, either from default param or default_cb param.
+	 *
+	 * @since  0.2.2
+	 *
+	 * @return mixed  Default field value
+	 */
+	public function get_default() {
+		if ( null !== $this->args['default'] ) {
+			return $this->args['default'];
+		}
+
+		$param = is_callable( $this->args['default_cb'] ) ? 'default_cb' : 'default';
+		$default = $this->get_param_callback_result( $param, false );
+
+		// Allow a filter override of the default value
+		$this->args['default'] = apply_filters( 'cmb2_default_filter', $default, $this );
+
+		return $this->args['default'];
+	}
+
+	/**
 	 * Fills in empty field parameters with defaults
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
@@ -1001,6 +1022,7 @@ class CMB2_Field {
 			'attributes'        => array(),
 			'protocols'         => null,
 			'default'           => null,
+			'default_cb'        => '',
 			'select_all_button' => true,
 			'multiple'          => false,
 			'repeatable'        => isset( $args['type'] ) && 'group' == $args['type'],
@@ -1015,8 +1037,12 @@ class CMB2_Field {
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 		) );
 
-		// Allow a filter override of the default value
-		$args['default']    = apply_filters( 'cmb2_default_filter', $args['default'], $this );
+		// default param can be passed a callback as well
+		if ( is_callable( $args['default'] ) ) {
+			$args['default_cb'] = $args['default'];
+			$args['default'] = null;
+		}
+
 		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
 
