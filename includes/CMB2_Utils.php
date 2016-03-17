@@ -298,4 +298,25 @@ class CMB2_Utils {
 		}
 	}
 
+	/**
+	 * Determine a file's extension
+	 * @since  1.0.0
+	 * @param  string       $file File url
+	 * @return string|false       File extension or false
+	 */
+	public function get_file_ext( $file ) {
+		$parsed = @parse_url( $file, PHP_URL_PATH );
+		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
+	}
+
+	/**
+	 * Get the file name from a url
+	 * @since  2.0.0
+	 * @param  string $value File url or path
+	 * @return string        File name
+	 */
+	public function get_file_name_from_path( $value ) {
+		$parts = explode( '/', $value );
+		return is_array( $parts ) ? end( $parts ) : $value;
+	}
 }

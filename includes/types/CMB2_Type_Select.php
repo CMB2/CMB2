@@ -1,0 +1,27 @@
+<?php
+/**
+ * CMB select field type
+ *
+ * @since  2.2.2
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
+class CMB2_Type_Select extends CMB2_Type_Multi_Base {
+
+	public function render() {
+		$a = $this->parse_args( 'select', array(
+			'class'   => 'cmb2_select',
+			'name'    => $this->_name(),
+			'id'      => $this->_id(),
+			'desc'    => $this->_desc( true ),
+			'options' => $this->concat_items(),
+		) );
+
+		$attrs = $this->types->concat_attrs( $a, array( 'desc', 'options' ) );
+		return sprintf( '<select%s>%s</select>%s', $attrs, $a['options'], $a['desc'] );
+	}
+}

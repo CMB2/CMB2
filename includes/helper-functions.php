@@ -29,7 +29,13 @@ function cmb2_autoload_classes( $class_name ) {
 		return;
 	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	$path = 'includes';
+
+	if ( 'CMB2_Type' === $class_name || 0 === strpos( $class_name, 'CMB2_Type_' ) ) {
+		$path .= '/types';
+	}
+
+	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
 }
 
 /**

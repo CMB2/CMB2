@@ -269,7 +269,10 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_is_valid_img_ext() {
 		$type = $this->get_field_type_object( 'file' );
-		$this->assertFalse( $type->is_valid_img_ext( $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) ) ) );
+		$type->type = new CMB2_Type_File( $type );
+
+		$ext = $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) );
+		$this->assertFalse( $type->is_valid_img_ext( $ext ) );
 		$this->assertFalse( $type->is_valid_img_ext( '.pdf' ) );
 		$this->assertFalse( $type->is_valid_img_ext( 'jpg' ) );
 		$this->assertFalse( $type->is_valid_img_ext( '.test' ) );
@@ -277,7 +280,9 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$valid_types = apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
 
 		foreach ( $valid_types as $ext ) {
-			$this->assertTrue( $type->is_valid_img_ext( '/test.' . $ext ) );
+			$is_valid = $type->is_valid_img_ext( '/test.' . $ext, true );
+			$this->assertEquals( $is_valid, $type->type->is_valid_img_ext( '/test.' . $ext, true ) );
+			$this->assertTrue( $is_valid );
 		}
 
 		// Add .test as a valid image type

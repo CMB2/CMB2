@@ -1099,13 +1099,4 @@ class CMB2_Field {
 		return $args;
 	}
 
-	/**
-	 * Updates attributes array values unless they exist from the field config array
-	 * @since 1.1.0
-	 * @param array $attrs Array of attributes to update
-	 */
-	public function maybe_set_attributes( $attrs = array() ) {
-		return wp_parse_args( $this->args['attributes'], $attrs );
-	}
-
 }
