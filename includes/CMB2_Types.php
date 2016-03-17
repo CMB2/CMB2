@@ -490,7 +490,7 @@ class CMB2_Types {
 	}
 
 	public function wysiwyg( $args = array() ) {
-		$a = $this->parse_args( $args, 'input', array(
+		$a = $this->parse_args( $args, 'wysiwyg', array(
 			'id'      => $this->_id(),
 			'value'   => $this->field->escaped_value( 'stripslashes' ),
 			'desc'    => $this->_desc( true ),
