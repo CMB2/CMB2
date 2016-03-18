@@ -502,11 +502,14 @@ class CMB2_Types {
 	}
 
 	public function text_date( $args = array() ) {
+ 		$dateFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+		
 		$args = wp_parse_args( $args, array(
 			'class'           => 'cmb2-text-small cmb2-datepicker',
 			'value'           => $this->field->get_timestamp_format(),
 			'desc'            => $this->_desc(),
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
+ 			'data-datepicker' => '{ "dateFormat": "' . $dateFormat  . '" }'
 		) );
 
 		if ( false === strpos( $args['class'], 'timepicker' ) ) {
@@ -518,6 +521,9 @@ class CMB2_Types {
 
 	// Alias for text_date
 	public function text_date_timestamp( $args = array() ) {
+ 		$dateFormat = cmb2_utils()->php_to_js_dateformat( $this->field->args( 'date_format' ) );
+ 		$args['data-datepicker'] = '{ "dateFormat": "' . $dateFormat  . '" }';
+
 		return $this->text_date( $args );
 	}
 

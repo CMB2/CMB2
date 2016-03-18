@@ -739,7 +739,7 @@ class CMB2_Field {
 	 * @return mixed         Unix timestamp representing the date.
 	 */
 	public function get_timestamp_from_value( $value ) {
-		return cmb2_utils()->get_timestamp_from_value( $value, $this->args( 'date_format' ) );
+		return cmb2_utils()->get_timestamp_from_value( $value, $this->args( 'date_format' ) . ' ' . $this->args( 'time_format' ) );
 	}
 
 	/**
