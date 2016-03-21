@@ -30,6 +30,8 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 			'desc'  => $this->_desc( true ),
 		), $args );
 
-		return sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] );
+		return $this->rendered(
+			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] )
+		);
 	}
 }

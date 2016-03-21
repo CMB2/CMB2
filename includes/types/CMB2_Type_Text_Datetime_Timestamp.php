@@ -35,7 +35,8 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 
 		$date_input = parent::render( $this->date_args( $args, $has_good_value ) );
 		$time_input = parent::render( $this->time_args( $args, $has_good_value ) );
-		return $date_input . "\n" . $time_input;
+
+		return $this->rendered( $date_input . "\n" . $time_input );
 	}
 
 	public function date_args( $args, $has_good_value ) {
@@ -46,6 +47,8 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 			'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
 			'desc'  => '',
 		) );
+
+		$date_args['rendered'] = true;
 
 		// Let's get the date-format, and set it up as a data attr for the field.
 		return $this->parse_picker_options( 'date', $date_args );
@@ -60,6 +63,8 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 			'desc'  => $args['desc'],
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
 		) );
+
+		$time_args['rendered'] = true;
 
 		// Let's get the time-format, and set it up as a data attr for the field.
 		return $this->parse_picker_options( 'time', $time_args );

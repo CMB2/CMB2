@@ -74,7 +74,7 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 
 		$output .= '</ul>';
 
-		return $output;
+		return $this->rendered( $output );
 	}
 
 }

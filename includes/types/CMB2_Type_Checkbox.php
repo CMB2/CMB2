@@ -52,11 +52,13 @@ class CMB2_Type_Checkbox extends CMB2_Type_Text {
 
 		$args = $this->parse_args( 'checkbox', $defaults );
 
-		return sprintf(
-			'%s <label for="%s">%s</label>',
-			parent::render( $args ),
-			$this->_id(),
-			$this->_desc()
+		return $this->rendered(
+			sprintf(
+				'%s <label for="%s">%s</label>',
+				parent::render( $args ),
+				$this->_id(),
+				$this->_desc()
+			)
 		);
 	}
 

@@ -46,6 +46,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		unset( $args['_id'], $args['_name'] );
 
 		// And get new field object
+		// (Need to set it to the types field property)
 		$this->types->field = $field = new CMB2_Field( array(
 			'field_args'  => $args,
 			'group_field' => $field->group,
@@ -97,7 +98,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		}
 		$output .= '</div>';
 
-		return $output;
+		return $this->rendered( $output );
 	}
 
 }

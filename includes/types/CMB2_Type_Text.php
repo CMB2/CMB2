@@ -54,6 +54,8 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 			CMB2_JS::add_dependencies( $a['js_dependencies'] );
 		}
 
-		return sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc', 'js_dependencies' ) ), $a['desc'] );
+		return $this->rendered(
+			sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc', 'js_dependencies' ) ), $a['desc'] )
+		);
 	}
 }

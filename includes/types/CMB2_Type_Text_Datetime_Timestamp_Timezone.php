@@ -37,21 +37,25 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
-			'desc'  => '',
-			'value' => $value,
+			'desc'     => '',
+			'value'    => $value,
+			'rendered' => true,
 		) );
-		$datetime_timestamp = new CMB2_Type_Text_Datetime_Timestamp( $this->types, $timestamp_args );
+		$datetime_timestamp = $this->types->text_datetime_timestamp( $timestamp_args );
 
 		$timezone_select_args = wp_parse_args( $args['select_timezone'], array(
-			'class'   => 'cmb2_select cmb2-select-timezone',
-			'name'    => $this->_name( '[timezone]' ),
-			'id'      => $this->_id( '_timezone' ),
-			'options' => wp_timezone_choice( $tzstring ),
-			'desc'    => $args['desc'],
+			'class'    => 'cmb2_select cmb2-select-timezone',
+			'name'     => $this->_name( '[timezone]' ),
+			'id'       => $this->_id( '_timezone' ),
+			'options'  => wp_timezone_choice( $tzstring ),
+			'desc'     => $args['desc'],
+			'rendered' => true,
 		) );
-		$select = new CMB2_Type_Select( $this->types, $timezone_select_args );
+		$select = $this->types->select( $timezone_select_args );
 
-		return $datetime_timestamp->render() . "\n" . $select->render();
+		return $this->rendered(
+			$datetime_timestamp . "\n" . $select
+		);
 	}
 
 }

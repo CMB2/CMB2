@@ -14,39 +14,65 @@ abstract class CMB2_Type_Base {
 
 	/**
 	 * The CMB2_Types object
-	 *
 	 * @var CMB2_Types
 	 */
 	public $types;
 
 	/**
 	 * Arguments for use in the render method
-	 *
 	 * @var array
 	 */
 	public $args;
 
 	/**
+	 * Rendered output (if 'rendered' argument is set to false)
+	 * @var string
+	 */
+	protected $rendered = '';
+
+	/**
 	 * Constructor
-	 *
 	 * @since 2.2.2
-	 *
 	 * @param CMB2_Types $types
 	 * @param array      $args
 	 */
 	public function __construct( CMB2_Types $types, $args = array() ) {
 		$this->types = $types;
+		$args['rendered'] = isset( $args['rendered'] ) ? (bool) $args['rendered'] : true;
 		$this->args = $args;
 	}
 
 	/**
 	 * Handles rendering this field type.
-	 *
 	 * @since  2.2.2
-	 *
 	 * @return string  Rendered field type.
 	 */
 	abstract public function render();
+
+	/**
+	 * Stores the rendered field output.
+	 * @since  2.2.2
+	 * @param  string|CMB2_Type_Base $rendered Rendered output.
+	 * @return string|CMB2_Type_Base           Rendered output or this object.
+	 */
+	public function rendered( $rendered ) {
+		if ( $this->args['rendered'] ) {
+			return is_a( $rendered, __CLASS__ ) ? $rendered->rendered : $rendered;
+		}
+
+		$this->rendered = is_a( $rendered, __CLASS__ ) ? $rendered->rendered : $rendered;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the stored rendered field output.
+	 * @since  2.2.2
+	 * @return string Stored rendered output (if 'rendered' argument is set to false).
+	 */
+	public function get_rendered() {
+		return $this->rendered;
+	}
 
 	/**
 	 * Handles parsing and filtering attributes while preserving any passed in via field config.
@@ -67,11 +93,8 @@ abstract class CMB2_Type_Base {
 
 		/**
 		 * Filter attributes for a field type.
-		 *
 		 * The dynamic portion of the hook name, $element, refers to the field type.
-		 *
 		 * @since 1.1.0
-		 *
 		 * @param array  $args              The array of attribute arguments.
 		 * @param array  $type_defaults          The array of default values.
 		 * @param array  $field             The `CMB2_Field` object.

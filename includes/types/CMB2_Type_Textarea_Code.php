@@ -19,9 +19,11 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 	 * @return string       Form textarea element
 	 */
 	public function render() {
-		return sprintf( '<pre>%s', parent::render( array(
-			'class' => 'cmb2-textarea-code',
-			'desc' => '</pre>' . $this->_desc( true ),
-		) ) );
+		return $this->rendered(
+			sprintf( '<pre>%s', parent::render( array(
+				'class' => 'cmb2-textarea-code',
+				'desc' => '</pre>' . $this->_desc( true ),
+			) ) )
+		);
 	}
 }

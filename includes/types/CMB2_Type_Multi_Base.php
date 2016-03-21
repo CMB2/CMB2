@@ -39,7 +39,7 @@ abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 			'label' => '',
 		), $args );
 
-		return sprintf( "\t" . '<li><input%s/> <label for="%s">%s</label></li>' . "\n", $this->types->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
+		return sprintf( "\t" . '<li><input%s/> <label for="%s">%s</label></li>' . "\n", $this->concat_attrs( $a, array( 'label' ) ), $a['id'], $a['label'] );
 	}
 
 	/**

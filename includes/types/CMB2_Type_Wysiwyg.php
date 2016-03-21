@@ -26,7 +26,10 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Base {
 			'options' => $this->field->options(),
 		) );
 
+		ob_start();
 		wp_editor( $a['value'], $a['id'], $a['options'] );
 		echo $a['desc'];
+
+		return $this->rendered( ob_get_clean() );
 	}
 }

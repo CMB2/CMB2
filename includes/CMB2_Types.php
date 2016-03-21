@@ -162,6 +162,7 @@ class CMB2_Types {
 	 * @return string               String of attributes for form element
 	 */
 	public function concat_attrs( $attrs, $attr_exclude = array() ) {
+		$attr_exclude[] = 'rendered';
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );

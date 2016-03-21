@@ -42,7 +42,7 @@ class CMB2_Type_Radio extends CMB2_Type_Multi_Base {
 			'desc' => $this->_desc( true ),
 		) );
 
-		return $this->ul( $args );
+		return $this->rendered( $this->ul( $args ) );
 	}
 
 	protected function ul( $a ) {

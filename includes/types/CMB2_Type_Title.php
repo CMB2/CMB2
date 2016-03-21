@@ -20,7 +20,9 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 			'desc'  => $this->_desc( true ),
 		) );
 
-		return sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $a['tag'], $a['class'], $a['name'], $a['desc'] );
+		return $this->rendered(
+			sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $a['tag'], $a['class'], $a['name'], $a['desc'] )
+		);
 	}
 
 }

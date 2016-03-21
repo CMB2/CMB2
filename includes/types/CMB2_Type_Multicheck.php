@@ -33,7 +33,7 @@ class CMB2_Type_Multicheck extends CMB2_Type_Radio {
 			'desc' => $this->_desc( true ),
 		) );
 
-		return $this->ul( $args );
+		return $this->rendered( $this->ul( $args ) );
 	}
 
 }

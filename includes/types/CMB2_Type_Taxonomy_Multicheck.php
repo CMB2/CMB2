@@ -24,7 +24,7 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 		$options     = ''; $i = 1;
 
 		if ( ! $terms ) {
-			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->types->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
+			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
 		} else {
 
 			foreach ( $terms as $term ) {
@@ -47,6 +47,8 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 			? 'cmb2-checkbox-list no-select-all cmb2-list'
 			: 'cmb2-checkbox-list cmb2-list';
 
-		return $this->types->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' );
+		return $this->rendered(
+			$this->types->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' )
+		);
 	}
 }
