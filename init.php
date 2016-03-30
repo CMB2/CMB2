@@ -114,8 +114,9 @@ if ( ! class_exists( 'CMB2_Bootstrap_222_Trunk', false ) ) {
 			 * for your plugins/themes with CMB2 dependency
 			 */
 			if ( ! defined( 'CMB2_LOADED' ) ) {
-				define( 'CMB2_LOADED', true );
+				define( 'CMB2_LOADED', self::PRIORITY );
 			}
+
 			add_action( 'init', array( $this, 'include_cmb' ), self::PRIORITY );
 		}
 

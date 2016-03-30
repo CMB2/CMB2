@@ -529,6 +529,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 		if ( version_compare( PHP_VERSION, '5.3' ) >= 0 ) {
 
+			// date_default_timezone_set( 'America/New_York' );
 			$tzstring = cmb2_utils()->timezone_string();
 			$offset = cmb2_utils()->timezone_offset( $tzstring );
 			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
