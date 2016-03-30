@@ -84,6 +84,7 @@ class CMB2_hookup {
 		if ( is_admin() ) {
 			// register our scripts and styles for cmb
 			$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
+			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 		}
 	}
 
@@ -92,15 +93,11 @@ class CMB2_hookup {
 		add_action( 'add_attachment', array( $this, 'save_post' ) );
 		add_action( 'edit_attachment', array( $this, 'save_post' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
-
-		$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 	}
 
 	public function comment_hooks() {
 		add_action( 'add_meta_boxes_comment', array( $this, 'add_metaboxes' ) );
 		add_action( 'edit_comment', array( $this, 'save_comment' ) );
-
-		$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 	}
 
 	public function user_hooks() {
@@ -148,8 +145,6 @@ class CMB2_hookup {
 		add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
 		add_action( 'edited_terms', array( $this, 'save_term' ), 10, 2 );
 		add_action( 'delete_term', array( $this, 'delete_term' ), 10, 3 );
-
-		$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 	}
 
 	/**
@@ -210,6 +205,9 @@ class CMB2_hookup {
 			'comment.php',
 			'edit-tags.php',
 			'term.php',
+			'user-new.php',
+			'profile.php',
+			'user-edit.php',
 		);
 		// only pre-enqueue our scripts/styles on the proper pages
 		// show_form_for_type will have us covered if we miss something here.
