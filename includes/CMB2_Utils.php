@@ -110,6 +110,11 @@ class CMB2_Utils {
 		$current_offset = get_option( 'gmt_offset' );
 		$tzstring       = get_option( 'timezone_string' );
 
+		// Remove old Etc mappings. Fallback to gmt_offset.
+		if ( false !== strpos( $tzstring, 'Etc/GMT' ) ) {
+			$tzstring = '';
+		}
+
 		if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 			if ( 0 == $current_offset ) {
 				$tzstring = 'UTC+0';
