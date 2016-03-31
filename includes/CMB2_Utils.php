@@ -186,28 +186,40 @@ class CMB2_Utils {
 			return $this->url . $path;
 		}
 
-		if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
-			// Windows
-			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
-			$content_url = str_replace( $content_dir, WP_CONTENT_URL, cmb2_dir() );
-			$cmb2_url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
-
-		} else {
-			$cmb2_url = str_replace(
-				array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
-				array( WP_CONTENT_URL, WP_PLUGIN_URL ),
-				cmb2_dir()
-			);
-		}
+		$cmb2_url = self::get_url_from_dir( cmb2_dir() );
 
 		/**
 		 * Filter the CMB location url
 		 *
 		 * @param string $cmb2_url Currently registered url
 		 */
-		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', set_url_scheme( $cmb2_url ), CMB2_VERSION ) );
+		$this->url = trailingslashit( apply_filters( 'cmb2_meta_box_url', $cmb2_url, CMB2_VERSION ) );
 
 		return $this->url . $path;
+	}
+
+	/**
+	 * Converts a system path to a URL
+	 * @since  2.2.2
+	 * @param  string $dir Directory path to convert.
+	 * @return string      Converted URL.
+	 */
+	public static function get_url_from_dir( $dir ) {
+		if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
+			// Windows
+			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
+			$content_url = str_replace( $content_dir, WP_CONTENT_URL, $dir );
+			$url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
+
+		} else {
+			$url = str_replace(
+				array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
+				array( WP_CONTENT_URL, WP_PLUGIN_URL ),
+				$dir
+			);
+		}
+
+		return set_url_scheme( $url );
 	}
 
 	/**
