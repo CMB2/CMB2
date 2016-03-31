@@ -535,7 +535,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
 				$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 			}
-			$today_stamp = strtotime( 'today' );
+			$today_stamp = strtotime( time() );
 
 			$field = $this->get_field_object( 'text_datetime_timestamp_timezone' );
 			$date_val = $field->format_timestamp( $today_stamp );
