@@ -518,7 +518,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$expected_group_render = '
 		before_group output
-		<div class="cmb-row cmb-repeat-group-wrap">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field cmb-repeat">
 			<div class="cmb-td">
 				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable" style="width:100%;">
 					<div class="cmb-row cmb-group-description">
@@ -598,7 +598,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$field = $cmb->get_field( 'group_field2' );
 
 		$expected_group_render = '
-		<div class="cmb-row cmb-repeat-group-wrap">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field2">
 			<div class="cmb-td">
 				<div id="group_field2_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable non-repeatable" style="width:100%;">
 					<div class="cmb-row">
