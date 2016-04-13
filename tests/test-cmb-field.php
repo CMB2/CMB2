@@ -44,15 +44,10 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		$this->object_id   = $this->post_id;
 		$this->object_type = 'post';
+		$this->cmb_id      = 'metabox';
 		$this->group       = false;
 
-		$this->field = new CMB2_Field( array(
-			'object_id'   => $this->object_id,
-			'object_type' => $this->object_type,
-			'group'       => $this->group,
-			'field_args'  => $this->field_args,
-		) );
-
+		$this->field = $this->new_field( $this->field_args );
 	}
 
 	public function tearDown() {
@@ -108,12 +103,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		// Add row classes dynamically with a callback that returns a string
 		$args['row_classes'] = array( $this, 'row_classes_string_cb' );
 
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'group' => $this->group,
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$classes = $field->row_classes();
 
@@ -128,12 +118,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		// Add row classes statically as a string
 		$args['row_classes'] = 'these are some classes';
 
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'group' => $this->group,
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$classes = $field->row_classes();
 
@@ -148,12 +133,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		// Add row classes statically as a string
 		$args['show_on_cb'] = '__return_false';
 
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'group' => $this->group,
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$this->assertFalse( $field->should_show() );
 
@@ -163,11 +143,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public function test_filtering_field_type_sanitization_filtering() {
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'field_args' => $this->field_args,
-		) );
+		$field = $this->new_field( $this->field_args );
 
 		add_filter( 'cmb2_sanitize_text', array( $this, '_return_different_value' ) );
 		$modified = $field->save_field( 'some value to be modified' );
@@ -187,11 +163,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 	 * @expectedException WPDieException
 	 */
 	public function test_cmb2_save_field_action() {
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'field_args' => $this->field_args,
-		) );
+		$field = $this->new_field( $this->field_args );
 
 		$this->hook_to_wp_die( 'cmb2_save_field' );
 		$modified = $field->save_field( 'some value to be modified' );
@@ -201,11 +173,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 	 * @expectedException WPDieException
 	 */
 	public function test_cmb2_save_field_field_id_action() {
-		$field = new CMB2_Field( array(
-			'object_id' => $this->object_id,
-			'object_type' => $this->object_type,
-			'field_args' => $this->field_args,
-		) );
+		$field = $this->new_field( $this->field_args );
 
 		$this->hook_to_wp_die( 'cmb2_save_field_test_test' );
 		$modified = $field->save_field( 'some value to be modified' );
@@ -246,9 +214,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 				'none'     => 'Option Three',
 			),
 		);
-		$field = new CMB2_Field( array(
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$this->assertFalse( $field->args( 'show_option_none' ) );
 
@@ -258,9 +224,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		);
 
 		$args['show_option_none'] = true;
-		$field = new CMB2_Field( array(
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$this->assertEquals( __( 'None', 'cmb2' ), $field->args( 'show_option_none' ) );
 
@@ -270,9 +234,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		);
 
 		$args['show_option_none'] = 'No Value';
-		$field = new CMB2_Field( array(
-			'field_args' => $args,
-		) );
+		$field = $this->new_field( $args );
 
 		$this->assertEquals( 'No Value', $field->args( 'show_option_none' ) );
 
@@ -372,6 +334,49 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		// Verify that the data we retrieved now matches the value we set
 		$this->assertEquals( $array_val, $value );
+	}
+
+	public function test_get_cmb() {
+		$cmb = new_cmb2_box( array(
+			'id'            => 'metabox',
+			'object_types'  => array( 'post' ),
+		) );
+
+		$field = $this->invokeMethod( $cmb, 'get_new_field', $this->field_args );
+
+		$this->assertEquals( $cmb, $field->get_cmb() );
+	}
+
+	public function test_get_field_clone() {
+		$field = $this->field->get_field_clone( array( 'id' => 'test_field_clone' ) );
+
+		foreach ( $this->field_args as $key => $arg ) {
+			if ( 'id' === $key || 'default' === $key ) {
+				continue;
+			}
+
+			$this->assertEquals( $arg, $field->args( $key ) );
+		}
+
+		$this->assertEquals( 'test_field_clone', $field->id() );
+	}
+
+	public function new_field( $field_args ) {
+		$args = array(
+			'field_args'  => array(),
+			'group_field' => $this->group,
+			'object_id'   => $this->object_id,
+			'object_type' => $this->object_type,
+			'cmb_id'      => $this->cmb_id,
+		);
+
+		if ( isset( $field_args['field_args'] ) ) {
+			$args = wp_parse_args( $field_args, $args );
+		} else {
+			$args['field_args'] = wp_parse_args( $field_args, $this->args );
+		}
+
+		return new CMB2_Field( $args );
 	}
 
 	public function before_field_cb( $args ) {

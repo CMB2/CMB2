@@ -510,11 +510,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb->update_field_property( 'group_field', 'after_group', 'after_group output' );
 
 		$fields = $cmb->prop( 'fields' );
-		$field = new CMB2_Field( array(
-			'field_args'  => $fields['group_field'],
-			'object_type' => $cmb->object_type(),
-			'object_id'   => $cmb->object_id(),
-		) );
+		$field = $this->invokeMethod( $cmb, 'get_new_field', $fields['group_field'] );
 
 		$expected_group_render = '
 		before_group output
