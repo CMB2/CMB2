@@ -1111,4 +1111,19 @@ class CMB2_Field {
 		return $args;
 	}
 
+	/**
+	 * Returns the CMB2 instance this field is registered to.
+	 *
+	 * @since  2.2.2
+	 *
+	 * @return CMB2|WP_Error If new CMB2_Field is called without cmb_id arg, returns error.
+	 */
+	public function get_cmb() {
+		if ( ! $this->cmb_id ) {
+			return new WP_Error( 'no_cmb_id', __( 'Sorry, this field does not have a cmb_id specified.', 'cmb2' ) );
+		}
+
+		return cmb2_get_metabox( $this->cmb_id, $this->object_id, $this->object_type );
+	}
+
 }
