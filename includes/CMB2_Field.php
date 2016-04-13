@@ -1112,6 +1112,34 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Returns a cloned version of this field object with, but with
+	 * modified/overridden field arguments.
+	 *
+	 * @since  2.2.2
+	 * @param  array  $field_args Array of field arguments, or entire array of
+	 *                            arguments for CMB2_Field
+	 *
+	 * @return CMB2_Field         The new CMB2_Field instance.
+	 */
+	public function get_field_clone( $field_args ) {
+		$args = array(
+			'field_args'  => array(),
+			'group_field' => $this->group,
+			'object_id'   => $this->object_id,
+			'object_type' => $this->object_type,
+			'cmb_id'      => $this->cmb_id,
+		);
+
+		if ( isset( $field_args['field_args'] ) ) {
+			$args = wp_parse_args( $field_args, $args );
+		} else {
+			$args['field_args'] = wp_parse_args( $field_args, $this->args );
+		}
+
+		return new CMB2_Field( $args );
+	}
+
+	/**
 	 * Returns the CMB2 instance this field is registered to.
 	 *
 	 * @since  2.2.2

@@ -408,18 +408,9 @@ class CMB2_Sanitize {
 	 * @since  2.2.0
 	 */
 	public function _new_supporting_field( $new_field_id ) {
-		$args = $this->field->args();
-		unset( $args['_id'], $args['_name'] );
-
-		$args['id'] = $new_field_id;
-		$args['sanitization_cb'] = false;
-
-		// And get new field object
-		return new CMB2_Field( array(
-			'field_args'  => $args,
-			'group_field' => $this->field->group,
-			'object_id'   => $this->field->object_id,
-			'object_type' => $this->field->object_type,
+		return $this->field->get_field_clone( array(
+			'id' => $new_field_id,
+			'sanitization_cb' => false,
 		) );
 	}
 

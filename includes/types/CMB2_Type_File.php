@@ -40,19 +40,14 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$cached_id = $this->_id();
 
 		// Reset field args for attachment ID
-		$args = $field->args();
-		// If we're looking at a file in a group, we need to get the non-prefixed id
-		$args['id'] = ( $field->group ? $field->args( '_id' ) : $cached_id ) . '_id';
-		unset( $args['_id'], $args['_name'] );
+		$args = array(
+			// If we're looking at a file in a group, we need to get the non-prefixed id
+			'id' => ( $field->group ? $field->args( '_id' ) : $cached_id ) . '_id',
+		);
 
 		// And get new field object
 		// (Need to set it to the types field property)
-		$this->types->field = $field = new CMB2_Field( array(
-			'field_args'  => $args,
-			'group_field' => $field->group,
-			'object_type' => $field->object_type,
-			'object_id'   => $field->object_id,
-		) );
+		$this->types->field = $field = $field->get_field_clone( $args );
 
 		// Get ID value
 		$_id_value = $field->escaped_value( 'absint' );
