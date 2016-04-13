@@ -87,6 +87,13 @@ class CMB2_Field {
 	public $data_to_save = array();
 
 	/**
+	 * Current field's CMB2 instance ID
+	 * @var   string
+	 * @since 2.2.2
+	 */
+	public $cmb_id = '';
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args Field arguments
@@ -97,9 +104,14 @@ class CMB2_Field {
 			$this->group       = $args['group_field'];
 			$this->object_id   = $this->group->object_id;
 			$this->object_type = $this->group->object_type;
+			$this->cmb_id      = $this->group->cmb_id;
 		} else {
 			$this->object_id   = isset( $args['object_id'] ) && '_' !== $args['object_id'] ? $args['object_id'] : 0;
 			$this->object_type = isset( $args['object_type'] ) ? $args['object_type'] : 'post';
+
+			if ( isset( $args['cmb_id'] ) ) {
+				$this->cmb_id = $args['cmb_id'];
+			}
 		}
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
