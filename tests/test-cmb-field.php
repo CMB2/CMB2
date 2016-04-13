@@ -373,7 +373,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		if ( isset( $field_args['field_args'] ) ) {
 			$args = wp_parse_args( $field_args, $args );
 		} else {
-			$args['field_args'] = wp_parse_args( $field_args, $this->args );
+			$args['field_args'] = $field_args;
 		}
 
 		return new CMB2_Field( $args );
