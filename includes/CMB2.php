@@ -15,7 +15,7 @@
 class CMB2 {
 
 	/**
-	 * Current field's ID
+	 * Current CMB2 instance ID
 	 * @var   string
 	 * @since 2.0.0
 	 */
@@ -272,11 +272,7 @@ class CMB2 {
 
 		} elseif ( 'hidden' == $field_args['type'] && $this->get_field( $field_args )->should_show() ) {
 			// Save rendering for after the metabox
-			$field = $this->add_hidden_field( array(
-				'field_args'  => $field_args,
-				'object_type' => $this->object_type(),
-				'object_id'   => $this->object_id(),
-			) );
+			$field = $this->add_hidden_field( $field_args );
 
 		} else {
 
@@ -381,10 +377,7 @@ class CMB2 {
 					if ( 'hidden' == $field_args['type'] ) {
 
 						// Save rendering for after the metabox
-						$this->add_hidden_field( array(
-							'field_args'  => $field_args,
-							'group_field' => $field_group,
-						) );
+						$this->add_hidden_field( $field_args, $field_group );
 
 					} else {
 
@@ -414,10 +407,16 @@ class CMB2 {
 	/**
 	 * Add a hidden field to the list of hidden fields to be rendered later
 	 * @since 2.0.0
-	 * @param array  $args Array of arguments to be passed to CMB2_Field
+	 * @param array  $field_args Array of field arguments to be passed to CMB2_Field
 	 */
-	public function add_hidden_field( $args ) {
-		$field = new CMB2_Field( $args );
+	public function add_hidden_field( $field_args, $field_group = null ) {
+		if ( isset( $field_args['field_args'] ) ) {
+			// For back-compatibility.
+			$field = new CMB2_Field( $field_args );
+		} else {
+			$field = $this->get_new_field( $field_args, $field_group );
+		}
+
 		$this->hidden_fields[] = new CMB2_Types( $field );
 
 		return $field;
@@ -569,12 +568,7 @@ class CMB2 {
 
 			default:
 
-				// Save default fields
-				$field = new CMB2_Field( array(
-					'field_args'  => $field_args,
-					'object_type' => $this->object_type(),
-					'object_id'   => $this->object_id(),
-				) );
+				$field = $this->get_new_field( $field_args );
 
 				if ( $field->save_field_from_data( $this->data_to_save ) ) {
 					$this->updated[] = $field->id();
@@ -594,11 +588,7 @@ class CMB2 {
 			return;
 		}
 
-		$field_group        = new CMB2_Field( array(
-			'field_args'  => $args,
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		) );
+		$field_group        = $this->get_new_field( $args );
 		$base_id            = $field_group->id();
 		$old                = $field_group->get_data();
 		// Check if group field has sanitization_cb
@@ -608,10 +598,8 @@ class CMB2 {
 		$field_group->data_to_save = $this->data_to_save;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
-			$field = new CMB2_Field( array(
-				'field_args'  => $field_args,
-				'group_field' => $field_group,
-			) );
+
+			$field  = $this->get_new_field( $field_args, $field_group );
 			$sub_id = $field->id( true );
 
 			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
@@ -826,12 +814,9 @@ class CMB2 {
 
 	/**
 	 * Get a field object
-	 *
 	 * @since  2.0.3
-	 *
 	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object
 	 * @param  CMB2_Field              $field_group (optional) CMB2_Field object (group parent)
-	 *
 	 * @return CMB2_Field|false CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $field_group = null ) {
@@ -877,22 +862,50 @@ class CMB2 {
 			// Update the fields array w/ any modified properties inherited from the group field
 			$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] = $field_args;
 
-			return array(
-				'field_args'  => $field_args,
-				'group_field' => $field_group,
-			);
-
+			return $this->get_default_args( $field_args, $field_group );
 		}
 
 		if ( is_array( $field_args ) ) {
 			$this->meta_box['fields'][ $field_id ] = array_merge( $field_args, $this->meta_box['fields'][ $field_id ] );
 		}
 
-		return array(
-			'field_args'  => $this->meta_box['fields'][ $field_id ],
-			'object_type' => $this->object_type(),
-			'object_id'   => $this->object_id(),
-		);
+		return $this->get_default_args( $this->meta_box['fields'][ $field_id ] );
+	}
+
+	/**
+	 * Get default field arguments specific to this CMB2 object.
+	 * @since  2.2.0
+	 * @param  array      $field_args  Metabox field config array.
+	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent)
+	 * @return array                   Array of field arguments.
+	 */
+	protected function get_default_args( $field_args, $field_group = null ) {
+		if ( $field_group ) {
+			$args = array(
+				'field_args'  => $field_args,
+				'group_field' => $field_group,
+			);
+		} else {
+			$args = array(
+				'field_args'  => $field_args,
+				'object_type' => $this->object_type(),
+				'object_id'   => $this->object_id(),
+				'cmb_id'      => $this->cmb_id,
+			);
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Get a new field object specific to this CMB2 object.
+	 * @since  2.2.0
+	 * @param  array      $field_args  Metabox field config array.
+	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent)
+	 * @return CMB2_Field CMB2_Field object
+	 */
+	protected function get_new_field( $field_args, $field_group = null ) {
+		return new CMB2_Field( $this->get_default_args( $field_args, $field_group ) );
 	}
 
 	/**
