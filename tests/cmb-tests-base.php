@@ -147,6 +147,10 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @return mixed Method return.
 	 */
 	public function invokeMethod( $object, $methodName ) {
+		if ( version_compare(phpversion(), '5.3', '<' ) ) {
+			$this->markTestSkipped( 'PHP version does not support ReflectionClass::setAccessible()' );
+		}
+
 		$args = func_get_args();
 		unset( $args[0], $args[1] );
 
