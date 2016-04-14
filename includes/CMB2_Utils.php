@@ -217,11 +217,21 @@ class CMB2_Utils {
 			$url = str_replace( DIRECTORY_SEPARATOR, '/', $content_url );
 
 		} else {
-			$url = str_replace(
-				array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
-				array( WP_CONTENT_URL, WP_PLUGIN_URL ),
-				$dir
-			);
+			if ( false !== strpos( $dir, WP_CONTENT_DIR ) ) {
+				$url = str_replace(
+					array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
+					array( WP_CONTENT_URL, WP_PLUGIN_URL ),
+					$dir
+				);
+			} else {
+				// Check to see if it's in the root directory
+				$to_trim = str_replace( ABSPATH, '', WP_CONTENT_DIR );
+				$url = str_replace(
+					array( ABSPATH ),
+					array( str_replace( $to_trim, '', WP_CONTENT_URL ) ),
+					$dir
+				);
+			}
 		}
 
 		return set_url_scheme( $url );
