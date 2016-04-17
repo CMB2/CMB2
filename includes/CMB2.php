@@ -705,7 +705,6 @@ class CMB2 {
 	 * @return string Object type
 	 */
 	public function mb_object_type() {
-
 		if ( null !== $this->mb_object_type ) {
 			return $this->mb_object_type;
 		}
@@ -715,27 +714,32 @@ class CMB2 {
 			return $this->mb_object_type;
 		}
 
-		if ( ! $this->prop( 'object_types' ) ) {
+		$registered_types = $this->prop( 'object_types' );
+
+		if ( ! $registered_types ) {
 			$this->mb_object_type = 'post';
 			return $this->mb_object_type;
 		}
 
 		$type = false;
+
 		// check if 'object_types' is a string
-		if ( is_string( $this->prop( 'object_types' ) ) ) {
-			$type = $this->prop( 'object_types' );
-		}
-		// if it's an array of one, extract it
-		elseif ( is_array( $this->prop( 'object_types' ) ) && 1 === count( $this->prop( 'object_types' ) ) ) {
-			$cpts = $this->prop( 'object_types' );
-			$type = is_string( end( $cpts ) )
-				? end( $cpts )
-				: false;
+		if ( is_string( $registered_types ) ) {
+			$type = $registered_types;
 		}
 
-		if ( ! $type ) {
-			$this->mb_object_type = 'post';
-			return $this->mb_object_type;
+		// if it's an array of one, extract it
+		elseif ( is_array( $registered_types ) && 1 === count( $registered_types ) ) {
+			$last = end( $registered_types );
+			if ( is_string( $last ) ) {
+				$type = $last;
+			}
+		} elseif ( is_array( $registered_types ) ) {
+			$page_type = $this->current_object_type();
+
+			if ( in_array( $page_type, $registered_types, true ) ) {
+				$type = $page_type;
+			}
 		}
 
 		// Get our object type
@@ -779,22 +783,33 @@ class CMB2 {
 			return $this->object_type;
 		}
 
-		global $pagenow;
-
-		if ( in_array( $pagenow, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
-			$this->object_type = 'user';
-
-		} elseif ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
-			$this->object_type = 'comment';
-
-		} elseif ( 'edit-tags.php' == $pagenow ) {
-			$this->object_type = 'term';
-
-		} else {
-			$this->object_type = 'post';
-		}
+		$this->object_type = $this->current_object_type();
 
 		return $this->object_type;
+	}
+
+	/**
+	 * Get the object type for the current page, based on the $pagenow global.
+	 * @since  2.2.2
+	 * @return string  Page object type name.
+	 */
+	public function current_object_type() {
+		global $pagenow;
+		$type = 'post';
+
+		if ( in_array( $pagenow, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
+			$type = 'user';
+		}
+
+		if ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
+			$type = 'comment';
+		}
+
+		if ( in_array( $pagenow, array( 'edit-tags.php', 'term.php' ), true ) ) {
+			$type = 'term';
+		}
+
+		return $type;
 	}
 
 	/**
