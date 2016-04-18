@@ -5,6 +5,9 @@
  * @see    https://github.com/WebDevStudios/CMB2
  */
 
+ // TODO: fix this.
+ // JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
+
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
