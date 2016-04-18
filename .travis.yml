@@ -22,6 +22,10 @@ matrix:
       php: nightly
     - env: WP_VERSION=3.8 WP_MULTISITE=1
       php: nightly
+    - env: WP_VERSION=latest WP_MULTISITE=0
+      php: nightly
+    - env: WP_VERSION=latest WP_MULTISITE=1
+      php: nightly
     - env: WP_VERSION=3.8 WP_MULTISITE=0
       php: 7.0.1
     - env: WP_VERSION=3.8 WP_MULTISITE=1
