@@ -927,19 +927,6 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Set metabox property.
-	 * @since  2.2.0
-	 * @param  string $property Metabox config property to retrieve
-	 * @param  mixed  $value    Value to set if no value found
-	 * @return mixed            Metabox config property value or false
-	 */
-	public function set_prop( $property, $value ) {
-		$this->meta_box[ $property ] = $value;
-
-		return $this->prop( $property );
-	}
-
-	/**
 	 * Get metabox property and optionally set a fallback
 	 * @since  2.0.0
 	 * @param  string $property Metabox config property to retrieve
