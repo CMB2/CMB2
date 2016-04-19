@@ -86,13 +86,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options_cb options attributes protocols default default_cb select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_row_cb label_cb id before_field after_field row_classes _id _name has_supporting_data', $classes );
+		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_row_cb label_cb id before_field after_field row_classes _id _name has_supporting_data', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertEquals( 'type, name, desc, before, after, options_cb, options, attributes, protocols, default, default_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_row_cb, label_cb, id, before_field, after_field, row_classes, _id, _name, has_supporting_data', $default );
+		$this->assertEquals( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_row_cb, label_cb, id, before_field, after_field, row_classes, _id, _name, has_supporting_data', $default );
 	}
 
 	public function test_cmb2_row_classes_field_callback_with_string() {
@@ -359,6 +359,71 @@ class Test_CMB2_Field extends Test_CMB2 {
 		}
 
 		$this->assertEquals( 'test_field_clone', $field->id() );
+	}
+
+	public function test_string() {
+
+		$field = $this->new_field( array(
+			'name'             => 'Case Study',
+			'id'               => 'prouct-case-study',
+			'type'             => 'select',
+			'show_option_none' => true,
+			'repeatable'       => true,
+			'options'          => array(
+				'1' => 'Rad Case Study',
+				'2' => 'Wicked Case Study',
+				'3' => 'Cool Case Study',
+			),
+			'text' => array(
+				'add_row_text' => 'Add Case Study',
+			),
+		) );
+
+		ob_start();
+		$field->render_field();
+		$rendered = ob_get_clean();
+
+		$expected = '
+		<div class="cmb-row cmb-type-select cmb2-id-prouct-case-study cmb-repeat" data-fieldtype="select">
+			<div class="cmb-th">
+				<label for="prouct-case-study">Case Study</label>
+			</div>
+			<div class="cmb-td">
+				<div id="prouct-case-study_repeat" class="cmb-repeat-table cmb-nested">
+					<div class="cmb-tbody cmb-field-list">
+						<div class="cmb-row cmb-repeat-row">
+							<div class="cmb-td">
+								<select class="cmb2_select" name="prouct-case-study[0]" id="prouct-case-study_0" data-iterator="0">	<option value=""  selected=\'selected\'>None</option>
+									<option value="1" >Rad Case Study</option>
+									<option value="2" >Wicked Case Study</option>
+									<option value="3" >Cool Case Study</option>
+								</select>
+							</div>
+							<div class="cmb-td cmb-remove-row">
+								<button type="button" class="button cmb-remove-row-button button-disabled">Remove</button>
+							</div>
+						</div>
+						<div class="cmb-row empty-row hidden">
+							<div class="cmb-td">
+								<select class="cmb2_select" name="prouct-case-study[1]" id="prouct-case-study_1" data-iterator="1">	<option value=""  selected=\'selected\'>None</option>
+									<option value="1" >Rad Case Study</option>
+									<option value="2" >Wicked Case Study</option>
+									<option value="3" >Cool Case Study</option>
+								</select>
+							</div>
+							<div class="cmb-td cmb-remove-row">
+								<button type="button" class="button cmb-remove-row-button">Remove</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="cmb-add-row">
+					<button type="button" data-selector="prouct-case-study_repeat" class="cmb-add-row-button button">Add Case Study</button>
+				</p>
+			</div>
+		</div>';
+
+		$this->assertHTMLstringsAreEqual( $expected, $rendered );
 	}
 
 	public function new_field( $field_args ) {

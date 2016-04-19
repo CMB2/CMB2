@@ -73,6 +73,13 @@ class CMB2_Field {
 	protected $field_options = array();
 
 	/**
+	 * Array of provided field text strings
+	 * @var   array
+	 * @since 2.0.0
+	 */
+	protected $strings;
+
+	/**
 	 * Array of field param callback results
 	 * @var   array
 	 * @since 2.0.0
@@ -963,6 +970,40 @@ class CMB2_Field {
 	}
 
 	/**
+	 * Retrieve text parameter from field's text array (if it has one), or use fallback text
+	 * For back-compatibility, falls back to checking the options array.
+	 *
+	 * @since  2.2.2
+	 * @param  string  $text_key Key in field's text array
+	 * @param  string  $fallback Fallback text
+	 * @return string            Text
+	 */
+	public function string( $text_key, $fallback ) {
+		// If null, populate with our field strings values.
+		if ( null === $this->strings ) {
+			$this->strings = (array) $this->args['text'];
+
+			if ( is_callable( $this->args['text_cb'] ) ) {
+				$strings = call_user_func( $this->args['text_cb'], $this );
+
+				if ( $strings && is_array( $strings ) ) {
+					$this->strings += $strings;
+				}
+			}
+		}
+
+		// If we have that string value, send it back.
+		if ( isset( $this->strings[ $text_key ] ) ) {
+			return $this->strings[ $text_key ];
+		}
+
+		// Check options for back-compat.
+		$string = $this->options( $text_key );
+
+		return $string ? $string : $fallback;
+	}
+
+	/**
 	 * Retrieve options args. Calls options_cb if it exists.
 	 * @since  2.0.0
 	 * @param  string  $key Specific option to retrieve
@@ -1029,8 +1070,10 @@ class CMB2_Field {
 			'desc'              => '',
 			'before'            => '',
 			'after'             => '',
-			'options_cb'        => '',
 			'options'           => array(),
+			'options_cb'        => '',
+			'text'              => array(),
+			'text_cb'           => '',
 			'attributes'        => array(),
 			'protocols'         => null,
 			'default'           => null,

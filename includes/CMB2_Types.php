@@ -125,13 +125,12 @@ class CMB2_Types {
 	/**
 	 * Retrieve text parameter from field's options array (if it has one), or use fallback text
 	 * @since  2.0.0
-	 * @param  string  $option_key Key in field's options array
-	 * @param  string  $fallback   Fallback text
-	 * @return string              Text
+	 * @param  string  $text_key Key in field's options array
+	 * @param  string  $fallback Fallback text
+	 * @return string            Text
 	 */
-	public function _text( $option_key, $fallback ) {
-		$has_string_param = $this->field->options( $option_key );
-		return $has_string_param ? $has_string_param : $fallback;
+	public function _text( $text_key, $fallback = '' ) {
+		return $this->field->string( $text_key, $fallback );
 	}
 
 	/**
