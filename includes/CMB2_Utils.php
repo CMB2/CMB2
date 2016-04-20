@@ -210,6 +210,18 @@ class CMB2_Utils {
 	 * @return string      Converted URL.
 	 */
 	public static function get_url_from_dir( $dir ) {
+		$dir = wp_normalize_path( $dir );
+
+		// Let's test if We are in the plugins or mu-plugins dir.
+		$test_dir = trailingslashit( $dir ) . 'unneeded.php';
+		if (
+			0 === strpos( $test_dir, wp_normalize_path( WPMU_PLUGIN_DIR ) )
+			|| 0 === strpos( $test_dir, wp_normalize_path( WP_PLUGIN_URL ) )
+		) {
+			// Ok, then use plugins_url, as it is more reliable.
+			return trailingslashit( plugins_url( '', $test_dir ) );
+		}
+
 		if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
 			// Windows
 			$content_dir = str_replace( '/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR );
