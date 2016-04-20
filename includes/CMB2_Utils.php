@@ -210,13 +210,13 @@ class CMB2_Utils {
 	 * @return string      Converted URL.
 	 */
 	public static function get_url_from_dir( $dir ) {
-		$dir = wp_normalize_path( $dir );
+		$dir = self::normalize_path( $dir );
 
 		// Let's test if We are in the plugins or mu-plugins dir.
 		$test_dir = trailingslashit( $dir ) . 'unneeded.php';
 		if (
-			0 === strpos( $test_dir, wp_normalize_path( WPMU_PLUGIN_DIR ) )
-			|| 0 === strpos( $test_dir, wp_normalize_path( WP_PLUGIN_DIR ) )
+			0 === strpos( $test_dir, self::normalize_path( WPMU_PLUGIN_DIR ) )
+			|| 0 === strpos( $test_dir, self::normalize_path( WP_PLUGIN_DIR ) )
 		) {
 			// Ok, then use plugins_url, as it is more reliable.
 			return trailingslashit( plugins_url( '', $test_dir ) );
@@ -257,11 +257,11 @@ class CMB2_Utils {
 	 * @return string Normalized path.
 	 */
 	protected static function normalize_path( $path ) {
-		if ( function_exists( 'wpnormalize_path' ) ) {
-			return wpnormalize_path( $path );
+		if ( function_exists( 'wp_normalize_path' ) ) {
+			return wp_normalize_path( $path );
 		}
 
-		// Replace newer WP's version of wpnormalize_path.
+		// Replace newer WP's version of wp_normalize_path.
 		$path = str_replace( '\\', '/', $path );
 		$path = preg_replace( '|(?<=.)/+|', '/', $path );
 		if ( ':' === substr( $path, 1, 1 ) ) {
