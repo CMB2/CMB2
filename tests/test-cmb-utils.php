@@ -70,4 +70,28 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		return $id;
 	}
 
+	public function test_get_url_from_dir() {
+		$this->assertEquals(
+			trailingslashit( site_url() ),
+			CMB2_Utils::get_url_from_dir( ABSPATH )
+		);
+
+		foreach ( array(
+			'cmb2',
+			'wp-content/cmb2',
+			'vendor/cmb2/',
+			'wp-content/themes/cmb2/',
+			'wp-content/themes/twentysixteen/cmb2/',
+			'wp-content/plugins/cmb2/',
+			'wp-content/plugins/some-plugin/cmb2/',
+			'wp-content/mu-plugins/cmb2/',
+			'wp-content/mu-plugins/some-mu-plugin/cmb2/',
+		) as $located ) {
+			$this->assertEquals(
+				site_url( $located ),
+				CMB2_Utils::get_url_from_dir( ABSPATH . $located )
+			);
+		}
+	}
+
 }

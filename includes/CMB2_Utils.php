@@ -232,7 +232,7 @@ class CMB2_Utils {
 		// Check to see if it's anywhere in the root directory
 
 		$site_dir = ABSPATH;
-		$site_url = is_multisite() ? network_site_url() : site_url();
+		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
 			array( $site_dir, WP_PLUGIN_DIR ),
