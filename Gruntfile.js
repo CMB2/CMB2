@@ -189,9 +189,9 @@ module.exports = function(grunt) {
 
 		asciify: {
 			banner: {
-				text    : 'CMB!',
+				text    : 'CMB2',
 				options : {
-					font : 'isometric2',
+					font : 'univers',
 					log  : true
 				}
 			}
@@ -295,20 +295,25 @@ module.exports = function(grunt) {
 
 	});
 
-	grunt.registerTask('styles', ['sass', 'csscomb', 'cmq', 'cssjanus','cssmin']);
-	grunt.registerTask('js', ['asciify', 'jshint', 'uglify']);
-	grunt.registerTask('tests', ['asciify', 'jshint', 'phpunit']);
-	grunt.registerTask('default', ['styles', 'js', 'tests']);
+	var asciify = ['asciify'];
+	var styles  = ['sass', 'csscomb', 'cmq', 'cssjanus', 'cssmin'];
+	var js      = ['jshint', 'uglify'];
+	var tests   = ['jshint', 'phpunit'];
+
+	grunt.registerTask( 'styles', asciify.concat( styles ) );
+	grunt.registerTask( 'js', asciify.concat( js ) );
+	grunt.registerTask( 'tests', asciify.concat( tests ) );
+	grunt.registerTask( 'default', asciify.concat( styles, js, tests ) );
 
 	// apigen
-	grunt.registerTask('apigen', ['exec:apigen']);
+	grunt.registerTask( 'apigen', asciify.concat( ['exec:apigen'] ) );
 
 	// Checktextdomain and makepot task(s)
-	grunt.registerTask('build:i18n', ['checktextdomain', 'makepot', 'newer:potomo']);
+	grunt.registerTask( 'build:i18n', asciify.concat( ['checktextdomain', 'makepot', 'newer:potomo'] ) );
 
 	// Makepot and push it on Transifex task(s).
-	grunt.registerTask('tx-push', ['makepot', 'exec:txpush_s']);
+	grunt.registerTask( 'tx-push', asciify.concat( ['makepot', 'exec:txpush_s'] ) );
 
 	// Pull from Transifex and create .mo task(s).
-	grunt.registerTask('tx-pull', ['exec:txpull', 'newer:potomo']);
+	grunt.registerTask( 'tx-pull', asciify.concat( ['exec:txpull', 'newer:potomo'] ) );
 };
