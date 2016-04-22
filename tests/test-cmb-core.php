@@ -20,6 +20,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
+			'classes' => 'custom-class another-class',
+			'classes_cb' => array( $this, 'custom_classes' ),
 			'id' => $this->cmb_id,
 			'fields' => array(
 				'test_test' => array(
@@ -261,7 +263,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			<input type="hidden" name="object_id" value="' . $this->post_id . '">
 			' . wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) . '
 			<!-- Begin CMB2 Fields -->
-			<div class="cmb2-wrap form-table">
+			<div class="cmb2-wrap form-table callback-class ' . $this->cmb_id . ' custom-class another-class filter-class custom-class-another-class">
 				<div id="cmb2-metabox-' . $this->cmb_id . '" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
 					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout" data-fieldtype="text">
@@ -283,7 +285,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 		</form>
 		';
 
+		add_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
+		remove_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
 
 		$this->assertHTMLstringsAreEqual( $expected_form, $form_get );
 	}
@@ -840,6 +844,16 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		// Reset value
 		$prop_value = $cmb->set_prop( $new_prop_name, $new_prop_value );
+	}
+
+	public function custom_classes( $cmb ) {
+		return array( 'callback-class', $cmb->cmb_id );
+	}
+
+	public function custom_classes_filter( $classes, $cmb ) {
+		$classes[] = 'filter-class';
+		$classes[] = sanitize_title_with_dashes( $cmb->prop( 'classes' ) );
+		return $classes;
 	}
 
 }

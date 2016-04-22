@@ -204,8 +204,48 @@ class CMB2 {
 		 */
 		do_action( "cmb2_before_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
 
-		echo '<div class="cmb2-wrap form-table"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
+		echo '<div class="', $this->box_classes(), '"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
+	}
+
+	/**
+	 * Defines the classes for the CMB2 form/wrap.
+	 *
+	 * @since  2.0.0
+	 * @return string Space concatenated list of classes
+	 */
+	public function box_classes() {
+
+		$classes = array( 'cmb2-wrap', 'form-table' );
+
+		$cb = $this->prop( 'classes_cb' );
+
+		// Use the callback to fetch classes.
+		if ( is_callable( $cb ) && ( $added_classes = call_user_func( $cb, $this ) ) ) {
+			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
+			$classes = array_merge( $classes, $added_classes );
+		}
+
+		if ( $added_classes = $this->prop( 'classes' ) ) {
+			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
+			$classes = array_merge( $classes, $added_classes );
+		}
+
+		/**
+		 * Globally filter box wrap classes
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param string $classes Array of classes for the cmb2-wrap.
+		 * @param CMB2   $cmb     This CMB2 object.
+		 */
+		$classes = apply_filters( 'cmb2_wrap_classes', $classes, $this );
+
+		// Clean up.
+		$classes = array_map( 'strip_tags', array_filter( $classes ) );
+
+		// Make a string.
+		return implode( ' ', $classes );
 	}
 
 	/**
