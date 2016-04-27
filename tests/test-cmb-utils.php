@@ -12,6 +12,41 @@ require_once( 'cmb-tests-base.php' );
 
 class Test_CMB2_Utils extends Test_CMB2 {
 
+	protected $test_empty = array(
+		array(
+			'val' => null,
+			'empty' => true,
+		),
+		array(
+			'val' => false,
+			'empty' => true,
+		),
+		array(
+			'val' => '',
+			'empty' => true,
+		),
+		array(
+			'val' => 0,
+			'empty' => false,
+		),
+		array(
+			'val' => 0.0,
+			'empty' => false,
+		),
+		array(
+			'val' => '0',
+			'empty' => false,
+		),
+		array(
+			'val' => '0.0',
+			'empty' => false,
+		),
+		array(
+			'val' => 1,
+			'empty' => false,
+		),
+	);
+
 	/**
 	 * Set up the test fixture
 	 */
@@ -92,6 +127,32 @@ class Test_CMB2_Utils extends Test_CMB2 {
 				CMB2_Utils::get_url_from_dir( ABSPATH . $located )
 			);
 		}
+	}
+
+	public function test_isempty() {
+		foreach ( $this->test_empty as $test ) {
+			$this->assertEquals( $test['empty'], cmb2_utils()->isempty( $test['val'] ) );
+		}
+	}
+
+	public function test_notempty() {
+		foreach ( $this->test_empty as $test ) {
+			$this->assertEquals( ! $test['empty'], cmb2_utils()->notempty( $test['val'] ) );
+		}
+	}
+
+	public function test_filter_empty() {
+		$vals = wp_list_pluck( $this->test_empty, 'val' );
+
+		$non_empties = array(
+			3 => 0,
+			4 => 0.0,
+			5 => '0',
+			6 => '0.0',
+			7 => 1,
+		);
+
+		$this->assertEquals( $non_empties, cmb2_utils()->filter_empty( $vals ) );
 	}
 
 }

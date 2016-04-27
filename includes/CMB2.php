@@ -705,8 +705,9 @@ class CMB2 {
 					? $old[ $field_group->index ][ $sub_id ]
 					: false;
 
-				$is_updated = ( ! empty( $new_val ) && $new_val != $old_val );
-				$is_removed = ( empty( $new_val ) && ! empty( $old_val ) );
+				$is_updated = ( ! cmb2_utils()->isempty( $new_val ) && $new_val !== $old_val );
+				$is_removed = ( cmb2_utils()->isempty( $new_val ) && ! cmb2_utils()->isempty( $old_val ) );
+
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
 					$this->updated[] = $base_id . '::' . $field_group->index . '::' . $sub_id;
@@ -716,9 +717,11 @@ class CMB2 {
 				$saved[ $field_group->index ][ $sub_id ] = $new_val;
 
 			}
-			$saved[ $field_group->index ] = array_filter( $saved[ $field_group->index ] );
+
+			$saved[ $field_group->index ] = cmb2_utils()->filter_empty( $saved[ $field_group->index ] );
 		}
-		$saved = array_filter( $saved );
+
+		$saved = cmb2_utils()->filter_empty( $saved );
 
 		return $field_group->update_data( $saved, true );
 	}

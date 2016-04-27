@@ -167,6 +167,26 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Checks if a value is not 'empty'. 0 doesn't count as empty.
+	 * @since  2.2.2
+	 * @param  mixed $value Value to check
+	 * @return bool         True or false
+	 */
+	public function notempty( $value ){
+		return null !== $value && '' !== $value && false !== $value;
+	}
+
+	/**
+	 * Filters out empty values (not including 0).
+	 * @since  2.2.2
+	 * @param  mixed $value Value to check
+	 * @return bool         True or false
+	 */
+	function filter_empty( $value ) {
+		return array_filter( $value, array( $this, 'notempty' ) );
+	}
+
+	/**
 	 * Insert a single array item inside another array at a set position
 	 * @since  2.0.2
 	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
