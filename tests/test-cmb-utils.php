@@ -45,6 +45,18 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'val' => 1,
 			'empty' => false,
 		),
+		array(
+			'val' => ' ',
+			'empty' => false,
+		),
+		array(
+			'val' => "\n",
+			'empty' => false,
+		),
+		array(
+			'val' => '&nbsp;',
+			'empty' => false,
+		),
 	);
 
 	/**
@@ -150,6 +162,9 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			5 => '0',
 			6 => '0.0',
 			7 => 1,
+			8 => ' ',
+			9 => "\n",
+			10 => '&nbsp;',
 		);
 
 		$this->assertEquals( $non_empties, cmb2_utils()->filter_empty( $vals ) );
