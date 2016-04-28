@@ -766,11 +766,9 @@ class CMB2_Field {
 	 * @since 1.0.0
 	 */
 	public function render_field() {
-		// Check if the field has a registered render_field callback
-		if ( $cb = $this->maybe_callback( 'render_row_cb' ) ) {
-			// Ok, callback is good, let's run it.
-			return call_user_func( $cb, $this->args(), $this );
-		}
+		$this->peform_param_callback( 'render_row_cb' );
+		// For chaining
+		return $this;
 	}
 
 	/**
@@ -800,7 +798,7 @@ class CMB2_Field {
 
 		} else {
 
-			if ( $this->get_param_callback_result( 'label_cb', false ) ) {
+			if ( $this->get_param_callback_result( 'label_cb' ) ) {
 				echo '<div class="cmb-th">', $this->peform_param_callback( 'label_cb' ), '</div>';
 			}
 
@@ -874,7 +872,7 @@ class CMB2_Field {
 			}
 		}
 
-		if ( $added_classes = $this->get_param_callback_result( 'row_classes', false ) ) {
+		if ( $added_classes = $this->get_param_callback_result( 'row_classes' ) ) {
 			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
 		}
 
@@ -929,31 +927,34 @@ class CMB2_Field {
 	 * @param  bool   $echo  Whether field should be 'echoed'
 	 * @return mixed         Results of param/param callback
 	 */
-	public function get_param_callback_result( $param, $echo = true ) {
+	public function get_param_callback_result( $param ) {
 
 		// If we've already retrieved this param's value,
 		if ( array_key_exists( $param, $this->callback_results ) ) {
+
 			// send it back
 			return $this->callback_results[ $param ];
 		}
 
+		// Check if parameter has registered a callback.
 		if ( $cb = $this->maybe_callback( $param ) ) {
-			if ( $echo ) {
-				// Ok, callback is good, let's run it and store the result
-				ob_start();
-				echo call_user_func( $cb, $this->args(), $this );
-				// grab the result from the output buffer and store it
-				$this->callback_results[ $param ] = ob_get_contents();
-				ob_end_clean();
-			} else {
-				$this->callback_results[ $param ] = call_user_func( $cb, $this->args(), $this );
-			}
 
-			return $this->callback_results[ $param ];
+			// Ok, callback is good, let's run it and store the result.
+			ob_start();
+			$returned = call_user_func( $cb, $this->args(), $this );
+
+			// Grab the result from the output buffer and store it.
+			$echoed = ob_get_clean();
+
+			// This checks if the user returned or echoed their callback.
+			// Defaults to using the echoed value.
+			$this->callback_results[ $param ] = $echoed ? $echoed : $returned;
+
+		} else {
+
+			// Otherwise just get whatever is there.
+			$this->callback_results[ $param ] = isset( $this->args[ $param ] ) ? $this->args[ $param ] : false;
 		}
-
-		// Otherwise just get whatever is there
-		$this->callback_results[ $param ] = isset( $this->args[ $param ] ) ? $this->args[ $param ] : false;
 
 		return $this->callback_results[ $param ];
 	}
@@ -1048,7 +1049,7 @@ class CMB2_Field {
 		}
 
 		$param = is_callable( $this->args['default_cb'] ) ? 'default_cb' : 'default';
-		$default = $this->get_param_callback_result( $param, false );
+		$default = $this->get_param_callback_result( $param );
 
 		// Allow a filter override of the default value
 		$this->args['default'] = apply_filters( 'cmb2_default_filter', $default, $this );
