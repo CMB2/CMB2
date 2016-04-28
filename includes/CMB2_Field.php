@@ -924,7 +924,6 @@ class CMB2_Field {
 	 * Store results of the param callbacks for continual access
 	 * @since  2.0.0
 	 * @param  string $param Field parameter
-	 * @param  bool   $echo  Whether field should be 'echoed'
 	 * @return mixed         Results of param/param callback
 	 */
 	public function get_param_callback_result( $param ) {
