@@ -583,7 +583,7 @@ class CMB2_Field {
 	}
 
 	/**
-	 * Determine if current type is excempt from escaping
+	 * Determine if current type is exempt from escaping
 	 * @since  1.1.0
 	 * @return bool  True if exempt
 	 */
