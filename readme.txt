@@ -76,6 +76,8 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [Github project page](https://github.com/webdevstudios/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
 
+[Pluginize](https://pluginize.com/?utm_source=CMB2&utm_medium=text&utm_campaign=wporg) was launched in 2016 by [WebDevStudios](https://webdevstudios.com/) to promote, support, and house all of their [WordPress products](https://pluginize.com/shop/?utm_source=CMB2&utm_medium=text&utm_campaign=wporg). Pluginize is not only creating new products for WordPress all the time, like [CPTUI Extended](https://pluginize.com/product/custom-post-type-ui-extended/?utm_source=cptui&utm_medium=text&utm_campaign=wporg), but also provides [ongoing support and development for WordPress community favorites like CPTUI](https://wordpress.org/plugins/custom-post-type-ui/) and more.
+
 ### Most Recent Changes
 
 #### 2.2.1
