@@ -1024,7 +1024,7 @@ class CMB2_Field {
 			$options = call_user_func( $this->args['options_cb'], $this );
 
 			if ( $options && is_array( $options ) ) {
-				$this->field_options += $options;
+				$this->field_options = $options + $this->field_options;
 			}
 		}
 
