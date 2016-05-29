@@ -41,4 +41,16 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 		return get_the_terms( $post, $taxonomy );
 	}
 
+	/**
+	 * Wrapper for `get_terms` to account for changes in WP 4.6 where taxonomy is expected
+	 * as part of the arguments.
+	 * @since  2.2.2
+	 * @return mixed Array of terms on success
+	 */
+	public function get_terms() {
+		return cmb2_utils()->wp_at_least( '4.5.0' )
+			? get_terms( array( 'taxonomy' => $this->field->args( 'taxonomy' ), 'hide_empty' => false ) )
+			: get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
+	}
+
 }

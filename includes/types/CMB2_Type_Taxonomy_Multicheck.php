@@ -19,7 +19,7 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 		$saved_terms = is_wp_error( $names ) || empty( $names )
 			? $field->get_default()
 			: wp_list_pluck( $names, 'slug' );
-		$terms       = get_terms( $field->args( 'taxonomy' ), 'hide_empty=0' );
+		$terms       = $this->get_terms();
 		$name        = $this->_name() . '[]';
 		$options     = ''; $i = 1;
 
