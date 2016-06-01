@@ -166,11 +166,11 @@ class CMB2_Sanitize {
 	/**
 	 * Validate money in a meta value
 	 * @since  1.0.1
-	 * @return string       Empty string or sanitized money value
+	 * @return string Empty string or sanitized money value
 	 */
 	public function text_money() {
-		if ( '' === $this->value ) {
-			return $this->value;
+		if ( ! $this->value ) {
+			return '';
 		}
 
 		global $wp_locale;
@@ -181,10 +181,9 @@ class CMB2_Sanitize {
 		// for repeatable
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				if ( '' === $val ) {
-					continue;
+				if ( $val ) {
+					$this->value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 				}
-				$this->value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 			}
 		} else {
 			$this->value = number_format_i18n( (float) str_ireplace( $search, $replace, $this->value ), 2 );
