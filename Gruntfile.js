@@ -165,6 +165,7 @@ module.exports = function(grunt) {
 
 		jshint: {
 			all: [
+				'js/wysiwyg.js',
 				'js/cmb2.js'
 			],
 			options: {
@@ -200,7 +201,7 @@ module.exports = function(grunt) {
 		uglify: {
 			all: {
 				files: {
-					'js/cmb2.min.js': ['js/cmb2.js']
+					'js/cmb2.min.js': ['js/cmb2.js', 'js/wysiwyg.js']
 				},
 				options: {
 					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -224,7 +225,7 @@ module.exports = function(grunt) {
 			},
 
 			scripts: {
-				files: ['js/cmb2.js'],
+				files: ['js/cmb2.js', 'js/wysiwyg.js'],
 				tasks: ['js'],
 				options: {
 					debounceDelay: 500
