@@ -13,7 +13,14 @@
  */
 class CMB2_Type_Title extends CMB2_Type_Base {
 
-	public function render() {
+	/**
+	 * Handles outputting an 'title' element
+	 *
+	 * @param  array $args Override arguments
+	 *
+	 * @return string       Heading element
+	 */
+	public function render( $args = array() ) {
 		$args = empty( $args ) ? $this->args : $args;
 		$a = $this->parse_args( 'title', array(
 			'tag'   => $this->field->object_type == 'post' ? 'h5' : 'h3',
