@@ -516,7 +516,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
-
 		window.wysiwyg.init($newRow);
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
@@ -566,7 +565,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			// when a group is removed loop through all next groups and update fields names
 			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
-			// Get the editors fixed up.
+			// Get rid of the editors.
 			$parent.find('.wp-editor-wrap textarea').each(function(i, el) {
 				window.wysiwyg.destroy($(el).attr('id'));
 			});
@@ -622,14 +621,14 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $parent   = $this.parents( '.cmb-repeatable-grouping' );
 		var $group = $parent.parent('.cmb-repeatable-group');
 
-		// Destroy any editors before starting.
-		window.wysiwyg.destroyAll($group);
-
 		var $goto     = $this.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
 
 		if ( ! $goto.length ) {
 			return;
 		}
+
+		// Destroy any editors before starting.
+		window.wysiwyg.destroyAll($group);
 
 		// we're gonna shift
 		$this.trigger( 'cmb2_shift_rows_start', $this );
