@@ -189,14 +189,17 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		// Create the media frame.
-		media.frames[ media.field ] = wp.media({
-			title: cmb.metabox().find('label[for=' + media.field + ']').text(),
-			library : media.fieldData.queryargs || {},
-			button: {
-				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
-			},
-			multiple: isList ? 'add' : false
-		});
+	        // depending on whether we have a post ID in the wp.media settings we create a 'post' frame or a default one (select)
+	        // the difference lies in the fact that for 'post' it will attach the uploads to the current post
+	        media.frames[media.field] = wp.media({
+	            frame: ( wp.media.model.settings.post.id == null || wp.media.model.settings.post.id == 0 ) ? '' : 'post',
+	            title: cmb.metabox().find('label[for=' + media.field + ']').text(),
+	            library: media.fieldData.queryargs || {},
+	            button: {
+	                text: l10n.strings[isList ? 'upload_files' : 'upload_file']
+	            },
+	            multiple: isList ? 'add' : false
+	        });
 
 		cmb.mediaHandlers.list = function( selection, returnIt ) {
 			// Get all of our selected files
