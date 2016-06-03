@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CMB title field type
  *
@@ -12,6 +13,13 @@
  */
 class CMB2_Type_Title extends CMB2_Type_Base {
 
+	/**
+	 * Handles outputting an 'title' element
+	 *
+	 * @param  array $args Override arguments
+	 *
+	 * @return string       Heading element
+	 */
 	public function render() {
 		$a = $this->parse_args( 'title', array(
 			'tag'   => $this->field->object_type == 'post' ? 'h5' : 'h3',
@@ -21,7 +29,7 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 		) );
 
 		return $this->rendered(
-			sprintf( '<%1$s class="%2$s">%3$s</%1$s>%4$s', $a['tag'], $a['class'], $a['name'], $a['desc'] )
+			sprintf( '<%1$s %2$s>%3$s</%1$s>%4$s', $a['tag'], $this->concat_attrs( $a, array( 'tag', 'name', 'desc' ) ), $a['name'], $a['desc'] )
 		);
 	}
 
