@@ -15,10 +15,7 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 
 	/**
 	 * Handles outputting an 'title' element
-	 *
-	 * @param  array $args Override arguments
-	 *
-	 * @return string       Heading element
+	 * @return string Heading element
 	 */
 	public function render() {
 		$a = $this->parse_args( 'title', array(
