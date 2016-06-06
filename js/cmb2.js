@@ -57,7 +57,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		 * Initialize time/date/color pickers
 		 */
 		cmb.initPickers( $metabox.find('input[type="text"].cmb2-timepicker'), $metabox.find('input[type="text"].cmb2-datepicker'), $metabox.find('input[type="text"].cmb2-colorpicker') );
-
+		
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
 		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
 
@@ -434,7 +434,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.afterRowInsert = function( $row ) {
 		var _prop;
-
+		
 		// Need to re-init wp_editor instances
 		if ( cmb.neweditor_id.length ) {
 			var i;
@@ -516,6 +516,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
+		window.wysiwyg.init($newRow);
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
@@ -564,6 +565,11 @@ window.CMB2 = (function(window, document, $, undefined){
 			// when a group is removed loop through all next groups and update fields names
 			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
+			// Get rid of the editors.
+			$parent.find('.wp-editor-wrap textarea').each(function(i, el) {
+				window.wysiwyg.destroy($(el).attr('id'));
+			});
+
 			$parent.remove();
 
 			if ( number <= 2 ) {
@@ -606,7 +612,6 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.shiftRows = function( evt ) {
-
 		evt.preventDefault();
 
 		var $this = $( this );
@@ -614,11 +619,16 @@ window.CMB2 = (function(window, document, $, undefined){
 		$this.trigger( 'cmb2_shift_rows_enter', $this );
 
 		var $parent   = $this.parents( '.cmb-repeatable-grouping' );
+		var $group = $parent.parent('.cmb-repeatable-group');
+
 		var $goto     = $this.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
 
 		if ( ! $goto.length ) {
 			return;
 		}
+
+		// Destroy any editors before starting.
+		window.wysiwyg.destroyAll($group);
 
 		// we're gonna shift
 		$this.trigger( 'cmb2_shift_rows_start', $this );
@@ -703,6 +713,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		// trigger color picker change event
 		$parent.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
+
+		// Set up the editors again.
+		window.wysiwyg.reinitAll($group);
 
 		// shift done
 		$this.trigger( 'cmb2_shift_rows_complete', $this );

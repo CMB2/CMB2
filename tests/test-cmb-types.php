@@ -526,18 +526,18 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 			$tzstring = cmb2_utils()->timezone_string();
 			$offset = cmb2_utils()->timezone_offset( $tzstring );
+
 			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
-				$tzstring = timezone_name_from_abbr( '', $offset, 0 );
+				$tzstring = $this->_tz_offset_to_name($offset);
 			}
+
 			$today_stamp = strtotime( 'today' );
 
 			$field = $this->get_field_object( 'text_datetime_timestamp_timezone' );
 			$date_val = $field->format_timestamp( $today_stamp );
 			$time_val = $field->format_timestamp( $today_stamp, 'time_format' );
-
 			$value_to_save = new DateTime( $date_val . ' ' . $time_val, new DateTimeZone( $tzstring ) );
 			$value_to_save = serialize( $value_to_save );
-
 
 			update_post_meta( $this->post_id, $this->text_type_field['id'], $value_to_save );
 
@@ -553,6 +553,26 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 			delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		}
+	}
+
+	/**
+	 * Takes a GMT offset and returns a timezone name
+	 *
+	 * @param int $offset seconds from GMT
+	 * @return string
+	 */
+	private function _tz_offset_to_name($offset) {
+		$abbrarray = timezone_abbreviations_list();
+
+		foreach ($abbrarray as $abbr) {
+			foreach ($abbr as $city) {
+				if ($city['offset'] == $offset) {
+					return $city['timezone_id'];
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public function test_select_timezone_field_after_value_update() {
@@ -896,12 +916,12 @@ class Test_CMB2_Types extends Test_CMB2 {
 					'text_datetime_timestamp_timezone' => array(
 						array(
 							'date' => '2015-11-20',
-							'time' => '17:00',
+							'time' => '18:00',
 							'timezone' => 'America/New_York',
 						),
 						array(
 							'date' => '2015-11-20',
-							'time' => '17:00',
+							'time' => '18:00',
 							'timezone' => 'America/Chicago',
 						),
 						array(
@@ -927,8 +947,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 				$offset = cmb2_utils()->timezone_offset( $tzstring );
 
 				if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
-					$tzstring = timezone_name_from_abbr( '', $offset, 0 );
-					$tzstring = false !== $tzstring ? $tzstring : timezone_name_from_abbr( '', 0, 0 );
+					$tzstring = $this->_tz_offset_to_name($offset);
 				}
 
 				$full_format = $date_args['date_format'] . ' ' . $date_args['time_format'];
