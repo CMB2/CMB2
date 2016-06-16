@@ -34,6 +34,8 @@ CMB2 is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https:
 
 You can see a list of available field types [here](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#types).
 
+If you are coming from the original "Custom Metaboxes and Fields for WordPress" plugin, [please read this post](https://webdevstudios.com/2015/02/02/cmb2-wordpress-plugin/) for the CMB2 background story.
+
 ## Features:
 
 * Create metaboxes to be used on post edit screens.
