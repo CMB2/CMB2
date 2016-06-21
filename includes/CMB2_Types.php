@@ -225,6 +225,10 @@ class CMB2_Types {
 				$this->iterator++;
 			}
 		} else {
+
+			// If value is empty (including empty array), then clear the value.
+			$this->field->escaped_value = $this->field->value = null;
+
 			// Otherwise add one row
 			$this->repeat_row( true );
 		}
