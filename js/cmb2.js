@@ -732,6 +732,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.datePickerSetupOpts = function( fieldOpts, options, method ) {
+		var existing = $.extend( {}, options );
 
 		options.beforeShow = function( input, inst ) {
 			if ( 'timepicker' === method ) {
@@ -742,8 +743,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			$id( 'ui-datepicker-div' ).addClass( 'cmb2-element' );
 
 			// Let's be sure to call beforeShow if it was added
-			if ( 'function' === typeof fieldOpts.beforeShow ) {
-				fieldOpts.beforeShow( input, inst );
+			if ( 'function' === typeof existing.beforeShow ) {
+				existing.beforeShow( input, inst );
 			}
 		};
 
@@ -752,8 +753,8 @@ window.CMB2 = (function(window, document, $, undefined){
 				cmb.addTimePickerClasses( inst.dpDiv );
 
 				// Let's be sure to call onChangeMonthYear if it was added
-				if ( 'function' === typeof fieldOpts.onChangeMonthYear ) {
-					fieldOpts.onChangeMonthYear( year, month, inst, picker );
+				if ( 'function' === typeof existing.onChangeMonthYear ) {
+					existing.onChangeMonthYear( year, month, inst, picker );
 				}
 			};
 		}
@@ -763,8 +764,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
 
 			// Let's be sure to call onClose if it was added
-			if ( 'function' === typeof fieldOpts.onClose ) {
-				fieldOpts.onClose( dateText, inst );
+			if ( 'function' === typeof existing.onClose ) {
+				existing.onClose( dateText, inst );
 			}
 		};
 
