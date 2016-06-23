@@ -871,12 +871,12 @@ Sidebar Placement Adjustments
  * https://github.com/stuttter/wp-datepicker-styling
  *
  */
-/* line 14, sass/partials/_jquery_ui.scss */
+/* line 15, sass/partials/_jquery_ui.scss */
 * html .cmb2-element.ui-helper-clearfix {
   height: 1%;
 }
 
-/* line 17, sass/partials/_jquery_ui.scss */
+/* line 24, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker, .cmb2-element .ui-datepicker {
   padding: 0;
   margin: 0;
@@ -892,7 +892,7 @@ Sidebar Placement Adjustments
   width: auto;
   /* Default Color Scheme */
 }
-/* line 31, sass/partials/_jquery_ui.scss */
+/* line 38, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker *, .cmb2-element .ui-datepicker * {
   padding: 0;
   font-family: "Open Sans", sans-serif;
@@ -900,14 +900,14 @@ Sidebar Placement Adjustments
   -moz-border-radius: 0;
   border-radius: 0;
 }
-/* line 39, sass/partials/_jquery_ui.scss */
+/* line 46, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker table, .cmb2-element .ui-datepicker table {
   font-size: 13px;
   margin: 0;
   border: none;
   border-collapse: collapse;
 }
-/* line 46, sass/partials/_jquery_ui.scss */
+/* line 53, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-widget-header,
 .cmb2-element.ui-datepicker .ui-datepicker-header, .cmb2-element .ui-datepicker .ui-widget-header,
 .cmb2-element .ui-datepicker .ui-datepicker-header {
@@ -916,22 +916,27 @@ Sidebar Placement Adjustments
   color: #fff;
   font-weight: normal;
 }
-/* line 54, sass/partials/_jquery_ui.scss */
+/* line 61, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-header .ui-state-hover, .cmb2-element .ui-datepicker .ui-datepicker-header .ui-state-hover {
   background: transparent;
   border-color: transparent;
   cursor: pointer;
 }
-/* line 60, sass/partials/_jquery_ui.scss */
+/* line 67, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-title, .cmb2-element .ui-datepicker .ui-datepicker-title {
   margin: 0;
-  padding: 2px 0;
+  padding: 10px 0;
   color: #fff;
   font-size: 14px;
   line-height: 14px;
   text-align: center;
 }
-/* line 69, sass/partials/_jquery_ui.scss */
+/* line 75, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-datepicker-title select, .cmb2-element .ui-datepicker .ui-datepicker-title select {
+  margin-top: -8px;
+  margin-bottom: -8px;
+}
+/* line 81, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-datepicker-next, .cmb2-element .ui-datepicker .ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-datepicker-next {
@@ -940,39 +945,39 @@ Sidebar Placement Adjustments
   height: 34px;
   width: 34px;
 }
-/* line 77, sass/partials/_jquery_ui.scss */
+/* line 89, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-state-hover.ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-state-hover.ui-datepicker-next, .cmb2-element .ui-datepicker .ui-state-hover.ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-state-hover.ui-datepicker-next {
   border: none;
 }
-/* line 82, sass/partials/_jquery_ui.scss */
+/* line 94, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover, .cmb2-element .ui-datepicker .ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-datepicker-prev-hover {
   left: 0;
 }
-/* line 87, sass/partials/_jquery_ui.scss */
+/* line 99, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next,
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover, .cmb2-element .ui-datepicker .ui-datepicker-next,
 .cmb2-element .ui-datepicker .ui-datepicker-next-hover {
   right: 0;
 }
-/* line 92, sass/partials/_jquery_ui.scss */
+/* line 104, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next span,
 .cmb2-element.ui-datepicker .ui-datepicker-prev span, .cmb2-element .ui-datepicker .ui-datepicker-next span,
 .cmb2-element .ui-datepicker .ui-datepicker-prev span {
   display: none;
 }
-/* line 97, sass/partials/_jquery_ui.scss */
+/* line 109, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev, .cmb2-element .ui-datepicker .ui-datepicker-prev {
   float: left;
 }
-/* line 101, sass/partials/_jquery_ui.scss */
+/* line 113, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next, .cmb2-element .ui-datepicker .ui-datepicker-next {
   float: right;
 }
-/* line 105, sass/partials/_jquery_ui.scss */
+/* line 117, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev:before,
 .cmb2-element.ui-datepicker .ui-datepicker-next:before, .cmb2-element .ui-datepicker .ui-datepicker-prev:before,
 .cmb2-element .ui-datepicker .ui-datepicker-next:before {
@@ -985,21 +990,21 @@ Sidebar Placement Adjustments
   width: 34px;
   height: 34px;
 }
-/* line 117, sass/partials/_jquery_ui.scss */
+/* line 129, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev:before, .cmb2-element .ui-datepicker .ui-datepicker-prev:before {
   content: '\f341';
 }
-/* line 121, sass/partials/_jquery_ui.scss */
+/* line 133, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next:before, .cmb2-element .ui-datepicker .ui-datepicker-next:before {
   content: '\f345';
 }
-/* line 125, sass/partials/_jquery_ui.scss */
+/* line 137, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover:before,
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover:before, .cmb2-element .ui-datepicker .ui-datepicker-prev-hover:before,
 .cmb2-element .ui-datepicker .ui-datepicker-next-hover:before {
   opacity: 0.7;
 }
-/* line 130, sass/partials/_jquery_ui.scss */
+/* line 142, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker select.ui-datepicker-month,
 .cmb2-element.ui-datepicker select.ui-datepicker-year, .cmb2-element .ui-datepicker select.ui-datepicker-month,
 .cmb2-element .ui-datepicker select.ui-datepicker-year {
@@ -1009,48 +1014,48 @@ Sidebar Placement Adjustments
   box-shadow: none;
   color: #fff;
 }
-/* line 139, sass/partials/_jquery_ui.scss */
+/* line 151, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead, .cmb2-element .ui-datepicker thead {
   color: #fff;
   font-weight: 600;
 }
-/* line 142, sass/partials/_jquery_ui.scss */
+/* line 154, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead th, .cmb2-element .ui-datepicker thead th {
   font-weight: normal;
 }
-/* line 147, sass/partials/_jquery_ui.scss */
+/* line 159, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker th, .cmb2-element .ui-datepicker th {
   padding: 10px;
 }
-/* line 151, sass/partials/_jquery_ui.scss */
+/* line 163, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td, .cmb2-element .ui-datepicker td {
   padding: 0;
   border: 1px solid #f4f4f4;
 }
-/* line 156, sass/partials/_jquery_ui.scss */
+/* line 168, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-other-month, .cmb2-element .ui-datepicker td.ui-datepicker-other-month {
   border: transparent;
 }
-/* line 160, sass/partials/_jquery_ui.scss */
+/* line 172, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end, .cmb2-element .ui-datepicker td.ui-datepicker-week-end {
   background-color: #f4f4f4;
   border: 1px solid #f4f4f4;
 }
-/* line 163, sass/partials/_jquery_ui.scss */
+/* line 175, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today, .cmb2-element .ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today {
   -webkit-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 170, sass/partials/_jquery_ui.scss */
+/* line 182, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-today, .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background-color: #f0f0c0;
 }
-/* line 174, sass/partials/_jquery_ui.scss */
+/* line 186, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-current-day, .cmb2-element .ui-datepicker td.ui-datepicker-current-day {
   background: #bbdd88;
 }
-/* line 178, sass/partials/_jquery_ui.scss */
+/* line 190, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td .ui-state-default, .cmb2-element .ui-datepicker td .ui-state-default {
   background: transparent;
   border: none;
@@ -1062,127 +1067,163 @@ Sidebar Placement Adjustments
   font-weight: normal;
   color: #444;
 }
-/* line 190, sass/partials/_jquery_ui.scss */
+/* line 202, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-state-disabled .ui-state-default, .cmb2-element .ui-datepicker td.ui-state-disabled .ui-state-default {
   opacity: 0.5;
 }
-/* line 195, sass/partials/_jquery_ui.scss */
+/* line 207, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-widget-header,
 .cmb2-element.ui-datepicker .ui-datepicker-header, .cmb2-element .ui-datepicker .ui-widget-header,
 .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #00a0d2;
 }
-/* line 200, sass/partials/_jquery_ui.scss */
+/* line 212, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead, .cmb2-element .ui-datepicker thead {
   background: #32373c;
 }
-/* line 204, sass/partials/_jquery_ui.scss */
+/* line 216, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td .ui-state-hover, .cmb2-element.ui-datepicker td .ui-state-active, .cmb2-element .ui-datepicker td .ui-state-hover, .cmb2-element .ui-datepicker td .ui-state-active {
   background: #0073aa;
   color: #fff;
 }
+/* line 221, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div, .cmb2-element .ui-datepicker .ui-timepicker-div {
+  font-size: 14px;
+}
+/* line 223, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div dl, .cmb2-element .ui-datepicker .ui-timepicker-div dl {
+  text-align: left;
+  padding: 0 .6em;
+}
+/* line 226, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div dl dt, .cmb2-element .ui-datepicker .ui-timepicker-div dl dt {
+  float: left;
+  clear: left;
+  padding: 0 0 0 5px;
+}
+/* line 231, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div dl dd, .cmb2-element .ui-datepicker .ui-timepicker-div dl dd {
+  margin: 0 10px 10px 40%;
+}
+/* line 233, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div dl dd select, .cmb2-element .ui-datepicker .ui-timepicker-div dl dd select {
+  width: 100%;
+}
+/* line 239, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane {
+  padding: .6em;
+  text-align: left;
+}
+/* line 243, sass/partials/_jquery_ui.scss */
+.cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-primary, .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-secondary, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-primary, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-secondary {
+  padding: 0 10px 1px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 0 .6em .4em .4em;
+}
 
-/* line 211, sass/partials/_jquery_ui.scss */
+/* line 257, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-fresh .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-fresh .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #00a0d2;
 }
-/* line 216, sass/partials/_jquery_ui.scss */
+/* line 262, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker thead, .admin-color-fresh .cmb2-element .ui-datepicker thead {
   background: #32373c;
 }
-/* line 220, sass/partials/_jquery_ui.scss */
+/* line 266, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-fresh .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #0073aa;
   color: #fff;
 }
 
-/* line 228, sass/partials/_jquery_ui.scss */
+/* line 274, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-blue .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-blue .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-blue .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #52accc;
 }
-/* line 233, sass/partials/_jquery_ui.scss */
+/* line 279, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker thead, .admin-color-blue .cmb2-element .ui-datepicker thead {
   background: #4796b3;
 }
-/* line 242, sass/partials/_jquery_ui.scss */
+/* line 288, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-active, .admin-color-blue .cmb2-element .ui-datepicker td .ui-state-hover, .admin-color-blue .cmb2-element .ui-datepicker td .ui-state-active {
   background: #096484;
   color: #fff;
 }
-/* line 247, sass/partials/_jquery_ui.scss */
+/* line 293, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker td.ui-datepicker-today, .admin-color-blue .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background: #eee;
 }
 
-/* line 256, sass/partials/_jquery_ui.scss */
+/* line 302, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-coffee .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-coffee .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #59524c;
 }
-/* line 261, sass/partials/_jquery_ui.scss */
+/* line 307, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker thead, .admin-color-coffee .cmb2-element .ui-datepicker thead {
   background: #46403c;
 }
-/* line 265, sass/partials/_jquery_ui.scss */
+/* line 311, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-coffee .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #c7a589;
   color: #fff;
 }
 
-/* line 273, sass/partials/_jquery_ui.scss */
+/* line 319, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-ectoplasm .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-ectoplasm .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #523f6d;
 }
-/* line 278, sass/partials/_jquery_ui.scss */
+/* line 324, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker thead, .admin-color-ectoplasm .cmb2-element .ui-datepicker thead {
   background: #413256;
 }
-/* line 282, sass/partials/_jquery_ui.scss */
+/* line 328, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-ectoplasm .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #a3b745;
   color: #fff;
 }
 
-/* line 290, sass/partials/_jquery_ui.scss */
+/* line 336, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-midnight .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-midnight .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #363b3f;
 }
-/* line 295, sass/partials/_jquery_ui.scss */
+/* line 341, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker thead, .admin-color-midnight .cmb2-element .ui-datepicker thead {
   background: #26292c;
 }
-/* line 299, sass/partials/_jquery_ui.scss */
+/* line 345, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-midnight .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #e14d43;
   color: #fff;
 }
 
-/* line 307, sass/partials/_jquery_ui.scss */
+/* line 353, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-ocean .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-ocean .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #738e96;
 }
-/* line 312, sass/partials/_jquery_ui.scss */
+/* line 358, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker thead, .admin-color-ocean .cmb2-element .ui-datepicker thead {
   background: #627c83;
 }
-/* line 316, sass/partials/_jquery_ui.scss */
+/* line 362, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-ocean .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #9ebaa0;
   color: #fff;
 }
 
-/* line 324, sass/partials/_jquery_ui.scss */
+/* line 370, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-datepicker-header,
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-datepicker-header .ui-state-hover, .admin-color-sunrise .cmb2-element .ui-datepicker .ui-widget-header,
@@ -1190,34 +1231,34 @@ Sidebar Placement Adjustments
 .admin-color-sunrise .cmb2-element .ui-datepicker .ui-datepicker-header .ui-state-hover {
   background: #cf4944;
 }
-/* line 330, sass/partials/_jquery_ui.scss */
+/* line 376, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker th, .admin-color-sunrise .cmb2-element .ui-datepicker th {
   border-color: #be3631;
   background: #be3631;
 }
-/* line 335, sass/partials/_jquery_ui.scss */
+/* line 381, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-sunrise .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #dd823b;
   color: #fff;
 }
 
-/* line 343, sass/partials/_jquery_ui.scss */
+/* line 389, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-light .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-light .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #e5e5e5;
 }
-/* line 348, sass/partials/_jquery_ui.scss */
+/* line 394, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-month,
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-year, .admin-color-light .cmb2-element .ui-datepicker select.ui-datepicker-month,
 .admin-color-light .cmb2-element .ui-datepicker select.ui-datepicker-year {
   color: #555;
 }
-/* line 353, sass/partials/_jquery_ui.scss */
+/* line 399, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker thead, .admin-color-light .cmb2-element .ui-datepicker thead {
   background: #888;
 }
-/* line 357, sass/partials/_jquery_ui.scss */
+/* line 403, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-title,
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-default,
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-prev:before,
@@ -1227,42 +1268,42 @@ Sidebar Placement Adjustments
 .admin-color-light .cmb2-element .ui-datepicker .ui-datepicker-next:before {
   color: #555;
 }
-/* line 365, sass/partials/_jquery_ui.scss */
+/* line 411, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-light .cmb2-element.ui-datepicker td .ui-state-active, .admin-color-light .cmb2-element .ui-datepicker td .ui-state-hover, .admin-color-light .cmb2-element .ui-datepicker td .ui-state-active {
   background: #ccc;
 }
-/* line 369, sass/partials/_jquery_ui.scss */
+/* line 415, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker td.ui-datepicker-today, .admin-color-light .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background: #eee;
 }
 
-/* line 377, sass/partials/_jquery_ui.scss */
+/* line 423, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #56b274;
 }
-/* line 382, sass/partials/_jquery_ui.scss */
+/* line 428, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker thead, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker thead {
   background: #36533f;
 }
-/* line 386, sass/partials/_jquery_ui.scss */
+/* line 432, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #446950;
   color: #fff;
 }
 
-/* line 394, sass/partials/_jquery_ui.scss */
+/* line 440, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-bbp-mint .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-bbp-mint .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #4ca26a;
 }
-/* line 399, sass/partials/_jquery_ui.scss */
+/* line 445, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker thead, .admin-color-bbp-mint .cmb2-element .ui-datepicker thead {
   background: #4f6d59;
 }
-/* line 403, sass/partials/_jquery_ui.scss */
+/* line 449, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-bbp-mint .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #5fb37c;
   color: #fff;

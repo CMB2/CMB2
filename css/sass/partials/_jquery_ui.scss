@@ -11,10 +11,17 @@
  * https://github.com/stuttter/wp-datepicker-styling
  *
  */
- * html .cmb2-element.ui-helper-clearfix {
+
+* html .cmb2-element.ui-helper-clearfix {
 	height:1%;
- }
- .cmb2-element.ui-datepicker, .cmb2-element .ui-datepicker {
+}
+
+$weekend: #f4f4f4;
+$freshblue: #00a0d2;
+$freshdark: #32373c;
+$freshdarkblue: #0073aa;
+
+.cmb2-element.ui-datepicker, .cmb2-element .ui-datepicker {
 	padding: 0;
 	margin: 0;
 	-webkit-border-radius: 0;
@@ -59,11 +66,16 @@
 
 	.ui-datepicker-title {
 		margin: 0;
-		padding: 2px 0;
+		padding: 10px 0;
 		color: #fff;
 		font-size: 14px;
 		line-height: 14px;
 		text-align: center;
+
+		select {
+			margin-top: -8px;
+			margin-bottom: -8px;
+		}
 	}
 
 	.ui-datepicker-prev,
@@ -150,7 +162,7 @@
 
 	td {
 		padding: 0;
-		border: 1px solid #f4f4f4;
+		border: 1px solid $weekend;
 	}
 
 	td.ui-datepicker-other-month {
@@ -158,8 +170,8 @@
 	}
 
 	td.ui-datepicker-week-end {
-		background-color: #f4f4f4;
-		border: 1px solid #f4f4f4;
+		background-color: $weekend;
+		border: 1px solid $weekend;
 		&.ui-datepicker-today {
 			-webkit-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
 			-moz-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
@@ -194,31 +206,65 @@
 	/* Default Color Scheme */
 	.ui-widget-header,
 	.ui-datepicker-header {
-		background: #00a0d2;
+		background: $freshblue;
 	}
 
 	thead {
-		background: #32373c;
+		background: $freshdark;
 	}
 
 	td .ui-state-hover, td .ui-state-active {
-		background: #0073aa;
+		background: $freshdarkblue;
 		color: #fff;
 	}
+
+	.ui-timepicker-div {
+		font-size: 14px;
+		dl {
+			text-align: left;
+			padding: 0 .6em;
+			dt {
+				float: left;
+				clear:left;
+				padding: 0 0 0 5px;
+			}
+			dd {
+				margin: 0 10px 10px 40%;
+				select {
+					width: 100%;
+				}
+			}
+		}
+
+		+ .ui-datepicker-buttonpane {
+			padding: .6em;
+			text-align: left;
+
+			.button-primary, .button-secondary {
+				padding: 0 10px 1px;
+				-webkit-border-radius: 3px;
+				-moz-border-radius: 3px;
+				border-radius: 3px;
+				margin: 0 .6em .4em .4em;
+			}
+
+		}
+	}
+
 }
 .admin-color-fresh {
 	.cmb2-element.ui-datepicker, .cmb2-element .ui-datepicker {
 		.ui-widget-header,
 		.ui-datepicker-header {
-			background: #00a0d2;
+			background: $freshblue;
 		}
 
 		thead {
-			background: #32373c;
+			background: $freshdark;
 		}
 
 		td .ui-state-hover {
-			background: #0073aa;
+			background: $freshdarkblue;
 			color: #fff;
 		}
 	}
