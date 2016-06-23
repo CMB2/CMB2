@@ -51,6 +51,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.init = function() {
+		$(document).trigger( 'cmb_pre_init', cmb );
 
 		cmb.log( 'CMB2 localized data', l10n );
 		var $metabox     = cmb.metabox();
