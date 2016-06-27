@@ -894,7 +894,7 @@ class CMB2 {
 
 	/**
 	 * Set metabox property.
-	 * @since  2.2.0
+	 * @since  2.2.2
 	 * @param  string $property Metabox config property to retrieve
 	 * @param  mixed  $value    Value to set if no value found
 	 * @return mixed            Metabox config property value or false
