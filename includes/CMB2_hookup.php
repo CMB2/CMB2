@@ -42,6 +42,13 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	protected $columns = array();
 
 	/**
+	 * The object type we are performing the hookup for
+	 * @var   string
+	 * @since 2.0.9
+	 */
+	protected $object_type = 'post';
+
+	/**
 	 * Constructor
 	 * @since 2.0.0
 	 * @param CMB2 $cmb The CMB2 object to hookup
