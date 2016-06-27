@@ -45,6 +45,8 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'field_id'    => 'test_embed',
 			'src'         => 'https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed',
 		);
+
+		delete_option( $this->oembed_args['object_id'] );
 	}
 
 	public function tearDown() {
@@ -63,22 +65,15 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	public function test_get_oembed() {
 		$args = $this->oembed_args;
 
-		$this->assertEquals(
-			$this->expected_oembed_results( $args ),
-			cmb2_get_oembed( $args )
-		);
+		$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
+		$this->assertOEmbedResult( $args );
 
 		// Test another oembed URL
 		$args['url'] = 'https://twitter.com/Jtsternberg/status/703434891518726144';
 
-		$expected = $this->is_connected()
-			? sprintf( '<div class="embed-status"><blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['url'], $args['field_id'] )
-			: $this->no_connection_oembed_result( $args['url'] );
+		$args['oembed_result'] = sprintf( '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>', $args['url'] );
 
-		$this->assertEquals(
-			$expected,
-			cmb2_get_oembed( $args )
-		);
+		$this->assertOEmbedResult( $args );
 	}
 
 	public function test_values_cached() {
@@ -91,6 +86,13 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '{{unknown}}',
 			'_oembed_e587db3cd3a82c8215553980b4f347c1' => '{{unknown}}',
 		);
+
+		if ( $this->is_3_8() && $this->is_connected() ) {
+			$expected = array(
+				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
+				'_oembed_bc2b74b277d0e39ae9ec91eefaee8e31' => '{{unknown}}',
+			);
+		}
 
 		$options = $this->get_option();
 
@@ -110,6 +112,11 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		add_action( 'cmb2_save_options-page_fields', array( 'CMB2_Ajax', 'clean_stale_options_page_oembeds' ) );
 
 		$new = array( 'another_value' => 'value' );
+		if ( $this->is_3_8() ) {
+			$new = array(
+				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+			);
+		}
 		$_POST = array_merge( $new, $this->get_option() );
 
 		$this->cmb->save_fields();
@@ -120,6 +127,10 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 
 	protected function get_option() {
 		return cmb2_options( $this->oembed_args['object_id'] )->get_options();
+	}
+
+	protected function is_3_8() {
+		return ! cmb2_utils()->wp_at_least( '3.8.1' );
 	}
 
 }

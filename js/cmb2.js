@@ -5,6 +5,9 @@
  * @see    https://github.com/WebDevStudios/CMB2
  */
 
+ // TODO: fix this.
+ // JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
+
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
@@ -48,6 +51,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.init = function() {
+		$(document).trigger( 'cmb_pre_init', cmb );
 
 		cmb.log( 'CMB2 localized data', l10n );
 		var $metabox     = cmb.metabox();
@@ -723,32 +727,68 @@ window.CMB2 = (function(window, document, $, undefined){
 				var $this     = $( this );
 				var fieldOpts = $this.data( method ) || {};
 				var options   = $.extend( {}, cmb.defaults[ defaultKey ], fieldOpts );
-				$this[ method ]( cmb.datePickerSetupOpts( fieldOpts, options ) );
+				$this[ method ]( cmb.datePickerSetupOpts( fieldOpts, options, method ) );
 			} );
 		}
 	};
 
-	cmb.datePickerSetupOpts = function( fieldOpts, options ) {
+	cmb.datePickerSetupOpts = function( fieldOpts, options, method ) {
+		var existing = $.extend( {}, options );
 
 		options.beforeShow = function( input, inst ) {
+			if ( 'timepicker' === method ) {
+				cmb.addTimePickerClasses( inst.dpDiv );
+			}
+
 			// Wrap datepicker w/ class to narrow the scope of jQuery UI CSS and prevent conflicts
 			$id( 'ui-datepicker-div' ).addClass( 'cmb2-element' );
+
 			// Let's be sure to call beforeShow if it was added
-			if ( 'function' === typeof fieldOpts.beforeShow ) {
-				fieldOpts.beforeShow( input, inst );
+			if ( 'function' === typeof existing.beforeShow ) {
+				existing.beforeShow( input, inst );
 			}
 		};
+
+		if ( 'timepicker' === method ) {
+			options.onChangeMonthYear = function( year, month, inst, picker ) {
+				cmb.addTimePickerClasses( inst.dpDiv );
+
+				// Let's be sure to call onChangeMonthYear if it was added
+				if ( 'function' === typeof existing.onChangeMonthYear ) {
+					existing.onChangeMonthYear( year, month, inst, picker );
+				}
+			};
+		}
 
 		options.onClose = function( dateText, inst ) {
 			// Remove the class when we're done with it (and hide to remove FOUC).
 			$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
+
 			// Let's be sure to call onClose if it was added
-			if ( 'function' === typeof fieldOpts.onClose ) {
-				fieldOpts.onClose( dateText, inst );
+			if ( 'function' === typeof existing.onClose ) {
+				existing.onClose( dateText, inst );
 			}
 		};
 
 		return options;
+	};
+
+	// Adds classes to timepicker buttons.
+	cmb.addTimePickerClasses = function( $picker ) {
+		var func = cmb.addTimePickerClasses;
+		func.count = func.count || 0;
+
+		// Wait a bit to let the timepicker render, since these are pre-render events.
+		setTimeout( function() {
+			if ( $picker.find( '.ui-priority-secondary' ).length ) {
+				$picker.find( '.ui-priority-secondary' ).addClass( 'button-secondary' );
+				$picker.find( '.ui-priority-primary' ).addClass( 'button-primary' );
+				func.count = 0;
+			} else if ( func.count < 5 ) {
+				func.count++;
+				func( $picker );
+			}
+		}, 10 );
 	};
 
 	cmb.initColorPickers = function( $selector ) {

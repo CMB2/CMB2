@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # To install temp. test suite
 # bash tests/bin/install-wp-tests.sh wordpress_test root ''
+# bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost 3.8
 
 if [ $# -lt 3 ]; then
 	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version]"
@@ -63,7 +64,7 @@ install_wp() {
 
 install_test_suite() {
 	# portable in-place argument for both GNU sed and Mac OSX sed
-	if [[ $(uname -s) == 'Darwin' ]]; then
+	if [[ $(uname -s) == 'Darwin' && $(which sed) == '/usr/bin/sed' ]]; then
 		local ioption='-i .bak'
 	else
 		local ioption='-i'

@@ -46,15 +46,50 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
-	public function expected_oembed_results( $args ) {
-		return $this->is_connected()
-			? sprintf( '<div class="embed-status"><iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe><p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['src'], $args['field_id'] )
-			: $this->no_connection_oembed_result( $args['url'] );
+	public function expected_youtube_oembed_results( $args ) {
+		if ( $this->is_connected() ) {
+			$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
+			return $this->expected_oembed_success_results( $args );
+		}
+
+		return $this->no_connection_oembed_result( $args['url'] );
+	}
+
+	public function expected_oembed_success_results( $args ) {
+		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
 	public function no_connection_oembed_result( $url ) {
 		global $wp_embed;
 		return sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $url, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $url ) ) );
+	}
+
+	public function assertOEmbedResult( $args ) {
+		$possibilities = array(
+			$this->normalize_http_string( $this->expected_oembed_success_results( $args ) ),
+			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
+		);
+
+		$actual = $this->normalize_http_string( cmb2_ajax()->get_oembed( $args ) );
+
+		$results = array();
+		foreach ( $possibilities as $key => $expected ) {
+			$results[ $key ] = $this->compareHTMLstrings( $expected, $actual );
+		}
+
+		if ( ! empty( $results[0] ) && ! empty( $results[1] ) ) {
+			// If they both failed, this will tell us.
+			$this->assertEquals( $possibilities[0], $actual, $results[0] );
+			$this->assertEquals( $possibilities[1], $actual, $results[1] );
+		} elseif ( empty( $results[0] ) ) {
+			$this->assertEquals( $possibilities[0], $actual );
+		} else {
+			$this->assertEquals( $possibilities[1], $actual );
+		}
+	}
+
+	public function normalize_http_string( $string ) {
+		return preg_replace( '~https?://~', '', $this->normalize_string( $string ) );
 	}
 
 	protected function capture_render( $cb ) {
@@ -81,10 +116,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		wp_die( $hook . ' die' );
 	}
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
-		$expected_string = $this->normalize_string( $expected_string );
-		$string_to_test = $this->normalize_string( $string_to_test );
-
+	protected function compareHTMLstrings( $expected_string, $string_to_test ) {
 		$compare = strcmp( $expected_string, $string_to_test );
 
 		if ( 0 !== $compare ) {
@@ -102,6 +134,38 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			    substr( $string_to_test, $start, 5 ) . $pointer . substr( $string_to_test, $compare, $chars_to_show )
 			);
 		}
+
+		return $compare;
+	}
+
+	/**
+	 * Call protected/private method of a class.
+	 *
+	 * @param object $object     Instantiated object that we will run method on.
+	 * @param string $methodName Method name to call
+	 *
+	 * @return mixed Method return.
+	 */
+	public function invokeMethod( $object, $methodName ) {
+		if ( version_compare(phpversion(), '5.3', '<' ) ) {
+			$this->markTestSkipped( 'PHP version does not support ReflectionClass::setAccessible()' );
+		}
+
+		$args = func_get_args();
+		unset( $args[0], $args[1] );
+
+		$reflection = new ReflectionClass( get_class( $object ) );
+		$method = $reflection->getMethod( $methodName );
+		$method->setAccessible( true );
+
+		return $method->invokeArgs( $object, $args );
+	}
+
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
+		$expected_string = $this->normalize_string( $expected_string );
+		$string_to_test = $this->normalize_string( $string_to_test );
+
+		$compare = $this->compareHTMLstrings( $expected_string, $string_to_test );
 
 		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
 	}

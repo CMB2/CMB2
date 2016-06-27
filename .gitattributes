@@ -13,6 +13,7 @@ phpunit.xml        export-ignore
 tests              export-ignore
 composer.json      export-ignore
 readme.md          export-ignore
+README.md          export-ignore
 .idea              export-ignore
 .scrutinizer.yml   export-ignore
 coverage.clover    export-ignore

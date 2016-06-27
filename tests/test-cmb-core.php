@@ -20,6 +20,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
+			'classes' => 'custom-class another-class',
+			'classes_cb' => array( $this, 'custom_classes' ),
 			'id' => $this->cmb_id,
 			'fields' => array(
 				'test_test' => array(
@@ -261,10 +263,10 @@ class Test_CMB2_Core extends Test_CMB2 {
 			<input type="hidden" name="object_id" value="' . $this->post_id . '">
 			' . wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) . '
 			<!-- Begin CMB2 Fields -->
-			<div class="cmb2-wrap form-table">
+			<div class="cmb2-wrap form-table callback-class ' . $this->cmb_id . ' custom-class another-class filter-class custom-class-another-class">
 				<div id="cmb2-metabox-' . $this->cmb_id . '" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
-					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout">
+					<div class="cmb-row cmb-type-text cmb2-id-test-test table-layout" data-fieldtype="text">
 						<div class="cmb-th">
 							<label for="test_test">Name</label>
 						</div>
@@ -283,7 +285,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 		</form>
 		';
 
+		add_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
+		remove_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
 
 		$this->assertHTMLstringsAreEqual( $expected_form, $form_get );
 	}
@@ -510,15 +514,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb->update_field_property( 'group_field', 'after_group', 'after_group output' );
 
 		$fields = $cmb->prop( 'fields' );
-		$field = new CMB2_Field( array(
-			'field_args'  => $fields['group_field'],
-			'object_type' => $cmb->object_type(),
-			'object_id'   => $cmb->object_id(),
-		) );
+		$field = $this->invokeMethod( $cmb, 'get_new_field', $fields['group_field'] );
 
 		$expected_group_render = '
 		before_group output
-		<div class="cmb-row cmb-repeat-group-wrap">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field cmb-repeat" data-fieldtype="group">
 			<div class="cmb-td">
 				<div id="group_field_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable" style="width:100%;">
 					<div class="cmb-row cmb-group-description">
@@ -533,7 +533,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
-							<div class="cmb-row cmb-type-colorpicker cmb2-id-group-field-0-colorpicker cmb-repeat-group-field">
+							<div class="cmb-row cmb-type-colorpicker cmb2-id-group-field-0-colorpicker cmb-repeat-group-field" data-fieldtype="colorpicker">
 								<div class="cmb-th">
 									<label for="group_field_0_colorpicker">Colorpicker</label>
 								</div>
@@ -541,7 +541,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
 								</div>
 							</div>
-							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
@@ -598,7 +598,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$field = $cmb->get_field( 'group_field2' );
 
 		$expected_group_render = '
-		<div class="cmb-row cmb-repeat-group-wrap">
+		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field2" data-fieldtype="group">
 			<div class="cmb-td">
 				<div id="group_field2_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable non-repeatable" style="width:100%;">
 					<div class="cmb-row">
@@ -610,7 +610,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
-							<div class="cmb-row cmb-type-text cmb2-id-group-field2-0-first-field cmb-repeat-group-field table-layout">
+							<div class="cmb-row cmb-type-text cmb2-id-group-field2-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field2_0_first_field">Field 1</label>
 								</div>
@@ -837,6 +837,23 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$prop_value = $cmb->meta_box[ $new_prop_name ];
 		$this->assertEquals( $new_prop_value, $prop_value);
 
+		// Test updating property
+		$new_prop_value = $cmb->set_prop( $new_prop_name, $unused_fallback );
+		$this->assertEquals( $unused_fallback, $new_prop_value );
+		$this->assertEquals( $new_prop_value, $cmb->prop( $new_prop_name ) );
+
+		// Reset value
+		$prop_value = $cmb->set_prop( $new_prop_name, $new_prop_value );
+	}
+
+	public function custom_classes( $cmb ) {
+		return array( 'callback-class', $cmb->cmb_id );
+	}
+
+	public function custom_classes_filter( $classes, $cmb ) {
+		$classes[] = 'filter-class';
+		$classes[] = sanitize_title_with_dashes( $cmb->prop( 'classes' ) );
+		return $classes;
 	}
 
 }
