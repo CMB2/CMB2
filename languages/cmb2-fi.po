@@ -3,13 +3,14 @@
 # Translators:
 # Justin Sternberg <me@jtsternberg.com>, 2014
 # Sami Keijonen <sami.keijonen@foxnet.fi>, 2015
+# Tomi Toivio <tomi@sange.fi>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2016-01-18 19:53+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2016-05-31 22:38+0000\n"
+"Last-Translator: Tomi Toivio <tomi@sange.fi>\n"
 "Language-Team: Finnish (http://www.transifex.com/wp-translations/cmb2/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,7 +205,7 @@ msgstr "oEmbed"
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr "Anna youtube, twitter tai instagram URL-osoite. Tukee lueteltuja <a href=\"http://codex.wordpress.org/Embeds\"> http://codex.wordpress.org/Embeds</a>."
+msgstr "Anna Youtube, Twitter tai Instagram URL-osoite. Tukee lueteltuja <a href=\"http://codex.wordpress.org/Embeds\"> http://codex.wordpress.org/Embeds</a>."
 
 #: example-functions.php:371
 msgid "About Page Metabox"
@@ -232,7 +233,7 @@ msgstr "Poista merkintä"
 
 #: example-functions.php:427
 msgid "Entry Title"
-msgstr ""
+msgstr "Merkinnän otsikko"
 
 #: example-functions.php:434
 msgid "Description"
@@ -240,11 +241,11 @@ msgstr "Kuvaus:"
 
 #: example-functions.php:435
 msgid "Write a short description for this entry"
-msgstr ""
+msgstr "Kirjoita lyhyt kuvaus tälle merkinnälle"
 
 #: example-functions.php:441
 msgid "Entry Image"
-msgstr ""
+msgstr "Merkinnän kuva"
 
 #: example-functions.php:447
 msgid "Image Caption"
@@ -407,7 +408,7 @@ msgstr "﻿Käytä tätä tiedostoa"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "Käytä näitä tiedostoja"
 
 #: includes/CMB2_JS.php:137 includes/CMB2_Types.php:996
 msgid "Remove Image"
@@ -458,7 +459,7 @@ msgstr "Tallenna"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2"
-msgstr ""
+msgstr "CMB2"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/WebDevStudios/CMB2"

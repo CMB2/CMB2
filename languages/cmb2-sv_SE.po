@@ -1,13 +1,14 @@
 # Copyright (C) 2015 WebDevStudios
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
+# David Svensson <david.svensson@orosberg.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2016-01-18 19:52+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2016-06-26 20:49+0000\n"
+"Last-Translator: David Svensson <david.svensson@orosberg.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/wp-translations/cmb2/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -357,7 +358,7 @@ msgstr "Januari, Februari, Mars, April, Maj, Juni, Juli, Augusti, September, Okt
 
 #: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr "Jan, Feb, Mar, Apr, Maj, Jun, Jul, Aug, Okt, Nov, Dec"
+msgstr "Jan, Feb, Mar, Apr, Maj, Jun, Jul, Aug, Sep, Okt, Nov, Dec"
 
 #: includes/CMB2_JS.php:115
 msgid "Next"
@@ -381,7 +382,7 @@ msgstr ""
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"
