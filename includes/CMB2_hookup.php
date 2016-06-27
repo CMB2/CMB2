@@ -231,24 +231,25 @@ class CMB2_hookup {
 			return;
 		}
 
+		/**
+		 * To keep from registering an actual post-screen metabox,
+		 * omit the 'title' attribute from the metabox registration array.
+		 *
+		 * (WordPress will not display metaboxes without titles anyway)
+		 *
+		 * This is a good solution if you want to output your metaboxes
+		 * Somewhere else in the post-screen
+		 */
+		if ( ! $this->cmb->prop( 'title' ) ) {
+			return;
+		}
+
 		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
-			/**
-			 * To keep from registering an actual post-screen metabox,
-			 * omit the 'title' attribute from the metabox registration array.
-			 *
-			 * (WordPress will not display metaboxes without titles anyway)
-			 *
-			 * This is a good solution if you want to output your metaboxes
-			 * Somewhere else in the post-screen
-			 */
-			if ( $this->cmb->prop( 'title' ) ) {
-
-				if ( $this->cmb->prop( 'closed' ) ) {
-					add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
-				}
-
-				add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			if ( $this->cmb->prop( 'closed' ) ) {
+				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
+
+			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 		}
 	}
 
