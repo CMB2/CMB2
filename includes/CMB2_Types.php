@@ -38,12 +38,12 @@ class CMB2_Types {
 	}
 
 	/**
-	 * Default fallback. Allows rendering fields via "cmb2_render_$name" hook
-	 * @since  1.0.0
-	 * @param  string $name      Non-existent method name
-	 * @param  array  $arguments All arguments passed to the method
+	 * Default fallback. Allows rendering fields via "cmb2_render_$fieldtype" hook
+	 * @since 1.0.0
+	 * @param string $fieldtype Non-existent field type name
+	 * @param array  $arguments All arguments passed to the method
 	 */
-	public function __call( $name, $arguments ) {
+	public function __call( $fieldtype, $arguments ) {
 		$proxied = array(
 			'get_object_terms' => array(),
 			'is_valid_img_ext' => false,
@@ -56,15 +56,15 @@ class CMB2_Types {
 			'file_status_output' => '',
 			'parse_picker_options' => array(),
 		);
-		if ( isset( $proxied[ $name ] ) ) {
+		if ( isset( $proxied[ $fieldtype ] ) ) {
 			// Proxies the method call to the CMB2_Type object
-			return $this->proxy_method( $name, $proxied[ $name ], $arguments );
+			return $this->proxy_method( $fieldtype, $proxied[ $fieldtype ], $arguments );
 		}
 
 		/**
 		 * Pass non-existent field types through an action
 		 *
-		 * The dynamic portion of the hook name, $name, refers to the field type.
+		 * The dynamic portion of the hook name, $fieldtype, refers to the field type.
 		 *
 		 * @param array  $field              The passed in `CMB2_Field` object
 		 * @param mixed  $escaped_value      The value of this field escaped.
@@ -77,7 +77,7 @@ class CMB2_Types {
 		 *                                   but could also be `comment`, `user` or `options-page`.
 		 * @param object $field_type_object  This `CMB2_Types` object
 		 */
-		do_action( "cmb2_render_$name", $this->field, $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
+		do_action( "cmb2_render_$fieldtype", $this->field, $this->field->escaped_value(), $this->field->object_id, $this->field->object_type, $this );
 	}
 
 	/**
