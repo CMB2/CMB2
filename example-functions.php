@@ -74,6 +74,21 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 }
 
 /**
+ * Manually render a field column display.
+ *
+ * @param  array      $field_args Array of field arguments.
+ * @param  CMB2_Field $field      The field object
+ */
+function yourprefix_display_text_small_column( $field_args, $field ) {
+	?>
+	<div class="custom-column-display <?php echo $field->row_classes(); ?>">
+		<p><?php echo $field->escaped_value(); ?></p>
+		<p class="description"><?php echo $field->args( 'description' ); ?></p>
+	</div>
+	<?php
+}
+
+/**
  * Conditionally displays a message if the $post_id is 2
  *
  * @param  array             $field_args Array of field parameters
@@ -121,6 +136,7 @@ function yourprefix_register_demo_metabox() {
 		// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
 		// 'on_front'        => false, // Optionally designate a field to wp-admin only
 		// 'repeatable'      => true,
+		// 'column'          => true, // Display field value in the admin post-listing columns
 	) );
 
 	$cmb_demo->add_field( array(
@@ -129,6 +145,11 @@ function yourprefix_register_demo_metabox() {
 		'id'   => $prefix . 'textsmall',
 		'type' => 'text_small',
 		// 'repeatable' => true,
+		// 'column' => array(
+		// 	'name'     => __( 'Column Title', 'cmb2' ), // Set the admin column title
+		// 	'position' => 2, // Set as the second column.
+		// );
+		// 'display_cb' => 'yourprefix_display_text_small_column', // Output the display of the column values through a callback.
 	) );
 
 	$cmb_demo->add_field( array(

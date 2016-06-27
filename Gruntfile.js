@@ -117,7 +117,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: false,
 					cwd: 'css/',
-					src: ['css/cmb2.css'],
+					src: ['css/cmb2.css','css/cmb2-display.css'],
 					dest: 'css/',
 				}]
 			}
@@ -131,7 +131,8 @@ module.exports = function(grunt) {
 				},
 				files: {
 				  'css/cmb2.css': 'css/sass/cmb2.scss',
-				  'css/cmb2-front.css': 'css/sass/cmb2-front.scss'
+				  'css/cmb2-front.css': 'css/sass/cmb2-front.scss',
+				  'css/cmb2-display.css': 'css/sass/cmb2-display.scss'
 				}
 			}
 		},
@@ -157,7 +158,14 @@ module.exports = function(grunt) {
 			},
 			minify: {
 				expand: true,
-				src: ['css/cmb2.css','css/cmb2-front.css','css/cmb2-rtl.css','css/cmb2-front-rtl.css'],
+				src: [
+					'css/cmb2.css',
+					'css/cmb2-front.css',
+					'css/cmb2-display.css',
+					'css/cmb2-rtl.css',
+					'css/cmb2-front-rtl.css',
+					'css/cmb2-display-rtl.css'
+				],
 				// dest: '',
 				ext: '.min.css'
 			}
@@ -269,6 +277,7 @@ module.exports = function(grunt) {
 					swapLtrRtlInUrl: false
 				},
 				files: [
+					{ src: 'css/cmb2-display.css', dest: 'css/cmb2-display-rtl.css' },
 					{ src: 'css/cmb2-front.css', dest: 'css/cmb2-front-rtl.css' },
 					{ src: 'css/cmb2.css', dest: 'css/cmb2-rtl.css' }
 				]

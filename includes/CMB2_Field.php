@@ -101,6 +101,13 @@ class CMB2_Field {
 	public $cmb_id = '';
 
 	/**
+	 * The field's render context. In most cases, 'edit', but can be 'display'.
+	 * @var   string
+	 * @since 2.2.2
+	 */
+	public $render_context = 'edit';
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args Field arguments
@@ -766,7 +773,10 @@ class CMB2_Field {
 	 * @since 1.0.0
 	 */
 	public function render_field() {
+		$this->render_context = 'edit';
+
 		$this->peform_param_callback( 'render_row_cb' );
+
 		// For chaining
 		return $this;
 	}
@@ -863,7 +873,7 @@ class CMB2_Field {
 			'cmb-repeat'             => $this->args( 'repeatable' ),
 			'cmb-repeat-group-field' => $this->group,
 			'cmb-inline'             => $this->args( 'inline' ),
-			'table-layout'           => in_array( $this->type(), $repeat_table_rows_types ),
+			'table-layout'           => 'edit' === $this->render_context && in_array( $this->type(), $repeat_table_rows_types ),
 		);
 
 		foreach ( $conditional_classes as $class => $condition ) {
@@ -889,6 +899,69 @@ class CMB2_Field {
 		 * @param CMB2_Field object $field   This field object
 		 */
 		return apply_filters( 'cmb2_row_classes', implode( ' ', $classes ), $this );
+	}
+
+
+
+	/**
+	 * Get field display callback and render the display value in the column.
+	 * @since 2.2.2
+	 */
+	public function render_column() {
+		$this->render_context = 'display';
+
+		$this->peform_param_callback( 'display_cb' );
+
+		// For chaining
+		return $this;
+	}
+
+	/**
+	 * Default callback to outputs field value in a display format.
+	 * @since 2.2.2
+	 */
+	public function display_value_callback() {
+		// If field is requesting to be conditionally shown
+		if ( ! $this->should_show() ) {
+			return;
+		}
+
+		$display = new CMB2_Field_Display( $this );
+
+		/**
+		 * A filter to bypass the default display.
+		 *
+		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 *
+		 * Passing a non-null value to the filter will short-circuit the default display.
+		 *
+		 * @param bool|mixed         $pre_output Default null value.
+		 * @param CMB2_Field         $field      This field object.
+		 * @param CMB2_Field_Display $display    The `CMB2_Field_Display` object.
+		 */
+		$pre_output = apply_filters( "cmb2_pre_field_display_{$this->type()}", null, $this, $display );
+
+		if ( null !== $pre_output ) {
+			echo $pre_output;
+			return;
+		}
+
+		$this->peform_param_callback( 'before_display_wrap' );
+
+		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes( 'display' ), $this->type() );
+
+		$this->peform_param_callback( 'before_display' );
+
+		CMB2_Field_Display::get( $this )->display();
+
+		$this->peform_param_callback( 'after_display' );
+
+		echo "\n</div>";
+
+		$this->peform_param_callback( 'after_display_wrap' );
+
+		// For chaining
+		return $this;
 	}
 
 	/**
@@ -1089,7 +1162,9 @@ class CMB2_Field {
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
 			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
 			'render_row_cb'     => array( $this, 'render_field_callback' ),
+			'display_cb'        => array( $this, 'display_value_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
+			'column'            => false,
 		) );
 
 		// default param can be passed a callback as well

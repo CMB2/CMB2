@@ -1,0 +1,34 @@
+/**
+ * CMB2 Styling
+ */
+
+.cmb2-colorpicker-swatch {
+	span {
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		border-radius: 1em;
+		float: left;
+		margin-top: 3px;
+		margin-right: 2px;
+	}
+}
+
+.cmb2-code {
+	overflow: scroll;
+}
+
+.cmb-image-display {
+	max-width: 100%;
+	height: auto;
+}
+
+.cmb2-display-file-list li {
+	display: inline;
+	margin: 0 .5em .5em 0;
+}
+
+.cmb2-oembed * {
+	max-width: 100%;
+	height: auto;
+}
