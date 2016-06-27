@@ -100,8 +100,7 @@ class CMB2_Ajax {
 	 * @param  array  $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
-	public function get_oembed( $args ) {
-
+	public function get_oembed_no_edit( $args ) {
 		global $wp_embed;
 
 		$oembed_url = esc_url( $args['url'] );
@@ -113,6 +112,7 @@ class CMB2_Ajax {
 			'object_type' => 'post',
 			'oembed_args' => $this->embed_args,
 			'field_id'    => false,
+			'wp_error'    => false,
 		) );
 
 		$this->embed_args =& $args;
@@ -151,19 +151,30 @@ class CMB2_Ajax {
 		}
 
 		// Ping WordPress for an embed
-		$check_embed = $wp_embed->run_shortcode( '[embed' . $embed_args . ']' . $oembed_url . '[/embed]' );
+		$embed = $wp_embed->run_shortcode( '[embed' . $embed_args . ']' . $oembed_url . '[/embed]' );
 
 		// Fallback that WordPress creates when no oEmbed was found
 		$fallback = $wp_embed->maybe_make_link( $oembed_url );
 
+		return compact( 'embed', 'fallback', 'args' );
+	}
+
+	/**
+	 * Retrieves oEmbed from url/object ID
+	 * @since  0.9.5
+	 * @param  array  $args      Arguments for method
+	 * @return string            html markup with embed or fallback
+	 */
+	public function get_oembed( $args ) {
+		$oembed = $this->get_oembed_no_edit( $args );
+
 		// Send back our embed
-		if ( $check_embed && $check_embed != $fallback ) {
-			return '<div class="embed-status">' . $check_embed . '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="' . $args['field_id'] . '">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
+		if ( $oembed['embed'] && $oembed['embed'] != $oembed['fallback'] ) {
+			return '<div class="cmb2-oembed embed-status">' . $oembed['embed'] . '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="' . $oembed['args']['field_id'] . '">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
 		}
 
 		// Otherwise, send back error info that no oEmbeds were found
-		return '<p class="ui-state-error-text">' . sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $fallback ) . ' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
-
+		return '<p class="ui-state-error-text">' . sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $oembed['fallback'] ) . ' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
 	}
 
 	/**

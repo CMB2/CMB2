@@ -56,7 +56,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	}
 
 	public function expected_oembed_success_results( $args ) {
-		return sprintf( '<div class="embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
+		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
 	public function no_connection_oembed_result( $url ) {
@@ -70,7 +70,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
 		);
 
-		$actual = $this->normalize_http_string( cmb2_get_oembed( $args ) );
+		$actual = $this->normalize_http_string( cmb2_ajax()->get_oembed( $args ) );
 
 		$results = array();
 		foreach ( $possibilities as $key => $expected ) {
