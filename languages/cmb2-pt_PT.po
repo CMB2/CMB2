@@ -2,14 +2,15 @@
 # This file is distributed under the same license as the CMB2 package.
 # Translators:
 # Luis Martins <luis.martins@multiweb.pt>, 2015
+# Maria Manuela Silva <manuela.silva@sky.com>, 2016
 # Pedro Mendonça <ped.gaspar@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2015-07-29 15:52:03+00:00\n"
-"PO-Revision-Date: 2016-01-18 19:48+0000\n"
-"Last-Translator: Luis Martins <luis.martins@multiweb.pt>\n"
+"PO-Revision-Date: 2016-06-06 15:16+0000\n"
+"Last-Translator: Maria Manuela Silva <manuela.silva@sky.com>\n"
 "Language-Team: Portuguese (Portugal) (http://www.transifex.com/wp-translations/cmb2/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +32,7 @@ msgstr "Testar Metabox"
 
 #: example-functions.php:93 example-functions.php:380
 msgid "Test Text"
-msgstr "Texto de teste"
+msgstr "Texto de Teste"
 
 #: example-functions.php:94 example-functions.php:106
 #: example-functions.php:114 example-functions.php:122
@@ -63,55 +64,55 @@ msgstr "Texto de Teste Médio"
 
 #: example-functions.php:121
 msgid "Website URL"
-msgstr "URL de Website"
+msgstr "URL do Site da Web"
 
 #: example-functions.php:130
 msgid "Test Text Email"
-msgstr "Teste Email"
+msgstr "Texto de Teste de E-mail"
 
 #: example-functions.php:138
 msgid "Test Time"
-msgstr "Teste Hora"
+msgstr "Testar Hora"
 
 #: example-functions.php:145 example-functions.php:146
 msgid "Time zone"
-msgstr "Fuso-Horário"
+msgstr "Fuso Horário"
 
 #: example-functions.php:152
 msgid "Test Date Picker"
-msgstr "Teste de Selector de Data"
+msgstr "Testar Seletor de Data"
 
 #: example-functions.php:159
 msgid "Test Date Picker (UNIX timestamp)"
-msgstr "Teste de Selector de Data (Unix timestamp)"
+msgstr "Testar Seletor de Data (Data/Hora Unix)"
 
 #: example-functions.php:167
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
-msgstr "Teste de Data/Hora combinados (UNIX timestamp)"
+msgstr "Testar Data/Hora Combinados (Data/Hora UNIX)"
 
 #: example-functions.php:184
 msgid "Test Money"
-msgstr "Teste Valor Financeiro"
+msgstr "Testar Valor Financeiro"
 
 #: example-functions.php:193
 msgid "Test Color Picker"
-msgstr "Teste Selector Cor"
+msgstr "Testar Seletor de Cor"
 
 #: example-functions.php:201
 msgid "Test Text Area"
-msgstr "Teste Área de Texto"
+msgstr "Testar Área de Texto"
 
 #: example-functions.php:208
 msgid "Test Text Area Small"
-msgstr "Teste Área de Texto Pequena"
+msgstr "Testar Área de Texto Pequena"
 
 #: example-functions.php:215
 msgid "Test Text Area for Code"
-msgstr "Teste Área de Texto para Código"
+msgstr "Testar Área de Texto para Código"
 
 #: example-functions.php:222
 msgid "Test Title Weeeee"
-msgstr "Teste Título Weeeee"
+msgstr "Testar Título Weeeee"
 
 #: example-functions.php:223
 msgid "This is a title description"
@@ -119,7 +120,7 @@ msgstr "Isto é uma descrição do título"
 
 #: example-functions.php:229
 msgid "Test Select"
-msgstr "Teste Selector"
+msgstr "Testar Selecionar"
 
 #: example-functions.php:235 example-functions.php:248
 #: example-functions.php:260
@@ -186,7 +187,7 @@ msgstr "Teste Imagem"
 
 #: example-functions.php:323
 msgid "Upload an image or enter a URL."
-msgstr "Enviar uma imagem ou introduzir URL."
+msgstr "Enviar uma imagem ou inserir um URL."
 
 #: example-functions.php:329
 msgid "Multiple Files"
@@ -204,15 +205,15 @@ msgstr "oEmbed"
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr "Introduza um endereço do youtube, twitter, ou instagram URL. Suporta os serviços listados em <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+msgstr "Insira um URL do Youtube, Twitter, ou Instagram. Suporta os serviços listados em <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
 
 #: example-functions.php:371
 msgid "About Page Metabox"
-msgstr "Sobre Metabox de Página"
+msgstr "Sobre Page Metabox"
 
 #: example-functions.php:402
 msgid "Repeating Field Group"
-msgstr "Grupo de Campos repetível"
+msgstr "Grupo de Campos de Repetição"
 
 #: example-functions.php:410
 msgid "Generates reusable form entries"
