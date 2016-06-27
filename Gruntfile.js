@@ -317,9 +317,6 @@ module.exports = function(grunt) {
 	// apigen
 	grunt.registerTask( 'apigen', asciify.concat( ['exec:apigen'] ) );
 
-	// apigen
-	grunt.registerTask('apigen', ['exec:apigen']);
-
 	// Checktextdomain and makepot task(s)
 	grunt.registerTask( 'build:i18n', asciify.concat( ['checktextdomain', 'makepot', 'newer:potomo'] ) );
 
