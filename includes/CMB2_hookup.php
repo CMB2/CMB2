@@ -93,9 +93,7 @@ class CMB2_hookup {
 			$this->once( 'admin_enqueue_scripts', array( __CLASS__, 'register_scripts' ), 8 );
 			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 
-			if ( $this->cmb->has_columns && $this->cmb->prop( 'cmb_styles' ) ) {
-				self::enqueue_cmb_css( 'cmb2-display-styles' );
-			}
+			$this->maybe_enqueue_column_display_styles();
 		}
 	}
 
@@ -618,6 +616,22 @@ class CMB2_hookup {
 
 		self::$hooks_completed[] = $key;
 		add_filter( $action, $hook, $priority, $accepted_args );
+	}
+
+	/**
+	 * Enqueues the 'cmb2-display-styles' if the conditions match (has columns, on the right page, etc).
+	 * @since  2.2.3
+	 */
+	protected function maybe_enqueue_column_display_styles() {
+		global $pagenow;
+		if (
+			$pagenow
+			&& $this->cmb->has_columns
+			&& $this->cmb->prop( 'cmb_styles' )
+			&& in_array( $pagenow, array( 'edit.php', 'users.php', 'edit-comments.php', 'edit-tags.php' ), 1 )
+			) {
+			self::enqueue_cmb_css( 'cmb2-display-styles' );
+		}
 	}
 
 	/**
