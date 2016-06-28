@@ -90,7 +90,7 @@ function cmb2_get_oembed( $args = array() ) {
 		return '<div class="cmb2-oembed">' . $oembed['embed'] . '</div>';
 	}
 
-	$error = sprintf( __( 'No oEmbed Results Found for %s. View more info at %s', 'cmb2' ), $oembed['fallback'], ' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.' );
+	$error = sprintf( __( 'No oEmbed Results Found for %s. View more info at %s.', 'cmb2' ), $oembed['fallback'], ' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>' );
 
 	if ( isset( $args['wp_error'] ) && $args['wp_error'] ) {
 		return new WP_Error( 'cmb2_get_oembed_result', $wp_error, compact( 'oembed', 'args' ) );
