@@ -630,7 +630,12 @@ class CMB2_hookup {
 		}
 
 		self::register_styles();
-		return wp_enqueue_style( $handle );
+
+		/*
+		 * White list the options as this method can be used as a hook callback
+		 * and have a different argument passed.
+		 */
+		return wp_enqueue_style( 'cmb2-display-styles' === $handle ? $handle : 'cmb2-styles' );
 	}
 
 	/**
