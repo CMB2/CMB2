@@ -142,6 +142,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_223_Trunk', false ) ) {
 			$this->l10ni18n();
 
 			// Include helper functions
+			require_once 'includes/CMB2_Base.php';
 			require_once 'includes/CMB2.php';
 			require_once 'includes/helper-functions.php';
 
