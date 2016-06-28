@@ -472,12 +472,16 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function save_field( $meta_value ) {
 
-		$new_value = $this->sanitization_cb( $meta_value );
-		$old       = $this->get_data();
 		$updated   = false;
 		$action    = '';
+		$new_value = $this->sanitization_cb( $meta_value );
 
-		if ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
+		if ( ! $this->args( 'save_field' ) ) {
+
+			// Nothing to see here.
+			$action = 'disabled';
+
+		} elseif ( $this->args( 'multiple' ) && ! $this->args( 'repeatable' ) && ! $this->group ) {
 
 			$this->remove_data();
 			$count = 0;
@@ -493,7 +497,7 @@ class CMB2_Field extends CMB2_Base {
 			$updated = $count ? $count : false;
 			$action  = 'repeatable';
 
-		} elseif ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $old ) {
+		} elseif ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $this->get_data() ) {
 			$updated = $this->update_data( $new_value );
 			$action  = 'updated';
 		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
@@ -1043,6 +1047,7 @@ class CMB2_Field extends CMB2_Base {
 			'inline'            => false,
 			'on_front'          => true,
 			'show_names'        => true,
+			'save_field'        => true, // Will not save if false
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
