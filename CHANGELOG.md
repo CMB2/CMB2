@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Enhancements
+
+* Small string improvement, move a period inside the translatable string. Props [@pedro-mendonca](https://github.com/pedro-mendonca) ([#672](https://github.com/WebDevStudios/CMB2/pull/672)).
+
 ## 2.2.2.1 - 2016-06-27
 
 ### Bug Fixes
