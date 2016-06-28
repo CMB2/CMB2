@@ -497,7 +497,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 	public function test_cmb2_field_save_field_true() {
 		$args = $this->field_args;
-		$args['save_field'] = false;
+		$args['save_field'] = true;
 
 		$field = $this->new_field( $args );
 		$modified = $field->save_field( 'some value that should be saved' );
