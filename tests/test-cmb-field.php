@@ -485,23 +485,4 @@ class Test_CMB2_Field extends Test_CMB2 {
 		return get_option( $opt_key );
 	}
 
-	public function test_cmb2_field_save_field_false() {
-		$args = $this->field_args;
-		$args['save_field'] = false;
-
-		$field = $this->new_field( $args );
-		$modified = $field->save_field( 'some value that should not be saved' );
-
-		$this->assertFalse( $modified );
-	}
-
-	public function test_cmb2_field_save_field_true() {
-		$args = $this->field_args;
-		$args['save_field'] = false;
-
-		$field = $this->new_field( $args );
-		$modified = $field->save_field( 'some value that should be saved' );
-
-		$this->assertNotFalse( $modified );
-	}
 }
