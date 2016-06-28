@@ -620,7 +620,7 @@ class CMB2_hookup {
 
 	/**
 	 * Enqueues the 'cmb2-display-styles' if the conditions match (has columns, on the right page, etc).
-	 * @since  2.2.3
+	 * @since  2.2.2.1
 	 */
 	protected function maybe_enqueue_column_display_styles() {
 		global $pagenow;

@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## 2.2.2.1 - 2016-06-27
+
+### Bug Fixes
+
+* Fix issue that kept CMB2 stylesheet from being enqueued when using the [options-page snippets](https://github.com/WebDevStudios/CMB2-Snippet-Library/tree/master/options-and-settings-pages).
+* Fix issue which caused the CMB2 column display styles to be enqueued in the wrong pages. Now only enqueues on admin pages with columns.
+
 ## 2.2.2 - 2016-06-27
 
 ### Enhancements
