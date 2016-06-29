@@ -452,7 +452,7 @@ class CMB2_Field extends CMB2_Base {
 	 * Process $_POST data to save this field's value
 	 * @since  2.0.3
 	 * @param  array $data_to_save $_POST data to check
-	 * @return bool                Result of save
+	 * @return array|int|bool                Result of save, false on failure
 	 */
 	public function save_field_from_data( array $data_to_save ) {
 		$this->data_to_save = $data_to_save;
@@ -468,7 +468,7 @@ class CMB2_Field extends CMB2_Base {
 	 * Sanitize/store a value to this field
 	 * @since  2.0.0
 	 * @param  array $meta_value Desired value to sanitize/store
-	 * @return bool              Result of save
+	 * @return array|int|bool              Result of save. false on failure
 	 */
 	public function save_field( $meta_value ) {
 
