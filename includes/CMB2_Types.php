@@ -114,7 +114,7 @@ class CMB2_Types {
 	 */
 	protected function proxy_method( $method, $default, $args = array() ) {
 		if ( ! is_object( $this->type ) ) {
-			$this->guess_type_object();
+			$this->guess_type_object( $method );
 		}
 
 		if ( is_object( $this->type ) && method_exists( $this->type, $method ) ) {
@@ -134,7 +134,7 @@ class CMB2_Types {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  string $method  Method attempting to be called on the CMB2_Type object.
+	 * @param string $method  Method attempting to be called on the CMB2_Type object.
 	 */
 	protected function guess_type_object( $method ) {
 		// Try to "guess" the Type object based on the method requested.
