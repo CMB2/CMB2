@@ -114,47 +114,7 @@ class CMB2_Types {
 	 */
 	protected function proxy_method( $method, $default, $args = array() ) {
 		if ( ! is_object( $this->type ) ) {
-
-			// Try to "guess" the Type object based on the method requested.
-			switch ( $method ) {
-				case 'select_option':
-				case 'list_input':
-				case 'list_input_checkbox':
-				case 'concat_items':
-					$this->type = new CMB2_Type_Select( $this );
-					break;
-				case 'is_valid_img_ext':
-				case 'img_status_output':
-				case 'file_status_output':
-					$this->type = new CMB2_Type_File_Base( $this );
-					break;
-				case 'parse_picker_options':
-					$this->type = new CMB2_Type_Text_Date( $this );
-					break;
-				case 'get_object_terms':
-				case 'get_terms':
-					$this->type = new CMB2_Type_Taxonomy_Multicheck( $this );
-					break;
-				case 'date_args':
-				case 'time_args':
-					$this->type = new CMB2_Type_Text_Datetime_Timestamp( $this );
-					break;
-				case 'parse_args':
-					$this->type = new CMB2_Type_Text( $this );
-					break;
-			}
-
-			// Then, let's throw a debug _doing_it_wrong notice.
-
-			$message = array( sprintf( __( 'Custom field types require a Type object instantiation to use this method. This method was called by the \'%s\' field type.' ), $this->field->type() ) );
-
-			$message[] = is_object( $this->type )
-				? __( 'That field type may not work as expected.', 'cmb2' )
-				: __( 'That field type will not work as expected.', 'cmb2' );
-
-			$message[] = __( 'See: https://github.com/mustardBees/cmb-field-select2/pull/34w for more information about this change.', 'cmb2' );
-
-			_doing_it_wrong( __CLASS__ . '::' . $method, implode( ' ', $message ), '2.2.2' );
+			$this->guess_type_object();
 		}
 
 		if ( is_object( $this->type ) && method_exists( $this->type, $method ) ) {
@@ -165,6 +125,58 @@ class CMB2_Types {
 		}
 
 		return $default;
+	}
+
+	/**
+	 * If no CMB2_Types::$type object is initiated when a proxy method is called, it means
+	 * it's a custom field type (which SHOULD be instantiating a Type), but let's try and
+	 * guess the type object for them, instantiate it, and throw a _doing_it_wrong notice.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $method  Method attempting to be called on the CMB2_Type object.
+	 */
+	protected function guess_type_object( $method ) {
+		// Try to "guess" the Type object based on the method requested.
+		switch ( $method ) {
+			case 'select_option':
+			case 'list_input':
+			case 'list_input_checkbox':
+			case 'concat_items':
+				$this->type = new CMB2_Type_Select( $this );
+				break;
+			case 'is_valid_img_ext':
+			case 'img_status_output':
+			case 'file_status_output':
+				$this->type = new CMB2_Type_File_Base( $this );
+				break;
+			case 'parse_picker_options':
+				$this->type = new CMB2_Type_Text_Date( $this );
+				break;
+			case 'get_object_terms':
+			case 'get_terms':
+				$this->type = new CMB2_Type_Taxonomy_Multicheck( $this );
+				break;
+			case 'date_args':
+			case 'time_args':
+				$this->type = new CMB2_Type_Text_Datetime_Timestamp( $this );
+				break;
+			case 'parse_args':
+				$this->type = new CMB2_Type_Text( $this );
+				break;
+		}
+
+		// Then, let's throw a debug _doing_it_wrong notice.
+
+		$message = array( sprintf( __( 'Custom field types require a Type object instantiation to use this method. This method was called by the \'%s\' field type.' ), $this->field->type() ) );
+
+		$message[] = is_object( $this->type )
+			? __( 'That field type may not work as expected.', 'cmb2' )
+			: __( 'That field type will not work as expected.', 'cmb2' );
+
+		$message[] = __( 'See: https://github.com/mustardBees/cmb-field-select2/pull/34w for more information about this change.', 'cmb2' );
+
+		_doing_it_wrong( __CLASS__ . '::' . $method, implode( ' ', $message ), '2.2.2' );
 	}
 
 	/**
