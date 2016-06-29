@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 * Introduce the `'save_field'` boolean field parameter for disabling the saving of a field. Useful if you want to display the value of another field, or use a disabled/read-only field. Props [@jamesgol](https://github.com/jamesgol) ([#674](https://github.com/WebDevStudios/CMB2/pull/674), [#346](https://github.com/WebDevStudios/CMB2/issues/346), [#500](https://github.com/WebDevStudios/CMB2/issues/500)).
 * Update docblocks for `CMB2_Field::save_field_from_data()` and `CMB2_Field::save_field()`. Props [@jamesgol](https://github.com/jamesgol) ([#675](https://github.com/WebDevStudios/CMB2/pull/675).
 
+### Bug Fixes
+
+* If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate, then throw a `_doing_it_wrong` notice.
+
 ## 2.2.2.1 - 2016-06-27
 
 ### Bug Fixes
