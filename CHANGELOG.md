@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate, then throw a `_doing_it_wrong` notice.
+* Normalize path to WordPress root (`ABSPATH`). Props [@rianbotha](https://github.com/rianbotha) ([#677](https://github.com/WebDevStudios/CMB2/pull/677), [#676](https://github.com/WebDevStudios/CMB2/pull/676)).
 
 ## 2.2.2.1 - 2016-06-27
 
