@@ -251,7 +251,7 @@ class CMB2_Utils {
 
 		// Check to see if it's anywhere in the root directory
 
-		$site_dir = ABSPATH;
+		$site_dir = self::normalize_path( ABSPATH );
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
