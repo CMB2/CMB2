@@ -1,4 +1,4 @@
-# CMB2
+Cmb2GridPlugin::getInstance();# CMB2
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Travis](https://img.shields.io/travis/WebDevStudios/CMB2.svg)](https://travis-ci.org/WebDevStudios/CMB2/)
@@ -151,7 +151,6 @@ If including the library in your plugin or theme:
 
 ## Known Issues
 
-* The CMB2 url (for css/js resources) does not define properly in all WAMP/XAMP (Windows) environments.
 * Metabox containing WYSIWYG editor cannot be moved or used in a repeatable way at this time (this is a TinyMCE issue).
 * Not all fields work well in a repeatable group.
 

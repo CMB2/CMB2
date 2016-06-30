@@ -120,7 +120,6 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 
 ### Known Issues
 
-* The CMB2 url (for css/js resources) does not define properly in all WAMP/XAMP (Windows) environments.
 * Metabox containing WYSIWYG editor cannot be moved or used in a repeatable way at this time (this is a TinyMCE issue).
 * Not all fields work well in a repeatable group.
 
