@@ -275,7 +275,7 @@ abstract class CMB2_Base {
 	public function maybe_callback( $cb ) {
 		$args = $this->{$this->properties_name};
 		if ( ! isset( $args[ $cb ] ) ) {
-			return;
+			return null;
 		}
 
 		// Check if requesting explicitly false
@@ -290,7 +290,7 @@ abstract class CMB2_Base {
 			return $cb;
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
