@@ -243,7 +243,7 @@ class CMB2_Utils {
 		}
 
 		// Ok, now let's test if we are in the theme dir.
-		$theme_root = get_theme_root();
+		$theme_root = self::normalize_path( get_theme_root() );
 		if ( 0 === strpos( $dir, $theme_root ) ) {
 			// Ok, then use get_theme_root_uri.
 			return set_url_scheme( trailingslashit( str_replace( $theme_root, get_theme_root_uri(), $dir ) ) );
