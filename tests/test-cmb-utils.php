@@ -138,7 +138,15 @@ class Test_CMB2_Utils extends Test_CMB2 {
 				site_url( $located ),
 				CMB2_Utils::get_url_from_dir( ABSPATH . $located )
 			);
+
+			add_filter( 'theme_root', array( 'CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
+			$this->assertEquals(
+				site_url( $located ),
+				CMB2_Utils_WIN::get_url_from_dir( ABSPATH . $located )
+			);
+			remove_filter( 'theme_root', array( 'CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
 		}
+
 	}
 
 	public function test_isempty() {
@@ -170,4 +178,12 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		$this->assertEquals( $non_empties, cmb2_utils()->filter_empty( $vals ) );
 	}
 
+}
+
+class CMB2_Utils_WIN extends CMB2_Utils {
+	public static $ABSPATH = 'C:\xampp\htdocs\the-site-dir';
+
+	public static function _change_to_wamp_theme_root() {
+		return self::$ABSPATH . '/wp-content/themes/';
+	}
 }
