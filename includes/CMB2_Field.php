@@ -923,7 +923,7 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function replace_hash( $value ) {
 		// Replace hash with 1 based count
-		return str_ireplace( '{#}', ( $this->index + 1 ), $value );
+		return str_replace( '{#}', ( $this->index + 1 ), $value );
 	}
 
 	/**
