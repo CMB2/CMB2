@@ -916,14 +916,23 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
-	 * Replaces a hash key - {#} - with the repeatable index
+	 * Replaces a hash key - {#} - with the repeatable index, but allow customization of replacement via filter
 	 * @since  1.2.0
 	 * @param  string $value Value to update
 	 * @return string        Updated value
 	 */
 	public function replace_hash( $value ) {
-		// Replace hash with 1 based count
-		return str_ireplace( '{#}', ( $this->index + 1 ), $value );
+		// Replace hash with 1 based count by default, but allow customization of replacement via filter
+		return str_ireplace(
+			'{#}',
+			apply_filters(
+				'cmb2_group_title_hash_replacement',
+				( $this->index + 1 ),
+				$this,
+				$this->index
+			),
+			$value
+		);
 	}
 
 	/**
