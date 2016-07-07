@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 * Small string improvement, move a period inside the translatable string. Props [@pedro-mendonca](https://github.com/pedro-mendonca) ([#672](https://github.com/WebDevStudios/CMB2/pull/672)).
 * Introduce the `'save_field'` boolean field parameter for disabling the saving of a field. Useful if you want to display the value of another field, or use a disabled/read-only field. Props [@jamesgol](https://github.com/jamesgol) ([#674](https://github.com/WebDevStudios/CMB2/pull/674), [#346](https://github.com/WebDevStudios/CMB2/issues/346), [#500](https://github.com/WebDevStudios/CMB2/issues/500)).
 * Update docblocks for `CMB2_Field::save_field_from_data()` and `CMB2_Field::save_field()`. Props [@jamesgol](https://github.com/jamesgol) ([#675](https://github.com/WebDevStudios/CMB2/pull/675).
+* More javascript events tied to the media modal actions (related to the `'file'` and '`file_list'` fields). `'cmb_media_modal_init'`, `'cmb_media_modal_open'`, and `'cmb_media_modal_select'`.
+* All CMB2 JS events now also get the CMB2 JS object passed in the list of arguments.
+* CMB2 JS object is now instantiated without stomping existing object, to enable extending.
 
 ### Bug Fixes
 
