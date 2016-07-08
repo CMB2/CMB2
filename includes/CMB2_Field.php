@@ -833,9 +833,12 @@ class CMB2_Field extends CMB2_Base {
 			}
 		}
 
-		if ( $added_classes = $this->get_param_callback_result( 'row_classes' ) ) {
+		if ( $added_classes = $this->args( 'classes' ) ) {
+			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
+		} elseif ( $added_classes = $this->get_param_callback_result( 'classes_cb' ) ) {
 			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
 		}
+
 
 		if ( $added_classes ) {
 			$classes[] = esc_attr( $added_classes );
@@ -1020,12 +1023,15 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function _set_field_defaults( $args, $blah ) {
 
-		if ( ! isset( $args['type'] ) ) {
-			$this;
-			$trace = wp_debug_backtrace_summary( null, 0, false );
-			// echo '<xmp>: '. print_r( $this, true ) .'</xmp>';
-			wp_die( '<xmp>'. __LINE__ .') '. print_r( get_defined_vars(), true ) .'</xmp>' );
-		}
+		/*
+		 * Deprecated parameters:
+		 *
+		 * 'std' -- use 'default' (no longer works)
+		 * 'row_classes' -- use 'class', or 'class_cb'
+		 * 'default' -- as callback (use default_cb)
+		 */
+
+
 		// Set up blank or default values for empty ones
 		$args = wp_parse_args( $args, array(
 			'type'              => '',
@@ -1041,6 +1047,8 @@ class CMB2_Field extends CMB2_Base {
 			'protocols'         => null,
 			'default'           => null,
 			'default_cb'        => '',
+			'classes'           => null,
+			'classes_cb'        => '',
 			'select_all_button' => true,
 			'multiple'          => false,
 			'repeatable'        => isset( $args['type'] ) && 'group' == $args['type'],
@@ -1058,11 +1066,32 @@ class CMB2_Field extends CMB2_Base {
 			'column'            => false,
 		) );
 
+		/*
+		 * Deprecated usage.
+		 */
+
+		if ( isset( $args['row_classes'] ) ) {
+
+			// row_classes param could be a callback
+			if ( is_callable( $args['row_classes'] ) ) {
+				$args['classes_cb'] = $args['row_classes'];
+				$args['classes'] = null;
+			} else {
+				$args['classes'] = $args['row_classes'];
+			}
+
+			unset( $args['row_classes'] );
+		}
+
 		// default param can be passed a callback as well
 		if ( is_callable( $args['default'] ) ) {
 			$args['default_cb'] = $args['default'];
 			$args['default'] = null;
 		}
+
+		/*
+		 * END deprecated usage.
+		 */
 
 		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );

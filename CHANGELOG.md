@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 * More javascript events tied to the media modal actions (related to the `'file'` and '`file_list'` fields). `'cmb_media_modal_init'`, `'cmb_media_modal_open'`, and `'cmb_media_modal_select'`.
 * All CMB2 JS events now also get the CMB2 JS object passed in the list of arguments.
 * CMB2 JS object is now instantiated without stomping existing object, to enable extending.
+* Change `'row_classes'` to just `'classes'`, to mirror the metabox `'classes'` property. Also now accepts a `'classes_cb'` parameter for specifying a callback which returns a string or array. The callback will receive `$field_args` as the first argument, and the CMB2_Field `$field` object as the second argument. (`'row_classes'` will continue to work, but is deprecated)
+
 
 ### Bug Fixes
 
