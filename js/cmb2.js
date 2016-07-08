@@ -278,10 +278,9 @@ window.CMB2 = window.CMB2 || {};
 
 			if ( cmb.attach_id && isList ) {
 				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( cmb.mediaHandlers.list( selection, true ) );
-				return;
+			} else {
+				cmb.mediaHandlers[type]( selection );
 			}
-
-			cmb.mediaHandlers[type]( selection );
 
 			cmb.trigger( 'cmb_media_modal_select', selection, media );
 		};
