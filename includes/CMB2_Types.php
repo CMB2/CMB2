@@ -399,11 +399,15 @@ class CMB2_Types {
 	}
 
 	public function hidden() {
-		return $this->input( array(
+		$args = array(
 			'type' => 'hidden',
 			'desc' => '',
-			'class' => false,
-		) );
+			'class' => 'cmb2-hidden',
+		);
+		if ( $this->field->group ) {
+			$args['data-groupid'] = $this->field->group->id();
+		}
+		return $this->input( $args );
 	}
 
 	public function text_small() {
