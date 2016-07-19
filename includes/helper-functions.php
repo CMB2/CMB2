@@ -29,7 +29,13 @@ function cmb2_autoload_classes( $class_name ) {
 		return;
 	}
 
-	include_once( cmb2_dir( "includes/{$class_name}.php" ) );
+	$path = 'includes';
+
+	if ( 'CMB2_Type' === $class_name || 0 === strpos( $class_name, 'CMB2_Type_' ) ) {
+		$path .= '/types';
+	}
+
+	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
 }
 
 /**
@@ -49,9 +55,7 @@ function cmb2_utils() {
  * @return CMB2_Ajax object CMB2 utilities class
  */
 function cmb2_ajax() {
-	static $cmb2_ajax;
-	$cmb2_ajax = $cmb2_ajax ? $cmb2_ajax : new CMB2_Ajax();
-	return $cmb2_ajax;
+	return CMB2_Ajax::get_instance();
 }
 
 /**

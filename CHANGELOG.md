@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Enhancements
+* Implement CMB2_Ajax as a singleton. Props [jrfnl](https://github.com/jrfnl) ([#602](https://github.com/WebDevStudios/CMB2/pull/602)).
+* CMB2 is now a lot more intelligent about where it is located in your installation. This update should solve almost all of the reasons to use the `'cmb2_meta_box_url'` filter (thought it will continue to work as expected). ([#27](https://github.com/WebDevStudios/CMB2/issues/27), [#118](https://github.com/WebDevStudios/CMB2/issues/118), [#432](https://github.com/WebDevStudios/CMB2/issues/432), [related wiki item](https://github.com/WebDevStudios/CMB2/wiki/Troubleshooting#cmb2-urls-issues))
+* Add `classes` and `classes_cb` CMB2 box params which allows you to add additional classes to the cmb-wrap. The `classes` parameter can take a string or array, and the `classes_cb` takes a callback which returns a string or array. The callback will receive `$cmb` as an argument. These classes are also passed through a new filter, `'cmb2_wrap_classes'`, which receives the array of classes as the first argument, and the CMB2 object as the second. Reported/requested in [#364](https://github.com/WebDevStudios/CMB2/issues/364#issuecomment-213223692).
+
+
+### Bug Fixes
+* Fix issue with 'default' callback not being applied in all instances. Introduced new `CMB2_Field::get_default()` method, and `'default_cb'` field parameter. Using the `'default'` field parameter with a callback will be deprecated in the next few releases. ([#572](https://github.com/WebDevStudios/CMB2/issues/572)).
+* Be sure to call `CMB2_Field::row_classes()` for group field rows. Also, update CSS to use the "cmb-type-group" classname instead of "cmb-repeat-group-wrap".
+* Introduce new `'text'` and `'text_cb'` field parameters for overriding CMB2 text strings instead of using the `'options'` array. ([#630](https://github.com/WebDevStudios/CMB2/pull/630))
+* Fix bug where the value of '0' could not be saved in group fields.
+* Allow for optional/empty money field. Props [@jrfnl](https://github.com/jrfnl) ([#577](https://github.com/WebDevStudios/CMB2/pull/577)).
+
 ## 2.2.1 - 2016-02-29
 
 ### Bug Fixes
@@ -103,9 +116,9 @@ All notable changes to this project will be documented in this file.
 * Ability to use non-repeatable group fields by setting the `'repeatable'` field param to `false` when registering a group field type. Props [marcusbattle](https://github.com/marcusbattle), ([#159](https://github.com/WebDevStudios/CMB2/pull/159)).
 * Add and enqeueue a front-end specific CSS file which adds additional styles which are typically covered by wp-admin css. ([#311](https://github.com/WebDevStudios/CMB2/issues/311))
 * Better handling of the CMB2 javascript (and CSS) required dependencies array. Dependencies are now only added conditionally based on the field types that are actually visible. ([#136](https://github.com/WebDevStudios/CMB2/issues/136))
-* **THIS IS A BREAKING CHANGE:** The `group` field type's `'show_on_cb'` property now receives the `CMB2_Field` object instance as an argument instead of the `CMB2` instance. If you're using the `'show_on_cb'` property for a `group` field, please adjust accordingly. _note: you can still retrieve the `CMB2` instance via the `cmb2_get_metabox` helper function._
+* **THIS IS A BREAKING CHANGE:** The `group` field type's `'show_on_cb'` parameter now receives the `CMB2_Field` object instance as an argument instead of the `CMB2` instance. If you're using the `'show_on_cb'` parameter for a `group` field, please adjust accordingly. _note: you can still retrieve the `CMB2` instance via the `cmb2_get_metabox` helper function._
 * New dynamic hook, `"cmb2_save_{$object_type}_fields_{$this->cmb_id}"`, to complement the existing `"cmb2_save_{$object_type}_fields"` hook.
-* New CMB2 property, `enqueue_js`, to disable the enqueueing of the CMB2 Javascript.
+* New CMB2 parameter, `enqueue_js`, to disable the enqueueing of the CMB2 Javascript.
 * German translation provided by Friedhelm Jost.
 
 ### Bug Fixes
@@ -171,7 +184,7 @@ All notable changes to this project will be documented in this file.
 * Added a callback option for the field default value. The callback gets passed an array of all the field parameters as the first argument, and the field object as the second argument. (which means you can get the post id using `$field->object_id`). ([#233](https://github.com/WebDevStudios/CMB2/issues/233)).
 * New `CMB2::get_field()` method and `cmb2_get_field` helper function for retrieving a `CMB2_Field` object from the array of registered fields for a metabox.
 * New `CMB2::get_sanitized_values()` method and `cmb2_get_metabox_sanitized_values` helper function for retrieving sanitized values from an array of values (usually `$_POST` data).
-* New `'save_fields'` metabox property that can be used to disable (by setting `'save_fields' => false`) the automatic saving of the fields when the form is submitted. These can be useful when you want to handle the saving of the fields yourself, or want to use submitted data for other purposes like generating new posts, or sending emails, etc.
+* New `'save_fields'` metabox parameter that can be used to disable (by setting `'save_fields' => false`) the automatic saving of the fields when the form is submitted. These can be useful when you want to handle the saving of the fields yourself, or want to use submitted data for other purposes like generating new posts, or sending emails, etc.
 
 ### Bug Fixes
 

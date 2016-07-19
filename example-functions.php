@@ -52,6 +52,28 @@ function yourprefix_hide_if_no_cats( $field ) {
 }
 
 /**
+ * Manually render a field.
+ *
+ * @param  array      $field_args Array of field arguments.
+ * @param  CMB2_Field $field      The field object
+ */
+function yourprefix_render_row_cb( $field_args, $field ) {
+	$classes     = $field->row_classes();
+	$id          = $field->args( 'id' );
+	$label       = $field->args( 'name' );
+	$name        = $field->args( '_name' );
+	$value       = $field->escaped_value();
+	$description = $field->args( 'description' );
+	?>
+	<div class="custom-field-row <?php echo $classes; ?>">
+		<p><label for="<?php echo $id; ?>"><?php echo $label; ?></label></p>
+		<p><input id="<?php echo $id; ?>" type="text" name="<?php echo $name; ?>" value="<?php echo $value; ?>"/></p>
+		<p class="description"><?php echo $description; ?></p>
+	</div>
+	<?php
+}
+
+/**
  * Conditionally displays a message if the $post_id is 2
  *
  * @param  array             $field_args Array of field parameters
@@ -85,6 +107,8 @@ function yourprefix_register_demo_metabox() {
 		// 'show_names' => true, // Show field names on the left
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // true to keep the metabox closed by default
+		// 'classes'    => 'extra-class', // Extra cmb2-wrap classes
+		// 'classes_cb' => 'yourprefix_add_some_classes', // Add classes through a callback.
 	) );
 
 	$cmb_demo->add_field( array(
@@ -113,6 +137,14 @@ function yourprefix_register_demo_metabox() {
 		'id'   => $prefix . 'textmedium',
 		'type' => 'text_medium',
 		// 'repeatable' => true,
+	) );
+
+	$cmb_demo->add_field( array(
+		'name' => __( 'Custom Rendered Field', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'render_row_cb',
+		'type' => 'text',
+		'render_row_cb' => 'yourprefix_render_row_cb',
 	) );
 
 	$cmb_demo->add_field( array(

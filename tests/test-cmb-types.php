@@ -141,7 +141,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout">
+		<div class="cmb-row cmb-type-text cmb2-id-field-test-field cmb-repeat table-layout" data-fieldtype="text">
 			<div class="cmb-th"><label for="field_test_field">Name</label></div>
 			<div class="cmb-td">
 				<p class="cmb2-metabox-description">This is a description</p>
@@ -181,7 +181,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-select cmb2-id-options-cb-test-field">
+		<div class="cmb-row cmb-type-select cmb2-id-options-cb-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_cb_test_field">Name</label></div>
 			<div class="cmb-td">
 				<select class="cmb2_select" name="options_cb_test_field" id="options_cb_test_field">
@@ -207,7 +207,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-select cmb2-id-options-test-field">
+		<div class="cmb-row cmb-type-select cmb2-id-options-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_test_field">Name</label></div>
 			<div class="cmb-td">
 				<select class="cmb2_select" name="options_test_field" id="options_test_field">
@@ -243,7 +243,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertInstanceOf( 'CMB2_Field', $field );
 
 		$expected_field = '
-		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout">
+		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout" data-fieldtype="text">
 			<div class="cmb-th"><label for="attributes_test_field">Name</label></div>
 			<div class="cmb-td">
 				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>
@@ -269,7 +269,10 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_is_valid_img_ext() {
 		$type = $this->get_field_type_object( 'file' );
-		$this->assertFalse( $type->is_valid_img_ext( $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) ) ) );
+		$type->type = new CMB2_Type_File( $type );
+
+		$ext = $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) );
+		$this->assertFalse( $type->is_valid_img_ext( $ext ) );
 		$this->assertFalse( $type->is_valid_img_ext( '.pdf' ) );
 		$this->assertFalse( $type->is_valid_img_ext( 'jpg' ) );
 		$this->assertFalse( $type->is_valid_img_ext( '.test' ) );
@@ -277,7 +280,9 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$valid_types = apply_filters( 'cmb2_valid_img_types', array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' ) );
 
 		foreach ( $valid_types as $ext ) {
-			$this->assertTrue( $type->is_valid_img_ext( '/test.' . $ext ) );
+			$is_valid = $type->is_valid_img_ext( '/test.' . $ext, true );
+			$this->assertEquals( $is_valid, $type->type->is_valid_img_ext( '/test.' . $ext, true ) );
+			$this->assertTrue( $is_valid );
 		}
 
 		// Add .test as a valid image type
@@ -437,6 +442,22 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$this->assertEquals( '£ text_money', $type->field->get_param_callback_result( 'before_field' ) );
 	}
 
+	public function test_text_money_field_value_update() {
+		$field = $this->get_field_object( 'text_money' );
+		$field->save_field( '8.2' );
+		$this->assertEquals( '8.20', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+		$field = $this->get_field_object( 'text_money' );
+		$field->save_field( '0.00' );
+		$this->assertEquals( '0.00', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+		$field->save_field( '0' );
+		$this->assertEquals( '', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+	}
+
 	public function test_textarea_small_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<textarea class="cmb2-textarea-small" name="field_test_field" id="field_test_field" cols="60" rows="4"></textarea><p class="cmb2-metabox-description">This is a description</p>',
@@ -524,18 +545,15 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 		if ( version_compare( PHP_VERSION, '5.3' ) >= 0 ) {
 
-			$tzstring = cmb2_utils()->timezone_string();
-			$offset = cmb2_utils()->timezone_offset( $tzstring );
-
-			if ( substr( $tzstring, 0, 3 ) === 'UTC' ) {
-				$tzstring = $this->_tz_offset_to_name($offset);
-			}
-
-			$today_stamp = strtotime( 'today' );
+			// date_default_timezone_set( 'America/New_York' );
+			// $tzstring = cmb2_utils()->timezone_string();
+			$tzstring = 'America/New_York';
+			$test_stamp = strtotime( '2pm April 12 2016' );
 
 			$field = $this->get_field_object( 'text_datetime_timestamp_timezone' );
-			$date_val = $field->format_timestamp( $today_stamp );
-			$time_val = $field->format_timestamp( $today_stamp, 'time_format' );
+			$date_val = $field->format_timestamp( $test_stamp );
+			$time_val = $field->format_timestamp( $test_stamp, 'time_format' );
+
 			$value_to_save = new DateTime( $date_val . ' ' . $time_val, new DateTimeZone( $tzstring ) );
 			$value_to_save = serialize( $value_to_save );
 
@@ -547,7 +565,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 			$zones = wp_timezone_choice( $tzstring );
 
 			$this->assertHTMLstringsAreEqual(
-				sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="%s" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="%s" data-timepicker=\'{"timeFormat":"hh:mm TT"}\'/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone">%s</select><p class="cmb2-metabox-description">This is a description</p>', $date_val, $time_val, $zones ),
+				sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="04/12/2016" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="06:00 PM" data-timepicker=\'{"timeFormat":"hh:mm TT"}\'/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone">%s</select><p class="cmb2-metabox-description">This is a description</p>', $zones ),
 				$this->capture_render( array( $this->get_field_type_object( 'text_datetime_timestamp_timezone' ), 'render' ) )
 			);
 
@@ -848,7 +866,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
  		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
- 		$results = $this->expected_oembed_results( array(
+ 		$results = $this->expected_youtube_oembed_results( array(
 			'src'      => 'http://www.youtube.com/embed/' . $vid . '?feature=oembed',
 			'url'      => $value,
 			'field_id' => 'field_test_field',
@@ -978,7 +996,18 @@ class Test_CMB2_Types extends Test_CMB2 {
 		);
 
 		if ( $is_53 ) {
+
+			date_default_timezone_set( 'America/New_York' );
+
 			$expected['group'][0]['text_datetime_timestamp_timezone_utc'] = array( 1448056800, 1448060400 );
+
+			// If DST, remove an hour.
+			if ( date( 'I' ) ) {
+				foreach ( $expected['group'][0]['text_datetime_timestamp_timezone_utc'] as $key => $value ) {
+					$expected['group'][0]['text_datetime_timestamp_timezone_utc'][ $key ] = $value - 3600;
+				}
+			}
+
 			$expected['group'][0]['text_datetime_timestamp_timezone'] = $date_values;
 		}
 

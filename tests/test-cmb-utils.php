@@ -12,6 +12,53 @@ require_once( 'cmb-tests-base.php' );
 
 class Test_CMB2_Utils extends Test_CMB2 {
 
+	protected $test_empty = array(
+		array(
+			'val' => null,
+			'empty' => true,
+		),
+		array(
+			'val' => false,
+			'empty' => true,
+		),
+		array(
+			'val' => '',
+			'empty' => true,
+		),
+		array(
+			'val' => 0,
+			'empty' => false,
+		),
+		array(
+			'val' => 0.0,
+			'empty' => false,
+		),
+		array(
+			'val' => '0',
+			'empty' => false,
+		),
+		array(
+			'val' => '0.0',
+			'empty' => false,
+		),
+		array(
+			'val' => 1,
+			'empty' => false,
+		),
+		array(
+			'val' => ' ',
+			'empty' => false,
+		),
+		array(
+			'val' => "\n",
+			'empty' => false,
+		),
+		array(
+			'val' => '&nbsp;',
+			'empty' => false,
+		),
+	);
+
 	/**
 	 * Set up the test fixture
 	 */
@@ -68,6 +115,59 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 
 		return $id;
+	}
+
+	public function test_get_url_from_dir() {
+		$this->assertEquals(
+			trailingslashit( site_url() ),
+			CMB2_Utils::get_url_from_dir( ABSPATH )
+		);
+
+		foreach ( array(
+			'cmb2',
+			'wp-content/cmb2',
+			'vendor/cmb2/',
+			'wp-content/themes/cmb2/',
+			'wp-content/themes/twentysixteen/cmb2/',
+			'wp-content/plugins/cmb2/',
+			'wp-content/plugins/some-plugin/cmb2/',
+			'wp-content/mu-plugins/cmb2/',
+			'wp-content/mu-plugins/some-mu-plugin/cmb2/',
+		) as $located ) {
+			$this->assertEquals(
+				site_url( $located ),
+				CMB2_Utils::get_url_from_dir( ABSPATH . $located )
+			);
+		}
+	}
+
+	public function test_isempty() {
+		foreach ( $this->test_empty as $test ) {
+			$this->assertEquals( $test['empty'], cmb2_utils()->isempty( $test['val'] ) );
+		}
+	}
+
+	public function test_notempty() {
+		foreach ( $this->test_empty as $test ) {
+			$this->assertEquals( ! $test['empty'], cmb2_utils()->notempty( $test['val'] ) );
+		}
+	}
+
+	public function test_filter_empty() {
+		$vals = wp_list_pluck( $this->test_empty, 'val' );
+
+		$non_empties = array(
+			3 => 0,
+			4 => 0.0,
+			5 => '0',
+			6 => '0.0',
+			7 => 1,
+			8 => ' ',
+			9 => "\n",
+			10 => '&nbsp;',
+		);
+
+		$this->assertEquals( $non_empties, cmb2_utils()->filter_empty( $vals ) );
 	}
 
 }
