@@ -5,6 +5,50 @@ window.wysiwyg = (function($) {
 	'use strict';
 
 	// Private variables
+	var toBeDestroyed = [],
+		toBeInitialized = [];
+
+	// Private functions
+
+	/**
+	 * Destroys any editors that weren't destroyed because they didn't exist yet.
+	 */
+	function delayedDestroy() {
+		toBeDestroyed.forEach(function(id) {
+			toBeDestroyed.splice(toBeDestroyed.indexOf(id), 1);
+			my.destroy(id);
+		});
+	}
+
+	/**
+	 * Initializes any editors that weren't initialized because they didn't exist yet.
+	 */
+	function delayedInit() {
+
+		// Don't initialize until they've all been destroyed.
+		if (toBeDestroyed.length === 0) {
+			toBeInitialized.forEach(function (id) {
+				toBeInitialized.splice(toBeInitialized.indexOf(id), 1);
+				init(id);
+			});
+		} else {
+			window.setTimeout(delayedInit, 100);
+		}
+	}
+
+	function init(id) {
+
+		// The destroys might not have happened yet.  Don't init until they have.
+		if (toBeDestroyed.length === 0) {
+			tinyMCE.init(tinyMCEPreInit.mceInit[id]);
+
+			// Also, switch back to visual to start if on text, because making the editor makes it go to visual mode.
+			$('#' + id).parents('.wp-editor-wrap').removeClass('html-active').addClass('tmce-active');
+		} else {
+			toBeInitialized.push(id);
+			window.setTimeout(delayedInit, 100);
+		}
+	}
 
 	// Public variables
 	var my = {
@@ -61,11 +105,19 @@ window.wysiwyg = (function($) {
 	/**
 	 * Destroys one editor
 	 *
-	 * @param string idSelector
+	 * @param string id
 	 */
-	my.destroy = function(idSelector) {
-		var editor = tinyMCE.get(idSelector);
-		editor.destroy();
+	my.destroy = function(id) {
+
+		// The editor might not be initialized yet.  But we need to destroy it once it is.
+		var editor = tinyMCE.get(id);
+
+		if (editor) {
+			editor.destroy();
+		} else if (toBeDestroyed.indexOf(id) === -1) {
+			toBeDestroyed.push(id);
+			window.setTimeout(delayedDestroy, 100);
+		}
 	};
 
 	/**
@@ -87,10 +139,7 @@ window.wysiwyg = (function($) {
 	my.reinitAll = function($group) {
 		$group.find('.wp-editor-wrap textarea').each(function(i, el) {
 			var innerId = $(el).attr('id');
-			tinyMCE.init(tinyMCEPreInit.mceInit[innerId]);
-
-			// Also, switch back to visual to start if on text, because making the editor makes it go to visual mode.
-			$('#' + innerId).parents('.wp-editor-wrap').removeClass('html-active').addClass('tmce-active');
+			init(innerId);
 		});
 	};
 
