@@ -393,13 +393,13 @@ function yourprefix_register_demo_metabox() {
 
 	$cmb_demo->add_field( array(
 		'name' => __( 'oEmbed', 'cmb2' ),
-		'desc' => __( 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.', 'cmb2' ),
+		'desc' => sprintf( __( 'Enter a youtube, twitter, or instagram URL. Supports services listed at %s.', 'cmb2' ), '<a href="https://codex.wordpress.org/Embeds">codex.wordpress.org/Embeds</a>' ),
 		'id'   => $prefix . 'embed',
 		'type' => 'oembed',
 	) );
 
 	$cmb_demo->add_field( array(
-		'name'         => 'Testing Field Parameters',
+		'name'         => __( 'Testing Field Parameters', 'cmb2' ),
 		'id'           => $prefix . 'parameters',
 		'type'         => 'text',
 		'before_row'   => 'yourprefix_before_row_if_2', // callback
