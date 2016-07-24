@@ -174,7 +174,14 @@ class CMB2_Ajax {
 		}
 
 		// Otherwise, send back error info that no oEmbeds were found
-		return '<p class="ui-state-error-text">' . sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $oembed['fallback'] ) . ' <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>';
+		return sprintf(
+			'<p class="ui-state-error-text">%s</p>',
+			sprintf(
+				__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ),
+				$oembed['fallback'],
+				'<a href="https://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>'
+			)
+		);
 	}
 
 	/**
