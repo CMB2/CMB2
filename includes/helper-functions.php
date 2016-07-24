@@ -91,6 +91,7 @@ function cmb2_get_oembed( $args = array() ) {
 	}
 
 	$error = sprintf(
+		/* translators: 1: results for. 2: link to codex.wordpress.org/Embeds */
 		__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ),
 		$oembed['fallback'],
 		'<a href="https://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>'

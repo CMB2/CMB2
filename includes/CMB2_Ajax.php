@@ -177,6 +177,7 @@ class CMB2_Ajax {
 		return sprintf(
 			'<p class="ui-state-error-text">%s</p>',
 			sprintf(
+				/* translators: 1: results for. 2: link to codex.wordpress.org/Embeds */
 				__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ),
 				$oembed['fallback'],
 				'<a href="https://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>'
