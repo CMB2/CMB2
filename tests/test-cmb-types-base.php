@@ -140,7 +140,7 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 	}
 
 	protected function file_sprintf( $args ) {
-		return sprintf( '<li class="file-status"><span>' . __( 'File:', 'cmb2' ) . ' <strong>%1$s</strong></span>&nbsp;&nbsp; (<a href="%3$s" target="_blank" rel="external">' . __( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button">' . __( 'Remove', 'cmb2' ) . '</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s" data-id=\'%2$d\'/></li>',
+		return sprintf( '<li class="file-status"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%1$s</strong></span>&nbsp;&nbsp; (<a href="%3$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s" data-id=\'%2$d\'/></li>',
 			$args['file_name'],
 			$args['attachment_id'],
 			$args['url']
