@@ -140,11 +140,11 @@ class CMB2_hookup {
 
 	public function term_hooks() {
 		if ( ! function_exists( 'get_term_meta' ) ) {
-			wp_die( esc_html__( 'Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress install.', 'cmb2' ) );
+			wp_die( esc_html__( 'Term Metadata is a WordPress 4.4 feature. Please upgrade your WordPress install.', 'cmb2' ) );
 		}
 
 		if ( ! $this->cmb->prop( 'taxonomies' ) ) {
-			wp_die( esc_html__( 'Term metaboxes configuration requires a \'taxonomies\' parameter', 'cmb2' ) );
+			wp_die( esc_html__( 'Term metaboxes configuration requires a \'taxonomies\' parameter.', 'cmb2' ) );
 		}
 
 		$this->taxonomies = (array) $this->cmb->prop( 'taxonomies' );

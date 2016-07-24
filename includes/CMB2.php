@@ -126,7 +126,7 @@ class CMB2 {
 	public function __construct( $meta_box, $object_id = 0 ) {
 
 		if ( empty( $meta_box['id'] ) ) {
-			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter', 'cmb2' ) );
+			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter.', 'cmb2' ) );
 		}
 
 		$this->meta_box = wp_parse_args( $meta_box, $this->mb_defaults );
