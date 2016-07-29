@@ -95,6 +95,12 @@ class CMB2_JS {
 	 * @since  2.0.7
 	 */
 	protected static function localize( $debug ) {
+		static $localized = false;
+		if ( $localized ) {
+			return;
+		}
+
+		$localized = true;
 		$l10n = array(
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),

@@ -80,6 +80,30 @@ class CMB2_Field extends CMB2_Base {
 	public $render_context = 'edit';
 
 	/**
+	 * All CMB2_Field callable field arguments.
+	 * Can be used to determine if a field argument is callable.
+	 *
+	 * @var array
+	 */
+	public static $callable_fields = array(
+		'default',
+		'row_classes',
+		'options_cb',
+		'label_cb',
+		'render_row_cb',
+		'before_group',
+		'before_group_row',
+		'before_row',
+		'before',
+		'before_field',
+		'after_field',
+		'after',
+		'after_row',
+		'after_group_row',
+		'after_group',
+	);
+
+	/**
 	 * Constructs our field object
 	 * @since 1.1.0
 	 * @param array $args Field arguments
@@ -162,7 +186,7 @@ class CMB2_Field extends CMB2_Base {
 	public function _data( $var, $key = '' ) {
 		$vars = $this->{$var};
 		if ( $key ) {
-			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
+			return array_key_exists( $key, $vars ) ? $vars[ $key ] : false;
 		}
 		return $vars;
 	}
@@ -507,6 +531,7 @@ class CMB2_Field extends CMB2_Base {
 
 		if ( $updated ) {
 			$this->value = $this->get_data();
+			$this->escaped_value = null;
 		}
 
 		$field_id = $this->id( true );
@@ -839,7 +864,6 @@ class CMB2_Field extends CMB2_Base {
 			$added_classes = is_array( $added_classes ) ? implode( ' ', $added_classes ) : (string) $added_classes;
 		}
 
-
 		if ( $added_classes ) {
 			$classes[] = esc_attr( $added_classes );
 		}
@@ -996,6 +1020,19 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Store JS dependencies as part of the field args.
+	 * @since 2.2.0
+	 * @param array $dependencies Dependies to register for this field.
+	 */
+	public function add_js_dependencies( $dependencies = array() ) {
+		foreach ( (array) $dependencies as $dependency ) {
+			$this->args['js_dependencies'][ $dependency ] = $dependency;
+		}
+
+		CMB2_JS::add_dependencies( $dependencies );
+	}
+
+	/**
 	 * Get CMB2_Field default value, either from default param or default_cb param.
 	 *
 	 * @since  0.2.2
@@ -1021,7 +1058,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
 	 */
-	public function _set_field_defaults( $args, $blah ) {
+	public function _set_field_defaults( $args ) {
 
 		/*
 		 * Deprecated parameters:
@@ -1064,6 +1101,7 @@ class CMB2_Field extends CMB2_Base {
 			'display_cb'        => array( $this, 'display_value_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 			'column'            => false,
+			'js_dependencies'   => array(),
 		) );
 
 		/*
