@@ -33,7 +33,7 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$output .= parent::render( array(
 			'type'  => 'button',
 			'class' => 'cmb2-upload-button button cmb2-upload-list',
-			'value'  => esc_html( $this->_text( 'add_upload_files_text', __( 'Add or Upload Files', 'cmb2' ) ) ),
+			'value'  => esc_attr( $this->_text( 'add_upload_files_text', esc_html__( 'Add or Upload Files', 'cmb2' ) ) ),
 			'name'  => '', 'id'  => '',
 		) );
 

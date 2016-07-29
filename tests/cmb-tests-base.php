@@ -56,12 +56,12 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	}
 
 	public function expected_oembed_success_results( $args ) {
-		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . __( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
+		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . esc_html__( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
 	public function no_connection_oembed_result( $url ) {
 		global $wp_embed;
-		return sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $url, sprintf( __( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $url ) ) );
+		return sprintf( '<p class="ui-state-error-text">%2$s <a href="http://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p>', $url, sprintf( esc_html__( 'No oEmbed Results Found for %s. View more info at', 'cmb2' ), $wp_embed->maybe_make_link( $url ) ) );
 	}
 
 	public function assertOEmbedResult( $args ) {
