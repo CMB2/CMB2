@@ -525,7 +525,6 @@ window.CMB2 = window.CMB2 || {};
 		cmb.triggerElement( $this, 'cmb2_add_group_row_start', $this );
 
 		var $table   = $id( $this.data('selector') );
-		var groupid  = $table.data( 'groupid' );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
 		var prevNum  = parseInt( $oldRow.data('iterator') );
 		cmb.idNumber = prevNum + 1;
@@ -544,11 +543,6 @@ window.CMB2 = window.CMB2 || {};
 		} else {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
-
-		// Handle hidden fields.
-		var $lasthidden = $( '[type="hidden"][data-groupid="'+ groupid +'"]' ).last();
-		var $clone = cmb.elReplacements( $lasthidden.clone(), prevNum );
-		$lasthidden.after( $clone );
 
 		cmb.triggerElement( $table, 'cmb2_add_row', $newRow );
 	};
