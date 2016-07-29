@@ -208,7 +208,7 @@ module.exports = function(grunt) {
 		uglify: {
 			all: {
 				files: {
-					'js/cmb2.min.js': ['js/cmb2.js']
+					'js/cmb2.min.js': ['js/cmb2.js', 'js/wysiwyg.js']
 				},
 				options: {
 					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
