@@ -162,7 +162,7 @@ class CMB2_Field extends CMB2_Base {
 	public function _data( $var, $key = '' ) {
 		$vars = $this->{$var};
 		if ( $key ) {
-			return isset( $vars[ $key ] ) ? $vars[ $key ] : false;
+			return array_key_exists( $key, $vars ) ? $vars[ $key ] : false;
 		}
 		return $vars;
 	}
