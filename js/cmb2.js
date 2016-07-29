@@ -537,7 +537,7 @@ window.CMB2 = window.CMB2 || {};
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
-		window.wysiwyg.init( $newRow );
+		cmb.wysiwyg.init( $newRow );
 
 		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
 			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
@@ -588,11 +588,11 @@ window.CMB2 = window.CMB2 || {};
 
 		// when a group is removed loop through all next groups and update fields names
 		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
-	
+
 		// Get rid of the editors.
-		$parent.find( '.wp-editor-wrap textarea' ).each(function(i, el) {
-			window.wysiwyg.destroy( $(el).attr('id') );
-		});
+		$parent.find( '.wp-editor-wrap textarea' ).each( function() {
+			cmb.wysiwyg.destroy( $( this ).attr('id') );
+		} );
 
 		$parent.remove();
 
@@ -652,8 +652,7 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		// Destroy any editors before starting.
-		window.wysiwyg.destroyAll( $group );
-
+		cmb.wysiwyg.destroyAll( $group );
 
 		// About to shift
 		cmb.triggerElement( $this, 'cmb2_shift_rows_start', $this );
@@ -740,7 +739,7 @@ window.CMB2 = window.CMB2 || {};
 		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 
 		// Set up the editors again.
-		window.wysiwyg.reinitAll( $group );
+		cmb.wysiwyg.reinitAll( $group );
 
 		// shift done
 		cmb.triggerElement( $this, 'cmb2_shift_rows_complete', $this );
