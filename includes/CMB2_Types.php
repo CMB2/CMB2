@@ -174,7 +174,7 @@ class CMB2_Types {
 			? esc_html__( 'That field type may not work as expected.', 'cmb2' )
 			: esc_html__( 'That field type will not work as expected.', 'cmb2' );
 
-		$message[] = esc_html__( 'See: https://github.com/mustardBees/cmb-field-select2/pull/34w for more information about this change.', 'cmb2' );
+		$message[] = esc_html__( 'For more information about this change see: https://github.com/mustardBees/cmb-field-select2/pull/34w', 'cmb2' );
 
 		_doing_it_wrong( __CLASS__ . '::' . $method, implode( ' ', $message ), '2.2.2' );
 	}
