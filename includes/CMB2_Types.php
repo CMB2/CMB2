@@ -406,6 +406,7 @@ class CMB2_Types {
 		);
 		if ( $this->field->group ) {
 			$args['data-groupid'] = $this->field->group->id();
+			$args['data-iterator'] = $this->iterator;
 		}
 		return $this->input( $args );
 	}

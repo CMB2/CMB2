@@ -441,7 +441,13 @@ class CMB2 extends CMB2_Base {
 			$field = $this->get_new_field( $field_args, $field_group );
 		}
 
-		$this->hidden_fields[] = new CMB2_Types( $field );
+		$type = new CMB2_Types( $field );
+
+		if ( $field_group ) {
+			$type->iterator = $field_group->index;
+		}
+
+		$this->hidden_fields[] = $type;
 
 		return $field;
 	}

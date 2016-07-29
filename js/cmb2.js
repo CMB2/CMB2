@@ -500,7 +500,7 @@ window.CMB2 = window.CMB2 || {};
 
 		// If name is defined
 		if ( typeof name !== 'undefined' ) {
-			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
+			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ), 10 );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
 
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
@@ -525,9 +525,8 @@ window.CMB2 = window.CMB2 || {};
 		cmb.triggerElement( $this, 'cmb2_add_group_row_start', $this );
 
 		var $table   = $id( $this.data('selector') );
-		var groupid  = $table.data( 'groupid' );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
-		var prevNum  = parseInt( $oldRow.data('iterator') );
+		var prevNum  = parseInt( $oldRow.data('iterator'), 10 );
 		cmb.idNumber = prevNum + 1;
 		var $row     = $oldRow.clone();
 
@@ -545,11 +544,6 @@ window.CMB2 = window.CMB2 || {};
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
-		// Handle hidden fields.
-		var $lasthidden = $( '[type="hidden"][data-groupid="'+ groupid +'"]' ).last();
-		var $clone = cmb.elReplacements( $lasthidden.clone(), prevNum );
-		$lasthidden.after( $clone );
-
 		cmb.triggerElement( $table, 'cmb2_add_row', $newRow );
 	};
 
@@ -559,7 +553,7 @@ window.CMB2 = window.CMB2 || {};
 		var $this         = $( this );
 		var $table        = $id( $this.data('selector') );
 		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
+		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator'), 10 );
 		cmb.idNumber      = prevNum + 1;
 		var $row          = $emptyrow.clone();
 
@@ -584,24 +578,25 @@ window.CMB2 = window.CMB2 || {};
 		var $parent = $this.parents('.cmb-repeatable-grouping');
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
-		if ( number > 1 ) {
-
-			cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
-
-			// when a group is removed loop through all next groups and update fields names
-			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
-
-			$parent.remove();
-
-			if ( number <= 2 ) {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-			} else {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-			}
-
-			cmb.triggerElement( $table, 'cmb2_remove_row' );
-
+		// Needs to always be at least one group.
+		if ( number < 2 ) {
+			return;
 		}
+
+		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
+
+		// when a group is removed loop through all next groups and update fields names
+		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+
+		$parent.remove();
+
+		if ( number <= 2 ) {
+			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
+		} else {
+			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
+		}
+
+		cmb.triggerElement( $table, 'cmb2_remove_row' );
 
 	};
 
