@@ -79,7 +79,7 @@ class CMB2_JS {
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
 		if ( $enqueue_wysiwyg ) {
-			wp_enqueue_script( 'cmb2-wysiwyg', cmb2_utils()->url( 'js/cmb2-wysiwyg.js' ), array( 'jquery' ), CMB2_VERSION );
+			wp_enqueue_script( 'cmb2-wysiwyg', cmb2_utils()->url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
 		}
 
 		self::localize( $debug );
