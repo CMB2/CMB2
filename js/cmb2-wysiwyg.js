@@ -53,27 +53,31 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  {string} groupid The group ID
+	 * @param  {object} data The group/field data.
 	 *
-	 * @return {object}         Options data object for a group.
+	 * @return {object}      Options data object for a group.
 	 */
-	function getGroupData( groupid ) {
-		if ( ! all[ groupid ] ) {
-			all[ groupid ] = {
-				template : wp.template( 'cmb2-wysiwyg-' + groupid ),
+	function getGroupData( data ) {
+		var groupid = data.groupid;
+		var fieldid = data.fieldid;
+
+		if ( ! all[ groupid ] || ! all[ groupid ][ fieldid ] ) {
+			all[ groupid ] = all[ groupid ] || {};
+			all[ groupid ][ fieldid ] = {
+				template : wp.template( 'cmb2-wysiwyg-' + groupid + '-' + fieldid ),
 				defaults : {
 
 					// Get the data from the template-wysiwyg initiation.
-					mce : $.extend( {}, tinyMCEPreInit.mceInit[ 'cmb2_replace_id_' + groupid ] ),
-					qt  : $.extend( {}, tinyMCEPreInit.qtInit[ 'cmb2_replace_id_' + groupid ] )
+					mce : $.extend( {}, tinyMCEPreInit.mceInit[ 'cmb2_i_' + groupid + fieldid ] ),
+					qt  : $.extend( {}, tinyMCEPreInit.qtInit[ 'cmb2_i_' + groupid + fieldid ] )
 				}
 			};
 			// This is the template-wysiwyg data, and we do not want that to be initiated.
-			delete tinyMCEPreInit.mceInit[ 'cmb2_replace_id_' + groupid ];
-			delete tinyMCEPreInit.qtInit[ 'cmb2_replace_id_' + groupid ];
+			delete tinyMCEPreInit.mceInit[ 'cmb2_i_' + groupid + fieldid ];
+			delete tinyMCEPreInit.qtInit[ 'cmb2_i_' + groupid + fieldid ];
 		}
 
-		return all[ groupid ];
+		return all[ groupid ][ fieldid ];
 	}
 
 	/**
@@ -86,8 +90,8 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	function initOptions( options ) {
-		var nameRegex = new RegExp( 'cmb2_replace_name_' + options.groupid, 'g' );
-		var idRegex   = new RegExp( 'cmb2_replace_id_' + options.groupid, 'g' );
+		var nameRegex = new RegExp( 'cmb2_n_' + options.groupid + options.fieldid, 'g' );
+		var idRegex   = new RegExp( 'cmb2_i_' + options.groupid + options.fieldid, 'g' );
 		var prop, newSettings, newQTS;
 
 		// If no settings for this field. Clone from placeholder.
@@ -262,7 +266,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 			return false;
 		}
 
-		$.extend( data, getGroupData( data.groupid ) );
+		$.extend( data, getGroupData( data ) );
 
 		initOptions( data );
 
