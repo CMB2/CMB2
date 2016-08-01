@@ -157,7 +157,19 @@ function yourprefix_register_demo_metabox() {
 		'desc' => __( 'field description (optional)', 'cmb2' ),
 		'id'   => $prefix . 'textmedium',
 		'type' => 'text_medium',
-		// 'repeatable' => true,
+	) );
+
+	$cmb_demo->add_field( array(
+		'name'       => __( 'Read-only Disabled Field', 'cmb2' ),
+		'desc'       => __( 'field description (optional)', 'cmb2' ),
+		'id'         => $prefix . 'readonly',
+		'type'       => 'text_medium',
+		'default'    => __( 'Hey there, I\'m a read-only field', 'cmb2' ),
+		'save_field' => false, // Disables the saving of this field.
+		'attributes' => array(
+			'disabled' => 'disabled',
+			'readonly' => 'readonly',
+		),
 	) );
 
 	$cmb_demo->add_field( array(

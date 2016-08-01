@@ -36,7 +36,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 			),
 			'before_field'  => array( $this, 'before_field_cb' ),
 			'after_field'   => 'after_field_static',
-			'row_classes'   => array( $this, 'row_classes_array_cb' ),
+			'classes_cb'    => array( $this, 'row_classes_array_cb' ),
 			'default'       => array( $this, 'cb_to_set_default' ),
 			'render_row_cb' => array( $this, 'render_row_cb_test' ),
 			'label_cb'      => array( $this, 'label_cb_test' ),
@@ -86,13 +86,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb select_all_button multiple repeatable inline on_front show_names date_format time_format description preview_size render_row_cb display_cb label_cb column id before_field after_field row_classes _id _name has_supporting_data', $classes );
+		$this->assertHTMLstringsAreEqual( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb classes classes_cb select_all_button multiple repeatable inline on_front show_names save_field date_format time_format description preview_size render_row_cb display_cb label_cb column js_dependencies id before_field after_field _id _name has_supporting_data', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertEquals( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, id, before_field, after_field, row_classes, _id, _name, has_supporting_data', $default );
+		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, id, before_field, after_field, _id, _name, has_supporting_data', $default );
 	}
 
 	public function test_cmb2_row_classes_field_callback_with_string() {
@@ -485,4 +485,23 @@ class Test_CMB2_Field extends Test_CMB2 {
 		return get_option( $opt_key );
 	}
 
+	public function test_cmb2_field_save_field_false() {
+		$args = $this->field_args;
+		$args['save_field'] = false;
+
+		$field = $this->new_field( $args );
+		$modified = $field->save_field( 'some value that should not be saved' );
+
+		$this->assertFalse( $modified );
+	}
+
+	public function test_cmb2_field_save_field_true() {
+		$args = $this->field_args;
+		$args['save_field'] = true;
+
+		$field = $this->new_field( $args );
+		$modified = $field->save_field( 'some value that should be saved' );
+
+		$this->assertNotFalse( $modified );
+	}
 }

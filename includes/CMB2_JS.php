@@ -50,6 +50,11 @@ class CMB2_JS {
 		// Filter required script dependencies
 		$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
 
+		// Only use minified files if SCRIPT_DEBUG is off
+		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+
+		$min = $debug ? '' : '.min';
+
 		// if colorpicker
 		if ( ! is_admin() && isset( $dependencies['wp-color-picker'] ) ) {
 			self::colorpicker_frontend();
@@ -65,12 +70,17 @@ class CMB2_JS {
 			wp_register_script( 'jquery-ui-datetimepicker', cmb2_utils()->url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
 		}
 
-		// Only use minified files if SCRIPT_DEBUG is off
-		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
-		$min   = $debug ? '' : '.min';
+		// if cmb2-wysiwyg
+		$enqueue_wysiwyg = isset( $dependencies['cmb2-wysiwyg'] ) && $debug;
+		unset( $dependencies['cmb2-wysiwyg'] );
 
-		// Register cmb JS
+		// Enqueue cmb JS
 		wp_enqueue_script( self::$handle, cmb2_utils()->url( "js/cmb2{$min}.js" ), $dependencies, CMB2_VERSION, true );
+
+		// if SCRIPT_DEBUG, we need to enqueue separately.
+		if ( $enqueue_wysiwyg ) {
+			wp_enqueue_script( 'cmb2-wysiwyg', cmb2_utils()->url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
+		}
 
 		self::localize( $debug );
 	}
@@ -95,6 +105,12 @@ class CMB2_JS {
 	 * @since  2.0.7
 	 */
 	protected static function localize( $debug ) {
+		static $localized = false;
+		if ( $localized ) {
+			return;
+		}
+
+		$localized = true;
 		$l10n = array(
 			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'          => admin_url( '/admin-ajax.php' ),

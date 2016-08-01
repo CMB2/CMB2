@@ -17,7 +17,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.2.2.1
+ * Version:      2.2.3.beta
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -48,7 +48,7 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'CMB2_Bootstrap_2221', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_223_Trunk', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -61,14 +61,14 @@ if ( ! class_exists( 'CMB2_Bootstrap_2221', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      http://webdevstudios.com
 	 */
-	class CMB2_Bootstrap_2221 {
+	class CMB2_Bootstrap_223_Trunk {
 
 		/**
 		 * Current version number
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.2.2.1';
+		const VERSION = '2.2.3.beta';
 
 		/**
 		 * Current version hook priority.
@@ -77,20 +77,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_2221', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9981;
+		const PRIORITY = 9980;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_2221 object
+		 * Single instance of the CMB2_Bootstrap_223_Trunk object
 		 *
-		 * @var CMB2_Bootstrap_2221
+		 * @var CMB2_Bootstrap_223_Trunk
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_2221 object
+		 * Creates/returns the single instance CMB2_Bootstrap_223_Trunk object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_2221 Single instance object
+		 * @return CMB2_Bootstrap_223_Trunk Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -142,6 +142,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_2221', false ) ) {
 			$this->l10ni18n();
 
 			// Include helper functions
+			require_once 'includes/CMB2_Base.php';
 			require_once 'includes/CMB2.php';
 			require_once 'includes/helper-functions.php';
 
@@ -180,6 +181,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_2221', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_2221::initiate();
+	CMB2_Bootstrap_223_Trunk::initiate();
 
 }

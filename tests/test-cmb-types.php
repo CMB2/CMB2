@@ -203,7 +203,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_hidden_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" name="field_test_field" id="field_test_field" value=""/>',
+			'<input type="hidden" class="cmb2-hidden" name="field_test_field" id="field_test_field" value=""/>',
 			$this->capture_render( array( $this->get_field_type_object( 'hidden' ), 'render' ) )
 		);
 	}

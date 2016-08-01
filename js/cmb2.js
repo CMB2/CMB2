@@ -11,22 +11,24 @@
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
-window.CMB2 = (function(window, document, $, undefined){
+window.CMB2 = window.CMB2 || {};
+(function(window, document, $, cmb, undefined){
 	'use strict';
 
 	// localization strings
 	var l10n = window.cmb2_l10;
 	var setTimeout = window.setTimeout;
-
-	// CMB2 functionality object
-	var cmb = {
+	var $document;
+	var $id = function( selector ) {
+		return $( document.getElementById( selector ) );
+	};
+	var defaults = {
 		idNumber        : false,
 		repeatEls       : 'input:not([type="button"],[id^=filelist]),select,textarea,.cmb2-media-status',
 		noEmpty         : 'input:not([type="button"]):not([type="radio"]):not([type="checkbox"]),textarea',
 		repeatUpdate    : 'input:not([type="button"]),select,textarea,label',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
-		neweditor_id    : [],
 		defaults : {
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
@@ -35,11 +37,6 @@ window.CMB2 = (function(window, document, $, undefined){
 		media : {
 			frames : {},
 		},
-	};
-
-	// Because it's a more efficient way of getting an element by id.
-	var $id = function( selector ) {
-		return $( document.getElementById( selector ) );
 	};
 
 	cmb.metabox = function() {
@@ -51,9 +48,15 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.init = function() {
-		$(document).trigger( 'cmb_pre_init', cmb );
+		$document = $( document );
+
+		// Setup the CMB2 object defaults.
+		$.extend( cmb, defaults );
+
+		cmb.trigger( 'cmb_pre_init' );
 
 		cmb.log( 'CMB2 localized data', l10n );
+
 		var $metabox     = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
 
@@ -102,9 +105,9 @@ window.CMB2 = (function(window, document, $, undefined){
 		// on pageload
 		setTimeout( cmb.resizeoEmbeds, 500);
 		// and on window resize
-		$(window).on( 'resize', cmb.resizeoEmbeds );
+		$( window ).on( 'resize', cmb.resizeoEmbeds );
 
-		$(document).trigger( 'cmb_init', cmb );
+		cmb.trigger( 'cmb_init' );
 	};
 
 	cmb.resetTitlesAndIterator = function() {
@@ -124,7 +127,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 	cmb.toggleHandle = function( evt ) {
 		evt.preventDefault();
-		$(document).trigger( 'postbox-toggled', $( this ).parent('.postbox').toggleClass('closed') );
+		cmb.trigger( 'postbox-toggled', $( this ).parent('.postbox').toggleClass('closed') );
 	};
 
 	cmb.toggleCheckBoxes = function( evt ) {
@@ -180,6 +183,7 @@ window.CMB2 = (function(window, document, $, undefined){
 		media.fieldData   = media.$field.data();
 		media.previewSize = media.fieldData.previewsize;
 		media.fieldName   = media.$field.attr('name');
+		media.isList      = isList;
 
 		var uploadStatus, attachment;
 
@@ -190,14 +194,16 @@ window.CMB2 = (function(window, document, $, undefined){
 		}
 
 		// Create the media frame.
-		media.frames[ media.field ] = wp.media({
+		media.frames[ media.field ] = wp.media( {
 			title: cmb.metabox().find('label[for=' + media.field + ']').text(),
 			library : media.fieldData.queryargs || {},
 			button: {
 				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
 			},
 			multiple: isList ? 'add' : false
-		});
+		} );
+
+		cmb.trigger( 'cmb_media_modal_init', media );
 
 		cmb.mediaHandlers.list = function( selection, returnIt ) {
 			// Get all of our selected files
@@ -244,6 +250,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 
 		};
+
 		cmb.mediaHandlers.single = function( selection ) {
 			// Only get one file from the uploader
 			attachment = selection.first().toJSON();
@@ -270,22 +277,26 @@ window.CMB2 = (function(window, document, $, undefined){
 
 			if ( cmb.attach_id && isList ) {
 				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( cmb.mediaHandlers.list( selection, true ) );
-				return;
+			} else {
+				cmb.mediaHandlers[type]( selection );
 			}
 
-			cmb.mediaHandlers[type]( selection );
+			cmb.trigger( 'cmb_media_modal_select', selection, media );
 		};
 
 		cmb.mediaHandlers.openModal = function() {
 			var selection = media.frames[ media.field ].state().get('selection');
+			var attach;
 
 			if ( ! cmb.attach_id ) {
-				return selection.reset();
+				selection.reset();
+			} else {
+				attach = wp.media.attachment( cmb.attach_id );
+				attach.fetch();
+				selection.set( attach ? [ attach ] : [] );
 			}
 
-			var attach = wp.media.attachment( cmb.attach_id );
-			attach.fetch();
-			selection.set( attach ? [ attach ] : [] );
+			cmb.trigger( 'cmb_media_modal_open', selection, media );
 		};
 
 		// When a file is selected, run a callback.
@@ -315,7 +326,7 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.cleanRow = function( $row, prevNum, group ) {
-		var $inputs = $row.find( cmb.repeatUpdate );
+		var $elements = $row.find( cmb.repeatUpdate );
 		if ( group ) {
 
 			var $other  = $row.find( '[id]' ).not( cmb.repeatUpdate );
@@ -339,80 +350,65 @@ window.CMB2 = (function(window, document, $, undefined){
 				});
 			}
 		}
-		cmb.neweditor_id = [];
 
-		$inputs.filter(':checked').prop( 'checked', false );
-		$inputs.filter(':selected').prop( 'selected', false );
+		$elements.filter(':checked').prop( 'checked', false );
+		$elements.filter(':selected').prop( 'selected', false );
 
 		if ( $row.find('h3.cmb-group-title').length ) {
 			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
 
-		$inputs.each( function(){
-			var $newInput = $( this );
-			var isEditor  = $newInput.hasClass( 'wp-editor-area' );
-			var oldFor    = $newInput.attr( 'for' );
-			var oldVal    = $newInput.val();
-			var type      = $newInput.prop( 'type' );
-			var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
-			// var $next  = $newInput.next();
-			var attrs     = {};
-			var newID, oldID;
-			if ( oldFor ) {
-				attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
-			} else {
-				var oldName = $newInput.attr( 'name' );
-				// Replace 'name' attribute key
-				var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
-				oldID       = $newInput.attr( 'id' );
-				newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
-				attrs       = {
-					id: newID,
-					name: newName,
-					// value: '',
-					'data-iterator': cmb.idNumber,
-				};
-
-			}
-
-			// Clear out old values
-			if ( undefined !== typeof( oldVal ) && oldVal || checkable ) {
-				attrs.value = checkable ? checkable : '';
-			}
-
-			// Clear out textarea values
-			if ( 'TEXTAREA' === $newInput.prop('tagName') ) {
-				$newInput.html( '' );
-			}
-
-			if ( checkable ) {
-				$newInput.removeAttr( 'checked' );
-			}
-
-			$newInput
-				.removeClass( 'hasDatepicker' )
-				.attr( attrs ).val( checkable ? checkable : '' );
-
-			// wysiwyg field
-			if ( isEditor ) {
-				// Get new wysiwyg ID
-				newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
-				// Empty the contents
-				$newInput.html('');
-				// Get wysiwyg field
-				var $wysiwyg = $newInput.parents( '.cmb-type-wysiwyg' );
-				// Remove extra mce divs
-				$wysiwyg.find('.mce-tinymce:not(:first-child)').remove();
-				// Replace id instances
-				var html = $wysiwyg.html().replace( new RegExp( oldID, 'g' ), newID );
-				// Update field html
-				$wysiwyg.html( html );
-				// Save ids for later to re-init tinymce
-				cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
-			}
-		});
+		$elements.each( function() {
+			cmb.elReplacements( $( this ), prevNum );
+		} );
 
 		return cmb;
+	};
+
+	cmb.elReplacements = function( $newInput, prevNum ) {
+		var oldFor    = $newInput.attr( 'for' );
+		var oldVal    = $newInput.val();
+		var type      = $newInput.prop( 'type' );
+		var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
+		// var $next  = $newInput.next();
+		var attrs     = {};
+		var newID, oldID;
+		if ( oldFor ) {
+			attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
+		} else {
+			var oldName = $newInput.attr( 'name' );
+			// Replace 'name' attribute key
+			var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+			oldID       = $newInput.attr( 'id' );
+			newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+			attrs       = {
+				id: newID,
+				name: newName,
+				// value: '',
+				'data-iterator': cmb.idNumber,
+			};
+
+		}
+
+		// Clear out old values
+		if ( undefined !== typeof( oldVal ) && oldVal || checkable ) {
+			attrs.value = checkable ? checkable : '';
+		}
+
+		// Clear out textarea values
+		if ( 'TEXTAREA' === $newInput.prop('tagName') ) {
+			$newInput.html( '' );
+		}
+
+		if ( checkable ) {
+			$newInput.removeAttr( 'checked' );
+		}
+
+		$newInput
+			.removeClass( 'hasDatepicker' )
+			.attr( attrs ).val( checkable ? checkable : '' );
+
+		return $newInput;
 	};
 
 	cmb.newRowHousekeeping = function( $row ) {
@@ -437,41 +433,6 @@ window.CMB2 = (function(window, document, $, undefined){
 	};
 
 	cmb.afterRowInsert = function( $row ) {
-		var _prop;
-
-		// Need to re-init wp_editor instances
-		if ( cmb.neweditor_id.length ) {
-			var i;
-			for ( i = cmb.neweditor_id.length - 1; i >= 0; i-- ) {
-				var id = cmb.neweditor_id[i].id;
-				var old = cmb.neweditor_id[i].old;
-
-				if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
-					var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ old ] );
-
-					for ( _prop in newSettings ) {
-						if ( 'string' === typeof( newSettings[_prop] ) ) {
-							newSettings[_prop] = newSettings[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.mceInit[ id ] = newSettings;
-				}
-				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
-					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
-					for ( _prop in newQTS ) {
-						if ( 'string' === typeof( newQTS[_prop] ) ) {
-							newQTS[_prop] = newQTS[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.qtInit[ id ] = newQTS;
-				}
-				tinyMCE.init({
-					id : tinyMCEPreInit.mceInit[ id ],
-				});
-
-			}
-		}
-
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
 	};
@@ -483,7 +444,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		// If name is defined
 		if ( typeof name !== 'undefined' ) {
-			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ) );
+			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ), 10 );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
 
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
@@ -505,13 +466,18 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $this = $( this );
 
 		// before anything significant happens
-		$this.trigger( 'cmb2_add_group_row_start', $this );
+		cmb.triggerElement( $this, 'cmb2_add_group_row_start', $this );
 
 		var $table   = $id( $this.data('selector') );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
-		var prevNum  = parseInt( $oldRow.data('iterator') );
-		cmb.idNumber = prevNum + 1;
+		var prevNum  = parseInt( $oldRow.data('iterator'), 10 );
+		cmb.idNumber = parseInt( prevNum, 10 ) + 1;
 		var $row     = $oldRow.clone();
+
+		// Make sure the next number doesn't exist.
+		while ( $table.find( '.cmb-repeatable-grouping[data-iterator="'+ cmb.idNumber +'"]' ).length > 0 ) {
+			cmb.idNumber++;
+		}
 
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
@@ -527,7 +493,7 @@ window.CMB2 = (function(window, document, $, undefined){
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
-		$table.trigger( 'cmb2_add_row', $newRow );
+		cmb.triggerElement( $table, 'cmb2_add_row', $newRow );
 	};
 
 	cmb.addAjaxRow = function( evt ) {
@@ -536,8 +502,8 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $this         = $( this );
 		var $table        = $id( $this.data('selector') );
 		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator') );
-		cmb.idNumber      = prevNum + 1;
+		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator'), 10 );
+		cmb.idNumber      = parseInt( prevNum, 10 ) + 1;
 		var $row          = $emptyrow.clone();
 
 		cmb.newRowHousekeeping( $row ).cleanRow( $row, prevNum );
@@ -547,7 +513,7 @@ window.CMB2 = (function(window, document, $, undefined){
 
 		cmb.afterRowInsert( $row );
 
-		$table.trigger( 'cmb2_add_row', $row );
+		cmb.triggerElement( $table, 'cmb2_add_row', $row );
 
 		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
 
@@ -561,23 +527,25 @@ window.CMB2 = (function(window, document, $, undefined){
 		var $parent = $this.parents('.cmb-repeatable-grouping');
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
-		if ( number > 1 ) {
-
-			$table.trigger( 'cmb2_remove_group_row_start', $this );
-
-			// when a group is removed loop through all next groups and update fields names
-			$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
-
-			$parent.remove();
-
-			if ( number <= 2 ) {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-			} else {
-				$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-			}
-
-			$table.trigger( 'cmb2_remove_row' );
+		// Needs to always be at least one group.
+		if ( number < 2 ) {
+			return;
 		}
+
+		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
+
+		// when a group is removed loop through all next groups and update fields names
+		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+
+		$parent.remove();
+
+		if ( number <= 2 ) {
+			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
+		} else {
+			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
+		}
+
+		cmb.triggerElement( $table, 'cmb2_remove_row' );
 
 	};
 
@@ -603,7 +571,8 @@ window.CMB2 = (function(window, document, $, undefined){
 			if ( number === 3 ) {
 				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
 			}
-			$table.trigger( 'cmb2_remove_row' );
+
+			cmb.triggerElement( $table, 'cmb2_remove_row' );
 		} else {
 			$this.addClass( 'button-disabled' );
 		}
@@ -614,22 +583,22 @@ window.CMB2 = (function(window, document, $, undefined){
 		evt.preventDefault();
 
 		var $this = $( this );
-		// before anything signif happens
-		$this.trigger( 'cmb2_shift_rows_enter', $this );
+		var $from = $this.parents( '.cmb-repeatable-grouping' );
+		var $goto = $this.hasClass( 'move-up' ) ? $from.prev( '.cmb-repeatable-grouping' ) : $from.next( '.cmb-repeatable-grouping' );
 
-		var $parent   = $this.parents( '.cmb-repeatable-grouping' );
-		var $goto     = $this.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
+		// Before shift occurs.
+		cmb.triggerElement( $this, 'cmb2_shift_rows_enter', $this, $from, $goto );
 
 		if ( ! $goto.length ) {
 			return;
 		}
 
-		// we're gonna shift
-		$this.trigger( 'cmb2_shift_rows_start', $this );
+		// About to shift
+		cmb.triggerElement( $this, 'cmb2_shift_rows_start', $this, $from, $goto );
 
 		var inputVals = [];
-		// Loop this items fields
-		$parent.find( cmb.repeatEls ).each( function() {
+		// Loop this item's fields
+		$from.find( cmb.repeatEls ).each( function() {
 			var $element = $( this );
 			var elType = $element.attr( 'type' );
 			var val;
@@ -701,15 +670,15 @@ window.CMB2 = (function(window, document, $, undefined){
 			}
 		});
 
-		$parent.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
+		$from.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 		$goto.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 
 		// trigger color picker change event
-		$parent.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
+		$from.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 
 		// shift done
-		$this.trigger( 'cmb2_shift_rows_complete', $this );
+		cmb.triggerElement( $this, 'cmb2_shift_rows_complete', $this, $from, $goto );
 	};
 
 	cmb.initPickers = function( $timePickers, $datePickers, $colorPickers ) {
@@ -979,10 +948,21 @@ window.CMB2 = (function(window, document, $, undefined){
 			});
 
 		}, 500);
+
+	};
+
+	cmb.trigger = function( evtName ) {
+		var args = Array.prototype.slice.call( arguments, 1 );
+		args.push( cmb );
+		$document.trigger( evtName, args );
+	};
+
+	cmb.triggerElement = function( $el, evtName ) {
+		var args = Array.prototype.slice.call( arguments, 2 );
+		args.push( cmb );
+		$el.trigger( evtName, args );
 	};
 
 	$( cmb.init );
 
-	return cmb;
-
-})(window, document, jQuery);
+})(window, document, jQuery, window.CMB2);

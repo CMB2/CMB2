@@ -13,6 +13,13 @@
 class CMB2_Utils {
 
 	/**
+	 * The WordPress ABSPATH constant.
+	 * @var   string
+	 * @since 2.2.3
+	 */
+	protected static $ABSPATH = ABSPATH;
+
+	/**
 	 * The url which is used to load local resources.
 	 * @var   string
 	 * @since 2.0.0
@@ -243,15 +250,23 @@ class CMB2_Utils {
 		}
 
 		// Ok, now let's test if we are in the theme dir.
-		$theme_root = get_theme_root();
+		$theme_root = self::normalize_path( get_theme_root() );
 		if ( 0 === strpos( $dir, $theme_root ) ) {
 			// Ok, then use get_theme_root_uri.
-			return set_url_scheme( trailingslashit( str_replace( $theme_root, get_theme_root_uri(), $dir ) ) );
+			return set_url_scheme(
+				trailingslashit(
+					str_replace(
+						untrailingslashit( $theme_root ),
+						untrailingslashit( get_theme_root_uri() ),
+						$dir
+					)
+				)
+			);
 		}
 
 		// Check to see if it's anywhere in the root directory
 
-		$site_dir = self::normalize_path( ABSPATH );
+		$site_dir = self::normalize_path( self::$ABSPATH );
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
