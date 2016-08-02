@@ -7,6 +7,13 @@
  * @author    WebDevStudios
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
+ *
+ * @property-read $args        The objects array of properties/arguments.
+ * @property-read $meta_box    The objects array of properties/arguments.
+ * @property-read $properties  The objects array of properties/arguments.
+ * @property-read $cmb_id      Current CMB2 instance ID
+ * @property-read $object_id   Object ID
+ * @property-read $object_type Type of object being handled. (e.g., post, user, comment, or term)
  */
 abstract class CMB2_Base {
 
