@@ -97,6 +97,13 @@ class CMB2 extends CMB2_Base {
 	protected $has_columns = false;
 
 	/**
+	 * If taxonomy field is requesting to remove_default, we store the taxonomy here.
+	 * @var   bool
+	 * @since 2.2.3
+	 */
+	protected $tax_metaboxes_to_remove = array();
+
+	/**
 	 * Get started
 	 * @since 0.4.0
 	 * @param array   $config    Metabox config array
@@ -1052,6 +1059,10 @@ class CMB2 extends CMB2_Base {
 			) );
 		}
 
+		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
+			$this->tax_metaboxes_to_remove[ $field['taxonomy'] ] = $field['taxonomy'];
+		}
+
 		$this->_add_field_to_array(
 			$field,
 			$this->meta_box['fields'],
@@ -1257,6 +1268,7 @@ class CMB2 extends CMB2_Base {
 		switch ( $field ) {
 			case 'updated':
 			case 'has_columns':
+			case 'tax_metaboxes_to_remove':
 				return $this->{$field};
 			default:
 				return parent::__get( $field );
