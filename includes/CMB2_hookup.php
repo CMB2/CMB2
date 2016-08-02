@@ -327,6 +327,19 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
+			foreach ( $this->cmb->prop( 'fields' ) as $meta_box => $field ) {
+				if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
+					if ( ! is_taxonomy( $field['taxonomy'] ) ) {
+						continue;
+					}
+					if ( is_taxonomy_hierarchical( $field['taxonomy'] ) ) {
+						remove_meta_box( $field['taxonomy'] . 'div', $post_type, 'side' );
+					} else {
+						remove_meta_box( 'tagsdiv-' . $field['taxnomy'], $post_type, 'side' );
+					}
+				}
+			}
+
 			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 		}
 	}
