@@ -1049,14 +1049,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
-			$this->has_columns = true;
-
-			$column = is_array( $field['column'] ) ? $field['column'] : array();
-
-			$field['column'] = wp_parse_args( $column, array(
-				'name'     => isset( $field['name'] ) ? $field['name'] : '',
-				'position' => false,
-			) );
+			$field = $this->define_field_column( $field );
 		}
 
 		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
@@ -1070,6 +1063,25 @@ class CMB2 extends CMB2_Base {
 		);
 
 		return $field['id'];
+	}
+
+	/**
+	 * Defines a field's column if requesting to be show in admin columns.
+	 * @since  2.2.3
+	 * @param  array  $field Metabox field config array.
+	 * @return array         Modified metabox field config array.
+	 */
+	protected function define_field_column( array $field ) {
+		$this->has_columns = true;
+
+		$column = is_array( $field['column'] ) ? $field['column'] : array();
+
+		$field['column'] = wp_parse_args( $column, array(
+			'name'     => isset( $field['name'] ) ? $field['name'] : '',
+			'position' => false,
+		) );
+
+		return $field;
 	}
 
 	/**
