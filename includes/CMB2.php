@@ -100,7 +100,7 @@ class CMB2 extends CMB2_Base {
 
 	/**
 	 * If taxonomy field is requesting to remove_default, we store the taxonomy here.
-	 * @var   bool
+	 * @var   array
 	 * @since 2.2.3
 	 */
 	protected $tax_metaboxes_to_remove = array();
