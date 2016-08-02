@@ -27,8 +27,8 @@ class CMB2_Types {
 	public $field;
 
 	/**
-	 * Current CMB2_Type object
-	 * @var   CMB2_Type object
+	 * Current CMB2_Type_Base object
+	 * @var   CMB2_Type_Base object
 	 * @since 2.2.2
 	 */
 	public $type;
@@ -57,7 +57,7 @@ class CMB2_Types {
 			'parse_picker_options' => array(),
 		);
 		if ( isset( $proxied[ $fieldtype ] ) ) {
-			// Proxies the method call to the CMB2_Type object
+			// Proxies the method call to the CMB2_Type_Base object
 			return $this->proxy_method( $fieldtype, $proxied[ $fieldtype ], $arguments );
 		}
 
@@ -103,11 +103,11 @@ class CMB2_Types {
 	}
 
 	/**
-	 * Proxies the method call to the CMB2_Type object, if it exists, otherwise returns a default fallback value.
+	 * Proxies the method call to the CMB2_Type_Base object, if it exists, otherwise returns a default fallback value.
 	 *
 	 * @since  2.2.2
 	 *
-	 * @param  string $method  Method to call on the CMB2_Type object.
+	 * @param  string $method  Method to call on the CMB2_Type_Base object.
 	 * @param  mixed  $default Default fallback value if method is not found.
 	 *
 	 * @return mixed           Results from called method.
@@ -134,7 +134,7 @@ class CMB2_Types {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param string $method  Method attempting to be called on the CMB2_Type object.
+	 * @param string $method  Method attempting to be called on the CMB2_Type_Base object.
 	 */
 	protected function guess_type_object( $method ) {
 		// Try to "guess" the Type object based on the method requested.
@@ -371,7 +371,7 @@ class CMB2_Types {
 	 * Handles outputting an 'input' element
 	 * @since  1.1.0
 	 * @param  array  $args Override arguments
-	 * @param  array  $type Field type
+	 * @param  string $type Field type
 	 * @return string       Form input element
 	 */
 	public function input( $args = array(), $type = __FUNCTION__ ) {
