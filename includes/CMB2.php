@@ -11,6 +11,8 @@
  * @property-read string $cmb_id
  * @property-read array $meta_box
  * @property-read array $updated
+ * @property-read bool  $has_columns
+ * @property-read array $tax_metaboxes_to_remove
  */
 class CMB2 extends CMB2_Base {
 
