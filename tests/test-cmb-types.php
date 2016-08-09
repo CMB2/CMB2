@@ -494,7 +494,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_title_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<h5 class="cmb2-metabox-title">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
+			'<h5 class="cmb2-metabox-title" id="field-test-field">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'title' ), 'render' ) )
 		);
 	}
