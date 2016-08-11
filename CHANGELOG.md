@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 * Make wysiwyg editors work in the repeatable groups context. A standard repeatable (non-group) wysiwyg field is not supported (but will possibly be included in a future update). Props [@johnsonpaul1014](https://github.com/johnsonpaul1014) ([#26](https://github.com/WebDevStudios/CMB2/pull/26), [#99](https://github.com/WebDevStudios/CMB2/pull/99), [#260](https://github.com/WebDevStudios/CMB2/pull/260), [#264](https://github.com/WebDevStudios/CMB2/pull/264), [#356](https://github.com/WebDevStudios/CMB2/pull/356), [#431](https://github.com/WebDevStudios/CMB2/pull/431), [#462](https://github.com/WebDevStudios/CMB2/pull/462), [#657](https://github.com/WebDevStudios/CMB2/pull/657), [#693](https://github.com/WebDevStudios/CMB2/pull/693)). 
 * Add an id to the heading tag in the title field. This allows linking to a particular title using the id.
 * Internationalization improvements. Props [ramiy](https://github.com/ramiy) ([#696](https://github.com/WebDevStudios/CMB2/pull/696)).
+* Ensure that saving does not happen during a switch-to-blog session, as data would be saved to the wrong object. [See more](https://wordpress.org/support/topic/bug-in-lastest-version?replies=2).
 
 
 ### Bug Fixes

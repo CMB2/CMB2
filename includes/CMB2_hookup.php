@@ -572,7 +572,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @return bool          Whether object can be saved
 	 */
 	public function can_save( $type = '' ) {
-		return (
+		return apply_filters( 'cmb2_can_save', (
 			$this->cmb->prop( 'save_fields' )
 			// check nonce
 			&& isset( $_POST[ $this->cmb->nonce() ] )
@@ -581,7 +581,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			// get the metabox types & compare it to this type
 			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
-		);
+			// Don't do updates during a switch-to-blog instance.
+			&& ! ( is_multisite() && ms_is_switched() )
+		) );
 	}
 
 	/**
