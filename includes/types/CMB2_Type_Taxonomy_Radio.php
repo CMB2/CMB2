@@ -22,7 +22,7 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 		$i = 1;
 
 		if ( ! $terms ) {
-			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', __( 'No terms', 'cmb2' ) ) ) );
+			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', esc_html__( 'No terms', 'cmb2' ) ) ) );
 		} else {
 			$option_none  = $field->args( 'show_option_none' );
 			if ( ! empty( $option_none ) ) {

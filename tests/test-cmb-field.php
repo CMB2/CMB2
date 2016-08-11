@@ -226,7 +226,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$args['show_option_none'] = true;
 		$field = $this->new_field( $args );
 
-		$this->assertEquals( __( 'None', 'cmb2' ), $field->args( 'show_option_none' ) );
+		$this->assertEquals( esc_html__( 'None', 'cmb2' ), $field->args( 'show_option_none' ) );
 
 		$this->assertHTMLstringsAreEqual(
 			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="" checked="checked"/><label for="radio_inline1">None</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="standard"/><label for="radio_inline2">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="custom"/><label for="radio_inline3">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline4" value="none"/><label for="radio_inline4">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
@@ -252,7 +252,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		$cmb_demo = cmb2_get_metabox( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Test Metabox', 'cmb2' ),
+			'title'         => esc_html__( 'Test Metabox', 'cmb2' ),
 			'object_types'  => array( 'page', ), // Post type
 			'show_on_cb'    => 'yourprefix_show_if_front_page', // function should return a bool value
 			'context'       => 'normal',
@@ -263,15 +263,15 @@ class Test_CMB2_Field extends Test_CMB2 {
 		), $post_id );
 
 		$field_id = $cmb_demo->add_field( array(
-			'name'    => __( 'Test Multi Checkbox', 'cmb2' ),
-			'desc'    => __( 'field description (optional)', 'cmb2' ),
+			'name'    => esc_html__( 'Test Multi Checkbox', 'cmb2' ),
+			'desc'    => esc_html__( 'field description (optional)', 'cmb2' ),
 			'id'      => $prefix . 'multicheckbox',
 			'type'    => 'multicheck',
 			'multiple' => true, // Store values in individual rows
 			'options' => array(
-				'check1' => __( 'Check One', 'cmb2' ),
-				'check2' => __( 'Check Two', 'cmb2' ),
-				'check3' => __( 'Check Three', 'cmb2' ),
+				'check1' => esc_html__( 'Check One', 'cmb2' ),
+				'check2' => esc_html__( 'Check Two', 'cmb2' ),
+				'check3' => esc_html__( 'Check Three', 'cmb2' ),
 			),
 		) );
 

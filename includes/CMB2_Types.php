@@ -168,13 +168,13 @@ class CMB2_Types {
 
 		// Then, let's throw a debug _doing_it_wrong notice.
 
-		$message = array( sprintf( __( 'Custom field types require a Type object instantiation to use this method. This method was called by the \'%s\' field type.' ), $this->field->type() ) );
+		$message = array( sprintf( esc_html__( 'Custom field types require a Type object instantiation to use this method. This method was called by the \'%s\' field type.' ), $this->field->type() ) );
 
 		$message[] = is_object( $this->type )
-			? __( 'That field type may not work as expected.', 'cmb2' )
-			: __( 'That field type will not work as expected.', 'cmb2' );
+			? esc_html__( 'That field type may not work as expected.', 'cmb2' )
+			: esc_html__( 'That field type will not work as expected.', 'cmb2' );
 
-		$message[] = __( 'See: https://github.com/mustardBees/cmb-field-select2/pull/34w for more information about this change.', 'cmb2' );
+		$message[] = esc_html__( 'For more information about this change see: https://github.com/mustardBees/cmb-field-select2/pull/34w', 'cmb2' );
 
 		_doing_it_wrong( __CLASS__ . '::' . $method, implode( ' ', $message ), '2.2.2' );
 	}
@@ -248,7 +248,7 @@ class CMB2_Types {
 			</div>
 		</div>
 		<p class="cmb-add-row">
-			<button type="button" data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button"><?php echo esc_html( $this->_text( 'add_row_text', __( 'Add Row', 'cmb2' ) ) ); ?></button>
+			<button type="button" data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button"><?php echo esc_html( $this->_text( 'add_row_text', esc_html__( 'Add Row', 'cmb2' ) ) ); ?></button>
 		</p>
 
 		<?php
@@ -311,7 +311,7 @@ class CMB2_Types {
 				<?php $this->_render(); ?>
 			</div>
 			<div class="cmb-td cmb-remove-row">
-				<button type="button" class="button cmb-remove-row-button<?php echo $disabled; ?>"><?php echo esc_html( $this->_text( 'remove_row_text', __( 'Remove', 'cmb2' ) ) ); ?></button>
+				<button type="button" class="button cmb-remove-row-button<?php echo $disabled; ?>"><?php echo esc_html( $this->_text( 'remove_row_text', esc_html__( 'Remove', 'cmb2' ) ) ); ?></button>
 			</div>
 		</div>
 
