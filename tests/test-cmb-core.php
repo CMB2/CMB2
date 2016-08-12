@@ -588,6 +588,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 			// $expected_group_render,
 			ob_get_clean()
 		);
+
+		remove_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
 	}
 
 	public function test_disable_group_repeat() {
