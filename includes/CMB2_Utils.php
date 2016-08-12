@@ -189,7 +189,7 @@ class CMB2_Utils {
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
 	 */
-	function filter_empty( $value ) {
+	public static function filter_empty( $value ) {
 		return array_filter( $value, array( __CLASS__, 'notempty' ) );
 	}
 
