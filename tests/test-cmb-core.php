@@ -192,7 +192,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			cmb2_dir()
 		);
 
-		$this->assertEquals( cmb2_utils()->url(), $cmb2_url );
+		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
 	}
 
 	public function test_array_insert() {
@@ -204,7 +204,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$new = array( 'new' => array( 4,5,6 ) );
 
-		cmb2_utils()->array_insert( $array, $new, 2 );
+		CMB2_Utils::array_insert( $array, $new, 2 );
 
 		$this->assertEquals( array(
 			'one' => array( 1,2,3 ),

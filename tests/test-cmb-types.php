@@ -438,7 +438,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		if ( version_compare( PHP_VERSION, '5.3' ) >= 0 ) {
 
 			// date_default_timezone_set( 'America/New_York' );
-			// $tzstring = cmb2_utils()->timezone_string();
+			// $tzstring = CMB2_Utils::timezone_string();
 			$tzstring = 'America/New_York';
 			$test_stamp = strtotime( '2pm April 12 2016' );
 
@@ -466,7 +466,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_select_timezone_field_after_value_update() {
-		$value_to_save = cmb2_utils()->timezone_string();
+		$value_to_save = CMB2_Utils::timezone_string();
 		update_post_meta( $this->post_id, $this->text_type_field['id'], $value_to_save );
 		$zones = wp_timezone_choice( $value_to_save );
 
@@ -818,7 +818,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 				}
 
 				$tzstring = $value['timezone'];
-				$offset = cmb2_utils()->timezone_offset( $tzstring );
+				$offset = CMB2_Utils::timezone_offset( $tzstring );
 
 				if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 					$tzstring = timezone_name_from_abbr( '', $offset, 0 );

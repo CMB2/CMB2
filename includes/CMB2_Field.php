@@ -521,10 +521,10 @@ class CMB2_Field extends CMB2_Base {
 			$updated = $count ? $count : false;
 			$action  = 'repeatable';
 
-		} elseif ( ! cmb2_utils()->isempty( $new_value ) && $new_value !== $this->get_data() ) {
+		} elseif ( ! CMB2_Utils::isempty( $new_value ) && $new_value !== $this->get_data() ) {
 			$updated = $this->update_data( $new_value );
 			$action  = 'updated';
-		} elseif ( cmb2_utils()->isempty( $new_value ) ) {
+		} elseif ( CMB2_Utils::isempty( $new_value ) ) {
 			$updated = $this->remove_data();
 			$action  = 'removed';
 		}
@@ -671,7 +671,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed             Field value, or default value
 	 */
 	public function val_or_default( $meta_value ) {
-		return ! cmb2_utils()->isempty( $meta_value ) ? $meta_value : $this->get_default();
+		return ! CMB2_Utils::isempty( $meta_value ) ? $meta_value : $this->get_default();
 	}
 
 	/**
@@ -680,7 +680,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @return string Offset time string
 	 */
 	public function field_timezone_offset() {
-		return cmb2_utils()->timezone_offset( $this->field_timezone() );
+		return CMB2_Utils::timezone_offset( $this->field_timezone() );
 	}
 
 	/**
@@ -723,7 +723,7 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function get_timestamp_format( $format = 'date_format', $meta_value = 0 ) {
 		$meta_value = $meta_value ? $meta_value : $this->escaped_value();
-		$meta_value = cmb2_utils()->make_valid_time_stamp( $meta_value );
+		$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
 
 		if ( empty( $meta_value ) ) {
 			return '';
@@ -741,7 +741,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed         Unix timestamp representing the date.
 	 */
 	public function get_timestamp_from_value( $value ) {
-		return cmb2_utils()->get_timestamp_from_value( $value, $this->args( 'date_format' ) );
+		return CMB2_Utils::get_timestamp_from_value( $value, $this->args( 'date_format' ) );
 	}
 
 	/**

@@ -19,7 +19,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * @return bool         Whether file has a valid image extension
 	 */
 	public function is_valid_img_ext( $file, $blah = false ) {
-		$file_ext = cmb2_utils()->get_file_ext( $file );
+		$file_ext = CMB2_Utils::get_file_ext( $file );
 
 		$valid_types = array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' );
 
@@ -73,7 +73,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		return sprintf( '<%1$s class="file-status"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
 			$args['tag'],
 			esc_html( $this->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
-			cmb2_utils()->get_file_name_from_path( $args['value'] ),
+			CMB2_Utils::get_file_name_from_path( $args['value'] ),
 			$args['value'],
 			esc_html( $this->_text( 'file_download_text', esc_html__( 'Download', 'cmb2' ) ) ),
 			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',

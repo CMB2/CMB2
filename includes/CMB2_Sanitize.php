@@ -79,7 +79,7 @@ class CMB2_Sanitize {
 				if ( $this->field->args( 'taxonomy' ) ) {
 					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
 				} else {
-					cmb2_utils()->log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
+					CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
 				}
 				break;
 			case 'multicheck':
@@ -263,10 +263,10 @@ class CMB2_Sanitize {
 		}
 
 		if ( empty( $tzstring ) ) {
-			$tzstring = cmb2_utils()->timezone_string();
+			$tzstring = CMB2_Utils::timezone_string();
 		}
 
-		$offset = cmb2_utils()->timezone_offset( $tzstring );
+		$offset = CMB2_Utils::timezone_offset( $tzstring );
 
 		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
@@ -311,7 +311,7 @@ class CMB2_Sanitize {
 
 		} catch ( Exception $e ) {
 			$this->value = '';
-			cmb2_utils()->log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
+			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 		}
 
 		return $this->value;
@@ -394,7 +394,7 @@ class CMB2_Sanitize {
 
 		// If there is no ID saved yet, try to get it from the url
 		if ( $this->value && ! $id_val ) {
-			$id_val = cmb2_utils()->image_id_from_url( $this->value );
+			$id_val = CMB2_Utils::image_id_from_url( $this->value );
 		}
 
 		return $id_field->save_field( $id_val );

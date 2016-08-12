@@ -197,7 +197,7 @@ class CMB2_Types {
 	 * @return string|false       File extension or false
 	 */
 	public function get_file_ext( $file ) {
-		return cmb2_utils()->get_file_ext( $file );
+		return CMB2_Utils::get_file_ext( $file );
 	}
 
 	/**
@@ -207,7 +207,7 @@ class CMB2_Types {
 	 * @return string        File name
 	 */
 	public function get_file_name_from_path( $value ) {
-		return cmb2_utils()->get_file_name_from_path( $value );
+		return CMB2_Utils::get_file_name_from_path( $value );
 	}
 
 	/**
@@ -218,18 +218,7 @@ class CMB2_Types {
 	 * @return string               String of attributes for form element
 	 */
 	public function concat_attrs( $attrs, $attr_exclude = array() ) {
-		$attr_exclude[] = 'rendered';
-		$attributes = '';
-		foreach ( $attrs as $attr => $val ) {
-			$excluded = in_array( $attr, (array) $attr_exclude, true );
-			$empty    = false === $val && 'value' !== $attr;
-			if ( ! $excluded && ! $empty ) {
-				// if data attribute, use single quote wraps, else double
-				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
-				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
-			}
-		}
-		return $attributes;
+		return CMB2_Utils::concat_attrs( $attrs, $attr_exclude );
 	}
 
 	/**

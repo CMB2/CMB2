@@ -16,7 +16,7 @@ class CMB2_Type_Select_Timezone extends CMB2_Type_Select {
 
 		$this->field->args['default'] = $this->field->get_default()
 			? $this->field->get_default()
-			: cmb2_utils()->timezone_string();
+			: CMB2_Utils::timezone_string();
 
 		$this->args = wp_parse_args( $this->args, array(
 			'class'   => 'cmb2_select cmb2-select-timezone',

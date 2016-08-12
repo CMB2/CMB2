@@ -719,8 +719,8 @@ class CMB2 extends CMB2_Base {
 					? $old[ $field_group->index ][ $sub_id ]
 					: false;
 
-				$is_updated = ( ! cmb2_utils()->isempty( $new_val ) && $new_val !== $old_val );
-				$is_removed = ( cmb2_utils()->isempty( $new_val ) && ! cmb2_utils()->isempty( $old_val ) );
+				$is_updated = ( ! CMB2_Utils::isempty( $new_val ) && $new_val !== $old_val );
+				$is_removed = ( CMB2_Utils::isempty( $new_val ) && ! CMB2_Utils::isempty( $old_val ) );
 
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
@@ -732,10 +732,10 @@ class CMB2 extends CMB2_Base {
 
 			}
 
-			$saved[ $field_group->index ] = cmb2_utils()->filter_empty( $saved[ $field_group->index ] );
+			$saved[ $field_group->index ] = CMB2_Utils::filter_empty( $saved[ $field_group->index ] );
 		}
 
-		$saved = cmb2_utils()->filter_empty( $saved );
+		$saved = CMB2_Utils::filter_empty( $saved );
 
 		return $field_group->update_data( $saved, true );
 	}
@@ -1142,7 +1142,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
 		if ( $position ) {
-			cmb2_utils()->array_insert( $fields, array( $field['id'] => $field ), $position );
+			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
 		} else {
 			$fields[ $field['id'] ] = $field;
 		}

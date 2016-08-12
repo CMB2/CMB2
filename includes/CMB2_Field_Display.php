@@ -387,7 +387,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 	protected function file_output( $url_value, $id, CMB2_Type_File_Base $field_type ) {
 		// If there is no ID saved yet, try to get it from the url
 		if ( $url_value && ! $id ) {
-			$id = cmb2_utils()->image_id_from_url( esc_url_raw( $url_value ) );
+			$id = CMB2_Utils::image_id_from_url( esc_url_raw( $url_value ) );
 		}
 
 		if ( $field_type->is_valid_img_ext( $url_value ) ) {
@@ -407,7 +407,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
 				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
 				$url_value,
-				cmb2_utils()->get_file_name_from_path( $url_value )
+				CMB2_Utils::get_file_name_from_path( $url_value )
 			);
 
 		}
