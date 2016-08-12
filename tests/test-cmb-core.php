@@ -192,7 +192,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			cmb2_dir()
 		);
 
-		$this->assertEquals( cmb2_utils()->url(), $cmb2_url );
+		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
 	}
 
 	public function test_array_insert() {
@@ -204,7 +204,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$new = array( 'new' => array( 4,5,6 ) );
 
-		cmb2_utils()->array_insert( $array, $new, 2 );
+		CMB2_Utils::array_insert( $array, $new, 2 );
 
 		$this->assertEquals( array(
 			'one' => array( 1,2,3 ),
@@ -570,11 +570,24 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		ob_start();
 		$cmb->render_group( $field->args );
-		// grab the data from the output buffer and add it to our $content variable
-		$rendered_group = ob_get_clean();
 
-		$this->assertHTMLstringsAreEqual( $expected_group_render, $rendered_group );
+		$this->assertHTMLstringsAreEqual( $expected_group_render, ob_get_clean() );
 
+		// Test after modifying the cmb2_group_wrap_attributes filter.
+		add_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
+
+		ob_start();
+		$cmb->render_group( $field->args );
+
+		$this->assertHTMLstringsAreEqual(
+			str_replace(
+				'style="width:100%;"',
+				'style="width:100%;" blah="blah"',
+				$expected_group_render
+			),
+			// $expected_group_render,
+			ob_get_clean()
+		);
 	}
 
 	public function test_disable_group_repeat() {
@@ -854,6 +867,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$classes[] = 'filter-class';
 		$classes[] = sanitize_title_with_dashes( $cmb->prop( 'classes' ) );
 		return $classes;
+	}
+
+	public function modify_group_attributes( $atts ) {
+		$atts['blah'] = 'blah';
+		return $atts;
 	}
 
 }

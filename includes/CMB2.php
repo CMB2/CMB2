@@ -345,9 +345,29 @@ class CMB2 extends CMB2_Base {
 		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
+		$group_wrap_attributes = array(
+			'class' => 'cmb-nested cmb-field-list cmb-repeatable-group' . $sortable . $repeat_class,
+			'style' => 'width:100%;',
+		);
+
+		/**
+		 * Allow for adding additional HTML attributes to a group wrapper.
+		 *
+		 * The attributes will be an array of key => value pairs for each attribute.
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param string     $group_wrap_attributes Current attributes array.
+		 *
+		 * @param CMB2_Field $field_group           The group CMB2_Field object.
+		 */
+		$group_wrap_attributes = apply_filters( 'cmb2_group_wrap_attributes', $group_wrap_attributes, $field_group );
+
+		$group_wrap_attributes = CMB2_Utils::concat_attrs( $group_wrap_attributes );
+
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" ', $group_wrap_attributes, '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -704,8 +724,8 @@ class CMB2 extends CMB2_Base {
 					? $old[ $field_group->index ][ $sub_id ]
 					: false;
 
-				$is_updated = ( ! cmb2_utils()->isempty( $new_val ) && $new_val !== $old_val );
-				$is_removed = ( cmb2_utils()->isempty( $new_val ) && ! cmb2_utils()->isempty( $old_val ) );
+				$is_updated = ( ! CMB2_Utils::isempty( $new_val ) && $new_val !== $old_val );
+				$is_removed = ( CMB2_Utils::isempty( $new_val ) && ! CMB2_Utils::isempty( $old_val ) );
 
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
@@ -717,10 +737,10 @@ class CMB2 extends CMB2_Base {
 
 			}
 
-			$saved[ $field_group->index ] = cmb2_utils()->filter_empty( $saved[ $field_group->index ] );
+			$saved[ $field_group->index ] = CMB2_Utils::filter_empty( $saved[ $field_group->index ] );
 		}
 
-		$saved = cmb2_utils()->filter_empty( $saved );
+		$saved = CMB2_Utils::filter_empty( $saved );
 
 		return $field_group->update_data( $saved, true );
 	}
@@ -1127,7 +1147,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
 		if ( $position ) {
-			cmb2_utils()->array_insert( $fields, array( $field['id'] => $field ), $position );
+			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
 		} else {
 			$fields[ $field['id'] ] = $field;
 		}

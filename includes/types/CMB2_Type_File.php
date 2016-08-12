@@ -54,7 +54,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 
 		// If there is no ID saved yet, try to get it from the url
 		if ( $meta_value && ! $_id_value ) {
-			$_id_value = cmb2_utils()->image_id_from_url( esc_url_raw( $meta_value ) );
+			$_id_value = CMB2_Utils::image_id_from_url( esc_url_raw( $meta_value ) );
 		}
 
 		$output .= parent::render( array(

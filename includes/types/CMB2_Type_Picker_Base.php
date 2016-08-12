@@ -25,7 +25,7 @@ abstract class CMB2_Type_Picker_Base extends CMB2_Type_Text {
 		$atts   = array();
 		$format = $this->field->args( $arg . '_format' );
 
-		if ( $js_format = cmb2_utils()->php_to_js_dateformat( $format ) ) {
+		if ( $js_format = CMB2_Utils::php_to_js_dateformat( $format ) ) {
 
 			if ( $update ) {
 				$atts = $this->field->args( 'attributes' );

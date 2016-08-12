@@ -82,7 +82,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 	public function test_image_id_from_url() {
 		global $wp_version;
 
-		$_id_value = cmb2_utils()->image_id_from_url( esc_url_raw( wp_get_attachment_url( $this->attachment_id ) ) );
+		$_id_value = CMB2_Utils::image_id_from_url( esc_url_raw( wp_get_attachment_url( $this->attachment_id ) ) );
 		if ( $wp_version > 3.9 ) {
 			$this->assertEquals( $_id_value, $this->attachment_id );
 		} else {
@@ -151,13 +151,13 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 	public function test_isempty() {
 		foreach ( $this->test_empty as $test ) {
-			$this->assertEquals( $test['empty'], cmb2_utils()->isempty( $test['val'] ) );
+			$this->assertEquals( $test['empty'], CMB2_Utils::isempty( $test['val'] ) );
 		}
 	}
 
 	public function test_notempty() {
 		foreach ( $this->test_empty as $test ) {
-			$this->assertEquals( ! $test['empty'], cmb2_utils()->notempty( $test['val'] ) );
+			$this->assertEquals( ! $test['empty'], CMB2_Utils::notempty( $test['val'] ) );
 		}
 	}
 
@@ -175,7 +175,37 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			10 => '&nbsp;',
 		);
 
-		$this->assertEquals( $non_empties, cmb2_utils()->filter_empty( $vals ) );
+		$this->assertEquals( $non_empties, CMB2_Utils::filter_empty( $vals ) );
+	}
+
+	public function test_concat_attrs() {
+		$data = array(
+			'att3'  => 'att3 value',
+			'att5'  => 'att5 value',
+			'att7'  => 'att7 value',
+			'att10' => 'att10 value',
+		);
+
+		$attributes = array(
+			'rendered'  => 'rendered',
+			'false'     => false,
+			'value'     => false,
+			'att3'      => 'att3 value',
+			'att5'      => 'att5 value',
+			'att7'      => 'att7 value',
+			'att10'     => 'att10 value',
+			'data-blah' => function_exists( 'wp_json_encode' ) ? wp_json_encode( $data ) : json_encode( $data ),
+		);
+
+		$to_exclude = array(
+			'att5',
+			'att7',
+		);
+
+		$this->assertHTMLstringsAreEqual(
+			'value="" att3="att3 value" att10="att10 value" data-blah=\'{"att3":"att3 value","att5":"att5 value","att7":"att7 value","att10":"att10 value"}\'',
+			CMB2_Utils::concat_attrs( $attributes, $to_exclude )
+		);
 	}
 
 }
