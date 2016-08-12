@@ -338,36 +338,13 @@ class CMB2 extends CMB2_Base {
 
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
-		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
-		$repeat_class    = $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
 		$group_val       = (array) $field_group->value();
-		$nrows           = count( $group_val );
-		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
+		$remove_disabled = count( $group_val ) <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
-
-		$group_wrap_attributes = array(
-			'class' => 'cmb-nested cmb-field-list cmb-repeatable-group' . $sortable . $repeat_class,
-			'style' => 'width:100%;',
-		);
-
-		/**
-		 * Allow for adding additional HTML attributes to a group wrapper.
-		 *
-		 * The attributes will be an array of key => value pairs for each attribute.
-		 *
-		 * @since 2.2.2
-		 *
-		 * @param string     $group_wrap_attributes Current attributes array.
-		 *
-		 * @param CMB2_Field $field_group           The group CMB2_Field object.
-		 */
-		$group_wrap_attributes = apply_filters( 'cmb2_group_wrap_attributes', $group_wrap_attributes, $field_group );
-
-		$group_wrap_attributes = CMB2_Utils::concat_attrs( $group_wrap_attributes );
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" ', $group_wrap_attributes, '>';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" ', $this->group_wrap_attributes( $field_group ), '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -382,7 +359,6 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( ! empty( $group_val ) ) {
-
 			foreach ( $group_val as $group_key => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
 				$field_group->index++;
@@ -400,6 +376,38 @@ class CMB2 extends CMB2_Base {
 		$field_group->peform_param_callback( 'after_group' );
 
 		return $field_group;
+	}
+
+	/**
+	 * Get the group wrap attributes, which are passed through a filter.
+	 * @since  2.2.3
+	 * @param  CMB2_Field $field_group The group CMB2_Field object.
+	 * @return string                  The attributes string.
+	 */
+	public function group_wrap_attributes( $field_group ) {
+		$classes = 'cmb-nested cmb-field-list cmb-repeatable-group';
+		$classes .= $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
+		$classes .= $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
+
+		$group_wrap_attributes = array(
+			'class' => $classes,
+			'style' => 'width:100%;',
+		);
+
+		/**
+		 * Allow for adding additional HTML attributes to a group wrapper.
+		 *
+		 * The attributes will be an array of key => value pairs for each attribute.
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param string     $group_wrap_attributes Current attributes array.
+		 *
+		 * @param CMB2_Field $field_group           The group CMB2_Field object.
+		 */
+		$group_wrap_attributes = apply_filters( 'cmb2_group_wrap_attributes', $group_wrap_attributes, $field_group );
+
+		return CMB2_Utils::concat_attrs( $group_wrap_attributes );
 	}
 
 	/**
