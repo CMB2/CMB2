@@ -8,123 +8,15 @@
  * @link      http://webdevstudios.com
  */
 
-require_once( 'cmb-tests-base.php' );
+require_once( 'test-cmb-types-base.php' );
 
-class Test_CMB2_Types extends Test_CMB2 {
+class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	/**
 	 * Set up the test fixture
 	 */
 	public function setUp() {
 		parent::setUp();
-
-		$this->cmb_id = 'test';
-
-		$this->text_type_field = array(
-			'name' => 'Name',
-			'desc' => 'This is a description',
-			'id'   => 'field_test_field',
-			'type' => 'text',
-		);
-
-		$this->field_test = array(
-			'id' => 'field_test',
-			'fields' => array(
-				$this->text_type_field,
-			),
-		);
-
-		$this->attributes_test = array(
-			'id' => 'attributes_test',
-			'fields' => array(
-				array(
-					'name' => 'Name',
-					'desc' => 'This is a description',
-					'id'   => 'attributes_test_field',
-					'type' => 'text',
-					'attributes' => array(
-						'type'      => 'number',
-						'disabled'  => 'disabled',
-						'id'        => 'arbitrary-id',
-						'data-test' => json_encode( array(
-							'one'   => 'One',
-							'two'   => 'Two',
-							'true'  => true,
-							'false' => false,
-							'array' => array(
-								'nested_data' => true,
-							),
-						) ),
-					),
-				),
-			),
-		);
-
-		$this->options_test = array(
-			'id' => 'options_test',
-			'fields' => array(
-				array(
-					'name' => 'Name',
-					'description' => 'This is a description',
-					'id'   => 'options_test_field',
-					'type' => 'select',
-					'options' => array(
-						'one'   => 'One',
-						'two'   => 'Two',
-						'true'  => true,
-						'false' => false,
-					),
-				),
-			),
-		);
-
-		$this->options_cb_test = array(
-			'id' => 'options_cb_test',
-			'fields' => array(
-				array(
-					'name' => 'Name',
-					'description' => 'This is a description',
-					'id'   => 'options_cb_test_field',
-					'type' => 'select',
-					'options_cb' => array( $this, 'options_cb' ),
-				),
-			),
-		);
-
-		$this->options_cb_and_array_test = array(
-			'id' => 'options_cb_and_array_test',
-			'fields' => array(
-				array(
-					'name' => 'Name',
-					'description' => 'This is a description',
-					'id'   => 'options_cb_and_array_test_field',
-					'type' => 'select',
-					'options' => array(
-						'one'   => 'One',
-						'two'   => 'Two',
-						'true'  => true,
-						'false' => false,
-					),
-					'options_cb' => array( $this, 'options_cb' ),
-				),
-			),
-		);
-
-		$this->post_id = $this->factory->post->create();
-		$this->term = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'test_category' ) );
-		$this->term2 = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'number_2' ) );
-
-		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
-
-		$this->img_name = 'image.jpg';
-		$this->attachment_id = $this->factory->attachment->create_object( $this->img_name, $this->post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
-		$this->attachment_id2 = $this->factory->attachment->create_object( '2nd-'.$this->img_name, $this->post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
 	}
 
 	public function tearDown() {
@@ -152,7 +44,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button button-disabled">' . __( 'Remove', 'cmb2' ) . '</button>
+								<button type="button" class="button cmb-remove-row-button button-disabled">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -160,7 +52,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button">' . __( 'Remove', 'cmb2' ) . '</button>
+								<button type="button" class="button cmb-remove-row-button">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
 							</div>
 						</div>
 					</div>
@@ -311,7 +203,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_hidden_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" name="field_test_field" id="field_test_field" value=""/>',
+			'<input type="hidden" class="cmb2-hidden" name="field_test_field" id="field_test_field" value=""/>',
 			$this->capture_render( array( $this->get_field_type_object( 'hidden' ), 'render' ) )
 		);
 	}
@@ -440,6 +332,22 @@ class Test_CMB2_Types extends Test_CMB2 {
 		);
 
 		$this->assertEquals( '£ text_money', $type->field->get_param_callback_result( 'before_field' ) );
+	}
+
+	public function test_text_money_field_value_update() {
+		$field = $this->get_field_object( 'text_money' );
+		$field->save_field( '8.2' );
+		$this->assertEquals( '8.20', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+		$field = $this->get_field_object( 'text_money' );
+		$field->save_field( '0.00' );
+		$this->assertEquals( '0.00', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+		$field->save_field( '0' );
+		$this->assertEquals( '', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
 	}
 
 	public function test_textarea_small_field() {
@@ -586,7 +494,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_title_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<h5 class="cmb2-metabox-title">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
+			'<h5 class="cmb2-metabox-title" id="field-test-field">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'title' ), 'render' ) )
 		);
 	}
@@ -682,14 +590,6 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	}
 
-	private function check_box_assertion( $output, $checked = false ) {
-		$checked = $checked ? ' checked="checked"' : '';
-		$this->assertHTMLstringsAreEqual(
-			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"'. $checked .'/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
-			is_string( $output ) ? $output : $this->capture_render( $output )
-		);
-	}
-
 	public function test_taxonomy_radio_field() {
 		$args = $this->options_test['fields'][0];
 		$args['type'] = 'taxonomy_radio';
@@ -736,7 +636,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 
 	public function test_file_list_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . __( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
+			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file_list', 'preview_size' => array( 120, 120 ) ) ), 'render' ) )
 		);
 	}
@@ -760,7 +660,7 @@ class Test_CMB2_Types extends Test_CMB2 {
 		$field_type = $this->get_field_type_object( 'file_list' );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . __( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
+			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
 				$this->file_sprintf( array(
 					'file_name'     => $field_type->get_file_name_from_path( $attach_1_url ),
 					'attachment_id' => $this->attachment_id,
@@ -778,17 +678,9 @@ class Test_CMB2_Types extends Test_CMB2 {
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
-	protected function file_sprintf( $args ) {
-		return sprintf( '<li class="file-status"><span>' . __( 'File:', 'cmb2' ) . ' <strong>%1$s</strong></span>&nbsp;&nbsp; (<a href="%3$s" target="_blank" rel="external">' . __( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button">' . __( 'Remove', 'cmb2' ) . '</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s" data-id=\'%2$d\'/></li>',
-			$args['file_name'],
-			$args['attachment_id'],
-			$args['url']
-		);
-	}
-
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . __( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file', 'preview_size' => array( 199, 199 ) ) ), 'render' ) )
 		);
 	}
@@ -806,7 +698,7 @@ class Test_CMB2_Types extends Test_CMB2 {
  		$file_name = $field_type->get_file_name_from_path( $file_url );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . __( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field_id-status" class="cmb2-media-status"><div class="file-status"><span>' . __( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . __( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . __( 'Remove', 'cmb2' ) . '</a>)</div></div>',
+			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field_id-status" class="cmb2-media-status"><div class="file-status"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
 				$this->attachment_id,
 				$file_url,
 				$file_name
@@ -980,32 +872,6 @@ class Test_CMB2_Types extends Test_CMB2 {
 	}
 
 	/**
-	 * Test_CMB2_Types helper methods
-	 */
-
-	private function get_field_object( $type = '' ) {
-		$args = $this->text_type_field;
-
-		if ( $type ) {
-			if ( is_string( $type ) ) {
-				$args['type'] = $type;
-			} elseif ( is_array( $type ) ) {
-				$args = wp_parse_args( $type, $args );
-			}
-		}
-
-		return new CMB2_Field( array(
-			'field_args' => $args,
-			'object_id' => $this->post_id,
-		) );
-	}
-
-	private function get_field_type_object( $args = '' ) {
-		$field = is_a( $args, 'CMB2_Field' ) ? $args : $this->get_field_object( $args );
-		return new CMB2_Types( $field );
-	}
-
-	/**
 	 * Test Callbacks
 	 */
 
@@ -1030,13 +896,4 @@ class Test_CMB2_Types extends Test_CMB2 {
 		return '£ ' . $field_args['type'];
 	}
 
-}
-
-/**
- * Simply allows access to the dependencies protected property (for testing)
- */
-class Test_CMB2_JS extends CMB2_JS {
-	public static function dependencies() {
-		return parent::$dependencies;
-	}
 }

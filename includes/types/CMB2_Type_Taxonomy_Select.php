@@ -13,14 +13,13 @@
 class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 
 	public function render() {
-		$field = $this->field;
 		$names = $this->get_object_terms();
 
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $field->get_default() : $names[key( $names )]->slug;
-		$terms      = get_terms( $field->args( 'taxonomy' ), 'hide_empty=0' );
-		$options    = '';
+		$saved_term  = is_wp_error( $names ) || empty( $names ) ? $this->field->get_default() : $names[key( $names )]->slug;
+		$terms       = $this->get_terms();
+		$options     = '';
+		$option_none = $this->field->args( 'show_option_none' );
 
-		$option_none  = $field->args( 'show_option_none' );
 		if ( ! empty( $option_none ) ) {
 
 			$field_id = $this->_id();
@@ -52,12 +51,14 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 			) );
 		}
 
-		foreach ( $terms as $term ) {
-			$options .= $this->select_option( array(
-				'label'   => $term->name,
-				'value'   => $term->slug,
-				'checked' => $saved_term === $term->slug,
-			) );
+		if ( ! empty( $terms ) ) {
+			foreach ( $terms as $term ) {
+				$options .= $this->select_option( array(
+					'label'   => $term->name,
+					'value'   => $term->slug,
+					'checked' => $saved_term === $term->slug,
+				) );
+			}
 		}
 
 		return $this->rendered(

@@ -130,8 +130,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	}
 
 	protected function is_3_8() {
-		global $wp_version;
-		return version_compare( $wp_version, '3.8' ) <= 0;
+		return ! cmb2_utils()->wp_at_least( '3.8.1' );
 	}
 
 }

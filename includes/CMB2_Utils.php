@@ -13,6 +13,13 @@
 class CMB2_Utils {
 
 	/**
+	 * The WordPress ABSPATH constant.
+	 * @var   string
+	 * @since 2.2.3
+	 */
+	protected static $ABSPATH = ABSPATH;
+
+	/**
 	 * The url which is used to load local resources.
 	 * @var   string
 	 * @since 2.0.0
@@ -167,6 +174,26 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Checks if a value is not 'empty'. 0 doesn't count as empty.
+	 * @since  2.2.2
+	 * @param  mixed $value Value to check
+	 * @return bool         True or false
+	 */
+	public function notempty( $value ){
+		return null !== $value && '' !== $value && false !== $value;
+	}
+
+	/**
+	 * Filters out empty values (not including 0).
+	 * @since  2.2.2
+	 * @param  mixed $value Value to check
+	 * @return bool         True or false
+	 */
+	function filter_empty( $value ) {
+		return array_filter( $value, array( $this, 'notempty' ) );
+	}
+
+	/**
 	 * Insert a single array item inside another array at a set position
 	 * @since  2.0.2
 	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
@@ -223,15 +250,23 @@ class CMB2_Utils {
 		}
 
 		// Ok, now let's test if we are in the theme dir.
-		$theme_root = get_theme_root();
+		$theme_root = self::normalize_path( get_theme_root() );
 		if ( 0 === strpos( $dir, $theme_root ) ) {
 			// Ok, then use get_theme_root_uri.
-			return set_url_scheme( trailingslashit( str_replace( $theme_root, get_theme_root_uri(), $dir ) ) );
+			return set_url_scheme(
+				trailingslashit(
+					str_replace(
+						untrailingslashit( $theme_root ),
+						untrailingslashit( get_theme_root_uri() ),
+						$dir
+					)
+				)
+			);
 		}
 
 		// Check to see if it's anywhere in the root directory
 
-		$site_dir = ABSPATH;
+		$site_dir = self::normalize_path( self::$ABSPATH );
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
@@ -380,4 +415,16 @@ class CMB2_Utils {
 		$parts = explode( '/', $value );
 		return is_array( $parts ) ? end( $parts ) : $value;
 	}
+
+	/**
+	 * Check if WP version is at least $version.
+	 * @since  2.2.2
+	 * @param  string  $version WP version string to compare.
+	 * @return bool             Result of comparison check.
+	 */
+	public function wp_at_least( $version ) {
+		global $wp_version;
+		return version_compare( $wp_version, $version, '>=' );
+	}
+
 }

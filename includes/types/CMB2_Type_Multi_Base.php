@@ -70,9 +70,13 @@ abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 		$method = isset( $args['method'] ) ? $args['method'] : 'select_option';
 		unset( $args['method'] );
 
-		$value = $field->escaped_value()
+		$value = null !== $field->escaped_value()
 			? $field->escaped_value()
 			: $field->get_default();
+
+		if ( is_numeric( $value ) ) {
+			$value = intval( $value );
+		}
 
 		$concatenated_items = ''; $i = 1;
 
@@ -90,7 +94,7 @@ abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 			$a['label'] = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value == $opt_value ) {
+			if ( $value === $opt_value ) {
 				$a['checked'] = 'checked';
 			}
 
