@@ -817,16 +817,23 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 					continue;
 				}
 
-				$tzstring = $value['timezone'];
-				$offset = CMB2_Utils::timezone_offset( $tzstring );
+				if ( is_array( $value ) && array_key_exists( 'timezone', $value ) ) {
+					$tzstring = $value['timezone'];
+				}
+
+				if ( empty( $tzstring ) ) {
+					$tzstring = CMB2_Utils::timezone_string();
+				}
+
+				$tzstring    = $value['timezone'];
+				$full_format = $date_args['date_format'] . ' ' . $date_args['time_format'];
+				$full_date   = $value['date'] . ' ' . $value['time'];
+				$offset      = CMB2_Utils::timezone_offset( $tzstring, $full_date );
 
 				if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 					$tzstring = timezone_name_from_abbr( '', $offset, 0 );
 					$tzstring = false !== $tzstring ? $tzstring : timezone_name_from_abbr( '', 0, 0 );
 				}
-
-				$full_format = $date_args['date_format'] . ' ' . $date_args['time_format'];
-				$full_date   = $value['date'] . ' ' . $value['time'];
 
 				$datetime = date_create_from_format( $full_format, $full_date );
 
@@ -857,14 +864,6 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			date_default_timezone_set( 'America/New_York' );
 
 			$expected['group'][0]['text_datetime_timestamp_timezone_utc'] = array( 1448056800, 1448060400 );
-
-			// If DST, remove an hour.
-			if ( date( 'I' ) ) {
-				foreach ( $expected['group'][0]['text_datetime_timestamp_timezone_utc'] as $key => $value ) {
-					$expected['group'][0]['text_datetime_timestamp_timezone_utc'][ $key ] = $value - 3600;
-				}
-			}
-
 			$expected['group'][0]['text_datetime_timestamp_timezone'] = $date_values;
 		}
 

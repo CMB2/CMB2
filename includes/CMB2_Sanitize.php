@@ -224,7 +224,7 @@ class CMB2_Sanitize {
 			$this->value = $this->field->get_timestamp_from_value( $this->value['date'] . ' ' . $this->value['time'] );
 		}
 
-		if ( $tz_offset = $this->field->field_timezone_offset() ) {
+		if ( $tz_offset = $this->field->field_timezone_offset( $this->value ) ) {
 			$this->value += (int) $tz_offset;
 		}
 
@@ -266,7 +266,9 @@ class CMB2_Sanitize {
 			$tzstring = CMB2_Utils::timezone_string();
 		}
 
-		$offset = CMB2_Utils::timezone_offset( $tzstring );
+		$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
+		$full_date   = $this->value['date'] . ' ' . $this->value['time'];
+		$offset      = CMB2_Utils::timezone_offset( $tzstring, $full_date );
 
 		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
@@ -279,8 +281,6 @@ class CMB2_Sanitize {
 			$tzstring = false !== $tzstring ? $tzstring : timezone_name_from_abbr( '', 0, 0 );
 		}
 
-		$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
-		$full_date   = $this->value['date'] . ' ' . $this->value['time'];
 
 		try {
 
