@@ -155,7 +155,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	/**
 	 * @expectedException Test_CMB2_Exception
 	 */
-	public function test_set_metabox_after_offlimits() {
+	public function test_setting_protected_property() {
 		try {
 			// Fyi you don't need to do an assert test here, as we are only testing the exception, so just make the call
 			$this->cmb->metabox['title'] = 'title';
