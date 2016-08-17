@@ -586,7 +586,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @return bool         True if type cannot be repeatable
 	 */
 	public function repeatable_exception( $type ) {
-		// These types cannot be escaped
+		// These types cannot be repeatable.
 		$internal_fields = array(
 			// Use file_list instead
 			'file'                => 1,
