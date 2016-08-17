@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.3.beta\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2016-08-01 17:14:41+00:00\n"
+"POT-Creation-Date: 2016-08-17 14:24:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-8-1 17:14+240\n"
+"PO-Revision-Date: 2016-8-17 14:24+240\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Test Metabox"
 msgstr ""
 
-#: example-functions.php:130 example-functions.php:448
+#: example-functions.php:130 example-functions.php:452
 msgid "Test Text"
 msgstr ""
 
@@ -44,13 +44,13 @@ msgstr ""
 #: example-functions.php:326 example-functions.php:338
 #: example-functions.php:347 example-functions.php:355
 #: example-functions.php:364 example-functions.php:371
-#: example-functions.php:385 example-functions.php:449
-#: example-functions.php:540 example-functions.php:548
-#: example-functions.php:555 example-functions.php:562
-#: example-functions.php:569 example-functions.php:576
-#: example-functions.php:583 example-functions.php:610
-#: example-functions.php:618 example-functions.php:625
-#: example-functions.php:662 tests/test-cmb-field.php:267
+#: example-functions.php:385 example-functions.php:453
+#: example-functions.php:544 example-functions.php:552
+#: example-functions.php:559 example-functions.php:566
+#: example-functions.php:573 example-functions.php:580
+#: example-functions.php:587 example-functions.php:614
+#: example-functions.php:622 example-functions.php:629
+#: example-functions.php:666 tests/test-cmb-field.php:267
 msgid "field description (optional)"
 msgstr ""
 
@@ -213,114 +213,112 @@ msgstr ""
 msgid "oEmbed"
 msgstr ""
 
-#: example-functions.php:408
-msgid ""
-"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
+#: example-functions.php:410
+#. translators: %s: link to codex.wordpress.org/Embeds
+msgid "Enter a youtube, twitter, or instagram URL. Supports services listed at %s."
 msgstr ""
 
-#: example-functions.php:439
+#: example-functions.php:443
 msgid "About Page Metabox"
 msgstr ""
 
-#: example-functions.php:468
+#: example-functions.php:472
 msgid "Repeating Field Group"
 msgstr ""
 
-#: example-functions.php:476
+#: example-functions.php:480
 msgid "Generates reusable form entries"
 msgstr ""
 
-#: example-functions.php:478
+#: example-functions.php:482
 msgid "Entry {#}"
 msgstr ""
 
-#: example-functions.php:479
+#: example-functions.php:483
 msgid "Add Another Entry"
 msgstr ""
 
-#: example-functions.php:480
+#: example-functions.php:484
 msgid "Remove Entry"
 msgstr ""
 
-#: example-functions.php:493
+#: example-functions.php:497
 msgid "Entry Title"
 msgstr ""
 
-#: example-functions.php:500
+#: example-functions.php:504
 msgid "Description"
 msgstr ""
 
-#: example-functions.php:501
+#: example-functions.php:505
 msgid "Write a short description for this entry"
 msgstr ""
 
-#: example-functions.php:507
+#: example-functions.php:511
 msgid "Entry Image"
 msgstr ""
 
-#: example-functions.php:513
+#: example-functions.php:517
 msgid "Image Caption"
 msgstr ""
 
-#: example-functions.php:532
+#: example-functions.php:536
 msgid "User Profile Metabox"
 msgstr ""
 
-#: example-functions.php:539 example-functions.php:609
+#: example-functions.php:543 example-functions.php:613
 msgid "Extra Info"
 msgstr ""
 
-#: example-functions.php:547
+#: example-functions.php:551
 msgid "Avatar"
 msgstr ""
 
-#: example-functions.php:554
+#: example-functions.php:558
 msgid "Facebook URL"
 msgstr ""
 
-#: example-functions.php:561
+#: example-functions.php:565
 msgid "Twitter URL"
 msgstr ""
 
-#: example-functions.php:568
+#: example-functions.php:572
 msgid "Google+ URL"
 msgstr ""
 
-#: example-functions.php:575
+#: example-functions.php:579
 msgid "Linkedin URL"
 msgstr ""
 
-#: example-functions.php:582
+#: example-functions.php:586
 msgid "User Field"
 msgstr ""
 
-#: example-functions.php:602
+#: example-functions.php:606
 msgid "Category Metabox"
 msgstr ""
 
-#: example-functions.php:617
+#: example-functions.php:621
 msgid "Term Image"
 msgstr ""
 
-#: example-functions.php:624
+#: example-functions.php:628
 msgid "Arbitrary Term Field"
 msgstr ""
 
-#: example-functions.php:646
+#: example-functions.php:650
 msgid "Theme Options Metabox"
 msgstr ""
 
-#: example-functions.php:661
+#: example-functions.php:665
 msgid "Site Background Color"
 msgstr ""
 
-#: includes/CMB2.php:108
-msgid "Metabox configuration is required to have an ID parameter"
+#: includes/CMB2.php:117
+msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: includes/CMB2.php:395
+#: includes/CMB2.php:432
 msgid "Click to toggle"
 msgstr ""
 
@@ -332,8 +330,10 @@ msgstr ""
 msgid "Remove Embed"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:177 tests/cmb-tests-base.php:64
-msgid "No oEmbed Results Found for %s. View more info at"
+#: includes/CMB2_Ajax.php:181 includes/helper-functions.php:95
+#: tests/cmb-tests-base.php:68
+#. translators: 1: results for. 2: link to codex.wordpress.org/Embeds
+msgid "No oEmbed Results Found for %1$s. View more info at %2$s."
 msgstr ""
 
 #: includes/CMB2_Field.php:1144
@@ -449,7 +449,7 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_JS.php:154 includes/CMB2_Types.php:314
+#: includes/CMB2_JS.php:154 includes/CMB2_Types.php:303
 #: includes/types/CMB2_Type_File_Base.php:80 tests/test-cmb-types-base.php:143
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
 #: tests/test-cmb-types.php:701
@@ -481,29 +481,25 @@ msgstr ""
 
 #: includes/CMB2_Types.php:177
 msgid ""
-"See: https://github.com/mustardBees/cmb-field-select2/pull/34w for more "
-"information about this change."
+"For more information about this change see: "
+"https://github.com/mustardBees/cmb-field-select2/pull/34w"
 msgstr ""
 
-#: includes/CMB2_Types.php:251
+#: includes/CMB2_Types.php:240
 msgid "Add Row"
 msgstr ""
 
 #: includes/CMB2_hookup.php:128
 msgid ""
-"Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress "
+"Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
 "install."
 msgstr ""
 
 #: includes/CMB2_hookup.php:132
-msgid "Term metaboxes configuration requires a 'taxonomies' parameter"
+msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
 msgstr ""
 
-#: includes/helper-functions.php:93
-msgid "No oEmbed Results Found for %s. View more info at %s."
-msgstr ""
-
-#: includes/helper-functions.php:279
+#: includes/helper-functions.php:284
 msgid "Save"
 msgstr ""
 
