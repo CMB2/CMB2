@@ -11,6 +11,8 @@
  * @property-read string $cmb_id
  * @property-read array $meta_box
  * @property-read array $updated
+ * @property-read bool  $has_columns
+ * @property-read array $tax_metaboxes_to_remove
  */
 class CMB2 extends CMB2_Base {
 
@@ -97,6 +99,13 @@ class CMB2 extends CMB2_Base {
 	protected $has_columns = false;
 
 	/**
+	 * If taxonomy field is requesting to remove_default, we store the taxonomy here.
+	 * @var   array
+	 * @since 2.2.3
+	 */
+	protected $tax_metaboxes_to_remove = array();
+
+	/**
 	 * Get started
 	 * @since 0.4.0
 	 * @param array   $config    Metabox config array
@@ -159,9 +168,9 @@ class CMB2 extends CMB2_Base {
 		$object_type = $this->object_type( $object_type );
 		$object_id = $this->object_id( $object_id );
 
-		$this->nonce_field();
-
 		echo "\n<!-- Begin CMB2 Fields -->\n";
+
+		$this->nonce_field();
 
 		/**
 		 * Hook before form table begins
@@ -329,16 +338,13 @@ class CMB2 extends CMB2_Base {
 
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
-		$sortable        = $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
-		$repeat_class    = $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
 		$group_val       = (array) $field_group->value();
-		$nrows           = count( $group_val );
-		$remove_disabled = $nrows <= 1 ? 'disabled="disabled" ' : '';
+		$remove_disabled = count( $group_val ) <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" class="cmb-nested cmb-field-list cmb-repeatable-group', $sortable, $repeat_class, '" style="width:100%;">';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', $field_group->row_classes(), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', $field_group->id(), '" id="', $field_group->id(), '_repeat" ', $this->group_wrap_attributes( $field_group ), '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
@@ -353,7 +359,6 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( ! empty( $group_val ) ) {
-
 			foreach ( $group_val as $group_key => $field_id ) {
 				$this->render_group_row( $field_group, $remove_disabled );
 				$field_group->index++;
@@ -371,6 +376,38 @@ class CMB2 extends CMB2_Base {
 		$field_group->peform_param_callback( 'after_group' );
 
 		return $field_group;
+	}
+
+	/**
+	 * Get the group wrap attributes, which are passed through a filter.
+	 * @since  2.2.3
+	 * @param  CMB2_Field $field_group The group CMB2_Field object.
+	 * @return string                  The attributes string.
+	 */
+	public function group_wrap_attributes( $field_group ) {
+		$classes = 'cmb-nested cmb-field-list cmb-repeatable-group';
+		$classes .= $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
+		$classes .= $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
+
+		$group_wrap_attributes = array(
+			'class' => $classes,
+			'style' => 'width:100%;',
+		);
+
+		/**
+		 * Allow for adding additional HTML attributes to a group wrapper.
+		 *
+		 * The attributes will be an array of key => value pairs for each attribute.
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param string     $group_wrap_attributes Current attributes array.
+		 *
+		 * @param CMB2_Field $field_group           The group CMB2_Field object.
+		 */
+		$group_wrap_attributes = apply_filters( 'cmb2_group_wrap_attributes', $group_wrap_attributes, $field_group );
+
+		return CMB2_Utils::concat_attrs( $group_wrap_attributes );
 	}
 
 	/**
@@ -695,8 +732,8 @@ class CMB2 extends CMB2_Base {
 					? $old[ $field_group->index ][ $sub_id ]
 					: false;
 
-				$is_updated = ( ! cmb2_utils()->isempty( $new_val ) && $new_val !== $old_val );
-				$is_removed = ( cmb2_utils()->isempty( $new_val ) && ! cmb2_utils()->isempty( $old_val ) );
+				$is_updated = ( ! CMB2_Utils::isempty( $new_val ) && $new_val !== $old_val );
+				$is_removed = ( CMB2_Utils::isempty( $new_val ) && ! CMB2_Utils::isempty( $old_val ) );
 
 				// Compare values and add to `$updated` array
 				if ( $is_updated || $is_removed ) {
@@ -708,10 +745,10 @@ class CMB2 extends CMB2_Base {
 
 			}
 
-			$saved[ $field_group->index ] = cmb2_utils()->filter_empty( $saved[ $field_group->index ] );
+			$saved[ $field_group->index ] = CMB2_Utils::filter_empty( $saved[ $field_group->index ] );
 		}
 
-		$saved = cmb2_utils()->filter_empty( $saved );
+		$saved = CMB2_Utils::filter_empty( $saved );
 
 		return $field_group->update_data( $saved, true );
 	}
@@ -1042,14 +1079,11 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
-			$this->has_columns = true;
+			$field = $this->define_field_column( $field );
+		}
 
-			$column = is_array( $field['column'] ) ? $field['column'] : array();
-
-			$field['column'] = wp_parse_args( $column, array(
-				'name'     => isset( $field['name'] ) ? $field['name'] : '',
-				'position' => false,
-			) );
+		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
+			$this->tax_metaboxes_to_remove[ $field['taxonomy'] ] = $field['taxonomy'];
 		}
 
 		$this->_add_field_to_array(
@@ -1059,6 +1093,25 @@ class CMB2 extends CMB2_Base {
 		);
 
 		return $field['id'];
+	}
+
+	/**
+	 * Defines a field's column if requesting to be show in admin columns.
+	 * @since  2.2.3
+	 * @param  array  $field Metabox field config array.
+	 * @return array         Modified metabox field config array.
+	 */
+	protected function define_field_column( array $field ) {
+		$this->has_columns = true;
+
+		$column = is_array( $field['column'] ) ? $field['column'] : array();
+
+		$field['column'] = wp_parse_args( $column, array(
+			'name'     => isset( $field['name'] ) ? $field['name'] : '',
+			'position' => false,
+		) );
+
+		return $field;
 	}
 
 	/**
@@ -1102,7 +1155,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
 		if ( $position ) {
-			cmb2_utils()->array_insert( $fields, array( $field['id'] => $field ), $position );
+			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
 		} else {
 			$fields[ $field['id'] ] = $field;
 		}
@@ -1257,6 +1310,7 @@ class CMB2 extends CMB2_Base {
 		switch ( $field ) {
 			case 'updated':
 			case 'has_columns':
+			case 'tax_metaboxes_to_remove':
 				return $this->{$field};
 			default:
 				return parent::__get( $field );

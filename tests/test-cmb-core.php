@@ -155,7 +155,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	/**
 	 * @expectedException Test_CMB2_Exception
 	 */
-	public function test_set_metabox_after_offlimits() {
+	public function test_setting_protected_property() {
 		try {
 			// Fyi you don't need to do an assert test here, as we are only testing the exception, so just make the call
 			$this->cmb->metabox['title'] = 'title';
@@ -192,7 +192,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			cmb2_dir()
 		);
 
-		$this->assertEquals( cmb2_utils()->url(), $cmb2_url );
+		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
 	}
 
 	public function test_array_insert() {
@@ -204,7 +204,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$new = array( 'new' => array( 4,5,6 ) );
 
-		cmb2_utils()->array_insert( $array, $new, 2 );
+		CMB2_Utils::array_insert( $array, $new, 2 );
 
 		$this->assertEquals( array(
 			'one' => array( 1,2,3 ),
@@ -261,8 +261,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$expected_form = '
 		<form class="cmb-form" method="post" id="' . $this->cmb_id . '" enctype="multipart/form-data" encoding="multipart/form-data">
 			<input type="hidden" name="object_id" value="' . $this->post_id . '">
-			' . wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) . '
 			<!-- Begin CMB2 Fields -->
+			' . wp_nonce_field( $this->cmb->nonce(), $this->cmb->nonce(), false, false ) . '
 			<div class="cmb2-wrap form-table callback-class ' . $this->cmb_id . ' custom-class another-class filter-class custom-class-another-class">
 				<div id="cmb2-metabox-' . $this->cmb_id . '" class="cmb2-metabox cmb-field-list">
 					function test_before_row Description test_test
@@ -570,11 +570,26 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		ob_start();
 		$cmb->render_group( $field->args );
-		// grab the data from the output buffer and add it to our $content variable
-		$rendered_group = ob_get_clean();
 
-		$this->assertHTMLstringsAreEqual( $expected_group_render, $rendered_group );
+		$this->assertHTMLstringsAreEqual( $expected_group_render, ob_get_clean() );
 
+		// Test after modifying the cmb2_group_wrap_attributes filter.
+		add_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
+
+		ob_start();
+		$cmb->render_group( $field->args );
+
+		$this->assertHTMLstringsAreEqual(
+			str_replace(
+				'style="width:100%;"',
+				'style="width:100%;" blah="blah"',
+				$expected_group_render
+			),
+			// $expected_group_render,
+			ob_get_clean()
+		);
+
+		remove_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
 	}
 
 	public function test_disable_group_repeat() {
@@ -854,6 +869,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$classes[] = 'filter-class';
 		$classes[] = sanitize_title_with_dashes( $cmb->prop( 'classes' ) );
 		return $classes;
+	}
+
+	public function modify_group_attributes( $atts ) {
+		$atts['blah'] = 'blah';
+		return $atts;
 	}
 
 }

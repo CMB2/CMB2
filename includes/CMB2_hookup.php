@@ -11,14 +11,7 @@
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
  */
-class CMB2_hookup {
-
-	/**
-	 * Array of all hooks done (to be run once)
-	 * @var   array
-	 * @since 2.0.0
-	 */
-	protected static $hooks_completed = array();
+class CMB2_hookup extends CMB2_Hookup_Base {
 
 	/**
 	 * Only allow JS registration once
@@ -35,12 +28,6 @@ class CMB2_hookup {
 	protected static $css_registration_done = false;
 
 	/**
-	 * @var   CMB2 object
-	 * @since 2.0.2
-	 */
-	protected $cmb;
-
-	/**
 	 * CMB taxonomies array for term meta
 	 * @var   array
 	 * @since 2.2.0
@@ -55,12 +42,10 @@ class CMB2_hookup {
 	protected $columns = array();
 
 	/**
-	 * The object type we are performing the hookup for
-	 * @var   string
-	 * @since 2.0.9
+	 * Constructor
+	 * @since 2.0.0
+	 * @param CMB2 $cmb The CMB2 object to hookup
 	 */
-	protected $object_type = 'post';
-
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 		$this->object_type = $this->cmb->mb_object_type();
@@ -194,8 +179,8 @@ class CMB2_hookup {
 
 		// Filter required styles and register stylesheet
 		$dependencies = apply_filters( 'cmb2_style_dependencies', array() );
-		wp_register_style( 'cmb2-styles', cmb2_utils()->url( "css/cmb2{$front}{$rtl}{$min}.css" ), $dependencies );
-		wp_register_style( 'cmb2-display-styles', cmb2_utils()->url( "css/cmb2-display{$rtl}{$min}.css" ), $dependencies );
+		wp_register_style( 'cmb2-styles', CMB2_Utils::url( "css/cmb2{$front}{$rtl}{$min}.css" ), $dependencies );
+		wp_register_style( 'cmb2-display-styles', CMB2_Utils::url( "css/cmb2-display{$rtl}{$min}.css" ), $dependencies );
 
 		self::$css_registration_done = true;
 	}
@@ -342,7 +327,27 @@ class CMB2_hookup {
 				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
 			}
 
+			if ( count( $this->cmb->tax_metaboxes_to_remove ) ) {
+				$this->remove_default_tax_metaboxes( $post_type );
+			}
+
 			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+		}
+	}
+
+	/**
+	 * Remove the specified default taxonomy metaboxes for a post-type.
+	 * @since 2.2.3
+	 * @param string $post_type Post type to remove the metabox for.
+	 */
+	protected function remove_default_tax_metaboxes( $post_type ) {
+		foreach ( $this->cmb->tax_metaboxes_to_remove as $taxonomy ) {
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				continue;
+			}
+
+			$mb_id = is_taxonomy_hierarchical( $taxonomy ) ? "{$taxonomy}div" : "tagsdiv-{$taxonomy}";
+			remove_meta_box( $mb_id, $post_type, 'side' );
 		}
 	}
 
@@ -567,7 +572,7 @@ class CMB2_hookup {
 	 * @return bool          Whether object can be saved
 	 */
 	public function can_save( $type = '' ) {
-		return (
+		return apply_filters( 'cmb2_can_save', (
 			$this->cmb->prop( 'save_fields' )
 			// check nonce
 			&& isset( $_POST[ $this->cmb->nonce() ] )
@@ -576,7 +581,9 @@ class CMB2_hookup {
 			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			// get the metabox types & compare it to this type
 			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
-		);
+			// Don't do updates during a switch-to-blog instance.
+			&& ! ( is_multisite() && ms_is_switched() )
+		) );
 	}
 
 	/**
@@ -597,25 +604,6 @@ class CMB2_hookup {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Ensures WordPress hook only gets fired once
-	 * @since  2.0.0
-	 * @param string   $action        The name of the filter to hook the $hook callback to.
-	 * @param callback $hook          The callback to be run when the filter is applied.
-	 * @param integer  $priority      Order the functions are executed
-	 * @param int      $accepted_args The number of arguments the function accepts.
-	 */
-	public function once( $action, $hook, $priority = 10, $accepted_args = 1 ) {
-		$key = md5( serialize( func_get_args() ) );
-
-		if ( in_array( $key, self::$hooks_completed ) ) {
-			return;
-		}
-
-		self::$hooks_completed[] = $key;
-		add_filter( $action, $hook, $priority, $accepted_args );
 	}
 
 	/**

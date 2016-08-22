@@ -46,7 +46,7 @@ phpunit
 ```
 
 ### 5. Bonus Round: Run tests automatically before each commit
-All you need to do is run these two commands, and then priort to accepting any commit grunt will run phpunit.
+All you need to do is run these two commands, and then prior to accepting any commit grunt will run phpunit.
 If a test fails, the commit will be rejected, giving you the opportunity to fix the problem first.
 
 ```bash

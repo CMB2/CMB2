@@ -29,7 +29,6 @@ window.CMB2 = window.CMB2 || {};
 		repeatUpdate    : 'input:not([type="button"]),select,textarea,label',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},
-		neweditor_id    : [],
 		defaults : {
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
@@ -351,7 +350,6 @@ window.CMB2 = window.CMB2 || {};
 				});
 			}
 		}
-		cmb.neweditor_id = [];
 
 		$elements.filter(':checked').prop( 'checked', false );
 		$elements.filter(':selected').prop( 'selected', false );
@@ -368,7 +366,6 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.elReplacements = function( $newInput, prevNum ) {
-		var isEditor  = $newInput.hasClass( 'wp-editor-area' );
 		var oldFor    = $newInput.attr( 'for' );
 		var oldVal    = $newInput.val();
 		var type      = $newInput.prop( 'type' );
@@ -411,24 +408,6 @@ window.CMB2 = window.CMB2 || {};
 			.removeClass( 'hasDatepicker' )
 			.attr( attrs ).val( checkable ? checkable : '' );
 
-		// wysiwyg field
-		if ( isEditor ) {
-			// Get new wysiwyg ID
-			newID = newID ? oldID.replace( 'zx'+ prevNum, 'zx'+ cmb.idNumber ) : '';
-			// Empty the contents
-			$newInput.html('');
-			// Get wysiwyg field
-			var $wysiwyg = $newInput.parents( '.cmb-type-wysiwyg' );
-			// Remove extra mce divs
-			$wysiwyg.find('.mce-tinymce:not(:first-child)').remove();
-			// Replace id instances
-			var html = $wysiwyg.html().replace( new RegExp( oldID, 'g' ), newID );
-			// Update field html
-			$wysiwyg.html( html );
-			// Save ids for later to re-init tinymce
-			cmb.neweditor_id.push( { 'id': newID, 'old': oldID } );
-		}
-
 		return $newInput;
 	};
 
@@ -454,41 +433,6 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.afterRowInsert = function( $row ) {
-		var _prop;
-
-		// Need to re-init wp_editor instances
-		if ( cmb.neweditor_id.length ) {
-			var i;
-			for ( i = cmb.neweditor_id.length - 1; i >= 0; i-- ) {
-				var id = cmb.neweditor_id[i].id;
-				var old = cmb.neweditor_id[i].old;
-
-				if ( typeof( tinyMCEPreInit.mceInit[ id ] ) === 'undefined' ) {
-					var newSettings = jQuery.extend( {}, tinyMCEPreInit.mceInit[ old ] );
-
-					for ( _prop in newSettings ) {
-						if ( 'string' === typeof( newSettings[_prop] ) ) {
-							newSettings[_prop] = newSettings[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.mceInit[ id ] = newSettings;
-				}
-				if ( typeof( tinyMCEPreInit.qtInit[ id ] ) === 'undefined' ) {
-					var newQTS = jQuery.extend( {}, tinyMCEPreInit.qtInit[ old ] );
-					for ( _prop in newQTS ) {
-						if ( 'string' === typeof( newQTS[_prop] ) ) {
-							newQTS[_prop] = newQTS[_prop].replace( new RegExp( old, 'g' ), id );
-						}
-					}
-					tinyMCEPreInit.qtInit[ id ] = newQTS;
-				}
-				tinyMCE.init({
-					id : tinyMCEPreInit.mceInit[ id ],
-				});
-
-			}
-		}
-
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
 	};
@@ -527,8 +471,13 @@ window.CMB2 = window.CMB2 || {};
 		var $table   = $id( $this.data('selector') );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
 		var prevNum  = parseInt( $oldRow.data('iterator'), 10 );
-		cmb.idNumber = prevNum + 1;
+		cmb.idNumber = parseInt( prevNum, 10 ) + 1;
 		var $row     = $oldRow.clone();
+
+		// Make sure the next number doesn't exist.
+		while ( $table.find( '.cmb-repeatable-grouping[data-iterator="'+ cmb.idNumber +'"]' ).length > 0 ) {
+			cmb.idNumber++;
+		}
 
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
@@ -554,7 +503,7 @@ window.CMB2 = window.CMB2 || {};
 		var $table        = $id( $this.data('selector') );
 		var $emptyrow     = $table.find('.empty-row');
 		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator'), 10 );
-		cmb.idNumber      = prevNum + 1;
+		cmb.idNumber      = parseInt( prevNum, 10 ) + 1;
 		var $row          = $emptyrow.clone();
 
 		cmb.newRowHousekeeping( $row ).cleanRow( $row, prevNum );
@@ -634,22 +583,22 @@ window.CMB2 = window.CMB2 || {};
 		evt.preventDefault();
 
 		var $this = $( this );
-		// Before shift occurs.
-		cmb.triggerElement( $this, 'cmb2_shift_rows_enter', $this );
+		var $from = $this.parents( '.cmb-repeatable-grouping' );
+		var $goto = $this.hasClass( 'move-up' ) ? $from.prev( '.cmb-repeatable-grouping' ) : $from.next( '.cmb-repeatable-grouping' );
 
-		var $parent   = $this.parents( '.cmb-repeatable-grouping' );
-		var $goto     = $this.hasClass( 'move-up' ) ? $parent.prev( '.cmb-repeatable-grouping' ) : $parent.next( '.cmb-repeatable-grouping' );
+		// Before shift occurs.
+		cmb.triggerElement( $this, 'cmb2_shift_rows_enter', $this, $from, $goto );
 
 		if ( ! $goto.length ) {
 			return;
 		}
 
 		// About to shift
-		cmb.triggerElement( $this, 'cmb2_shift_rows_start', $this );
+		cmb.triggerElement( $this, 'cmb2_shift_rows_start', $this, $from, $goto );
 
 		var inputVals = [];
 		// Loop this item's fields
-		$parent.find( cmb.repeatEls ).each( function() {
+		$from.find( cmb.repeatEls ).each( function() {
 			var $element = $( this );
 			var elType = $element.attr( 'type' );
 			var val;
@@ -721,15 +670,15 @@ window.CMB2 = window.CMB2 || {};
 			}
 		});
 
-		$parent.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
+		$from.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 		$goto.find( 'input[data-checked=true]' ).prop( 'checked', true ).removeAttr( 'data-checked' );
 
 		// trigger color picker change event
-		$parent.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
+		$from.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 		$goto.find( 'input[type="text"].cmb2-colorpicker' ).trigger( 'change' );
 
 		// shift done
-		cmb.triggerElement( $this, 'cmb2_shift_rows_complete', $this );
+		cmb.triggerElement( $this, 'cmb2_shift_rows_complete', $this, $from, $goto );
 	};
 
 	cmb.initPickers = function( $timePickers, $datePickers, $colorPickers ) {

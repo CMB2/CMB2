@@ -86,13 +86,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb classes classes_cb select_all_button multiple repeatable inline on_front show_names save_field date_format time_format description preview_size render_row_cb display_cb label_cb column id before_field after_field _id _name has_supporting_data', $classes );
+		$this->assertHTMLstringsAreEqual( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb classes classes_cb select_all_button multiple repeatable inline on_front show_names save_field date_format time_format description preview_size render_row_cb display_cb label_cb column js_dependencies id before_field after_field _id _name has_supporting_data', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertEquals( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, id, before_field, after_field, _id, _name, has_supporting_data', $default );
+		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, id, before_field, after_field, _id, _name, has_supporting_data', $default );
 	}
 
 	public function test_cmb2_row_classes_field_callback_with_string() {

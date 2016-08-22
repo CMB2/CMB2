@@ -52,7 +52,7 @@ function cmb2_utils() {
 /**
  * Get instance of the CMB2_Ajax class
  * @since  2.0.0
- * @return CMB2_Ajax object CMB2 utilities class
+ * @return CMB2_Ajax object CMB2 ajax class
  */
 function cmb2_ajax() {
 	return CMB2_Ajax::get_instance();
