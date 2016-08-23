@@ -139,6 +139,10 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed             Value of field argument
 	 */
 	public function __call( $name, $arguments ) {
+		if ( 'string' === $name ) {
+			return call_user_func_array( array( $this, 'get_string' ), $arguments );
+		}
+
 		$key = isset( $arguments[0] ) ? $arguments[0] : false;
 		return $this->args( $name, $key );
 	}
@@ -962,7 +966,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @param  string  $fallback Fallback text
 	 * @return string            Text
 	 */
-	public function string( $text_key, $fallback ) {
+	public function get_string( $text_key, $fallback ) {
 		// If null, populate with our field strings values.
 		if ( null === $this->strings ) {
 			$this->strings = (array) $this->args['text'];
