@@ -418,7 +418,7 @@ abstract class CMB2_Base {
 	public function __call( $method, $args ) {
 		$object_class = strtolower( get_class( $this ) );
 
-		if ( ! has_action(  "{$object_class}_inherit_{$method}" ) ) {
+		if ( ! has_filter(  "{$object_class}_inherit_{$method}" ) ) {
 			throw new Exception( 'Invalid ' . get_class( $this ) . ' method: ' . $method );
 		}
 
@@ -441,7 +441,6 @@ abstract class CMB2_Base {
 		 * @param array $args The arguments to be passed to the hook.
 		 *                    The first argument will always be this object instance.
 		 */
-		do_action_ref_array( "{$object_class}_inherit_{$method}", $args );
+		return apply_filters_ref_array( "{$object_class}_inherit_{$method}", $args );
 	}
-
 }
