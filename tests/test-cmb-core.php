@@ -797,6 +797,34 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	}
 
+	/**
+	 * @expectedException Test_CMB2_Exception
+	 */
+	public function test_invalid_cmb_magic_call() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		try {
+			// Calling a non-existent method should generate an exception
+			$cmb->foo_bar_baz();
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
+
+	}
+
+	public function test_overloaded_cmb_method() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		add_action( 'cmb2_inherit_fabulous', array( __CLASS__, 'overloading_test' ), 10, 2 );
+
+		$this->assertEquals( 'Fabulous hair', $cmb->fabulous( 'hair' ) );
+		$this->assertObjectHasAttribute( 'fabulous_noun', $cmb );
+	}
+
 	public function test_cmb2_props() {
 
 		$cmb = cmb2_get_metabox( 'test' );
