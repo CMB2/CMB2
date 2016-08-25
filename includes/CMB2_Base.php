@@ -409,4 +409,39 @@ abstract class CMB2_Base {
 		}
 	}
 
+	/**
+	 * Allows overloading the object with methods... Whooaaa oooh it's magic, y'knoooow.
+	 * @since 1.0.0
+	 * @param string $method Non-existent method.
+	 * @param array  $arguments All arguments passed to the method
+	 */
+	public function __call( $method, $args ) {
+		$object_class = strtolower( get_class( $this ) );
+
+		if ( ! has_action(  "{$object_class}_inherit_{$method}" ) ) {
+			throw new Exception( 'Invalid ' . get_class( $this ) . ' method: ' . $method );
+		}
+
+		array_unshift( $args, $this );
+
+		/**
+		 * Allows overloading the object (CMB2 or CMB2_Field) with additional capabilities
+		 * by registering hook callbacks.
+		 *
+		 * The first dynamic portion of the hook name, $object_class, refers to the object class,
+		 * either cmb2 or cmb2_field.
+		 *
+		 * The second dynamic portion of the hook name, $method, is the non-existent method being
+		 * called on the object. To avoid possible future methods encroaching on your hooks,
+		 * use a unique method (aka, $cmb->prefix_my_method()).
+		 *
+		 * When registering your callback, you will need to ensure that you register the correct
+		 * number of `$accepted_args`, accounting for this object instance being the first argument.
+		 *
+		 * @param array $args The arguments to be passed to the hook.
+		 *                    The first argument will always be this object instance.
+		 */
+		do_action_ref_array( "{$object_class}_inherit_{$method}", $args );
+	}
+
 }
