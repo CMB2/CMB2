@@ -37,7 +37,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 			'before_field'  => array( $this, 'before_field_cb' ),
 			'after_field'   => 'after_field_static',
 			'classes_cb'    => array( $this, 'row_classes_array_cb' ),
-			'default'       => array( $this, 'cb_to_set_default' ),
+			'default_cb'    => array( $this, 'cb_to_set_default' ),
 			'render_row_cb' => array( $this, 'render_row_cb_test' ),
 			'label_cb'      => array( $this, 'label_cb_test' ),
 		);
@@ -95,7 +95,11 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, id, before_field, after_field, _id, _name, has_supporting_data', $default );
 	}
 
-	public function test_cmb2_row_classes_field_callback_with_string() {
+	/**
+	 * Tests classes callback, but also tests that 'row_classes' param as callback is deprecated.
+	 * @expectedDeprecated CMB2_Field::__construct()
+	 */
+	public function test_cmb2_classes_field_callback_with_string() {
 
 		// Test with string
 		$args = $this->field_args;
@@ -110,7 +114,11 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout callback with string', $classes );
 	}
 
-	public function test_cmb2_row_classes_string() {
+	/**
+	 * Tests row classes, but also tests that 'row_classes' param is deprecated.
+	 * @expectedDeprecated CMB2_Field::__construct()
+	 */
+	public function test_cmb2_classes_string() {
 
 		// Test with string
 		$args = $this->field_args;
@@ -351,7 +359,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$field = $this->field->get_field_clone( array( 'id' => 'test_field_clone' ) );
 
 		foreach ( $this->field_args as $key => $arg ) {
-			if ( 'id' === $key || 'default' === $key ) {
+			if ( 'id' === $key || 'default' === $key || 'default_cb' === $key ) {
 				continue;
 			}
 

@@ -25,7 +25,7 @@ abstract class CMB2_Base {
 	protected $cmb_id = '';
 
 	/**
-	 * The deprecated object properties name.
+	 * The object properties name.
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -58,6 +58,16 @@ abstract class CMB2_Base {
 	 * @since 2.0.0
 	 */
 	protected $callback_results = array();
+
+	/**
+	 * The deprecated_param method deprecated param message signature.
+	 */
+	const DEPRECATED_PARAM = 1;
+
+	/**
+	 * The deprecated_param method deprecated callback param message signature.
+	 */
+	const DEPRECATED_CB_PARAM = 2;
 
 	/**
 	 * Get started
@@ -298,6 +308,81 @@ abstract class CMB2_Base {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Mark a param as deprecated and inform when it has been used.
+	 *
+	 * There is a default WordPress hook deprecated_argument_run that will be called
+	 * that can be used to get the backtrace up to what file and function used the
+	 * deprecated argument.
+	 *
+	 * The current behavior is to trigger a user error if WP_DEBUG is true.
+	 *
+	 * @since 2.2.3
+	 *
+	 * @param string $function The function that was called.
+	 * @param string $version  The version of CMB2 that deprecated the argument used.
+	 * @param string $message  Optional. A message regarding the change, or numeric
+	 *                         key to generate message from additional arguments.
+	 *                         Default null.
+	 */
+	protected function deprecated_param( $function, $version, $message = null ) {
+
+		if ( is_numeric( $message ) ) {
+			$args = func_get_args();
+
+			switch ( $message ) {
+
+				case self::DEPRECATED_PARAM:
+					$message = sprintf( __( 'The "%s" field parameter has been deprecated in favor of the "%s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					break;
+
+				case self::DEPRECATED_CB_PARAM:
+					$message = sprintf( __( 'Using the "%s" field parameter as a callback has been deprecated in favor of the "%s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					break;
+
+				default:
+					$message = null;
+					break;
+			}
+		}
+
+		/**
+		 * Fires when a deprecated argument is called. This is a WP core action.
+		 *
+		 * @since 2.2.3
+		 *
+		 * @param string $function The function that was called.
+		 * @param string $message  A message regarding the change.
+		 * @param string $version  The version of CMB2 that deprecated the argument used.
+		 */
+		do_action( 'deprecated_argument_run', $function, $message, $version );
+
+		/**
+		 * Filters whether to trigger an error for deprecated arguments. This is a WP core filter.
+		 *
+		 * @since 2.2.3
+		 *
+		 * @param bool $trigger Whether to trigger the error for deprecated arguments. Default true.
+		 */
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && apply_filters( 'deprecated_argument_trigger_error', true ) ) {
+			if ( function_exists( '__' ) ) {
+				if ( ! is_null( $message ) ) {
+					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s! %3$s', 'cmb2' ), $function, $version, $message ) );
+				}
+				else {
+					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s with no alternative available.', 'cmb2' ), $function, $version ) );
+				}
+			} else {
+				if ( ! is_null( $message ) ) {
+					trigger_error( sprintf( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s! %3$s', $function, $version, $message ) );
+				}
+				else {
+					trigger_error( sprintf( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s with no alternative available.', $function, $version ) );
+				}
+			}
+		}
 	}
 
 	/**
