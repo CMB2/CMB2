@@ -1,0 +1,448 @@
+# Translation of Development (trunk) in Moroccan Arabic
+# This file is distributed under the same license as the Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-10-21 21:13:01+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: GlotPress/1.0-alpha-1100\n"
+"Project-Id-Version: Development (trunk)\n"
+
+#: includes/CMB2_JS.php:140 includes/CMB2_Types.php:1021
+msgid "Download"
+msgstr "التحميل"
+
+#: includes/CMB2_JS.php:115
+msgid "Next"
+msgstr "التالي"
+
+#: includes/helper-functions.php:250
+msgid "Save"
+msgstr "حفظ"
+
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:357
+#: includes/CMB2_Types.php:1023
+msgid "Remove"
+msgstr "إزالة"
+
+#: includes/CMB2_Field.php:978 includes/CMB2_Field.php:982
+msgid "None"
+msgstr "لا شيء"
+
+#: includes/CMB2_JS.php:87
+msgid "Default"
+msgstr "افتراضي"
+
+#: includes/CMB2_JS.php:117
+msgid "Today"
+msgstr "اليوم"
+
+#: includes/CMB2_JS.php:127
+msgid "Now"
+msgstr "الآن"
+
+#: includes/CMB2_JS.php:123
+msgid "Time"
+msgstr "الوقت"
+
+#: example-functions.php:434
+msgid "Description"
+msgstr "الوصف"
+
+#: example-functions.php:267
+msgid "Test Taxonomy Radio"
+msgstr "زر راديو للاختيار من التصنيفات اختباري"
+
+#: example-functions.php:276
+msgid "Test Taxonomy Select"
+msgstr "قائمة منسدلة للاختيار من التصنيفات اختبارية"
+
+#: example-functions.php:284
+msgid "Test Taxonomy Multi Checkbox"
+msgstr "مربع اختباري متعدد الاختيارات للتصنيفات"
+
+#: example-functions.php:293
+msgid "Test Checkbox"
+msgstr "مربع اختيار اختباري"
+
+#: example-functions.php:300
+msgid "Test Multi Checkbox"
+msgstr "مربع اختيار متعدد اختباري"
+
+#: example-functions.php:306
+msgid "Check One"
+msgstr "الاختيار الأول"
+
+#: example-functions.php:307
+msgid "Check Two"
+msgstr "الاختيار الثاني"
+
+#: example-functions.php:308
+msgid "Check Three"
+msgstr "الاختيار الثالث"
+
+#: example-functions.php:314
+msgid "Test wysiwyg"
+msgstr "محرر اختباري"
+
+#: example-functions.php:322
+msgid "Test Image"
+msgstr "صورة اختبارية"
+
+#: example-functions.php:323
+msgid "Upload an image or enter a URL."
+msgstr "قم برفع صورة او قم بادخال رابط"
+
+#: example-functions.php:329
+msgid "Multiple Files"
+msgstr "ملفات متعددة"
+
+#: example-functions.php:330
+msgid "Upload or add multiple images/attachments."
+msgstr "قم برفع او اضافة صور/مرفقات متعددة"
+
+#: example-functions.php:337
+msgid "oEmbed"
+msgstr "مدرج oEmbed"
+
+#: example-functions.php:371
+msgid "About Page Metabox"
+msgstr "صندوق ميتا خاص بصفحة \" about\""
+
+#: example-functions.php:402
+msgid "Repeating Field Group"
+msgstr "مجموعة حقول متكررة"
+
+#: example-functions.php:410
+msgid "Generates reusable form entries"
+msgstr "تنتج مدخلات استمارات  - form - قابلة لاعادة الاستخدام"
+
+#: example-functions.php:412
+msgid "Entry {#}"
+msgstr "مدخلة  {#}"
+
+#: example-functions.php:413
+msgid "Add Another Entry"
+msgstr "اضف مدخلة أخرى"
+
+#: example-functions.php:414
+msgid "Remove Entry"
+msgstr "حذف مدخلة"
+
+#: example-functions.php:427
+msgid "Entry Title"
+msgstr "عنوان المدخلة"
+
+#: example-functions.php:435
+msgid "Write a short description for this entry"
+msgstr "اكتب وصف قصير لهذه المدخلة"
+
+#: example-functions.php:441
+msgid "Entry Image"
+msgstr "صورة المدخلة"
+
+#: example-functions.php:447
+msgid "Image Caption"
+msgstr "وصف الصورة"
+
+#: example-functions.php:468
+msgid "User Profile Metabox"
+msgstr "صندوق ميتا خاص بالملف الشخصي للعضو"
+
+#: example-functions.php:475
+msgid "Extra Info"
+msgstr "معلومات اضافية"
+
+#: example-functions.php:483
+msgid "Avatar"
+msgstr "الصورة الرمزية"
+
+#: example-functions.php:490
+msgid "Facebook URL"
+msgstr "رابط فيسبوك"
+
+#: example-functions.php:497
+msgid "Twitter URL"
+msgstr "رابط تويتر"
+
+#: example-functions.php:504
+msgid "Google+ URL"
+msgstr "رابط جوجل بلس"
+
+#: example-functions.php:511
+msgid "Linkedin URL"
+msgstr "لابط لينكد ان"
+
+#: example-functions.php:518
+msgid "User Field"
+msgstr "حقل المستخدم"
+
+#: example-functions.php:541
+msgid "Theme Options Metabox"
+msgstr "حقل ميتا خاص بخيارات القالب"
+
+#: example-functions.php:556
+msgid "Site Background Color"
+msgstr "لون خلفية الموقع"
+
+#: includes/CMB2.php:120
+msgid "Metabox configuration is required to have an ID parameter"
+msgstr "ضبط صندوق الميتا يتطلب وجود متغير خاص ب ID"
+
+#: includes/CMB2.php:332
+msgid "Click to toggle"
+msgstr "أنقر للفتح والإغلاق"
+
+#: includes/CMB2_Ajax.php:40
+msgid "Please Try Again"
+msgstr "برجاء المحاولة مرة أخرى"
+
+#: includes/CMB2_Ajax.php:135
+msgid "Remove Embed"
+msgstr "حذف المدرج"
+
+#: includes/CMB2_Ajax.php:139
+msgid "No oEmbed Results Found for %s. View more info at"
+msgstr "لم يتم العثور على مدرج oEmbed في  %s. شاهد المزيد من المعلومات في "
+
+#: includes/CMB2_Field.php:955
+msgid "Add Group"
+msgstr "اضافة مجموعة"
+
+#: includes/CMB2_Field.php:956
+msgid "Remove Group"
+msgstr "حذف مجموعة"
+
+#: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
+msgid "Clear"
+msgstr "مسح"
+
+#: includes/CMB2_JS.php:88
+msgid "Select Color"
+msgstr "إختر لونا"
+
+#: includes/CMB2_JS.php:89
+msgid "Current Color"
+msgstr "اللون الحالي"
+
+#: includes/CMB2_JS.php:109
+msgctxt "Valid formatDate string for jquery-ui datepicker"
+msgid "mm/dd/yy"
+msgstr "mm/dd/yy"
+
+#: includes/CMB2_JS.php:110
+msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+msgstr "الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس, الجمعة, السبت"
+
+#: includes/CMB2_JS.php:111
+msgid "Su, Mo, Tu, We, Th, Fr, Sa"
+msgstr "الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس, الجمعة, السبت"
+
+#: includes/CMB2_JS.php:112
+msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
+msgstr "الأحد, الاثنين, الثلاثاء, الأربعاء, الخميس, الجمعة, السبت"
+
+#: includes/CMB2_JS.php:113
+msgid "January, February, March, April, May, June, July, August, September, October, November, December"
+msgstr "يناير, فبراير, مارس, ابريل, مايو, يونيو, يوليو, اغسطس, سبتمبر, اكتوبر, نوفمبر, ديسمبر"
+
+#: includes/CMB2_JS.php:114
+msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
+msgstr "يناير, فبراير, مارس, ابريل, مايو, يونيو, يوليو, اغسطس, سبتمبر, اكتوبر, نوفمبر, ديسمبر"
+
+#: includes/CMB2_JS.php:116
+msgid "Prev"
+msgstr "السابق"
+
+#: includes/CMB2_JS.php:118 includes/CMB2_JS.php:128
+msgid "Done"
+msgstr "انتهى"
+
+#: includes/CMB2_JS.php:122
+msgid "Choose Time"
+msgstr "اختر الوقت"
+
+#: includes/CMB2_JS.php:124
+msgid "Hour"
+msgstr "ساعة"
+
+#: includes/CMB2_JS.php:125
+msgid "Minute"
+msgstr "دقيقة"
+
+#: includes/CMB2_JS.php:126
+msgid "Second"
+msgstr "ثانية"
+
+#: includes/CMB2_JS.php:129
+msgctxt "Valid formatting string, as per http://trentrichardson.com/examples/timepicker/"
+msgid "hh:mm TT"
+msgstr "hh:mm TT"
+
+#: includes/CMB2_JS.php:135
+msgid "Use this file"
+msgstr "استخدم هذا الملف"
+
+#: includes/CMB2_JS.php:137 includes/CMB2_Types.php:1004
+msgid "Remove Image"
+msgstr "إزالة الصورة"
+
+#: includes/CMB2_JS.php:139 includes/CMB2_Types.php:1018
+msgid "File:"
+msgstr "ملف :"
+
+#: includes/CMB2_JS.php:141
+msgid "Select / Deselect All"
+msgstr "اختيار/ عدم اختيار الكل"
+
+#: includes/CMB2_Types.php:298
+msgid "Add Row"
+msgstr "اضافة صف"
+
+#: includes/CMB2_Types.php:749 includes/CMB2_Types.php:797
+msgid "No terms"
+msgstr "لا يوجد مصطلحات"
+
+#: includes/CMB2_Types.php:864
+msgid "Add or Upload Files"
+msgstr "اضف او قم برفع ملفات"
+
+#: includes/CMB2_Types.php:926
+msgid "Add or Upload File"
+msgstr "اضف او قم برفع ملف"
+
+#. Author URI of the plugin/theme
+msgid "http://webdevstudios.com"
+msgstr "http://webdevstudios.com"
+
+#. Plugin Name of the plugin/theme
+msgid "CMB2"
+msgstr "CMB2"
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/WebDevStudios/CMB2"
+msgstr "https://github.com/WebDevStudios/CMB2"
+
+#. Author of the plugin/theme
+msgid "WebDevStudios"
+msgstr "WebDevStudios"
+
+#: example-functions.php:82
+msgid "Test Metabox"
+msgstr "صندوق ميتا اختباري"
+
+#: example-functions.php:93 example-functions.php:380
+msgid "Test Text"
+msgstr "نص اختباري"
+
+#: example-functions.php:94 example-functions.php:106 example-functions.php:114
+#: example-functions.php:122 example-functions.php:131
+#: example-functions.php:139 example-functions.php:153
+#: example-functions.php:160 example-functions.php:168
+#: example-functions.php:185 example-functions.php:194
+#: example-functions.php:202 example-functions.php:209
+#: example-functions.php:216 example-functions.php:230
+#: example-functions.php:243 example-functions.php:256
+#: example-functions.php:268 example-functions.php:277
+#: example-functions.php:285 example-functions.php:294
+#: example-functions.php:301 example-functions.php:315
+#: example-functions.php:381 example-functions.php:476
+#: example-functions.php:484 example-functions.php:491
+#: example-functions.php:498 example-functions.php:505
+#: example-functions.php:512 example-functions.php:519
+#: example-functions.php:557
+msgid "field description (optional)"
+msgstr "وصف الحقل (اختياري)"
+
+#: example-functions.php:105
+msgid "Test Text Small"
+msgstr "نص اختباري صغير"
+
+#: example-functions.php:113
+msgid "Test Text Medium"
+msgstr "نص اختباري متوسط"
+
+#: example-functions.php:121
+msgid "Website URL"
+msgstr "رابط موقع"
+
+#: example-functions.php:130
+msgid "Test Text Email"
+msgstr "نص بريد إلكتروني اختباري"
+
+#: example-functions.php:138
+msgid "Test Time"
+msgstr "وقت اختباري"
+
+#: example-functions.php:145 example-functions.php:146
+msgid "Time zone"
+msgstr "منطقة زمنية"
+
+#: example-functions.php:152
+msgid "Test Date Picker"
+msgstr "مربع اختيار التاريخ اختباري"
+
+#: example-functions.php:159
+msgid "Test Date Picker (UNIX timestamp)"
+msgstr "مربع اختيار التاريخ اختباري بنظام (UNIX timestamp)"
+
+#: example-functions.php:167
+msgid "Test Date/Time Picker Combo (UNIX timestamp)"
+msgstr "مربع اختباري لاختيار الوقت و التاريخ معا بنظام  (UNIX timestamp)"
+
+#: example-functions.php:184
+msgid "Test Money"
+msgstr "حقل نقود اختباري"
+
+#: example-functions.php:193
+msgid "Test Color Picker"
+msgstr "حقل اختيار اللون اختباري"
+
+#: example-functions.php:201
+msgid "Test Text Area"
+msgstr "مربع نصي متعدد السطور اختباري"
+
+#: example-functions.php:208
+msgid "Test Text Area Small"
+msgstr "مربع نصي متعدد السطور اختباري صغير"
+
+#: example-functions.php:215
+msgid "Test Text Area for Code"
+msgstr "مربع نصي متعدد السطور اختباري خاص بالكود"
+
+#: example-functions.php:222
+msgid "Test Title Weeeee"
+msgstr "عنوان اختباري"
+
+#: example-functions.php:223
+msgid "This is a title description"
+msgstr "هذا هو وصف للعنوان"
+
+#: example-functions.php:229
+msgid "Test Select"
+msgstr "اختيار  من قائمة منسدلة اختباري"
+
+#: example-functions.php:235 example-functions.php:248
+#: example-functions.php:260
+msgid "Option One"
+msgstr "الخيار الأول"
+
+#: example-functions.php:236 example-functions.php:249
+#: example-functions.php:261
+msgid "Option Two"
+msgstr "الخيار الثاني"
+
+#: example-functions.php:237 example-functions.php:250
+#: example-functions.php:262
+msgid "Option Three"
+msgstr "الخيار الثالث"
+
+#: example-functions.php:242
+msgid "Test Radio inline"
+msgstr "زر راديو اختاري مُضمن"
+
+#: example-functions.php:255
+msgid "Test Radio"
+msgstr "زر راديو اختباري"
