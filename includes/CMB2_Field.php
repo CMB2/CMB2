@@ -139,6 +139,10 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed             Value of field argument
 	 */
 	public function __call( $name, $arguments ) {
+		if ( 'string' === $name ) {
+			return call_user_func_array( array( $this, 'get_string' ), $arguments );
+		}
+
 		$key = isset( $arguments[0] ) ? $arguments[0] : false;
 		return $this->args( $name, $key );
 	}
@@ -962,7 +966,7 @@ class CMB2_Field extends CMB2_Base {
 	 * @param  string  $fallback Fallback text
 	 * @return string            Text
 	 */
-	public function string( $text_key, $fallback ) {
+	public function get_string( $text_key, $fallback ) {
 		// If null, populate with our field strings values.
 		if ( null === $this->strings ) {
 			$this->strings = (array) $this->args['text'];
@@ -1057,17 +1061,9 @@ class CMB2_Field extends CMB2_Base {
 	 * Fills in empty field parameters with defaults
 	 * @since 1.1.0
 	 * @param array $args Metabox field config array
+	 * @param array       Modified field config array.
 	 */
 	public function _set_field_defaults( $args ) {
-
-		/*
-		 * Deprecated parameters:
-		 *
-		 * 'std' -- use 'default' (no longer works)
-		 * 'row_classes' -- use 'class', or 'class_cb'
-		 * 'default' -- as callback (use default_cb)
-		 */
-
 
 		// Set up blank or default values for empty ones
 		$args = wp_parse_args( $args, array(
@@ -1105,40 +1101,16 @@ class CMB2_Field extends CMB2_Base {
 		) );
 
 		/*
-		 * Deprecated usage.
+		 * Deprecated usage:
+		 *
+		 * 'std' -- use 'default' (no longer works)
+		 * 'row_classes' -- use 'class', or 'class_cb'
+		 * 'default' -- as callback (use default_cb)
 		 */
-
-		if ( isset( $args['row_classes'] ) ) {
-
-			// row_classes param could be a callback
-			if ( is_callable( $args['row_classes'] ) ) {
-				$args['classes_cb'] = $args['row_classes'];
-				$args['classes'] = null;
-			} else {
-				$args['classes'] = $args['row_classes'];
-			}
-
-			unset( $args['row_classes'] );
-		}
-
-		// default param can be passed a callback as well
-		if ( is_callable( $args['default'] ) ) {
-			$args['default_cb'] = $args['default'];
-			$args['default'] = null;
-		}
-
-		/*
-		 * END deprecated usage.
-		 */
+		$args = $this->convert_deprecated_params( $args );
 
 		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
 		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
-
-		// options param can be passed a callback as well
-		if ( is_callable( $args['options'] ) ) {
-			$args['options_cb'] = $args['options'];
-			$args['options'] = array();
-		}
 
 		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
 			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
@@ -1233,6 +1205,56 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		return cmb2_get_metabox( $this->cmb_id, $this->object_id, $this->object_type );
+	}
+
+	/**
+	 * Converts deprecated field parameters to the current/proper parameter, and throws a deprecation notice.
+	 * @since 2.2.3
+	 * @param array $args Metabox field config array.
+	 * @param array       Modified field config array.
+	 */
+	protected function convert_deprecated_params( $args ) {
+
+		if ( isset( $args['row_classes'] ) ) {
+
+			$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_PARAM, 'row_classes', 'classes' );
+
+			// row_classes param could be a callback
+			if ( is_callable( $args['row_classes'] ) ) {
+
+				$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_CB_PARAM, 'row_classes', 'classes_cb' );
+
+				$args['classes_cb'] = $args['row_classes'];
+				$args['classes'] = null;
+			} else {
+
+
+				$args['classes'] = $args['row_classes'];
+			}
+
+			unset( $args['row_classes'] );
+		}
+
+
+		// default param can be passed a callback as well
+		if ( is_callable( $args['default'] ) ) {
+
+			$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_CB_PARAM, 'default', 'default_cb' );
+
+			$args['default_cb'] = $args['default'];
+			$args['default'] = null;
+		}
+
+		// options param can be passed a callback as well
+		if ( is_callable( $args['options'] ) ) {
+
+			$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_CB_PARAM, 'options', 'options_cb' );
+
+			$args['options_cb'] = $args['options'];
+			$args['options'] = array();
+		}
+
+		return $args;
 	}
 
 }

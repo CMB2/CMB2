@@ -187,7 +187,7 @@ class CMB2_Types {
 	 * @return string            Text
 	 */
 	public function _text( $text_key, $fallback = '' ) {
-		return $this->field->string( $text_key, $fallback );
+		return $this->field->get_string( $text_key, $fallback );
 	}
 
 	/**

@@ -34,12 +34,12 @@ class Test_CMB2_Field extends Test_CMB2 {
 					'type' => 'text',
 				) ),
 			),
-			'before_field'  => array( $this, 'before_field_cb' ),
+			'before_field'  => array( __CLASS__, 'before_field_cb' ),
 			'after_field'   => 'after_field_static',
-			'classes_cb'    => array( $this, 'row_classes_array_cb' ),
-			'default'       => array( $this, 'cb_to_set_default' ),
-			'render_row_cb' => array( $this, 'render_row_cb_test' ),
-			'label_cb'      => array( $this, 'label_cb_test' ),
+			'classes_cb'    => array( __CLASS__, 'row_classes_array_cb' ),
+			'default_cb'    => array( __CLASS__, 'cb_to_set_default' ),
+			'render_row_cb' => array( __CLASS__, 'render_row_cb_test' ),
+			'label_cb'      => array( __CLASS__, 'label_cb_test' ),
 		);
 
 		$this->object_id   = $this->post_id;
@@ -95,13 +95,17 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, id, before_field, after_field, _id, _name, has_supporting_data', $default );
 	}
 
-	public function test_cmb2_row_classes_field_callback_with_string() {
+	/**
+	 * Tests classes callback, but also tests that 'row_classes' param as callback is deprecated.
+	 * @expectedDeprecated CMB2_Field::__construct()
+	 */
+	public function test_cmb2_classes_field_callback_with_string() {
 
 		// Test with string
 		$args = $this->field_args;
 
 		// Add row classes dynamically with a callback that returns a string
-		$args['row_classes'] = array( $this, 'row_classes_string_cb' );
+		$args['row_classes'] = array( __CLASS__, 'row_classes_string_cb' );
 
 		$field = $this->new_field( $args );
 
@@ -110,7 +114,11 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( 'cmb-type-text cmb2-id-test-test table-layout callback with string', $classes );
 	}
 
-	public function test_cmb2_row_classes_string() {
+	/**
+	 * Tests row classes, but also tests that 'row_classes' param is deprecated.
+	 * @expectedDeprecated CMB2_Field::__construct()
+	 */
+	public function test_cmb2_classes_string() {
 
 		// Test with string
 		$args = $this->field_args;
@@ -145,18 +153,15 @@ class Test_CMB2_Field extends Test_CMB2 {
 	public function test_filtering_field_type_sanitization_filtering() {
 		$field = $this->new_field( $this->field_args );
 
-		add_filter( 'cmb2_sanitize_text', array( $this, '_return_different_value' ) );
+		add_filter( 'cmb2_sanitize_text', array( __CLASS__, '_return_different_value' ) );
 		$modified = $field->save_field( 'some value to be modified' );
 		$this->assertTrue( !! $modified );
-		remove_filter( 'cmb2_sanitize_text', array( $this, '_return_different_value' ) );
+		remove_filter( 'cmb2_sanitize_text', array( __CLASS__, '_return_different_value' ) );
 
 		// $val = $field->get_data();
 		$val = get_post_meta( $this->object_id, 'test_test', 1 );
 		$this->assertEquals( 'modified string', $val );
 		$this->assertEquals( $val, $field->get_data() );
-	}
-	public function _return_different_value( $null ) {
-		return 'modified string';
 	}
 
 	/**
@@ -306,7 +311,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
 		// Now filter the setting of the meta.. will use update_option instead
-		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( $this, 'override_set' ), 10, 4 );
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( __CLASS__, 'override_set' ), 10, 4 );
 		// Set the value
 		$this->field->save_field( $array_val );
 
@@ -328,7 +333,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertFalse( !! $value );
 
 		// Now filter the getting of the meta, which will use get_option
-		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( $this, 'override_get' ), 10, 4 );
+		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( __CLASS__, 'override_get' ), 10, 4 );
 		// Get the value
 		$value = $this->field->get_data();
 
@@ -351,7 +356,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$field = $this->field->get_field_clone( array( 'id' => 'test_field_clone' ) );
 
 		foreach ( $this->field_args as $key => $arg ) {
-			if ( 'id' === $key || 'default' === $key ) {
+			if ( 'id' === $key || 'default' === $key || 'default_cb' === $key ) {
 				continue;
 			}
 
@@ -444,43 +449,47 @@ class Test_CMB2_Field extends Test_CMB2 {
 		return new CMB2_Field( $args );
 	}
 
-	public function before_field_cb( $args ) {
+	public static function before_field_cb( $args ) {
 		echo 'before_field_cb_' . $args['id'];
 	}
 
-	public function row_classes_array_cb( $args ) {
+	public static function row_classes_array_cb( $args ) {
 		/**
 		 * Side benefit: this will call out when default args change
 		 */
 		return array_keys( $args );
 	}
 
-	public function row_classes_string_cb( $args ) {
+	public static function row_classes_string_cb( $args ) {
 		return 'callback with string';
 	}
 
-	public function render_row_cb_test( $field_args ) {
+	public static function render_row_cb_test( $field_args ) {
 		echo 'test render cb';
 	}
 
-	public function label_cb_test( $field_args ) {
+	public static function label_cb_test( $field_args ) {
 		echo 'test label cb';
 	}
 
-	public function cb_to_set_default( $args ) {
+	public static function cb_to_set_default( $args ) {
 		/**
 		 * Side benefit: this will call out when default args change
 		 */
 		return implode( ', ', array_keys( $args ) );
 	}
 
-	public function override_set( $override, $args, $field_args, $field ) {
+	public static function _return_different_value( $null ) {
+		return 'modified string';
+	}
+
+	public static function override_set( $override, $args, $field_args, $field ) {
 		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
 		$updated = update_option( $opt_key, $args['value'] );
 		return true;
 	}
 
-	public function override_get( $override_val, $object_id, $args, $field ) {
+	public static function override_get( $override_val, $object_id, $args, $field ) {
 		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
 		return get_option( $opt_key );
 	}

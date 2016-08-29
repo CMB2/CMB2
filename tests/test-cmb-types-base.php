@@ -86,7 +86,7 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 					'description' => 'This is a description',
 					'id'   => 'options_cb_test_field',
 					'type' => 'select',
-					'options_cb' => array( $this, 'options_cb' ),
+					'options_cb' => array( __CLASS__, 'options_cb' ),
 				),
 			),
 		);
@@ -105,7 +105,7 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 						'true'  => true,
 						'false' => false,
 					),
-					'options_cb' => array( $this, 'options_cb' ),
+					'options_cb' => array( __CLASS__, 'options_cb' ),
 				),
 			),
 		);
@@ -144,6 +144,22 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 			$args['file_name'],
 			$args['attachment_id'],
 			$args['url']
+		);
+	}
+
+	/**
+	 * Test Callbacks
+	 */
+
+	public static function options_cb( $field ) {
+		return array(
+			'one'         => 'One',
+			'two'         => 'Two',
+			'true'        => true,
+			'false'       => false,
+			'post_id'     => $field->object_id,
+			'object_type' => $field->object_type,
+			'type'        => $field->args( 'type' ),
 		);
 	}
 

@@ -178,7 +178,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		}
 
 		// Add .test as a valid image type
-		add_filter( 'cmb2_valid_img_types', array( $this, 'add_type_cb' ) );
+		add_filter( 'cmb2_valid_img_types', array( __CLASS__, 'add_type_cb' ) );
 		$this->assertTrue( $type->is_valid_img_ext( '/test.test' ) );
 	}
 
@@ -323,7 +323,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$type = $this->get_field_type_object( array(
 			'type'         => 'text_money',
-			'before_field' => array( $this, 'change_money_cb' ),
+			'before_field' => array( __CLASS__, 'change_money_cb' ),
 		) );
 
 		$this->assertHTMLstringsAreEqual(
@@ -871,11 +871,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertEquals( $expected, $values );
 	}
 
-	/**
-	 * Test Callbacks
-	 */
-
-	public function options_cb( $field ) {
+	public static function options_cb( $field ) {
 		return array(
 			'one'         => 'One',
 			'two'         => 'Two',
@@ -887,12 +883,12 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
-	public function add_type_cb( $types ) {
+	public static function add_type_cb( $types ) {
 		$types[] = 'test';
 		return $types;
 	}
 
-	public function change_money_cb( $field_args ) {
+	public static function change_money_cb( $field_args ) {
 		return '£ ' . $field_args['type'];
 	}
 

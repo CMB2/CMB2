@@ -21,7 +21,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
 			'classes' => 'custom-class another-class',
-			'classes_cb' => array( $this, 'custom_classes' ),
+			'classes_cb' => array( __CLASS__, 'custom_classes' ),
 			'id' => $this->cmb_id,
 			'fields' => array(
 				'test_test' => array(
@@ -29,9 +29,9 @@ class Test_CMB2_Core extends Test_CMB2 {
 					'description' => 'Description',
 					'id'          => 'test_test',
 					'type'        => 'text',
-					'before_row'  => array( $this, 'cmb_before_row' ),
+					'before_row'  => array( __CLASS__, 'cmb_before_row' ),
 					'before'      => 'testing before',
-					'after'       => array( $this, 'cmb_after' ),
+					'after'       => array( __CLASS__, 'cmb_after' ),
 					'after_row'   => 'testing after row',
 				),
 			),
@@ -285,19 +285,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 		</form>
 		';
 
-		add_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
+		add_filter( 'cmb2_wrap_classes', array( __CLASS__, 'custom_classes_filter' ), 10, 2 );
 		$form_get = cmb2_get_metabox_form( $this->cmb_id, $this->post_id );
-		remove_filter( 'cmb2_wrap_classes', array( $this, 'custom_classes_filter' ), 10, 2 );
+		remove_filter( 'cmb2_wrap_classes', array( __CLASS__, 'custom_classes_filter' ), 10, 2 );
 
 		$this->assertHTMLstringsAreEqual( $expected_form, $form_get );
-	}
-
-	public function cmb_before_row( $field_args, $field ) {
-		echo 'function test_before_row ' . $field_args['description'] . ' ' . $field->id();
-	}
-
-	public function cmb_after( $field_args, $field ) {
-		echo 'function test_after ' . $field_args['description'] . ' ' . $field->id();
 	}
 
 	public function test_cmb2_options() {
@@ -574,7 +566,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertHTMLstringsAreEqual( $expected_group_render, ob_get_clean() );
 
 		// Test after modifying the cmb2_group_wrap_attributes filter.
-		add_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
+		add_filter( 'cmb2_group_wrap_attributes', array( __CLASS__, 'modify_group_attributes' ) );
 
 		ob_start();
 		$cmb->render_group( $field->args );
@@ -589,7 +581,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			ob_get_clean()
 		);
 
-		remove_filter( 'cmb2_group_wrap_attributes', array( $this, 'modify_group_attributes' ) );
+		remove_filter( 'cmb2_group_wrap_attributes', array( __CLASS__, 'modify_group_attributes' ) );
 	}
 
 	public function test_disable_group_repeat() {
@@ -805,6 +797,34 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	}
 
+	/**
+	 * @expectedException Test_CMB2_Exception
+	 */
+	public function test_invalid_cmb_magic_call() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		try {
+			// Calling a non-existent method should generate an exception
+			$cmb->foo_bar_baz();
+		} catch ( Exception $e ) {
+			if ( 'Exception' === get_class( $e ) ) {
+				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
+			}
+		}
+
+	}
+
+	public function test_overloaded_cmb_method() {
+
+		$cmb = cmb2_get_metabox( 'test' );
+
+		add_action( 'cmb2_inherit_fabulous', array( __CLASS__, 'overloading_test' ), 10, 2 );
+
+		$this->assertEquals( 'Fabulous hair', $cmb->fabulous( 'hair' ) );
+		$this->assertObjectHasAttribute( 'fabulous_noun', $cmb );
+	}
+
 	public function test_cmb2_props() {
 
 		$cmb = cmb2_get_metabox( 'test' );
@@ -861,19 +881,32 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$prop_value = $cmb->set_prop( $new_prop_name, $new_prop_value );
 	}
 
-	public function custom_classes( $cmb ) {
+	public static function overloading_test( $cmb2, $noun = '' ) {
+		$cmb2->fabulous_noun = $noun;
+		return 'Fabulous '. $noun;
+	}
+
+	public static function custom_classes( $cmb ) {
 		return array( 'callback-class', $cmb->cmb_id );
 	}
 
-	public function custom_classes_filter( $classes, $cmb ) {
+	public static function custom_classes_filter( $classes, $cmb ) {
 		$classes[] = 'filter-class';
 		$classes[] = sanitize_title_with_dashes( $cmb->prop( 'classes' ) );
 		return $classes;
 	}
 
-	public function modify_group_attributes( $atts ) {
+	public static function modify_group_attributes( $atts ) {
 		$atts['blah'] = 'blah';
 		return $atts;
+	}
+
+	public static function cmb_before_row( $field_args, $field ) {
+		echo 'function test_before_row ' . $field_args['description'] . ' ' . $field->id();
+	}
+
+	public static function cmb_after( $field_args, $field ) {
+		echo 'function test_after ' . $field_args['description'] . ' ' . $field->id();
 	}
 
 }
