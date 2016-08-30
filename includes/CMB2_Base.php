@@ -405,7 +405,7 @@ abstract class CMB2_Base {
 			case 'object_type':
 				return $this->{$field};
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'give' ), __CLASS__, $field ) );
 		}
 	}
 
@@ -419,7 +419,7 @@ abstract class CMB2_Base {
 		$object_class = strtolower( get_class( $this ) );
 
 		if ( ! has_filter(  "{$object_class}_inherit_{$method}" ) ) {
-			throw new Exception( 'Invalid ' . get_class( $this ) . ' method: ' . $method );
+			throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'give' ), get_class( $this ), $method ) );
 		}
 
 		array_unshift( $args, $this );

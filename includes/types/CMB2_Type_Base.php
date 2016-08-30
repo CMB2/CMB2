@@ -120,7 +120,7 @@ abstract class CMB2_Type_Base {
 			case 'concat_attrs':
 				return call_user_func_array( array( $this->types, $name ), $arguments );
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' method: ' . $name );
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'give' ), __CLASS__, $name ) );
 		}
 	}
 
@@ -135,7 +135,7 @@ abstract class CMB2_Type_Base {
 			case 'field':
 				return $this->types->field;
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'give' ), __CLASS__, $field ) );
 		}
 	}
 
