@@ -166,11 +166,11 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
 			foreach ( $rest_box->read_fields as $field_id ) {
 				$field = $rest_box->cmb->get_field( $field_id );
-				$field->object_id = $object['id'];
+				$field->object_id( $object['id'] );
 
 				// TODO: test other object types (users, comments, etc)
 				if ( isset( $object->type ) ) {
-					$field->object_type = $object->type;
+					$field->object_type( $object->type );
 				}
 
 				$values[ $cmb_id ][ $field->id( true ) ] = $field->get_data();
