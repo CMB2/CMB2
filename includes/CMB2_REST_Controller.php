@@ -1,4 +1,9 @@
 <?php
+if ( ! class_exists( 'WP_REST_Controller' ) ) {
+	// Shim the WP_REST_Controller class if wp-api plugin not installed, & not in core.
+	require_once cmb2_dir( 'includes/shim/WP_REST_Controller.php' );
+}
+
 /**
  * Creates CMB2 objects/fields endpoint for WordPres REST API.
  * Allows access to fields registered to a specific post type and more.
@@ -6,7 +11,7 @@
  * @todo  Add better documentation.
  * @todo  Research proper schema.
  *
- * @since 2.2.0
+ * @since 2.2.4
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -17,63 +22,106 @@
 abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
+	 * The namespace of this controller's route.
+	 *
+	 * @var string
+	 */
+	protected $namespace = CMB2_REST::NAMESPACE;
+
+	/**
+	 * The base of this controller's route.
+	 *
+	 * @var string
+	 */
+	protected $rest_base;
+
+	/**
 	 * The current request object
 	 * @var WP_REST_Request $request
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public $request;
 
 	/**
 	 * The current server object
 	 * @var WP_REST_Server $server
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public $server;
 
 	/**
 	 * Box object id
 	 * @var   mixed
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public $object_id = null;
 
 	/**
 	 * Box object type
 	 * @var   string
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public $object_type = '';
 
 	/**
+	 * CMB2 Instance
+	 *
+	 * @var CMB2_REST
+	 */
+	protected $rest_box;
+
+	/**
 	 * The initial route
 	 * @var   string
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	protected static $route = '';
 
 	/**
 	 * Defines which endpoint the initial request is.
 	 * @var string $request_type
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	protected static $request_type = '';
 
 	/**
 	 * Constructor
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public function __construct( WP_REST_Server $wp_rest_server ) {
 		$this->server = $wp_rest_server;
 	}
 
 	/**
+	 * Check if a given request has access to get items.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|boolean
+	 */
+	public function get_items_permissions_check( $request ) {
+		$this->initiate_request( $request, 'permissions_check' );
+
+		/**
+		 * By default, no special permissions needed.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
+		 * @param object $request    The WP_REST_Request object
+		 */
+		return apply_filters( 'cmb2_request_items_permissions_check', true, $this->request );
+	}
+
+	/**
 	 * Check if a given request has access to a field or box.
 	 * By default, no special permissions needed, but filtering return value.
 	 *
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool
+	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
 		$this->initiate_request( $request, 'permissions_check' );
@@ -81,18 +129,18 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * By default, no special permissions needed.
 		 *
-		 * @since 2.2.0
+		 * @since 2.2.4
 		 *
-		 * @param object $request        The WP_REST_Request object
-		 * @param object $cmb2_endpoints This endpoints object
+		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
+		 * @param object $request    The WP_REST_Request object
 		 */
-		return apply_filters( 'cmb2_request_permissions_check', true, $this->request );
+		return apply_filters( 'cmb2_request_item_permissions_check', true, $this->request );
 	}
 
 	/**
 	 * Prepare a CMB2 object for serialization
 	 *
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 *
 	 * @param  mixed $data
 	 * @return array $data
@@ -104,7 +152,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Output buffers a callback and returns the results.
 	 *
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 *
 	 * @param  mixed $cb Callable function/method.
 	 * @return mixed     Results of output buffer after calling function/method.
@@ -119,13 +167,13 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Prepare a CMB2 object for serialization
+	 * Prepare the CMB2 item for the REST response.
 	 *
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 *
-	 * @param  mixed           $data
-	 * @param  WP_REST_Request $request Request object
-	 * @return array $data
+	 * @param  mixed            $item     WordPress representation of the item.
+	 * @param  WP_REST_Request  $request  Request object.
+	 * @return WP_REST_Response $response
 	 */
 	public function prepare_item_for_response( $data, $request = null ) {
 		$data = $this->filter_response_by_context( $data, $this->request['context'] );
@@ -133,7 +181,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * Filter the prepared CMB2 item response.
 		 *
-		 * @since 2.2.0
+		 * @since 2.2.4
 		 *
 		 * @param mixed  $data           Prepared data
 		 * @param object $request        The WP_REST_Request object
@@ -142,6 +190,16 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		return apply_filters( 'cmb2_rest_prepare', rest_ensure_response( $data ), $this->request, $this );
 	}
 
+	/**
+	 * Initiates the request property and the rest_box property if box is readable.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  WP_REST_Request $request      Request object.
+	 * @param  string          $request_type A description of the type of request being made.
+	 *
+	 * @return void
+	 */
 	protected function initiate_rest_read_box( $request, $request_type ) {
 		$this->initiate_rest_box( $request, $request_type );
 
@@ -150,6 +208,16 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		}
 	}
 
+	/**
+	 * Initiates the request property and the rest_box property if box is writeable.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  WP_REST_Request $request      Request object.
+	 * @param  string          $request_type A description of the type of request being made.
+	 *
+	 * @return void
+	 */
 	protected function initiate_rest_write_box( $request, $request_type ) {
 		$this->initiate_rest_box( $request, $request_type );
 
@@ -158,38 +226,81 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		}
 	}
 
+	/**
+	 * Initiates the request property and the rest_box property.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  WP_REST_Request $request      Request object.
+	 * @param  string          $request_type A description of the type of request being made.
+	 *
+	 * @return void
+	 */
 	protected function initiate_rest_box( $request, $request_type ) {
 		$this->initiate_request( $request, $request_type );
 
 		$this->rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
 
 		if ( ! $this->rest_box ) {
+
 			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ) );
+
+		} else {
+
+			if ( isset( $this->request['object_id'] ) ) {
+				$this->rest_box->cmb->object_id( absint( $this->request['object_id'] ) );
+			}
+
+			if ( isset( $this->request['object_type'] ) ) {
+				$this->rest_box->cmb->object_type( sanitize_text_field( $this->request['object_type'] ) );
+			}
 		}
 	}
 
+	/**
+	 * Initiates the request property and sets up the initial static properties.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  WP_REST_Request $request      Request object.
+	 * @param  string          $request_type A description of the type of request being made.
+	 *
+	 * @return void
+	 */
 	public function initiate_request( $request, $request_type ) {
 		$this->request = $request;
-		$this->request['context'] = isset( $this->request['context'] ) && ! empty( $this->request['context'] )
-			? $this->request['context']
-			: 'view';
 
-		if ( isset( $_REQUEST['object_id'] ) ) {
-			$this->object_id = absint( $_REQUEST['object_id'] );
+		if ( ! isset( $this->request['context'] ) || empty( $this->request['context'] ) ) {
+			$this->request['context'] = 'view';
 		}
 
-		if ( isset( $_REQUEST['object_type'] ) ) {
-			$this->object_type = absint( $_REQUEST['object_type'] );
+		if ( ! self::$request_type ) {
+			self::$request_type = $request_type;
 		}
 
-		self::$request_type = self::$request_type ? self::$request_type : $request_type;
-		self::$route = self::$route ? self::$route : $this->request->get_route();
+		if ( ! self::$route ) {
+			self::$route = $this->request->get_route();
+		}
 	}
 
+	/**
+	 * Useful when getting `_embed`-ed items
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string  Initial requested type.
+	 */
 	public static function get_intial_request_type() {
 		return self::$request_type;
 	}
 
+	/**
+	 * Useful when getting `_embed`-ed items
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string  Initial requested route.
+	 */
 	public static function get_intial_route() {
 		return self::$route;
 	}
@@ -197,7 +308,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Get CMB2 fields schema, conforming to JSON Schema
 	 *
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 *
 	 * @return array
 	 */
@@ -233,12 +344,42 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @link http://v2.wp-api.org/extending/linking/
 	 * @link http://www.iana.org/assignments/link-relations/link-relations.xhtml
 	 *
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 *
 	 * @param  mixed  $object Object to build links from.
 	 *
 	 * @return array          Array of links
 	 */
 	abstract protected function prepare_links( $object );
+
+	/**
+	 * Get whitelisted query strings from URL for appending to link URLS.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string URL query stringl
+	 */
+	public function get_query_string() {
+		$defaults = array(
+			'object_id'   => 0,
+			'object_type' => '',
+			'_rendered'   => '',
+			// '_embed'      => '',
+		);
+
+		$query_string = '';
+
+		foreach ( $defaults as $key => $value ) {
+			if ( isset( $this->request[ $key ] ) ) {
+				$query_string .= $query_string ? '&' : '?';
+				$query_string .= $key;
+				if ( $value = sanitize_text_field( $this->request[ $key ] ) ) {
+					$query_string .= '=' . $value;
+				}
+			}
+		}
+
+		return $query_string;
+	}
 
 }

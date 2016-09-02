@@ -3,7 +3,7 @@
  * Handles hooking CMB2 objects/fields into the WordPres REST API
  * which can allow fields to be read and/or updated.
  *
- * @since  2.2.0
+ * @since  2.2.4
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -16,58 +16,58 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * The current CMB2 REST endpoint version
 	 * @var string
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	const VERSION = '1';
 
 	/**
 	 * The CMB2 REST base namespace (v should always be followed by $version)
 	 * @var string
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
-	const BASE = 'cmb2/v1';
+	const NAMESPACE = 'cmb2/v1';
 
 	/**
 	 * @var   CMB2 object
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public $cmb;
 
 	/**
 	 * @var   CMB2_REST[] objects
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	public static $boxes;
 
 	/**
 	 * Array of readable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	protected $read_fields = array();
 
 	/**
 	 * Array of writeable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 */
 	protected $write_fields = array();
 
 	/**
-	 * whether CMB2 object is readable via the rest api
+	 * whether CMB2 object is readable via the rest api.
 	 * @var boolean
 	 */
 	protected $rest_read = false;
 
 	/**
-	 * whether CMB2 object is readable via the rest api
+	 * whether CMB2 object is writeable via the rest api.
 	 * @var boolean
 	 */
 	protected $rest_write = false;
 
 	/**
 	 * Constructor
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 * @param CMB2 $cmb The CMB2 object to be registered for the API.
 	 */
 	public function __construct( CMB2 $cmb ) {
@@ -82,7 +82,10 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	public function universal_hooks() {
 		// hook up the CMB rest endpoint classes
 		$this->once( 'rest_api_init', array( $this, 'init_routes' ), 0 );
-		$this->once( 'rest_api_init', array( __CLASS__, 'register_appended_fields' ), 50 );
+
+		if ( function_exists( 'register_rest_field' ) ) {
+			$this->once( 'rest_api_init', array( __CLASS__, 'register_appended_fields' ), 50 );
+		}
 
 		$this->declare_read_write_fields();
 
@@ -107,7 +110,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		}
 		$types = array_unique( $types );
 
-		register_api_field(
+		register_rest_field(
 			$types,
 			'cmb2',
 			array(
@@ -151,7 +154,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Handler for getting custom field data.
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 * @param  array           $object   The object from the response
 	 * @param  string          $field_id Name of field
 	 * @param  WP_REST_Request $request  Current request
@@ -182,7 +185,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Handler for updating custom field data.
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 * @param  mixed    $value    The value of the field
 	 * @param  object   $object   The object from the response
 	 * @param  string   $field_id Name of field
@@ -237,7 +240,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Handles returning a sanitized field value.
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 * @param  array   $values   Array of values being provided.
 	 * @param  string  $field_id The id of the field to update.
 	 * @return mixed             The results of saving/sanitizing a field value.
@@ -253,8 +256,8 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$field->object_id   = $this->cmb->object_id();
-		$field->object_type = $this->cmb->object_type();
+		$field->object_id( $this->cmb->object_id() );
+		$field->object_type( $this->cmb->object_type() );
 
 		if ( 'group' == $field->type() ) {
 			return $this->sanitize_group_value( $values, $field );
@@ -265,7 +268,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Handles returning a sanitized group field value.
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 * @param  array       $values Array of values being provided.
 	 * @param  CMB2_Field  $field  CMB2_Field object.
 	 * @return mixed               The results of saving/sanitizing the group field value.
@@ -283,7 +286,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Filter whether a meta key is protected.
-	 * @since 2.2.0
+	 * @since 2.2.4
 	 * @param bool   $protected Whether the key is protected. Default false.
 	 * @param string $meta_key  Meta key.
 	 * @param string $meta_type Meta type.
@@ -338,7 +341,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Get an instance of this class by a CMB2 id
 	 *
-	 * @since  2.2.0
+	 * @since  2.2.4
 	 *
 	 * @param  string  $cmb_id CMB2 config id
 	 *
