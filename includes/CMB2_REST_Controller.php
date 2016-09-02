@@ -101,7 +101,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
-		$this->initiate_request( $request, 'permissions_check' );
+		$this->initiate_request( $request, __FUNCTION__ );
+		$can_access = true;
 
 		/**
 		 * By default, no special permissions needed.
@@ -111,7 +112,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
 		 */
-		return apply_filters( 'cmb2_request_items_permissions_check', true, $this->request );
+		return apply_filters( 'cmb2_api_get_items_permissions_check', $can_access, $this );
 	}
 
 	/**
@@ -124,7 +125,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
-		$this->initiate_request( $request, 'permissions_check' );
+		$this->initiate_request( $request, __FUNCTION__ );
+		$can_access = true;
 
 		/**
 		 * By default, no special permissions needed.
@@ -134,7 +136,55 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
 		 */
-		return apply_filters( 'cmb2_request_item_permissions_check', true, $this->request );
+		return apply_filters( 'cmb2_api_get_item_permissions_check', $can_access, $this );
+	}
+
+	/**
+	 * Check if a given request has access to update a field value.
+	 * By default, requires 'edit_others_posts' capability, but filtering return value.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return WP_Error|boolean
+	 */
+	public function update_field_value_permissions_check( $request ) {
+		$this->initiate_request( $request, __FUNCTION__ );
+		$can_update = current_user_can( 'edit_others_posts' );
+
+		/**
+		 * By default, 'edit_others_posts' is required capability.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param bool   $can_update Whether this CMB2 endpoint can be accessed.
+		 * @param object $request    The WP_REST_Request object
+		 */
+		return apply_filters( 'cmb2_api_update_field_value_permissions_check', $can_update, $this );
+	}
+
+	/**
+	 * Check if a given request has access to delete a field value.
+	 * By default, requires 'delete_others_posts' capability, but filtering return value.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return WP_Error|boolean
+	 */
+	public function delete_field_value_permissions_check( $request ) {
+		$this->initiate_request( $request, __FUNCTION__ );
+		$can_delete = current_user_can( 'delete_others_posts' );
+
+		/**
+		 * By default, 'delete_others_posts' is required capability.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param bool   $can_delete Whether this CMB2 endpoint can be accessed.
+		 * @param object $request    The WP_REST_Request object
+		 */
+		return apply_filters( 'cmb2_api_delete_field_value_permissions_check', $can_delete, $this );
 	}
 
 	/**

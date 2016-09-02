@@ -40,6 +40,17 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 				'callback' => array( $this, 'get_item' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			),
+			array(
+				'methods'  => WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'update_field_value' ),
+				'args'     => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+				'permission_callback' => array( $this, 'update_field_value_permissions_check' ),
+			),
+			array(
+				'methods'  => WP_REST_Server::DELETABLE,
+				'callback' => array( $this, 'delete_field_value' ),
+				'permission_callback' => array( $this, 'delete_field_value_permissions_check' ),
+			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
 	}
@@ -99,6 +110,82 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	}
 
 	/**
+	 * Update CMB2 field value.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function update_field_value( $request ) {
+		$this->initiate_rest_read_box( $request, 'field_value_update' );
+
+		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
+			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the object_id and object_type parameters specified.', 'cmb2' ) ) );
+		}
+
+		if ( ! $this->request['value'] ) {
+			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ) ) );
+		}
+
+		if ( is_wp_error( $this->rest_box ) ) {
+			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+		}
+
+		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
+
+		if ( ! $field ) {
+			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
+		}
+
+		$field->args['value_updated'] = (bool) $field->save_field( $this->request['value'] );
+
+		$field_data = $this->get_rest_field( $field );
+
+		if ( is_wp_error( $field_data ) ) {
+			return $this->prepare_item( array( 'error' => $field_data->get_error_message() ) );
+		}
+
+		return $this->prepare_item( $field_data );
+	}
+
+	/**
+	 * Update CMB2 field value.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function delete_field_value( $request ) {
+		$this->initiate_rest_read_box( $request, 'field_value_delete' );
+
+		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
+			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be deleted without the object_id and object_type parameters specified.', 'cmb2' ) ) );
+		}
+
+		if ( is_wp_error( $this->rest_box ) ) {
+			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+		}
+
+		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
+
+		if ( ! $field ) {
+			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
+		}
+
+		$field->args['value_deleted'] = (bool) $field->remove_data();
+
+		$field_data = $this->get_rest_field( $field );
+
+		if ( is_wp_error( $field_data ) ) {
+			return $this->prepare_item( array( 'error' => $field_data->get_error_message() ) );
+		}
+
+		return $this->prepare_item( $field_data );
+	}
+
+	/**
 	 * Get a specific field
 	 *
 	 * @since 2.2.4
@@ -107,7 +194,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return array|WP_Error
 	 */
 	public function get_rest_field( $field_id ) {
-		$field = $this->rest_box->field_can_read( $field_id, true );
+		$field = $field_id instanceof CMB2_Field ? $field_id : $this->rest_box->field_can_read( $field_id, true );
 
 		if ( ! $field ) {
 			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
