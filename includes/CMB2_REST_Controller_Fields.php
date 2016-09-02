@@ -120,42 +120,17 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	public function update_field_value( $request ) {
 		$this->initiate_rest_read_box( $request, 'field_value_update' );
 
-		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
-			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the object_id and object_type parameters specified.', 'cmb2' ) ) );
-		}
-
 		if ( ! $this->request['value'] ) {
 			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ) ) );
 		}
 
-		if ( is_wp_error( $this->rest_box ) ) {
-			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
-		}
-
 		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
 
-		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
-		}
-
-		$field->args['value_updated'] = (bool) $field->save_field( $this->request['value'] );
-
-		// If options page, save the updated options
-		if ( 'options-page' == $this->request['object_type'] ) {
-			$field->args['value_updated'] = cmb2_options( $this->request['object_id'] )->set();
-		}
-
-		$field_data = $this->get_rest_field( $field );
-
-		if ( is_wp_error( $field_data ) ) {
-			return $this->prepare_item( array( 'error' => $field_data->get_error_message() ) );
-		}
-
-		return $this->prepare_item( $field_data );
+		return $this->modify_field_value( 'updated', $field );
 	}
 
 	/**
-	 * Update CMB2 field value.
+	 * Delete CMB2 field value.
 	 *
 	 * @since 2.2.4
 	 *
@@ -165,25 +140,41 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	public function delete_field_value( $request ) {
 		$this->initiate_rest_read_box( $request, 'field_value_delete' );
 
+		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
+
+		return $this->modify_field_value( 'deleted', $field );
+	}
+
+	/**
+	 * Modify CMB2 field value.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param  string     $activity The modification activity (updated or deleted).
+	 * @param  CMB2_Field $field    The field object.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function modify_field_value( $activity, $field ) {
+
 		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
-			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be deleted without the object_id and object_type parameters specified.', 'cmb2' ) ) );
+			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ) ) );
 		}
 
 		if ( is_wp_error( $this->rest_box ) ) {
 			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
 		}
 
-		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
-
 		if ( ! $field ) {
 			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
 		}
 
-		$field->args['value_deleted'] = (bool) $field->remove_data();
+		$field->args["value_{$activity}"] = (bool) 'deleted' === $activity
+			? $field->remove_data()
+			: $field->save_field( $this->request['value'] );
 
-		// If options page, save the updated options
+		// If options page, save the $activity options
 		if ( 'options-page' == $this->request['object_type'] ) {
-			$field->args['value_deleted'] = cmb2_options( $this->request['object_id'] )->set();
+			$field->args["value_{$activity}"] = cmb2_options( $this->request['object_id'] )->set();
 		}
 
 		$field_data = $this->get_rest_field( $field );
