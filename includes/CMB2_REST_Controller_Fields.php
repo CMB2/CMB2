@@ -140,6 +140,11 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 
 		$field->args['value_updated'] = (bool) $field->save_field( $this->request['value'] );
 
+		// If options page, save the updated options
+		if ( 'options-page' == $this->request['object_type'] ) {
+			$field->args['value_updated'] = cmb2_options( $this->request['object_id'] )->set();
+		}
+
 		$field_data = $this->get_rest_field( $field );
 
 		if ( is_wp_error( $field_data ) ) {
@@ -175,6 +180,11 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		}
 
 		$field->args['value_deleted'] = (bool) $field->remove_data();
+
+		// If options page, save the updated options
+		if ( 'options-page' == $this->request['object_type'] ) {
+			$field->args['value_deleted'] = cmb2_options( $this->request['object_id'] )->set();
+		}
 
 		$field_data = $this->get_rest_field( $field );
 
