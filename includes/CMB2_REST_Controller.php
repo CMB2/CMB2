@@ -298,7 +298,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		} else {
 
 			if ( isset( $this->request['object_id'] ) ) {
-				$this->rest_box->cmb->object_id( absint( $this->request['object_id'] ) );
+				$this->rest_box->cmb->object_id( sanitize_text_field( $this->request['object_id'] ) );
 			}
 
 			if ( isset( $this->request['object_type'] ) ) {
