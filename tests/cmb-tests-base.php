@@ -169,6 +169,22 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $method->invokeArgs( $object, $args );
 	}
 
+	/**
+	 * Get protected/private property of a class.
+	 *
+	 * @param object $object       Instantiated object that we will get property for.
+	 * @param string $propertyName Property to get.
+	 *
+	 * @return mixed               Value of property.
+	 */
+	protected function getProperty( $object, $propertyName ) {
+		$reflection = new \ReflectionClass( get_class( $object ) );
+		$property = $reflection->getProperty( $propertyName );
+		$property->setAccessible( true );
+
+		return $property->getValue( $object );
+	}
+
 	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
