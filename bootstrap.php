@@ -59,7 +59,7 @@ function cmb2_bootstrap() {
 			$hookup->universal_hooks();
 		}
 
-		if ( $cmb->prop( 'show_in_rest' ) && function_exists( 'rest_api_init' ) ) {
+		if ( $cmb->prop( 'show_in_rest' ) && function_exists( 'rest_get_server' ) ) {
 			$rest = new CMB2_REST( $cmb );
 			$rest->universal_hooks();
 		}

@@ -124,7 +124,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ) ) );
 		}
 
-		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
+		$field = $this->rest_box->field_can_edit( $this->request->get_param( 'field_id' ), true );
 
 		return $this->modify_field_value( 'updated', $field );
 	}
@@ -140,7 +140,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	public function delete_field_value( $request ) {
 		$this->initiate_rest_read_box( $request, 'field_value_delete' );
 
-		$field = $this->rest_box->field_can_write( $this->request->get_param( 'field_id' ), true );
+		$field = $this->rest_box->field_can_edit( $this->request->get_param( 'field_id' ), true );
 
 		return $this->modify_field_value( 'deleted', $field );
 	}

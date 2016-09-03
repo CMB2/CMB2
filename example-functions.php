@@ -124,7 +124,7 @@ function yourprefix_register_demo_metabox() {
 		// 'closed'     => true, // true to keep the metabox closed by default
 		// 'classes'    => 'extra-class', // Extra cmb2-wrap classes
 		// 'classes_cb' => 'yourprefix_add_some_classes', // Add classes through a callback.
-		// 'show_in_rest' => true|'read_and_write'\'write_only', // true to show fields in the WP-API. write is disabled by default. More here: https://github.com/WebDevStudios/CMB2/wiki/REST-API
+		// 'show_in_rest' => WP_REST_Server::READABLE|WP_REST_Server::ALLMETHODS|WP_REST_Server::EDITABLE, // true to show fields in the WP-API. write is disabled by default. More here: https://github.com/WebDevStudios/CMB2/wiki/REST-API
 	) );
 
 	$cmb_demo->add_field( array(
