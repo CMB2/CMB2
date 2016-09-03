@@ -67,7 +67,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$this->initiate_rest_read_box( $request, 'fields_read' );
 
 		if ( is_wp_error( $this->rest_box ) ) {
-			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+			return $this->rest_box;
 		}
 
 		$fields = array();
@@ -97,13 +97,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$this->initiate_rest_read_box( $request, 'field_read' );
 
 		if ( is_wp_error( $this->rest_box ) ) {
-			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+			return $this->rest_box;
 		}
 
 		$field = $this->get_rest_field( $this->request->get_param( 'field_id' ) );
 
 		if ( is_wp_error( $field ) ) {
-			return $this->prepare_item( array( 'error' => $field->get_error_message() ) );
+			return $field;
 		}
 
 		return $this->prepare_item( $field );
@@ -121,7 +121,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$this->initiate_rest_read_box( $request, 'field_value_update' );
 
 		if ( ! $this->request['value'] ) {
-			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ) ) );
+			return new WP_Error( 'cmb2_rest_update_field_error', __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ), array( 'status' => 400 ) );
 		}
 
 		$field = $this->rest_box->field_can_edit( $this->request->get_param( 'field_id' ), true );
@@ -157,15 +157,15 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	public function modify_field_value( $activity, $field ) {
 
 		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
-			return $this->prepare_item( array( 'error' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ) ) );
+			return new WP_Error( 'cmb2_rest_modify_field_value_error', __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ), array( 'status' => 400 ) );
 		}
 
 		if ( is_wp_error( $this->rest_box ) ) {
-			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+			return $this->rest_box;
 		}
 
 		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
+			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$field->args["value_{$activity}"] = (bool) 'deleted' === $activity
@@ -180,7 +180,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$field_data = $this->get_rest_field( $field );
 
 		if ( is_wp_error( $field_data ) ) {
-			return $this->prepare_item( array( 'error' => $field_data->get_error_message() ) );
+			return $field_data;
 		}
 
 		return $this->prepare_item( $field_data );
@@ -198,7 +198,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		$field = $field_id instanceof CMB2_Field ? $field_id : $this->rest_box->field_can_read( $field_id, true );
 
 		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ) );
+			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$field_data = $this->prepare_field_data( $field );

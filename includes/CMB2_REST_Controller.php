@@ -254,7 +254,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_rest_box( $request, $request_type );
 
 		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_read ) {
-			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have read permissions.', 'cmb2' ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have read permissions.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 	}
 
@@ -272,7 +272,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_rest_box( $request, $request_type );
 
 		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_write ) {
-			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have write permissions.', 'cmb2' ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'This box does not have write permissions.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 	}
 
@@ -293,7 +293,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 		if ( ! $this->rest_box ) {
 
-			$this->rest_box = new WP_Error( 'cmb2_rest_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_box_not_found_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ), array( 'status' => 403 ) );
 
 		} else {
 

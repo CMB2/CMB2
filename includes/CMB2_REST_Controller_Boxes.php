@@ -79,7 +79,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		$this->initiate_request( $request, 'boxes_read' );
 
 		if ( empty( CMB2_REST::$boxes ) ) {
-			return $this->prepare_item( array( 'error' => __( 'No boxes found.', 'cmb2' ) ), $this->request );
+			return new WP_Error( 'cmb2_rest_no_boxes', __( 'No boxes found.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$boxes_data = array();
@@ -106,7 +106,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		$this->initiate_rest_read_box( $request, 'box_read' );
 
 		if ( is_wp_error( $this->rest_box ) ) {
-			return $this->prepare_item( array( 'error' => $this->rest_box->get_error_message() ) );
+			return $this->rest_box;
 		}
 
 		return $this->prepare_item( $this->get_rest_box() );
