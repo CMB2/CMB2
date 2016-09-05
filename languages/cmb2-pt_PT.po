@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2016-08-17 11:13+0100\n"
-"PO-Revision-Date: 2016-08-17 11:13+0100\n"
+"POT-Creation-Date: 2016-09-05 21:59+0100\n"
+"PO-Revision-Date: 2016-09-05 22:07+0100\n"
 "Last-Translator: Pedro Mendonça <ped.gaspar@gmail.com>\n"
 "Language-Team: Pedro Mendonça <ped.gaspar@gmail.com>\n"
 "Language: pt_PT\n"
@@ -28,7 +28,7 @@ msgstr ""
 "X-Poedit-WPHeader: init.php\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: example-functions.php:117 tests/test-cmb-field.php:255
+#: example-functions.php:117 tests/test-cmb-field.php:260
 msgid "Test Metabox"
 msgstr "Teste de metabox"
 
@@ -54,7 +54,7 @@ msgstr "Teste de texto"
 #: example-functions.php:573 example-functions.php:580
 #: example-functions.php:587 example-functions.php:614
 #: example-functions.php:622 example-functions.php:629
-#: example-functions.php:666 tests/test-cmb-field.php:267
+#: example-functions.php:666 tests/test-cmb-field.php:272
 msgid "field description (optional)"
 msgstr "descrição do campo (opcional)"
 
@@ -177,19 +177,19 @@ msgstr "Teste de caixas de selecção múltiplas de taxonomia"
 msgid "Test Checkbox"
 msgstr "Teste de caixa de selecção"
 
-#: example-functions.php:370 tests/test-cmb-field.php:266
+#: example-functions.php:370 tests/test-cmb-field.php:271
 msgid "Test Multi Checkbox"
 msgstr "Teste de caixas de selecção múltiplas"
 
-#: example-functions.php:376 tests/test-cmb-field.php:272
+#: example-functions.php:376 tests/test-cmb-field.php:277
 msgid "Check One"
 msgstr "Caixa de selecção um"
 
-#: example-functions.php:377 tests/test-cmb-field.php:273
+#: example-functions.php:377 tests/test-cmb-field.php:278
 msgid "Check Two"
 msgstr "Caixa de selecção dois"
 
-#: example-functions.php:378 tests/test-cmb-field.php:274
+#: example-functions.php:378 tests/test-cmb-field.php:279
 msgid "Check Three"
 msgstr "Caixa de selecção três"
 
@@ -217,7 +217,6 @@ msgstr "Carregar ou adicionar múltiplas imagens/anexos."
 msgid "oEmbed"
 msgstr "oEmbed"
 
-#. translators: %s: link to codex.wordpress.org/Embeds
 #: example-functions.php:410
 #, php-format
 msgid ""
@@ -338,7 +337,6 @@ msgstr "Por favor tente de novo"
 msgid "Remove Embed"
 msgstr "Remover incorporação"
 
-#. translators: 1: results for. 2: link to codex.wordpress.org/Embeds
 #: includes/CMB2_Ajax.php:181 includes/helper-functions.php:95
 #: tests/cmb-tests-base.php:68
 #, php-format
@@ -347,20 +345,65 @@ msgstr ""
 "Nenhum resultado de oEmbed encontrado para %1$s. Ver mais informações em "
 "%2$s."
 
-#: includes/CMB2_Field.php:1144
+#: includes/CMB2_Base.php:338
+#, php-format
+msgid ""
+"The \"%s\" field parameter has been deprecated in favor of the \"%s\" "
+"parameter."
+msgstr ""
+"O parâmetro de campo \"%s\" está obsoleto, por favor use o parâmetro \"%s\"."
+
+#: includes/CMB2_Base.php:342
+#, php-format
+msgid ""
+"Using the \"%s\" field parameter as a callback has been deprecated in favor "
+"of the \"%s\" parameter."
+msgstr ""
+"A utilização do parâmetro de campo \"%s\" está obsoleta, por favor use o "
+"parâmetro \"%s\"."
+
+#: includes/CMB2_Base.php:372
+#, php-format
+msgid ""
+"%1$s was called with a parameter that is <strong>deprecated</strong> since "
+"version %2$s! %3$s"
+msgstr ""
+"A função %1$s foi chamada com um parâmetro que está <strong>obsoleto</"
+"strong> desde a versão %2$s! %3$s"
+
+#: includes/CMB2_Base.php:375
+#, php-format
+msgid ""
+"%1$s was called with a parameter that is <strong>deprecated</strong> since "
+"version %2$s with no alternative available."
+msgstr ""
+"A função %1$s foi chamada com um parâmetro que está <strong>obsoleto</"
+"strong> desde a versão %2$s sem nenhuma alternativa disponível."
+
+#: includes/CMB2_Base.php:408 includes/types/CMB2_Type_Base.php:138
+#, php-format
+msgid "Invalid %1$s property: %2$s"
+msgstr "A propriedade de %1$s é inválida: %2$s"
+
+#: includes/CMB2_Base.php:422 includes/types/CMB2_Type_Base.php:123
+#, php-format
+msgid "Invalid %1$s method: %2$s"
+msgstr "O método de %1$s é inválido: %2$s"
+
+#: includes/CMB2_Field.php:1116
 msgid "Add Group"
 msgstr "Adicionar grupo"
 
-#: includes/CMB2_Field.php:1145
+#: includes/CMB2_Field.php:1117
 msgid "Remove Group"
 msgstr "Remover grupo"
 
-#: includes/CMB2_Field.php:1167 includes/CMB2_Field.php:1171
-#: tests/test-cmb-field.php:229
+#: includes/CMB2_Field.php:1139 includes/CMB2_Field.php:1143
+#: tests/test-cmb-field.php:234
 msgid "None"
 msgstr "Nenhum"
 
-#: includes/CMB2_Field.php:1232
+#: includes/CMB2_Field.php:1204
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr "Desculpe, este campo não tem um cmb_id especificado."
 
