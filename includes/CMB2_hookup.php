@@ -28,24 +28,11 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	protected static $css_registration_done = false;
 
 	/**
-	 * @var   CMB2 object
-	 * @since 2.0.2
-	 */
-	protected $cmb;
-
-	/**
 	 * CMB taxonomies array for term meta
 	 * @var   array
 	 * @since 2.2.0
 	 */
 	protected $taxonomies = array();
-
-	/**
-	 * The object type we are performing the hookup for
-	 * @var   string
-	 * @since 2.0.9
-	 */
-	protected $object_type = 'post';
 
 	/**
 	 * Custom field columns.

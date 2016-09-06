@@ -25,6 +25,11 @@ abstract class CMB2_Hookup_Base {
 	 */
 	protected $object_type = 'post';
 
+	/**
+	 * Constructor
+	 * @since 2.0.0
+	 * @param CMB2 $cmb The CMB2 object to hookup
+	 */
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 		$this->object_type = $this->cmb->mb_object_type();
