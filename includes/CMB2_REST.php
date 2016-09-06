@@ -25,7 +25,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @var string
 	 * @since 2.2.4
 	 */
-	const NAMESPACE = 'cmb2/v1';
+	const NAME_SPACE = 'cmb2/v1';
 
 	/**
 	 * @var   CMB2 object

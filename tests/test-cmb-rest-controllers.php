@@ -79,14 +79,14 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_get_schema() {
-		$this->assertResponseStatuses( '/' . CMB2_REST::NAMESPACE, array(
+		$this->assertResponseStatuses( '/' . CMB2_REST::NAME_SPACE, array(
 			'GET' => 200,
 			'POST' => 404,
 		) );
 	}
 
 	public function test_read_boxes() {
-		$url = '/' . CMB2_REST::NAMESPACE . '/boxes';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => 404,
@@ -94,7 +94,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_read_box() {
-		$url = '/' . CMB2_REST::NAMESPACE . '/boxes/test';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => 404,
@@ -102,7 +102,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_read_box_fields() {
-		$url = '/' . CMB2_REST::NAMESPACE . '/boxes/test/fields';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => 404,
@@ -110,13 +110,13 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_read_box_field() {
-		$url = '/' . CMB2_REST::NAMESPACE . '/boxes/test/fields/rest_test';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => 403,
 		) );
 
-		$url = '/' . CMB2_REST::NAMESPACE . '/boxes/test2/fields/rest_test';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test2/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 403,
 			'POST' => 403,
@@ -126,7 +126,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	// public function test_get_unauthorized() {
 	// 	// wp_set_current_user( 0 );
 
-	// 	$path = '/' . CMB2_REST::NAMESPACE . '/boxes/test/fields/rest_test';
+	// 	$path = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 	// 	$response = rest_do_request( new WP_REST_Request( 'POST', $path ) );
 	// 	error_log( '$response->data: '. print_r( $response->data, true ) );
 	// 	$this->assertResponseStatus( 403, $response );
@@ -135,7 +135,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_get_authorized() {
 	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
 	// 	$this->assertResponseData( array(
@@ -146,7 +146,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	// public function test_get_authorized_reformatted() {
 	// 	update_option( 'phone_number', '555 555 5555' );
 	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
 	// 	$this->assertResponseData( array(
@@ -157,7 +157,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	// public function test_get_authorized_invalid_format() {
 	// 	update_option( 'phone_number', 'will this work?' );
 	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
 	// 	$this->assertResponseData( array(
@@ -167,7 +167,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_update_unauthorized() {
 	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$request->set_param( 'phone_number', '(111) 222-3333' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 403, $response );
@@ -176,7 +176,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_update_authorized() {
 	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$request->set_param( 'phone_number', '(111) 222-3333' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
@@ -188,7 +188,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_update_authorized_reformatted() {
 	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$request->set_param( 'phone_number', '555 555 5555' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
@@ -200,7 +200,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_update_authorized_empty() {
 	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$request->set_param( 'phone_number', '' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 200, $response );
@@ -212,7 +212,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 	// public function test_update_authorized_invalid_format() {
 	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAMESPACE . '/site-info' );
+	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
 	// 	$request->set_param( 'phone_number', 'will this work?' );
 	// 	$response = $this->server->dispatch( $request );
 	// 	$this->assertResponseStatus( 400, $response );

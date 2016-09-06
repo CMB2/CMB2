@@ -26,7 +26,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $namespace = CMB2_REST::NAMESPACE;
+	protected $namespace = CMB2_REST::NAME_SPACE;
 
 	/**
 	 * The base of this controller's route.
