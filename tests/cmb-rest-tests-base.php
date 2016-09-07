@@ -23,14 +23,42 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 		parent::tearDown();
 	}
 
-	protected function assertResponseStatuses( $url, $statuses ) {
-		foreach ( $statuses as $method => $code ) {
-			$this->assertResponseStatus( $code, rest_do_request( new WP_REST_Request( $method, $url ) ) );
+	protected function assertResponseStatuses( $url, $statuses, $debug = false ) {
+		foreach ( $statuses as $method => $status ) {
+			$error_code = '';
+
+			if ( is_array( $status ) ) {
+				$error_code = current( $status );
+				$status = key( $status );
+			}
+
+			$this->assertRequestResponseStatus( $method, $url, $status, $error_code, $debug );
 		}
 	}
 
-	protected function assertResponseStatus( $status, $response ) {
+	protected function assertRequestResponseStatus( $method, $url, $status, $error_code = '', $debug = false ) {
+		if ( $debug ) {
+			error_log( $method . ' $url: '. print_r( $url, true ) );
+		}
+
+		$request = new WP_REST_Request( $method, $url );
+		$this->assertResponseStatus( $status, rest_do_request( $request ), $error_code, $debug );
+	}
+
+	protected function assertResponseStatus( $status, $response, $error_code = '', $debug = false ) {
+		if ( $debug ) {
+			error_log( '$response->get_data(): '. print_r( $response->get_data(), true ) );
+		}
 		$this->assertEquals( $status, $response->get_status() );
+
+		if ( $error_code ) {
+			$this->assertResponseErrorCode( $error_code, $response );
+		}
+	}
+
+	protected function assertResponseErrorCode( $error_code, $response ) {
+		$response_data = $response->get_data();
+		$this->assertEquals( $error_code, $response_data['code'] );
 	}
 
 	protected function assertResponseData( $data, $response ) {

@@ -81,7 +81,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	public function test_get_schema() {
 		$this->assertResponseStatuses( '/' . CMB2_REST::NAME_SPACE, array(
 			'GET' => 200,
-			'POST' => 404,
+			'POST' => array( 404 => 'rest_no_route' ),
 		) );
 	}
 
@@ -89,7 +89,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => 404,
+			'POST' => array( 404 => 'rest_no_route' ),
 		) );
 	}
 
@@ -97,15 +97,59 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => 404,
+			'POST' => array( 404 => 'rest_no_route' ),
 		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__;
+		$this->assertResponseStatuses( $url, array(
+			'GET' => array( 403 => 'cmb2_rest_box_not_found_error' ),
+			'POST' => array( 404 => 'rest_no_route' ),
+		) );
+
+		$rest = new CMB2_REST( new CMB2( array(
+			'id' => 'test_read_box_test',
+			'show_in_rest' => WP_REST_Server::EDITABLE,
+		) ) );
+		$rest->universal_hooks();
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test_read_box_test';
+		$this->assertResponseStatuses( $url, array(
+			'GET' => array( 403 => 'cmb2_rest_no_read_error' ),
+			'POST' => array( 404 => 'rest_no_route' ),
+		) );
+
+		$rest = new CMB2_REST( new CMB2( array(
+			'id' => 'test_edit_box_test',
+			'show_in_rest' => WP_REST_Server::READABLE,
+		) ) );
+		$rest->universal_hooks();
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test_edit_box_test';
+		$this->assertResponseStatuses( $url, array(
+			'POST' => array( 404 => 'rest_no_route' ),
+		) );
+	}
+
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_read_box_with_read_permissions_callback() {
+		$rest = new CMB2_REST( new CMB2( array(
+			'id' => __FUNCTION__,
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'get_item_permissions_check_cb' => 'wp_die',
+		) ) );
+		$rest->universal_hooks();
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/'. __FUNCTION__;
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
 	}
 
 	public function test_read_box_fields() {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => 404,
+			'POST' => array( 404 => 'rest_no_route' ),
 		) );
 	}
 
@@ -113,120 +157,165 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => 403,
+			'POST' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 403 => 'rest_forbidden' ),
 		) );
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test2/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
-			'GET' => 403,
-			'POST' => 403,
+			'GET' => array( 403 => 'cmb2_rest_no_field_by_id_error' ),
+			'POST' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 403 => 'rest_forbidden' ),
 		) );
 	}
 
-	// public function test_get_unauthorized() {
-	// 	// wp_set_current_user( 0 );
+	public function test_read_box_field_filter() {
+		add_filter( 'cmb2_api_get_item_permissions_check', '__return_false' );
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$this->assertResponseStatuses( $url, array(
+			'GET' => array( 403 => 'rest_forbidden' ),
+			'POST' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 403 => 'rest_forbidden' ),
+		) );
+	}
 
-	// 	$path = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
-	// 	$response = rest_do_request( new WP_REST_Request( 'POST', $path ) );
-	// 	error_log( '$response->data: '. print_r( $response->data, true ) );
-	// 	$this->assertResponseStatus( 403, $response );
+	/**
+	 * @expectedException WPDieException
+	 */
+	public function test_read_box_field_with_read_permissions_callback() {
+		$rest = new CMB2_REST( new CMB2( array(
+			'id' => __FUNCTION__,
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'get_item_permissions_check_cb' => 'wp_die',
+		) ) );
+		$rest->universal_hooks();
 
-	// }
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/'. __FUNCTION__ . '/fields/rest_test';
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+	}
 
-	// public function test_get_authorized() {
-	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '(555) 212-2121',
-	// 	), $response );
-	// }
+	public function test_read_box_field_with_value() {
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'GET', $url );
+		$request['object_id'] = $this->post_id;
+		$request['object_type'] = 'post';
+		$response = rest_do_request( $request );
 
-	// public function test_get_authorized_reformatted() {
-	// 	update_option( 'phone_number', '555 555 5555' );
-	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '(555) 555-5555',
-	// 	), $response );
-	// }
+		$response_data = $response->get_data();
+		$this->assertEquals( get_post_meta( $this->post_id, 'rest_test', 1 ), $response_data['value'] );
+	}
 
-	// public function test_get_authorized_invalid_format() {
-	// 	update_option( 'phone_number', 'will this work?' );
-	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'GET', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '',
-	// 	), $response );
-	// }
+	public function test_update_unauthorized_for_subscriber() {
+		wp_set_current_user( $this->subscriber );
 
-	// public function test_update_unauthorized() {
-	// 	wp_set_current_user( $this->subscriber );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$request->set_param( 'phone_number', '(111) 222-3333' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 403, $response );
-	// 	$this->assertEquals( '(555) 212-2121', get_option( 'phone_number' ) );
-	// }
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$response = rest_do_request( new WP_REST_Request( 'POST', $url ) );
+		$this->assertResponseStatus( 403, $response, 'rest_forbidden' );
+	}
 
-	// public function test_update_authorized() {
-	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$request->set_param( 'phone_number', '(111) 222-3333' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '(111) 222-3333',
-	// 	), $response );
-	// 	$this->assertEquals( '(111) 222-3333', get_option( 'phone_number' ) );
-	// }
+	public function test_update_bad_request_for_admin() {
+		wp_set_current_user( $this->administrator );
 
-	// public function test_update_authorized_reformatted() {
-	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$request->set_param( 'phone_number', '555 555 5555' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '(555) 555-5555',
-	// 	), $response );
-	// 	$this->assertEquals( '(555) 555-5555', get_option( 'phone_number' ) );
-	// }
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'POST', $url );
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_update_field_error' );
+		$this->assertResponseData( array(
+			'code'    => 'cmb2_rest_update_field_error',
+			'message' => __( 'CMB2 Field value cannot be updated without the value parameter specified.', 'cmb2' ),
+			'data'    => array(
+				'status' => 400,
+			),
+		), $response );
 
-	// public function test_update_authorized_empty() {
-	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$request->set_param( 'phone_number', '' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 200, $response );
-	// 	$this->assertResponseData( array(
-	// 		'phone_number' => '',
-	// 	), $response );
-	// 	$this->assertEquals( '', get_option( 'phone_number' ) );
-	// }
+		$request['value'] = 'new value';
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+		$this->assertResponseData( array(
+			'code'    => 'cmb2_rest_modify_field_value_error',
+			'message' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ),
+			'data'    => array(
+				'status' => 400,
+			),
+		), $response );
 
-	// public function test_update_authorized_invalid_format() {
-	// 	wp_set_current_user( $this->administrator );
-	// 	$request = new WP_REST_Request( 'POST', CMB2_REST::NAME_SPACE . '/site-info' );
-	// 	$request->set_param( 'phone_number', 'will this work?' );
-	// 	$response = $this->server->dispatch( $request );
-	// 	$this->assertResponseStatus( 400, $response );
-	// 	$this->assertResponseData( array(
-	// 		'message' => 'Invalid parameter(s): phone_number',
-	// 	), $response );
-	// 	$this->assertEquals( '(555) 212-2121', get_option( 'phone_number' ) );
-	// }
+		$request['object_id'] = $this->post_id;
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+		$this->assertResponseData( array(
+			'code'    => 'cmb2_rest_modify_field_value_error',
+			'message' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ),
+			'data'    => array(
+				'status' => 400,
+		    ),
+		), $response );
+	}
 
-	// function test_format_phone_number() {
-	// 	$this->assertEquals( '(555) 212-2121', rad_format_phone_number( '555-212-2121' ) );
-	// 	$this->assertEquals( '(555) 212-2121', rad_format_phone_number( '5552122121' ) );
-	// 	$this->assertEquals( '(555) 212-2121', rad_format_phone_number( '+1 (555) 212 2121' ) );
-	// 	$this->assertEquals( '', rad_format_phone_number( '' ) );
-	// }
+	public function test_update_authorized_for_admin() {
+		wp_set_current_user( $this->administrator );
 
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'POST', $url );
+		$request['value'] = 'new value';
+		$request['object_id'] = $this->post_id;
+		$request['object_type'] = 'post';
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 200, $response );
+
+		$response = rest_do_request( $request );
+
+		$response_data = $response->get_data();
+		$this->assertEquals( 'new value', get_post_meta( $this->post_id, 'rest_test', 1 ) );
+		$this->assertEquals( 'new value', $response_data['value'] );
+	}
+
+	public function test_delete_unauthorized_for_subscriber() {
+		wp_set_current_user( $this->subscriber );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'DELETE', $url );
+		$request['object_id'] = $this->post_id;
+		$request['object_type'] = 'post';
+		$response = rest_do_request( $request );
+
+		$this->assertResponseStatus( 403, $response, 'rest_forbidden' );
+	}
+
+	public function test_delete_bad_request_for_admin() {
+		wp_set_current_user( $this->administrator );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'DELETE', $url );
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+		$this->assertResponseData( array(
+			'code'    => 'cmb2_rest_modify_field_value_error',
+			'message' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ),
+			'data'    => array(
+				'status' => 400,
+			),
+		), $response );
+
+
+		$request['object_id'] = $this->post_id;
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+	}
+
+	public function test_delete_authorized_for_admin() {
+		wp_set_current_user( $this->administrator );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$request = new WP_REST_Request( 'DELETE', $url );
+		$request['object_id'] = $this->post_id;
+		$request['object_type'] = 'post';
+		$response = rest_do_request( $request );
+		$this->assertResponseStatus( 200, $response );
+
+		$response = rest_do_request( $request );
+
+		$response_data = $response->get_data();
+		$this->assertEquals( '', get_post_meta( $this->post_id, 'rest_test', 1 ) );
+		$this->assertEquals( '', $response_data['value'] );
+	}
 }
