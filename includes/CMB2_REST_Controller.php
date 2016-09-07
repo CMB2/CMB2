@@ -104,6 +104,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_request( $request, __FUNCTION__ );
 		$can_access = true;
 
+		$this->maybe_hook_callback( 'get_items_permissions_check_cb' );
+
 		/**
 		 * By default, no special permissions needed.
 		 *
@@ -127,6 +129,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	public function get_item_permissions_check( $request ) {
 		$this->initiate_request( $request, __FUNCTION__ );
 		$can_access = true;
+
+		$this->maybe_hook_callback( 'get_item_permissions_check_cb' );
 
 		/**
 		 * By default, no special permissions needed.
@@ -152,6 +156,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_request( $request, __FUNCTION__ );
 		$can_update = current_user_can( 'edit_others_posts' );
 
+		$this->maybe_hook_callback( 'update_field_value_permissions_check_cb' );
+
 		/**
 		 * By default, 'edit_others_posts' is required capability.
 		 *
@@ -176,6 +182,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_request( $request, __FUNCTION__ );
 		$can_delete = current_user_can( 'delete_others_posts' );
 
+		$this->maybe_hook_callback( 'delete_field_value_permissions_check_cb' );
+
 		/**
 		 * By default, 'delete_others_posts' is required capability.
 		 *
@@ -185,6 +193,29 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		 * @param object $request    The WP_REST_Request object
 		 */
 		return apply_filters( 'cmb2_api_delete_field_value_permissions_check', $can_delete, $this );
+	}
+
+	/**
+	 * Check if a CMB object callback property exists, and if it does,
+	 * hook it to the permissions filter.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  string  $to_check The callback property to check.
+	 *
+	 * @return void
+	 */
+	public function maybe_hook_callback( $to_check ) {
+		if ( ! $this->request->get_param( 'cmb_id' ) ) {
+			return;
+		}
+
+		$rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
+
+		if ( $rest_box && $rest_box->cmb->prop( "{$to_check}" ) ) {
+			$filter = 'cmb2_api_' . ( substr( $to_check, 0, strlen( $to_check ) - 3 ) );
+			add_filter( $filter, $rest_box->cmb->prop( "{$to_check}" ), 10, 2 );
+		}
 	}
 
 	/**
