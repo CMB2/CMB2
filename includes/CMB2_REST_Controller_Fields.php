@@ -165,7 +165,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		}
 
 		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
+			return new WP_Error( 'cmb2_rest_no_field_by_id_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$field->args["value_{$activity}"] = (bool) 'deleted' === $activity
@@ -195,10 +195,10 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return array|WP_Error
 	 */
 	public function get_rest_field( $field_id ) {
-		$field = $field_id instanceof CMB2_Field ? $field_id : $this->rest_box->field_can_read( $field_id, true );
+		$field = $this->rest_box->field_can_read( $field_id, true );
 
 		if ( ! $field ) {
-			return new WP_Error( 'cmb2_rest_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
+			return new WP_Error( 'cmb2_rest_no_field_by_id_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$field_data = $this->prepare_field_data( $field );
