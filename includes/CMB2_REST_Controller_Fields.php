@@ -156,7 +156,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 */
 	public function modify_field_value( $activity, $field ) {
 
-		if ( ! $this->request['object_id'] && ! $this->request['object_type'] ) {
+		if ( ! $this->request['object_id'] || ! $this->request['object_type'] ) {
 			return new WP_Error( 'cmb2_rest_modify_field_value_error', __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ), array( 'status' => 400 ) );
 		}
 
