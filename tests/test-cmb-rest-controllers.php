@@ -24,10 +24,6 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	 * Set up the test fixture
 	 */
 	public function setUp() {
-		parent::setUp();
-
-		update_option( 'permalink_structure', '/%postname%/' );
-
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
 			'id' => $this->cmb_id,
@@ -48,19 +44,10 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$this->cmb = new CMB2( $this->metabox_array );
 
-		$mb = $this->metabox_array;
-		$mb['id'] = 'test2';
-		foreach ( $mb['fields'] as &$field ) {
-			$field['show_in_rest'] = WP_REST_Server::EDITABLE;
-		}
-		$this->cmb2 = new CMB2( $mb );
-
 		$this->rest_box = new Test_CMB2_REST_Object( $this->cmb );
-		$this->rest_box2 = new Test_CMB2_REST_Object( $this->cmb );
 		$this->rest_box->universal_hooks();
-		$this->rest_box2->universal_hooks();
 
-		do_action( 'rest_api_init' );
+		parent::setUp();
 
 		$this->subscriber = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		$this->administrator = $this->factory->user->create( array( 'role' => 'administrator' ) );
@@ -160,6 +147,14 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 			'POST' => array( 403 => 'rest_forbidden' ),
 			'DELETE' => array( 403 => 'rest_forbidden' ),
 		) );
+
+		$mb = $this->metabox_array;
+		$mb['id'] = 'test2';
+		foreach ( $mb['fields'] as &$field ) {
+			$field['show_in_rest'] = WP_REST_Server::EDITABLE;
+		}
+		$rest_box2 = new Test_CMB2_REST_Object( new CMB2( $mb ) );
+		$rest_box2->universal_hooks();
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test2/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(

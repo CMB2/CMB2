@@ -26,10 +26,6 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	public function setUp() {
 		parent::setUp();
 
-		global $wp_rest_server;
-		$wp_rest_server = new WP_REST_Server;
-		do_action( 'rest_api_init' );
-
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
 			'id' => $this->cmb_id,

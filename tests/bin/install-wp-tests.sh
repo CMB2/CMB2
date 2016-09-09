@@ -90,6 +90,13 @@ install_test_suite() {
 	sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
 }
 
+install_required_plugins() {
+	if [ ! -d /tmp/wordpress/wp-content/plugins/rest-api/ ]; then
+		download https://downloads.wordpress.org/plugin/rest-api.zip /tmp/rest-api.zip
+		unzip /tmp/rest-api.zip -d /tmp/wordpress/wp-content/plugins/
+	fi
+}
+
 install_db() {
 	# parse DB_HOST for port or socket references
 	local PARTS=(${DB_HOST//\:/ })
@@ -116,4 +123,5 @@ install_db() {
 
 install_wp
 install_test_suite
+install_required_plugins
 install_db

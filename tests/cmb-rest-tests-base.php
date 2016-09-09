@@ -17,6 +17,8 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 	 */
 	public function setUp() {
 		parent::setUp();
+		update_option( 'permalink_structure', '/%postname%/' );
+		rest_get_server();
 	}
 
 	public function tearDown() {

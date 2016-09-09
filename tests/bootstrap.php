@@ -33,7 +33,18 @@ function _tests_cmb2_manually_load_plugin() {
 		define( 'WP_ADMIN', true );
 	}
 
-	require dirname( __FILE__ ) . '/../init.php';
+	$plugin = dirname( dirname( __FILE__ ) );
+	$wp_content = dirname( dirname( $plugin ) );
+	$rest_api = $wp_content . '/plugins/WP-API/plugin.php';
+	if ( file_exists( $rest_api ) ) {
+		require_once $rest_api;
+	} else {
+		$rest_api = $wp_content . '/plugins/rest-api/plugin.php';
+		if ( file_exists( $rest_api ) ) {
+			require_once $rest_api;
+		}
+	}
+	require_once $plugin . '/init.php';
 }
 tests_add_filter( 'muplugins_loaded', '_tests_cmb2_manually_load_plugin' );
 
