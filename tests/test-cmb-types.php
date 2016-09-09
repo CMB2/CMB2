@@ -365,10 +365,9 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_wysiwyg_field() {
-		global $wp_version;
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$version = 'ver=' . $wp_version;
+		$version = 'ver=' . get_bloginfo( 'version' );
 
 		$field = $this->get_field_object( array( 'type' => 'wysiwyg', 'options' => array( 'quicktags' => false ) ) );
 		$type = $this->get_field_type_object( $field );
