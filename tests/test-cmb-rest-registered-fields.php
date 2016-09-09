@@ -65,6 +65,15 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 		parent::tearDown();
 	}
 
+	public function test_wp_api_installed() {
+		global $test_root;
+
+		$this->assertEquals( '/tmp/wordpress/tests', $test_root );
+		$rest_api = dirname( $test_root ) . '/wp-content/plugins/rest-api/plugin.php';
+		$this->assertEquals( '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php', $rest_api );
+		$this->assertTrue( file_exists( $rest_api ) );
+	}
+
 	public function test_rest_posts_controller_exists() {
 		$this->assertTrue( class_exists( 'WP_REST_Posts_Controller' ) );
 	}
