@@ -59,6 +59,11 @@ function _tests_cmb2_manually_load_plugin() {
 		&& file_exists( $rest_api )
 	) {
 		require_once $rest_api;
+	} elseif (
+		( $rest_api = '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php' )
+		&& file_exists( $rest_api )
+	) {
+		require_once $rest_api;
 	}
 
 	require_once $plugin . '/init.php';
