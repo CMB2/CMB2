@@ -40,7 +40,7 @@ function _tests_cmb2_manually_load_plugin() {
 	define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );
 
 	if (
-		( $rest_api = CMB2_WP_CONTENT . '/plugins/WP-API/plugin.php' )
+		( $rest_api = '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php' )
 		&& file_exists( $rest_api )
 	) {
 		require_once $rest_api;
@@ -50,17 +50,7 @@ function _tests_cmb2_manually_load_plugin() {
 	) {
 		require_once $rest_api;
 	} elseif (
-		( $rest_api = dirname( $test_root ) . '/wp-content/plugins/rest-api/plugin.php' )
-		&& file_exists( $rest_api )
-	) {
-		require_once $rest_api;
-	} elseif (
-		( $rest_api = dirname( dirname( $test_root ) ) . '/wordpress/wp-content/plugins/rest-api/plugin.php' )
-		&& file_exists( $rest_api )
-	) {
-		require_once $rest_api;
-	} elseif (
-		( $rest_api = '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php' )
+		( $rest_api = CMB2_WP_CONTENT . '/plugins/WP-API/plugin.php' )
 		&& file_exists( $rest_api )
 	) {
 		require_once $rest_api;
