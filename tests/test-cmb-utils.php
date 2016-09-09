@@ -80,10 +80,9 @@ class Test_CMB2_Utils extends Test_CMB2 {
 	}
 
 	public function test_image_id_from_url() {
-		global $wp_version;
 
 		$_id_value = CMB2_Utils::image_id_from_url( esc_url_raw( wp_get_attachment_url( $this->attachment_id ) ) );
-		if ( $wp_version > 3.9 ) {
+		if ( get_bloginfo( 'version' ) > 3.9 ) {
 			$this->assertEquals( $_id_value, $this->attachment_id );
 		} else {
 			$this->assertGreaterThan( 0, $this->attachment_id );
