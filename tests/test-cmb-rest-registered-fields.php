@@ -95,6 +95,11 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 			&& file_exists( $rest_api )
 		) {
 			require_once $rest_api;
+		} elseif (
+			( $rest_api = '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
 		}
 
 		$this->assertEquals( array(
