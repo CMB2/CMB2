@@ -68,10 +68,44 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 	public function test_wp_api_installed() {
 		global $test_root;
 
-		$this->assertEquals( '/tmp/wordpress/tests', $test_root );
-		$rest_api = dirname( $test_root ) . '/wp-content/plugins/rest-api/plugin.php';
-		$this->assertEquals( '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php', $rest_api );
-		$this->assertTrue( file_exists( $rest_api ) );
+		$rest_api = '';
+
+		if (
+			( $rest_api = CMB2_WP_CONTENT . '/plugins/WP-API/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
+		} elseif (
+			( $rest_api = CMB2_WP_CONTENT . '/plugins/rest-api/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
+		} elseif (
+			( $rest_api = dirname( $test_root ) . '/wp-content/plugins/rest-api/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
+		} elseif (
+			( $rest_api = dirname( dirname( $test_root ) ) . '/wordpress/wp-content/plugins/rest-api/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
+		} elseif (
+			( $rest_api = dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/plugins/rest-api/plugin.php' )
+			&& file_exists( $rest_api )
+		) {
+			require_once $rest_api;
+		}
+
+		$this->assertEquals( array(
+			'/tmp/wordpress/tests',
+			dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/plugins/WP-API/plugin.php',
+			true
+		), array(
+			$test_root,
+			$rest_api,
+			file_exists( $rest_api ),
+		) );
 	}
 
 	public function test_rest_posts_controller_exists() {

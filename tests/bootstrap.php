@@ -36,10 +36,26 @@ function _tests_cmb2_manually_load_plugin() {
 	}
 
 	$plugin = dirname( dirname( __FILE__ ) );
-	$wp_content = dirname( dirname( $plugin ) );
+
+	define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );
 
 	if (
+		( $rest_api = CMB2_WP_CONTENT . '/plugins/WP-API/plugin.php' )
+		&& file_exists( $rest_api )
+	) {
+		require_once $rest_api;
+	} elseif (
+		( $rest_api = CMB2_WP_CONTENT . '/plugins/rest-api/plugin.php' )
+		&& file_exists( $rest_api )
+	) {
+		require_once $rest_api;
+	} elseif (
 		( $rest_api = dirname( $test_root ) . '/wp-content/plugins/rest-api/plugin.php' )
+		&& file_exists( $rest_api )
+	) {
+		require_once $rest_api;
+	} elseif (
+		( $rest_api = dirname( dirname( $test_root ) ) . '/wordpress/wp-content/plugins/rest-api/plugin.php' )
 		&& file_exists( $rest_api )
 	) {
 		require_once $rest_api;
