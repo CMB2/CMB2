@@ -110,7 +110,11 @@ window.CMB2 = window.CMB2 || {};
 		cmb.trigger( 'cmb_init' );
 	};
 
-	cmb.resetTitlesAndIterator = function() {
+	cmb.resetTitlesAndIterator = function( evt ) {
+		if ( ! evt.group ) {
+			return;
+		}
+
 		// Loop repeatable group tables
 		$( '.cmb-repeatable-group' ).each( function() {
 			var $table = $( this );
@@ -493,7 +497,8 @@ window.CMB2 = window.CMB2 || {};
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
-		cmb.triggerElement( $table, 'cmb2_add_row', $newRow );
+		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
+
 	};
 
 	cmb.addAjaxRow = function( evt ) {
@@ -513,7 +518,7 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.afterRowInsert( $row );
 
-		cmb.triggerElement( $table, 'cmb2_add_row', $row );
+		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: false }, $row );
 
 		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
 
@@ -545,7 +550,7 @@ window.CMB2 = window.CMB2 || {};
 			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
 		}
 
-		cmb.triggerElement( $table, 'cmb2_remove_row' );
+		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: true } );
 
 	};
 
@@ -572,7 +577,8 @@ window.CMB2 = window.CMB2 || {};
 				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
 			}
 
-			cmb.triggerElement( $table, 'cmb2_remove_row' );
+			cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
+
 		} else {
 			$this.addClass( 'button-disabled' );
 		}
