@@ -31,7 +31,7 @@ class CMB2_Boxes {
 	}
 
 	/**
-	 * Remove a CMB2 instance object to the registry.
+	 * Remove a CMB2 instance object from the registry.
 	 *
 	 * @since 1.X.X
 	 *
