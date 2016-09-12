@@ -16,13 +16,50 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 	 * Set up the test fixture
 	 */
 	public function setUp() {
+		$this->reset_instances();
+
 		parent::setUp();
 		update_option( 'permalink_structure', '/%postname%/' );
-		rest_get_server();
+
+
+		if ( ! did_action( 'rest_api_init' ) ) {
+			do_action( 'rest_api_init', rest_get_server() );
+		}
+	}
+
+	/**
+	 * Set up the test fixture
+	 */
+	public function set_up_and_init( $metabox_array ) {
+		$this->metabox_array = $metabox_array;
+		$this->cmb_id = $metabox_array['id'];
+		$this->rest_box = new Test_CMB2_REST_Object( new CMB2( $this->metabox_array ) );
+
+		self::setUp();
+
+		$this->subscriber = $this->factory->user->create( array( 'role' => 'subscriber' ) );
+		$this->administrator = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->post_id = $this->factory->post->create();
+
+		foreach ( $this->metabox_array['fields'] as $field ) {
+			update_post_meta( $this->post_id, $field['id'], md5( $field['id'] ) );
+		}
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+		foreach ( $this->metabox_array['fields'] as $field ) {
+			delete_post_meta( $this->post_id, $field['id'] );
+		}
+		CMB2_Boxes::remove( $this->cmb_id );
+		CMB2_REST::remove( $this->cmb_id );
+	}
+
+	protected function reset_instances() {
+		foreach ( CMB2_REST::$boxes as $cmb_id => $rest ) {
+			$rest = new CMB2_REST( $rest->cmb );
+			$rest->universal_hooks();
+		}
 	}
 
 	protected function assertResponseStatuses( $url, $statuses, $debug = false ) {

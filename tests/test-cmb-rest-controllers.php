@@ -24,10 +24,10 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	 * Set up the test fixture
 	 */
 	public function setUp() {
-		$this->cmb_id = 'test';
-		$this->metabox_array = array(
-			'id' => $this->cmb_id,
+		$this->set_up_and_init( array(
+			'id' => 'test',
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'post' ),
 			'fields' => array(
 				'rest_test' => array(
 					'name'        => 'Name',
@@ -40,29 +40,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 					'type'        => 'text',
 				),
 			),
-		);
-
-		$this->cmb = new CMB2( $this->metabox_array );
-
-		$this->rest_box = new Test_CMB2_REST_Object( $this->cmb );
-		$this->rest_box->universal_hooks();
-
-		parent::setUp();
-
-		$this->subscriber = $this->factory->user->create( array( 'role' => 'subscriber' ) );
-		$this->administrator = $this->factory->user->create( array( 'role' => 'administrator' ) );
-
-		$this->post_id = $this->factory->post->create();
-
-		foreach ( $this->metabox_array['fields'] as $field ) {
-			update_post_meta( $this->post_id, $field['id'], md5( $field['id'] ) );
-		}
-
-		cmb2_bootstrap();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
+		) );
 	}
 
 	public function test_get_schema() {
@@ -95,6 +73,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$rest = new CMB2_REST( new CMB2( array(
 			'id' => 'test_read_box_test',
+			'object_types' => array( 'post' ),
 			'show_in_rest' => WP_REST_Server::EDITABLE,
 		) ) );
 		$rest->universal_hooks();
@@ -107,6 +86,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$rest = new CMB2_REST( new CMB2( array(
 			'id' => 'test_edit_box_test',
+			'object_types' => array( 'post' ),
 			'show_in_rest' => WP_REST_Server::READABLE,
 		) ) );
 		$rest->universal_hooks();
@@ -124,6 +104,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$rest = new CMB2_REST( new CMB2( array(
 			'id' => __FUNCTION__,
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'post' ),
 			'get_item_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();
@@ -153,7 +134,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		foreach ( $mb['fields'] as &$field ) {
 			$field['show_in_rest'] = WP_REST_Server::EDITABLE;
 		}
-		$rest_box2 = new Test_CMB2_REST_Object( new CMB2( $mb ) );
+		$rest_box2 = new CMB2_REST( new CMB2( $mb ) );
 		$rest_box2->universal_hooks();
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test2/fields/rest_test';
@@ -181,6 +162,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$rest = new CMB2_REST( new CMB2( array(
 			'id' => __FUNCTION__,
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'post' ),
 			'get_item_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();

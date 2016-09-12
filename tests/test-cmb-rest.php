@@ -24,11 +24,8 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	 * Set up the test fixture
 	 */
 	public function setUp() {
-		parent::setUp();
-
-		$this->cmb_id = 'test';
-		$this->metabox_array = array(
-			'id' => $this->cmb_id,
+		$this->set_up_and_init( array(
+			'id' => strtolower( __CLASS__ ),
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
 			'fields' => array(
 				'rest_test' => array(
@@ -42,24 +39,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 					'type'        => 'text',
 				),
 			),
-		);
-
-		$this->cmb = new CMB2( $this->metabox_array );
-		$this->rest_box = new Test_CMB2_REST_Object( $this->cmb );
-		$this->post_id = $this->factory->post->create();
-
-		foreach ( $this->metabox_array['fields'] as $field ) {
-			update_post_meta( $this->post_id, $field['id'], md5( $field['id'] ) );
-		}
-
-		cmb2_bootstrap();
-	}
-
-	public function tearDown() {
-		parent::tearDown();
-
-		global $wp_rest_server;
-		$wp_rest_server = null;
+		) );
 	}
 
 	public function test_construction() {
@@ -187,7 +167,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_get_rest_box() {
-		$this->assertInstanceOf( 'CMB2_REST', CMB2_REST::get_rest_box( 'test' ) );
+		$this->assertInstanceOf( 'CMB2_REST', CMB2_REST::get_rest_box( strtolower( __CLASS__ ) ) );
 	}
 
 	public function test_get_restable_field_values() {
@@ -219,7 +199,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 			$this->cmb_id => $fields,
 		);
 
-		$values = CMB2_REST::update_restable_field_values( $new_values, (object) array( 'ID' => $this->post_id ), 'cmb2' );
+		$values = CMB2_REST::update_restable_field_values( $new_values, (object) array( 'ID' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
 
 		$this->assertEquals( count( $fields ), count( $values[ $this->cmb_id ] ) );
 		foreach ( $values[ $this->cmb_id ] as $value ) {
@@ -232,7 +212,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	}
 
 	protected function confirm_get_restable_field_values( $expected ) {
-		$values = CMB2_REST::get_restable_field_values( array( 'id' => $this->post_id ), '', new WP_REST_Request );
+		$values = CMB2_REST::get_restable_field_values( array( 'id' => $this->post_id ), '', new WP_REST_Request, 'post' );
 		$expected = array( $this->cmb_id => $expected );
 		$this->assertEquals( $expected, $values );
 	}
