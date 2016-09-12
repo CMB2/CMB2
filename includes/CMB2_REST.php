@@ -113,6 +113,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		}
 		$types = array_unique( $types );
 
+		// @todo separate registrations for each object_type, 'post', 'user', 'term', 'comment'.
 		register_rest_field(
 			$types,
 			'cmb2',
@@ -168,26 +169,28 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.4
 	 *
-	 * @param  array           $data       The data from the response
-	 * @param  string          $field_name Name of field
-	 * @param  WP_REST_Request $request    Current request
+	 * @param  array           $object      The object data from the response
+	 * @param  string          $field_name  Name of field
+	 * @param  WP_REST_Request $request     Current request
+	 * @param  string          $object_type The request object type
 	 *
 	 * @return mixed
 	 */
-	public static function get_restable_field_values( $data, $field_name, $request ) {
+	public static function get_restable_field_values( $object, $field_name, $request, $object_type ) {
 		$values = array();
-		if ( ! isset( $data['id'] ) ) {
+		if ( ! isset( $object['id'] ) ) {
 			return;
 		}
 
+		// @todo Security hardening... check for object type, check for show_in_rest values.
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
 			foreach ( $rest_box->read_fields as $field_id ) {
 				$field = $rest_box->cmb->get_field( $field_id );
-				$field->object_id( $data['id'] );
+				$field->object_id( $object['id'] );
 
 				// TODO: test other object types (users, comments, etc)
-				// if ( isset( $data['type'] ) ) {
-				// 	$field->object_type( $data['type'] );
+				// if ( isset( $object['type'] ) ) {
+				// 	$field->object_type( $object['type'] );
 				// }
 
 				$values[ $cmb_id ][ $field->id( true ) ] = $field->get_data();
@@ -202,17 +205,20 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.4
 	 *
-	 * @param  mixed    $value      The value of the field
-	 * @param  object   $object     The object from the response
-	 * @param  string   $field_name Name of field
+	 * @param  mixed           $value       The value of the field
+	 * @param  object          $object      The object from the response
+	 * @param  string          $field_name  Name of field
+	 * @param  WP_REST_Request $request     Current request
+	 * @param  string          $object_type The request object type
 	 *
 	 * @return bool|int
 	 */
-	public static function update_restable_field_values( $values, $object, $field_name ) {
+	public static function update_restable_field_values( $values, $object, $field_name, $request, $object_type ) {
 		if ( empty( $values ) || ! is_array( $values ) || 'cmb2' !== $field_name ) {
 			return;
 		}
 
+		// @todo verify that $object_type matches this output.
 		$data = self::get_object_data( $object );
 		if ( ! $data ) {
 			return;
@@ -220,6 +226,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 		$updated = array();
 
+		// @todo Security hardening... check for object type, check for show_in_rest values.
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
 			if ( ! array_key_exists( $cmb_id, $values ) ) {
 				continue;
@@ -366,7 +373,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Get an instance of this class by a CMB2 id
+	 * Get a CMB2_REST instance object from the registry by a CMB2 id.
 	 *
 	 * @since  2.2.4
 	 *
@@ -376,6 +383,19 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 */
 	public static function get_rest_box( $cmb_id ) {
 		return isset( self::$boxes[ $cmb_id ] ) ? self::$boxes[ $cmb_id ] : false;
+	}
+
+	/**
+	 * Remove a CMB2_REST instance object from the registry.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param string $cmb_id A CMB2 instance id.
+	 */
+	public static function remove( $cmb_id ) {
+		if ( array_key_exists( $cmb_id, self::$boxes ) ) {
+			unset( self::$boxes[ $cmb_id ] );
+		}
 	}
 
 	/**
