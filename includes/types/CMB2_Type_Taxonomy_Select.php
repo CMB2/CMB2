@@ -12,6 +12,18 @@
  */
 class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 
+	private function render_options( $terms , $saved_term ) {
+		$options = '';
+		foreach ( $terms as $term ) {
+			$options .= $this->select_option( array(
+					'label'   => $term->name,
+					'value'   => $term->slug,
+					'checked' => $saved_term === $term->slug,
+			) );
+		}
+		return $options;
+	}
+	
 	public function render() {
 		$names = $this->get_object_terms();
 
@@ -19,7 +31,9 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 		$terms       = $this->get_terms();
 		$options     = '';
 		$option_none = $this->field->args( 'show_option_none' );
-
+		echo "<pre>"; var_dump($this->field->args); die;
+		$heirarchy   = $this->field->args( 'heirarchy' );
+		
 		if ( ! empty( $option_none ) ) {
 
 			$field_id = $this->_id();
@@ -50,14 +64,27 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 				'checked' => $saved_term == $option_none_value,
 			) );
 		}
-
+		
 		if ( ! empty( $terms ) ) {
-			foreach ( $terms as $term ) {
-				$options .= $this->select_option( array(
-					'label'   => $term->name,
-					'value'   => $term->slug,
-					'checked' => $saved_term === $term->slug,
-				) );
+			if ( $heirarchy ) {
+				$groups = array();
+				foreach ( $terms as $term ) {
+					if ( $term->parent == 0 ) {
+						$groups[$term->term_id] = array( 'term' => $term, 'children' => array() );
+					} 
+					if ( !isset( $groups[$term->parent] ) ) {
+						$groups[$term->parent] = array('term' => null, 'children' => array() );
+					}
+					$groups[$term->parent]['children'][] = $term; 
+				}
+				foreach( $groups as $group ) {
+					$options .= $this->select_group( array (
+							'label' => $group['term']->name,
+							'options' => $this->render_options( $group['children'], $saved_term )
+					));
+				}
+			} else {
+				$this->render_options( $terms, $saved_term );
 			}
 		}
 
