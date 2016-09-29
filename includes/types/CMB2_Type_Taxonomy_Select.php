@@ -65,7 +65,7 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 		}
 		
 		if ( ! empty( $terms ) ) {
-			if ( $hierarchy ) {
+			if ( $hierarchy == true ) {
 				$groups = array();
 				foreach ( $terms as $term ) {
 					if ( $term->parent == 0 ) {
@@ -88,7 +88,7 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 					) );
 				}
 			} else {
-				$this->render_options( $terms, $saved_term );
+				$options .= $this->render_options( $terms, $saved_term );
 			}
 		}
 
