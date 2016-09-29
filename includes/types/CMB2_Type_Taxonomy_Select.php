@@ -31,7 +31,7 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 		$terms       = $this->get_terms();
 		$options     = '';
 		$option_none = $this->field->args( 'show_option_none' );
-		$heirarchy   = $this->field->args( 'heirarchy' );
+		$hierarchy   = $this->field->args( 'hierarchy' );
 		
 		if ( ! empty( $option_none ) ) {
 
@@ -65,7 +65,7 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 		}
 		
 		if ( ! empty( $terms ) ) {
-			if ( $heirarchy ) {
+			if ( $hierarchy ) {
 				$groups = array();
 				foreach ( $terms as $term ) {
 					if ( $term->parent == 0 ) {
