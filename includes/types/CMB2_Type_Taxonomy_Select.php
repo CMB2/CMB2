@@ -91,7 +91,6 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 				$this->render_options( $terms, $saved_term );
 			}
 		}
-		echo $options;
 
 		return $this->rendered(
 			$this->types->select( array( 'options' => $options ) )
