@@ -112,7 +112,7 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 
 		$this->post_id = $this->factory->post->create();
 		$this->term = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'test_category' ) );
-		$this->term2 = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'number_2' ) );
+		$this->term2 = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'number_2' , 'parent' => 1 ) );
 
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 

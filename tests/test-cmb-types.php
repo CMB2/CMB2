@@ -531,6 +531,20 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	public function test_taxonomy_select_field_hierarchy() {
+	
+		$args = $this->options_test['fields'][0];
+		$args['type'] = 'taxonomy_select';
+		$args['taxonomy'] = 'category';
+		$args['hierarchy'] = true;
+		$field = $this->get_field_object( $args );
+	
+		$this->assertHTMLstringsAreEqual(
+				'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><optgroup label="test_category"><option value="number_2" >number_2</option></optgroup></select><p class="cmb2-metabox-description">This is a description</p>',
+				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+				);
+	}
+	
 	public function test_radio_field() {
 		$args = $this->options_test['fields'][0];
 		$args['type'] = 'radio';
