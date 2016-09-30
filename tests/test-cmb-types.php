@@ -540,7 +540,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$field = $this->get_field_object( $args );
 	
 		$this->assertHTMLstringsAreEqual(
-				'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><optgroup label="test_category"><option value="number_2" >number_2</option></optgroup></select><p class="cmb2-metabox-description">This is a description</p>',
+				'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><optgroup label="Uncategorized"><option value="number_2" >number_2</option></optgroup><optgroup label="test_category"></optgroup></select><p class="cmb2-metabox-description">This is a description</p>',
 				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 				);
 	}
