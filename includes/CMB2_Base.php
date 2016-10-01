@@ -119,23 +119,23 @@ abstract class CMB2_Base {
 	}
 
 	/**
-	 * Get the object type for the current page, based on the $pagenow global.
+	 * Get the object type for the current page, based on get_current_screen().
 	 * @since  2.2.2
 	 * @return string  Page object type name.
 	 */
 	public function current_object_type() {
-		global $pagenow;
+		$screen = get_current_screen();
 		$type = 'post';
 
-		if ( in_array( $pagenow, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
 			$type = 'user';
 		}
 
-		if ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'edit-comments.php', 'comment.php' ), true ) ) {
 			$type = 'comment';
 		}
 
-		if ( in_array( $pagenow, array( 'edit-tags.php', 'term.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'edit-tags.php', 'term.php' ), true ) ) {
 			$type = 'term';
 		}
 

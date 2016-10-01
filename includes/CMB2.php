@@ -760,7 +760,7 @@ class CMB2 extends CMB2_Base {
 	 * @return integer $object_id Object ID
 	 */
 	public function object_id( $object_id = 0 ) {
-		global $pagenow;
+		$screen = get_current_screen();
 
 		if ( $object_id ) {
 			$this->object_id = $object_id;
@@ -775,7 +775,7 @@ class CMB2 extends CMB2_Base {
 		switch ( $this->object_type() ) {
 			case 'user':
 				$object_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id;
-				$object_id = ! $object_id && 'user-new.php' != $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
+				$object_id = ! $object_id && 'user-new.php' != $screen->parent_file && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
@@ -889,23 +889,23 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Get the object type for the current page, based on the $pagenow global.
+	 * Get the object type for the current page, based on get_current_screen().
 	 * @since  2.2.2
 	 * @return string  Page object type name.
 	 */
 	public function current_object_type() {
-		global $pagenow;
+		$screen = get_current_screen();
 		$type = 'post';
 
-		if ( in_array( $pagenow, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'user-edit.php', 'profile.php', 'user-new.php' ), true ) ) {
 			$type = 'user';
 		}
 
-		if ( in_array( $pagenow, array( 'edit-comments.php', 'comment.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'edit-comments.php', 'comment.php' ), true ) ) {
 			$type = 'comment';
 		}
 
-		if ( in_array( $pagenow, array( 'edit-tags.php', 'term.php' ), true ) ) {
+		if ( in_array( $screen->parent_file, array( 'edit-tags.php', 'term.php' ), true ) ) {
 			$type = 'term';
 		}
 
