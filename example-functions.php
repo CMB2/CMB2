@@ -645,7 +645,7 @@ function yourprefix_register_theme_options_metabox() {
 
 	/**
 	 * Metabox for an options page. Will not be added automatically, but needs to be called with
-	 * the `cmb2_metabox_form` helper function. See wiki for more info.
+	 * the `cmb2_metabox_form` helper function. See https://github.com/WebDevStudios/CMB2/wiki for more info.
 	 */
 	$cmb_options = new_cmb2_box( array(
 		'id'      => $option_key . 'page',

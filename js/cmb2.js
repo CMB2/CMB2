@@ -55,8 +55,6 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.trigger( 'cmb_pre_init' );
 
-		cmb.log( 'CMB2 localized data', l10n );
-
 		var $metabox     = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
 

@@ -70,9 +70,10 @@ class CMB2_Show_Filters {
 	/**
 	 * Add metaboxes for an specific ID
 	 * @since  1.0.0
-	 * @param  bool  $display  To display or not
+	 * @param  bool  $display       To display or not
 	 * @param  array $meta_box_args Metabox config array
-	 * @return bool            Whether to display this metabox on the current page.
+	 * @param  CMB2  $cmb           The CMB2 instance.
+	 * @return bool                 Whether to display this metabox on the current page.
 	 */
 	public static function check_id( $display, $meta_box_args, $cmb ) {
 
@@ -81,7 +82,7 @@ class CMB2_Show_Filters {
 			return $display;
 		}
 
-		$object_id = is_admin() ? $cmb->object_id() : @get_the_id();
+		$object_id = is_admin() ? $cmb->object_id() : get_the_ID();
 
 		if ( ! $object_id ) {
 			return false;
