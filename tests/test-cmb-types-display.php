@@ -160,6 +160,10 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 
  		$actual_field = $this->capture_render( array( $this->get_field_object( 'oembed' ), 'render_column' ) );
 
+ 		if ( ! $this->is_connected() ) {
+ 			$expected_field = '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">No oEmbed Results Found for <a href="www.youtube.com/watch?v='. $vid .'">www.youtube.com/watch?v='. $vid .'</a>. View more info at <a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p></div>';
+ 		}
+
 		$this->assertHTMLstringsAreEqual(
 			preg_replace( '~https?://~', '', $expected_field ), // normalize http differences
 			preg_replace( '~https?://~', '', $actual_field ) // normalize http differences
