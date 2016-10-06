@@ -170,16 +170,16 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 		$this->assertInstanceOf( 'CMB2_REST', CMB2_REST::get_rest_box( strtolower( __CLASS__ ) ) );
 	}
 
-	public function test_get_restable_field_values() {
+	public function test_get_rest_values() {
 		$expected = array();
 		foreach ( $this->metabox_array['fields'] as $field ) {
 			$expected[ $field['id'] ] = md5( $field['id'] );
 		}
 
-		$this->confirm_get_restable_field_values( $expected );
+		$this->confirm_get_rest_values( $expected );
 	}
 
-	public function test_update_restable_field_values() {
+	public function test_update_rest_values() {
 		$fields = $this->metabox_array['fields'];
 
 		$test_santizing_value = "'ello mate<script>XSS</script>";
@@ -199,7 +199,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 			$this->cmb_id => $fields,
 		);
 
-		$values = CMB2_REST::update_restable_field_values( $new_values, (object) array( 'ID' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
+		$values = CMB2_REST::update_post_rest_values( $new_values, (object) array( 'ID' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
 
 		$this->assertEquals( count( $fields ), count( $values[ $this->cmb_id ] ) );
 		foreach ( $values[ $this->cmb_id ] as $value ) {
@@ -208,11 +208,11 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 
 		$fields[ $test_santizing_key ] = sanitize_text_field( $test_santizing_value );
 
-		$this->confirm_get_restable_field_values( $fields );
+		$this->confirm_get_rest_values( $fields );
 	}
 
-	protected function confirm_get_restable_field_values( $expected ) {
-		$values = CMB2_REST::get_restable_field_values( array( 'id' => $this->post_id ), '', new WP_REST_Request, 'post' );
+	protected function confirm_get_rest_values( $expected ) {
+		$values = CMB2_REST::get_post_rest_values( array( 'id' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
 		$expected = array( $this->cmb_id => $expected );
 		$this->assertEquals( $expected, $values );
 	}

@@ -21,7 +21,6 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 		parent::setUp();
 		update_option( 'permalink_structure', '/%postname%/' );
 
-
 		if ( ! did_action( 'rest_api_init' ) ) {
 			do_action( 'rest_api_init', rest_get_server() );
 		}
@@ -120,33 +119,6 @@ if ( ! class_exists( 'Test_CMB2_REST_Object' ) ) {
 	 * Simply allows access to the mb_defaults protected property (for testing)
 	 */
 	class Test_CMB2_REST_Object extends CMB2_REST {
-
-		/**
-		 * Array of readable field objects.
-		 * @var   CMB2_Field[]
-		 * @since 2.2.4
-		 */
-		public $read_fields = array();
-
-		/**
-		 * Array of editable field objects.
-		 * @var   CMB2_Field[]
-		 * @since 2.2.4
-		 */
-		public $edit_fields = array();
-
-		/**
-		 * whether CMB2 object is readable via the rest api.
-		 * @var boolean
-		 */
-		public $rest_read = false;
-
-		/**
-		 * whether CMB2 object is editable via the rest api.
-		 * @var boolean
-		 */
-		public $rest_edit = false;
-
 		public function declare_read_edit_fields() {
 			return parent::declare_read_edit_fields();
 		}
