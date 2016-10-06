@@ -598,7 +598,6 @@ class CMB2_Field extends CMB2_Base {
 			'file'                => 1,
 			'radio'               => 1,
 			'title'               => 1,
-			// @todo Ajax load wp_editor: http://wordpress.stackexchange.com/questions/51776/how-to-load-wp-editor-through-ajax-jquery
 			'wysiwyg'             => 1,
 			'checkbox'            => 1,
 			'radio_inline'        => 1,
