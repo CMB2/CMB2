@@ -815,32 +815,18 @@ class CMB2 extends CMB2_Base {
 			return $this->mb_object_type;
 		}
 
-		$registered_types = $this->prop( 'object_types' );
-
-		if ( ! $registered_types ) {
-			$this->mb_object_type = 'post';
-			return $this->mb_object_type;
-		}
+		$registered_types = $this->box_types();
 
 		$type = false;
 
-		// check if 'object_types' is a string
-		if ( is_string( $registered_types ) ) {
-			$type = $registered_types;
-		}
-
 		// if it's an array of one, extract it
-		elseif ( is_array( $registered_types ) && 1 === count( $registered_types ) ) {
+		if ( 1 === count( $registered_types ) ) {
 			$last = end( $registered_types );
 			if ( is_string( $last ) ) {
 				$type = $last;
 			}
-		} elseif ( is_array( $registered_types ) ) {
-			$page_type = $this->current_object_type();
-
-			if ( in_array( $page_type, $registered_types, true ) ) {
-				$type = $page_type;
-			}
+		} elseif ( in_array( $this->current_object_type(), $registered_types, true ) ) {
+			$type = $page_type;
 		}
 
 		// Get our object type
@@ -858,6 +844,15 @@ class CMB2 extends CMB2_Base {
 		}
 
 		return $this->mb_object_type;
+	}
+
+	/**
+	 * Gets the box 'object_types' array based on box settings.
+	 * @since  2.2.4
+	 * @return array Object types
+	 */
+	public function box_types() {
+		return CMB2_Utils::ensure_array( $this->prop( 'object_types' ), array( 'post' ) );
 	}
 
 	/**
