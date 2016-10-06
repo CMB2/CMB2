@@ -43,7 +43,7 @@ abstract class CMB2_Base {
 	 * @var   string
 	 * @since 2.2.3
 	 */
-	protected $object_type = 'post';
+	protected $object_type = '';
 
 	/**
 	 * Array of key => value data for saving. Likely $_POST data.
