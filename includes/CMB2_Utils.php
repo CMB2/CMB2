@@ -448,4 +448,31 @@ class CMB2_Utils {
 		return $attributes;
 	}
 
+	/**
+	 * Ensures value is an array.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @param  mixed $value   Value to ensure is array.
+	 * @param  array $default Default array. Defaults to empty array.
+	 *
+	 * @return array          The array.
+	 */
+	public static function ensure_array( $value, $default = array() ) {
+		if ( empty( $value ) ) {
+			return $default;
+		}
+
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return (array) $value;
+		}
+
+		// Not sure anything would be non-scalar that is not an array or object?
+		if ( ! is_scalar( $value ) ) {
+			return $default;
+		}
+
+		return (array) $value;
+	}
+
 }

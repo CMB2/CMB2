@@ -207,6 +207,20 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		);
 	}
 
+	public function test_ensure_array() {
+		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( '', array( 'test' ) ) );
+		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( false, array( 'test' ) ) );
+		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( 0, array( 'test' ) ) );
+
+		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( 'test' ) );
+		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( array( 'test' ) ) );
+
+		$this->assertEquals( array(
+			'errors' => array(),
+			'error_data' => array(),
+		), CMB2_Utils::ensure_array( new WP_Error ) );
+	}
+
 }
 
 class CMB2_Utils_WIN extends CMB2_Utils {
