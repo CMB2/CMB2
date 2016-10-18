@@ -1217,9 +1217,10 @@ class CMB2_Field extends CMB2_Base {
 
 		if ( isset( $args['row_classes'] ) ) {
 
-			$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_PARAM, 'row_classes', 'classes' );
+			// We'll let this one be.
+			// $this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_PARAM, 'row_classes', 'classes' );
 
-			// row_classes param could be a callback
+			// row_classes param could be a callback. This is definitely deprecated.
 			if ( is_callable( $args['row_classes'] ) ) {
 
 				$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_CB_PARAM, 'row_classes', 'classes_cb' );
@@ -1227,7 +1228,6 @@ class CMB2_Field extends CMB2_Base {
 				$args['classes_cb'] = $args['row_classes'];
 				$args['classes'] = null;
 			} else {
-
 
 				$args['classes'] = $args['row_classes'];
 			}
