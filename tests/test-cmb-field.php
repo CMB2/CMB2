@@ -116,7 +116,6 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 	/**
 	 * Tests row classes, but also tests that 'row_classes' param is deprecated.
-	 * @expectedDeprecated CMB2_Field::__construct()
 	 */
 	public function test_cmb2_classes_string() {
 
