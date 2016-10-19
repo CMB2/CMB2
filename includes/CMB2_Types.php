@@ -31,7 +31,7 @@ class CMB2_Types {
 	 * @var   CMB2_Type_Base object
 	 * @since 2.2.2
 	 */
-	public $type;
+	public $type = null;
 
 	public function __construct( CMB2_Field $field ) {
 		$this->field = $field;
@@ -130,13 +130,14 @@ class CMB2_Types {
 	/**
 	 * If no CMB2_Types::$type object is initiated when a proxy method is called, it means
 	 * it's a custom field type (which SHOULD be instantiating a Type), but let's try and
-	 * guess the type object for them, instantiate it, and throw a _doing_it_wrong notice.
+	 * guess the type object for them and instantiate it.
 	 *
 	 * @since  2.2.3
 	 *
 	 * @param string $method  Method attempting to be called on the CMB2_Type_Base object.
 	 */
 	protected function guess_type_object( $method ) {
+
 		// Try to "guess" the Type object based on the method requested.
 		switch ( $method ) {
 			case 'select_option':
@@ -166,17 +167,7 @@ class CMB2_Types {
 				break;
 		}
 
-		// Then, let's throw a debug _doing_it_wrong notice.
-
-		$message = array( sprintf( esc_html__( 'Custom field types require a Type object instantiation to use this method. This method was called by the \'%s\' field type.' ), $this->field->type() ) );
-
-		$message[] = is_object( $this->type )
-			? esc_html__( 'That field type may not work as expected.', 'cmb2' )
-			: esc_html__( 'That field type will not work as expected.', 'cmb2' );
-
-		$message[] = esc_html__( 'For more information about this change see: https://github.com/mustardBees/cmb-field-select2/pull/34w', 'cmb2' );
-
-		_doing_it_wrong( __CLASS__ . '::' . $method, implode( ' ', $message ), '2.2.2' );
+		return null !== $this->type;
 	}
 
 	/**
