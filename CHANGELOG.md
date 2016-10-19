@@ -26,7 +26,9 @@ All notable changes to this project will be documented in this file.
 * Stop using `$wp_version` global Props [ramiy](https://github.com/ramiy) ([#731](https://github.com/WebDevStudios/CMB2/pull/731)).
 * Closures (anonymous functions) are now supported for any box/field `'*_cb'` parameters. E.g.
 ```php
-	'show_on_cb' => function( $cmb ) { return has_tag( 'cats', $cmb->object_id ); }
+	...
+	'show_on_cb' => function( $cmb ) { return has_tag( 'cats', $cmb->object_id ); },
+	...
 ```
 
 ### Bug Fixes
