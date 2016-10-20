@@ -24,11 +24,16 @@ All notable changes to this project will be documented in this file.
 * Make exception message translatable. Props [ramiy](https://github.com/ramiy) ([#724](https://github.com/WebDevStudios/CMB2/pull/724)).
 * Portuguese translation provided by [@alvarogois](https://github.com/alvarogois) and [@pedro-mendonca](https://github.com/pedro-mendonca) - [#709](https://github.com/WebDevStudios/CMB2/pull/709), [#727](https://github.com/WebDevStudios/CMB2/pull/727).
 * Stop using `$wp_version` global Props [ramiy](https://github.com/ramiy) ([#731](https://github.com/WebDevStudios/CMB2/pull/731)).
-
+* Closures (anonymous functions) are now supported for any box/field `'*_cb'` parameters. E.g.
+```php
+	...
+	'show_on_cb' => function( $cmb ) { return has_tag( 'cats', $cmb->object_id ); },
+	...
+```
 
 ### Bug Fixes
 
-* If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate, then throw a `_doing_it_wrong` notice.
+* If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate.
 * Normalize WordPress root path (`ABSPATH`) and theme rooth path (`get_theme_root()`). Props [@rianbotha](https://github.com/rianbotha) ([#677](https://github.com/WebDevStudios/CMB2/pull/677), [#676](https://github.com/WebDevStudios/CMB2/pull/676)).
 * Fix issue with `'cmb2_remove_row'` Javascript callback for non-group row removal. Fixes [#729](https://github.com/WebDevStudios/CMB2/pull/729)).
 
