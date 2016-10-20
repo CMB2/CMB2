@@ -78,13 +78,14 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	public function get_items( $request ) {
 		$this->initiate_request( $request, 'boxes_read' );
 
-		if ( empty( CMB2_REST::$boxes ) ) {
+		$boxes = CMB2_REST::get_all();
+		if ( empty( $boxes ) ) {
 			return new WP_Error( 'cmb2_rest_no_boxes', __( 'No boxes found.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
 		$boxes_data = array();
 		// Loop boxes and get specific field.
-		foreach ( CMB2_REST::$boxes as $this->rest_box ) {
+		foreach ( $boxes as $this->rest_box ) {
 			if ( $this->rest_box->rest_read ) {
 				$rest_box = $this->get_rest_box();
 				$boxes_data[ $this->rest_box->cmb->cmb_id ] = $this->server->response_to_data( $rest_box, isset( $this->request['_embed'] ) );

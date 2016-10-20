@@ -43,6 +43,10 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		) );
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	public function test_get_schema() {
 		$this->assertResponseStatuses( '/' . CMB2_REST::NAME_SPACE, array(
 			'GET' => 200,

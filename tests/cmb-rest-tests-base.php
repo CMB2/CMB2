@@ -43,19 +43,32 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 		foreach ( $this->metabox_array['fields'] as $field ) {
 			update_post_meta( $this->post_id, $field['id'], md5( $field['id'] ) );
 		}
+
+		CMB2_REST::register_cmb2_fields();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
-		foreach ( $this->metabox_array['fields'] as $field ) {
-			delete_post_meta( $this->post_id, $field['id'] );
+		if ( ! empty( $this->metabox_array['fields'] ) ) {
+			foreach ( $this->metabox_array['fields'] as $field ) {
+				delete_post_meta( $this->post_id, $field['id'] );
+			}
 		}
-		CMB2_Boxes::remove( $this->cmb_id );
-		CMB2_REST::remove( $this->cmb_id );
+
+		Test_CMB2_REST_Object::reset_boxes();
+		Test_CMB2_REST_Object::reset_type_boxes();
+
+		foreach ( CMB2_Boxes::get_all() as $box ) {
+			CMB2_Boxes::remove( $box->cmb_id );
+		}
+
+		global $wp_actions, $wp_rest_server;
+		unset( $wp_rest_server );
+		unset( $wp_actions['rest_api_init'] );
 	}
 
 	protected function reset_instances() {
-		foreach ( CMB2_REST::$boxes as $cmb_id => $rest ) {
+		foreach ( CMB2_REST::get_all() as $cmb_id => $rest ) {
 			$rest = new CMB2_REST( $rest->cmb );
 			$rest->universal_hooks();
 		}
@@ -116,7 +129,7 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 
 if ( ! class_exists( 'Test_CMB2_REST_Object' ) ) {
 	/**
-	 * Simply allows access to the mb_defaults protected property (for testing)
+	 * Make some things accessible in the CMB2_REST class.
 	 */
 	class Test_CMB2_REST_Object extends CMB2_REST {
 		public function declare_read_edit_fields() {
@@ -128,8 +141,19 @@ if ( ! class_exists( 'Test_CMB2_REST_Object' ) ) {
 		public function can_edit( $show_in_rest ) {
 			return parent::can_edit( $show_in_rest );
 		}
-		public static function get_object_data( $object ) {
-			return parent::get_object_data( $object );
+		public static function get_object_id( $object, $object_type = 'post' ) {
+			return parent::get_object_id( $object, $object_type );
+		}
+		public static function reset_boxes() {
+			parent::$boxes = array();
+		}
+		public static function reset_type_boxes() {
+			parent::$type_boxes = array(
+				'post' => array(),
+				'user' => array(),
+				'comment' => array(),
+				'term' => array(),
+			);
 		}
 	}
 }

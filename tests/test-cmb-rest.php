@@ -42,6 +42,10 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 		) );
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	public function test_construction() {
 		$this->assertTrue( $this->rest_box->cmb instanceof CMB2 );
 	}
@@ -146,24 +150,20 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 		$this->assertInstanceOf( 'CMB2_Field', $this->rest_box->field_can_edit( 'rest_test', true ) );
 	}
 
-	public function test_get_object_data() {
+	public function test_get_object_id() {
 		$object = (object) array( 'ID' => 1 );
-		$expected = array( 'object_id' => $object->ID, 'object_type' => 'post' );
-		$this->assertEquals( $expected, Test_CMB2_REST_Object::get_object_data( $object ) );
+		$this->assertEquals( $object->ID, Test_CMB2_REST_Object::get_object_id( $object, 'post' ) );
 
 		$object = (object) array( 'comment_ID' => 1 );
-		$expected = array( 'object_id' => $object->comment_ID, 'object_type' => 'comment' );
-		$this->assertEquals( $expected, Test_CMB2_REST_Object::get_object_data( $object ) );
+		$this->assertEquals( $object->comment_ID, Test_CMB2_REST_Object::get_object_id( $object, 'comment' ) );
 
 		$object = (object) array( 'term_id' => 1 );
-		$expected = array( 'object_id' => $object->term_id, 'object_type' => 'term' );
-		$this->assertEquals( $expected, Test_CMB2_REST_Object::get_object_data( $object ) );
+		$this->assertEquals( $object->term_id, Test_CMB2_REST_Object::get_object_id( $object, 'term' ) );
 
 		$object = array( 'term_id' => 1 );
-		$expected = array( 'object_id' => $object['term_id'], 'object_type' => 'term' );
-		$this->assertEquals( $expected, Test_CMB2_REST_Object::get_object_data( $object ) );
+		$this->assertEquals( $object['term_id'], Test_CMB2_REST_Object::get_object_id( $object, 'term' ) );
 
-		$this->assertEquals( false, Test_CMB2_REST_Object::get_object_data( array() ) );
+		$this->assertEquals( false, Test_CMB2_REST_Object::get_object_id( array() ) );
 	}
 
 	public function test_get_rest_box() {
