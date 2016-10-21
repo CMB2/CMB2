@@ -102,7 +102,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 */
 	public function universal_hooks() {
 		// hook up the CMB rest endpoint classes
-		$this->once( 'rest_api_init', array( $this, 'init_routes' ), 0 );
+		$this->once( 'rest_api_init', array( __CLASS__, 'init_routes' ), 0 );
 
 		if ( function_exists( 'register_rest_field' ) ) {
 			$this->once( 'rest_api_init', array( __CLASS__, 'register_cmb2_fields' ), 50 );
@@ -120,7 +120,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @return void
 	 */
-	public function init_routes() {
+	public static function init_routes() {
 		$wp_rest_server = rest_get_server();
 
 		$boxes_controller = new CMB2_REST_Controller_Boxes( $wp_rest_server );
