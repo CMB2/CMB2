@@ -88,7 +88,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		foreach ( $boxes as $this->rest_box ) {
 			if ( $this->rest_box->rest_read ) {
 				$rest_box = $this->get_rest_box();
-				$boxes_data[ $this->rest_box->cmb->cmb_id ] = $this->server->response_to_data( $rest_box, isset( $this->request['_embed'] ) );
+				$boxes_data[] = $this->server->response_to_data( $rest_box, isset( $this->request['_embed'] ) );
 			}
 		}
 
