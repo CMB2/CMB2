@@ -10,6 +10,9 @@
 
 require_once( 'cmb-tests-base.php' );
 
+/**
+ * Test the oEmbed functionality
+ */
 class Test_CMB2_Ajax extends Test_CMB2 {
 
 	/**
@@ -62,6 +65,9 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		$this->assertEquals( $this->oembed_args['object_type'], $this->cmb->object_type() );
 	}
 
+	/**
+	 * @group cmb2-ajax-embed
+	 */
 	public function test_get_oembed() {
 		$args = $this->oembed_args;
 
@@ -76,6 +82,9 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		$this->assertOEmbedResult( $args );
 	}
 
+	/**
+	 * @group cmb2-ajax-embed
+	 */
 	public function test_values_cached() {
 		$expected = $this->is_connected() ? array(
 			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
