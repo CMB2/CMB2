@@ -8,7 +8,10 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON( 'package.json' ),
 
 		phpunit: {
-			classes: {}
+			classes: {},
+			options: {
+				excludeGroup: 'cmb2-ajax-embed',
+			}
 		},
 
 		githooks: {
