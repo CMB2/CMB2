@@ -67,6 +67,7 @@ class CMB2 extends CMB2_Base {
 		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'
 		'new_term_section' => true,
+		'show_in_rest'     => false,
 	);
 
 	/**

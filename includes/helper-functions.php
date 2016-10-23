@@ -35,6 +35,10 @@ function cmb2_autoload_classes( $class_name ) {
 		$path .= '/types';
 	}
 
+	if ( 'CMB2_REST' === $class_name || 0 === strpos( $class_name, 'CMB2_REST_' ) ) {
+		$path .= '/rest-api';
+	}
+
 	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
 }
 

@@ -1099,6 +1099,7 @@ class CMB2_Field extends CMB2_Base {
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
 			'column'            => false,
 			'js_dependencies'   => array(),
+			'show_in_rest'      => null,
 		) );
 
 		/*
