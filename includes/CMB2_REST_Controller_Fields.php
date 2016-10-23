@@ -22,34 +22,56 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @since 2.2.4
 	 */
 	public function register_routes() {
+		$args = array(
+			'_embed' => array(
+				'description' => __( 'Includes the box object which the fields are registered to in the response.', 'cmb2' ),
+			),
+			'_rendered' => array(
+				'description' => __( 'When the \'rendered\' argument is passed, the renderable field attributes will be returned fully rendered. By default, the names of the callback handers for the renderable attributes will be returned.', 'cmb2' ),
+			),
+			'object_id' => array(
+				'description' => __( 'To view or modify the field\'s value, the \'object_id\' and \'object_type\' arguments are required.', 'cmb2' ),
+			),
+			'object_type' => array(
+				'description' => __( 'To view or modify the field\'s value, the \'object_id\' and \'object_type\' arguments are required.', 'cmb2' ),
+			),
+		);
 
 		// Returns specific box's fields.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/', array(
 			array(
-				'methods'  => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_items' ),
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_items' ),
 				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				'args'                => $args,
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
 
+		$delete_args = $args;
+		$delete_args['object_id']['required'] = true;
+		$delete_args['object_type']['required'] = true;
+
 		// Returns specific field data.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)/fields/(?P<field_id>[\w-]+)', array(
 			array(
-				'methods'  => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_item' ),
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_item' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				'args'                => $args,
 			),
 			array(
-				'methods'  => WP_REST_Server::EDITABLE,
-				'callback' => array( $this, 'update_field_value' ),
-				'args'     => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'update_field_value' ),
+				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				'permission_callback' => array( $this, 'update_field_value_permissions_check' ),
+				'args'                => $args,
 			),
 			array(
-				'methods'  => WP_REST_Server::DELETABLE,
-				'callback' => array( $this, 'delete_field_value' ),
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => array( $this, 'delete_field_value' ),
 				'permission_callback' => array( $this, 'delete_field_value_permissions_check' ),
+				'args'                => $delete_args,
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );

@@ -45,6 +45,20 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @since 2.2.4
 	 */
 	public function register_routes() {
+		$args = array(
+			'_embed' => array(
+				'description' => __( 'Includes the registered fields for the box in the response.', 'cmb2' ),
+			),
+			'_rendered' => array(
+				'description' => __( 'Includes the fully rendered attributes, \'form_open\', \'form_close\', as well as the enqueued \'js_dependencies\' script handles, and \'css_dependencies\' stylesheet handles.', 'cmb2' ),
+			),
+		);
+
+		// @todo determine what belongs in the context param.
+		// $args['context'] = $this->get_context_param();
+		// $args['context']['required'] = false;
+		// $args['context']['default'] = 'view';
+		// $args['context']['enum'] = array( 'view', 'embed' );
 
 		// Returns all boxes data.
 		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
@@ -52,7 +66,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_items' ),
 				'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				'args'                => $this->get_collection_params(),
+				'args'                => $args,
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
@@ -60,9 +74,10 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		// Returns specific box's data.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)', array(
 			array(
-				'methods'  => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_item' ),
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_item' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				'args'                => $args,
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );

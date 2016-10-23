@@ -130,7 +130,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
 		) );
 
 		$mb = $this->metabox_array;
@@ -145,7 +145,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertResponseStatuses( $url, array(
 			'GET' => array( 403 => 'cmb2_rest_no_field_by_id_error' ),
 			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
 		) );
 	}
 
@@ -155,8 +155,13 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertResponseStatuses( $url, array(
 			'GET' => array( 403 => 'rest_forbidden' ),
 			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 403 => 'rest_forbidden' ),
+			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
 		) );
+
+		$request = new WP_REST_Request( 'DELETE', $url );
+		$request['object_id'] = $this->post_id;
+		$request['object_type'] = 'post';
+		$this->assertResponseStatus( 403, rest_do_request( $request ), 'rest_forbidden' );
 	}
 
 	/**
@@ -268,19 +273,22 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$request = new WP_REST_Request( 'DELETE', $url );
 		$response = rest_do_request( $request );
-		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+		$this->assertResponseStatus( 400, $response, 'rest_missing_callback_param' );
 		$this->assertResponseData( array(
-			'code'    => 'cmb2_rest_modify_field_value_error',
-			'message' => __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ),
+			'code'    => 'rest_missing_callback_param',
+			'message' => 'Missing parameter(s): object_id, object_type',
 			'data'    => array(
 				'status' => 400,
+				'params' => array(
+					'object_id',
+					'object_type',
+				),
 			),
 		), $response );
 
-
 		$request['object_id'] = $this->post_id;
 		$response = rest_do_request( $request );
-		$this->assertResponseStatus( 400, $response, 'cmb2_rest_modify_field_value_error' );
+		$this->assertResponseStatus( 400, $response, 'rest_missing_callback_param' );
 	}
 
 	public function test_delete_authorized_for_admin() {
