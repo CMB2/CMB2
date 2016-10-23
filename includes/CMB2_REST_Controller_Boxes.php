@@ -49,9 +49,10 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 		// Returns all boxes data.
 		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
 			array(
-				'methods'  => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_items' ),
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_items' ),
 				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				'args'                => $this->get_collection_params(),
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );

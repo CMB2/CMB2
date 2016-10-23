@@ -400,17 +400,17 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 			'type'                 => 'object',
 			'properties'           => array(
 				'description' => array(
-					'description'  => 'A human-readable description of the object.',
+					'description'  => __( 'A human-readable description of the object.', 'cmb2' ),
 					'type'         => 'string',
 					'context'      => array( 'view' ),
 					),
 					'name'             => array(
-						'description'  => 'The id for the object.',
+						'description'  => __( 'The id for the object.', 'cmb2' ),
 						'type'         => 'integer',
 						'context'      => array( 'view' ),
 					),
 				'name' => array(
-					'description'  => 'The title for the object.',
+					'description'  => __( 'The title for the object.', 'cmb2' ),
 					'type'         => 'string',
 					'context'      => array( 'view' ),
 				),
