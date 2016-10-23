@@ -6,7 +6,7 @@
  * @todo  Add better documentation.
  * @todo  Research proper schema.
  *
- * @since 2.2.4
+ * @since 2.2.3
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -19,7 +19,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Register the routes for the objects of the controller.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public function register_routes() {
 		$args = array(
@@ -80,7 +80,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Get all public CMB2 box fields.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -110,7 +110,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Get one CMB2 field from the collection.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -134,7 +134,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Update CMB2 field value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -154,7 +154,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Delete CMB2 field value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -170,7 +170,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Modify CMB2 field value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  string     $activity The modification activity (updated or deleted).
 	 * @param  CMB2_Field $field    The field object.
@@ -211,7 +211,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Get a specific field
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  string Field id
 	 * @return array|WP_Error
@@ -234,7 +234,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Prepare the field data array for JSON.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  CMB2_Field $field field object.
 	 *
@@ -294,7 +294,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	/**
 	 * Return an array of contextual links for field/fields.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  CMB2_Field $field Field object to build links from.
 	 *

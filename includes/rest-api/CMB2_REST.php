@@ -3,7 +3,7 @@
  * Handles hooking CMB2 objects/fields into the WordPres REST API
  * which can allow fields to be read and/or updated.
  *
- * @since  2.2.4
+ * @since  2.2.3
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -16,32 +16,32 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * The current CMB2 REST endpoint version
 	 * @var string
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	const VERSION = '1';
 
 	/**
 	 * The CMB2 REST base namespace (v should always be followed by $version)
 	 * @var string
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	const NAME_SPACE = 'cmb2/v1';
 
 	/**
 	 * @var   CMB2 object
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public $cmb;
 
 	/**
 	 * @var   CMB2_REST[] objects
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected static $boxes = array();
 
 	/**
 	 * @var   array Array of cmb ids for each type.
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected static $type_boxes = array(
 		'post' => array(),
@@ -53,14 +53,14 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Array of readable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected $read_fields = array();
 
 	/**
 	 * Array of editable field objects.
 	 * @var   CMB2_Field[]
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected $edit_fields = array();
 
@@ -79,7 +79,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Constructor
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param CMB2 $cmb The CMB2 object to be registered for the API.
 	 */
@@ -96,7 +96,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Hooks to register on frontend and backend.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return void
 	 */
@@ -116,7 +116,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Initiate the CMB2 Boxes and Fields routes
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return void
 	 */
@@ -133,7 +133,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Loop through REST boxes and call register_rest_field for each object type.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return void
 	 */
@@ -192,7 +192,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Wrapper for register_rest_field.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param string|array $object_types Object(s) the field is being registered
 	 *                                   to, "post"|"term"|"comment" etc.
@@ -211,7 +211,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Setup readable and editable fields.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return void
 	 */
@@ -238,7 +238,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * Determines if a field is readable based on it's show_in_rest value
 	 * and the box's show_in_rest value.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  bool $show_in_rest Field's show_in_rest value. Default null.
 	 *
@@ -258,7 +258,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * Determines if a field is editable based on it's show_in_rest value
 	 * and the box's show_in_rest value.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  bool $show_in_rest Field's show_in_rest value. Default null.
 	 *
@@ -277,7 +277,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for getting post custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array           $object      The object data from the response
 	 * @param  string          $field_name  Name of field
@@ -295,7 +295,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for getting user custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array           $object      The object data from the response
 	 * @param  string          $field_name  Name of field
@@ -313,7 +313,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for getting comment custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array           $object      The object data from the response
 	 * @param  string          $field_name  Name of field
@@ -331,7 +331,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for getting term custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array           $object      The object data from the response
 	 * @param  string          $field_name  Name of field
@@ -349,7 +349,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for getting custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array           $object           The object data from the response
 	 * @param  WP_REST_Request $request          Current request
@@ -389,7 +389,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for updating post custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed           $value       The value of the field
 	 * @param  object          $object      The object from the response
@@ -408,7 +408,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for updating user custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed           $value       The value of the field
 	 * @param  object          $object      The object from the response
@@ -427,7 +427,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for updating comment custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed           $value       The value of the field
 	 * @param  object          $object      The object from the response
@@ -446,7 +446,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for updating term custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed           $value       The value of the field
 	 * @param  object          $object      The object from the response
@@ -465,7 +465,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handler for updating custom field data.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed           $value            The value of the field
 	 * @param  object          $object           The object from the response
@@ -531,7 +531,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handles returning a sanitized field value.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array   $values   Array of values being provided.
 	 * @param  string  $field_id The id of the field to update.
@@ -562,7 +562,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Handles returning a sanitized group field value.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  array       $values Array of values being provided.
 	 * @param  CMB2_Field  $field  CMB2_Field object.
@@ -583,7 +583,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Filter whether a meta key is protected.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param bool   $protected Whether the key is protected. Default false.
 	 * @param string $meta_key  Meta key.
@@ -638,7 +638,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Get a CMB2_REST instance object from the registry by a CMB2 id.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  string  $cmb_id CMB2 config id
 	 *
@@ -651,7 +651,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Remove a CMB2_REST instance object from the registry.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param string $cmb_id A CMB2 instance id.
 	 */
@@ -664,7 +664,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Retrieve all CMB2_REST instances from the registry.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 * @return CMB2[] Array of all registered CMB2_REST instances.
 	 */
 	public static function get_all() {
@@ -676,7 +676,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * Value is considered readable if it is not empty and if it does not match the editable blacklist.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed  $value Value to check.
 	 *
@@ -695,7 +695,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * Value is considered editable if matches the editable whitelist.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed  $value Value to check.
 	 *

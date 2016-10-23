@@ -451,7 +451,7 @@ class CMB2_Utils {
 	/**
 	 * Ensures value is an array.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed $value   Value to ensure is array.
 	 * @param  array $default Default array. Defaults to empty array.

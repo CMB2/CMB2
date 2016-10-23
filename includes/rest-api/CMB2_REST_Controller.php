@@ -11,7 +11,7 @@ if ( ! class_exists( 'WP_REST_Controller' ) ) {
  * @todo  Add better documentation.
  * @todo  Research proper schema.
  *
- * @since 2.2.4
+ * @since 2.2.3
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -38,28 +38,28 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * The current request object
 	 * @var WP_REST_Request $request
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public $request;
 
 	/**
 	 * The current server object
 	 * @var WP_REST_Server $server
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public $server;
 
 	/**
 	 * Box object id
 	 * @var   mixed
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public $object_id = null;
 
 	/**
 	 * Box object type
 	 * @var   string
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public $object_type = '';
 
@@ -73,20 +73,20 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * The initial route
 	 * @var   string
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected static $route = '';
 
 	/**
 	 * Defines which endpoint the initial request is.
 	 * @var string $request_type
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	protected static $request_type = '';
 
 	/**
 	 * Constructor
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public function __construct( WP_REST_Server $wp_rest_server ) {
 		$this->server = $wp_rest_server;
@@ -95,7 +95,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Check if a given request has access to get items.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|boolean
@@ -109,7 +109,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * By default, no special permissions needed.
 		 *
-		 * @since 2.2.4
+		 * @since 2.2.3
 		 *
 		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
@@ -121,7 +121,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to a field or box.
 	 * By default, no special permissions needed, but filtering return value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|boolean
@@ -135,7 +135,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * By default, no special permissions needed.
 		 *
-		 * @since 2.2.4
+		 * @since 2.2.3
 		 *
 		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
@@ -147,7 +147,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to update a field value.
 	 * By default, requires 'edit_others_posts' capability, but filtering return value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|boolean
@@ -161,7 +161,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * By default, 'edit_others_posts' is required capability.
 		 *
-		 * @since 2.2.4
+		 * @since 2.2.3
 		 *
 		 * @param bool   $can_update Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
@@ -173,7 +173,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to delete a field value.
 	 * By default, requires 'delete_others_posts' capability, but filtering return value.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|boolean
@@ -187,7 +187,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * By default, 'delete_others_posts' is required capability.
 		 *
-		 * @since 2.2.4
+		 * @since 2.2.3
 		 *
 		 * @param bool   $can_delete Whether this CMB2 endpoint can be accessed.
 		 * @param object $request    The WP_REST_Request object
@@ -199,7 +199,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * Check if a CMB object callback property exists, and if it does,
 	 * hook it to the permissions filter.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  string  $to_check The callback property to check.
 	 *
@@ -221,7 +221,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Prepare a CMB2 object for serialization
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  mixed $data
 	 * @return array $data
@@ -233,7 +233,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Output buffers a callback and returns the results.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed $cb Callable function/method.
 	 * @return mixed     Results of output buffer after calling function/method.
@@ -250,7 +250,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Prepare the CMB2 item for the REST response.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  mixed            $item     WordPress representation of the item.
 	 * @param  WP_REST_Request  $request  Request object.
@@ -262,7 +262,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		/**
 		 * Filter the prepared CMB2 item response.
 		 *
-		 * @since 2.2.4
+		 * @since 2.2.3
 		 *
 		 * @param mixed  $data           Prepared data
 		 * @param object $request        The WP_REST_Request object
@@ -274,7 +274,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Initiates the request property and the rest_box property if box is readable.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  WP_REST_Request $request      Request object.
 	 * @param  string          $request_type A description of the type of request being made.
@@ -292,7 +292,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Initiates the request property and the rest_box property if box is writeable.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  WP_REST_Request $request      Request object.
 	 * @param  string          $request_type A description of the type of request being made.
@@ -310,7 +310,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Initiates the request property and the rest_box property.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  WP_REST_Request $request      Request object.
 	 * @param  string          $request_type A description of the type of request being made.
@@ -341,7 +341,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Initiates the request property and sets up the initial static properties.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  WP_REST_Request $request      Request object.
 	 * @param  string          $request_type A description of the type of request being made.
@@ -367,7 +367,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Useful when getting `_embed`-ed items
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return string  Initial requested type.
 	 */
@@ -378,7 +378,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Useful when getting `_embed`-ed items
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return string  Initial requested route.
 	 */
@@ -389,7 +389,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Get CMB2 fields schema, conforming to JSON Schema
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @return array
 	 */
@@ -425,7 +425,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @link http://v2.wp-api.org/extending/linking/
 	 * @link http://www.iana.org/assignments/link-relations/link-relations.xhtml
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  mixed  $object Object to build links from.
 	 *
@@ -436,7 +436,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	/**
 	 * Get whitelisted query strings from URL for appending to link URLS.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @return string URL query stringl
 	 */

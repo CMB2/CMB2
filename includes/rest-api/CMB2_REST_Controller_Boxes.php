@@ -6,7 +6,7 @@
  * @todo  Add better documentation.
  * @todo  Research proper schema.
  *
- * @since 2.2.4
+ * @since 2.2.3
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -32,7 +32,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 	/**
 	 * Constructor
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public function __construct( WP_REST_Server $wp_rest_server ) {
 		$this->namespace_base = $this->namespace . '/' . $this->rest_base;
@@ -42,7 +42,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	/**
 	 * Register the routes for the objects of the controller.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 */
 	public function register_routes() {
 		$args = array(
@@ -86,7 +86,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	/**
 	 * Get all public CMB2 boxes.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -114,7 +114,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	/**
 	 * Get one CMB2 box from the collection.
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|WP_REST_Response
@@ -132,7 +132,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	/**
 	 * Get a CMB2 box prepared for REST
 	 *
-	 * @since 2.2.4
+	 * @since 2.2.3
 	 *
 	 * @return array
 	 */
@@ -171,7 +171,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	/**
 	 * Return an array of contextual links for box/boxes.
 	 *
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 *
 	 * @param  CMB2_REST $cmb CMB2_REST object to build links from.
 	 *

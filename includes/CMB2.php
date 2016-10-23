@@ -847,7 +847,7 @@ class CMB2 extends CMB2_Base {
 
 	/**
 	 * Gets the box 'object_types' array based on box settings.
-	 * @since  2.2.4
+	 * @since  2.2.3
 	 * @return array Object types
 	 */
 	public function box_types() {
