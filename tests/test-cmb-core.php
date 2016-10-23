@@ -100,7 +100,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->defaults = array(
 			'id'               => $this->cmb_id,
 			'title'            => '',
-			'type'             => '',
 			'object_types'     => array(), // Post type
 			'context'          => 'normal',
 			'priority'         => 'high',

@@ -52,7 +52,6 @@ class CMB2 extends CMB2_Base {
 	protected $mb_defaults = array(
 		'id'               => '',
 		'title'            => '',
-		'type'             => '',
 		'object_types'     => array(), // Post type
 		'context'          => 'normal',
 		'priority'         => 'high',
