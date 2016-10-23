@@ -86,11 +86,13 @@ class CMB2_Field extends CMB2_Base {
 	 * @var array
 	 */
 	public static $callable_fields = array(
-		'default',
-		'row_classes',
+		'default_cb',
+		'classes_cb',
 		'options_cb',
+		'text_cb',
 		'label_cb',
 		'render_row_cb',
+		'display_cb',
 		'before_group',
 		'before_group_row',
 		'before_row',
