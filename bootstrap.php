@@ -55,6 +55,7 @@ function cmb2_bootstrap() {
 	foreach ( CMB2_Boxes::get_all() as $cmb ) {
 		if ( $cmb->prop( 'hookup' ) ) {
 			$hookup = new CMB2_hookup( $cmb );
+			$hookup->universal_hooks();
 		}
 	}
 
