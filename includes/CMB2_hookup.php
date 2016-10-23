@@ -49,23 +49,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 		$this->object_type = $this->cmb->mb_object_type();
-
-		$this->universal_hooks();
-
-		if ( is_admin() ) {
-
-			switch ( $this->object_type ) {
-				case 'post':
-					return $this->post_hooks();
-				case 'comment':
-					return $this->comment_hooks();
-				case 'user':
-					return $this->user_hooks();
-				case 'term':
-					return $this->term_hooks();
-			}
-
-		}
 	}
 
 	public function universal_hooks() {
@@ -79,6 +62,17 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 
 			$this->maybe_enqueue_column_display_styles();
+
+			switch ( $this->object_type ) {
+				case 'post':
+					return $this->post_hooks();
+				case 'comment':
+					return $this->comment_hooks();
+				case 'user':
+					return $this->user_hooks();
+				case 'term':
+					return $this->term_hooks();
+			}
 		}
 	}
 
