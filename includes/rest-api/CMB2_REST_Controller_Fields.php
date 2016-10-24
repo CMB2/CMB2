@@ -312,14 +312,10 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' . $query_string ),
 			),
 			'up' => array(
+				'embeddable' => true,
 				'href' => rest_url( $boxbase . $query_string ),
 			),
 		);
-
-		// Don't embed boxes when looking at boxes route.
-		if ( '/cmb2/v1/boxes' !== CMB2_REST_Controller::get_intial_route() ) {
-			$links['up']['embeddable'] = true;
-		}
 
 		return $links;
 	}
