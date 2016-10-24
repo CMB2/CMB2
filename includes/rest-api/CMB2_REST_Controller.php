@@ -212,9 +212,9 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 		$rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
 
-		if ( $rest_box && $rest_box->cmb->prop( "{$to_check}" ) ) {
+		if ( $rest_box && $rest_box->cmb->prop( $to_check ) ) {
 			$filter = 'cmb2_api_' . ( substr( $to_check, 0, strlen( $to_check ) - 3 ) );
-			add_filter( $filter, $rest_box->cmb->prop( "{$to_check}" ), 10, 2 );
+			add_filter( $filter, $rest_box->cmb->prop( $to_check ), 10, 2 );
 		}
 	}
 
