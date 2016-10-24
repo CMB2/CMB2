@@ -49,9 +49,6 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 			'_embed' => array(
 				'description' => __( 'Includes the registered fields for the box in the response.', 'cmb2' ),
 			),
-			'_rendered' => array(
-				'description' => __( 'Includes the fully rendered attributes, \'form_open\', \'form_close\', as well as the enqueued \'js_dependencies\' script handles, and \'css_dependencies\' stylesheet handles.', 'cmb2' ),
-			),
 		);
 
 		// @todo determine what belongs in the context param.
@@ -70,6 +67,10 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 			),
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
+
+		$args['_rendered'] = array(
+			'description' => __( 'Includes the fully rendered attributes, \'form_open\', \'form_close\', as well as the enqueued \'js_dependencies\' script handles, and \'css_dependencies\' stylesheet handles.', 'cmb2' ),
+		);
 
 		// Returns specific box's data.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<cmb_id>[\w-]+)', array(
@@ -141,7 +142,7 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 		$boxes_data = $cmb->meta_box;
 
-		if ( isset( $this->request['_rendered'] ) && $this->namespace_base !== CMB2_REST_Controller::get_intial_route() ) {
+		if ( isset( $this->request['_rendered'] ) && $this->namespace_base !== ltrim( CMB2_REST_Controller::get_intial_route(), '/' ) ) {
 			$boxes_data['form_open'] = $this->get_cb_results( array( $cmb, 'render_form_open' ) );
 			$boxes_data['form_close'] = $this->get_cb_results( array( $cmb, 'render_form_close' ) );
 
