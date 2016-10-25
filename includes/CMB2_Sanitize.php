@@ -210,7 +210,7 @@ class CMB2_Sanitize {
 	/**
 	 * Datetime to timestamp
 	 * @since  1.0.1
-	 * @return string Timestring
+	 * @return string|array Timestring
 	 */
 	public function text_datetime_timestamp( $repeat = false ) {
 

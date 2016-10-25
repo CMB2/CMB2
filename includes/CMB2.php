@@ -676,8 +676,8 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Save a repeatable group
 	 * @since  1.x.x
-	 * @param  array $field_group CMB2_Field group field object
-	 * @return mixed              Return of CMB2_Field::update_data()
+	 * @param  CMB2_Field $field_group CMB2_Field group field object
+	 * @return mixed                   Return of CMB2_Field::update_data()
 	 */
 	public function save_group_field( $field_group ) {
 		$base_id = $field_group->id();
@@ -816,7 +816,7 @@ class CMB2 extends CMB2_Base {
 
 		$registered_types = $this->box_types();
 
-		$type = false;
+		$type = '';
 
 		// if it's an array of one, extract it
 		if ( 1 === count( $registered_types ) ) {
@@ -940,10 +940,10 @@ class CMB2 extends CMB2_Base {
 	 * @since  2.0.3
 	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object
 	 * @param  CMB2_Field              $field_group (optional) CMB2_Field object (group parent)
-	 * @return CMB2_Field|false CMB2_Field object (or false)
+	 * @return CMB2_Field|false                     CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $field_group = null ) {
-		if ( is_a( $field, 'CMB2_Field' ) ) {
+		if ( $field instanceof CMB2_Field ) {
 			return $field;
 		}
 

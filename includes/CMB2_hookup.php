@@ -551,6 +551,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function delete_term( $term_id, $tt_id, $taxonomy = '' ) {
 		if ( $this->taxonomy_can_save( $taxonomy ) ) {
 
+			$data_to_delete = array();
 			foreach ( $this->cmb->prop( 'fields' ) as $field ) {
 				$data_to_delete[ $field['id'] ] = '';
 			}

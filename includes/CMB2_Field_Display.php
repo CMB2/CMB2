@@ -113,8 +113,6 @@ class CMB2_Field_Display {
 	 * Catchall method if field's 'display_cb' is NOT defined, or field type does
 	 * not have a corresponding display method
 	 * @since 2.2.2
-	 * @param  string $method    Non-existent method name
-	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function display() {
 		// If repeatable
@@ -378,7 +376,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		$field_type = new CMB2_Type_File_Base( new CMB2_Types( $this->field ) );
 
 		$id = $this->field->get_field_clone( array(
-			'id' => $field_type->_id() . '_id',
+			'id' => $this->field->_id() . '_id',
 		) )->escaped_value( 'absint' );
 
 		$this->file_output( $this->value, $id, $field_type );

@@ -164,8 +164,6 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check_filter( $can_access = true ) {
-		$can_access = true;
-
 		/**
 		 * By default, no special permissions needed.
 		 *
@@ -328,7 +326,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @since 2.2.3
 	 *
 	 * @param  string\CMB2_Field Field id or Field object.
-	 * @return array|WP_Error    Response array or WP_Error object.
+	 * @return WP_Error|WP_REST_Response
 	 */
 	public function prepare_read_field( $field ) {
 		$this->field = $this->rest_box->field_can_read( $field, true );

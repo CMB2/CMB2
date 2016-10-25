@@ -167,8 +167,6 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check_filter( $can_access = true ) {
-		$can_access = true;
-
 		/**
 		 * By default, no special permissions needed.
 		 *

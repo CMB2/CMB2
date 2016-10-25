@@ -10,6 +10,11 @@
  * @author    WebDevStudios
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
+ *
+ * @property-read read_fields Array of readable field objects.
+ * @property-read edit_fields Array of editable field objects.
+ * @property-read rest_read   Whether CMB2 object is readable via the rest api.
+ * @property-read rest_edit   Whether CMB2 object is editable via the rest api.
  */
 class CMB2_REST extends CMB2_Hookup_Base {
 
@@ -65,13 +70,13 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	protected $edit_fields = array();
 
 	/**
-	 * whether CMB2 object is readable via the rest api.
+	 * Whether CMB2 object is readable via the rest api.
 	 * @var boolean
 	 */
 	protected $rest_read = false;
 
 	/**
-	 * whether CMB2 object is editable via the rest api.
+	 * Whether CMB2 object is editable via the rest api.
 	 * @var boolean
 	 */
 	protected $rest_edit = false;
@@ -619,14 +624,45 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		return 0;
 	}
 
+	/**
+	 * Checks if a given field can be read.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string|CMB2_Field $field_id      Field ID or CMB2_Field object.
+	 * @param  boolean           $return_object Whether to return the Field object.
+	 *
+	 * @return mixed                            False if field can't be read or true|CMB2_Field object.
+	 */
 	public function field_can_read( $field_id, $return_object = false ) {
 		return $this->field_can( 'read_fields', $field_id, $return_object );
 	}
 
+	/**
+	 * Checks if a given field can be edited.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string|CMB2_Field $field_id      Field ID or CMB2_Field object.
+	 * @param  boolean           $return_object Whether to return the Field object.
+	 *
+	 * @return mixed                            False if field can't be edited or true|CMB2_Field object.
+	 */
 	public function field_can_edit( $field_id, $return_object = false ) {
 		return $this->field_can( 'edit_fields', $field_id, $return_object );
 	}
 
+	/**
+	 * Checks if a given field can be read or edited.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string            $type          Whether we are checking for read or edit fields.
+	 * @param  string|CMB2_Field $field_id      Field ID or CMB2_Field object.
+	 * @param  boolean           $return_object Whether to return the Field object.
+	 *
+	 * @return mixed                            False if field can't be read or edited or true|CMB2_Field object.
+	 */
 	protected function field_can( $type = 'read_fields', $field_id, $return_object = false ) {
 		if ( ! in_array( $field_id instanceof CMB2_Field ? $field_id->id() : $field_id, $this->{$type}, true ) ) {
 			return false;

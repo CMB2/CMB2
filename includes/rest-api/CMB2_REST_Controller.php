@@ -108,7 +108,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @since  2.2.3
 	 *
 	 * @param  string $filter         The name of the filter to apply.
-	 * @param  string $default_access The default access for this request.
+	 * @param  bool   $default_access The default access for this request.
 	 *
 	 * @return void
 	 */

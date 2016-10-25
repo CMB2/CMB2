@@ -102,7 +102,7 @@ function cmb2_get_oembed( $args = array() ) {
 	);
 
 	if ( isset( $args['wp_error'] ) && $args['wp_error'] ) {
-		return new WP_Error( 'cmb2_get_oembed_result', $wp_error, compact( 'oembed', 'args' ) );
+		return new WP_Error( 'cmb2_get_oembed_result', $error, compact( 'oembed', 'args' ) );
 	}
 
 	// Otherwise, send back error info that no oEmbeds were found

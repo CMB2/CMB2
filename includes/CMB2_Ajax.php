@@ -238,9 +238,8 @@ class CMB2_Ajax {
 	/**
 	 * Gets/updates the cached oEmbed value from/to relevant object metadata (vs postmeta)
 	 *
-	 * @since  1.3.0
-	 * @param  string  $meta_key   Postmeta's key
-	 * @param  mixed   $meta_value (Optional) value of the postmeta to be saved
+	 * @since 1.3.0
+	 * @param string $meta_key Postmeta's key
 	 */
 	protected function cache_action( $meta_key ) {
 		$func_args = func_get_args();
@@ -278,11 +277,11 @@ class CMB2_Ajax {
 	 */
 	public static function clean_stale_options_page_oembeds( $option_key ) {
 		$options = cmb2_options( $option_key )->get_options();
+		$modified = false;
 		if ( is_array( $options ) ) {
 
 			$ttl = apply_filters( 'oembed_ttl', DAY_IN_SECONDS, '', array(), 0 );
 			$now = time();
-			$modified = false;
 
 			foreach ( $options as $key => $value ) {
 				// Check for cached oembed data
@@ -303,6 +302,7 @@ class CMB2_Ajax {
 				}
 			}
 		}
+
 		// Update the option and remove stale cache data
 		if ( $modified ) {
 			$updated = cmb2_options( $option_key )->set( $options );
