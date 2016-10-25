@@ -274,7 +274,7 @@ abstract class CMB2_Base {
 	}
 
 	/**
-	 * Handles the property callbacks, and passes this object as property.
+	 * Handles the parameter callbacks, and passes this object as parameter.
 	 * @since  2.2.3
 	 * @param  callable $cb The callback method/function/closure
 	 * @return mixed        Return of the callback function.
@@ -308,6 +308,57 @@ abstract class CMB2_Base {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Checks if this object has parameter corresponding to the given filter
+	 * which is callable. If so, it registers the callback, and if not,
+	 * converts the maybe-modified $val to a boolean for return.
+	 *
+ 	 * The registered handlers will have a parameter name which matches the filter, except:
+ 	 * - The 'cmb2_api' prefix will be removed
+ 	 * - A '_cb' suffix will be added (to stay inline with other '*_cb' parameters).
+ 	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $hook_name     The hook name.
+	 * @param  bool   $val           The default value.
+	 * @param  string $hook_function The hook function. Default: 'add_filter'
+	 *
+	 * @return null|bool             Null if hook is registered, or bool for value.
+	 */
+	public function maybe_hook_parameter( $hook_name, $val = null, $hook_function = 'add_filter' ) {
+
+		// Remove filter prefix, add param suffix.
+		$parameter = substr( $hook_name, strlen( 'cmb2_api_' ) ) . '_cb';
+
+		return self::maybe_hook(
+			$this->prop( $parameter, $val ),
+			$hook_name,
+			$hook_function
+		);
+	}
+
+	/**
+	 * Checks if given value is callable, and registers the callback.
+	 * If is non-callable, converts the $val to a boolean for return.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  bool   $val           The default value.
+	 * @param  string $hook_name     The hook name.
+	 * @param  string $hook_function The hook function.
+	 *
+	 * @return null|bool         Null if hook is registered, or bool for value.
+	 */
+	public static function maybe_hook( $val, $hook_name, $hook_function ) {
+		if ( is_callable( $val ) ) {
+			$hook_function( $hook_name, $val, 10, 2 );
+			return null;
+		}
+
+		// Cast to bool.
+		return !! $val;
 	}
 
 	/**
