@@ -138,12 +138,12 @@ class Test_CMB2_Utils extends Test_CMB2 {
 				CMB2_Utils::get_url_from_dir( ABSPATH . $located )
 			);
 
-			add_filter( 'theme_root', array( 'CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
+			add_filter( 'theme_root', array( 'Test_CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
 			$this->assertEquals(
 				site_url( $located ),
-				CMB2_Utils_WIN::get_url_from_dir( ABSPATH . $located )
+				Test_CMB2_Utils_WIN::get_url_from_dir( ABSPATH . $located )
 			);
-			remove_filter( 'theme_root', array( 'CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
+			remove_filter( 'theme_root', array( 'Test_CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
 		}
 
 	}
@@ -223,7 +223,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 }
 
-class CMB2_Utils_WIN extends CMB2_Utils {
+class Test_CMB2_Utils_WIN extends CMB2_Utils {
 	public static $ABSPATH = 'C:\xampp\htdocs\the-site-dir';
 
 	public static function _change_to_wamp_theme_root() {
