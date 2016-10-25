@@ -468,7 +468,8 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Add a hidden field to the list of hidden fields to be rendered later
 	 * @since 2.0.0
-	 * @param array  $field_args Array of field arguments to be passed to CMB2_Field
+	 * @param array           $field_args  Array of field arguments to be passed to CMB2_Field
+	 * @param CMB2_Field|null $field_group CMB2_Field group field object
 	 */
 	public function add_hidden_field( $field_args, $field_group = null ) {
 		if ( isset( $field_args['field_args'] ) ) {
@@ -939,7 +940,7 @@ class CMB2 extends CMB2_Base {
 	 * Get a field object
 	 * @since  2.0.3
 	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object
-	 * @param  CMB2_Field              $field_group (optional) CMB2_Field object (group parent)
+	 * @param  CMB2_Field|null         $field_group (optional) CMB2_Field object (group parent)
 	 * @return CMB2_Field|false                     CMB2_Field object (or false)
 	 */
 	public function get_field( $field, $field_group = null ) {
@@ -971,11 +972,11 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Handles determining which type of arguments to pass to CMB2_Field
 	 * @since  2.0.7
-	 * @param  mixed  $field_id     Field (or group field) ID
-	 * @param  mixed  $field_args   Array of field arguments
-	 * @param  mixed  $sub_field_id Sub field ID (if field_group exists)
-	 * @param  mixed  $field_group  If a sub-field, will be the parent group CMB2_Field object
-	 * @return array                Array of CMB2_Field arguments
+	 * @param  mixed           $field_id     Field (or group field) ID
+	 * @param  mixed           $field_args   Array of field arguments
+	 * @param  mixed           $sub_field_id Sub field ID (if field_group exists)
+	 * @param  CMB2_Field|null $field_group  If a sub-field, will be the parent group CMB2_Field object
+	 * @return array                         Array of CMB2_Field arguments
 	 */
 	public function get_field_args( $field_id, $field_args, $sub_field_id, $field_group ) {
 
@@ -1061,7 +1062,7 @@ class CMB2 extends CMB2_Base {
 	 * @since  2.0.0
 	 * @param  array  $field           Metabox field config array
 	 * @param  int    $position        (optional) Position of metabox. 1 for first, etc
-	 * @return mixed                   Field id or false
+	 * @return string|false            Field id or false
 	 */
 	public function add_field( array $field, $position = 0 ) {
 		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {

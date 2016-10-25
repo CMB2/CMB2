@@ -30,7 +30,7 @@ class CMB2_Ajax {
 	/**
 	 * Get the singleton instance of this class
 	 * @since 2.2.2
-	 * @return object
+	 * @return CMB2_Ajax
 	 */
 	public static function get_instance() {
 		if ( ! ( self::$instance instanceof self ) ) {
