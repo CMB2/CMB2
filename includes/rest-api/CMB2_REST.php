@@ -396,7 +396,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed           $value       The value of the field
+	 * @param  mixed           $values      The value of the field
 	 * @param  object          $object      The object from the response
 	 * @param  string          $field_name  Name of field
 	 * @param  WP_REST_Request $request     Current request
@@ -415,7 +415,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed           $value       The value of the field
+	 * @param  mixed           $values      The value of the field
 	 * @param  object          $object      The object from the response
 	 * @param  string          $field_name  Name of field
 	 * @param  WP_REST_Request $request     Current request
@@ -434,7 +434,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed           $value       The value of the field
+	 * @param  mixed           $values      The value of the field
 	 * @param  object          $object      The object from the response
 	 * @param  string          $field_name  Name of field
 	 * @param  WP_REST_Request $request     Current request
@@ -453,7 +453,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed           $value       The value of the field
+	 * @param  mixed           $values      The value of the field
 	 * @param  object          $object      The object from the response
 	 * @param  string          $field_name  Name of field
 	 * @param  WP_REST_Request $request     Current request
@@ -472,7 +472,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed           $value            The value of the field
+	 * @param  mixed           $values           The value of the field
 	 * @param  object          $object           The object from the response
 	 * @param  WP_REST_Request $request          Current request
 	 * @param  string          $object_type      The request object type

@@ -9,14 +9,16 @@
  * @author    WebDevStudios
  * @license   GPL-2.0+
  * @link      http://webdevstudios.com
+ *
+ * @method string _id()
+ * @method string _desc()
  */
 class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 
 	/**
 	 * Handles outputting a 'wysiwyg' element
 	 * @since  1.1.0
-	 * @param  array  $args Override arguments
-	 * @return string       Form wysiwyg element
+	 * @return string Form wysiwyg element
 	 */
 	public function render() {
 		$field = $this->field;
