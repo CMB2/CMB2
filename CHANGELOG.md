@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 * If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate.
 * Normalize WordPress root path (`ABSPATH`) and theme rooth path (`get_theme_root()`). Props [@rianbotha](https://github.com/rianbotha) ([#677](https://github.com/WebDevStudios/CMB2/pull/677), [#676](https://github.com/WebDevStudios/CMB2/pull/676)).
 * Fix issue with `'cmb2_remove_row'` Javascript callback for non-group row removal. Fixes [#729](https://github.com/WebDevStudios/CMB2/pull/729)).
+* Fix issue with missing assignment of variable (undefined variable). Props [@anhskohbo](https://github.com/anhskohbo) ([#779](https://github.com/WebDevStudios/CMB2/pull/779)).
 
 ## 2.2.2.1 - 2016-06-27
 
