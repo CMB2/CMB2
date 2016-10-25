@@ -27,7 +27,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 				'description' => __( 'Includes the box object which the fields are registered to in the response.', 'cmb2' ),
 			),
 			'_rendered' => array(
-				'description' => __( 'When the \'rendered\' argument is passed, the renderable field attributes will be returned fully rendered. By default, the names of the callback handers for the renderable attributes will be returned.', 'cmb2' ),
+				'description' => __( 'When the \'_rendered\' argument is passed, the renderable field attributes will be returned fully rendered. By default, the names of the callback handers for the renderable attributes will be returned.', 'cmb2' ),
 			),
 			'object_id' => array(
 				'description' => __( 'To view or modify the field\'s value, the \'object_id\' and \'object_type\' arguments are required.', 'cmb2' ),
