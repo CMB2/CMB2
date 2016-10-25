@@ -824,7 +824,7 @@ class CMB2 extends CMB2_Base {
 			if ( is_string( $last ) ) {
 				$type = $last;
 			}
-		} elseif ( in_array( $this->current_object_type(), $registered_types, true ) ) {
+		} elseif ( in_array( $page_type = $this->current_object_type(), $registered_types, true ) ) {
 			$type = $page_type;
 		}
 
