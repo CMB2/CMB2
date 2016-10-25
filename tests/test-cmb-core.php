@@ -10,6 +10,9 @@
 
 require_once( 'cmb-tests-base.php' );
 
+/**
+ * @todo Tests for maybe_hook_parameter.
+ */
 class Test_CMB2_Core extends Test_CMB2 {
 
 	/**

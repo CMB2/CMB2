@@ -71,6 +71,13 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	protected $rest_box;
 
 	/**
+	 * CMB2_Field Instance
+	 *
+	 * @var CMB2_Field
+	 */
+	protected $field;
+
+	/**
 	 * The initial route
 	 * @var   string
 	 * @since 2.2.3
@@ -93,129 +100,84 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Check if a given request has access to get items.
+	 * A wrapper for `apply_filters` which checks for box/field properties to hook to the filter.
 	 *
-	 * @since 2.2.3
-	 *
-	 * @param  WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|boolean
-	 */
-	public function get_items_permissions_check( $request ) {
-		$this->initiate_request( $request, __FUNCTION__ );
-		$can_access = true;
-
-		$this->maybe_hook_callback( 'get_items_permissions_check_cb' );
-
-		/**
-		 * By default, no special permissions needed.
-		 *
-		 * @since 2.2.3
-		 *
-		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
-		 * @param object $request    The WP_REST_Request object
-		 */
-		return apply_filters( 'cmb2_api_get_items_permissions_check', $can_access, $this );
-	}
-
-	/**
-	 * Check if a given request has access to a field or box.
-	 * By default, no special permissions needed, but filtering return value.
-	 *
-	 * @since 2.2.3
-	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
-	 */
-	public function get_item_permissions_check( $request ) {
-		$this->initiate_request( $request, __FUNCTION__ );
-		$can_access = true;
-
-		$this->maybe_hook_callback( 'get_item_permissions_check_cb' );
-
-		/**
-		 * By default, no special permissions needed.
-		 *
-		 * @since 2.2.3
-		 *
-		 * @param bool   $can_access Whether this CMB2 endpoint can be accessed.
-		 * @param object $request    The WP_REST_Request object
-		 */
-		return apply_filters( 'cmb2_api_get_item_permissions_check', $can_access, $this );
-	}
-
-	/**
-	 * Check if a given request has access to update a field value.
-	 * By default, requires 'edit_others_posts' capability, but filtering return value.
-	 *
-	 * @since 2.2.3
-	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
-	 */
-	public function update_field_value_permissions_check( $request ) {
-		$this->initiate_request( $request, __FUNCTION__ );
-		$can_update = current_user_can( 'edit_others_posts' );
-
-		$this->maybe_hook_callback( 'update_field_value_permissions_check_cb' );
-
-		/**
-		 * By default, 'edit_others_posts' is required capability.
-		 *
-		 * @since 2.2.3
-		 *
-		 * @param bool   $can_update Whether this CMB2 endpoint can be accessed.
-		 * @param object $request    The WP_REST_Request object
-		 */
-		return apply_filters( 'cmb2_api_update_field_value_permissions_check', $can_update, $this );
-	}
-
-	/**
-	 * Check if a given request has access to delete a field value.
-	 * By default, requires 'delete_others_posts' capability, but filtering return value.
-	 *
-	 * @since 2.2.3
-	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
-	 */
-	public function delete_field_value_permissions_check( $request ) {
-		$this->initiate_request( $request, __FUNCTION__ );
-		$can_delete = current_user_can( 'delete_others_posts' );
-
-		$this->maybe_hook_callback( 'delete_field_value_permissions_check_cb' );
-
-		/**
-		 * By default, 'delete_others_posts' is required capability.
-		 *
-		 * @since 2.2.3
-		 *
-		 * @param bool   $can_delete Whether this CMB2 endpoint can be accessed.
-		 * @param object $request    The WP_REST_Request object
-		 */
-		return apply_filters( 'cmb2_api_delete_field_value_permissions_check', $can_delete, $this );
-	}
-
-	/**
-	 * Check if a CMB object callback property exists, and if it does,
+	 * Checks if a CMB object callback property exists, and if it does,
 	 * hook it to the permissions filter.
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  string  $to_check The callback property to check.
+	 * @param  string $filter         The name of the filter to apply.
+	 * @param  string $default_access The default access for this request.
 	 *
 	 * @return void
 	 */
-	public function maybe_hook_callback( $to_check ) {
-		if ( ! $this->request->get_param( 'cmb_id' ) ) {
+	public function maybe_hook_callback_and_apply_filters( $filter, $default_access ) {
+		if ( ! $this->rest_box && $this->request->get_param( 'cmb_id' ) ) {
+			$this->rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
+		}
+
+		$default_access = $this->maybe_hook_registered_callback( $filter, $default_access );
+
+		/**
+		 * Apply the permissions check filter.
+		 *
+		 * @since 2.2.3
+		 *
+		 * @param bool   $default_access Whether this CMB2 endpoint can be accessed.
+		 * @param object $controller     This CMB2_REST_Controller object.
+		 */
+		$default_access = apply_filters( $filter, $default_access, $this );
+
+		$this->maybe_unhook_registered_callback( $filter );
+
+		return $default_access;
+	}
+
+	/**
+	 * Checks if the CMB2 box has any registered callback parameters for the given filter.
+	 *
+	 * The registered handlers will have a property name which matches the filter, except:
+	 * - The 'cmb2_api' prefix will be removed
+	 * - A '_cb' suffix will be added (to stay inline with other '*_cb' parameters).
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $filter      The filter name.
+	 * @param  bool   $default_val The default filter value.
+	 *
+	 * @return bool                The possibly-modified filter value (if the '*_cb' param is non-callable).
+	 */
+	public function maybe_hook_registered_callback( $filter, $default_val ) {
+		if ( ! $this->rest_box || is_wp_error( $this->rest_box ) ) {
+			return $default_val;
+		}
+
+		// Hook box specific filter callbacks.
+		$val = $this->rest_box->cmb->maybe_hook_parameter( $filter, $default_val );
+		if ( null !== $val ) {
+			$default_val = $val;
+		}
+
+		return $default_val;
+	}
+
+	/**
+	 * Unhooks any CMB2 box registered callback parameters for the given filter.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $filter The filter name.
+	 *
+	 * @return void
+	 */
+	public function maybe_unhook_registered_callback( $filter ) {
+		if ( ! $this->rest_box || is_wp_error( $this->rest_box ) ) {
 			return;
 		}
 
-		$rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
-
-		if ( $rest_box && $rest_box->cmb->prop( $to_check ) ) {
-			$filter = 'cmb2_api_' . ( substr( $to_check, 0, strlen( $to_check ) - 3 ) );
-			add_filter( $filter, $rest_box->cmb->prop( $to_check ), 10, 2 );
-		}
+		// Unhook box specific filter callbacks.
+		$this->rest_box->cmb->maybe_hook_parameter( $filter, null, 'remove_filter' );
 	}
 
 	/**
@@ -226,8 +188,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * @param  mixed $data
 	 * @return array $data
 	 */
-	public function prepare_item( $post ) {
-		return $this->prepare_item_for_response( $post, $this->request );
+	public function prepare_item( $data ) {
+		return $this->prepare_item_for_response( $data, $this->request );
 	}
 
 	/**

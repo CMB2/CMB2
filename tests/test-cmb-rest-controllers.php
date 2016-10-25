@@ -13,6 +13,8 @@ require_once( 'cmb-rest-tests-base.php' );
 /**
  * Test the REST endpoints
  *
+ * @todo  More Tests for maybe_hook_registered_callback.
+ *
  * @group cmb2-rest-api
  *
  * @link https://pantheon.io/blog/test-coverage-your-wp-rest-api-project
@@ -109,7 +111,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 			'id' => __FUNCTION__,
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
 			'object_types' => array( 'post' ),
-			'get_item_permissions_check_cb' => 'wp_die',
+			'get_box_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();
 
@@ -150,7 +152,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_read_box_field_filter() {
-		add_filter( 'cmb2_api_get_item_permissions_check', '__return_false' );
+		add_filter( 'cmb2_api_get_field_permissions_check', '__return_false' );
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => array( 403 => 'rest_forbidden' ),
@@ -172,7 +174,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 			'id' => __FUNCTION__,
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
 			'object_types' => array( 'post' ),
-			'get_item_permissions_check_cb' => 'wp_die',
+			'get_field_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();
 
