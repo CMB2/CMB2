@@ -846,14 +846,16 @@ Sidebar Placement Adjustments
   right: 0;
   top: .5em;
   line-height: 1em;
-  cursor: pointer;
   padding: 2px 6px 3px;
+  opacity: .5;
 }
 /* line 46, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
+  cursor: pointer;
   color: #a00;
+  opacity: 1;
 }
-/* line 48, sass/partials/_collapsible_ui.scss */
+/* line 50, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
   color: #f00;
 }
