@@ -53,7 +53,7 @@ Sidebar Placement Adjustments
 	}
 
 	.cmb-th,
-	.cmb-td,
+	.cmb-td:not(.cmb-td.cmb-remove-row),
 	.cmb-th + .cmb-td {
 		width: 100%;
 		display: block;
@@ -136,9 +136,9 @@ Sidebar Placement Adjustments
 		font-style: italic;
 	}
 
-	.cmb-remove-row {
-		clear: both;
-		padding-top: 12px;
+	.cmb-td.cmb-remove-row {
+		left: 7px;
+		right: auto;
 		padding-bottom: 0;
 	}
 

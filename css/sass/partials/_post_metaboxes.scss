@@ -83,34 +83,15 @@ Post Metaboxes
 		padding-top: 1.8em;
 	}
 
-	.cmb2-metabox > .cmb-row {
-		&.table-layout, .cmb-row.table-layout {
-			.cmb-repeat-table .cmb-tbody {
-				display: table;
-				width: 100%;
+	.cmb-row.cmb-repeat:not(.cmb-repeat-group-wrap) {
+		.cmb-repeat-table {
+			background-color: #fafafa;
+			border: 1px solid $light-gray;
+			border-bottom: none;
+		}
 
-				input.regular-text {
-					width: 100%;
-				}
-
-				.cmb-row:not(.hidden):not(.empty-row) {
-					display: table-row;
-				}
-
-				.cmb-td {
-					display: table-cell;
-					float: none;
-					width: 100%;
-				}
-
-				.cmb-row:not(:first-of-type) .cmb-td {
-					padding-top: 1.8em;
-				}
-
-				.cmb-td.cmb-remove-row {
-					padding-right: 0;
-				}
-			}
+		.cmb-add-row:before {
+			background-color: $light-gray;
 		}
 	}
 }
