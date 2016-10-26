@@ -41,10 +41,12 @@
 		left: 0;
 		top: .5em;
 		line-height: 1em;
-		cursor: pointer;
 		padding: 2px 6px 3px;
+		opacity: .5;
 		&:not([disabled]) {
+			cursor: pointer;
 			color: $dark-red;
+			opacity: 1;
 			&:hover {
 				color: $red;
 			}
