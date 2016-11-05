@@ -197,7 +197,7 @@ window.CMB2 = window.CMB2 || {};
 
 		// Create the media frame.
 		media.frames[ media.field ] = wp.media( {
-			title: cmb.metabox().find('label[for=' + media.field + ']').text(),
+			title: cmb.metabox().find('label[for="' + media.field + '"]').text(),
 			library : media.fieldData.queryargs || {},
 			button: {
 				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
