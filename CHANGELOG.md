@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Bug Fixes
+* Use quotes for `label[for=""]` selector. Fixed `Syntax error, unrecognized expression`. Props [@anhskohbo](https://github.com/anhskohbo) ([#789](https://github.com/WebDevStudios/CMB2/pull/789)).
+
+
 ## 2.2.3 - 2016-10-25
 
 ### Enhancements
