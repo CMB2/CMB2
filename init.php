@@ -48,7 +48,7 @@
                   or things might explode!
 *************************************************************************/
 
-if ( ! class_exists( 'CMB2_Bootstrap_2231', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -61,14 +61,14 @@ if ( ! class_exists( 'CMB2_Bootstrap_2231', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      http://webdevstudios.com
 	 */
-	class CMB2_Bootstrap_2231 {
+	class CMB2_Bootstrap_224_Trunk {
 
 		/**
 		 * Current version number
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.2.3.1';
+		const VERSION = '2.2.4';
 
 		/**
 		 * Current version hook priority.
@@ -80,17 +80,17 @@ if ( ! class_exists( 'CMB2_Bootstrap_2231', false ) ) {
 		const PRIORITY = 9978;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_2231 object
+		 * Single instance of the CMB2_Bootstrap_224_Trunk object
 		 *
-		 * @var CMB2_Bootstrap_2231
+		 * @var CMB2_Bootstrap_224_Trunk
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_2231 object
+		 * Creates/returns the single instance CMB2_Bootstrap_224_Trunk object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_2231 Single instance object
+		 * @return CMB2_Bootstrap_224_Trunk Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -181,6 +181,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_2231', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_2231::initiate();
+	CMB2_Bootstrap_224_Trunk::initiate();
 
 }
