@@ -6,9 +6,11 @@ All notable changes to this project will be documented in this file.
 ## 2.2.3.1 - 2016-11-08
 
 ### Enhancements
+
 * Better styling for disabled group "X" buttons, and add title attr. Fixes [#773](https://github.com/WebDevStudios/CMB2/issues/773).
 
 ### Bug Fixes
+
 * Use quotes for `label[for=""]` selector. Fixed `Syntax error, unrecognized expression`. Props [@anhskohbo](https://github.com/anhskohbo) ([#789](https://github.com/WebDevStudios/CMB2/pull/789)).
 * Fix `ReferenceError: tinyMCE is not defined` javascript errors (happening when trying to remove a repeatable field/group). Fixes [#790](https://github.com/WebDevStudios/CMB2/issues/790), and [#730](https://github.com/WebDevStudios/CMB2/issues/730).
 * Fix REST API `'show_in_rest'` examples in `example-functions.php`. Any REST API boxes/fields must use the `'cmb2_init'` hook (as opposed to the `'cmb2_admin_init'` hook).
