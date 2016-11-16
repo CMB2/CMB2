@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Bug Fixes
+* Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
+
 ## 2.2.3.1 - 2016-11-08
 
 ### Enhancements
