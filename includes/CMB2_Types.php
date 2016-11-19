@@ -50,25 +50,14 @@ class CMB2_Types {
 	 * @param array  $arguments All arguments passed to the method
 	 */
 	public function __call( $fieldtype, $arguments ) {
-		$proxied = array(
-			'get_object_terms' => array(),
-			'is_valid_img_ext' => false,
-			'parse_args' => array(),
-			'concat_items' => '',
-			'select_option' => '',
-			'list_input' => '',
-			'list_input_checkbox' => '',
-			'img_status_output' => '',
-			'file_status_output' => '',
-			'parse_picker_options' => array(),
-		);
-		if ( isset( $proxied[ $fieldtype ] ) ) {
-			// Proxies the method call to the CMB2_Type_Base object
-			return $this->proxy_method( $fieldtype, $proxied[ $fieldtype ], $arguments );
+
+		// Check for methods to be proxied to the CMB2_Type_Base object.
+		if ( $exists = $this->maybe_proxy_method( $fieldtype, $arguments ) ) {
+			return $exists['value'];
 		}
 
 		/**
-		 * Pass non-existent field types through an action
+		 * Pass non-existent field types through an action.
 		 *
 		 * The dynamic portion of the hook name, $fieldtype, refers to the field type.
 		 *
@@ -177,6 +166,36 @@ class CMB2_Types {
 	}
 
 	/**
+	 * Check for methods to be proxied to the CMB2_Type_Base object.
+	 * @since  2.2.4
+	 * @param  string $method    The possible method to proxy.
+	 * @param  array  $arguments All arguments passed to the method.
+	 * @return bool|array       False if not proxied, else array with 'value' key being the return of the method.
+	 */
+	public function maybe_proxy_method( $method, $arguments ) {
+		$exists = false;
+
+		$proxied = array(
+			'get_object_terms' => array(),
+			'is_valid_img_ext' => false,
+			'parse_args' => array(),
+			'concat_items' => '',
+			'select_option' => '',
+			'list_input' => '',
+			'list_input_checkbox' => '',
+			'img_status_output' => '',
+			'file_status_output' => '',
+			'parse_picker_options' => array(),
+		);
+		if ( isset( $proxied[ $method ] ) ) {
+			$exists = array(
+				// Ok, proxy the method call to the CMB2_Type_Base object.
+				'value' => $this->proxy_method( $method, $proxied[ $method ], $arguments ),
+			);
+		}
+
+		return $exists;
+	}
 	 * Retrieve text parameter from field's options array (if it has one), or use fallback text
 	 * @since  2.0.0
 	 * @param  string  $text_key Key in field's options array
