@@ -56,6 +56,11 @@ class CMB2_Types {
 			return $exists['value'];
 		}
 
+		// Check for custom field type class.
+		if ( $object = $this->maybe_custom_field_object( $fieldtype, $arguments ) ) {
+			return $object->render();
+		}
+
 		/**
 		 * Pass non-existent field types through an action.
 		 *
@@ -196,6 +201,39 @@ class CMB2_Types {
 
 		return $exists;
 	}
+
+	/**
+	 * Checks for a custom field class to use for rendering.
+	 * @since 2.2.4
+	 * @param string $fieldtype Non-existent field type name
+	 * @param array  $arguments All arguments passed to the method
+	 */
+	public function maybe_custom_field_object( $fieldtype, $arguments ) {
+		/**
+		 * Filters the custom field type class used for rendering the field. Class is required to extend CMB2_Type_Base.
+		 *
+		 * The dynamic portion of the hook name, $fieldtype, refers to the (custom) field type.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $class              The custom field type class to use. Default null.
+		 * @param object $field_type_object  This `CMB2_Types` object
+		 */
+		$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", null, $this, $arguments );
+
+		if ( $render_class_name && class_exists( $render_class_name ) ) {
+
+			$this->type = new $render_class_name( $this, $arguments );
+
+			if ( ! ( $this->type instanceof CMB2_Type_Base ) ) {
+				throw new Exception( __( 'Custom CMB2 field type classes must extend CMB2_Type_Base.', 'cmb2' ) );
+			}
+		}
+
+		return $this->type;
+	}
+
+	/**
 	 * Retrieve text parameter from field's options array (if it has one), or use fallback text
 	 * @since  2.0.0
 	 * @param  string  $text_key Key in field's options array
