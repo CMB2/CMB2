@@ -147,7 +147,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		} );
 
 		if ( true === initiated ) {
-			if( 'undefined' !== typeof window.QTags ) {
+			if ( 'undefined' !== typeof window.QTags ) {
 				window.QTags._buttonsInit();
 			}
 
@@ -282,7 +282,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		$toReplace.replaceWith( data.template( data ) );
 
 		window.tinyMCE.init( tinyMCEPreInit.mceInit[ data.id ] );
-		if( 'function' === typeof window.quicktags ) {
+		if ( 'function' === typeof window.quicktags ) {
 			window.quicktags( tinyMCEPreInit.qtInit[ data.id ] );
 		}
 
