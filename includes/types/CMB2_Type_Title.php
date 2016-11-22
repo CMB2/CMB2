@@ -17,17 +17,17 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 	 * @return string Heading element
 	 */
 	public function render() {
+		$name = $this->field->args( 'name' );
+		$tag  = 'span';
 
-		$tag = $this->field->object_type == 'post' ? 'h5' : 'h3';
-
-		if ( empty( $this->field->args( 'name' ) ) ) {
-			$tag = 'span';
+		if ( ! empty( $name ) ) {
+			$tag = $this->field->object_type == 'post' ? 'h5' : 'h3';
 		}
 
 		$a = $this->parse_args( 'title', array(
 			'tag'   => $tag,
-			'class' => empty( $this->field->args( 'name' ) ) ? 'cmb2-metabox-title-anchor' : 'cmb2-metabox-title',
-			'name'  => $this->field->args( 'name' ),
+			'class' => empty( $name ) ? 'cmb2-metabox-title-anchor' : 'cmb2-metabox-title',
+			'name'  => $name,
 			'desc'  => $this->_desc( true ),
 			'id'    => str_replace( '_', '-', sanitize_html_class( $this->field->id() ) ),
 		) );
