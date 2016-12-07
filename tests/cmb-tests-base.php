@@ -103,10 +103,8 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	protected function capture_render( $cb ) {
 		ob_start();
 		call_user_func( $cb );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
+		// grab the data from the output buffer and add it to our $content variable
+		return ob_get_clean();
 	}
 
 	protected function render_field( $field ) {
