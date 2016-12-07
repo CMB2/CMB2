@@ -696,6 +696,10 @@ class CMB2 extends CMB2_Base {
 		$field_group->data_to_save = $this->data_to_save;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
+			if ( 'title' === $field_args['type'] ) {
+				// Don't process title fields
+				continue;
+			}
 
 			$field  = $this->get_new_field( $field_args, $field_group );
 			$sub_id = $field->id( true );
