@@ -260,8 +260,7 @@ function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	ob_start();
 	// Get cmb form
 	cmb2_print_metabox_form( $cmb, $object_id, $args );
-	$form = ob_get_contents();
-	ob_end_clean();
+	$form = ob_get_clean();
 
 	return apply_filters( 'cmb2_get_metabox_form', $form, $object_id, $cmb );
 }

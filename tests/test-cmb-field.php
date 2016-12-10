@@ -66,8 +66,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->field->peform_param_callback( 'before_field' );
 		$this->field->peform_param_callback( 'after_field' );
 		// grab the data from the output buffer and add it to our $content variable
-		$content = ob_get_contents();
-		ob_end_clean();
+		$content = ob_get_clean();
 
 		$this->assertEquals( 'before_field_cb_test_testafter_field_static', $content );
 	}

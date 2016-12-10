@@ -50,25 +50,19 @@ class CMB2_Types {
 	 * @param array  $arguments All arguments passed to the method
 	 */
 	public function __call( $fieldtype, $arguments ) {
-		$proxied = array(
-			'get_object_terms' => array(),
-			'is_valid_img_ext' => false,
-			'parse_args' => array(),
-			'concat_items' => '',
-			'select_option' => '',
-			'list_input' => '',
-			'list_input_checkbox' => '',
-			'img_status_output' => '',
-			'file_status_output' => '',
-			'parse_picker_options' => array(),
-		);
-		if ( isset( $proxied[ $fieldtype ] ) ) {
-			// Proxies the method call to the CMB2_Type_Base object
-			return $this->proxy_method( $fieldtype, $proxied[ $fieldtype ], $arguments );
+
+		// Check for methods to be proxied to the CMB2_Type_Base object.
+		if ( $exists = $this->maybe_proxy_method( $fieldtype, $arguments ) ) {
+			return $exists['value'];
+		}
+
+		// Check for custom field type class.
+		if ( $object = $this->maybe_custom_field_object( $fieldtype, $arguments ) ) {
+			return $object->render();
 		}
 
 		/**
-		 * Pass non-existent field types through an action
+		 * Pass non-existent field types through an action.
 		 *
 		 * The dynamic portion of the hook name, $fieldtype, refers to the field type.
 		 *
@@ -174,6 +168,68 @@ class CMB2_Types {
 		}
 
 		return null !== $this->type;
+	}
+
+	/**
+	 * Check for methods to be proxied to the CMB2_Type_Base object.
+	 * @since  2.2.4
+	 * @param  string $method    The possible method to proxy.
+	 * @param  array  $arguments All arguments passed to the method.
+	 * @return bool|array       False if not proxied, else array with 'value' key being the return of the method.
+	 */
+	public function maybe_proxy_method( $method, $arguments ) {
+		$exists = false;
+
+		$proxied = array(
+			'get_object_terms' => array(),
+			'is_valid_img_ext' => false,
+			'parse_args' => array(),
+			'concat_items' => '',
+			'select_option' => '',
+			'list_input' => '',
+			'list_input_checkbox' => '',
+			'img_status_output' => '',
+			'file_status_output' => '',
+			'parse_picker_options' => array(),
+		);
+		if ( isset( $proxied[ $method ] ) ) {
+			$exists = array(
+				// Ok, proxy the method call to the CMB2_Type_Base object.
+				'value' => $this->proxy_method( $method, $proxied[ $method ], $arguments ),
+			);
+		}
+
+		return $exists;
+	}
+
+	/**
+	 * Checks for a custom field class to use for rendering.
+	 * @since 2.2.4
+	 * @param string $fieldtype Non-existent field type name
+	 */
+	public function maybe_custom_field_object( $fieldtype ) {
+		/**
+		 * Filters the custom field type class used for rendering the field. Class is required to extend CMB2_Type_Base.
+		 *
+		 * The dynamic portion of the hook name, $fieldtype, refers to the (custom) field type.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $class              The custom field type class to use. Default null.
+		 * @param object $field_type_object  This `CMB2_Types` object.
+		 */
+		$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", null, $this );
+
+		if ( $render_class_name && class_exists( $render_class_name ) ) {
+
+			$this->type = new $render_class_name( $this );
+
+			if ( ! ( $this->type instanceof CMB2_Type_Base ) ) {
+				throw new Exception( __( 'Custom CMB2 field type classes must extend CMB2_Type_Base.', 'cmb2' ) );
+			}
+		}
+
+		return $this->type;
 	}
 
 	/**
