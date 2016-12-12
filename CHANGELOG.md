@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 * Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
 * Repeatable WYSIWYG no longer breaks if `'quicktags'` param is set to false. Props [@timburden](https://github.com/timburden) ([#797](https://github.com/WebDevStudios/CMB2/pull/797), [#796](https://github.com/WebDevStudios/CMB2/issues/796)).
 * Do not process title fields during group field save process.
+* Fix issue where term-meta values were not being displayed for some users. Props [@sbussetti](https://github.com/sbussetti) ([#763](https://github.com/WebDevStudios/CMB2/pull/763), [#700](https://github.com/WebDevStudios/CMB2/issues/700)).
 
 ## 2.2.3.1 - 2016-11-08
 
