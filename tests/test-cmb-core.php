@@ -132,6 +132,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
+
+		$this->term_id = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'save_term' ) );
 	}
 
 	public function tearDown() {
@@ -719,7 +721,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		}
 	}
 
-	public function test_get_sanitized_values() {
+	public function test_cmb2_get_metabox_sanitized_values() {
 		// Set our object id. Do this to test that it doesn't get broken
 		$this->cmb->object_id( $this->post_id );
 
@@ -756,6 +758,46 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		// And verify that the post-meta was not saved to the post
 		$this->assertTrue( ! isset( $meta_values['test_test'], $meta_values['another_field'] ) );
+	}
+
+	public function test_get_sanitized_values() {
+		$cmb = new CMB2( array(
+			'id' => __FUNCTION__,
+			'fields' => array(
+				array(
+					'id'   => 'test_test',
+					'type' => 'text',
+				),
+				array(
+					'id'       => 'test_tax',
+					'type'     => 'taxonomy_multicheck',
+					'taxonomy' => 'category',
+				),
+			),
+		) );
+
+		$term = get_term_by( 'id', $this->term_id, 'category' );
+
+		$value = array(
+			'nope' => 'nope',
+			'remove' => array( 'remove', 'this' ),
+			'test_test' => 'A value',
+			'test_tax' => array(
+				$term->slug
+			),
+		);
+
+		$sanitized = $cmb->get_sanitized_values( $value );
+		error_log( '$sanitized: '. print_r( $sanitized, true ) );
+
+		$expected = array(
+			'test_test' => 'A value',
+			'test_tax' => array(
+				$term->slug
+			),
+		);
+
+		$this->assertEquals( $expected, $sanitized );
 	}
 
 	public function test_get_field() {
