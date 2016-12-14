@@ -16,7 +16,7 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 		$field = $this->field;
 		$names = $this->get_object_terms();
 
-		$saved_term = is_wp_error( $names ) || empty( $names ) ? $field->get_default() : $names[key( $names )]->slug;
+		$saved_term = is_wp_error( $names ) || empty( $names ) ? $this->field->get_default() : array_shift( $names )->slug;
 		$terms      = $this->get_terms();
 		$options    = '';
 		$i = 1;
