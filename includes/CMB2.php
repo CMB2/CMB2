@@ -517,8 +517,14 @@ class CMB2 extends CMB2_Base {
 		// Ensure temp. data store is empty
 		cmb2_options( 0 )->set();
 
+		// We want to get any taxonomy values back.
+		add_filter( "cmb2_return_taxonomy_values_{$this->cmb_id}", '__return_true' );
+
 		// Process/save fields
 		$this->process_fields();
+
+		// Put things back the way they were.
+		remove_filter( "cmb2_return_taxonomy_values_{$this->cmb_id}", '__return_true' );
 
 		// Get data from temp. data store
 		$sanitized_values = cmb2_options( 0 )->get_options();

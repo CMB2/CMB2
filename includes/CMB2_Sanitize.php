@@ -80,11 +80,7 @@ class CMB2_Sanitize {
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_multicheck':
 			case 'taxonomy_multicheck_inline':
-				if ( $this->field->args( 'taxonomy' ) ) {
-					wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
-				} else {
-					CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
-				}
+				$sanitized_value = $this->_taxonomy();
 				break;
 			case 'multicheck':
 			case 'multicheck_inline':
@@ -96,11 +92,64 @@ class CMB2_Sanitize {
 			default:
 				// Handle repeatable fields array
 				// We'll fallback to 'sanitize_text_field'
-				$sanitized_value = is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : sanitize_text_field( $this->value );
+				$sanitized_value = $this->_default_sanitization();
 				break;
 		}
 
 		return $this->_is_empty_array( $sanitized_value ) ? '' : $sanitized_value;
+	}
+
+	/**
+	 * Default sanitization method, sanitize_text_field. Checks if value is array.
+	 * @since  2.2.4
+	 * @return mixed  Sanitized value.
+	 */
+	protected function _default_sanitization() {
+		// Handle repeatable fields array
+		return is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : sanitize_text_field( $this->value );
+	}
+
+	/**
+	 * Sets the object terms to the object (if not options-page) and optionally returns the sanitized term values.
+	 * @since  2.2.4
+	 * @return mixed  Blank value, or sanitized term values if "cmb2_return_taxonomy_values_{$cmb_id}" is true.
+	 */
+	protected function _taxonomy() {
+		$sanitized_value = '';
+
+		if ( ! $this->field->args( 'taxonomy' ) ) {
+			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
+		} else {
+
+			if ( 'options-page' !== $this->field->object_type ) {
+				$return_values = true;
+			} else {
+				wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+				$return_values = false;
+			}
+
+			$cmb_id = $this->field->cmb_id;
+
+			/**
+			 * Filter whether 'taxonomy_*' fields should return their value when being sanitized.
+			 *
+			 * By default, these fields do not return a value as we do not want them stored to meta
+			 * (as they are stored as terms). This allows overriding that and is used by CMB2::get_sanitized_values().
+			 *
+			 * The dynamic portion of the hook, $cmb_id, refers to the this field's CMB2 box id.
+			 *
+			 * @since 2.2.4
+			 *
+			 * @param bool          $return_values By default, this is only true for 'options-page' boxes. To enable:
+			 *                                     `add_filter( "cmb2_return_taxonomy_values_{$cmb_id}", '__return_true' );`
+			 * @param CMB2_Sanitize $sanitizer This object.
+			 */
+			if ( apply_filters( "cmb2_return_taxonomy_values_{$cmb_id}", $return_values, $this ) ) {
+				$sanitized_value = $this->_default_sanitization();
+			}
+		}
+
+		return $sanitized_value;
 	}
 
 	/**
