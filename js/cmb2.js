@@ -933,7 +933,12 @@ window.CMB2 = window.CMB2 || {};
             type: 'post',
             dataType: 'json',
             url: l10n.ajaxurl,
-            data: data
+            data: $.extend({
+                'field_id': field_id,
+                'object_id': $obj.data('objectid'),
+                'object_type': $obj.data('objecttype'),
+                'cmb2_ajax_nonce': l10n.ajax_nonce
+            }, (data || {}))
         }, callbacks));
     };
 
@@ -970,10 +975,6 @@ window.CMB2 = window.CMB2 || {};
                 'action': 'cmb2_oembed_handler',
                 'oembed_url': oembed_url,
                 'oembed_width': oembed_width > 300 ? oembed_width : 300,
-                'field_id': field_id,
-                'object_id': $obj.data('objectid'),
-                'object_type': $obj.data('objecttype'),
-                'cmb2_ajax_nonce': l10n.ajax_nonce
             }, {
                 success: function (response) {
                     // and populate our results from ajax response
