@@ -5,8 +5,8 @@
  * @see    https://github.com/WebDevStudios/CMB2
  */
 
- // TODO: fix this.
- // JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
+// TODO: fix this.
+// JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
 
 /**
  * Custom jQuery for Custom Metaboxes and Fields
@@ -93,9 +93,9 @@ window.CMB2 = window.CMB2 || {};
 		if ( $repeatGroup.length ) {
 			$repeatGroup
 				.filter('.sortable').each( function() {
-					// Add sorting arrows
-					$( this ).find( '.button.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
-				})
+				// Add sorting arrows
+				$( this ).find( '.button.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
+			})
 				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
 		}
@@ -228,13 +228,13 @@ window.CMB2 = window.CMB2 || {};
 						'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
 						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
 						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
-					'</li>';
+						'</li>';
 
 				} else {
 					// Standard generic output if it's not an image.
 					uploadStatus = '<li class="file-status"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
 						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
-					'</li>';
+						'</li>';
 
 				}
 
@@ -781,12 +781,12 @@ window.CMB2 = window.CMB2 || {};
 				$( this ).after( '<div id="picker-' + i + '" style="z-index: 1000; background: #EEE; border: 1px solid #CCC; position: absolute; display: block;"></div>' );
 				$id( 'picker-' + i ).hide().farbtastic( $( this ) );
 			} )
-			.focus( function() {
-				$( this ).next().show();
-			} )
-			.blur( function() {
-				$( this ).next().hide();
-			} );
+				.focus( function() {
+					$( this ).next().show();
+				} )
+				.blur( function() {
+					$( this ).next().hide();
+				} );
 		}
 	};
 
@@ -814,7 +814,7 @@ window.CMB2 = window.CMB2 || {};
 				// Only Ajax on normal keystrokes
 				if ( betw( 48, 90 ) || betw( 96, 111 ) || betw( 8, 9 ) || evt.which === 187 || evt.which === 190 ) {
 					// fire our ajax function
-					cmb.doAjax( $this, evt );
+					cmb.doOembedAjax( $this, evt );
 				}
 			},
 			paste : function() {
@@ -901,7 +901,40 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	// function for running our ajax
-	cmb.doAjax = function( $obj ) {
+	cmb.doAjax = function($context, data, cbs) {
+		var ajaxData,
+			callbacks,
+			self = this;
+
+		callbacks = {
+			complete: function(response) {
+				cmb.log('onComplete', response);
+				cbs.complete.call(self, response);
+			},
+			error: function(response) {
+				cmb.log('onError', response);
+				cbs.error.call(self, response);
+			}
+			success: function(response) {
+				cmb.log('onSuccess', response);
+				// hide our spinner
+				if ($context) {
+					cmb.spinner($context, true);
+				}
+				cbs.success.call(self, response);
+			}
+		};
+
+		$.ajax($.extend({
+			type : 'post',
+			dataType : 'json',
+			url : l10n.ajaxurl,
+			data : data
+		}, callbacks));
+	};
+
+	// function for running our oEmbed ajax
+	cmb.doOembedAjax = function( $obj ) {
 		// get typed value
 		var oembed_url = $obj.val();
 		// only proceed if the field contains more than 6 characters
@@ -929,23 +962,16 @@ window.CMB2 = window.CMB2 || {};
 			if ( $( '.cmb2-oembed:focus' ).val() !== oembed_url ) {
 				return;
 			}
-			$.ajax({
-				type : 'post',
-				dataType : 'json',
-				url : l10n.ajaxurl,
-				data : {
-					'action'          : 'cmb2_oembed_handler',
-					'oembed_url'      : oembed_url,
-					'oembed_width'    : oembed_width > 300 ? oembed_width : 300,
-					'field_id'        : field_id,
-					'object_id'       : $obj.data( 'objectid' ),
-					'object_type'     : $obj.data( 'objecttype' ),
-					'cmb2_ajax_nonce' : l10n.ajax_nonce
-				},
+			cmb.doAjax($context, {
+				'action'          : 'cmb2_oembed_handler',
+				'oembed_url'      : oembed_url,
+				'oembed_width'    : oembed_width > 300 ? oembed_width : 300,
+				'field_id'        : field_id,
+				'object_id'       : $obj.data( 'objectid' ),
+				'object_type'     : $obj.data( 'objecttype' ),
+				'cmb2_ajax_nonce' : l10n.ajax_nonce
+			}, {
 				success: function(response) {
-					cmb.log( response );
-					// hide our spinner
-					cmb.spinner( $context, true );
 					// and populate our results from ajax response
 					$embed_wrap.html( response.data );
 				}
