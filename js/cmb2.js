@@ -914,7 +914,7 @@ window.CMB2 = window.CMB2 || {};
 			error: function(response) {
 				cmb.log('onError', response);
 				cbs.error.call(self, response);
-			}
+			},
 			success: function(response) {
 				cmb.log('onSuccess', response);
 				// hide our spinner
