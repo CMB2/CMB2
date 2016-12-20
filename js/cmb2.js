@@ -1,3 +1,6 @@
+/* jshint browser: true*/
+/* globals jQuery, wp*/
+
 /**
  * Controls the behaviours of custom metabox fields.
  *
@@ -902,8 +905,7 @@ window.CMB2 = window.CMB2 || {};
 
 	// function for running our ajax
 	cmb.doAjax = function($context, data, cbs) {
-		var ajaxData,
-			callbacks,
+		var callbacks,
 			self = this;
 
 		callbacks = {
