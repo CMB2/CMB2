@@ -26,7 +26,7 @@ Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/con
 
 ## Description
 
-CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.
+CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind. Easily manage meta for posts, terms, users, comments, or create custom option pages.
 
 **[Download plugin on wordpress.org](http://wordpress.org/plugins/cmb2/)**
 
@@ -46,6 +46,7 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * Create metaboxes to be used on post edit screens.
 * [Create forms to be used on an options pages](https://github.com/WebDevStudios/CMB2/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page).
 * Create forms to handle user meta and display them on user profile add/edit pages.
+* Create forms to handle term meta and display wherever your taxonomies are used.
 * [Flexible API that allows you to use CMB forms almost anywhere, even on the front-end](https://github.com/WebDevStudios/CMB2/wiki/Bringing-Metaboxes-to-the-Front-end).
 * [Several field types are included](https://github.com/WebDevStudios/CMB2/wiki/Field-Types).
 * [Custom API hook that allows you to create your own field types](https://github.com/WebDevStudios/CMB2/wiki/Adding-your-own-field-types).
