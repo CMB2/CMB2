@@ -961,7 +961,7 @@ class CMB2 extends CMB2_Base {
 		$field_id = is_string( $field ) ? $field : $field['id'];
 
 		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
-		$ids = $this->get_field_ids( $field_id, $parent_field_id, true );
+		$ids = $this->get_field_ids( $field_id, $parent_field_id );
 
 		if ( ! $ids ) {
 			return false;
