@@ -314,7 +314,7 @@ window.CMB2 = window.CMB2 || {};
 		evt.preventDefault();
 		var $this = $( this );
 		if ( $this.is( '.cmb-attach-list .cmb2-remove-file-button' ) ){
-			$this.parents('li').remove();
+			$this.closest('li').remove();
 			return false;
 		}
 
