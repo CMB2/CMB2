@@ -10,13 +10,13 @@
 ![CMB2](https://plugins.trac.wordpress.org/export/HEAD/cmb2/assets/banner-1544x500.png)
 
 **Contributors:**      [webdevstudios](https://github.com/webdevstudios), [jtsternberg](https://github.com/jtsternberg), [gregrickaby](https://github.com/gregrickaby), [tw2113](https://github.com/tw2113), [patrickgarman](https://github.com/pmgarman), [JPry](https://github.com/JPry)
-**Donate link:**       [http://webdevstudios.com](http://webdevstudios.com)  
-**Tags:**              metaboxes, forms, fields, options, settings  
-**Requires at least:** 3.8.0  
-**Tested up to:**      4.7  
-**Stable tag:**        2.2.3.1  
-**License:**           GPLv2 or later  
-**License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
+**Donate link:**       [http://webdevstudios.com](http://webdevstudios.com)
+**Tags:**              metaboxes, forms, fields, options, settings
+**Requires at least:** 3.8.0
+**Tested up to:**      4.7
+**Stable tag:**        2.2.3.1
+**License:**           GPLv2 or later
+**License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)
 
 [![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
 [![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
@@ -67,6 +67,8 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [CMB2 Field Type: CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) from [JayWood](https://github.com/JayWood): `rgba_colorpicker ` adds a color picker that supports RGBa, (RGB with transparency (alpha) value).
 * [CMB2 Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
 	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
+
+* [CMB2 Field Type: Leaflet Maps](https://github.com/villeristi/CMB2-field-Leaflet-Geocoder) from [villeristi](https://github.com/villeristi): Custom field type for [Leaflet](http://leafletjs.com/) Maps.
 
 * [CMB2 Field Type: Select2](https://github.com/mustardBees/cmb-field-select2) from [mustardBees](https://github.com/mustardBees): Custom field types which use the [Select2](http://ivaynberg.github.io/select2/) script:
 
