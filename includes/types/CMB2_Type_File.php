@@ -52,6 +52,11 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// Get ID value
 		$_id_value = $field->escaped_value( 'absint' );
 
+		// We don't want to output "0" as a value.
+		if ( ! $_id_value ) {
+			$_id_value = '';
+		}
+
 		// If there is no ID saved yet, try to get it from the url
 		if ( $meta_value && ! $_id_value ) {
 			$_id_value = CMB2_Utils::image_id_from_url( esc_url_raw( $meta_value ) );

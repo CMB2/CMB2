@@ -679,7 +679,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="0"/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-queryargs=\'\'/><input class="cmb2-upload-button button" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array( $this->get_field_type_object( array( 'type' => 'file', 'preview_size' => array( 199, 199 ) ) ), 'render' ) )
 		);
 	}
@@ -868,6 +868,62 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		}
 
 		$this->assertEquals( $expected, $values );
+	}
+
+	public function test_save_group_with_file_field() {
+		$cmb = new CMB2( array(
+			'id' => 'test-save-file-in-group',
+			'object_types' => array(
+				'post',
+			),
+			'fields' => array(
+				'group_field' => array(
+					'name' => 'Group',
+					'desc' => 'Group description',
+					'id' => 'group_field',
+					'type' => 'group',
+					'fields' => array(
+						'first_field' => array(
+							'name' => 'Field 1',
+							'id' => 'first_field',
+							'type' => 'text',
+						),
+						'test_file' => array(
+							'name' => 'Name',
+							'id' => 'test_file',
+							'type' => 'file',
+						),
+					),
+				),
+			),
+		) );
+
+		$test_values = array(
+			'group_field' => array(
+				array(
+					'first_field'  => '',
+					'test_file'    => '',
+					'test_file_id' => '0',
+				),
+			),
+		);
+		$expected = $test_values;
+		$expected['group_field'] = array();
+
+		$this->assertEquals( $expected, $cmb->get_sanitized_values( $test_values ) );
+
+		$test_values['group_field'][0]['first_field'] = 'one';
+		$test_values['group_field'][0]['test_file'] = 'http://two';
+
+		$expected = $test_values;
+		unset( $expected['group_field'][0]['test_file_id'] );
+
+		$this->assertEquals( $expected, $cmb->get_sanitized_values( $test_values ) );
+
+		$test_values['group_field'][0]['test_file_id'] = '3';
+		$expected['group_field'][0]['test_file_id'] = 3;
+
+		$this->assertEquals( $expected, $cmb->get_sanitized_values( $test_values ) );
 	}
 
 	public static function options_cb( $field ) {
