@@ -580,6 +580,27 @@ Post Metaboxes
 }
 
 /*--------------------------------------------------------------
+After Title Form
+--------------------------------------------------------------*/
+/* line 5, sass/partials/_after_title_form.scss */
+.cmb2-after-title-wrap {
+  padding: 15px 10px;
+}
+/* line 9, sass/partials/_after_title_form.scss */
+.cmb2-after-title-wrap .cmb-th,
+.cmb2-after-title-wrap .cmb-td {
+  padding: 0;
+}
+/* line 14, sass/partials/_after_title_form.scss */
+.cmb2-after-title-wrap .cmb-row {
+  margin-bottom: 10px;
+}
+/* line 17, sass/partials/_after_title_form.scss */
+.cmb2-after-title-wrap .cmb-row:last-of-type {
+  margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
 Misc.
 --------------------------------------------------------------*/
 /* line 5, sass/partials/_misc.scss */

@@ -237,6 +237,9 @@ class CMB2 extends CMB2_Base {
 		// Clean up.
 		$classes = array_map( 'strip_tags', array_filter( $classes ) );
 
+		// Remove any duplicates.
+		$classes = array_unique( $classes );
+
 		// Make a string.
 		return implode( ' ', $classes );
 	}

@@ -77,7 +77,43 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	public function post_hooks() {
-		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+
+		// Fetch the context we set in our call.
+		$context = ! empty( $this->cmb->prop( 'context' ) ) ? $this->cmb->prop( 'context' ) : 'normal';
+
+		// Call the proper hook based on the context provided.
+		switch ( $context ) {
+
+			case 'form_top':
+				add_action( 'edit_form_top', array( $this, 'add_context_metabox' ) );
+				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
+
+				break;
+
+			case 'before_permalink':
+				add_action( 'edit_form_before_permalink', array( $this, 'add_context_metabox' ) );
+				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
+
+				break;
+
+			case 'after_title':
+				add_action( 'edit_form_after_title', array( $this, 'add_context_metabox' ) );
+				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
+
+				break;
+
+			case 'after_editor':
+				add_action( 'edit_form_after_editor', array( $this, 'add_context_metabox' ) );
+				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
+
+				break;
+
+
+			default:
+				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+		}
+
+		//add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		add_action( 'add_attachment', array( $this, 'save_post' ) );
 		add_action( 'edit_attachment', array( $this, 'save_post' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -291,6 +327,38 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$column = ob_get_clean();
 
 		return $column ? $column : $empty;
+	}
+
+	/**
+	 * [add_context_metabox description]
+	 */
+	public function add_context_metabox() {
+
+		if ( ! $this->show_on() ) {
+			return;
+		}
+
+		$form = cmb2_get_metabox( $this->cmb->prop( 'id' ) );
+
+		$form->show_form();
+	}
+
+	/**
+	 * Add an additional CSS class for the form box in the "after title" hook.
+	 *
+	 * @param array $classes Array of classes for the cmb2-wrap.
+	 * @param CMB2  $cmb     This CMB2 object.
+	 */
+	public function add_context_class( $classes, $cmb ) {
+
+		// Include a based context wrapper.
+		$classes[] = 'cmb2-context-wrap-' . $cmb->prop( 'context' );
+
+		// Include an ID based context wrapper as well.
+		$classes[] = 'cmb2-context-wrap-' . $cmb->prop( 'id' );
+
+		// Return the updated array of classes.
+		return $classes;
 	}
 
 	/**

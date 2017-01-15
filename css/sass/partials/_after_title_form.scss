@@ -1,0 +1,21 @@
+/*--------------------------------------------------------------
+After Title Form
+--------------------------------------------------------------*/
+
+.cmb2-after-title-wrap {
+
+	padding: 15px 10px;
+
+	.cmb-th,
+	.cmb-td {
+		padding: 0;
+	}
+
+	.cmb-row {
+		margin-bottom: 10px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+}
