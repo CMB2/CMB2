@@ -43,7 +43,7 @@ abstract class CMB2_Base {
 	 * @var   string
 	 * @since 2.2.3
 	 */
-	protected $object_type = 'post';
+	protected $object_type = '';
 
 	/**
 	 * Array of key => value data for saving. Likely $_POST data.
@@ -456,7 +456,7 @@ abstract class CMB2_Base {
 			case 'object_type':
 				return $this->{$field};
 			default:
-				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'give' ), __CLASS__, $field ) );
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}
 
@@ -470,7 +470,7 @@ abstract class CMB2_Base {
 		$object_class = strtolower( get_class( $this ) );
 
 		if ( ! has_filter(  "{$object_class}_inherit_{$method}" ) ) {
-			throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'give' ), get_class( $this ), $method ) );
+			throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), get_class( $this ), $method ) );
 		}
 
 		array_unshift( $args, $this );

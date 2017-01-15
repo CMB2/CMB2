@@ -520,8 +520,14 @@ class CMB2 extends CMB2_Base {
 		// Ensure temp. data store is empty
 		cmb2_options( 0 )->set();
 
+		// We want to get any taxonomy values back.
+		add_filter( "cmb2_return_taxonomy_values_{$this->cmb_id}", '__return_true' );
+
 		// Process/save fields
 		$this->process_fields();
+
+		// Put things back the way they were.
+		remove_filter( "cmb2_return_taxonomy_values_{$this->cmb_id}", '__return_true' );
 
 		// Get data from temp. data store
 		$sanitized_values = cmb2_options( 0 )->get_options();
@@ -699,6 +705,10 @@ class CMB2 extends CMB2_Base {
 		$field_group->data_to_save = $this->data_to_save;
 
 		foreach ( array_values( $field_group->fields() ) as $field_args ) {
+			if ( 'title' === $field_args['type'] ) {
+				// Don't process title fields
+				continue;
+			}
 
 			$field  = $this->get_new_field( $field_args, $field_group );
 			$sub_id = $field->id( true );
@@ -954,7 +964,7 @@ class CMB2 extends CMB2_Base {
 		$field_id = is_string( $field ) ? $field : $field['id'];
 
 		$parent_field_id = ! empty( $field_group ) ? $field_group->id() : '';
-		$ids = $this->get_field_ids( $field_id, $parent_field_id, true );
+		$ids = $this->get_field_ids( $field_id, $parent_field_id );
 
 		if ( ! $ids ) {
 			return false;

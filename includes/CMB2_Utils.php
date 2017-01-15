@@ -170,7 +170,7 @@ class CMB2_Utils {
 	 * @return bool         True or false
 	 */
 	public static function isempty( $value ) {
-		return null === $value || '' === $value || false === $value;
+		return null === $value || '' === $value || false === $value || array() === $value;
 	}
 
 	/**
@@ -180,7 +180,7 @@ class CMB2_Utils {
 	 * @return bool         True or false
 	 */
 	public static function notempty( $value ){
-		return null !== $value && '' !== $value && false !== $value;
+		return null !== $value && '' !== $value && false !== $value && array() !== $value;
 	}
 
 	/**

@@ -224,7 +224,7 @@ window.CMB2 = window.CMB2 || {};
 					var height = media.previewSize[1] ? media.previewSize[1] : 50;
 
 					// image preview
-					uploadStatus = '<li class="img-status">'+
+					uploadStatus = '<li class="img-status cmb2-media-item">'+
 						'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
 						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
 						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
@@ -232,7 +232,7 @@ window.CMB2 = window.CMB2 || {};
 
 				} else {
 					// Standard generic output if it's not an image.
-					uploadStatus = '<li class="file-status"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
+					uploadStatus = '<li class="file-status cmb2-media-item"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
 						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
 					'</li>';
 
@@ -263,10 +263,10 @@ window.CMB2 = window.CMB2 || {};
 			if ( attachment.type && attachment.type === 'image' ) {
 				// image preview
 				var width = media.previewSize[0] ? media.previewSize[0] : 350;
-				uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
+				uploadStatus = '<div class="img-status cmb2-media-item"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
 			} else {
 				// Standard generic output if it's not an image.
-				uploadStatus = '<div class="file-status"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'">'+ l10n.strings.remove_file +'</a>)</div>';
+				uploadStatus = '<div class="file-status cmb2-media-item"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'">'+ l10n.strings.remove_file +'</a>)</div>';
 			}
 
 			// add/display our output
@@ -313,8 +313,8 @@ window.CMB2 = window.CMB2 || {};
 	cmb.handleRemoveMedia = function( evt ) {
 		evt.preventDefault();
 		var $this = $( this );
-		if ( $this.is( '.cmb-attach-list .cmb2-remove-file-button' ) ){
-			$this.parents('li').remove();
+		if ( $this.is( '.cmb-attach-list .cmb2-remove-file-button' ) ) {
+			$this.parents( '.cmb2-media-item' ).remove();
 			return false;
 		}
 

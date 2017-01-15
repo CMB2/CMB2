@@ -132,6 +132,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
+
+		$this->term_id = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'save_term' ) );
 	}
 
 	public function tearDown() {
@@ -511,6 +513,12 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$fields = $cmb->prop( 'fields' );
 		$field = $this->invokeMethod( $cmb, 'get_new_field', $fields['group_field'] );
 
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
+			'name' => 'Name',
+			'id'   => 'test_file',
+			'type' => 'file',
+		) ); // Test that the position argument is working
+
 		$expected_group_render = '
 		before_group output
 		<div class="cmb-row cmb-repeat-group-wrap cmb-type-group cmb2-id-group-field cmb-repeat" data-fieldtype="group">
@@ -541,6 +549,18 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
 								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value=""/></div>
+							</div>
+							<div class="cmb-row cmb-type-file cmb2-id-group-field-0-test-file cmb-repeat-group-field" data-fieldtype="file">
+								<div class="cmb-th">
+									<label for="group_field_0_test_file">Name</label>
+								</div>
+								<div class="cmb-td">
+									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-queryargs=\'\'/>
+									<input class="cmb2-upload-button button" type="button" value="Add or Upload File" />
+									<input type="hidden" class="cmb2-upload-file-id" name="group_field[0][test_file_id]" id="group_field_0_test_file_id" value=""/>
+									<div id="group_field_0_test_file_id-status" class="cmb2-media-status">
+									</div>
+								</div>
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
@@ -719,7 +739,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		}
 	}
 
-	public function test_get_sanitized_values() {
+	public function test_cmb2_get_metabox_sanitized_values() {
 		// Set our object id. Do this to test that it doesn't get broken
 		$this->cmb->object_id( $this->post_id );
 
@@ -756,6 +776,46 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		// And verify that the post-meta was not saved to the post
 		$this->assertTrue( ! isset( $meta_values['test_test'], $meta_values['another_field'] ) );
+	}
+
+	public function test_get_sanitized_values() {
+		$cmb = new CMB2( array(
+			'id' => __FUNCTION__,
+			'fields' => array(
+				array(
+					'id'   => 'test_test',
+					'type' => 'text',
+				),
+				array(
+					'id'       => 'test_tax',
+					'type'     => 'taxonomy_multicheck',
+					'taxonomy' => 'category',
+				),
+			),
+		) );
+
+		$term = get_term_by( 'id', $this->term_id, 'category' );
+
+		$value = array(
+			'nope' => 'nope',
+			'remove' => array( 'remove', 'this' ),
+			'test_test' => 'A value',
+			'test_tax' => array(
+				$term->slug
+			),
+		);
+
+		$sanitized = $cmb->get_sanitized_values( $value );
+		error_log( '$sanitized: '. print_r( $sanitized, true ) );
+
+		$expected = array(
+			'test_test' => 'A value',
+			'test_tax' => array(
+				$term->slug
+			),
+		);
+
+		$this->assertEquals( $expected, $sanitized );
 	}
 
 	public function test_get_field() {
