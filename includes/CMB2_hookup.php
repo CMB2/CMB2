@@ -108,7 +108,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 				break;
 
-
 			default:
 				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		}
@@ -351,7 +350,19 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function add_context_class( $classes, $cmb ) {
 
-		// Include a based context wrapper.
+		if ( ! $this->show_on() ) {
+			return;
+		}
+
+		// If we aren't applying one of our extended contextes, just return our array.
+		if ( empty( $cmb->prop( 'context' ) ) || ! in_array( $cmb->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
+			return $classes;
+		}
+
+		// Include a generic context wrapper and the postbox wrapper.
+		$classes[] = 'postbox cmb2-context-wrap';
+
+		// Include a context-type based context wrapper.
 		$classes[] = 'cmb2-context-wrap-' . $cmb->prop( 'context' );
 
 		// Include an ID based context wrapper as well.
