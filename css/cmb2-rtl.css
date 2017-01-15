@@ -738,31 +738,57 @@ Post Metaboxes
 }
 
 /*--------------------------------------------------------------
-After Title Form
+Context Metaboxes
 --------------------------------------------------------------*/
 
-/* line 5, sass/partials/_after_title_form.scss */
+/* line 5, sass/partials/_context_metaboxes.scss */
 
-.cmb2-after-title-wrap {
-	padding: 15px 10px;
+.cmb2-context-wrap {
+	margin-top: 10px;
 }
 
-/* line 9, sass/partials/_after_title_form.scss */
+/* line 9, sass/partials/_context_metaboxes.scss */
 
-.cmb2-after-title-wrap .cmb-th,
-.cmb2-after-title-wrap .cmb-td {
+.cmb2-context-wrap.cmb2-context-wrap-form_top {
+	margin-left: 300px;
+	width: auto;
+}
+
+/* line 14, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap.cmb2-context-wrap-after_editor {
+	margin-top: 20px;
+}
+
+/* line 18, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb2-metabox {
+	padding: 10px;
+}
+
+/* line 22, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-th {
+	padding: 0 0 0 2%;
+	width: 18%;
+}
+
+/* line 27, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-td {
+	width: 80%;
 	padding: 0;
 }
 
-/* line 14, sass/partials/_after_title_form.scss */
+/* line 32, sass/partials/_context_metaboxes.scss */
 
-.cmb2-after-title-wrap .cmb-row {
+.cmb2-context-wrap .cmb-row {
 	margin-bottom: 10px;
 }
 
-/* line 17, sass/partials/_after_title_form.scss */
+/* line 35, sass/partials/_context_metaboxes.scss */
 
-.cmb2-after-title-wrap .cmb-row:last-of-type {
+.cmb2-context-wrap .cmb-row:last-of-type {
 	margin-bottom: 0;
 }
 

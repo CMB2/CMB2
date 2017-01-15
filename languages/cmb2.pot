@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.3.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2017-01-15 17:31:41+00:00\n"
+"POT-Creation-Date: 2017-01-15 19:27:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-1-15 17:31+300\n"
+"PO-Revision-Date: 2017-1-15 19:27+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: example-functions.php:117 tests/test-cmb-field.php:262
+#: example-functions.php:117 tests/test-cmb-field.php:261
 msgid "Test Metabox"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgstr ""
 #: example-functions.php:573 example-functions.php:580
 #: example-functions.php:587 example-functions.php:614
 #: example-functions.php:622 example-functions.php:629
-#: example-functions.php:666 tests/test-cmb-field.php:274
+#: example-functions.php:666 tests/test-cmb-field.php:273
 msgid "field description (optional)"
 msgstr ""
 
@@ -173,19 +173,19 @@ msgstr ""
 msgid "Test Checkbox"
 msgstr ""
 
-#: example-functions.php:370 tests/test-cmb-field.php:273
+#: example-functions.php:370 tests/test-cmb-field.php:272
 msgid "Test Multi Checkbox"
 msgstr ""
 
-#: example-functions.php:376 tests/test-cmb-field.php:279
+#: example-functions.php:376 tests/test-cmb-field.php:278
 msgid "Check One"
 msgstr ""
 
-#: example-functions.php:377 tests/test-cmb-field.php:280
+#: example-functions.php:377 tests/test-cmb-field.php:279
 msgid "Check Two"
 msgstr ""
 
-#: example-functions.php:378 tests/test-cmb-field.php:281
+#: example-functions.php:378 tests/test-cmb-field.php:280
 msgid "Check Three"
 msgstr ""
 
@@ -397,7 +397,7 @@ msgid "Remove Group"
 msgstr ""
 
 #: includes/CMB2_Field.php:1141 includes/CMB2_Field.php:1145
-#: tests/test-cmb-field.php:236
+#: tests/test-cmb-field.php:235
 msgid "None"
 msgstr ""
 
@@ -501,7 +501,7 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_JS.php:154 includes/CMB2_Types.php:300
+#: includes/CMB2_JS.php:154 includes/CMB2_Types.php:356
 #: includes/types/CMB2_Type_File_Base.php:80 tests/test-cmb-types-base.php:143
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
 #: tests/test-cmb-types.php:700
@@ -517,21 +517,25 @@ msgstr ""
 msgid "Select / Deselect All"
 msgstr ""
 
-#: includes/CMB2_Types.php:237
+#: includes/CMB2_Types.php:228
+msgid "Custom CMB2 field type classes must extend CMB2_Type_Base."
+msgstr ""
+
+#: includes/CMB2_Types.php:293
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_hookup.php:158
+#: includes/CMB2_hookup.php:157
 msgid ""
 "Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
 "install."
 msgstr ""
 
-#: includes/CMB2_hookup.php:162
+#: includes/CMB2_hookup.php:161
 msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
 msgstr ""
 
-#: includes/helper-functions.php:288
+#: includes/helper-functions.php:287
 msgid "Save"
 msgstr ""
 
