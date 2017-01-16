@@ -52,7 +52,17 @@ class CMB2 extends CMB2_Base {
 	protected $mb_defaults = array(
 		'id'               => '',
 		'title'            => '',
-		'object_types'     => array(), // Post type
+		// Post type slug, or 'user', 'term', 'comment', or 'options-page'
+		'object_types'     => array(),
+		 /*
+		 * The context within the screen where the boxes should display. Available contexts vary
+		 * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
+		 *
+		 * For placement in locations outside of a metabox, other options include:
+		 * 'form_top', 'before_permalink', 'after_title', 'after_editor'
+		 *
+		 * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
+		 */
 		'context'          => 'normal',
 		'priority'         => 'high',
 		'show_names'       => true, // Show field names on the left
@@ -225,6 +235,31 @@ class CMB2 extends CMB2_Base {
 		}
 
 		/**
+		 * Add our context classes for non-standard metaboxes.
+		 *
+		 * @since 2.2.4
+		 */
+		if ( ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
+
+			// Include the postbox wrapper unless that property is set to false.
+			if ( empty( $this->prop( 'remove_box_wrap' ) ) ) {
+				$context[] = 'postbox';
+			}
+
+			// Include a generic context wrapper.
+			$context[] = 'cmb2-context-wrap';
+
+			// Include a context-type based context wrapper.
+			$context[] = 'cmb2-context-wrap-' . $this->prop( 'context' );
+
+			// Include an ID based context wrapper as well.
+			$context[] = 'cmb2-context-wrap-' . $this->prop( 'id' );
+
+			// And merge all the classes back into the array.
+			$classes = array_merge( $classes, $context );
+		}
+
+		/**
 		 * Globally filter box wrap classes
 		 *
 		 * @since 2.2.2
@@ -236,6 +271,9 @@ class CMB2 extends CMB2_Base {
 
 		// Clean up.
 		$classes = array_map( 'strip_tags', array_filter( $classes ) );
+
+		// Remove any duplicates.
+		$classes = array_unique( $classes );
 
 		// Make a string.
 		return implode( ' ', $classes );

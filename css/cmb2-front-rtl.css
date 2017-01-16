@@ -580,6 +580,52 @@ Post Metaboxes
 }
 
 /*--------------------------------------------------------------
+Context Metaboxes
+--------------------------------------------------------------*/
+/* line 5, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap {
+  margin-top: 10px;
+}
+/* line 9, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap.cmb2-context-wrap-form_top {
+  margin-left: 300px;
+  width: auto;
+}
+/* line 14, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap.cmb2-context-wrap-after_editor {
+  margin-top: 20px;
+}
+/* line 18, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap .cmb2-metabox {
+  padding: 10px;
+}
+/* line 22, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap .cmb-th {
+  padding: 0 0 0 2%;
+  width: 18%;
+}
+/* line 27, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap .cmb-td {
+  width: 80%;
+  padding: 0;
+}
+/* line 32, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap .cmb-row {
+  margin-bottom: 10px;
+}
+/* line 35, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap .cmb-row:last-of-type {
+  margin-bottom: 0;
+}
+
+/* one column on the post write/edit screen */
+@media only screen and (max-width: 850px) {
+  /* line 45, sass/partials/_context_metaboxes.scss */
+  .cmb2-context-wrap.cmb2-context-wrap-form_top {
+    margin-left: 0;
+  }
+}
+/*--------------------------------------------------------------
 Misc.
 --------------------------------------------------------------*/
 /* line 5, sass/partials/_misc.scss */

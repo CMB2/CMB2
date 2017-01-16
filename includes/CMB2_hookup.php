@@ -77,7 +77,33 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	public function post_hooks() {
-		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+
+		// Fetch the context we set in our call.
+		$context = ! empty( $this->cmb->prop( 'context' ) ) ? $this->cmb->prop( 'context' ) : 'normal';
+
+		// Call the proper hook based on the context provided.
+		switch ( $context ) {
+
+			case 'form_top':
+				add_action( 'edit_form_top', array( $this, 'add_context_metaboxes' ) );
+				break;
+
+			case 'before_permalink':
+				add_action( 'edit_form_before_permalink', array( $this, 'add_context_metaboxes' ) );
+				break;
+
+			case 'after_title':
+				add_action( 'edit_form_after_title', array( $this, 'add_context_metaboxes' ) );
+				break;
+
+			case 'after_editor':
+				add_action( 'edit_form_after_editor', array( $this, 'add_context_metaboxes' ) );
+				break;
+
+			default:
+				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+		}
+
 		add_action( 'add_attachment', array( $this, 'save_post' ) );
 		add_action( 'edit_attachment', array( $this, 'save_post' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -291,6 +317,29 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$column = ob_get_clean();
 
 		return $column ? $column : $empty;
+	}
+
+	/**
+	 * Output the CMB2 fields in an alternate context (not in a metabox).
+	 * @since 2.2.4
+	 */
+	public function add_context_metaboxes() {
+
+		if ( ! $this->show_on() ) {
+			return;
+		}
+
+		$current_screen = get_current_screen();
+
+		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
+			$screen = convert_to_screen( $object_type );
+
+			// If we're on the right post-type/object, stop searching...
+			if ( isset( $screen->id ) && $screen->id === $current_screen->id ) {
+				// And show the form.
+				return $this->cmb->show_form();
+			}
+		}
 	}
 
 	/**

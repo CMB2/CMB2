@@ -1,0 +1,49 @@
+/*--------------------------------------------------------------
+Context Metaboxes
+--------------------------------------------------------------*/
+
+.cmb2-context-wrap {
+
+	margin-top: 10px;
+
+	&.cmb2-context-wrap-form_top {
+		margin-right: 300px;
+		width: auto;
+	}
+
+	&.cmb2-context-wrap-after_editor {
+		margin-top: 20px;
+	}
+
+	.cmb2-metabox {
+		padding: 10px;
+	}
+
+	.cmb-th {
+		padding: 0 2% 0 0;
+		width: 18%;
+	}
+
+	.cmb-td {
+		width: 80%;
+		padding: 0;
+	}
+
+	.cmb-row {
+		margin-bottom: 10px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+
+}
+
+/* one column on the post write/edit screen */
+@media only screen and (max-width: 850px) {
+
+	.cmb2-context-wrap.cmb2-context-wrap-form_top {
+		margin-right: 0;
+	}
+
+}
