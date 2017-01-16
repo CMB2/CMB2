@@ -235,6 +235,31 @@ class CMB2 extends CMB2_Base {
 		}
 
 		/**
+		 * Add our context classes for non-standard metaboxes.
+		 *
+		 * @since 2.2.4
+		 */
+		if ( ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
+
+			// Include the postbox wrapper unless that arg is set to false.
+			if ( empty( $this->prop( 'remove_box_wrap' ) ) ) {
+				$context[] = 'postbox';
+			}
+
+			// Include a generic context wrapper.
+			$context[] = 'cmb2-context-wrap';
+
+			// Include a context-type based context wrapper.
+			$context[] = 'cmb2-context-wrap-' . $this->prop( 'context' );
+
+			// Include an ID based context wrapper as well.
+			$context[] = 'cmb2-context-wrap-' . $this->prop( 'id' );
+
+			// And merge all the classes back into the array.
+			$classes = array_merge( $classes, $context );
+		}
+
+		/**
 		 * Globally filter box wrap classes
 		 *
 		 * @since 2.2.2

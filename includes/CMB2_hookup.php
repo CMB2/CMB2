@@ -86,26 +86,18 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 			case 'form_top':
 				add_action( 'edit_form_top', array( $this, 'add_context_metabox' ) );
-				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
-
 				break;
 
 			case 'before_permalink':
 				add_action( 'edit_form_before_permalink', array( $this, 'add_context_metabox' ) );
-				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
-
 				break;
 
 			case 'after_title':
 				add_action( 'edit_form_after_title', array( $this, 'add_context_metabox' ) );
-				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
-
 				break;
 
 			case 'after_editor':
 				add_action( 'edit_form_after_editor', array( $this, 'add_context_metabox' ) );
-				add_filter( 'cmb2_wrap_classes', array( $this, 'add_context_class' ), 10, 2 );
-
 				break;
 
 			default:
@@ -337,39 +329,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$form = cmb2_get_metabox( $this->cmb->prop( 'id' ) );
-
-		$form->show_form();
-	}
-
-	/**
-	 * Add an additional CSS class for the form box when used in contexts outside of a metabox.
-	 * @since 2.2.4
-	 * @param array $classes Array of classes for the cmb2-wrap.
-	 * @param CMB2  $cmb     This CMB2 object.
-	 */
-	public function add_context_class( $classes, $cmb ) {
-
-		if ( ! $this->show_on() ) {
-			return $classes;
+		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
+			$this->cmb->show_form();
 		}
-
-		// If we aren't applying one of our extended contextes, just return our array.
-		if ( empty( $cmb->prop( 'context' ) ) || ! in_array( $cmb->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
-			return $classes;
-		}
-
-		// Include a generic context wrapper and the postbox wrapper.
-		$classes[] = 'postbox cmb2-context-wrap';
-
-		// Include a context-type based context wrapper.
-		$classes[] = 'cmb2-context-wrap-' . $cmb->prop( 'context' );
-
-		// Include an ID based context wrapper as well.
-		$classes[] = 'cmb2-context-wrap-' . $cmb->prop( 'id' );
-
-		// Return the updated array of classes.
-		return $classes;
 	}
 
 	/**
