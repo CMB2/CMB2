@@ -241,7 +241,7 @@ class CMB2 extends CMB2_Base {
 		 */
 		if ( ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
 
-			// Include the postbox wrapper unless that arg is set to false.
+			// Include the postbox wrapper unless that property is set to false.
 			if ( empty( $this->prop( 'remove_box_wrap' ) ) ) {
 				$context[] = 'postbox';
 			}
