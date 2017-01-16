@@ -328,7 +328,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * [add_context_metabox description]
+	 * Output the CMB2 fields in an alternate context (not in a metabox).
+	 * @since 2.2.4
 	 */
 	public function add_context_metabox() {
 
@@ -343,7 +344,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 	/**
 	 * Add an additional CSS class for the form box when used in contexts outside of a metabox.
-	 *
+	 * @since 2.2.4
 	 * @param array $classes Array of classes for the cmb2-wrap.
 	 * @param CMB2  $cmb     This CMB2 object.
 	 */
