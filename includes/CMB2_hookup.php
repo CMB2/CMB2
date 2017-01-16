@@ -329,8 +329,16 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
-			$this->cmb->show_form();
+		$current_screen = get_current_screen();
+
+		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
+			$screen = convert_to_screen( $object_type );
+
+			// If we're on the right post-type/object, stop searching...
+			if ( isset( $screen->id ) && $screen->id === $current_screen->id ) {
+				// And show the form.
+				return $this->cmb->show_form();
+			}
 		}
 	}
 
