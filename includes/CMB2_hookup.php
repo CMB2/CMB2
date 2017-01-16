@@ -351,7 +351,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function add_context_class( $classes, $cmb ) {
 
 		if ( ! $this->show_on() ) {
-			return;
+			return $classes;
 		}
 
 		// If we aren't applying one of our extended contextes, just return our array.
