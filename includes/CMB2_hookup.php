@@ -112,7 +112,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		}
 
-		//add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		add_action( 'add_attachment', array( $this, 'save_post' ) );
 		add_action( 'edit_attachment', array( $this, 'save_post' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -343,7 +342,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Add an additional CSS class for the form box in the "after title" hook.
+	 * Add an additional CSS class for the form box when used in contexts outside of a metabox.
 	 *
 	 * @param array $classes Array of classes for the cmb2-wrap.
 	 * @param CMB2  $cmb     This CMB2 object.

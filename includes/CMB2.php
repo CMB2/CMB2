@@ -52,7 +52,17 @@ class CMB2 extends CMB2_Base {
 	protected $mb_defaults = array(
 		'id'               => '',
 		'title'            => '',
-		'object_types'     => array(), // Post type
+		// Post type slug, or 'user', 'term', 'comment', or 'options-page'
+		'object_types'     => array(),
+		 /*
+		 * The context within the screen where the boxes should display. Available contexts vary
+		 * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
+		 *
+		 * For placement in locations outside of a metabox, other options include:
+		 * 'form_top', 'before_permalink', 'after_title', 'after_editor'
+		 *
+		 * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
+		 */
 		'context'          => 'normal',
 		'priority'         => 'high',
 		'show_names'       => true, // Show field names on the left
