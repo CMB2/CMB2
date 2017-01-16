@@ -336,10 +336,64 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 			// If we're on the right post-type/object, stop searching...
 			if ( isset( $screen->id ) && $screen->id === $current_screen->id ) {
-				// And show the form.
-				return $this->cmb->show_form();
+
+				// Call our before hook.
+				if ( ! empty( $this->cmb->prop( 'title' ) ) ) {
+					$this::context_box_title_markup_open( $this->cmb );
+				}
+
+				// Show the form.
+				$this->cmb->show_form();
+
+				// Call our after hook.
+				if ( ! empty( $this->cmb->prop( 'title' ) ) ) {
+					$this::context_box_title_markup_close();
+				}
 			}
 		}
+	}
+
+	/**
+	 * Add the
+	 *
+	 * @param object  $cmb  This CMB2 object
+	 *
+	 * @return string
+	 */
+	public function context_box_title_markup_open( $cmb ) {
+
+		$title = $cmb->prop( 'title' );
+
+		$screen = get_current_screen();
+		$hidden = get_hidden_meta_boxes( $screen );
+
+		$classes = 'postbox context-' . $cmb->prop( 'context' ) . '-box context-box ';
+		$classes .= in_array( $cmb->cmb_id, $hidden ) ? ' hide-if-js' : '';
+		$classes .= postbox_classes( $cmb->cmb_id, $screen->id );
+
+		echo '<div id="' . $cmb->cmb_id . '" class="' . $classes . '">' . "\n";
+
+			echo '<button type="button" class="handlediv button-link" aria-expanded="true">';
+				echo '<span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s' ), $title ) . '</span>';
+				echo '<span class="toggle-indicator" aria-hidden="true"></span>';
+			echo '</button>';
+
+			echo '<h2 class="hndle"><span>' . esc_attr( $title ) . '</span></h2>' . "\n";
+			echo '<div class="inside">' . "\n";
+
+
+	}
+
+	/**
+	 * The closing markup for when we include a title.
+	 *
+	 * @return string
+	 */
+	public function context_box_title_markup_close() {
+
+		// Load the closing divs for a title box.
+		echo '</div>' . "\n";
+		echo '</div>' . "\n";
 	}
 
 	/**
