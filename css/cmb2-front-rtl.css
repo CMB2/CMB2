@@ -618,6 +618,13 @@ Context Metaboxes
   margin-bottom: 0;
 }
 
+/* one column on the post write/edit screen */
+@media only screen and (max-width: 850px) {
+  /* line 45, sass/partials/_context_metaboxes.scss */
+  .cmb2-context-wrap.cmb2-context-wrap-form_top {
+    margin-left: 0;
+  }
+}
 /*--------------------------------------------------------------
 Misc.
 --------------------------------------------------------------*/

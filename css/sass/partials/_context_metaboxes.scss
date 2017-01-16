@@ -38,3 +38,12 @@ Context Metaboxes
 	}
 
 }
+
+/* one column on the post write/edit screen */
+@media only screen and (max-width: 850px) {
+
+	.cmb2-context-wrap.cmb2-context-wrap-form_top {
+		margin-right: 0;
+	}
+
+}
