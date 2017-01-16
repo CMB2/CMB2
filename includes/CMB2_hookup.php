@@ -85,19 +85,19 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		switch ( $context ) {
 
 			case 'form_top':
-				add_action( 'edit_form_top', array( $this, 'add_context_metabox' ) );
+				add_action( 'edit_form_top', array( $this, 'add_context_metaboxes' ) );
 				break;
 
 			case 'before_permalink':
-				add_action( 'edit_form_before_permalink', array( $this, 'add_context_metabox' ) );
+				add_action( 'edit_form_before_permalink', array( $this, 'add_context_metaboxes' ) );
 				break;
 
 			case 'after_title':
-				add_action( 'edit_form_after_title', array( $this, 'add_context_metabox' ) );
+				add_action( 'edit_form_after_title', array( $this, 'add_context_metaboxes' ) );
 				break;
 
 			case 'after_editor':
-				add_action( 'edit_form_after_editor', array( $this, 'add_context_metabox' ) );
+				add_action( 'edit_form_after_editor', array( $this, 'add_context_metaboxes' ) );
 				break;
 
 			default:
@@ -323,7 +323,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * Output the CMB2 fields in an alternate context (not in a metabox).
 	 * @since 2.2.4
 	 */
-	public function add_context_metabox() {
+	public function add_context_metaboxes() {
 
 		if ( ! $this->show_on() ) {
 			return;
