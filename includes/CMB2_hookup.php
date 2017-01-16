@@ -354,7 +354,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Add the
+	 * The opening markup for when we include a title.
 	 *
 	 * @param object  $cmb  This CMB2 object
 	 *
@@ -380,8 +380,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 			echo '<h2 class="hndle"><span>' . esc_attr( $title ) . '</span></h2>' . "\n";
 			echo '<div class="inside">' . "\n";
-
-
 	}
 
 	/**
