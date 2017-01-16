@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
 
-	These would be defined by setting the `context` property of your box args:
+	These would be defined by setting the `context` property for your box:
 
 	```php
 	$cmb_demo = new_cmb2_box( array(
