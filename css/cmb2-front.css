@@ -582,45 +582,79 @@ Post Metaboxes
 /*--------------------------------------------------------------
 Context Metaboxes
 --------------------------------------------------------------*/
-/* line 5, sass/partials/_context_metaboxes.scss */
+/* Metabox collapse arrow indicators */
+/* line 9, sass/partials/_context_metaboxes.scss */
+.js .postbox.context-box .toggle-indicator:before {
+  content: "\f142";
+  display: inline-block;
+  font: normal 20px/1 dashicons;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none !important;
+}
+/* line 22, sass/partials/_context_metaboxes.scss */
+.js .postbox.context-box.closed .toggle-indicator:before {
+  content: "\f140";
+}
+
+/* line 30, sass/partials/_context_metaboxes.scss */
+.postbox.context-box {
+  margin-bottom: 10px;
+}
+/* line 34, sass/partials/_context_metaboxes.scss */
+.postbox.context-box.context-before_permalink-box {
+  margin-top: 10px;
+}
+/* line 38, sass/partials/_context_metaboxes.scss */
+.postbox.context-box.context-after_title-box {
+  margin-top: 10px;
+}
+/* line 42, sass/partials/_context_metaboxes.scss */
+.postbox.context-box.context-after_editor-box {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+/* line 47, sass/partials/_context_metaboxes.scss */
+.postbox.context-box .hndle {
+  cursor: auto;
+}
+
+/* line 52, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap {
   margin-top: 10px;
 }
-/* line 9, sass/partials/_context_metaboxes.scss */
+/* line 56, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap.cmb2-context-wrap-form_top {
   margin-right: 300px;
   width: auto;
 }
-/* line 14, sass/partials/_context_metaboxes.scss */
-.cmb2-context-wrap.cmb2-context-wrap-after_editor {
-  margin-top: 20px;
-}
-/* line 18, sass/partials/_context_metaboxes.scss */
-.cmb2-context-wrap .cmb2-metabox {
+/* line 63, sass/partials/_context_metaboxes.scss */
+.cmb2-context-wrap.cmb2-context-wrap-no-title .cmb2-metabox {
   padding: 10px;
 }
-/* line 22, sass/partials/_context_metaboxes.scss */
+/* line 68, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-th {
   padding: 0 2% 0 0;
   width: 18%;
 }
-/* line 27, sass/partials/_context_metaboxes.scss */
+/* line 73, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-td {
   width: 80%;
   padding: 0;
 }
-/* line 32, sass/partials/_context_metaboxes.scss */
+/* line 78, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row {
   margin-bottom: 10px;
 }
-/* line 35, sass/partials/_context_metaboxes.scss */
+/* line 81, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row:last-of-type {
   margin-bottom: 0;
 }
 
 /* one column on the post write/edit screen */
 @media only screen and (max-width: 850px) {
-  /* line 45, sass/partials/_context_metaboxes.scss */
+  /* line 91, sass/partials/_context_metaboxes.scss */
   .cmb2-context-wrap.cmb2-context-wrap-form_top {
     margin-right: 0;
   }
