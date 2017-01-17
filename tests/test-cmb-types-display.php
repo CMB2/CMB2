@@ -32,35 +32,44 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 	public function test_hidden() {
 		$this->assertDisplayFieldMatches( 'hidden', __FUNCTION__ );
 	}
+
 	public function test_text_small() {
 		$this->assertDisplayFieldMatches( 'text_small', __FUNCTION__ );
 	}
+
 	public function test_text_medium() {
 		$this->assertDisplayFieldMatches( 'text_medium', __FUNCTION__ );
 	}
+
 	public function test_text_email() {
 		$this->assertDisplayFieldMatches( 'text_email', __FUNCTION__ );
 	}
+
 	public function test_text_url() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'text_url', $value, '<a href="http://'. $value .'" rel="nofollow">http://'. $value .'</a>' );
 	}
+
 	public function test_text_money() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'text_money', $value, '$'. $value );
 	}
+
 	public function test_textarea() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
 	}
+
 	public function test_textarea_small() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
 	}
+
 	public function test_textarea_code() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'textarea_code', $value, '<xmp class="cmb2-code">'. $value .'</xmp>' );
 	}
+
 	public function test_wysiwyg() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
@@ -70,18 +79,22 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		$value = time();
 		$this->assertDisplayFieldMatches( 'text_date', $value, date( 'm/d/Y', $value ) );
 	}
+
 	public function test_text_date_timestamp() {
 		$value = time();
 		$this->assertDisplayFieldMatches( 'text_date_timestamp', $value, date( 'm/d/Y', $value ) );
 	}
+
 	public function test_text_time() {
 		$value = time();
 		$this->assertDisplayFieldMatches( 'text_time', $value, date( 'h:i A', $value ) );
 	}
+
 	public function test_text_datetime_timestamp() {
 		$value = time();
 		$this->assertDisplayFieldMatches( 'text_datetime_timestamp', $value, date( 'm/d/Y', $value ) );
 	}
+
 	public function test_text_datetime_timestamp_timezone() {
 		$time = time();
 
@@ -101,56 +114,74 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 
 		$this->assertDisplayFieldMatches( 'text_datetime_timestamp_timezone', $saved_value, $expected );
 	}
+
 	public function test_select_timezone() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'select_timezone', $value );
 	}
+
 	public function test_colorpicker() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'colorpicker', $value, '<span class="cmb2-colorpicker-swatch"><span style="background-color:'. $value .'"></span> '. $value .'</span>' );
 	}
+
 	public function test_title() {
 		$this->assertDisplayFieldMatches( 'title', '' );
 	}
+
 	public function test_select() {
 		$this->assertOptionDisplayFieldMatches( 'select', 'two' );
 	}
+
 	public function test_taxonomy_select() {
 		$this->text_type_field['taxonomy'] = 'category';
 		$this->assertDisplayFieldMatches( 'taxonomy_select', '', '<a href="">test_category</a>' );
 	}
+
 	public function test_radio() {
 		$this->assertOptionDisplayFieldMatches( 'radio', 'two' );
 	}
+
 	public function test_radio_inline() {
 		$this->assertOptionDisplayFieldMatches( 'radio_inline', 'two', false, '<div class="cmb-column cmb-type-radio-inline cmb2-id-options-test-field cmb-inline" data-fieldtype="radio_inline">Two</div>' );
 	}
+
 	public function test_multicheck() {
 		$this->assertOptionDisplayFieldMatches( 'multicheck', array( 'one', 'two' ), 'One, Two' );
 	}
+
 	public function test_multicheck_inline() {
 		$this->assertOptionDisplayFieldMatches( 'multicheck_inline', array( 'one', 'two' ), true, '<div class="cmb-column cmb-type-multicheck-inline cmb2-id-options-test-field cmb-inline" data-fieldtype="multicheck_inline">One, Two</div>' );
 	}
+
 	public function test_checkbox() {
 		$value = 'on';
 		$this->assertDisplayFieldMatches( 'checkbox', $value );
 	}
+
 	public function test_taxonomy_radio() {
 		$this->text_type_field['taxonomy'] = 'category';
 		$this->assertDisplayFieldMatches( 'taxonomy_radio', '', '<a href="">test_category</a>' );
 	}
+
 	public function test_taxonomy_radio_inline() {
 		$this->text_type_field['taxonomy'] = 'category';
 		$this->assertDisplayFieldMatches( 'taxonomy_radio_inline', '', true, '<div class="cmb-column cmb-type-taxonomy-radio-inline cmb2-id-field-test-field cmb-inline" data-fieldtype="taxonomy_radio_inline"><a href="">test_category</a></div>' );
 	}
+
 	public function test_taxonomy_multicheck() {
 		$this->text_type_field['taxonomy'] = 'category';
 		$this->assertDisplayFieldMatches( 'taxonomy_multicheck', '', '<div class="cmb2-taxonomy-terms-category"><a href="">test_category</a></div>' );
 	}
+
 	public function test_taxonomy_multicheck_inline() {
 		$this->text_type_field['taxonomy'] = 'category';
 		$this->assertDisplayFieldMatches( 'taxonomy_multicheck_inline', '', true, '<div class="cmb-column cmb-type-taxonomy-multicheck-inline cmb2-id-field-test-field cmb-inline" data-fieldtype="taxonomy_multicheck_inline"><div class="cmb2-taxonomy-terms-category"><a href="">test_category</a></div></div>' );
 	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
 	public function test_oembed() {
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
@@ -171,6 +202,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 			preg_replace( '~https?://~', '', $actual_field ) // normalize http differences
 		);
 	}
+
 	public function test_file_list() {
 		$images = get_attached_media( 'image', $this->post_id );
 		$attach_1_url = get_permalink( $this->attachment_id );
@@ -185,6 +217,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 			'<ul class="cmb2-display-file-list"><li><div class="file-status"><span>File: <strong><a href="'. $attach_1_url .'">'. CMB2_Utils::get_file_name_from_path( $attach_1_url ) .'</a></strong></span></div></li><li><div class="file-status"><span>File: <strong><a href="'. $attach_2_url .'">'. CMB2_Utils::get_file_name_from_path( $attach_2_url ) .'</a></strong></span></div></li></ul>'
 		);
 	}
+
 	public function test_file() {
 		$images = get_attached_media( 'image', $this->post_id );
 		$attach_1_url = get_permalink( $this->attachment_id );

@@ -3,7 +3,7 @@ Context Metaboxes
 --------------------------------------------------------------*/
 
 /* Metabox collapse arrow indicators */
-.js .postbox.context-box {
+.js .cmb2-postbox.context-box {
 
 	.toggle-indicator {
 		&:before {
@@ -27,7 +27,7 @@ Context Metaboxes
 
 }
 
-.postbox.context-box {
+.cmb2-postbox.context-box {
 
 	margin-bottom: 10px;
 
@@ -42,6 +42,18 @@ Context Metaboxes
 	&.context-after_editor-box {
 		margin-top: 20px;
 		margin-bottom: 0;
+	}
+
+	&.context-form_top-box {
+
+		margin-top: 10px;
+
+		.hndle {
+			font-size: 14px;
+			padding: 8px 12px;
+			margin: 0;
+			line-height: 1.4;
+		}
 	}
 
 	.hndle {
