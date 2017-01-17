@@ -339,7 +339,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 				// Call our before hook.
 				if ( ! empty( $this->cmb->prop( 'title' ) ) ) {
-					$this::context_box_title_markup_open( $this->cmb );
+					$this->context_box_title_markup_open( $this->cmb );
 				}
 
 				// Show the form.
@@ -347,7 +347,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 				// Call our after hook.
 				if ( ! empty( $this->cmb->prop( 'title' ) ) ) {
-					$this::context_box_title_markup_close();
+					$this->context_box_title_markup_close();
 				}
 			}
 		}
@@ -356,22 +356,20 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	/**
 	 * The opening markup for when we include a title.
 	 *
-	 * @param object  $cmb  This CMB2 object
-	 *
 	 * @return string
 	 */
-	public function context_box_title_markup_open( $cmb ) {
+	public function context_box_title_markup_open() {
 
-		$title = $cmb->prop( 'title' );
+		$title = $this->cmb->prop( 'title' );
 
 		$screen = get_current_screen();
 		$hidden = get_hidden_meta_boxes( $screen );
 
-		$classes = 'postbox context-' . $cmb->prop( 'context' ) . '-box context-box ';
-		$classes .= in_array( $cmb->cmb_id, $hidden ) ? ' hide-if-js' : '';
-		$classes .= postbox_classes( $cmb->cmb_id, $screen->id );
+		$classes = 'postbox context-' . $this->cmb->prop( 'context' ) . '-box context-box postbox-container ';
+		$classes .= in_array( $this->cmb->cmb_id, $hidden ) ? ' hide-if-js' : '';
+		$classes .= postbox_classes( $this->cmb->cmb_id, $screen->id );
 
-		echo '<div id="' . $cmb->cmb_id . '" class="' . $classes . '">' . "\n";
+		echo '<div id="' . $this->cmb->cmb_id . '" class="' . $classes . '">' . "\n";
 
 			echo '<button type="button" class="handlediv button-link" aria-expanded="true">';
 				echo '<span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s' ), $title ) . '</span>';
