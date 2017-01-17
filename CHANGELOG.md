@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 * Modify `'taxonomy_*'` fields to return stored terms for non-post objects.
 * Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
-* Allow outputting CMB2 in additional locations in the post-editor.
+* Allow outputting CMB2 boxes/fields in additional locations in the post-editor.
 
 	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
 
@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 		'context' => 'before_permalink',
 	) );
 	```
+
+	If it is preferred that the fields are output without the metabox, then omit the `'title'` property from the metabox registration array, and instead add `	'remove_box_wrap' => true,`.
 
 	Props [@norcross](https://github.com/norcross) ([#836](https://github.com/WebDevStudios/CMB2/pull/836)).
 * Allow outputting CMB2 in additional locations in the post-editor.
