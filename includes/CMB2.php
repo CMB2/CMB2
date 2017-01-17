@@ -239,11 +239,11 @@ class CMB2 extends CMB2_Base {
 		 *
 		 * @since 2.2.4
 		 */
-		if ( ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) ) ) {
+		if ( $this->is_alternate_context_box() ) {
 
-			// Include the postbox wrapper unless that property is set to false.
-			if ( empty( $this->prop( 'remove_box_wrap' ) ) ) {
-				$context[] = 'postbox';
+			// Include custom class if requesting no title.
+			if ( empty( $this->prop( 'title' ) ) && empty( $this->prop( 'remove_box_wrap' ) ) ) {
+				$context[] = 'cmb2-context-wrap-no-title';
 			}
 
 			// Include a generic context wrapper.
@@ -1342,6 +1342,17 @@ class CMB2 extends CMB2_Base {
 		}
 		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->cmb_id );
 		return $this->generated_nonce;
+	}
+
+	/**
+	 * Whether this box is an "alternate context" box. This means the box has a 'context' property defined as:
+	 * 'form_top', 'before_permalink', 'after_title', or 'after_editor'.
+	 *
+	 * @since  2.2.4
+	 * @return bool
+	 */
+	public function is_alternate_context_box() {
+		return ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) );
 	}
 
 	/**

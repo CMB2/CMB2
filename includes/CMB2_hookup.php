@@ -320,7 +320,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Output the CMB2 fields in an alternate context (not in a metabox).
+	 * Output the CMB2 box/fields in an alternate context (not in a standard metabox area).
 	 * @since 2.2.4
 	 */
 	public function add_context_metaboxes() {
@@ -329,17 +329,85 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$current_screen = get_current_screen();
+		$page = get_current_screen()->id;
 
 		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
 			$screen = convert_to_screen( $object_type );
 
-			// If we're on the right post-type/object, stop searching...
-			if ( isset( $screen->id ) && $screen->id === $current_screen->id ) {
-				// And show the form.
-				return $this->cmb->show_form();
+			// If we're on the right post-type/object...
+			if ( isset( $screen->id ) && $screen->id === $page ) {
+
+				// Show the box.
+				$this->output_context_metabox();
 			}
 		}
+	}
+
+	/**
+	 * Output the CMB2 box/fields in an alternate context (not in a standard metabox area).
+	 * @since 2.2.4
+	 */
+	public function output_context_metabox() {
+		$title = $this->cmb->prop( 'title' );
+
+		/*
+		 * To keep from outputting the open/close markup, do not include
+		 * a 'title' property in your metabox registration array.
+		 *
+		 * To output the fields 'naked' (without a postbox wrapper/style), then
+		 * add a `'remove_box_wrap' => true` to your metabox registration array.
+		 */
+		$add_wrap = ! empty( $title ) || empty( $this->cmb->prop( 'remove_box_wrap' ) );
+		$add_handle = $add_wrap && ! empty( $title );
+
+		// Open the context-box wrap.
+		$add_handle = $this->context_box_title_markup_open( $add_handle );
+
+		// Show the form fields.
+		$this->cmb->show_form();
+
+		// Close the context-box wrap.
+		$this->context_box_title_markup_close( $add_handle );
+	}
+
+	/**
+	 * Output the opening markup for a context box.
+	 * @since 2.2.4
+	 * @param $add_handle Whether to add the metabox handle and opening div for .inside
+	 */
+	public function context_box_title_markup_open( $add_handle = true ) {
+		$title = $this->cmb->prop( 'title' );
+
+		$page = get_current_screen()->id;
+		add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
+
+		echo '<div id="' . $this->cmb->cmb_id . '" class="' . postbox_classes( $this->cmb->cmb_id, $page ) . '">' . "\n";
+
+		if ( $add_handle ) {
+
+			echo '<button type="button" class="handlediv button-link" aria-expanded="true">';
+				echo '<span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s' ), $title ) . '</span>';
+				echo '<span class="toggle-indicator" aria-hidden="true"></span>';
+			echo '</button>';
+
+			echo '<h2 class="hndle"><span>' . esc_attr( $title ) . '</span></h2>' . "\n";
+			echo '<div class="inside">' . "\n";
+		}
+	}
+
+	/**
+	 * Output the closing markup for a context box.
+	 * @since 2.2.4
+	 * @param $add_inside_close Whether to add closing div for .inside.
+	 */
+	public function context_box_title_markup_close( $add_inside_close = true ) {
+
+		// Load the closing divs for a title box.
+		if ( $add_inside_close ) {
+			echo '</div>' . "\n"; // .inside
+		}
+
+		echo '</div>' . "\n"; // .context-box
 	}
 
 	/**
@@ -352,29 +420,28 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			return;
 		}
 
-		/**
+		/*
 		 * To keep from registering an actual post-screen metabox,
-		 * omit the 'title' attribute from the metabox registration array.
+		 * omit the 'title' property from the metabox registration array.
 		 *
 		 * (WordPress will not display metaboxes without titles anyway)
 		 *
-		 * This is a good solution if you want to output your metaboxes
-		 * Somewhere else in the post-screen
+		 * This is a good solution if you want to handle outputting your
+		 * metaboxes/fields elsewhere in the post-screen.
 		 */
 		if ( ! $this->cmb->prop( 'title' ) ) {
 			return;
 		}
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
-			if ( $this->cmb->prop( 'closed' ) ) {
-				add_filter( "postbox_classes_{$post_type}_{$this->cmb->cmb_id}", array( $this, 'close_metabox_class' ) );
-			}
+		$page = get_current_screen()->id;
+		add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
 
+		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
 			if ( count( $this->cmb->tax_metaboxes_to_remove ) ) {
-				$this->remove_default_tax_metaboxes( $post_type );
+				$this->remove_default_tax_metaboxes( $object_type );
 			}
 
-			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $post_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $object_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 		}
 	}
 
@@ -395,13 +462,47 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Add 'closed' class to metabox
-	 * @since  2.0.0
+	 * Modify metabox postbox classes.
+	 * @since  2.2.4
 	 * @param  array  $classes Array of classes
 	 * @return array           Modified array of classes
 	 */
-	public function close_metabox_class( $classes ) {
-		$classes[] = 'closed';
+	public function postbox_classes( $classes ) {
+		if ( $this->cmb->prop( 'closed' ) && ! in_array( 'closed', $classes ) ) {
+			$classes[] = 'closed';
+		}
+
+		if ( $this->cmb->is_alternate_context_box() ) {
+			$classes = $this->alternate_context_postbox_classes( $classes );
+		} else {
+			$classes[] = 'cmb2-postbox';
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Modify metabox altnernate context postbox classes.
+	 * @since  2.2.4
+	 * @param  array  $classes Array of classes
+	 * @return array           Modified array of classes
+	 */
+	protected function alternate_context_postbox_classes( $classes ) {
+		$classes[] = 'context-box';
+		$classes[] = 'context-' . $this->cmb->prop( 'context' ) . '-box';
+
+		if ( in_array( $this->cmb->cmb_id, get_hidden_meta_boxes( get_current_screen() ) ) ) {
+			$classes[] = 'hide-if-js';
+		}
+
+		$add_wrap = ! empty( $this->cmb->prop( 'title' ) ) || empty( $this->cmb->prop( 'remove_box_wrap' ) );
+
+		if ( $add_wrap ) {
+			$classes[] = 'cmb2-postbox postbox';
+		} else {
+			$classes[] = 'cmb2-no-box-wrap';
+		}
+
 		return $classes;
 	}
 

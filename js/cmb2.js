@@ -804,7 +804,7 @@ window.CMB2 = window.CMB2 || {};
 			focusout : function() {
 				setTimeout( function() {
 					// if it's been 2 seconds, hide our spinner
-					cmb.spinner( '.postbox .cmb2-metabox', true );
+					cmb.spinner( '.cmb2-metabox', true );
 				}, 2000);
 			},
 			keyup : function() {
@@ -892,12 +892,8 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.spinner = function( $context, hide ) {
-		if ( hide ) {
-			$('.cmb-spinner', $context ).hide();
-		}
-		else {
-			$('.cmb-spinner', $context ).show();
-		}
+		var m = hide ? 'removeClass' : 'addClass';
+		$('.cmb-spinner', $context )[ m ]( 'is-active' );
 	};
 
 	// function for running our ajax
