@@ -7,6 +7,21 @@ All notable changes to this project will be documented in this file.
 
 * Modify `'taxonomy_*'` fields to return stored terms for non-post objects.
 * Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
+* Allow outputting CMB2 in additional locations in the post-editor.
+
+	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
+
+	These would be defined by setting the `context` property for your box:
+
+	```php
+	$cmb_demo = new_cmb2_box( array(
+		...
+		'context' => 'before_permalink',
+	) );
+	```
+
+	Props [@norcross](https://github.com/norcross) ([#836](https://github.com/WebDevStudios/CMB2/pull/836)).
+* Allow outputting CMB2 in additional locations in the post-editor.
 
 ### Bug Fixes
 * Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
