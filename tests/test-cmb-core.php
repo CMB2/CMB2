@@ -806,7 +806,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$sanitized = $cmb->get_sanitized_values( $value );
-		error_log( '$sanitized: '. print_r( $sanitized, true ) );
 
 		$expected = array(
 			'test_test' => 'A value',
