@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 	If it is preferred that the fields are output without the metabox, then omit the `'title'` property from the metabox registration array, and instead add `	'remove_box_wrap' => true,`.
 
 	Props [@norcross](https://github.com/norcross) ([#836](https://github.com/WebDevStudios/CMB2/pull/836)).
-* Allow outputting CMB2 in additional locations in the post-editor.
+* New field parameter, `'render_class'`, allowing you to override the default `'CMB2_Type_Base'` class that is used when rendering the field. This provides interesting object-oriented ways to override default CMB2 behavior by subclassing the default class and overriding methods. The render class can also be overridden with the `"cmb2_render_class_{$fieldtype}"` filter, which is passed the default render class name as well as the `CMB2_Types` object, but this should be used sparingly, and within the context of your project's boxes/fields or you could break other plugins/themes CMB2 fields.
 
 ### Bug Fixes
 * Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
