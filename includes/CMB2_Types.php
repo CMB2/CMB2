@@ -453,7 +453,7 @@ class CMB2_Types {
 	 * @return string       Form input element
 	 */
 	public function input( $args = array(), $type = __FUNCTION__ ) {
-		return $this->get_new_render_type( $type, 'CMB2_Type_Text', $args, $type )->render();
+		return $this->get_new_render_type( 'text', 'CMB2_Type_Text', $args, $type )->render();
 	}
 
 	/**
