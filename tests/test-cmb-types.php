@@ -161,7 +161,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_is_valid_img_ext() {
 		$type = $this->get_field_type_object( 'file' );
-		$type->get_new_render_type( 'CMB2_Type_File' )->render();
+		$type->get_new_render_type( $type->field->type(), 'CMB2_Type_File' )->render();
 
 		$ext = $type->get_file_ext( site_url( '/wp-content/uploads/2014/12/test-file.pdf' ) );
 		$this->assertFalse( $type->is_valid_img_ext( $ext ) );

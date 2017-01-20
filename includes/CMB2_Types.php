@@ -57,7 +57,7 @@ class CMB2_Types {
 		}
 
 		// Check for custom field type class.
-		if ( $object = $this->maybe_custom_field_object( $arguments ) ) {
+		if ( $object = $this->maybe_custom_field_object( $fieldtype, $arguments ) ) {
 			return $object->render();
 		}
 
@@ -138,6 +138,7 @@ class CMB2_Types {
 	 * @param string $method  Method attempting to be called on the CMB2_Type_Base object.
 	 */
 	protected function guess_type_object( $method ) {
+		$fieldtype = $this->field->type();
 
 		// Try to "guess" the Type object based on the method requested.
 		switch ( $method ) {
@@ -145,26 +146,26 @@ class CMB2_Types {
 			case 'list_input':
 			case 'list_input_checkbox':
 			case 'concat_items':
-				$this->get_new_render_type( 'CMB2_Type_Select' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_Select' );
 				break;
 			case 'is_valid_img_ext':
 			case 'img_status_output':
 			case 'file_status_output':
-				$this->get_new_render_type( 'CMB2_Type_File_Base' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_File_Base' );
 				break;
 			case 'parse_picker_options':
-				$this->get_new_render_type( 'CMB2_Type_Text_Date' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_Text_Date' );
 				break;
 			case 'get_object_terms':
 			case 'get_terms':
-				$this->get_new_render_type( 'CMB2_Type_Taxonomy_Multicheck' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_Taxonomy_Multicheck' );
 				break;
 			case 'date_args':
 			case 'time_args':
-				$this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_Text_Datetime_Timestamp' );
 				break;
 			case 'parse_args':
-				$this->get_new_render_type( 'CMB2_Type_Text' );
+				$this->get_new_render_type( $fieldtype, 'CMB2_Type_Text' );
 				break;
 		}
 
@@ -206,10 +207,12 @@ class CMB2_Types {
 	/**
 	 * Checks for a custom field CMB2_Type_Base class to use for rendering.
 	 * @since 2.2.4
-	 * @param array $args Optional field arguments.
+	 * @param string $fieldtype Non-existent field type name
+	 * @param array  $args      Optional field arguments.
+	 * @return CMB2_Type_Base   Type object.
 	 */
-	public function maybe_custom_field_object( $args = array() ) {
-		if ( $render_class_name = $this->get_render_type_class() ) {
+	public function maybe_custom_field_object( $fieldtype, $args = array() ) {
+		if ( $render_class_name = $this->get_render_type_class( $fieldtype ) ) {
 
 			$this->type = new $render_class_name( $this, $args );
 
@@ -224,13 +227,14 @@ class CMB2_Types {
 	/**
 	 * Gets the render type CMB2_Type_Base object to use for rendering the field.
 	 * @since  2.2.4
-	 * @param  string          $render_class_name The default field type class to use. Defaults to null.
+	 * @param  string         $fieldtype         The type of field being rendered.
+	 * @param  string         $render_class_name The default field type class to use. Defaults to null.
 	 * @param  array          $args              Optional arguments to pass to type class.
 	 * @param  mixed          $additional        Optional additional argument to pass to type class.
 	 * @return CMB2_Type_Base                    Type object.
 	 */
-	public function get_new_render_type( $render_class_name = null, $args = array(), $additional = '' ) {
-		$render_class_name = $this->get_render_type_class( $render_class_name );
+	public function get_new_render_type( $fieldtype, $render_class_name = null, $args = array(), $additional = '' ) {
+		$render_class_name = $this->get_render_type_class( $fieldtype, $render_class_name );
 		$this->type = new $render_class_name( $this, $args, $additional );
 
 		return $this->type;
@@ -238,13 +242,13 @@ class CMB2_Types {
 
 	/**
 	 * Checks for the render type class to use for rendering the field.
-	 * @since 2.2.4
-	 * @param string $render_class_name The default field type class to use. Defaults to null.
+	 * @since  2.2.4
+	 * @param  string $fieldtype         The type of field being rendered.
+	 * @param  string $render_class_name The default field type class to use. Defaults to null.
+	 * @return string                    The field type class to use.
 	 */
-	public function get_render_type_class( $render_class_name = null ) {
+	public function get_render_type_class( $fieldtype, $render_class_name = null ) {
 		$render_class_name = $this->field->args( 'render_class' ) ? $this->field->args( 'render_class' ) : $render_class_name;
-
-		$fieldtype = $this->field->type();
 
 		if ( has_action( "cmb2_render_class_{$fieldtype}" ) ) {
 
@@ -449,7 +453,7 @@ class CMB2_Types {
 	 * @return string       Form input element
 	 */
 	public function input( $args = array(), $type = __FUNCTION__ ) {
-		return $this->get_new_render_type( 'CMB2_Type_Text', $args, $type )->render();
+		return $this->get_new_render_type( $type, 'CMB2_Type_Text', $args, $type )->render();
 	}
 
 	/**
@@ -459,7 +463,7 @@ class CMB2_Types {
 	 * @return string       Form textarea element
 	 */
 	public function textarea( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Textarea', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Textarea', $args )->render();
 	}
 
 	/**
@@ -472,119 +476,120 @@ class CMB2_Types {
 
 	public function hidden() {
 		$args = array(
-			'type' => 'hidden',
-			'desc' => '',
+			'type'  => 'hidden',
+			'desc'  => '',
 			'class' => 'cmb2-hidden',
 		);
 		if ( $this->field->group ) {
 			$args['data-groupid'] = $this->field->group->id();
 			$args['data-iterator'] = $this->iterator;
 		}
-		return $this->input( $args );
+
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', $args, 'input' )->render();
 	}
 
 	public function text_small() {
-		return $this->input( array(
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-small',
-			'desc' => $this->_desc(),
-		) );
+			'desc'  => $this->_desc(),
+		), 'input' )->render();
 	}
 
 	public function text_medium() {
-		return $this->input( array(
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-medium',
-			'desc' => $this->_desc(),
-		) );
+			'desc'  => $this->_desc(),
+		), 'input' )->render();
 	}
 
 	public function text_email() {
-		return $this->input( array(
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-email cmb2-text-medium',
-			'type' => 'email',
-		) );
+			'type'  => 'email',
+		), 'input' )->render();
 	}
 
 	public function text_url() {
-		return $this->input( array(
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-url cmb2-text-medium regular-text',
 			'value' => $this->field->escaped_value( 'esc_url' ),
-		) );
+		), 'input' )->render();
 	}
 
 	public function text_money() {
-		$input = $this->input( array(
+		$input = $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-money',
-			'desc' => $this->_desc(),
-		) );
+			'desc'  => $this->_desc(),
+		), 'input' )->render();
 		return ( ! $this->field->get_param_callback_result( 'before_field' ) ? '$ ' : ' ' ) . $input;
 	}
 
 	public function textarea_small() {
-		return $this->textarea( array(
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Textarea', array(
 			'class' => 'cmb2-textarea-small',
-			'rows' => 4,
-		) );
+			'rows'  => 4,
+		) )->render();
 	}
 
 	public function textarea_code( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Textarea_Code', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Textarea_Code', $args )->render();
 	}
 
 	public function wysiwyg( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Wysiwyg', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Wysiwyg', $args )->render();
 	}
 
 	public function text_date( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Text_Date', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Date', $args )->render();
 	}
 
 	// Alias for text_date
 	public function text_date_timestamp( $args = array() ) {
-		return $this->text_date( $args );
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Date', $args )->render();
 	}
 
 	public function text_time( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Text_Time', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Time', $args )->render();
 	}
 
 	public function text_datetime_timestamp( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Datetime_Timestamp', $args )->render();
 	}
 
 	public function text_datetime_timestamp_timezone( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp_Timezone', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Datetime_Timestamp_Timezone', $args )->render();
 	}
 
 	public function select_timezone( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Select_Timezone', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Select_Timezone', $args )->render();
 	}
 
 	public function colorpicker( $args = array(), $meta_value = '' ) {
-		return $this->get_new_render_type( 'CMB2_Type_Colorpicker', $args, $meta_value )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Colorpicker', $args, $meta_value )->render();
 	}
 
 	public function title( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Title', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Title', $args )->render();
 	}
 
 	public function select( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Select', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Select', $args )->render();
 	}
 
 	public function taxonomy_select( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Select', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Select', $args )->render();
 	}
 
 	public function radio( $args = array(), $type = __FUNCTION__ ) {
-		return $this->get_new_render_type( 'CMB2_Type_Radio', $args, $type )->render();
+		return $this->get_new_render_type( $type, 'CMB2_Type_Radio', $args, $type )->render();
 	}
 
-	public function radio_inline() {
-		return $this->radio( array(), __FUNCTION__ );
+	public function radio_inline( $args = array() ) {
+		return $this->radio( $args, __FUNCTION__ );
 	}
 
 	public function multicheck( $type = 'checkbox' ) {
-		return $this->get_new_render_type( 'CMB2_Type_Multicheck', array(), $type )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Multicheck', array(), $type )->render();
 	}
 
 	public function multicheck_inline() {
@@ -593,37 +598,37 @@ class CMB2_Types {
 
 	public function checkbox( $args = array(), $is_checked = null ) {
 		// Avoid get_new_render_type since we need a different default for the 3rd argument than ''.
-		$render_class_name = $this->get_render_type_class( 'CMB2_Type_Checkbox' );
+		$render_class_name = $this->get_render_type_class( __FUNCTION__, 'CMB2_Type_Checkbox' );
 		$this->type = new $render_class_name( $this, $args, $is_checked );
 		return $this->type->render();
 	}
 
 	public function taxonomy_radio( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Radio', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Radio', $args )->render();
 	}
 
-	public function taxonomy_radio_inline() {
-		return $this->taxonomy_radio();
+	public function taxonomy_radio_inline( $args = array() ) {
+		return $this->taxonomy_radio( $args );
 	}
 
 	public function taxonomy_multicheck( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Multicheck', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Multicheck', $args )->render();
 	}
 
-	public function taxonomy_multicheck_inline() {
-		return $this->taxonomy_multicheck();
+	public function taxonomy_multicheck_inline( $args = array() ) {
+		return $this->taxonomy_multicheck( $args );
 	}
 
 	public function oembed( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_Oembed', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Oembed', $args )->render();
 	}
 
 	public function file_list( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_File_List', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_File_List', $args )->render();
 	}
 
 	public function file( $args = array() ) {
-		return $this->get_new_render_type( 'CMB2_Type_File', $args )->render();
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_File', $args )->render();
 	}
 
 }

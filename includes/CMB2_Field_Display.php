@@ -309,7 +309,7 @@ class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 	protected function _display() {
 		$taxonomy = $this->field->args( 'taxonomy' );
 		$types    = new CMB2_Types( $this->field );
-		$type     = $types->get_new_render_type( 'CMB2_Type_Taxonomy_Radio' );
+		$type     = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_Taxonomy_Radio' );
 		$terms    = $type->get_object_terms();
 		$term     = false;
 
@@ -334,7 +334,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 	protected function _display() {
 		$taxonomy = $this->field->args( 'taxonomy' );
 		$types    = new CMB2_Types( $this->field );
-		$type     = $types->get_new_render_type( 'CMB2_Type_Taxonomy_Multicheck' );
+		$type     = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_Taxonomy_Multicheck' );
 		$terms    = $type->get_object_terms();
 
 		if ( is_wp_error( $terms ) || empty( $terms ) && ( $default = $this->field->get_default() ) ) {
@@ -376,7 +376,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		$this->value = esc_url_raw( $this->value );
 
 		$types = new CMB2_Types( $this->field );
-		$type  = $types->get_new_render_type( 'CMB2_Type_File_Base' );
+		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		$id = $this->field->get_field_clone( array(
 			'id' => $this->field->_id() . '_id',
@@ -426,7 +426,7 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 		}
 
 		$types = new CMB2_Types( $this->field );
-		$type  = $types->get_new_render_type( 'CMB2_Type_File_Base' );
+		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		echo '<ul class="cmb2-display-file-list">';
 		foreach ( $this->value as $id => $fullurl ) {
