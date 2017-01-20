@@ -57,7 +57,7 @@ class CMB2_Types {
 		}
 
 		// Check for custom field type class.
-		if ( $object = $this->maybe_custom_field_object( $fieldtype, $arguments ) ) {
+		if ( $object = $this->maybe_custom_field_object( $arguments ) ) {
 			return $object->render();
 		}
 
@@ -109,6 +109,7 @@ class CMB2_Types {
 	 *
 	 * @param  string $method  Method to call on the CMB2_Type_Base object.
 	 * @param  mixed  $default Default fallback value if method is not found.
+	 * @param  array  $args    Optional arguments to pass to proxy method.
 	 *
 	 * @return mixed           Results from called method.
 	 */
@@ -144,26 +145,26 @@ class CMB2_Types {
 			case 'list_input':
 			case 'list_input_checkbox':
 			case 'concat_items':
-				$this->type = new CMB2_Type_Select( $this );
+				$this->get_new_render_type( 'CMB2_Type_Select' );
 				break;
 			case 'is_valid_img_ext':
 			case 'img_status_output':
 			case 'file_status_output':
-				$this->type = new CMB2_Type_File_Base( $this );
+				$this->get_new_render_type( 'CMB2_Type_File_Base' );
 				break;
 			case 'parse_picker_options':
-				$this->type = new CMB2_Type_Text_Date( $this );
+				$this->get_new_render_type( 'CMB2_Type_Text_Date' );
 				break;
 			case 'get_object_terms':
 			case 'get_terms':
-				$this->type = new CMB2_Type_Taxonomy_Multicheck( $this );
+				$this->get_new_render_type( 'CMB2_Type_Taxonomy_Multicheck' );
 				break;
 			case 'date_args':
 			case 'time_args':
-				$this->type = new CMB2_Type_Text_Datetime_Timestamp( $this );
+				$this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp' );
 				break;
 			case 'parse_args':
-				$this->type = new CMB2_Type_Text( $this );
+				$this->get_new_render_type( 'CMB2_Type_Text' );
 				break;
 		}
 
@@ -181,15 +182,15 @@ class CMB2_Types {
 		$exists = false;
 
 		$proxied = array(
-			'get_object_terms' => array(),
-			'is_valid_img_ext' => false,
-			'parse_args' => array(),
-			'concat_items' => '',
-			'select_option' => '',
-			'list_input' => '',
-			'list_input_checkbox' => '',
-			'img_status_output' => '',
-			'file_status_output' => '',
+			'get_object_terms'     => array(),
+			'is_valid_img_ext'     => false,
+			'parse_args'           => array(),
+			'concat_items'         => '',
+			'select_option'        => '',
+			'list_input'           => '',
+			'list_input_checkbox'  => '',
+			'img_status_output'    => '',
+			'file_status_output'   => '',
 			'parse_picker_options' => array(),
 		);
 		if ( isset( $proxied[ $method ] ) ) {
@@ -203,29 +204,14 @@ class CMB2_Types {
 	}
 
 	/**
-	 * Checks for a custom field class to use for rendering.
+	 * Checks for a custom field CMB2_Type_Base class to use for rendering.
 	 * @since 2.2.4
-	 * @param string $fieldtype Non-existent field type name
+	 * @param array $args Optional field arguments.
 	 */
-	public function maybe_custom_field_object( $fieldtype ) {
+	public function maybe_custom_field_object( $args = array() ) {
+		if ( $render_class_name = $this->get_render_type_class() ) {
 
-		$render_class_name = $this->field->prop( 'render_class', null );
-
-		/**
-		 * Filters the custom field type class used for rendering the field. Class is required to extend CMB2_Type_Base.
-		 *
-		 * The dynamic portion of the hook name, $fieldtype, refers to the (custom) field type.
-		 *
-		 * @since 2.2.4
-		 *
-		 * @param string $render_class_name The custom field type class to use. Default null.
-		 * @param object $field_type_object This `CMB2_Types` object.
-		 */
-		$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", $render_class_name, $this );
-
-		if ( $render_class_name && class_exists( $render_class_name ) ) {
-
-			$this->type = new $render_class_name( $this );
+			$this->type = new $render_class_name( $this, $args );
 
 			if ( ! ( $this->type instanceof CMB2_Type_Base ) ) {
 				throw new Exception( __( 'Custom CMB2 field type classes must extend CMB2_Type_Base.', 'cmb2' ) );
@@ -233,6 +219,49 @@ class CMB2_Types {
 		}
 
 		return $this->type;
+	}
+
+	/**
+	 * Gets the render type CMB2_Type_Base object to use for rendering the field.
+	 * @since  2.2.4
+	 * @param  string          $render_class_name The default field type class to use. Defaults to null.
+	 * @param  array          $args              Optional arguments to pass to type class.
+	 * @param  mixed          $additional        Optional additional argument to pass to type class.
+	 * @return CMB2_Type_Base                    Type object.
+	 */
+	public function get_new_render_type( $render_class_name = null, $args = array(), $additional = '' ) {
+		$render_class_name = $this->get_render_type_class( $render_class_name );
+		$this->type = new $render_class_name( $this, $args, $additional );
+
+		return $this->type;
+	}
+
+	/**
+	 * Checks for the render type class to use for rendering the field.
+	 * @since 2.2.4
+	 * @param string $render_class_name The default field type class to use. Defaults to null.
+	 */
+	public function get_render_type_class( $render_class_name = null ) {
+
+		$render_class_name = $this->field->prop( 'render_class', $render_class_name );
+		$fieldtype         = $this->field->type();
+
+		if ( has_action( "cmb2_render_class_{$fieldtype}" ) ) {
+
+			/**
+			 * Filters the custom field type class used for rendering the field. Class is required to extend CMB2_Type_Base.
+			 *
+			 * The dynamic portion of the hook name, $fieldtype, refers to the (custom) field type.
+			 *
+			 * @since 2.2.4
+			 *
+			 * @param string $render_class_name The custom field type class to use. Default null.
+			 * @param object $field_type_object This `CMB2_Types` object.
+			 */
+			$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", $render_class_name, $this );
+		}
+
+		return $render_class_name && class_exists( $render_class_name ) ? $render_class_name : false;
 	}
 
 	/**
