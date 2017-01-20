@@ -208,6 +208,9 @@ class CMB2_Types {
 	 * @param string $fieldtype Non-existent field type name
 	 */
 	public function maybe_custom_field_object( $fieldtype ) {
+
+		$render_class_name = $this->field->prop( 'render_class', null );
+
 		/**
 		 * Filters the custom field type class used for rendering the field. Class is required to extend CMB2_Type_Base.
 		 *
@@ -215,10 +218,10 @@ class CMB2_Types {
 		 *
 		 * @since 2.2.4
 		 *
-		 * @param string $class              The custom field type class to use. Default null.
-		 * @param object $field_type_object  This `CMB2_Types` object.
+		 * @param string $render_class_name The custom field type class to use. Default null.
+		 * @param object $field_type_object This `CMB2_Types` object.
 		 */
-		$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", null, $this );
+		$render_class_name = apply_filters( "cmb2_render_class_{$fieldtype}", $render_class_name, $this );
 
 		if ( $render_class_name && class_exists( $render_class_name ) ) {
 
