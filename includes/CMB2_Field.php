@@ -798,8 +798,8 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before' );
 
-		$field_type = new CMB2_Types( $this );
-		$field_type->render();
+		$types = new CMB2_Types( $this );
+		$types->render();
 
 		$this->peform_param_callback( 'after' );
 

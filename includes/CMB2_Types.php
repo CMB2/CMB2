@@ -449,8 +449,7 @@ class CMB2_Types {
 	 * @return string       Form input element
 	 */
 	public function input( $args = array(), $type = __FUNCTION__ ) {
-		$this->type = new CMB2_Type_Text( $this, $args, $type );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Text', $args, $type )->render();
 	}
 
 	/**
@@ -460,8 +459,7 @@ class CMB2_Types {
 	 * @return string       Form textarea element
 	 */
 	public function textarea( $args = array() ) {
-		$this->type = new CMB2_Type_Textarea( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Textarea', $args )->render();
 	}
 
 	/**
@@ -528,19 +526,16 @@ class CMB2_Types {
 		) );
 	}
 
-	public function textarea_code() {
-		$this->type = new CMB2_Type_Textarea_Code( $this );
-		return $this->type->render();
+	public function textarea_code( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Textarea_Code', $args )->render();
 	}
 
 	public function wysiwyg( $args = array() ) {
-		$this->type = new CMB2_Type_Wysiwyg( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Wysiwyg', $args )->render();
 	}
 
 	public function text_date( $args = array() ) {
-		$this->type = new CMB2_Type_Text_Date( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Text_Date', $args )->render();
 	}
 
 	// Alias for text_date
@@ -549,48 +544,39 @@ class CMB2_Types {
 	}
 
 	public function text_time( $args = array() ) {
-		$this->type = new CMB2_Type_Text_Time( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Text_Time', $args )->render();
 	}
 
 	public function text_datetime_timestamp( $args = array() ) {
-		$this->type = new CMB2_Type_Text_Datetime_Timestamp( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp', $args )->render();
 	}
 
 	public function text_datetime_timestamp_timezone( $args = array() ) {
-		$this->type = new CMB2_Type_Text_Datetime_Timestamp_Timezone( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Text_Datetime_Timestamp_Timezone', $args )->render();
 	}
 
-	public function select_timezone() {
-		$this->type = new CMB2_Type_Select_Timezone( $this );
-		return $this->type->render();
+	public function select_timezone( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Select_Timezone', $args )->render();
 	}
 
 	public function colorpicker( $args = array(), $meta_value = '' ) {
-		$this->type = new CMB2_Type_Colorpicker( $this, $args, $meta_value );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Colorpicker', $args, $meta_value )->render();
 	}
 
 	public function title( $args = array() ) {
-		$this->type = new CMB2_Type_Title( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Title', $args )->render();
 	}
 
 	public function select( $args = array() ) {
-		$this->type = new CMB2_Type_Select( $this, $args );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Select', $args )->render();
 	}
 
-	public function taxonomy_select() {
-		$this->type = new CMB2_Type_Taxonomy_Select( $this );
-		return $this->type->render();
+	public function taxonomy_select( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Select', $args )->render();
 	}
 
 	public function radio( $args = array(), $type = __FUNCTION__ ) {
-		$this->type = new CMB2_Type_Radio( $this, $args, $type );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Radio', $args, $type )->render();
 	}
 
 	public function radio_inline() {
@@ -598,8 +584,7 @@ class CMB2_Types {
 	}
 
 	public function multicheck( $type = 'checkbox' ) {
-		$this->type = new CMB2_Type_Multicheck( $this, array(), $type );
-		return $this->type->render();
+		return $this->get_new_render_type( 'CMB2_Type_Multicheck', array(), $type )->render();
 	}
 
 	public function multicheck_inline() {
@@ -607,41 +592,38 @@ class CMB2_Types {
 	}
 
 	public function checkbox( $args = array(), $is_checked = null ) {
-		$this->type = new CMB2_Type_Checkbox( $this, $args, $is_checked );
+		// Avoid get_new_render_type since we need a different default for the 3rd argument than ''.
+		$render_class_name = $this->get_render_type_class( 'CMB2_Type_Checkbox' );
+		$this->type = new $render_class_name( $this, $args, $is_checked );
 		return $this->type->render();
 	}
 
-	public function taxonomy_radio() {
-		$this->type = new CMB2_Type_Taxonomy_Radio( $this );
-		return $this->type->render();
+	public function taxonomy_radio( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Radio', $args )->render();
 	}
 
 	public function taxonomy_radio_inline() {
 		return $this->taxonomy_radio();
 	}
 
-	public function taxonomy_multicheck() {
-		$this->type = new CMB2_Type_Taxonomy_Multicheck( $this );
-		return $this->type->render();
+	public function taxonomy_multicheck( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Taxonomy_Multicheck', $args )->render();
 	}
 
 	public function taxonomy_multicheck_inline() {
 		return $this->taxonomy_multicheck();
 	}
 
-	public function oembed() {
-		$this->type = new CMB2_Type_Oembed( $this );
-		return $this->type->render();
+	public function oembed( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_Oembed', $args )->render();
 	}
 
-	public function file_list() {
-		$this->type = new CMB2_Type_File_List( $this );
-		return $this->type->render();
+	public function file_list( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_File_List', $args )->render();
 	}
 
-	public function file() {
-		$this->type = new CMB2_Type_File( $this );
-		return $this->type->render();
+	public function file( $args = array() ) {
+		return $this->get_new_render_type( 'CMB2_Type_File', $args )->render();
 	}
 
 }
