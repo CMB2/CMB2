@@ -49,10 +49,10 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'src'         => 'https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed',
 		);
 
-		delete_option( $this->oembed_args['object_id'] );
 	}
 
 	public function tearDown() {
+		delete_option( $this->oembed_args['object_id'] );
 		parent::tearDown();
 	}
 
@@ -87,10 +87,10 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	 */
 	public function test_values_cached() {
 		$expected = $this->is_connected() ? array(
-			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
-			'_oembed_time_611cd8ff569bdf3f2bd77a47ba674606' => 1456629747,
-			'_oembed_e587db3cd3a82c8215553980b4f347c1' => '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>',
-			'_oembed_time_e587db3cd3a82c8215553980b4f347c1' => 1456629747,
+			'<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
+			'time_1',
+			'<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>',
+			'time_2',
 		) : array(
 			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '{{unknown}}',
 			'_oembed_e587db3cd3a82c8215553980b4f347c1' => '{{unknown}}',
@@ -104,14 +104,18 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		}
 
 		$options = $this->get_option();
+		$opt_keys = array_keys( $options );
+		$opt_values = array_values( $options );
 
-		foreach ( $expected as $key => $value ) {
-			$this->assertTrue( array_key_exists( $key, $options ) );
+		foreach ( $expected as $key => $expected_value ) {
+			$opt_key = $opt_keys[ $key ];
 
-			if ( 0 !== strpos( $key, '_oembed_time_' ) ) {
-				$this->assertEquals( $expected[ $key ], $options[ $key ] );
+			if ( 0 !== strpos( $expected_value, 'time_' ) ) {
+				$this->assertEquals( $expected_value, $opt_values[ $key ] );
+				$this->assertTrue( 0 === strpos( $opt_key, '_oembed_' ) );
 			} else {
-				$this->assertTrue( is_int( $value ) );
+				$this->assertTrue( 0 === strpos( $opt_key, '_oembed_time_' ) );
+				$this->assertTrue( is_int( $opt_values[ $key ] ) );
 			}
 		}
 	}
