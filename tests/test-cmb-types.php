@@ -716,6 +716,9 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	/**
+	 * @group cmb2-ajax-embed
+	 */
 	public function test_oembed_field_after_value_update() {
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
