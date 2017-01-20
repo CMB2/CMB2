@@ -953,12 +953,8 @@ class CMB2 extends CMB2_Base {
 			$type = 'term';
 		}
 
-		if ( $pagenow === 'admin-ajax.php' && isset($_POST['action']) ) {
-		    switch ( $_POST['action'] ) {
-			case 'add-tag':
-			    $type = 'term';
-			    break;
-		    }
+		if ( defined( 'DOING_AJAX' ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
+			$type = 'term';
 		}
 
 		return $type;
