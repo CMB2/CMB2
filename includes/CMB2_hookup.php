@@ -79,7 +79,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	public function post_hooks() {
 
 		// Fetch the context we set in our call.
-		$context = ! empty( $this->cmb->prop( 'context' ) ) ? $this->cmb->prop( 'context' ) : 'normal';
+		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
 
 		// Call the proper hook based on the context provided.
 		switch ( $context ) {
@@ -357,7 +357,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		 * To output the fields 'naked' (without a postbox wrapper/style), then
 		 * add a `'remove_box_wrap' => true` to your metabox registration array.
 		 */
-		$add_wrap = ! empty( $title ) || empty( $this->cmb->prop( 'remove_box_wrap' ) );
+		$add_wrap = ! empty( $title ) || ! $this->cmb->prop( 'remove_box_wrap' );
 		$add_handle = $add_wrap && ! empty( $title );
 
 		// Open the context-box wrap.
@@ -495,7 +495,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			$classes[] = 'hide-if-js';
 		}
 
-		$add_wrap = ! empty( $this->cmb->prop( 'title' ) ) || empty( $this->cmb->prop( 'remove_box_wrap' ) );
+		$add_wrap = $this->cmb->prop( 'title' ) || ! $this->cmb->prop( 'remove_box_wrap' );
 
 		if ( $add_wrap ) {
 			$classes[] = 'cmb2-postbox postbox';

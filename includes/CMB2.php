@@ -242,7 +242,7 @@ class CMB2 extends CMB2_Base {
 		if ( $this->is_alternate_context_box() ) {
 
 			// Include custom class if requesting no title.
-			if ( empty( $this->prop( 'title' ) ) && empty( $this->prop( 'remove_box_wrap' ) ) ) {
+			if ( ! $this->prop( 'title' ) && ! $this->prop( 'remove_box_wrap' ) ) {
 				$context[] = 'cmb2-context-wrap-no-title';
 			}
 
@@ -1356,7 +1356,7 @@ class CMB2 extends CMB2_Base {
 	 * @return bool
 	 */
 	public function is_alternate_context_box() {
-		return ! empty( $this->prop( 'context' ) ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) );
+		return $this->prop( 'context' ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ) );
 	}
 
 	/**
