@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 * Modify `'taxonomy_*'` fields to return stored terms for non-post objects.
-* Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
+* Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Also added `"cmb2_return_taxonomy_values_{$cmb_id}"` filter to modify if `'taxonomy_*'` field values are returned. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
 * Allow outputting CMB2 boxes/fields in additional locations in the post-editor.
 
 	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
@@ -30,7 +30,10 @@ All notable changes to this project will be documented in this file.
 * Repeatable WYSIWYG no longer breaks if `'quicktags'` param is set to false. Props [@timburden](https://github.com/timburden) ([#797](https://github.com/WebDevStudios/CMB2/pull/797), [#796](https://github.com/WebDevStudios/CMB2/issues/796)).
 * Do not process title fields during group field save process.
 * Fix issue where term-meta values were not being displayed for some users. Props [@sbussetti](https://github.com/sbussetti) ([#763](https://github.com/WebDevStudios/CMB2/pull/763), [#700](https://github.com/WebDevStudios/CMB2/issues/700)).
-* Fix issue where term meta would not be applied when using the new term form if multiple object types were specified. Props [@ADC07](https://github.com/ADC07) ([#842](https://github.com/WebDevStudios/CMB2/pull/842), [#841](https://github.com/WebDevStudios/CMB2/issues/841)). 
+* Fix issue where term meta would not be applied when using the new term form if multiple object types were specified. Props [@ADC07](https://github.com/ADC07) ([#842](https://github.com/WebDevStudios/CMB2/pull/842), [#841](https://github.com/WebDevStudios/CMB2/issues/841)).
+* Fix WordPress spinner styling when boxes/fields used on the frontend.
+* Fix issue where clicking to remove a `file_list` item could occasionally remove the field row. ([#828](https://github.com/WebDevStudios/CMB2/pull/828)).
+* Fix issue where empty file field in group would still cause non-empty values to store to database. ([#721](https://github.com/WebDevStudios/CMB2/issues/721)).
 
 ## 2.2.3.1 - 2016-11-08
 
