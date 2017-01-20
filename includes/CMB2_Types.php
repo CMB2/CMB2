@@ -242,9 +242,9 @@ class CMB2_Types {
 	 * @param string $render_class_name The default field type class to use. Defaults to null.
 	 */
 	public function get_render_type_class( $render_class_name = null ) {
+		$render_class_name = $this->field->args( 'render_class' ) ? $this->field->args( 'render_class' ) : $render_class_name;
 
-		$render_class_name = $this->field->prop( 'render_class', $render_class_name );
-		$fieldtype         = $this->field->type();
+		$fieldtype = $this->field->type();
 
 		if ( has_action( "cmb2_render_class_{$fieldtype}" ) ) {
 
