@@ -30,11 +30,9 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 
 			// Try and get the closest named size from our array of dimensions
 			if ( $named_size = CMB2_Utils::get_named_size( $img_size ) ) {
-				$img_size = $named_size;
+				$size_name = $named_size;
 			}
-		}
-
-		if ( ! is_array( $img_size ) ) {
+		} else {
 
 			$image_sizes = CMB2_Utils::get_available_image_sizes();
 
