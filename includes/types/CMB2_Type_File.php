@@ -13,12 +13,46 @@
 class CMB2_Type_File extends CMB2_Type_File_Base {
 
 	public function render() {
-		$field      = $this->field;
-		$meta_value = $field->escaped_value();
-		$options    = (array) $field->options();
-		$img_size   = $field->args( 'preview_size' );
-		$query_args = $field->args( 'query_args' );
-		$output     = '';
+
+		$field       = $this->field;
+		$meta_value  = $field->escaped_value();
+		$options     = (array) $field->options();
+		$img_size    = $field->args( 'preview_size' );
+		$size_width  = '';
+		$size_height = '';
+		$size_name   = '';
+		$query_args  = $field->args( 'query_args' );
+		$output      = '';
+
+		if ( is_array( $img_size ) ) {
+			$size_width  = $img_size[0];
+			$size_height = $img_size[1];
+			
+			// Try and get the closest named size from our array of dimensions
+			if ( $named_size = CMB2_Utils::get_named_size( $img_size ) ) {
+				$img_size = $named_size;
+			}
+		}
+
+		if ( ! is_array( $img_size ) ) {
+
+			$image_sizes = CMB2_Utils::get_available_image_sizes();
+
+			// The 'thumb' alias, which works elsewhere, doesn't work in the wp.media uploader
+			if ( 'thumb' == $img_size ) {
+				$img_size = 'thumbnail';
+			}
+
+			// Named size doesn't exist, use 'large'
+			if ( ! array_key_exists( $img_size, $image_sizes ) ) {
+				$img_size = 'large';
+			}
+
+			// Get image dimensions from named sizes
+			$size_width  = $image_sizes[ $img_size ]['width'];
+			$size_height = $image_sizes[ $img_size ]['height'];
+			$size_name   = $img_size;
+		}
 
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
@@ -28,7 +62,8 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'class' => 'cmb2-upload-file regular-text',
 			'size'  => 45,
 			'desc'  => '',
-			'data-previewsize' => is_array( $img_size ) ? '[' . implode( ',', $img_size ) . ']' : 350,
+			'data-previewsize' => sprintf( '[%s,%s]', $size_width, $size_height ),
+			'data-sizename'    => $size_name,
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
 		) );
@@ -74,10 +109,9 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			if ( $this->is_valid_img_ext( $meta_value ) ) {
 
 				if ( $_id_value ) {
-					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
+					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image', 'style' => 'height: auto;' ) );
 				} else {
-					$size = is_array( $img_size ) ? $img_size[0] : 350;
-					$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
+					$image = '<img style="width: auto; height: auto;" src="' . $meta_value . '" class="cmb-file-field-image" alt="" />';
 				}
 
 				$output .= $this->img_status_output( array(

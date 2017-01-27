@@ -184,6 +184,7 @@ window.CMB2 = window.CMB2 || {};
 		media.$field      = $id( media.field );
 		media.fieldData   = media.$field.data();
 		media.previewSize = media.fieldData.previewsize;
+		media.sizeName    = media.fieldData.sizename;
 		media.fieldName   = media.$field.attr('name');
 		media.isList      = isList;
 
@@ -220,12 +221,41 @@ window.CMB2 = window.CMB2 || {};
 			// Loop through each attachment
 			$( attachment ).each( function() {
 				if ( this.type && this.type === 'image' ) {
-					var width = media.previewSize[0] ? media.previewSize[0] : 50;
-					var height = media.previewSize[1] ? media.previewSize[1] : 50;
+					
+					// Preview size dimensions
+					var previewWidth  = media.previewSize[0] ? media.previewSize[0] : 150;
+					var previewHeight = media.previewSize[1] ? media.previewSize[1] : 150;
+					
+					// Image dimensions and url
+					var url    = this.url;
+					var width  = this.width;
+					var height = this.height;
+					
+					// Get the correct dimensions and url if a named size is set and exists
+					// fallback to the 'large' size
+					if ( typeof( this.sizes[ media.sizeName ] ) !== 'undefined' ) {
+						url    = this.sizes[ media.sizeName ].url;
+						width  = this.sizes[ media.sizeName ].width;
+						height = this.sizes[ media.sizeName ].height;
+					} else if ( typeof( this.sizes['large'] ) !== 'undefined' ) {
+						url    = this.sizes['large'].url;
+						width  = this.sizes['large'].width;
+						height = this.sizes['large'].height;
+					}
+					
+					// Fit the image in to the preview size, keeping the correct aspect ratio
+					if( width > previewWidth ) {
+						height = Math.floor( previewWidth * height / width );
+						width = previewWidth
+					}
+					if( height > previewHeight ) {
+						width = Math.floor( previewHeight * width / height );
+						height = previewHeight;
+					}
 
-					// image preview
+					// Image preview
 					uploadStatus = '<li class="img-status cmb2-media-item">'+
-						'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
+						'<img width="'+ width +'" height="'+ height +'" style="height: auto;" src="'+ url +'" class="cmb-file_list-field-image" alt="'+ this.filename +'">'+
 						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
 						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
 					'</li>';
@@ -261,9 +291,40 @@ window.CMB2 = window.CMB2 || {};
 			$id( media.field +'_id' ).val(attachment.id);
 
 			if ( attachment.type && attachment.type === 'image' ) {
-				// image preview
-				var width = media.previewSize[0] ? media.previewSize[0] : 350;
-				uploadStatus = '<div class="img-status cmb2-media-item"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
+
+				// Preview size dimensions
+				var previewWidth  = media.previewSize[0] ? media.previewSize[0] : 350;
+				var previewHeight = media.previewSize[1] ? media.previewSize[1] : 350;
+
+				// Image dimensions and url
+				var url    = attachment.url;
+				var width  = attachment.width;
+				var height = attachment.height;
+
+				// Get the correct dimensions and url if a named size is set and exists
+				// fallback to the 'large' size
+				if ( typeof( attachment.sizes[ media.sizeName ] ) !== 'undefined' ) {
+					url    = attachment.sizes[ media.sizeName ].url;
+					width  = attachment.sizes[ media.sizeName ].width;
+					height = attachment.sizes[ media.sizeName ].height;
+				} else if ( typeof( attachment.sizes['large'] ) !== 'undefined' ) {
+					url    = attachment.sizes['large'].url;
+					width  = attachment.sizes['large'].width;
+					height = attachment.sizes['large'].height;
+				}
+
+				// Fit the image in to the preview size, keeping the correct aspect ratio
+				if( width > previewWidth ) {
+					height = Math.floor( previewWidth * height / width );
+					width = previewWidth
+				}
+				if( height > previewHeight ) {
+					width = Math.floor( previewHeight * width / height );
+					height = previewHeight;
+				}
+
+				// Image preview
+				uploadStatus = '<div class="img-status cmb2-media-item"><img width="'+ width +'" height="'+ height +'" style="height: auto;" src="'+ url +'" class="cmb-file-field-image" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
 			} else {
 				// Standard generic output if it's not an image.
 				uploadStatus = '<div class="file-status cmb2-media-item"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'">'+ l10n.strings.remove_file +'</a>)</div>';
