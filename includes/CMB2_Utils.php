@@ -146,6 +146,12 @@ class CMB2_Utils {
 
 				$data = array_shift( $candidates );
 				$data = $data[0];
+			/*
+			 * When the size requested is smaller than the thumbnail dimensions, we
+			 * fall back to the thumbnail size.
+			 */
+			} elseif ( ! empty( $image_sizes['thumbnail'] ) && $image_sizes['thumbnail']['width'] >= $size[0] && $image_sizes['thumbnail']['width'] >= $size[1] ) {
+				$data = 'thumbnail';
 			} else {
 				return false;
 			}
