@@ -161,4 +161,48 @@ class CMB2_JS {
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
 	}
 
+	/**
+	 * Hook our JS media attachment filter
+	 * @since  2.x.x.x
+	 */
+	public static function filter_media() {
+		add_filter( 'wp_prepare_attachment_for_js',  array( __CLASS__, 'prepare_image_sizes_for_js' ) , 10, 3 );
+	}
+
+	/**
+	 * Filters attachment data prepared for JavaScript.
+	 *
+	 * Adds the url, width, height, and orientation for custom sizes to the JavaScript
+	 * object returned by the wp.media uploader. Hooked to 'wp_prepare_attachment_for_js'.
+	 *
+	 * @since  2.x.x.x
+	 * @param  array      $response   Array of prepared attachment data.
+	 * @param  int|object $attachment Attachment ID or object.
+	 * @param  array      $meta       Array of attachment meta data ( from wp_get_attachment_metadata() ).
+	 * @return string     filtered $response array
+	 */
+	public static function prepare_image_sizes_for_js( $response, $attachment, $meta ) {
+		$image_sizes = CMB2_Utils::get_available_image_sizes();
+		$image_sizes = array_keys( $image_sizes );
+		
+		foreach ( $image_sizes as $size ) {
+			// registered image size exists for this attachment
+			if ( isset( $meta['sizes'][ $size ] ) ) {
+
+				$attachment_url = wp_get_attachment_url( $attachment->ID );
+				$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+				$size_meta = $meta['sizes'][ $size ];
+
+				$response['sizes'][ $size ] = array(
+					'url'         => $base_url . $size_meta['file'],
+					'height'      => $size_meta['height'],
+					'width'       => $size_meta['width'],
+					'orientation' => $size_meta['height'] > $size_meta['width'] ? 'portrait' : 'landscape',
+				);
+			}
+		}
+
+		return $response;
+	}
+
 }

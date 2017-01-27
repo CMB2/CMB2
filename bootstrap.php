@@ -53,6 +53,13 @@ function cmb2_bootstrap() {
 	 * @since  2.0.2
 	 */
 	foreach ( CMB2_Boxes::get_all() as $cmb ) {
+		
+		/**
+		 * Filter media attachments for JS
+		 * @todo this needs a better home
+		 * @since  2.x.x.x
+		 */
+		CMB2_JS::filter_media();
 
 		if ( $cmb->prop( 'hookup' ) ) {
 			$hookup = new CMB2_hookup( $cmb );
