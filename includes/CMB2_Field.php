@@ -1093,7 +1093,7 @@ class CMB2_Field extends CMB2_Base {
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
-			'preview_size'      => 'file' == $args['type'] ? 'large' : 'thumbnail',
+			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
 			'render_row_cb'     => array( $this, 'render_field_callback' ),
 			'display_cb'        => array( $this, 'display_value_callback' ),
 			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
