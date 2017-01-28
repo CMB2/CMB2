@@ -18,46 +18,19 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$meta_value  = $field->escaped_value();
 		$name        = $this->_name();
 		$img_size    = $field->args( 'preview_size' );
-		$size_width  = '';
-		$size_height = '';
-		$size_name   = '';
 		$query_args  = $field->args( 'query_args' );
 		$output      = '';
 
-		if ( is_array( $img_size ) ) {
-			$size_width  = $img_size[0];
-			$size_height = $img_size[1];
-
-			// Try and get the closest named size from our array of dimensions
-			if ( $named_size = CMB2_Utils::get_named_size( $img_size ) ) {
-				$size_name = $named_size;
-			}
-		} else {
-
-			$image_sizes = CMB2_Utils::get_available_image_sizes();
-
-			// The 'thumb' alias, which works elsewhere, doesn't work in the wp.media uploader
-			if ( 'thumb' == $img_size ) {
-				$img_size = 'thumbnail';
-			}
-
-			// Named size doesn't exist, use 'thumbnail'
-			if ( ! array_key_exists( $img_size, $image_sizes ) ) {
-				$img_size = 'thumbnail';
-			}
-
-			// Get image dimensions from named sizes
-			$size_width  = $image_sizes[ $img_size ]['width'];
-			$size_height = $image_sizes[ $img_size ]['height'];
-			$size_name   = $img_size;
-		}
+		// get an array of image size meta data
+		// fallback to 'thumbnail'
+		$img_size_data = $this->get_image_size_data( $img_size, 'thumbnail' );
 
 		$output .= parent::render( array(
 			'type'  => 'hidden',
 			'class' => 'cmb2-upload-file cmb2-upload-list',
 			'size'  => 45, 'desc'  => '', 'value'  => '',
-			'data-previewsize' => sprintf( '[%s,%s]', $size_width, $size_height ),
-			'data-sizename'    => $size_name,
+			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
+			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
 		) );
@@ -87,7 +60,7 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 				if ( $this->is_valid_img_ext( $fullurl ) ) {
 
 					$output .= $this->img_status_output( array(
-						'image'    => wp_get_attachment_image( $id, $img_size, null, array( 'class' => 'cmb-file_list-field-image', 'style' => 'height: auto;' ) ),
+						'image'    => wp_get_attachment_image( $id, $img_size ),
 						'tag'      => 'li',
 						'id_input' => $id_input,
 					) );
