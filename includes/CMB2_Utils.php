@@ -111,15 +111,15 @@ class CMB2_Utils {
 	 * Uses get_available_image_sizes() to get all available sizes.
 	 *
 	 * @since  2.x.x.x
-	 * @param  array|string $size Image size. Accepts an array of width and height (in that order).
-	 * @return false|string $data Named image size e.g. 'thumbnail'.
+	 * @param  array|string $size Image size. Accepts an array of width and height (in that order)
+	 * @return false|string $data Named image size e.g. 'thumbnail'
 	 */
 	public static function get_named_size( $size ) {
-		$image_sizes = self::get_available_image_sizes();
 		$data = array();
 
 		// Find the best match when '$size' is an array.
 		if ( is_array( $size ) ) {
+			$image_sizes = self::get_available_image_sizes();
 			$candidates = array();
 
 			foreach ( $image_sizes as $_size => $data ) {
@@ -132,7 +132,23 @@ class CMB2_Utils {
 
 				// If it's not an exact match, consider larger sizes with the same aspect ratio.
 				if ( $data['width'] >= $size[0] && $data['height'] >= $size[1] ) {
-					if ( wp_image_matches_ratio( $data['width'], $data['height'], $size[0], $size[1] ) ) {
+					
+					/*
+					 * To test for varying crops, we constrain the dimensions of the larger image
+					 * to the dimensions of the smaller image and see if they match.
+					 */
+					if ( $data['width'] > $size[0] ) {
+						$constrained_size = wp_constrain_dimensions( $data['width'], $data['height'], $size[0] );
+						$expected_size = array( $size[0], $size[1] );
+					} else {
+						$constrained_size = wp_constrain_dimensions( $size[0], $size[1], $data['width'] );
+						$expected_size = array( $data['width'], $data['height'] );
+					}
+
+					// If the image dimensions are within 1px of the expected size, we consider it a match.
+					$matched = ( abs( $constrained_size[0] - $expected_size[0] ) <= 1 && abs( $constrained_size[1] - $expected_size[1] ) <= 1 );
+
+					if ( $matched ) {
 						$candidates[ $data['width'] * $data['height'] ] = array( $_size, $data );
 					}
 				}
