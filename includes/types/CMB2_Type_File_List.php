@@ -13,13 +13,13 @@
 class CMB2_Type_File_List extends CMB2_Type_File_Base {
 
 	public function render() {
+		$field      = $this->field;
 
-		$field       = $this->field;
-		$meta_value  = $field->escaped_value();
-		$name        = $this->_name();
-		$img_size    = $field->args( 'preview_size' );
-		$query_args  = $field->args( 'query_args' );
-		$output      = '';
+		$meta_value = $field->escaped_value();
+		$name       = $this->_name();
+		$img_size   = $field->args( 'preview_size' );
+		$query_args = $field->args( 'query_args' );
+		$output     = '';
 
 		// get an array of image size meta data, fallback to 'thumbnail'
 		$img_size_data = parent::get_image_size_data( $img_size, 'thumbnail' );
