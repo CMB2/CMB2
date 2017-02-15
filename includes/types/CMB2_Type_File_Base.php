@@ -48,6 +48,41 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	}
 
 	/**
+	 * file/file_list image wrap
+	 * @since  2.0.2
+	 * @param  array  $args Array of arguments for output
+	 * @return string       Image wrap output
+	 */
+	public function img_status_output( $args ) {
+		return sprintf( '<%1$s class="img-status cmb2-media-item">%2$s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button"%3$s>%4$s</a></p>%5$s</%1$s>',
+			$args['tag'],
+			$args['image'],
+			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
+			esc_html( $this->_text( 'remove_image_text', esc_html__( 'Remove Image', 'cmb2' ) ) ),
+			isset( $args['id_input'] ) ? $args['id_input'] : ''
+		);
+	}
+
+	/**
+	 * file/file_list file wrap
+	 * @since  2.0.2
+	 * @param  array  $args Array of arguments for output
+	 * @return string       File wrap output
+	 */
+	public function file_status_output( $args ) {
+		return sprintf( '<%1$s class="file-status cmb2-media-item"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
+			$args['tag'],
+			esc_html( $this->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
+			CMB2_Utils::get_file_name_from_path( $args['value'] ),
+			$args['value'],
+			esc_html( $this->_text( 'file_download_text', esc_html__( 'Download', 'cmb2' ) ) ),
+			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
+			esc_html( $this->_text( 'remove_text', esc_html__( 'Remove', 'cmb2' ) ) ),
+			isset( $args['id_input'] ) ? $args['id_input'] : ''
+		);
+	}
+
+	/**
 	 * Utility method to return an array of meta data for a registered image size
 	 *
 	 * Uses CMB2_Utils::get_named_size() to get the closest available named size
@@ -131,41 +166,6 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		}
 
 		return $response;
-	}
-
-	/**
-	 * file/file_list image wrap
-	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
-	 * @return string       Image wrap output
-	 */
-	public function img_status_output( $args ) {
-		return sprintf( '<%1$s class="img-status cmb2-media-item">%2$s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button"%3$s>%4$s</a></p>%5$s</%1$s>',
-			$args['tag'],
-			$args['image'],
-			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
-			esc_html( $this->_text( 'remove_image_text', esc_html__( 'Remove Image', 'cmb2' ) ) ),
-			isset( $args['id_input'] ) ? $args['id_input'] : ''
-		);
-	}
-
-	/**
-	 * file/file_list file wrap
-	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
-	 * @return string       File wrap output
-	 */
-	public function file_status_output( $args ) {
-		return sprintf( '<%1$s class="file-status cmb2-media-item"><span>%2$s <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%4$s" target="_blank" rel="external">%5$s</a> / <a href="#" class="cmb2-remove-file-button"%6$s>%7$s</a>)%8$s</%1$s>',
-			$args['tag'],
-			esc_html( $this->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
-			CMB2_Utils::get_file_name_from_path( $args['value'] ),
-			$args['value'],
-			esc_html( $this->_text( 'file_download_text', esc_html__( 'Download', 'cmb2' ) ) ),
-			isset( $args['cached_id'] ) ? ' rel="' . $args['cached_id'] . '"' : '',
-			esc_html( $this->_text( 'remove_text', esc_html__( 'Remove', 'cmb2' ) ) ),
-			isset( $args['id_input'] ) ? $args['id_input'] : ''
-		);
 	}
 
 }
