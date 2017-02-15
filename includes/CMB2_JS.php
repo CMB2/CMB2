@@ -84,6 +84,8 @@ class CMB2_JS {
 		}
 
 		self::localize( $debug );
+
+		do_action( 'cmb2_footer_enqueue' );
 	}
 
 	/**
