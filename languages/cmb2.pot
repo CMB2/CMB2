@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.3.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2017-02-15 16:45:00+00:00\n"
+"POT-Creation-Date: 2017-02-15 17:51:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-2-15 16:45+300\n"
+"PO-Revision-Date: 2017-2-15 17:51+300\n"
 "Last-Translator: WebDevStudios contact@webdevstudios.com\n"
 "Language-Team: WebDevStudios contact@webdevstudios.com\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -334,11 +334,11 @@ msgstr ""
 msgid "Will show in REST API \"editable\" contexts only (`POST` requests)."
 msgstr ""
 
-#: includes/CMB2.php:127
+#: includes/CMB2.php:167
 msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: includes/CMB2.php:470
+#: includes/CMB2.php:510
 msgid "Click to toggle"
 msgstr ""
 
@@ -661,12 +661,12 @@ msgid ""
 "response."
 msgstr ""
 
-#: includes/types/CMB2_Type_File.php:41 tests/test-cmb-types.php:682
+#: includes/types/CMB2_Type_File.php:40 tests/test-cmb-types.php:682
 #: tests/test-cmb-types.php:700
 msgid "Add or Upload File"
 msgstr ""
 
-#: includes/types/CMB2_Type_File_List.php:40 tests/test-cmb-types.php:638
+#: includes/types/CMB2_Type_File_List.php:39 tests/test-cmb-types.php:638
 #: tests/test-cmb-types.php:662
 msgid "Add or Upload Files"
 msgstr ""
