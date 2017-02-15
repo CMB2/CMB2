@@ -383,8 +383,9 @@ span.cmb2-metabox-description {
 /* line 354, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img {
   max-width: 350px;
+  height: auto;
 }
-/* line 359, sass/partials/_main_wrap.scss */
+/* line 360, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
   background: #ffffff;
@@ -394,16 +395,16 @@ span.cmb2-metabox-description {
   margin: 15px 0 0 0;
   padding: 5px;
 }
-/* line 369, sass/partials/_main_wrap.scss */
+/* line 370, sass/partials/_main_wrap.scss */
 .cmb2-media-status .embed-status {
   float: right;
   max-width: 800px;
 }
-/* line 374, sass/partials/_main_wrap.scss */
+/* line 375, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status, .cmb2-media-status .embed-status {
   position: relative;
 }
-/* line 377, sass/partials/_main_wrap.scss */
+/* line 378, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button, .cmb2-media-status .embed-status .cmb2-remove-file-button {
   background: url(../images/ico-delete.png);
   height: 16px;
@@ -413,16 +414,16 @@ span.cmb2-metabox-description {
   top: -5px;
   width: 16px;
 }
-/* line 391, sass/partials/_main_wrap.scss */
+/* line 392, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button {
   top: 10px;
 }
-/* line 396, sass/partials/_main_wrap.scss */
+/* line 397, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span {
   cursor: pointer;
 }
 
-/* line 402, sass/partials/_main_wrap.scss */
+/* line 403, sass/partials/_main_wrap.scss */
 .cmb-type-file-list .cmb2-media-status .img-status {
   clear: none;
   float: right;
@@ -430,32 +431,32 @@ span.cmb2-metabox-description {
   width: auto;
 }
 
-/* line 409, sass/partials/_main_wrap.scss */
+/* line 410, sass/partials/_main_wrap.scss */
 .cmb-attach-list li {
   clear: both;
   display: inline-block;
   margin-bottom: 25px;
   width: 100%;
 }
-/* line 415, sass/partials/_main_wrap.scss */
+/* line 416, sass/partials/_main_wrap.scss */
 .cmb-attach-list li img {
   cursor: move;
   float: right;
   margin-left: 10px;
 }
 
-/* line 422, sass/partials/_main_wrap.scss */
+/* line 423, sass/partials/_main_wrap.scss */
 .cmb2-remove-wrapper {
   margin: 0;
 }
 
-/* line 426, sass/partials/_main_wrap.scss */
+/* line 427, sass/partials/_main_wrap.scss */
 .child-cmb2 .cmb-th {
   text-align: right;
 }
 
 @media (max-width: 450px) {
-  /* line 431, sass/partials/_main_wrap.scss */
+  /* line 432, sass/partials/_main_wrap.scss */
   .cmb-th,
   .cmb-td,
   .cmb-th + .cmb-td {
