@@ -63,7 +63,7 @@ class CMB2_JS {
 		// if file/file_list
 		if ( isset( $dependencies['media-editor'] ) ) {
 			wp_enqueue_media();
-			self::output_js_templates();
+			CMB2_Type_File_Base::output_js_underscore_templates();
 		}
 
 		// if timepicker
@@ -160,40 +160,6 @@ class CMB2_JS {
 		);
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
-	}
-
-	/**
-	 * Outputs the underscore Javascript templates used for the file/file_list attachment fields.
-	 * @since  2.2.4
-	 * @return void
-	 */
-	protected static function output_js_templates() {
-		?>
-		<script type="text/html" id="tmpl-cmb2-single-image">
-			<div class="img-status cmb2-media-item">
-				<img width="{{ data.sizeWidth }}" height="{{ data.sizeHeight }}" src="{{ data.sizeUrl }}" class="cmb-file-field-image" alt="{{ data.filename }}" title="{{ data.filename }}" />
-				<p><a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}">{{ data.stringRemoveImage }}</a></p>
-			</div>
-		</script>
-		<script type="text/html" id="tmpl-cmb2-single-file">
-			<div class="file-status cmb2-media-item">
-				<span>{{ data.stringFile }} <strong>{{ data.filename }}</strong></span>&nbsp;&nbsp; (<a href="{{ data.url }}" target="_blank" rel="external">{{ data.stringDownload }}</a> / <a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}">{{ data.stringRemoveFile }}</a>)
-			</div>
-		</script>
-		<script type="text/html" id="tmpl-cmb2-list-image">
-			<li class="img-status cmb2-media-item">
-				<img width="{{ data.sizeWidth }}" height="{{ data.sizeHeight }}" src="{{ data.sizeUrl }}" class="cmb-file_list-field-image" alt="{{ data.filename }}">
-				<p><a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}[{{ data.id }}]">{{ data.stringRemoveImage }}</a></p>
-				<input type="hidden" id="filelist-{{ data.id }}" data-id="{{ data.id }}" name="{{ data.mediaFieldName }}[{{ data.id }}]" value="{{ data.url }}">
-			</li>
-		</script>
-		<script type="text/html" id="tmpl-cmb2-list-file">
-			<li class="file-status cmb2-media-item">
-				<span>{{ data.stringFile }} <strong>{{ data.filename }}</strong></span>&nbsp;&nbsp; (<a href="{{ data.url }}" target="_blank" rel="external">{{ data.stringDownload }}</a> / <a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}[{{ data.id }}]">{{ data.stringRemoveFile }}</a>)
-				<input type="hidden" id="filelist-{{ data.id }}" data-id="{{ data.id }}" name="{{ data.mediaFieldName }}[{{ data.id }}]" value="{{ data.url }}">
-			</li>
-		</script>
-		<?php
 	}
 
 }

@@ -83,6 +83,40 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	}
 
 	/**
+	 * Outputs the file/file_list underscore Javascript templates in the footer.
+	 * @since  2.2.4
+	 * @return void
+	 */
+	protected static function output_js_underscore_templates() {
+		?>
+		<script type="text/html" id="tmpl-cmb2-single-image">
+			<div class="img-status cmb2-media-item">
+				<img width="{{ data.sizeWidth }}" height="{{ data.sizeHeight }}" src="{{ data.sizeUrl }}" class="cmb-file-field-image" alt="{{ data.filename }}" title="{{ data.filename }}" />
+				<p><a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}">{{ data.stringRemoveImage }}</a></p>
+			</div>
+		</script>
+		<script type="text/html" id="tmpl-cmb2-single-file">
+			<div class="file-status cmb2-media-item">
+				<span>{{ data.stringFile }} <strong>{{ data.filename }}</strong></span>&nbsp;&nbsp; (<a href="{{ data.url }}" target="_blank" rel="external">{{ data.stringDownload }}</a> / <a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}">{{ data.stringRemoveFile }}</a>)
+			</div>
+		</script>
+		<script type="text/html" id="tmpl-cmb2-list-image">
+			<li class="img-status cmb2-media-item">
+				<img width="{{ data.sizeWidth }}" height="{{ data.sizeHeight }}" src="{{ data.sizeUrl }}" class="cmb-file_list-field-image" alt="{{ data.filename }}">
+				<p><a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}[{{ data.id }}]">{{ data.stringRemoveImage }}</a></p>
+				<input type="hidden" id="filelist-{{ data.id }}" data-id="{{ data.id }}" name="{{ data.mediaFieldName }}[{{ data.id }}]" value="{{ data.url }}">
+			</li>
+		</script>
+		<script type="text/html" id="tmpl-cmb2-list-file">
+			<li class="file-status cmb2-media-item">
+				<span>{{ data.stringFile }} <strong>{{ data.filename }}</strong></span>&nbsp;&nbsp; (<a href="{{ data.url }}" target="_blank" rel="external">{{ data.stringDownload }}</a> / <a href="#" class="cmb2-remove-file-button" rel="{{ data.mediaField }}[{{ data.id }}]">{{ data.stringRemoveFile }}</a>)
+				<input type="hidden" id="filelist-{{ data.id }}" data-id="{{ data.id }}" name="{{ data.mediaFieldName }}[{{ data.id }}]" value="{{ data.url }}">
+			</li>
+		</script>
+		<?php
+	}
+
+	/**
 	 * Utility method to return an array of meta data for a registered image size
 	 *
 	 * Uses CMB2_Utils::get_named_size() to get the closest available named size
