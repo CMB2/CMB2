@@ -555,7 +555,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<label for="group_field_0_test_file">Name</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-queryargs=\'\'/>
+									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\'/>
 									<input class="cmb2-upload-button button" type="button" value="Add or Upload File" />
 									<input type="hidden" class="cmb2-upload-file-id" name="group_field[0][test_file_id]" id="group_field_0_test_file_id" value=""/>
 									<div id="group_field_0_test_file_id-status" class="cmb2-media-status">

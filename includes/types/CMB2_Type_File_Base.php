@@ -82,4 +82,90 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		);
 	}
 
+	/**
+	 * Utility method to return an array of meta data for a registered image size
+	 *
+	 * Uses CMB2_Utils::get_named_size() to get the closest available named size
+	 * from an array of width and height values and CMB2_Utils::get_available_image_sizes()
+	 * to get the meta data associated with a named size.
+	 *
+	 * @since  2.2.4
+	 * @param  array|string $img_size  Image size. Accepts an array of width and height (in that order)
+	 * @param  string       $fallback  Size to use if the supplied named size doesn't exist
+	 * @return array                   Array containing the image size meta data
+	 *    $size = (
+	 *      'width'  => (int) image size width
+	 *      'height' => (int) image size height
+	 *      'name'   => (string) e.g. 'thumbnail'
+	 *    )
+	 */
+	static function get_image_size_data( $img_size = '', $fallback = 'thumbnail' ) {
+		$data = array();
+
+		if ( is_array( $img_size ) ) {
+			$data['width']  = intval( $img_size[0] );
+			$data['height'] = intval( $img_size[1] );
+			$data['name']   = '';
+
+			// Try and get the closest named size from our array of dimensions
+			if ( $named_size = CMB2_Utils::get_named_size( $img_size ) ) {
+				$data['name'] = $named_size;
+			}
+		} else {
+
+			$image_sizes = CMB2_Utils::get_available_image_sizes();
+
+			// The 'thumb' alias, which works elsewhere, doesn't work in the wp.media uploader
+			if ( 'thumb' == $img_size ) {
+				$img_size = 'thumbnail';
+			}
+
+			// Named size doesn't exist, use $fallback
+			if ( ! array_key_exists( $img_size, $image_sizes ) ) {
+				$img_size = $fallback;
+			}
+
+			// Get image dimensions from named sizes
+			$data['width']  = intval( $image_sizes[ $img_size ]['width'] );
+			$data['height'] = intval( $image_sizes[ $img_size ]['height'] );
+			$data['name']   = $img_size;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Filters attachment data prepared for JavaScript.
+	 *
+	 * Adds the url, width, height, and orientation for custom sizes to the JavaScript
+	 * object returned by the wp.media uploader. Hooked to 'wp_prepare_attachment_for_js'.
+	 *
+	 * @since  2.2.4
+	 * @param  array      $response   Array of prepared attachment data
+	 * @param  int|object $attachment Attachment ID or object
+	 * @param  array      $meta       Array of attachment meta data ( from wp_get_attachment_metadata() )
+	 * @return array      filtered $response array
+	 */
+	public static function prepare_image_sizes_for_js( $response, $attachment, $meta ) {
+		foreach ( CMB2_Utils::get_available_image_sizes() as $size => $info ) {
+
+			// registered image size exists for this attachment
+			if ( isset( $meta['sizes'][ $size ] ) ) {
+
+				$attachment_url = wp_get_attachment_url( $attachment->ID );
+				$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+				$size_meta = $meta['sizes'][ $size ];
+
+				$response['sizes'][ $size ] = array(
+					'url'         => $base_url . $size_meta['file'],
+					'height'      => $size_meta['height'],
+					'width'       => $size_meta['width'],
+					'orientation' => $size_meta['height'] > $size_meta['width'] ? 'portrait' : 'landscape',
+				);
+			}
+		}
+
+		return $response;
+	}
+
 }

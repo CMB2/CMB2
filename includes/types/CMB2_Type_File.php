@@ -20,6 +20,9 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$query_args = $field->args( 'query_args' );
 		$output     = '';
 
+		// get an array of image size meta data, fallback to 'large'
+		$img_size_data = parent::get_image_size_data( $img_size, 'large' );
+
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
 
@@ -28,7 +31,8 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'class' => 'cmb2-upload-file regular-text',
 			'size'  => 45,
 			'desc'  => '',
-			'data-previewsize' => is_array( $img_size ) ? '[' . implode( ',', $img_size ) . ']' : 350,
+			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
+			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
 		) );
@@ -76,8 +80,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 				if ( $_id_value ) {
 					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
 				} else {
-					$size = is_array( $img_size ) ? $img_size[0] : 350;
-					$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
+					$image = '<img style="max-width: ' . absint( $img_size_data['width'] ) . 'px; width: 100%;" src="' . $meta_value . '" class="cmb-file-field-image" alt="" />';
 				}
 
 				$output .= $this->img_status_output( array(

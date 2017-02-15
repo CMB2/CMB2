@@ -76,6 +76,116 @@ class CMB2_Utils {
 	}
 
 	/**
+	 * Utility method to get a combined list of default and custom registered image sizes
+	 * @since  2.2.4
+	 * @link   http://core.trac.wordpress.org/ticket/18947
+	 * @global array $_wp_additional_image_sizes
+	 * @return array The image sizes
+	 */
+	static function get_available_image_sizes() {
+		global $_wp_additional_image_sizes;
+
+		$default_image_sizes = array( 'thumbnail', 'medium', 'large' );
+		foreach ( $default_image_sizes as $size ) {
+			$image_sizes[ $size ] = array(
+				'height' => intval( get_option( "{$size}_size_h" ) ),
+				'width'  => intval( get_option( "{$size}_size_w" ) ),
+				'crop'   => get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false,
+			);
+		}
+
+		if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) ) {
+			$image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
+		}
+
+		return $image_sizes;
+	}
+
+	/**
+	 * Utility method to return the closest named size from an array of values
+	 *
+	 * Based off of WordPress's image_get_intermediate_size()
+	 * If the size matches an existing size then it will be used. If there is no
+	 * direct match, then the nearest image size larger than the specified size
+	 * will be used. If nothing is found, then the function will return false.
+	 * Uses get_available_image_sizes() to get all available sizes.
+	 *
+	 * @since  2.2.4
+	 * @param  array|string $size Image size. Accepts an array of width and height (in that order)
+	 * @return false|string       Named image size e.g. 'thumbnail'
+	 */
+	public static function get_named_size( $size ) {
+		$data = array();
+
+		// Find the best match when '$size' is an array.
+		if ( is_array( $size ) ) {
+			$image_sizes = self::get_available_image_sizes();
+			$candidates = array();
+
+			foreach ( $image_sizes as $_size => $data ) {
+
+				// If there's an exact match to an existing image size, short circuit.
+				if ( $data['width'] == $size[0] && $data['height'] == $size[1] ) {
+					$candidates[ $data['width'] * $data['height'] ] = array( $_size, $data );
+					break;
+				}
+
+				// If it's not an exact match, consider larger sizes with the same aspect ratio.
+				if ( $data['width'] >= $size[0] && $data['height'] >= $size[1] ) {
+
+					/*
+					 * To test for varying crops, we constrain the dimensions of the larger image
+					 * to the dimensions of the smaller image and see if they match.
+					 */
+					if ( $data['width'] > $size[0] ) {
+						$constrained_size = wp_constrain_dimensions( $data['width'], $data['height'], $size[0] );
+						$expected_size = array( $size[0], $size[1] );
+					} else {
+						$constrained_size = wp_constrain_dimensions( $size[0], $size[1], $data['width'] );
+						$expected_size = array( $data['width'], $data['height'] );
+					}
+
+					// If the image dimensions are within 1px of the expected size, we consider it a match.
+					$matched = ( abs( $constrained_size[0] - $expected_size[0] ) <= 1 && abs( $constrained_size[1] - $expected_size[1] ) <= 1 );
+
+					if ( $matched ) {
+						$candidates[ $data['width'] * $data['height'] ] = array( $_size, $data );
+					}
+				}
+			}
+
+			if ( ! empty( $candidates ) ) {
+				// Sort the array by size if we have more than one candidate.
+				if ( 1 < count( $candidates ) ) {
+					ksort( $candidates );
+				}
+
+				$data = array_shift( $candidates );
+				$data = $data[0];
+			}
+			/*
+			 * When the size requested is smaller than the thumbnail dimensions, we
+			 * fall back to the thumbnail size.
+			 */
+			elseif ( ! empty( $image_sizes['thumbnail'] ) && $image_sizes['thumbnail']['width'] >= $size[0] && $image_sizes['thumbnail']['width'] >= $size[1] ) {
+				$data = 'thumbnail';
+			} else {
+				return false;
+			}
+
+		} elseif ( ! empty( $image_sizes[ $size ] ) ) {
+			$data = $size;
+		}
+
+		// If we still don't have a match at this point, return false.
+		if ( empty( $data ) ) {
+			return false;
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Utility method that returns time string offset by timezone
 	 * @since  1.0.0
 	 * @param  string $tzstring Time string
