@@ -347,7 +347,7 @@ span.cmb2-metabox-description {
 	.img-status {
 		clear: none;
 		display: inline-block;
-		float: left;
+		vertical-align: middle;
 		margin-right: 10px;
 		width: auto;
 
@@ -402,16 +402,19 @@ span.cmb2-metabox-description {
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
-	float: left;
-	margin-right: 10px;
+	vertical-align: middle;
 	width: auto;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	margin-top: 0;
 }
 
 .cmb-attach-list li {
 	clear: both;
 	display: inline-block;
-	margin-bottom: 25px;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 10px;
 
 	img {
 		cursor: move;

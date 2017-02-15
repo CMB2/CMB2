@@ -458,7 +458,7 @@ span.cmb2-metabox-description {
 .cmb2-media-status .img-status {
 	clear: none;
 	display: inline-block;
-	float: right;
+	vertical-align: middle;
 	margin-left: 10px;
 	width: auto;
 }
@@ -526,21 +526,24 @@ span.cmb2-metabox-description {
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
-	float: right;
-	margin-left: 10px;
+	vertical-align: middle;
 	width: auto;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	margin-top: 0;
 }
 
-/* line 410, sass/partials/_main_wrap.scss */
+/* line 412, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li {
 	clear: both;
 	display: inline-block;
-	margin-bottom: 25px;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
 
-/* line 416, sass/partials/_main_wrap.scss */
+/* line 419, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li img {
 	cursor: move;
@@ -548,13 +551,13 @@ span.cmb2-metabox-description {
 	margin-left: 10px;
 }
 
-/* line 423, sass/partials/_main_wrap.scss */
+/* line 426, sass/partials/_main_wrap.scss */
 
 .cmb2-remove-wrapper {
 	margin: 0;
 }
 
-/* line 427, sass/partials/_main_wrap.scss */
+/* line 430, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th {
 	text-align: right;
@@ -1954,7 +1957,7 @@ Sidebar Placement Adjustments
 	padding-top: .4em;
 }
 
-/* line 432, sass/partials/_main_wrap.scss */
+/* line 435, sass/partials/_main_wrap.scss */
 
 .cmb-th,
 .cmb-td,
