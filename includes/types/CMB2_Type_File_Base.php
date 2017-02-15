@@ -87,7 +87,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * @since  2.2.4
 	 * @return void
 	 */
-	protected static function output_js_underscore_templates() {
+	public static function output_js_underscore_templates() {
 		?>
 		<script type="text/html" id="tmpl-cmb2-single-image">
 			<div class="img-status cmb2-media-item">
