@@ -1121,14 +1121,20 @@ class CMB2 extends CMB2_Base {
 			return false;
 		}
 
-		if ( in_array( $field['type'], array( 'file', 'file_list' ) ) ) {
-			// Initiate attachment JS hooks
-			add_filter( 'wp_prepare_attachment_for_js', 'CMB2_Type_File_Base::prepare_image_sizes_for_js', 10, 3 );
-		}
+		// Perform some field-type-specific initiation actions.
+		switch ( $field['type'] ) {
+			case 'file':
+			case 'file_list':
 
-		if ( 'oembed' === $field['type'] ) {
-			// Initiate oembed Ajax hooks
-			cmb2_ajax();
+				// Initiate attachment JS hooks
+				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
+				break;
+
+			case 'file_list':
+
+				// Initiate oembed Ajax hooks
+				cmb2_ajax();
+				break;
 		}
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
