@@ -21,9 +21,8 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$query_args  = $field->args( 'query_args' );
 		$output      = '';
 
-		// get an array of image size meta data
-		// fallback to 'thumbnail'
-		$img_size_data = $this->get_image_size_data( $img_size, 'thumbnail' );
+		// get an array of image size meta data, fallback to 'thumbnail'
+		$img_size_data = parent::get_image_size_data( $img_size, 'thumbnail' );
 
 		$output .= parent::render( array(
 			'type'  => 'hidden',

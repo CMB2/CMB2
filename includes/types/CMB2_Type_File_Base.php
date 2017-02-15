@@ -54,10 +54,10 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * from an array of width and height values and CMB2_Utils::get_available_image_sizes()
 	 * to get the meta data associated with a named size.
 	 *
-	 * @since  2.x.x.x
+	 * @since  2.2.4
 	 * @param  array|string $img_size  Image size. Accepts an array of width and height (in that order)
 	 * @param  string       $fallback  Size to use if the supplied named size doesn't exist
-	 * @return array        $size      Array containing the image size meta data
+	 * @return array                   Array containing the image size meta data
 	 *    $size = (
 	 *      'width'  => (int) image size width
 	 *      'height' => (int) image size height
@@ -95,7 +95,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 			$data['height'] = intval( $image_sizes[ $img_size ]['height'] );
 			$data['name']   = $img_size;
 		}
-		
+
 		return $data;
 	}
 
@@ -105,17 +105,15 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 * Adds the url, width, height, and orientation for custom sizes to the JavaScript
 	 * object returned by the wp.media uploader. Hooked to 'wp_prepare_attachment_for_js'.
 	 *
-	 * @since  2.x.x.x
+	 * @since  2.2.4
 	 * @param  array      $response   Array of prepared attachment data
 	 * @param  int|object $attachment Attachment ID or object
 	 * @param  array      $meta       Array of attachment meta data ( from wp_get_attachment_metadata() )
-	 * @return string     filtered $response array
+	 * @return array      filtered $response array
 	 */
 	public static function prepare_image_sizes_for_js( $response, $attachment, $meta ) {
-		$image_sizes = CMB2_Utils::get_available_image_sizes();
-		$image_sizes = array_keys( $image_sizes );
-		
-		foreach ( $image_sizes as $size ) {
+		foreach ( CMB2_Utils::get_available_image_sizes() as $size => $info ) {
+
 			// registered image size exists for this attachment
 			if ( isset( $meta['sizes'][ $size ] ) ) {
 
