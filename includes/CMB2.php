@@ -1130,7 +1130,7 @@ class CMB2 extends CMB2_Base {
 				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
 				break;
 
-			case 'file_list':
+			case 'oembed':
 
 				// Initiate oembed Ajax hooks
 				cmb2_ajax();
