@@ -510,7 +510,7 @@ class CMB2_Utils {
 	 * @return string|false       File extension or false
 	 */
 	public static function get_file_ext( $file ) {
-		$parsed = @parse_url( $file, PHP_URL_PATH );
+		$parsed = parse_url( $file, PHP_URL_PATH );
 		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
 	}
 
