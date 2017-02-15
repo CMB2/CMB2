@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 * Fix WordPress spinner styling when boxes/fields used on the frontend.
 * Fix issue where clicking to remove a `file_list` item could occasionally remove the field row. ([#828](https://github.com/WebDevStudios/CMB2/pull/828)).
 * Fix issue where empty file field in group would still cause non-empty values to store to database. ([#721](https://github.com/WebDevStudios/CMB2/issues/721)).
+* Make `file`/`file_list` field preview images work with named sizes. Props [@Cai333](https://github.com/Cai333) ([#848](https://github.com/WebDevStudios/CMB2/pull/848), [#844](https://github.com/WebDevStudios/CMB2/issues/844)).
 
 ## 2.2.3.1 - 2016-11-08
 
