@@ -607,6 +607,12 @@ window.CMB2 = window.CMB2 || {};
 			var elType = $element.attr( 'type' );
 			var val;
 
+			if ( elType == null) {
+				if ( $element.is( 'textarea' ) ) {
+					elType = 'textarea';
+				}
+			}
+
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
@@ -626,6 +632,12 @@ window.CMB2 = window.CMB2 || {};
 			var $element = $( this );
 			var elType = $element.attr( 'type' );
 			var val;
+
+			if ( elType == null) {
+				if ( $element.is( 'textarea' ) ) {
+					elType = 'textarea';
+				}
+			}
 
 			if ( $element.hasClass('cmb2-media-status') ) {
 				var toRowId = $element.closest('.cmb-repeatable-grouping').attr('data-iterator');
@@ -649,6 +661,20 @@ window.CMB2 = window.CMB2 || {};
 
 			}
 			// handle checkbox swapping
+			else if ( 'textarea' === elType  ) {
+				var toPreviewElement = $element.closest('.cdc-lazy-field-preview-div');
+				var fromPreviewElement = inputVals[ index ].$.closest('.cdc-lazy-field-preview-div');
+
+				var toPreviewElement = $element.prev().find( '.cdc-lazy-field-preview-div' );
+				var fromPreviewElement = inputVals[ index ].$.prev().find( '.cdc-lazy-field-preview-div' );
+
+				var tmpVal = $( toPreviewElement ).html();
+				$( toPreviewElement ).html( fromPreviewElement.html() );
+				$( fromPreviewElement ).html( tmpVal );
+
+				inputVals[ index ].$.val( $element.val() );
+				$element.val( inputVals[ index ].val );
+			}
 			else if ( 'checkbox' === elType  ) {
 				inputVals[ index ].$.prop( 'checked', $element.is(':checked') );
 				$element.prop( 'checked', inputVals[ index ].val );
