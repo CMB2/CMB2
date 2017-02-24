@@ -30,7 +30,7 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  */
 function yourprefix_show_if_front_page( $cmb ) {
 	// Don't show this metabox if it's not the front page template.
-	if ( $cmb->object_id !== get_option( 'page_on_front' ) ) {
+	if ( get_option( 'page_on_front' !== $cmb->object_id ) ) {
 		return false;
 	}
 	return true;
