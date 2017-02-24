@@ -30,7 +30,7 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  */
 function yourprefix_show_if_front_page( $cmb ) {
 	// Don't show this metabox if it's not the front page template.
-	if ( get_option( 'page_on_front' !== $cmb->object_id ) ) {
+	if ( get_option( 'page_on_front' ) !== $cmb->object_id ) {
 		return false;
 	}
 	return true;
@@ -67,7 +67,7 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 	?>
 	<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
 		<p><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></p>
-		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"/></p>
+		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo $value; ?>"/></p>
 		<p class="description"><?php echo esc_html( $description ); ?></p>
 	</div>
 	<?php
@@ -82,7 +82,7 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 function yourprefix_display_text_small_column( $field_args, $field ) {
 	?>
 	<div class="custom-column-display <?php echo esc_attr( $field->row_classes() ); ?>">
-		<p><?php echo esc_html( $field->escaped_value() ); ?></p>
+		<p><?php echo $field->escaped_value(); ?></p>
 		<p class="description"><?php echo esc_html( $field->args( 'description' ) ); ?></p>
 	</div>
 	<?php
