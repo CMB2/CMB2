@@ -65,10 +65,10 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 	$value       = $field->escaped_value();
 	$description = $field->args( 'description' );
 	?>
-	<div class="custom-field-row <?php echo $classes; ?>">
-		<p><label for="<?php echo $id; ?>"><?php echo $label; ?></label></p>
-		<p><input id="<?php echo $id; ?>" type="text" name="<?php echo $name; ?>" value="<?php echo $value; ?>"/></p>
-		<p class="description"><?php echo $description; ?></p>
+	<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
+		<p><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></p>
+		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"/></p>
+		<p class="description"><?php echo esc_html( $description ); ?></p>
 	</div>
 	<?php
 }
@@ -81,9 +81,9 @@ function yourprefix_render_row_cb( $field_args, $field ) {
  */
 function yourprefix_display_text_small_column( $field_args, $field ) {
 	?>
-	<div class="custom-column-display <?php echo $field->row_classes(); ?>">
-		<p><?php echo $field->escaped_value(); ?></p>
-		<p class="description"><?php echo $field->args( 'description' ); ?></p>
+	<div class="custom-column-display <?php echo esc_attr( $field->row_classes() ); ?>">
+		<p><?php echo esc_html( $field->escaped_value() ); ?></p>
+		<p class="description"><?php echo esc_html( $field->args( 'description' ) ); ?></p>
 	</div>
 	<?php
 }
