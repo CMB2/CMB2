@@ -3,8 +3,8 @@ Contributors:      webdevstudios, jtsternberg, gregrickaby, tw2113, patrickgarma
 Donate link:       http://webdevstudios.com
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
-Tested up to:      4.7
-Stable tag:        2.2.3.1
+Tested up to:      4.7.2
+Stable tag:        2.2.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,50 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/WebDevStudios/CMB2/wiki).
 
 == Changelog ==
+
+### 2.2.4 - 2017-02-27
+
+#### Enhancements
+
+* Modify `'taxonomy_*'` fields to return stored terms for non-post objects.
+* Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Also added `"cmb2_return_taxonomy_values_{$cmb_id}"` filter to modify if `'taxonomy_*'` field values are returned. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
+* Allow outputting CMB2 boxes/fields in additional locations in the post-editor.
+
+	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
+
+	These would be defined by setting the `context` property for your box:
+
+	```php
+	$cmb_demo = new_cmb2_box( array(
+		...
+		'context' => 'before_permalink',
+	) );
+	```
+
+	If it is preferred that the fields are output without the metabox, then omit the `'title'` property from the metabox registration array, and instead add `	'remove_box_wrap' => true,`.
+
+	Props [@norcross](https://github.com/norcross) ([#836](https://github.com/WebDevStudios/CMB2/pull/836)).
+* New field parameter, `'render_class'`, allowing you to override the default `'CMB2_Type_Base'` class that is used when rendering the field. This provides interesting object-oriented ways to override default CMB2 behavior by subclassing the default class and overriding methods. The render class can also be overridden with the `"cmb2_render_class_{$fieldtype}"` filter, which is passed the default render class name as well as the `CMB2_Types` object, but this should be used sparingly, and within the context of your project's boxes/fields or you could break other plugins'/themes' CMB2 fields.
+* Improvements to the `file`/`file_list` fields javascript APIs, including using undersore templates.
+* Small improvements to the styling for the `file_list` field type.
+* New action hook, `cmb2_footer_enqueue`, which occurs after CMB2 enqueues its assets.
+* Example functions clean up. Props [@PavelK27](https://github.com/PavelK27) ([#866](https://github.com/WebDevStudios/CMB2/pull/866)).
+* New `CMB2_Utils` methods, `get_available_image_sizes()` and `get_named_size()`. Props [@Cai333](https://github.com/Cai333).
+
+#### Bug Fixes
+
+* Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
+* Repeatable WYSIWYG no longer breaks if `'quicktags'` param is set to false. Props [@timburden](https://github.com/timburden) ([#797](https://github.com/WebDevStudios/CMB2/pull/797), [#796](https://github.com/WebDevStudios/CMB2/issues/796)).
+* Do not process title fields during group field save process.
+* Fix issue where term-meta values were not being displayed for some users. Props [@sbussetti](https://github.com/sbussetti) ([#763](https://github.com/WebDevStudios/CMB2/pull/763), [#700](https://github.com/WebDevStudios/CMB2/issues/700)).
+* Fix issue where term meta would not be applied when using the new term form if multiple object types were specified. Props [@ADC07](https://github.com/ADC07) ([#842](https://github.com/WebDevStudios/CMB2/pull/842), [#841](https://github.com/WebDevStudios/CMB2/issues/841)).
+* Fix WordPress spinner styling when boxes/fields used on the frontend.
+* Fix issue where clicking to remove a `file_list` item could occasionally remove the field row. ([#828](https://github.com/WebDevStudios/CMB2/pull/828)).
+* Fix issue where empty file field in group would still cause non-empty values to store to database. ([#721](https://github.com/WebDevStudios/CMB2/issues/721)).
+* Make `file`/`file_list` field preview images work with named sizes. Props [@Cai333](https://github.com/Cai333) ([#848](https://github.com/WebDevStudios/CMB2/pull/848), [#844](https://github.com/WebDevStudios/CMB2/issues/844)).
+* Fix incorrect text-domain. ([#798](https://github.com/WebDevStudios/CMB2/issues/798))
+* Do not silence notices/errors in `CMB2_Utils::get_file_ext()`.
+* If `title` field type has no name value, then only output a span element (instead of a header element).
 
 ### 2.2.3.1 - 2016-11-08
 
@@ -634,6 +678,50 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.2.4 - 2017-02-27
+
+#### Enhancements
+
+* Modify `'taxonomy_*'` fields to return stored terms for non-post objects.
+* Modify `CMB2::get_sanitized_values()` to return the sanitized `'taxonomy_*'` field values. Also added `"cmb2_return_taxonomy_values_{$cmb_id}"` filter to modify if `'taxonomy_*'` field values are returned. Fixes [#538](https://github.com/WebDevStudios/CMB2/issues/538).
+* Allow outputting CMB2 boxes/fields in additional locations in the post-editor.
+
+	**The new locations are:** [`form_top`](https://developer.wordpress.org/reference/hooks/edit_form_top/), [`before_permalink`](https://developer.wordpress.org/reference/hooks/edit_form_before_permalink/), [`after_title`](https://developer.wordpress.org/reference/hooks/edit_form_after_title/), and [`after_editor`](https://developer.wordpress.org/reference/hooks/edit_form_after_editor/)
+
+	These would be defined by setting the `context` property for your box:
+
+	```php
+	$cmb_demo = new_cmb2_box( array(
+		...
+		'context' => 'before_permalink',
+	) );
+	```
+
+	If it is preferred that the fields are output without the metabox, then omit the `'title'` property from the metabox registration array, and instead add `	'remove_box_wrap' => true,`.
+
+	Props [@norcross](https://github.com/norcross) ([#836](https://github.com/WebDevStudios/CMB2/pull/836)).
+* New field parameter, `'render_class'`, allowing you to override the default `'CMB2_Type_Base'` class that is used when rendering the field. This provides interesting object-oriented ways to override default CMB2 behavior by subclassing the default class and overriding methods. The render class can also be overridden with the `"cmb2_render_class_{$fieldtype}"` filter, which is passed the default render class name as well as the `CMB2_Types` object, but this should be used sparingly, and within the context of your project's boxes/fields or you could break other plugins'/themes' CMB2 fields.
+* Improvements to the `file`/`file_list` fields javascript APIs, including using undersore templates.
+* Small improvements to the styling for the `file_list` field type.
+* New action hook, `cmb2_footer_enqueue`, which occurs after CMB2 enqueues its assets.
+* Example functions clean up. Props [@PavelK27](https://github.com/PavelK27) ([#866](https://github.com/WebDevStudios/CMB2/pull/866)).
+* New `CMB2_Utils` methods, `get_available_image_sizes()` and `get_named_size()`. Props [@Cai333](https://github.com/Cai333).
+
+#### Bug Fixes
+
+* Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/WebDevStudios/CMB2/issues/770).
+* Repeatable WYSIWYG no longer breaks if `'quicktags'` param is set to false. Props [@timburden](https://github.com/timburden) ([#797](https://github.com/WebDevStudios/CMB2/pull/797), [#796](https://github.com/WebDevStudios/CMB2/issues/796)).
+* Do not process title fields during group field save process.
+* Fix issue where term-meta values were not being displayed for some users. Props [@sbussetti](https://github.com/sbussetti) ([#763](https://github.com/WebDevStudios/CMB2/pull/763), [#700](https://github.com/WebDevStudios/CMB2/issues/700)).
+* Fix issue where term meta would not be applied when using the new term form if multiple object types were specified. Props [@ADC07](https://github.com/ADC07) ([#842](https://github.com/WebDevStudios/CMB2/pull/842), [#841](https://github.com/WebDevStudios/CMB2/issues/841)).
+* Fix WordPress spinner styling when boxes/fields used on the frontend.
+* Fix issue where clicking to remove a `file_list` item could occasionally remove the field row. ([#828](https://github.com/WebDevStudios/CMB2/pull/828)).
+* Fix issue where empty file field in group would still cause non-empty values to store to database. ([#721](https://github.com/WebDevStudios/CMB2/issues/721)).
+* Make `file`/`file_list` field preview images work with named sizes. Props [@Cai333](https://github.com/Cai333) ([#848](https://github.com/WebDevStudios/CMB2/pull/848), [#844](https://github.com/WebDevStudios/CMB2/issues/844)).
+* Fix incorrect text-domain. ([#798](https://github.com/WebDevStudios/CMB2/issues/798))
+* Do not silence notices/errors in `CMB2_Utils::get_file_ext()`.
+* If `title` field type has no name value, then only output a span element (instead of a header element).
 
 ### 2.2.3.1 - 2016-11-08
 
