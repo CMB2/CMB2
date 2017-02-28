@@ -137,7 +137,7 @@ abstract class WP_REST_Controller {
 	/**
 	 * Prepare the item for the REST response.
 	 *
-	 * @param mixed $item WordPress representation of the item.
+	 * @param mixed           $item WordPress representation of the item.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response $response
 	 */
@@ -175,7 +175,7 @@ abstract class WP_REST_Controller {
 	/**
 	 * Filter a response based on the context defined in the schema.
 	 *
-	 * @param array $data
+	 * @param array  $data
 	 * @param string $context
 	 * @return array
 	 */
@@ -275,7 +275,7 @@ abstract class WP_REST_Controller {
 	 *
 	 * Ensures consistent description between endpoints, and populates enum from schema.
 	 *
-	 * @param array     $args
+	 * @param array $args
 	 * @return array
 	 */
 	public function get_context_param( $args = array() ) {
@@ -305,7 +305,7 @@ abstract class WP_REST_Controller {
 	/**
 	 * Add the values from additional fields to a data object.
 	 *
-	 * @param array  $object
+	 * @param array           $object
 	 * @param WP_REST_Request $request
 	 * @return array modified object with additional fields.
 	 */
@@ -328,7 +328,7 @@ abstract class WP_REST_Controller {
 	/**
 	 * Update the values of additional fields added to a data object.
 	 *
-	 * @param array  $object
+	 * @param array           $object
 	 * @param WP_REST_Request $request
 	 */
 	protected function update_additional_fields_for_object( $object, $request ) {

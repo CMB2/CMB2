@@ -14,6 +14,7 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 
 	/**
 	 * Handles outputting an 'title' element
+	 *
 	 * @return string Heading element
 	 */
 	public function render() {

@@ -34,8 +34,9 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 
 	/**
 	 * Handles outputting an 'input' element
+	 *
 	 * @since  1.1.0
-	 * @param  array  $args Override arguments
+	 * @param  array $args Override arguments
 	 * @return string       Form input element
 	 */
 	public function render( $args = array() ) {

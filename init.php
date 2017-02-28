@@ -42,11 +42,13 @@
  * **********************************************************************
  */
 
-/************************************************************************
-                  You should not edit the code below
-                  (or any code in the included files)
-                  or things might explode!
-*************************************************************************/
+/**
+ * *********************************************************************
+ *               You should not edit the code below
+ *               (or any code in the included files)
+ *               or things might explode!
+ * ***********************************************************************
+ */
 
 if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 
@@ -65,6 +67,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 
 		/**
 		 * Current version number
+		 *
 		 * @var   string
 		 * @since 1.0.0
 		 */
@@ -156,6 +159,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 
 		/**
 		 * Registers CMB2 text domain path
+		 *
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
