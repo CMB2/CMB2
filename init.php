@@ -1,5 +1,7 @@
 <?php
 /**
+ * The initation loader for CMB2, and the main plugin file.
+ *
  * @category     WordPress_Plugin
  * @package      CMB2
  * @author       WebDevStudios
@@ -144,15 +146,15 @@ if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 
 			$this->l10ni18n();
 
-			// Include helper functions
+			// Include helper functions.
 			require_once 'includes/CMB2_Base.php';
 			require_once 'includes/CMB2.php';
 			require_once 'includes/helper-functions.php';
 
-			// Now kick off the class autoloader
+			// Now kick off the class autoloader.
 			spl_autoload_register( 'cmb2_autoload_classes' );
 
-			// Kick the whole thing off
+			// Kick the whole thing off.
 			require_once 'bootstrap.php';
 			cmb2_bootstrap();
 		}

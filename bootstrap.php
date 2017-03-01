@@ -74,4 +74,4 @@ function cmb2_bootstrap() {
 	do_action( 'cmb2_after_init' );
 }
 
-// End. That's it, folks! //
+/* End. That's it, folks! */
