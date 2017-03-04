@@ -729,7 +729,9 @@ class CMB2_Field extends CMB2_Base {
 	public function get_timestamp_format( $format = 'date_format', $meta_value = 0 ) {
 		$meta_value = $meta_value ? $meta_value : $this->escaped_value();
 		$date_format = $this->args( 'date_format' );
-		if ( ! empty( $date_format ) ) {
+
+		if ( ! empty( $date_format ) && ! is_numeric( $meta_value ) ) {
+			$date_format = stripslashes( $date_format );
 			$meta_value = CMB2_Utils::get_timestamp_from_value( $meta_value, $date_format );
 		} else {
 			$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
