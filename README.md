@@ -84,7 +84,7 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 * [CMB2 Term Select](https://github.com/florianbeck/cmb2-field-type-tags): Special CMB2 Field that allows users to define an autocomplete text field for terms. _Note: this will set the taxonomy terms, but has the option (`'apply_term' => false`) to disable and save the term ids as data instead (like for options pages, etc)._
 * [CMB2 Related Links](https://github.com/jtsternberg/CMB2-Related-Links): Allows users to add a related links via a repeating field group. Field inputs are powered by the [CMB2 Field Type: CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field) documented above, and so each link can be populated with existing WordPress content by clicking on the search button. _Note: this is not a standard field type, but instead a function you use in combination with CMB2::add_field()._
 * [CMB Field Type: Order](https://github.com/rubengc/cmb2-field-order): Allows users to define custom order of predefined options.
-* [CMB Field Type: Animation](https://github.com/rubengc/cmb2-field-animation): Allows users to pickup an animation from [Animate.css](https://github.com/daneden/animate.css) (include preview of picked animation).
+* [CMB Field Type: Animation](https://github.com/rubengc/cmb2-field-animation): Allows users to pickup an animation from [Animate.css](https://github.com/daneden/animate.css) (includes preview of chosen animation).
 
 #### Other Helpful Resources
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
