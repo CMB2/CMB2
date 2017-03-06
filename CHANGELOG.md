@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+### Enhancements
+
+* Enable the additional media library modal filters. Fixes [#873](https://github.com/WebDevStudios/CMB2/issues/873).
+
 ## 2.2.4 - 2017-02-27
 
 ### Enhancements
