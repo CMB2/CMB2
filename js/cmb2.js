@@ -301,14 +301,16 @@ window.CMB2 = window.CMB2 || {};
 
 			// Get the correct dimensions and url if a named size is set and exists
 			// fallback to the 'large' size
-			if ( sizes[ media.sizeName ] ) {
-				url    = sizes[ media.sizeName ].url;
-				width  = sizes[ media.sizeName ].width;
-				height = sizes[ media.sizeName ].height;
-			} else if ( sizes.large ) {
-				url    = sizes.large.url;
-				width  = sizes.large.width;
-				height = sizes.large.height;
+			if ( sizes ) {
+				if ( sizes[ media.sizeName ] ) {
+					url    = sizes[ media.sizeName ].url;
+					width  = sizes[ media.sizeName ].width;
+					height = sizes[ media.sizeName ].height;
+				} else if ( sizes.large ) {
+					url    = sizes.large.url;
+					width  = sizes.large.width;
+					height = sizes.large.height;
+				}
 			}
 
 			// Fit the image in to the preview size, keeping the correct aspect ratio
@@ -320,6 +322,14 @@ window.CMB2 = window.CMB2 || {};
 			if ( height > previewH ) {
 				width = Math.floor( previewH * width / height );
 				height = previewH;
+			}
+
+			if ( ! width ) {
+				width = previewW;
+			}
+
+			if ( ! height ) {
+				height = 'svg' === this.get( 'filename' ).split( '.' ).pop() ? '100%' : previewH;
 			}
 
 			this.set( 'sizeUrl', url );
