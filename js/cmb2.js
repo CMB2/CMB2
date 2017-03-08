@@ -265,7 +265,7 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		handlers.getAttachmentHtml = function( attachment, templatesId ) {
-			var isImage = 'image' === attachment.get( 'type' );
+			var isImage = (('image' === attachment.get( 'type' )) && (_.contains( wp.media.view.settings.embedExts, attachment.get('filename').split('.').pop())));
 			var data    = handlers.prepareData( attachment, isImage );
 
 			// Image preview or standard generic output if it's not an image.
