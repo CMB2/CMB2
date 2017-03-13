@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 
 * Enable the additional media library modal filters. Fixes [#873](https://github.com/WebDevStudios/CMB2/issues/873).
 
+### Bug Fixes
+
+* Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/WebDevStudios/CMB2/pull/874).
+
 ## 2.2.4 - 2017-02-27
 
 ### Enhancements
