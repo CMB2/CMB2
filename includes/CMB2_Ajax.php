@@ -22,6 +22,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Instance of this class
+	 *
 	 * @since 2.2.2
 	 * @var object
 	 */
@@ -29,6 +30,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Get the singleton instance of this class
+	 *
 	 * @since 2.2.2
 	 * @return CMB2_Ajax
 	 */
@@ -42,6 +44,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Constructor
+	 *
 	 * @since 2.2.0
 	 */
 	protected function __construct() {
@@ -53,6 +56,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Handles our oEmbed ajax request
+	 *
 	 * @since  0.9.5
 	 * @return object oEmbed embed code | fallback | error message
 	 */
@@ -96,8 +100,9 @@ class CMB2_Ajax {
 
 	/**
 	 * Retrieves oEmbed from url/object ID
+	 *
 	 * @since  0.9.5
-	 * @param  array  $args      Arguments for method
+	 * @param  array $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
 	public function get_oembed_no_edit( $args ) {
@@ -161,8 +166,9 @@ class CMB2_Ajax {
 
 	/**
 	 * Retrieves oEmbed from url/object ID
+	 *
 	 * @since  0.9.5
-	 * @param  array  $args      Arguments for method
+	 * @param  array $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
 	public function get_oembed( $args ) {
@@ -271,8 +277,9 @@ class CMB2_Ajax {
 	/**
 	 * Hooks in when options-page data is saved to clean stale
 	 * oembed cache data from the option value.
+	 *
 	 * @since  2.2.0
-	 * @param  string  $option_key The options-page option key
+	 * @param  string $option_key The options-page option key
 	 * @return void
 	 */
 	public static function clean_stale_options_page_oembeds( $option_key ) {
@@ -294,8 +301,7 @@ class CMB2_Ajax {
 						unset( $options[ $key ] );
 						unset( $options[ str_replace( '_oembed_time_', '_oembed_', $key ) ] );
 					}
-				}
-				// Remove the cached unknown values
+				} // Remove the cached unknown values
 				elseif ( '{{unknown}}' === $value ) {
 					$modified = true;
 					unset( $options[ $key ] );

@@ -289,7 +289,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @param  string $activity The modification activity (updated or deleted).
 	 * @return WP_Error|WP_REST_Response
 	 */
-	public function modify_field_value( $activity) {
+	public function modify_field_value( $activity ) {
 
 		if ( ! $this->request['object_id'] || ! $this->request['object_type'] ) {
 			return new WP_Error( 'cmb2_rest_modify_field_value_error', __( 'CMB2 Field value cannot be modified without the object_id and object_type parameters specified.', 'cmb2' ), array( 'status' => 400 ) );
@@ -308,13 +308,13 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			return new WP_Error( 'cmb2_rest_no_field_by_id_error', __( 'No field found by that id.', 'cmb2' ), array( 'status' => 403 ) );
 		}
 
-		$this->field->args["value_{$activity}"] = (bool) 'deleted' === $activity
+		$this->field->args[ "value_{$activity}" ] = (bool) 'deleted' === $activity
 			? $this->field->remove_data()
 			: $this->field->save_field( $this->request['value'] );
 
 		// If options page, save the $activity options
 		if ( 'options-page' == $this->request['object_type'] ) {
-			$this->field->args["value_{$activity}"] = cmb2_options( $this->request['object_id'] )->set();
+			$this->field->args[ "value_{$activity}" ] = cmb2_options( $this->request['object_id'] )->set();
 		}
 
 		return $this->prepare_read_field( $this->field );

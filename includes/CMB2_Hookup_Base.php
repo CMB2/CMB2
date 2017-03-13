@@ -20,6 +20,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * The object type we are performing the hookup for
+	 *
 	 * @var   string
 	 * @since 2.0.9
 	 */
@@ -27,6 +28,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * Constructor
+	 *
 	 * @since 2.0.0
 	 * @param CMB2 $cmb The CMB2 object to hookup
 	 */
@@ -39,6 +41,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * Ensures WordPress hook only gets fired once per object.
+	 *
 	 * @since  2.0.0
 	 * @param string   $action        The name of the filter to hook the $hook callback to.
 	 * @param callback $hook          The callback to be run when the filter is applied.

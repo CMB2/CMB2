@@ -16,18 +16,21 @@ class CMB2_Sanitize {
 
 	/**
 	 * A CMB field object
+	 *
 	 * @var CMB2_Field object
 	 */
 	public $field;
 
 	/**
 	 * Field's value
+	 *
 	 * @var mixed
 	 */
 	public $value;
 
 	/**
 	 * Setup our class vars
+	 *
 	 * @since 1.1.0
 	 * @param CMB2_Field $field A CMB2 field object
 	 * @param mixed      $value Field value
@@ -39,6 +42,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Catchall method if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
+	 *
 	 * @since  1.0.0
 	 * @param  string $name      Non-existent method name
 	 * @param  array  $arguments All arguments passed to the method
@@ -49,6 +53,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Default fallback sanitization method. Applies filters.
+	 *
 	 * @since  1.0.2
 	 */
 	public function default_sanitization() {
@@ -56,6 +61,7 @@ class CMB2_Sanitize {
 		/**
 		 * This exists for back-compatibility, but validation
 		 * is not what happens here.
+		 *
 		 * @deprecated See documentation for "cmb2_sanitize_{$this->type()}".
 		 */
 		if ( function_exists( 'apply_filters_deprecated' ) ) {
@@ -101,6 +107,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Default sanitization method, sanitize_text_field. Checks if value is array.
+	 *
 	 * @since  2.2.4
 	 * @return mixed  Sanitized value.
 	 */
@@ -111,6 +118,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Sets the object terms to the object (if not options-page) and optionally returns the sanitized term values.
+	 *
 	 * @since  2.2.4
 	 * @return mixed  Blank value, or sanitized term values if "cmb2_return_taxonomy_values_{$cmb_id}" is true.
 	 */
@@ -154,6 +162,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Simple checkbox validation
+	 *
 	 * @since  1.0.1
 	 * @return string|false 'on' or false
 	 */
@@ -163,6 +172,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Validate url in a meta value
+	 *
 	 * @since  1.0.1
 	 * @return string        Empty string or escaped url
 	 */
@@ -198,6 +208,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Validate email in a meta value
+	 *
 	 * @since  1.0.1
 	 * @return string       Empty string or sanitized email
 	 */
@@ -218,6 +229,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Validate money in a meta value
+	 *
 	 * @since  1.0.1
 	 * @return string Empty string or sanitized money value
 	 */
@@ -247,6 +259,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Converts text date to timestamp
+	 *
 	 * @since  1.0.2
 	 * @return string Timestring
 	 */
@@ -258,6 +271,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Datetime to timestamp
+	 *
 	 * @since  1.0.1
 	 * @return string|array Timestring
 	 */
@@ -286,6 +300,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Datetime to timestamp with timezone
+	 *
 	 * @since  1.0.1
 	 * @return string       Timestring
 	 */
@@ -361,7 +376,6 @@ class CMB2_Sanitize {
 					$this->_save_utc_value( $utc_key, $utc_stamp );
 				}
 			}
-
 		} catch ( Exception $e ) {
 			$this->value = '';
 			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
@@ -372,6 +386,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Sanitize textareas and wysiwyg fields
+	 *
 	 * @since  1.0.1
 	 * @return string       Sanitized data
 	 */
@@ -381,6 +396,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Sanitize code textareas
+	 *
 	 * @since  1.0.2
 	 * @return string       Sanitized data
 	 */
@@ -395,6 +411,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Handles saving of attachment post ID and sanitizing file url
+	 *
 	 * @since  1.1.0
 	 * @return string        Sanitized url
 	 */
@@ -414,6 +431,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Gets the values for the `file` field type from the data being saved.
+	 *
 	 * @since  2.2.0
 	 */
 	public function _get_group_file_value_array( $id_key ) {
@@ -440,6 +458,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Peforms saving of `file` attachement's ID
+	 *
 	 * @since  1.1.0
 	 */
 	public function _save_file_id_value( $file_id_key ) {
@@ -460,6 +479,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Peforms saving of `text_datetime_timestamp_timezone` utc timestamp
+	 *
 	 * @since  2.2.0
 	 */
 	public function _save_utc_value( $utc_key, $utc_stamp ) {
@@ -468,6 +488,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * Returns a new, supporting, CMB2_Field object based on a new field id.
+	 *
 	 * @since  2.2.0
 	 */
 	public function _new_supporting_field( $new_field_id ) {
@@ -479,6 +500,7 @@ class CMB2_Sanitize {
 
 	/**
 	 * If repeating, loop through and re-apply sanitization method
+	 *
 	 * @since  1.1.0
 	 * @param  string $method Class method
 	 * @param  bool   $repeat Whether repeating or not
@@ -508,8 +530,9 @@ class CMB2_Sanitize {
 
 	/**
 	 * Determine if passed value is an empty array
+	 *
 	 * @since  2.0.6
-	 * @param  mixed  $to_check Value to check
+	 * @param  mixed $to_check Value to check
 	 * @return boolean          Whether value is an array that's empty
 	 */
 	public function _is_empty_array( $to_check ) {
