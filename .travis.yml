@@ -30,12 +30,15 @@ matrix:
       php: 7.0
     - env: WP_VERSION=3.8 WP_MULTISITE=1
       php: 7.0
-    - env: WP_VERSION=latest WP_MULTISITE=0
-      php: 7.0
-    - env: WP_VERSION=latest WP_MULTISITE=1
-      php: 7.0
 
 before_script:
+    - export PATH="$HOME/.composer/vendor/bin:$PATH"
+    - |
+      if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
+       composer global require "phpunit/phpunit=5.7.*"
+      else
+        composer global require "phpunit/phpunit=4.8.*"
+      fi
     - bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
 script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=coverage.clover; else phpunit --exclude-group cmb2-rest-api --coverage-clover=coverage.clover; fi
