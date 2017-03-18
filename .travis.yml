@@ -31,7 +31,7 @@ matrix:
     - env: WP_VERSION=3.8 WP_MULTISITE=1
       php: 7.0
 
-before_script:
+before_script: # Make PHP 7 test work. https://github.com/WebDevStudios/CMB2/pull/885
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - |
     if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
