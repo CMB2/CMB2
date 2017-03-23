@@ -1,3 +1,4 @@
+<!-- Before posting a new issue, please check if your issue is addressed in the CMB2 Wiki Troubleshooting page: https://github.com/WebDevStudios/CMB2/wiki/Troubleshooting -->
 ### Expected Behavior:
 
 
