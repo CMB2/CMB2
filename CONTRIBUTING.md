@@ -7,8 +7,9 @@ _Support is not offered for this library, and the likelihood that the maintainer
 
 Before reporting a bug
 ---
-1. Search [issues](https://github.com/WebDevStudios/CMB2/issues) to see if the issue has been previously reported.
-2. Install the trunk version of CMB2 and test there.
+1. Please review the [documentation](https://github.com/WebDevStudios/CMB2/wiki). Most questions revolve around the [field types](https://github.com/WebDevStudios/CMB2/wiki/Field-Types), [field parameters](https://github.com/WebDevStudios/CMB2/wiki/Field-Parameters), or are addressed in the [troubleshooting](https://github.com/WebDevStudios/CMB2/wiki/Troubleshooting) section.
+2. Search [issues](https://github.com/WebDevStudios/CMB2/issues) to see if the issue has been previously reported.
+3. Install the trunk version of CMB2 and test there.
 
 
 How to report a bug
