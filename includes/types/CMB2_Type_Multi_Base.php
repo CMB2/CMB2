@@ -13,6 +13,17 @@
 abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 
 	/**
+	 * Generates html for an optgroup element
+	 * @param  array $args Arguments array containing: label (label for the option group), and options (html for the options elements)
+	 * @return string Generated optgroup element html
+	 */
+	public function select_optgroup( $args = array() ) {
+		return sprintf( "\t" . '<optgroup label="%s">' . "\n", $args['label']) . 
+			$args['options'] .
+			sprintf( "\n\t</optgroup>\n" );
+	}
+	
+	/**
 	 * Generates html for an option element
 	 *
 	 * @since  1.1.0
