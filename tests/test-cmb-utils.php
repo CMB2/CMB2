@@ -76,7 +76,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		$this->post_id = $this->factory->post->create();
 		$this->img_name = 'test-image.jpg';
 
-		$filename = ( CMB2_TESTDATA.'/images/test-image.jpg' );
+		$filename = ( CMB2_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 		$upload   = wp_upload_bits( basename( $filename ), null, $contents );
 
@@ -100,12 +100,13 @@ class Test_CMB2_Utils extends Test_CMB2 {
 	function _make_attachment( $upload, $parent_post_id = -1 ) {
 
 		$type = '';
-		if ( !empty($upload['type']) ) {
+		if ( ! empty( $upload['type'] ) ) {
 			$type = $upload['type'];
 		} else {
 			$mime = wp_check_filetype( $upload['file'] );
-			if ($mime)
+			if ( $mime ) {
 				$type = $mime['type'];
+			}
 		}
 
 		$attachment = array(
@@ -114,11 +115,11 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'post_type' => 'attachment',
 			'post_parent' => $parent_post_id,
 			'post_mime_type' => $type,
-			'guid' => $upload[ 'url' ],
+			'guid' => $upload['url'],
 		);
 
 		// Save the data
-		$id = wp_insert_attachment( $attachment, $upload[ 'file' ], $parent_post_id );
+		$id = wp_insert_attachment( $attachment, $upload['file'], $parent_post_id );
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 
 		return $id;
