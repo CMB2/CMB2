@@ -403,4 +403,4 @@ if ( ! function_exists( 'date_create_from_format' ) ) {
 
 		return new DateTime( $ymd );
 	}
-}
+}// End if().
