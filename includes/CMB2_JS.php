@@ -32,7 +32,9 @@ class CMB2_JS {
 	 * @var   array
 	 * @since 2.0.7
 	 */
-	protected static $dependencies = array( 'jquery' => 'jquery' );
+	protected static $dependencies = array(
+		'jquery' => 'jquery',
+	);
 
 	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
