@@ -27,7 +27,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			'/[\t\n\r]/', // Remove tabs and newlines
 			'/\s{2,}/', // Replace repeating spaces with one space
 			'/> </', // Remove spaces between carats
-		), array(
+			), array(
 			'',
 			' ',
 			'><',
@@ -36,7 +36,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	public function is_connected() {
 		$connected = @fsockopen( 'www.youtube.com', 80 );
-		if ( $connected ){
+		if ( $connected ) {
 			$is_conn = true;
 			fclose( $connected );
 		} else {
@@ -131,7 +131,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			$chars_to_show = 75;
 			$start         = ( $compare - 5 );
 			$pointer       = '|--->>';
-			$sep           = "\n". str_repeat( '-', 75 );
+			$sep           = "\n" . str_repeat( '-', 75 );
 
 			$compare = sprintf(
 			    $sep . "\nFirst difference at position %d:\n\n  Expected: \t%s\n  Actual: \t%s\n" . $sep,
@@ -153,7 +153,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @return mixed Method return.
 	 */
 	public function invokeMethod( $object, $methodName ) {
-		if ( version_compare(phpversion(), '5.3', '<' ) ) {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
 			$this->markTestSkipped( 'PHP version does not support ReflectionClass::setAccessible()' );
 		}
 
