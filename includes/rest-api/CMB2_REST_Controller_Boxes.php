@@ -119,7 +119,9 @@ class CMB2_REST_Controller_Boxes extends CMB2_REST_Controller {
 
 		$boxes = CMB2_REST::get_all();
 		if ( empty( $boxes ) ) {
-			return new WP_Error( 'cmb2_rest_no_boxes', __( 'No boxes found.', 'cmb2' ), array( 'status' => 403 ) );
+			return new WP_Error( 'cmb2_rest_no_boxes', __( 'No boxes found.', 'cmb2' ), array(
+				'status' => 403,
+			) );
 		}
 
 		$boxes_data = array();
