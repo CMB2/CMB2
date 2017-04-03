@@ -151,16 +151,24 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	}
 
 	public function test_get_object_id() {
-		$object = (object) array( 'ID' => 1 );
+		$object = (object) array(
+			'ID' => 1,
+		);
 		$this->assertEquals( $object->ID, Test_CMB2_REST_Object::get_object_id( $object, 'post' ) );
 
-		$object = (object) array( 'comment_ID' => 1 );
+		$object = (object) array(
+			'comment_ID' => 1,
+		);
 		$this->assertEquals( $object->comment_ID, Test_CMB2_REST_Object::get_object_id( $object, 'comment' ) );
 
-		$object = (object) array( 'term_id' => 1 );
+		$object = (object) array(
+			'term_id' => 1,
+		);
 		$this->assertEquals( $object->term_id, Test_CMB2_REST_Object::get_object_id( $object, 'term' ) );
 
-		$object = array( 'term_id' => 1 );
+		$object = array(
+			'term_id' => 1,
+		);
 		$this->assertEquals( $object['term_id'], Test_CMB2_REST_Object::get_object_id( $object, 'term' ) );
 
 		$this->assertEquals( false, Test_CMB2_REST_Object::get_object_id( array() ) );
@@ -199,7 +207,9 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 			$this->cmb_id => $fields,
 		);
 
-		$values = CMB2_REST::update_post_rest_values( $new_values, (object) array( 'ID' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
+		$values = CMB2_REST::update_post_rest_values( $new_values, (object) array(
+			'ID' => $this->post_id,
+		), 'cmb2', new WP_REST_Request, 'post' );
 
 		$this->assertEquals( count( $fields ), count( $values[ $this->cmb_id ] ) );
 		foreach ( $values[ $this->cmb_id ] as $value ) {
@@ -212,8 +222,12 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	}
 
 	protected function confirm_get_rest_values( $expected ) {
-		$values = CMB2_REST::get_post_rest_values( array( 'id' => $this->post_id ), 'cmb2', new WP_REST_Request, 'post' );
-		$expected = array( $this->cmb_id => $expected );
+		$values = CMB2_REST::get_post_rest_values( array(
+			'id' => $this->post_id,
+		), 'cmb2', new WP_REST_Request, 'post' );
+		$expected = array(
+			$this->cmb_id => $expected,
+		);
 		$this->assertEquals( $expected, $values );
 	}
 
@@ -226,7 +240,7 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 		var_dump( $check );
 		$check = ob_get_clean();
 
-		return 'Checked and '. $label  .': ' . $is_readable .' is NOT equal to: '. $check;
+		return 'Checked and ' . $label . ': ' . $is_readable . ' is NOT equal to: ' . $check;
 	}
 
 	protected function get_read_scenarios() {
