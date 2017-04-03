@@ -731,6 +731,7 @@ class CMB2_Field extends CMB2_Base {
 		if ( $this->args( 'timezone' ) ) {
 			$value = $this->args( 'timezone' );
 		} // End if().
+		// Is there another meta key with a timezone stored as its value we should use?
 		elseif ( $this->args( 'timezone_meta_key' ) ) {
 			$value = $this->get_data( $this->args( 'timezone_meta_key' ) );
 		}
