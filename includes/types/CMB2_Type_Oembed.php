@@ -22,7 +22,9 @@ class CMB2_Type_Oembed extends CMB2_Type_Text {
 				'url'         => $field->escaped_value(),
 				'object_id'   => $field->object_id,
 				'object_type' => $field->object_type,
-				'oembed_args' => array( 'width' => '640' ),
+				'oembed_args' => array(
+					'width' => '640',
+				),
 				'field_id'    => $this->_id(),
 			) )
 			: '';
