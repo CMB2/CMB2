@@ -838,10 +838,10 @@ class CMB2 extends CMB2_Base {
 				// Add to `$saved` array.
 				$saved[ $field_group->index ][ $sub_id ] = $new_val;
 
-			}
+			}// End foreach().
 
 			$saved[ $field_group->index ] = CMB2_Utils::filter_empty( $saved[ $field_group->index ] );
-		}
+		}// End foreach().
 
 		$saved = CMB2_Utils::filter_empty( $saved );
 
