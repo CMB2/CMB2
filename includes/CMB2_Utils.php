@@ -176,7 +176,7 @@ class CMB2_Utils {
 			}
 		} elseif ( ! empty( $image_sizes[ $size ] ) ) {
 			$data = $size;
-		}
+		}// End if().
 
 		// If we still don't have a match at this point, return false.
 		if ( empty( $data ) ) {
@@ -208,7 +208,6 @@ class CMB2_Utils {
 			} catch ( Exception $e ) {
 				self::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}
-
 		}
 
 		return $tz_offset;
