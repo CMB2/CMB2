@@ -72,10 +72,12 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 				$options .= $this->list_input( $args, $i );
 				$i++;
 			}
-		}
+		}// End if().
 
 		return $this->rendered(
-			$this->types->radio( array( 'options' => $options ), 'taxonomy_radio' )
+			$this->types->radio( array(
+				'options' => $options,
+			), 'taxonomy_radio' )
 		);
 	}
 }
