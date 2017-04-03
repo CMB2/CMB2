@@ -228,9 +228,9 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 
 		$request = new WP_REST_Request( 'POST', $url );
 		$request['cmb2'] = array(
-		$cmb_id => array(
-			'rest_test2_registered_fields' => 'new value',
-		),
+			$cmb_id => array(
+				'rest_test2_registered_fields' => 'new value',
+			),
 		);
 		$request['content'] = 'test2'; // b/c comment endpoint requires wp_update_comment to pass.
 
