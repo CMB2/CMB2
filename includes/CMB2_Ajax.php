@@ -304,6 +304,7 @@ class CMB2_Ajax {
 						unset( $options[ str_replace( '_oembed_time_', '_oembed_', $key ) ] );
 					}
 				} // End if().
+				// Remove the cached unknown values.
 				elseif ( '{{unknown}}' === $value ) {
 					$modified = true;
 					unset( $options[ $key ] );
