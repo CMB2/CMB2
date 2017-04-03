@@ -302,7 +302,9 @@ class CMB2_Field extends CMB2_Base {
 	 * @param  bool  $single    Whether data is an array (add_metadata)
 	 */
 	public function update_data( $new_value, $single = true ) {
-		$a = $this->data_args( array( 'single' => $single ) );
+		$a = $this->data_args( array(
+			'single' => $single,
+		) );
 
 		$a['value'] = $a['repeat'] ? array_values( $new_value ) : $new_value;
 
@@ -373,7 +375,9 @@ class CMB2_Field extends CMB2_Base {
 	 * @param  string $old Old value
 	 */
 	public function remove_data( $old = '' ) {
-		$a = $this->data_args( array( 'old' => $old ) );
+		$a = $this->data_args( array(
+			'old' => $old,
+		) );
 
 		/**
 		 * Filter whether to override removing of meta value.
@@ -419,7 +423,7 @@ class CMB2_Field extends CMB2_Base {
 		// If no override, remove as usual
 		if ( null !== $override ) {
 			return $override;
-		} // Option page handling
+		} // End if().
 		elseif ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
 		}
@@ -726,7 +730,7 @@ class CMB2_Field extends CMB2_Base {
 		// Is timezone arg set?
 		if ( $this->args( 'timezone' ) ) {
 			$value = $this->args( 'timezone' );
-		} // Is there another meta key with a timezone stored as its value we should use?
+		} // End if().
 		elseif ( $this->args( 'timezone_meta_key' ) ) {
 			$value = $this->get_data( $this->args( 'timezone_meta_key' ) );
 		}
