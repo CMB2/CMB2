@@ -189,4 +189,4 @@ if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 	// Make it so...
 	CMB2_Bootstrap_225_Trunk::initiate();
 
-}
+}// End if().
