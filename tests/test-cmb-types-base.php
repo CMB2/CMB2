@@ -111,19 +111,25 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 		);
 
 		$this->post_id = $this->factory->post->create();
-		$this->term = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'test_category' ) );
-		$this->term2 = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'number_2' ) );
+		$this->term = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name' => 'test_category',
+		) );
+		$this->term2 = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name' => 'number_2',
+		) );
 
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 
 		$this->img_name = 'image.jpg';
 		$this->attachment_id = $this->factory->attachment->create_object( $this->img_name, $this->post_id, array(
 			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
+			'post_type' => 'attachment',
 		) );
-		$this->attachment_id2 = $this->factory->attachment->create_object( '2nd-'.$this->img_name, $this->post_id, array(
+		$this->attachment_id2 = $this->factory->attachment->create_object( '2nd-' . $this->img_name, $this->post_id, array(
 			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
+			'post_type' => 'attachment',
 		) );
 	}
 
@@ -134,7 +140,7 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 	protected function check_box_assertion( $output, $checked = false ) {
 		$checked = $checked ? ' checked="checked"' : '';
 		$this->assertHTMLstringsAreEqual(
-			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"'. $checked .'/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
+			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"' . $checked . '/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
 			is_string( $output ) ? $output : $this->capture_render( $output )
 		);
 	}
