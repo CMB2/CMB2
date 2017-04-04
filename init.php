@@ -29,7 +29,7 @@
  * http://www.opensource.org/licenses/gpl-license.php
  *
  * This is an add-on for WordPress
- * http://wordpress.org/
+ * https://wordpress.org/
  *
  * **********************************************************************
  * This program is free software; you can redistribute it and/or modify

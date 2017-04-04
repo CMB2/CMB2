@@ -206,13 +206,16 @@ window.CMB2 = window.CMB2 || {};
 			multiple: isList ? 'add' : false
 		} );
 
+		// Enable the additional media filters: https://github.com/WebDevStudios/CMB2/issues/873
+		modal.states.first().set( 'filterable', 'all' );
+
 		cmb.trigger( 'cmb_media_modal_init', media );
 
 		handlers.list = function( selection, returnIt ) {
-			var data, isImage, mediaItem;
 
 			// Setup our fileGroup array
 			var fileGroup = [];
+			var attachmentHtml;
 
 			if ( ! handlers.list.templates ) {
 				handlers.list.templates = {
@@ -223,15 +226,12 @@ window.CMB2 = window.CMB2 || {};
 
 			// Loop through each attachment
 			selection.each( function( attachment ) {
-				isImage = 'image' === attachment.get( 'type' );
-
-				data = handlers.prepareData( attachment, isImage );
 
 				// Image preview or standard generic output if it's not an image.
-				mediaItem = handlers.list.templates[ isImage ? 'image' : 'file' ]( data );
+				attachmentHtml = handlers.getAttachmentHtml( attachment, 'list' );
 
 				// Add our file to our fileGroup array
-				fileGroup.push( mediaItem );
+				fileGroup.push( attachmentHtml );
 			});
 
 			if ( ! returnIt ) {
@@ -244,8 +244,6 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		handlers.single = function( selection ) {
-			var attachment, isImage, data, mediaItem;
-
 			if ( ! handlers.single.templates ) {
 				handlers.single.templates = {
 					image : wp.template( 'cmb2-single-image' ),
@@ -254,20 +252,24 @@ window.CMB2 = window.CMB2 || {};
 			}
 
 			// Only get one file from the uploader
-			attachment = selection.first();
+			var attachment = selection.first();
 
 			media.$field.val( attachment.get( 'url' ) );
 			$id( media.field +'_id' ).val( attachment.get( 'id' ) );
 
-			isImage = 'image' === attachment.get( 'type' );
-
-			data = handlers.prepareData( attachment, isImage );
-
 			// Image preview or standard generic output if it's not an image.
-			mediaItem = handlers.single.templates[ isImage ? 'image' : 'file' ]( data );
+			var attachmentHtml = handlers.getAttachmentHtml( attachment, 'single' );
 
 			// add/display our output
-			media.$field.siblings( '.cmb2-media-status' ).slideDown().html( mediaItem );
+			media.$field.siblings( '.cmb2-media-status' ).slideDown().html( attachmentHtml );
+		};
+
+		handlers.getAttachmentHtml = function( attachment, templatesId ) {
+			var isImage = 'image' === attachment.get( 'type' );
+			var data    = handlers.prepareData( attachment, isImage );
+
+			// Image preview or standard generic output if it's not an image.
+			return handlers[ templatesId ].templates[ isImage ? 'image' : 'file' ]( data );
 		};
 
 		handlers.prepareData = function( data, image ) {
@@ -301,14 +303,16 @@ window.CMB2 = window.CMB2 || {};
 
 			// Get the correct dimensions and url if a named size is set and exists
 			// fallback to the 'large' size
-			if ( sizes[ media.sizeName ] ) {
-				url    = sizes[ media.sizeName ].url;
-				width  = sizes[ media.sizeName ].width;
-				height = sizes[ media.sizeName ].height;
-			} else if ( sizes.large ) {
-				url    = sizes.large.url;
-				width  = sizes.large.width;
-				height = sizes.large.height;
+			if ( sizes ) {
+				if ( sizes[ media.sizeName ] ) {
+					url    = sizes[ media.sizeName ].url;
+					width  = sizes[ media.sizeName ].width;
+					height = sizes[ media.sizeName ].height;
+				} else if ( sizes.large ) {
+					url    = sizes.large.url;
+					width  = sizes.large.width;
+					height = sizes.large.height;
+				}
 			}
 
 			// Fit the image in to the preview size, keeping the correct aspect ratio
@@ -320,6 +324,14 @@ window.CMB2 = window.CMB2 || {};
 			if ( height > previewH ) {
 				width = Math.floor( previewH * width / height );
 				height = previewH;
+			}
+
+			if ( ! width ) {
+				width = previewW;
+			}
+
+			if ( ! height ) {
+				height = 'svg' === this.get( 'filename' ).split( '.' ).pop() ? '100%' : previewH;
 			}
 
 			this.set( 'sizeUrl', url );
