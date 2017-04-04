@@ -894,17 +894,17 @@ class CMB2 extends CMB2_Base {
 				break;
 
 			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( $_REQUEST['c'] ) : $object_id;
+				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( absint( $_REQUEST['c'] ) ) : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			case 'term':
-				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( $_REQUEST['tag_ID'] ) : $object_id;
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( absint( $_REQUEST['tag_ID'] ) ) : $object_id;
 				break;
 
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( $_REQUEST['post'] ) : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( absint( $_REQUEST['post'] ) ) : $object_id;
 				break;
 		}
 
