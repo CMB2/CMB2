@@ -1465,13 +1465,13 @@ class CMB2 extends CMB2_Base {
 		$params = array();
 
 		switch ( $type ) {
-			case 'group_wrap_attributes' :
+			case 'group_wrap_attributes':
 				$params = array(
 					'class' => array(),
 					'style' => array(),
 				);
 				break;
-			case 'remove_disabled' :
+			case 'remove_disabled':
 				$params = array(
 					'disabled' => array(),
 				);
