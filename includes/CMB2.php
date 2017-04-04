@@ -500,7 +500,7 @@ class CMB2 extends CMB2_Base {
 
 			echo '
 			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
-			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
+			<h3 class="cmb-group-title cmbhandle-title"><span>', wp_kses_post( $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields.
