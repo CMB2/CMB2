@@ -888,7 +888,7 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( absint( $_REQUEST['user_id'] ) ) : $object_id;
+				$object_id = ( wp_verify_nonce( $this->nonce() ) && isset( $_REQUEST['user_id'] ) ) ? wp_unslash( absint( $_REQUEST['user_id'] ) ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
