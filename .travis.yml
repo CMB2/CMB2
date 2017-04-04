@@ -54,6 +54,7 @@ branches:
         - trunk
 
 notifications:
+  slack: cmb2:KTPXnN1FwSO8QWo0aX01Pswt
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/00b1df026574cdaeb815
