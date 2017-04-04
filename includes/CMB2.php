@@ -1297,7 +1297,9 @@ class CMB2 extends CMB2_Base {
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
 		if ( $position ) {
-			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
+			CMB2_Utils::array_insert( $fields, array(
+				$field['id'] => $field,
+			), $position );
 		} else {
 			$fields[ $field['id'] ] = $field;
 		}
