@@ -81,13 +81,20 @@ class CMB2 extends CMB2_Base {
 		'cmb_styles'       => true, // Include CMB2 stylesheet.
 		'enqueue_js'       => true, // Include CMB2 JS.
 		'fields'           => array(),
+
+		/*
+		 * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
+ 		 * and handles hooking in and saving those fields.
+		 */
 		'hookup'           => true,
 		'save_fields'      => true, // Will not save during hookup if false.
-		'closed'           => false, // Default to metabox being closed?
+		'closed'           => false, // Default metabox to being closed.
 		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'.
 		'new_term_section' => true,
 		'show_in_rest'     => false,
+		'classes'          => null, // Optionally add classes to the CMB2 wrapper
+		'classes_cb'       => '', // Optionally add classes to the CMB2 wrapper (via a callback)
 	);
 
 	/**

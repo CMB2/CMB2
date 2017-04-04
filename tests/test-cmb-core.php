@@ -121,6 +121,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'taxonomies'       => array(),
 			'new_user_section' => 'add-new-user', // or 'add-existing-user'
 			'new_term_section' => true,
+			'classes'          => null,
+			'classes_cb'       => ''
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
