@@ -1056,11 +1056,11 @@ class CMB2 extends CMB2_Base {
 	 * @return mixed            Metabox config property value or false.
 	 */
 	public function prop( $property, $fallback = null ) {
-		if ( array_key_exists( $property, $this->meta_box ) ) {
-			return $this->meta_box[ $property ];
-		} elseif ( $fallback ) {
-			return $this->meta_box[ $property ] = $fallback;
+		if ( ! array_key_exists( $property, $this->meta_box ) ) {
+			$this->meta_box[ $property ] = $fallback;
 		}
+
+		return $this->meta_box[ $property ];
 	}
 
 	/**
