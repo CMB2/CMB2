@@ -416,7 +416,7 @@ class CMB2 extends CMB2_Base {
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
-			echo '<div class="cmb-row', $class, '"><div class="cmb-th">';
+			echo '<div class="cmb-row', wp_kses( $class, array() ), '"><div class="cmb-th">';
 			if ( $label ) {
 				echo '<h2 class="cmb-group-name">', $label, '</h2>';
 			}
