@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
+* Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
 
 ## 2.2.4 - 2017-02-27
 

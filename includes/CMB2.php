@@ -434,7 +434,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button">', $field_group->options( 'add_button' ), '</button></p></div></div>';
+			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', $field_group->options( 'add_button' ), '</button></p></div></div>';
 		}
 
 		echo '</div></div></div>';
@@ -520,7 +520,7 @@ class CMB2 extends CMB2_Base {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="button cmb-remove-group-row alignright">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';

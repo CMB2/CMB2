@@ -410,7 +410,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button button-disabled">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button button-disabled">Remove</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -422,13 +422,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button">Remove</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<p class="cmb-add-row">
-					<button type="button" data-selector="prouct-case-study_repeat" class="cmb-add-row-button button">Add Case Study</button>
+					<button type="button" data-selector="prouct-case-study_repeat" class="cmb-add-row-button button-secondary">Add Case Study</button>
 				</p>
 			</div>
 		</div>';
