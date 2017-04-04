@@ -4,9 +4,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_JS {
 
@@ -32,7 +32,9 @@ class CMB2_JS {
 	 * @var   array
 	 * @since 2.0.7
 	 */
-	protected static $dependencies = array( 'jquery' => 'jquery' );
+	protected static $dependencies = array(
+		'jquery' => 'jquery',
+	);
 
 	/**
 	 * Add a dependency to the array of CMB2 JS dependencies

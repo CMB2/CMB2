@@ -4,9 +4,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 /**
@@ -403,4 +403,4 @@ if ( ! function_exists( 'date_create_from_format' ) ) {
 
 		return new DateTime( $ymd );
 	}
-}
+}// End if().

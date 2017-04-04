@@ -6,9 +6,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
@@ -84,7 +84,10 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	 */
 	public function get_terms() {
 		return CMB2_Utils::wp_at_least( '4.5.0' )
-			? get_terms( array( 'taxonomy' => $this->field->args( 'taxonomy' ), 'hide_empty' => false ) )
+			? get_terms( array(
+				'taxonomy' => $this->field->args( 'taxonomy' ),
+				'hide_empty' => false,
+			) )
 			: get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 	}
 

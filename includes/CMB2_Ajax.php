@@ -8,7 +8,7 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
  */
 class CMB2_Ajax {
@@ -82,7 +82,9 @@ class CMB2_Ajax {
 		$oembed_url = esc_url( $oembed_string );
 
 		// Set args
-		$embed_args = array( 'width' => $embed_width );
+		$embed_args = array(
+			'width' => $embed_width,
+		);
 
 		$this->ajax_update = true;
 
@@ -301,7 +303,8 @@ class CMB2_Ajax {
 						unset( $options[ $key ] );
 						unset( $options[ str_replace( '_oembed_time_', '_oembed_', $key ) ] );
 					}
-				} // Remove the cached unknown values
+				} // End if().
+				// Remove the cached unknown values.
 				elseif ( '{{unknown}}' === $value ) {
 					$modified = true;
 					unset( $options[ $key ] );

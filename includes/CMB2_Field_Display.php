@@ -6,9 +6,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Field_Display {
 
@@ -97,7 +97,7 @@ class CMB2_Field_Display {
 			default:
 				$type = new self( $field );
 				break;
-		}
+		}// End switch().
 
 		return $type;
 	}
@@ -414,7 +414,9 @@ class CMB2_Display_File extends CMB2_Field_Display {
 			$img_size = $this->field->args( 'preview_size' );
 
 			if ( $id ) {
-				$image = wp_get_attachment_image( $id, $img_size, null, array( 'class' => 'cmb-image-display' ) );
+				$image = wp_get_attachment_image( $id, $img_size, null, array(
+					'class' => 'cmb-image-display',
+				) );
 			} else {
 				$size = is_array( $img_size ) ? $img_size[0] : 200;
 				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $url_value . '" alt="" />';
@@ -471,7 +473,9 @@ class CMB2_Display_oEmbed extends CMB2_Field_Display {
 			'url'         => $this->value,
 			'object_id'   => $this->field->object_id,
 			'object_type' => $this->field->object_type,
-			'oembed_args' => array( 'width' => '300' ),
+			'oembed_args' => array(
+				'width' => '300',
+			),
 			'field_id'    => $this->field->id(),
 		) );
 	}

@@ -4,16 +4,16 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 /**
  * Retrieves an instance of CMB2_Option based on the option key
  *
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  */
 class CMB2_Options {
 	/**
@@ -39,7 +39,7 @@ class CMB2_Options {
  * for a specific option key
  *
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  */
 class CMB2_Option {
 

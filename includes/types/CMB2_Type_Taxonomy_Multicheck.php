@@ -6,9 +6,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 
@@ -49,7 +49,10 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 			: 'cmb2-checkbox-list cmb2-list';
 
 		return $this->rendered(
-			$this->types->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' )
+			$this->types->radio( array(
+				'class' => $classes,
+				'options' => $options,
+			), 'taxonomy_multicheck' )
 		);
 	}
 }

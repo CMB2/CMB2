@@ -7,9 +7,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_hookup extends CMB2_Hookup_Base {
 
@@ -375,7 +375,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$add_handle = $add_wrap && ! empty( $title );
 
 		// Open the context-box wrap.
-		$add_handle = $this->context_box_title_markup_open( $add_handle );
+		$this->context_box_title_markup_open( $add_handle );
 
 		// Show the form fields.
 		$this->cmb->show_form();
