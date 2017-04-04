@@ -375,7 +375,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$add_handle = $add_wrap && ! empty( $title );
 
 		// Open the context-box wrap.
-		$add_handle = $this->context_box_title_markup_open( $add_handle );
+		$this->context_box_title_markup_open( $add_handle );
 
 		// Show the form fields.
 		$this->cmb->show_form();
