@@ -1450,6 +1450,13 @@ class CMB2 extends CMB2_Base {
 		return $this->prop( 'context' ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ), true );
 	}
 
+	public function kses_group_wrap_atts() {
+		return array(
+			'class' => array(),
+			'style' => array(),
+		);
+	}
+
 	/**
 	 * Magic getter for our object.
 	 *
