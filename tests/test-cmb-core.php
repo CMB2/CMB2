@@ -581,7 +581,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 								</div>
 								<div class="cmb-td">
 									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\'/>
-									<input class="cmb2-upload-button button" type="button" value="Add or Upload File" />
+									<input class="cmb2-upload-button button-secondary" type="button" value="Add or Upload File" />
 									<input type="hidden" class="cmb2-upload-file-id" name="group_field[0][test_file_id]" id="group_field_0_test_file_id" value=""/>
 									<div id="group_field_0_test_file_id-status" class="cmb2-media-status">
 									</div>
@@ -589,7 +589,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
-									<button type="button" disabled="disabled" data-selector="group_field_repeat" class="button cmb-remove-group-row alignright">Remove Group</button>
+									<button type="button" disabled="disabled" data-selector="group_field_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">Remove Group</button>
 								</div>
 							</div>
 						</div>
@@ -598,7 +598,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 					<div class="cmb-row">
 						<div class="cmb-td">
 						<p class="cmb-add-row">
-						<button type="button" data-selector="group_field_repeat" data-grouptitle="" class="cmb-add-group-row button">Add Group</button>
+						<button type="button" data-selector="group_field_repeat" data-grouptitle="" class="cmb-add-group-row button-secondary">Add Group</button>
 						</p>
 						</div>
 					</div>
