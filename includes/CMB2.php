@@ -249,12 +249,14 @@ class CMB2 extends CMB2_Base {
 		$classes = array( 'cmb2-wrap', 'form-table' );
 
 		// Use the callback to fetch classes.
-		if ( $added_classes = $this->get_param_callback_result( 'classes_cb' ) ) {
+		$added_classes = $this->get_param_callback_result( 'classes_cb' );
+		if ( $added_classes ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
 			$classes = array_merge( $classes, $added_classes );
 		}
 
-		if ( $added_classes = $this->prop( 'classes' ) ) {
+		$added_classes = $this->prop( 'classes' );
+		if ( $added_classes ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
 			$classes = array_merge( $classes, $added_classes );
 		}
