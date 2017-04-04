@@ -933,14 +933,15 @@ class CMB2 extends CMB2_Base {
 		$registered_types = $this->box_types();
 
 		$type = '';
+		$curr_type = $this->current_object_type();
 
-		// if it's an array of one, extract it.
+		// If it's an array of one, extract it.
 		if ( 1 === count( $registered_types ) ) {
 			$last = end( $registered_types );
 			if ( is_string( $last ) ) {
 				$type = $last;
 			}
-		} elseif ( ( $curr_type = $this->current_object_type() ) && in_array( $curr_type, $registered_types, true ) ) {
+		} elseif ( $curr_type && in_array( $curr_type, $registered_types, true ) ) {
 			$type = $curr_type;
 		}
 
