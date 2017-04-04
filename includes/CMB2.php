@@ -522,7 +522,7 @@ class CMB2 extends CMB2_Base {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', esc_attr( $field_group->id() ), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', esc_html( $field_group->options( 'remove_button' ) ), '</button>
 						</div>
 					</div>
 					';
