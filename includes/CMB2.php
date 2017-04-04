@@ -621,8 +621,18 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		// Fall-back to $_POST data.
-		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
+
+		if ( $data_to_save ) {
+			// If data was passed.
+			$this->data_to_save = $data_to_save;
+		} elseif ( wp_verify_nonce( $this->nonce ) ) {
+			// Fall-back to $_POST data if no data was passed.
+			$this->data_to_save = $_POST;
+		} else {
+			// If we failed the nonce check, don't save anything.
+			$this->data_to_save = array();
+		}
+
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
