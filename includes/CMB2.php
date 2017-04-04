@@ -1412,7 +1412,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function search_old_school_array( $field_id, $fields ) {
 		$ids = wp_list_pluck( $fields, 'id' );
-		$index = array_search( $field_id, $ids );
+		$index = array_search( $field_id, $ids, true );
 		return false !== $index ? $index : false;
 	}
 
