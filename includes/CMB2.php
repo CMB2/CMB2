@@ -435,7 +435,7 @@ class CMB2 extends CMB2_Base {
 			$this->render_group_row( $field_group, $remove_disabled );
 		}
 
-		if ( $field_group->args( 'repeatable' ) ) {
+		if ( $this->is_repeatable( $field_group ) ) {
 			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', esc_html( $field_group->options( 'add_button' ) ), '</button></p></div></div>';
 		}
 
@@ -456,7 +456,7 @@ class CMB2 extends CMB2_Base {
 	public function group_wrap_attributes( $field_group ) {
 		$classes = 'cmb-nested cmb-field-list cmb-repeatable-group';
 		$classes .= $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
-		$classes .= $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
+		$classes .= $this->is_repeatable( $field_group ) ? ' repeatable' : ' non-repeatable';
 
 		$group_wrap_attributes = array(
 			'class' => $classes,
@@ -494,7 +494,7 @@ class CMB2 extends CMB2_Base {
 		echo '
 		<div class="postbox cmb-row cmb-repeatable-grouping', wp_kses( $closed_class, array() ), '" data-iterator="', absint( $field_group->index ), '">';
 
-		if ( $field_group->args( 'repeatable' ) ) {
+		if ( $this->is_repeatable( $field_group ) ) {
 			echo '<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', esc_attr( $field_group->id() ), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
@@ -518,7 +518,7 @@ class CMB2 extends CMB2_Base {
 				$field = $this->get_field( $field_args, $field_group )->render_field();
 			}
 		}
-		if ( $field_group->args( 'repeatable' ) ) {
+		if ( $this->is_repeatable( $field_group ) ) {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
@@ -1478,6 +1478,17 @@ class CMB2 extends CMB2_Base {
 		}
 
 		return $params;
+	}
+
+	/**
+	 * Helper function that returns whether a field group is repeatable or not.
+	 *
+	 * @since  2.2.4
+	 * @param  object $field_group The field group.
+	 * @return boolean
+	 */
+	public function is_repeatable( $field_group ) {
+		return $field_group->args( 'repeatable' );
 	}
 
 	/**
