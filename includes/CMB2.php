@@ -436,7 +436,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', $field_group->options( 'add_button' ), '</button></p></div></div>';
+			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', esc_html( $field_group->options( 'add_button' ) ), '</button></p></div></div>';
 		}
 
 		echo '</div></div></div>';
