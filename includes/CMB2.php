@@ -412,7 +412,7 @@ class CMB2 extends CMB2_Base {
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', wp_kses( $this->group_wrap_attributes( $field_group ), $this->kses_group_wrap_atts() ), '>';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', wp_kses( $this->group_wrap_attributes( $field_group ), $this->kses_args( 'group_wrap_attributes' ) ), '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
