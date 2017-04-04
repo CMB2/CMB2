@@ -1460,6 +1460,13 @@ class CMB2 extends CMB2_Base {
 		return $this->prop( 'context' ) && in_array( $this->prop( 'context' ), array( 'form_top', 'before_permalink', 'after_title', 'after_editor' ), true );
 	}
 
+	/**
+	 * Arguments for custom wp_kses sanitization/validation calls.
+	 *
+	 * @since  2.2.4
+	 * @param  string $type The field type being escaped.
+	 * @return array        An array of wp_kses HTML parameters allowed.
+	 */
 	public function kses_args( $type ) {
 		$params = array();
 
