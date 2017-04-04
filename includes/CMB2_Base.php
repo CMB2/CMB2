@@ -379,6 +379,43 @@ abstract class CMB2_Base {
 	}
 
 	/**
+	 * Arguments for custom wp_kses sanitization/validation calls.
+	 *
+	 * @since  2.2.4
+	 * @param  string $type The field type being escaped.
+	 * @return array        An array of wp_kses HTML parameters allowed.
+	 */
+	public function kses_args( $type ) {
+		$params = array();
+
+		switch ( $type ) {
+			case 'group_wrap_attributes':
+				$params = array(
+					'class' => array(),
+					'style' => array(),
+				);
+				break;
+			case 'remove_disabled':
+				$params = array(
+					'disabled' => array(),
+				);
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Helper function that returns whether a field group is repeatable or not.
+	 *
+	 * @since  2.2.4
+	 * @param  object $field_group The field group.
+	 * @return boolean
+	 */
+	public function is_repeatable( $field_group ) {
+		return $field_group->args( 'repeatable' );
+	}
+
+	/**
 	 * Mark a param as deprecated and inform when it has been used.
 	 *
 	 * There is a default WordPress hook deprecated_argument_run that will be called
