@@ -114,15 +114,20 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		// Loop repeatable group tables
-		$( '.cmb-repeatable-group' ).each( function() {
+		$( '.cmb-repeatable-group.repeatable' ).each( function() {
 			var $table = $( this );
+			var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
+
 			// Loop repeatable group table rows
 			$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
 				var $row = $( this );
+				var $rowTitle = $row.find( 'h3.cmb-group-title' );
 				// Reset rows iterator
 				$row.data( 'iterator', rowindex );
 				// Reset rows title
-				$row.find( '.cmb-group-title h4' ).text( $table.find( '.cmb-add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
+				if ( $rowTitle.length ) {
+					$rowTitle.text( groupTitle.replace( '{#}', ( rowindex + 1 ) ) );
+				}
 			});
 		});
 	};
