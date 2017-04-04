@@ -418,10 +418,10 @@ class CMB2 extends CMB2_Base {
 			$class = $desc ? ' cmb-group-description' : '';
 			echo '<div class="cmb-row', wp_kses( $class, array() ), '"><div class="cmb-th">';
 			if ( $label ) {
-				echo '<h2 class="cmb-group-name">', $label, '</h2>';
+				echo '<h2 class="cmb-group-name">', wp_kses_post( $label ), '</h2>';
 			}
 			if ( $desc ) {
-				echo '<p class="cmb2-metabox-description">', $desc, '</p>';
+				echo '<p class="cmb2-metabox-description">', wp_kses_post( $desc ), '</p>';
 			}
 			echo '</div></div>';
 		}
