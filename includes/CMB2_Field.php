@@ -865,20 +865,20 @@ class CMB2_Field extends CMB2_Base {
 		/**
 		 * Hook after field row has been rendered
 		 *
-		 * @param array  		$field_args     The current field args.
-		 * @param CMB2_Field    $field   		The current field object.
-		 */
-		do_action( 'cmb2_after_field_row', $this->args(), $this );
-
-		/**
-		 * Hook after field row has been rendered
-		 *
 		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
 		 *
 		 * @param array  		$field_args     The current field args.
 		 * @param CMB2_Field    $field   		The current field object.
 		 */
 		do_action( "cmb2_after_{$this->type()}_field_row", $this->args(), $this );
+
+		/**
+		 * Hook after field row has been rendered
+		 *
+		 * @param array  		$field_args     The current field args.
+		 * @param CMB2_Field    $field   		The current field object.
+		 */
+		do_action( 'cmb2_after_field_row', $this->args(), $this );
 
 		// For chaining
 		return $this;
