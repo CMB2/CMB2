@@ -621,7 +621,6 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-
 		if ( $data_to_save ) {
 			// If data was passed.
 			$this->data_to_save = $data_to_save;
@@ -1476,7 +1475,6 @@ class CMB2 extends CMB2_Base {
 					'disabled' => array(),
 				);
 		}
-
 
 		return $params;
 	}
