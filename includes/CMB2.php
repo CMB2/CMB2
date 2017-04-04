@@ -622,7 +622,7 @@ class CMB2 extends CMB2_Base {
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
 		// Fall-back to $_POST data if no data was passed.
-		$data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
+		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
 
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
