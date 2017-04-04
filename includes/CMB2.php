@@ -621,16 +621,8 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		if ( $data_to_save ) {
-			// If data was passed.
-			$this->data_to_save = $data_to_save;
-		} elseif ( wp_verify_nonce( $this->nonce ) ) {
-			// Fall-back to $_POST data if no data was passed.
-			$this->data_to_save = $_POST;
-		} else {
-			// If we failed the nonce check, don't save anything.
-			$this->data_to_save = array();
-		}
+		// Fall-back to $_POST data if no data was passed.
+		$data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
 
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
@@ -888,7 +880,7 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = ( wp_verify_nonce( $this->nonce() ) && isset( $_REQUEST['user_id'] ) ) ? wp_unslash( absint( $_REQUEST['user_id'] ) ) : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( absint( $_REQUEST['user_id'] ) ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
@@ -1025,7 +1017,7 @@ class CMB2 extends CMB2_Base {
 			$type = 'term';
 		}
 
-		if ( defined( 'DOING_AJAX' ) && wp_verify_nonce( $this->nonce ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
+		if ( defined( 'DOING_AJAX' ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
 			$type = 'term';
 		}
 
