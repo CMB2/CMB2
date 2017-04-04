@@ -14,8 +14,8 @@ Before posting a new issue:
 
 ### Steps to reproduce (I have confirmed I can reproduce this issue on the trunk branch):
 
-1.  
-2.  
+1.
+2.
 
 ### CMB2 Field Registration Code:
 
