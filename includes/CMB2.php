@@ -495,7 +495,7 @@ class CMB2 extends CMB2_Base {
 		<div class="postbox cmb-row cmb-repeatable-grouping', wp_kses( $closed_class, array() ), '" data-iterator="', absint( $field_group->index ), '">';
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
+			echo '<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', esc_attr( $field_group->id() ), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
 			echo '
