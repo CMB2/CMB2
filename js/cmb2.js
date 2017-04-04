@@ -1,8 +1,8 @@
 /**
  * Controls the behaviours of custom metabox fields.
  *
- * @author WebDevStudios
- * @see    https://github.com/WebDevStudios/CMB2
+ * @author CMB2 team
+ * @see    https://github.com/CMB2/CMB2
  */
 
  // TODO: fix this.
@@ -206,7 +206,7 @@ window.CMB2 = window.CMB2 || {};
 			multiple: isList ? 'add' : false
 		} );
 
-		// Enable the additional media filters: https://github.com/WebDevStudios/CMB2/issues/873
+		// Enable the additional media filters: https://github.com/CMB2/CMB2/issues/873
 		modal.states.first().set( 'filterable', 'all' );
 
 		cmb.trigger( 'cmb_media_modal_init', media );

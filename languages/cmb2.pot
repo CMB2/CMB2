@@ -1,4 +1,4 @@
-# Copyright (C) 2017 WebDevStudios
+# Copyright (C) 2017 CMB2
 # This file is distributed under the same license as the CMB2 package.
 msgid ""
 msgstr ""
@@ -9,8 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2017-2-15 17:51+300\n"
-"Last-Translator: WebDevStudios contact@webdevstudios.com\n"
-"Language-Team: WebDevStudios contact@webdevstudios.com\n"
+"Last-Translator: CMB2 team hello@zao.is\n"
+"Language-Team: CMB2 team hello@zao.is\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 "X-Poedit-KeywordsList: "
 "__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
@@ -681,7 +681,7 @@ msgid "CMB2"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://github.com/WebDevStudios/CMB2"
+msgid "https://github.com/CMB2/CMB2"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -691,11 +691,11 @@ msgid ""
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "WebDevStudios"
+msgid "CMB2 team"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://webdevstudios.com"
+msgid "https://cmb2.io"
 msgstr ""
 
 #: includes/CMB2_JS.php:126

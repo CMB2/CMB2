@@ -3,9 +3,9 @@
  * CMB2 tests base
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 abstract class Test_CMB2 extends WP_UnitTestCase {
 

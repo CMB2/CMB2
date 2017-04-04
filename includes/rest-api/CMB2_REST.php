@@ -7,9 +7,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  *
  * @property-read read_fields Array of readable field objects.
  * @property-read edit_fields Array of editable field objects.

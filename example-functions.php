@@ -8,7 +8,7 @@
  * @category YourThemeOrPlugin
  * @package  Demo_CMB2
  * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
- * @link     https://github.com/WebDevStudios/CMB2
+ * @link     https://github.com/CMB2/CMB2
  */
 
 /**
@@ -647,7 +647,7 @@ function yourprefix_register_theme_options_metabox() {
 
 	/**
 	 * Metabox for an options page. Will not be added automatically, but needs to be called with
-	 * the `cmb2_metabox_form` helper function. See https://github.com/WebDevStudios/CMB2/wiki for more info.
+	 * the `cmb2_metabox_form` helper function. See https://github.com/CMB2/CMB2/wiki for more info.
 	 */
 	$cmb_options = new_cmb2_box( array(
 		'id'      => $option_key . 'page',
@@ -695,7 +695,7 @@ function yourprefix_limit_rest_view_to_logged_in_users( $is_allowed, $cmb_contro
 add_action( 'cmb2_init', 'yourprefix_register_rest_api_box' );
 /**
  * Hook in and add a box to be available in the CMB2 REST API. Can only happen on the 'cmb2_init' hook.
- * More info: https://github.com/WebDevStudios/CMB2/wiki/REST-API
+ * More info: https://github.com/CMB2/CMB2/wiki/REST-API
  */
 function yourprefix_register_rest_api_box() {
 	$prefix = 'yourprefix_rest_';
@@ -706,7 +706,7 @@ function yourprefix_register_rest_api_box() {
 		'object_types'  => array( 'page' ), // Post type
 		'show_in_rest' => WP_REST_Server::ALLMETHODS, // WP_REST_Server::READABLE|WP_REST_Server::EDITABLE, // Determines which HTTP methods the box is visible in.
 		// Optional callback to limit box visibility.
-		// See: https://github.com/WebDevStudios/CMB2/wiki/REST-API#permissions
+		// See: https://github.com/CMB2/CMB2/wiki/REST-API#permissions
 		// 'get_box_permissions_check_cb' => 'yourprefix_limit_rest_view_to_logged_in_users',
 	) );
 
