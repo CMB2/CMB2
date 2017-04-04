@@ -47,10 +47,16 @@ branches:
   - trunk
 notifications:
   slack:
-    secure: g3L0XaiaUjUeBoNMLXx4pdz+7JudZhFGPY1mOX1WkC4B0zo+M/tGdhLLz/NNbdu39FKSslctQ+mUf8ai4rpR4uckfj7y7ObDJY3+Yj0sWEF5CdXnvGAqziHxxqQHPWZA6+iCzm3bG/IFUQ7X6NWDFlw03VrPqun+205x6YpP00k=
+    rooms:
+      - secure: g3L0XaiaUjUeBoNMLXx4pdz+7JudZhFGPY1mOX1WkC4B0zo+M/tGdhLLz/
+    on_success: never
+    on_failure: change
   webhooks:
     urls:
     - https://webhooks.gitter.im/e/00b1df026574cdaeb815
-    on_success: change  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
+    on_success: never  # options: [always|never|change] default: always
+    on_failure: change  # options: [always|never|change] default: always
     on_start: false     # default: false
+  email:
+    on_success: never # default: change
+    on_failure: always # default: always
