@@ -57,7 +57,7 @@ Main Wrap
 
 		&:not([type="hidden"]) {
 			+ input,
-			+ .button,
+			+ .button-secondary,
 			+ select {
 				margin-left: 20px;
 			}
@@ -100,7 +100,7 @@ Main Wrap
 	}
 
 	button,
-	.button {
+	.button-secondary {
 		white-space: nowrap;
 	}
 

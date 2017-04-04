@@ -50,7 +50,7 @@ Main Wrap
 }
 /* line 59, sass/partials/_main_wrap.scss */
 .cmb2-wrap input:not([type="hidden"]) + input,
-.cmb2-wrap input:not([type="hidden"]) + .button,
+.cmb2-wrap input:not([type="hidden"]) + .button-secondary,
 .cmb2-wrap input:not([type="hidden"]) + select {
   margin-left: 20px;
 }
@@ -86,7 +86,7 @@ Main Wrap
 }
 /* line 102, sass/partials/_main_wrap.scss */
 .cmb2-wrap button,
-.cmb2-wrap .button {
+.cmb2-wrap .button-secondary {
   white-space: nowrap;
 }
 /* line 107, sass/partials/_main_wrap.scss */
