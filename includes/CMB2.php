@@ -1026,7 +1026,7 @@ class CMB2 extends CMB2_Base {
 			$type = 'term';
 		}
 
-		if ( defined( 'DOING_AJAX' ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
+		if ( defined( 'DOING_AJAX' ) && wp_verify_nonce( $this->nonce ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
 			$type = 'term';
 		}
 
