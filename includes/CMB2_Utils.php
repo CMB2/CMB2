@@ -565,11 +565,24 @@ class CMB2_Utils {
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
-				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
+				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
 		return $attributes;
+	}
+
+	/**
+	 * Check if given attribute is a data attribute.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @param  string  $att HTML attribute
+	 *
+	 * @return boolean
+	 */
+	public static function is_data_attribute( $att ) {
+		return 0 === stripos( $att, 'data-' );
 	}
 
 	/**
