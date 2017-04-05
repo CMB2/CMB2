@@ -231,6 +231,37 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		), CMB2_Utils::ensure_array( new WP_Error ) );
 	}
 
+	public function test_url_set() {
+		$cmb2_url = str_replace(
+			array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
+			array( WP_CONTENT_URL, WP_PLUGIN_URL ),
+			cmb2_dir()
+		);
+
+		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
+	}
+
+	public function test_array_insert() {
+		$array = array(
+			'one' => array( 1,2,3 ),
+			'two' => array( 1,2,3 ),
+			'three' => array( 1,2,3 ),
+		);
+
+		$new = array(
+			'new' => array( 4, 5, 6 ),
+		);
+
+		CMB2_Utils::array_insert( $array, $new, 2 );
+
+		$this->assertEquals( array(
+			'one' => array( 1,2,3 ),
+			'new' => array( 4,5,6 ),
+			'two' => array( 1,2,3 ),
+			'three' => array( 1,2,3 ),
+		), $array );
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {

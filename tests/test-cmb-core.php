@@ -201,37 +201,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertEquals( $this->defaults, $cmb->meta_box, print_r( array( $this->defaults, $cmb->meta_box ), true ) );
 	}
 
-	public function test_url_set() {
-		$cmb2_url = str_replace(
-			array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
-			array( WP_CONTENT_URL, WP_PLUGIN_URL ),
-			cmb2_dir()
-		);
-
-		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
-	}
-
-	public function test_array_insert() {
-		$array = array(
-			'one' => array( 1,2,3 ),
-			'two' => array( 1,2,3 ),
-			'three' => array( 1,2,3 ),
-		);
-
-		$new = array(
-			'new' => array( 4, 5, 6 ),
-		);
-
-		CMB2_Utils::array_insert( $array, $new, 2 );
-
-		$this->assertEquals( array(
-			'one' => array( 1,2,3 ),
-			'new' => array( 4,5,6 ),
-			'two' => array( 1,2,3 ),
-			'three' => array( 1,2,3 ),
-		), $array );
-	}
-
 	public function test_cmb2_get_metabox() {
 		// Test that successful retrieval by box ID
 		$retrieve = cmb2_get_metabox( $this->cmb_id );
