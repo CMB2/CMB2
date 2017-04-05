@@ -941,6 +941,44 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$prop_value = $cmb->set_prop( $new_prop_name, $new_prop_value );
 	}
 
+	public function test_group_wrap_attributes() {
+		$cmb = $this->new_group_box( __FUNCTION__ );
+		$field_group = $cmb->get_field( 'group_field' );
+
+		$expected = array(
+			'',
+			'class="cmb-nested cmb-field-list cmb-repeatable-group non-sortable repeatable"',
+			'style="width:100%;"',
+		);
+
+		$this->assertEquals( implode( ' ', $expected ), $cmb->group_wrap_attributes( $field_group ) );
+
+		$json = '{"glossary": {"title": "example glossary","GlossDiv": {"title": "S","GlossList": {"GlossEntry": {"ID": "SGML","SortAs": "SGML","GlossTerm": "Standard Generalized Markup Language","Acronym": "SGML","Abbrev": "ISO 8879:1986","GlossDef": {"para": "A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso": ["GML", "XML"]},"GlossSee": "<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>"}}}}}';
+
+		add_filter( 'cmb2_group_wrap_attributes', function( $group_wrap_atts, $field_group ) use ( $json ) {
+			$group_wrap_atts['heyo'] = "it's Zao";
+			$group_wrap_atts['data-json'] = $json;
+
+			$group_wrap_atts['"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>'] = 'hackers';
+			$group_wrap_atts['hackers'] = '"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>';
+
+			return $group_wrap_atts;
+		}, 10, 2 );
+
+		$clean_json = str_replace(
+			'<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>',
+			'xssClick to Download',
+			$json
+		);
+
+		$expected[] = 'heyo="it\'s Zao"';
+		$expected[] = 'data-json=\'' . $clean_json . '\'';
+		$expected[] = 'scriptxssscriptahrefhttpxssattackexamplescomClicktoDownloada="hackers"';
+		$expected[] = 'hackers="&quot;&gt;&lt;script&gt;xss&lt;/script&gt;&lt;a href=&quot;http://xssattackexamples.com/&quot;&gt;Click to Download&lt;/a&gt;"';
+
+		$this->assertHTMLstringsAreEqual( implode( ' ', $expected ), $cmb->group_wrap_attributes( $field_group ) );
+	}
+
 	public static function overloading_test( $cmb2, $noun = '' ) {
 		$cmb2->fabulous_noun = $noun;
 		return 'Fabulous ' . $noun;
@@ -969,6 +1007,34 @@ class Test_CMB2_Core extends Test_CMB2 {
 		echo 'function test_after ' . $field_args['description'] . ' ' . $field->id();
 	}
 
+	protected function new_group_box( $id ) {
+		$cmb = cmb2_get_metabox( array(
+			'id'              => $id,
+			'title'           => $id,
+			'object_types'    => array( 'post' ),
+		), $this->post_id, 'post' );
+
+		$field_id = $cmb->add_field( array(
+			'name' => 'Group',
+			'desc' => 'Group description',
+			'id'   => 'group_field',
+			'type' => 'group',
+		) );
+
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
+			'name' => 'Field 1',
+			'id'   => 'first_field',
+			'type' => 'text',
+		) );
+
+		$sub_field_id = $cmb->add_group_field( $field_id, array(
+			'name' => 'Colorpicker',
+			'id'   => 'colorpicker',
+			'type' => 'colorpicker',
+		) );
+
+		return $cmb;
+	}
 }
 
 /**

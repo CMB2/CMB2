@@ -474,7 +474,16 @@ class CMB2 extends CMB2_Base {
 		 */
 		$group_wrap_attributes = apply_filters( 'cmb2_group_wrap_attributes', $group_wrap_attributes, $field_group );
 
-		return CMB2_Utils::concat_attrs( $group_wrap_attributes );
+		$atts = array();
+		foreach ( $group_wrap_attributes as $att => $att_value ) {
+			if ( ! CMB2_Utils::is_data_attribute( $att ) ) {
+				$att_value = htmlspecialchars( $att_value );
+			}
+
+			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( strip_tags( $att_value ) );
+		}
+
+		return CMB2_Utils::concat_attrs( $atts );
 	}
 
 	/**
