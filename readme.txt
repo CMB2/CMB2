@@ -71,6 +71,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Order](https://github.com/rubengc/cmb2-field-order) by [rubengc](https://github.com/rubengc): Allows users to define custom order of predefined options.
 * [CMB2 Field Type: Animation](https://github.com/rubengc/cmb2-field-animation) by [rubengc](https://github.com/rubengc): Allows users to pickup an animation from [Animate.css](https://github.com/daneden/animate.css) (includes preview of chosen animation).
 * [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) by [rubengc](https://github.com/rubengc): Based on [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax), adds the ability to attach posts/users/terms, and the ability to limit the maximum number of attached objects.
+* [CMB2 Field Type: Visual Style Editor](https://github.com/rubengc/cmb2-field-visual-style-editor) by [rubengc](https://github.com/rubengc): Custom field for CMB2 which allows customizing style from a small set of controls.
 
 ##### Other Helpful Resources
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
