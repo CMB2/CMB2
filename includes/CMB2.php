@@ -150,12 +150,12 @@ class CMB2 extends CMB2_Base {
 			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter.', 'cmb2' ) );
 		}
 
+		$this->cmb_id = $config['id'];
 		$this->meta_box = wp_parse_args( $config, $this->mb_defaults );
 		$this->meta_box['fields'] = array();
 
 		$this->object_id( $object_id );
 		$this->mb_object_type();
-		$this->cmb_id = $config['id'];
 
 		if ( ! empty( $config['fields'] ) && is_array( $config['fields'] ) ) {
 			$this->add_fields( $config['fields'] );
