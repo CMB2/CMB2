@@ -979,6 +979,27 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Determine if we are on an options page (or saving the options page).
+	 *
+	 * @since  2.2.5
+	 *
+	 * @return bool
+	 */
+	public function doing_options_page() {
+		$key = $this->options_page_key();
+		if ( empty( $key ) ) {
+			return false;
+		}
+
+		$doing_page = (
+			! empty( $_GET['page'] ) && $_GET['page'] === $key
+			|| ! empty( $_POST['object_id'] ) && $_POST['object_id'] === $key
+		);
+
+		return $doing_page ? $key : false;
+	}
+
+	/**
 	 * Get the options page key.
 	 *
 	 * @since  2.2.5
