@@ -979,6 +979,34 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Get the options page key.
+	 *
+	 * @since  2.2.5
+	 * @return array
+	 */
+	public function options_page_key() {
+		$key = '';
+		if ( ! $this->is_options_page_mb() ) {
+			return $key;
+		}
+
+
+		if ( ! empty( $this->meta_box['show_on']['value'] ) ) {
+			$values = $this->meta_box['show_on']['value'];
+		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
+			$values = $this->meta_box['show_on']['options-page'];
+		}
+
+		if ( is_string( $values ) ) {
+			$key = $values;
+		} elseif ( is_array( $values ) ) {
+			$key = array_shift( $values );
+		}
+
+		return $key;
+	}
+
+	/**
 	 * Returns the object type
 	 *
 	 * @since  1.0.0
