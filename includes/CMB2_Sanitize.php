@@ -86,7 +86,7 @@ class CMB2_Sanitize {
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_multicheck':
 			case 'taxonomy_multicheck_inline':
-				$sanitized_value = $this->_taxonomy();
+				$sanitized_value = $this->taxonomy();
 				break;
 			case 'multicheck':
 			case 'multicheck_inline':
@@ -122,7 +122,7 @@ class CMB2_Sanitize {
 	 * @since  2.2.4
 	 * @return mixed  Blank value, or sanitized term values if "cmb2_return_taxonomy_values_{$cmb_id}" is true.
 	 */
-	protected function _taxonomy() {
+	public function taxonomy() {
 		$sanitized_value = '';
 
 		if ( ! $this->field->args( 'taxonomy' ) ) {
