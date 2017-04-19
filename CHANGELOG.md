@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 * Enable the additional media library modal filters. Fixes [#873](https://github.com/CMB2/CMB2/issues/873).
 * Sanitize the attributes added via the `cmb2_group_wrap_attributes` filter.
+* New field parameter, `'query_args'`, which can be used by the `'taxonomy_*'` fields. Provides ability to override the arguments passed to `get_terms()`.
 
 ### Bug Fixes
 
