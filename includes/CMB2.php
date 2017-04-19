@@ -87,14 +87,14 @@ class CMB2 extends CMB2_Base {
  		 * and handles hooking in and saving those fields.
 		 */
 		'hookup'           => true,
-		'save_fields'      => true, // Will not save during hookup if false.
+		'save_fields'      => true,  // Will not save during hookup if false.
 		'closed'           => false, // Default metabox to being closed.
 		'taxonomies'       => array(),
 		'new_user_section' => 'add-new-user', // or 'add-existing-user'.
 		'new_term_section' => true,
 		'show_in_rest'     => false,
-		'classes'          => null, // Optionally add classes to the CMB2 wrapper
-		'classes_cb'       => '', // Optionally add classes to the CMB2 wrapper (via a callback)
+		'classes'          => null,  // Optionally add classes to the CMB2 wrapper
+		'classes_cb'       => '',    // Optionally add classes to the CMB2 wrapper (via a callback).
 	);
 
 	/**
@@ -249,12 +249,14 @@ class CMB2 extends CMB2_Base {
 		$classes = array( 'cmb2-wrap', 'form-table' );
 
 		// Use the callback to fetch classes.
-		if ( $added_classes = $this->get_param_callback_result( 'classes_cb' ) ) {
+		$added_classes = $this->get_param_callback_result( 'classes_cb' );
+		if ( $added_classes ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
 			$classes = array_merge( $classes, $added_classes );
 		}
 
-		if ( $added_classes = $this->prop( 'classes' ) ) {
+		$added_classes = $this->prop( 'classes' );
+		if ( $added_classes ) {
 			$added_classes = is_array( $added_classes ) ? $added_classes : array( $added_classes );
 			$classes = array_merge( $classes, $added_classes );
 		}
@@ -410,16 +412,16 @@ class CMB2 extends CMB2_Base {
 
 		$field_group->peform_param_callback( 'before_group' );
 
-		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', $this->group_wrap_attributes( $field_group ), '>';
+		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', wp_kses( $this->group_wrap_attributes( $field_group ), $this->kses_args( 'group_wrap_attributes' ) ), '>';
 
 		if ( $desc || $label ) {
 			$class = $desc ? ' cmb-group-description' : '';
-			echo '<div class="cmb-row', $class, '"><div class="cmb-th">';
+			echo '<div class="cmb-row', wp_kses( $class, array() ), '"><div class="cmb-th">';
 			if ( $label ) {
-				echo '<h2 class="cmb-group-name">', $label, '</h2>';
+				echo '<h2 class="cmb-group-name">', wp_kses_post( $label ), '</h2>';
 			}
 			if ( $desc ) {
-				echo '<p class="cmb2-metabox-description">', $desc, '</p>';
+				echo '<p class="cmb2-metabox-description">', wp_kses_post( $desc ), '</p>';
 			}
 			echo '</div></div>';
 		}
@@ -433,8 +435,8 @@ class CMB2 extends CMB2_Base {
 			$this->render_group_row( $field_group, $remove_disabled );
 		}
 
-		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', $field_group->options( 'add_button' ), '</button></p></div></div>';
+		if ( $this->is_repeatable( $field_group ) ) {
+			echo '<div class="cmb-row"><div class="cmb-td"><p class="cmb-add-row"><button type="button" data-selector="', esc_attr( $field_group->id() ), '_repeat" data-grouptitle="', esc_attr( $field_group->options( 'group_title' ) ), '" class="cmb-add-group-row button-secondary">', esc_html( $field_group->options( 'add_button' ) ), '</button></p></div></div>';
 		}
 
 		echo '</div></div></div>';
@@ -454,7 +456,7 @@ class CMB2 extends CMB2_Base {
 	public function group_wrap_attributes( $field_group ) {
 		$classes = 'cmb-nested cmb-field-list cmb-repeatable-group';
 		$classes .= $field_group->options( 'sortable' ) ? ' sortable' : ' non-sortable';
-		$classes .= $field_group->args( 'repeatable' ) ? ' repeatable' : ' non-repeatable';
+		$classes .= $this->is_repeatable( $field_group ) ? ' repeatable' : ' non-repeatable';
 
 		$group_wrap_attributes = array(
 			'class' => $classes,
@@ -499,15 +501,15 @@ class CMB2 extends CMB2_Base {
 		$closed_class = $field_group->options( 'closed' ) ? ' closed' : '';
 
 		echo '
-		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
+		<div class="postbox cmb-row cmb-repeatable-grouping', wp_kses( $closed_class, array() ), '" data-iterator="', absint( $field_group->index ), '">';
 
-		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
+		if ( $this->is_repeatable( $field_group ) ) {
+			echo '<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', esc_attr( $field_group->id() ), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
 			echo '
 			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
-			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
+			<h3 class="cmb-group-title cmbhandle-title"><span>', wp_kses_post( $field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields.
@@ -525,11 +527,11 @@ class CMB2 extends CMB2_Base {
 				$field = $this->get_field( $field_args, $field_group )->render_field();
 			}
 		}
-		if ( $field_group->args( 'repeatable' ) ) {
+		if ( $this->is_repeatable( $field_group ) ) {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" ', wp_kses( $remove_disabled, $this->kses_args( 'remove_disabled' ) ), 'data-selector="', esc_attr( $field_group->id() ), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', esc_html( $field_group->options( 'remove_button' ) ), '</button>
 						</div>
 					</div>
 					';
@@ -628,8 +630,9 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
-		// Fall-back to $_POST data.
+		// Fall-back to $_POST data if no data was passed.
 		$this->data_to_save = ! empty( $data_to_save ) ? $data_to_save : $_POST;
+
 		$object_id = $this->object_id( $object_id );
 		$object_type = $this->object_type( $object_type );
 
@@ -886,22 +889,22 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( $_REQUEST['user_id'] ) : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( absint( $_REQUEST['user_id'] ) ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( $_REQUEST['c'] ) : $object_id;
+				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( absint( $_REQUEST['c'] ) ) : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			case 'term':
-				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( $_REQUEST['tag_ID'] ) : $object_id;
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( absint( $_REQUEST['tag_ID'] ) ) : $object_id;
 				break;
 
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( $_REQUEST['post'] ) : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( absint( $_REQUEST['post'] ) ) : $object_id;
 				break;
 		}
 
@@ -930,14 +933,15 @@ class CMB2 extends CMB2_Base {
 		$registered_types = $this->box_types();
 
 		$type = '';
+		$curr_type = $this->current_object_type();
 
-		// if it's an array of one, extract it.
+		// If it's an array of one, extract it.
 		if ( 1 === count( $registered_types ) ) {
 			$last = end( $registered_types );
 			if ( is_string( $last ) ) {
 				$type = $last;
 			}
-		} elseif ( ( $curr_type = $this->current_object_type() ) && in_array( $curr_type, $registered_types, true ) ) {
+		} elseif ( $curr_type && in_array( $curr_type, $registered_types, true ) ) {
 			$type = $curr_type;
 		}
 
@@ -1052,11 +1056,11 @@ class CMB2 extends CMB2_Base {
 	 * @return mixed            Metabox config property value or false.
 	 */
 	public function prop( $property, $fallback = null ) {
-		if ( array_key_exists( $property, $this->meta_box ) ) {
-			return $this->meta_box[ $property ];
-		} elseif ( $fallback ) {
-			return $this->meta_box[ $property ] = $fallback;
+		if ( ! array_key_exists( $property, $this->meta_box ) ) {
+			$this->meta_box[ $property ] = $fallback;
 		}
+
+		return $this->meta_box[ $property ];
 	}
 
 	/**
@@ -1294,7 +1298,9 @@ class CMB2 extends CMB2_Base {
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
 		if ( $position ) {
-			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
+			CMB2_Utils::array_insert( $fields, array(
+				$field['id'] => $field,
+			), $position );
 		} else {
 			$fields[ $field['id'] ] = $field;
 		}
@@ -1407,7 +1413,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function search_old_school_array( $field_id, $fields ) {
 		$ids = wp_list_pluck( $fields, 'id' );
-		$index = array_search( $field_id, $ids );
+		$index = array_search( $field_id, $ids, true );
 		return false !== $index ? $index : false;
 	}
 
