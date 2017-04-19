@@ -79,10 +79,12 @@ class CMB2_Field_Display {
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_select':
+			case 'taxonomy_radio_hierarchical':
 				$type = new CMB2_Display_Taxonomy_Radio( $field );
 				break;
 			case 'taxonomy_multicheck':
 			case 'taxonomy_multicheck_inline':
+			case 'taxonomy_multicheck_hierarchical':
 				$type = new CMB2_Display_Taxonomy_Multicheck( $field );
 				break;
 			case 'file':

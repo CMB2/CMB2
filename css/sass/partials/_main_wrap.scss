@@ -156,6 +156,7 @@ Main Wrap
 			padding-bottom: 1.8em;
 		}
 	}
+
 }
 
 .cmb2-metabox {
@@ -429,6 +430,10 @@ span.cmb2-metabox-description {
 
 .child-cmb2 .cmb-th {
 	text-align: left;
+}
+
+.cmb2-indented-hierarchy {
+	padding-left: 1.5em;
 }
 
 @media (max-width: $mobile-break) {

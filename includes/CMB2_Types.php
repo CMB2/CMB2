@@ -629,12 +629,20 @@ class CMB2_Types {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Radio', $args )->render();
 	}
 
+	public function taxonomy_radio_hierarchical( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Radio_Hierarchical', $args )->render();
+	}
+
 	public function taxonomy_radio_inline( $args = array() ) {
 		return $this->taxonomy_radio( $args );
 	}
 
 	public function taxonomy_multicheck( $args = array() ) {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Multicheck', $args )->render();
+	}
+
+	public function taxonomy_multicheck_hierarchical( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Multicheck_Hierarchical', $args )->render();
 	}
 
 	public function taxonomy_multicheck_inline( $args = array() ) {

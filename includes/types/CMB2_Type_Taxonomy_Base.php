@@ -91,4 +91,26 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 			: get_terms( $this->field->args( 'taxonomy' ), 'hide_empty=0' );
 	}
 
+	protected function no_terms_result( $error, $tag = 'li' ) {
+		if ( is_wp_error( $error ) ) {
+			$message = $error->get_error_message();
+			$data = 'data-error="' . esc_attr( $error->get_error_code() ) . '"';
+		} else {
+			$message = $this->_text( 'no_terms_text', esc_html__( 'No terms', 'cmb2' ) );
+			$data = '';
+		}
+
+		$this->field->args['select_all_button'] = false;
+
+		return sprintf( '<%3$s><label %1$s>%2$s</label></%3$s>', $data, esc_html( $message ), $tag );
+	}
+
+	public function get_object_term_or_default() {
+		$saved_terms = $this->get_object_terms();
+
+		return is_wp_error( $saved_terms ) || empty( $saved_terms )
+			? $this->field->get_default()
+			: array_shift( $saved_terms )->slug;
+	}
+
 }

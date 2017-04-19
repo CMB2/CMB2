@@ -84,7 +84,9 @@ class CMB2_Sanitize {
 			case 'taxonomy_select':
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
+			case 'taxonomy_radio_hierarchical':
 			case 'taxonomy_multicheck':
+			case 'taxonomy_multicheck_hierarchical':
 			case 'taxonomy_multicheck_inline':
 				$sanitized_value = $this->taxonomy();
 				break;

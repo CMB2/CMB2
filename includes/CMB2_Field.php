@@ -623,15 +623,20 @@ class CMB2_Field extends CMB2_Base {
 		// These types cannot be repeatable.
 		$internal_fields = array(
 			// Use file_list instead
-			'file'                => 1,
-			'radio'               => 1,
-			'title'               => 1,
-			'wysiwyg'             => 1,
-			'checkbox'            => 1,
-			'radio_inline'        => 1,
-			'taxonomy_radio'      => 1,
-			'taxonomy_select'     => 1,
-			'taxonomy_multicheck' => 1,
+			'file'                             => 1,
+			'radio'                            => 1,
+			'title'                            => 1,
+			'wysiwyg'                          => 1,
+			'checkbox'                         => 1,
+			'radio_inline'                     => 1,
+			'taxonomy_radio'                   => 1,
+			'taxonomy_radio_inline'            => 1,
+			'taxonomy_radio_hierarchical'      => 1,
+			'taxonomy_select'                  => 1,
+			'taxonomy_multicheck'              => 1,
+			'taxonomy_multicheck_inline'       => 1,
+			'taxonomy_multicheck_hierarchical' => 1,
+
 		);
 
 		/**
@@ -1177,7 +1182,7 @@ class CMB2_Field extends CMB2_Base {
 			$args['options']['textarea_name'] = $args['_name'];
 		}
 
-		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline' ), $this );
+		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline', 'taxonomy_radio_hierarchical',  ), $this );
 
 		if ( in_array( $args['type'], $option_types, true ) ) {
 
