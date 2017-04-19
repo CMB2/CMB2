@@ -1447,6 +1447,17 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Checks if field-saving updated any fields.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @return bool
+	 */
+	public function was_updated() {
+		return ! empty( $this->updated );
+	}
+
+	/**
 	 * Whether this box is an "alternate context" box. This means the box has a 'context' property defined as:
 	 * 'form_top', 'before_permalink', 'after_title', or 'after_editor'.
 	 *
