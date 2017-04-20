@@ -43,13 +43,18 @@ class CMB2_Type_Taxonomy_Radio_Hierarchical extends CMB2_Type_Taxonomy_Radio {
 	protected function build_children( $parent_term, $saved_term ) {
 		$options = '';
 
-		$this->parent = $parent_term->term_id;
-		$terms = $this->get_terms();
+		if ( isset( $parent_term->term_id ) ) {
 
-		if ( ! empty( $terms ) && is_array( $terms ) ) {
-			$options = '<li class="cmb2-indented-hierarchy"><ul>';
-			$options .= $this->loop_terms( $terms, $saved_term );
-			$options .= '</ul></li>';
+			$this->parent = $parent_term->term_id;
+
+			$terms = $this->get_terms();
+
+			if ( ! empty( $terms ) && is_array( $terms ) ) {
+				$options = '<li class="cmb2-indented-hierarchy"><ul>';
+				$options .= $this->loop_terms( $terms, $saved_term );
+				$options .= '</ul></li>';
+			}
+
 		}
 
 		return $options;
