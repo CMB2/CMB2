@@ -109,7 +109,7 @@ class CMB2 extends CMB2_Base {
 		 * and several are passed along to add_menu_page()/add_submenu_page()
 		 */
 
-		'menu_title'       => '', // Falls back to 'title' (above).
+		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
 		'parent_slug'      => '', // Used as first param in add_submenu_page().
 		'capability'       => 'manage_options', // Cap required to view options-page.
 		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.

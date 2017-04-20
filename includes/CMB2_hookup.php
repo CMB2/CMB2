@@ -237,7 +237,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$parent_slug = $this->cmb->prop( 'parent_slug' );
 		$title       = $this->cmb->prop( 'title' );
 		$menu_title  = $this->cmb->prop( 'menu_title', $title );
-		$capability  = $this->cmb->prop( 'capability', 'manage_options' );
+		$capability  = $this->cmb->prop( 'capability' );
 		$callback    = array( $this, 'options_page_output' );
 
 		if ( $parent_slug ) {
@@ -685,7 +685,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $object_id ); ?>">
 				<?php $this->options_page_metabox(); ?>
-				<?php submit_button( esc_attr( $this->cmb->prop( 'save_button', __( 'Save', 'cmb2' ) ) ), 'primary', 'submit-cmb' ); ?>
+				<?php submit_button( esc_attr( $this->cmb->prop( 'save_button' ) ), 'primary', 'submit-cmb' ); ?>
 			</form>
 		</div>
 		<?php

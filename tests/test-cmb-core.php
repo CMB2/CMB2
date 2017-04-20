@@ -124,7 +124,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'classes'          => null,
 			'classes_cb'       => '',
 			'remove_box_wrap' => false,
-			'menu_title'       => '',
 			'parent_slug'      => '',
 			'capability'       => 'manage_options',
 			'icon_url'         => '',
@@ -132,7 +131,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'admin_menu_hook'  => 'admin_menu',
 			'display_cb'       => false,
 			'save_button'      => '',
-
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
