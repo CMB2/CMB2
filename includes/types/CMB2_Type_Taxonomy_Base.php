@@ -113,4 +113,45 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 			: array_shift( $saved_terms )->slug;
 	}
 
+	/**
+	 * Takes a list of all tax terms and outputs.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @param  array  $all_terms   Array of all terms.
+	 * @param  array|string $saved Array of terms set to the object, or single term slug.
+	 *
+	 * @return string              List of terms.
+	 */
+	protected function loop_terms( $all_terms, $saved_terms ) {
+		return '';
+	}
+
+	/**
+	 * Build children hierarchy.
+	 *
+	 * @param  object       $parent_term The parent term object.
+	 * @param  array|string $saved       Array of terms set to the object, or single term slug.
+	 *
+	 * @return string                    List of terms.
+	 */
+	protected function build_children( $parent_term, $saved ) {
+		if ( empty( $parent_term->term_id ) ) {
+			return '';
+		}
+
+		$this->parent = $parent_term->term_id;
+
+		$terms   = $this->get_terms();
+		$options = '';
+
+		if ( ! empty( $terms ) && is_array( $terms ) ) {
+			$options = '<li class="cmb2-indented-hierarchy"><ul>';
+			$options .= $this->loop_terms( $terms, $saved );
+			$options .= '</ul></li>';
+		}
+
+		return $options;
+	}
+
 }

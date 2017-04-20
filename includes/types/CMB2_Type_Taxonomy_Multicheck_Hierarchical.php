@@ -33,29 +33,6 @@ class CMB2_Type_Taxonomy_Multicheck_Hierarchical extends CMB2_Type_Taxonomy_Mult
 		return $options;
 	}
 
-	/**
-	 * Build children hierarchy
-	 *
-	 * @access public
-	 * @param $parent_term
-	 * @param $saved_terms
-	 * @return null|string
-	 */
-	protected function build_children( $parent_term, $saved_terms ) {
-		$options = '';
-
-		$this->parent = $parent_term->term_id;
-		$terms = $this->get_terms();
-
-		if ( ! empty( $terms ) && is_array( $terms ) ) {
-			$options = '<li class="cmb2-indented-hierarchy"><ul>';
-			$options .= $this->loop_terms( $terms, $saved_terms );
-			$options .= '</ul></li>';
-		}
-
-		return $options;
-	}
-
 	public function get_terms() {
 		return CMB2_Utils::wp_at_least( '4.5.0' )
 			? get_terms( wp_parse_args( $this->field->prop( 'query_args', array() ), array(
