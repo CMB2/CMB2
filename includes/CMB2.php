@@ -179,6 +179,8 @@ class CMB2 extends CMB2_Base {
 	 * @since 1.0.0
 	 * @param int    $object_id   Object ID.
 	 * @param string $object_type Type of object being saved. (e.g., post, user, or comment).
+	 *
+	 * @return CMB2
 	 */
 	public function show_form( $object_id = 0, $object_type = '' ) {
 		$this->render_form_open( $object_id, $object_type );
@@ -187,7 +189,7 @@ class CMB2 extends CMB2_Base {
 			$this->render_field( $field_args );
 		}
 
-		$this->render_form_close( $object_id, $object_type );
+		return $this->render_form_close( $object_id, $object_type );
 	}
 
 	/**
@@ -197,7 +199,8 @@ class CMB2 extends CMB2_Base {
 	 * @since  2.2.0
 	 * @param  integer $object_id   Object ID.
 	 * @param  string  $object_type Object type.
-	 * @return void
+	 *
+	 * @return CMB2
 	 */
 	public function render_form_open( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
@@ -236,6 +239,7 @@ class CMB2 extends CMB2_Base {
 
 		echo '<div class="', esc_attr( $this->box_classes() ), '"><div id="cmb2-metabox-', sanitize_html_class( $this->cmb_id ), '" class="cmb2-metabox cmb-field-list">';
 
+		return $this;
 	}
 
 	/**
@@ -311,7 +315,8 @@ class CMB2 extends CMB2_Base {
 	 * @since  2.2.0
 	 * @param  integer $object_id   Object ID.
 	 * @param  string  $object_type Object type.
-	 * @return void
+	 *
+	 * @return CMB2
 	 */
 	public function render_form_close( $object_id = 0, $object_type = '' ) {
 		$object_type = $this->object_type( $object_type );
@@ -349,6 +354,7 @@ class CMB2 extends CMB2_Base {
 
 		echo "\n<!-- End CMB2 Fields -->\n";
 
+		return $this;
 	}
 
 	/**
@@ -492,6 +498,8 @@ class CMB2 extends CMB2_Base {
 	 * @since  1.0.2
 	 * @param  CMB2_Field $field_group     CMB2_Field group field object.
 	 * @param  string     $remove_disabled Attribute string to disable the remove button.
+	 *
+	 * @return CMB2
 	 */
 	public function render_group_row( $field_group, $remove_disabled ) {
 
@@ -540,6 +548,8 @@ class CMB2 extends CMB2_Base {
 		';
 
 		$field_group->peform_param_callback( 'after_group_row' );
+
+		return $this;
 	}
 
 	/**
@@ -572,6 +582,8 @@ class CMB2 extends CMB2_Base {
 	 * Loop through and output hidden fields
 	 *
 	 * @since  2.0.0
+	 *
+	 * @return CMB2
 	 */
 	public function render_hidden_fields() {
 		if ( ! empty( $this->hidden_fields ) ) {
@@ -579,6 +591,8 @@ class CMB2 extends CMB2_Base {
 				$hidden->render();
 			}
 		}
+
+		return $this;
 	}
 
 	/**
@@ -625,6 +639,8 @@ class CMB2 extends CMB2_Base {
 	 * @param  int    $object_id    Object ID.
 	 * @param  string $object_type  Type of object being saved. (e.g., post, user, or comment).
 	 * @param  array  $data_to_save Array of key => value data for saving. Likely $_POST data.
+	 *
+	 * @return CMB2
 	 */
 	public function save_fields( $object_id = 0, $object_type = '', $data_to_save = array() ) {
 
@@ -640,13 +656,15 @@ class CMB2 extends CMB2_Base {
 			cmb2_options( $object_id )->set();
 		}
 
-		$this->after_save();
+		return $this->after_save();
 	}
 
 	/**
 	 * Process and save form fields
 	 *
 	 * @since  2.0.0
+	 *
+	 * @return CMB2
 	 */
 	public function process_fields() {
 
@@ -661,6 +679,8 @@ class CMB2 extends CMB2_Base {
 		foreach ( $this->prop( 'fields' ) as $field_args ) {
 			$this->process_field( $field_args );
 		}
+
+		return $this;
 	}
 
 	/**
@@ -668,6 +688,8 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  2.0.0
 	 * @param  array $field_args Array of field arguments.
+	 *
+	 * @return CMB2
 	 */
 	public function process_field( $field_args ) {
 
@@ -695,6 +717,7 @@ class CMB2 extends CMB2_Base {
 				break;
 		}
 
+		return $this;
 	}
 
 	/**
@@ -702,7 +725,7 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  2.x.x
 	 *
-	 * @return void
+	 * @return CMB2
 	 */
 	public function pre_process() {
 		/**
@@ -718,6 +741,8 @@ class CMB2 extends CMB2_Base {
 		 * @param int   $object_id The ID of the current object
 		 */
 		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
+
+		return $this;
 	}
 
 	/**
@@ -726,7 +751,7 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  2.x.x
 	 *
-	 * @return void
+	 * @return CMB2
 	 */
 	public function after_save() {
 		$object_type = $this->object_type();
@@ -762,6 +787,8 @@ class CMB2 extends CMB2_Base {
 		 * @param array  $cmb         This CMB2 object
 		 */
 		do_action( "cmb2_save_{$object_type}_fields_{$this->cmb_id}", $object_id, $this->updated, $this );
+
+		return $this;
 	}
 
 	/**
@@ -1214,6 +1241,8 @@ class CMB2 extends CMB2_Base {
 	 * @since 2.1.0
 	 * @param array $fields          Array of fields to add.
 	 * @param mixed $parent_field_id Parent field id or null.
+ 	 *
+	 * @return CMB2
 	 */
 	protected function add_fields( $fields, $parent_field_id = null ) {
 		foreach ( $fields as $field ) {
@@ -1232,6 +1261,8 @@ class CMB2 extends CMB2_Base {
 				$this->add_fields( $sub_fields, $field_id );
 			}
 		}
+
+		return $this;
 	}
 
 	/**
@@ -1379,6 +1410,7 @@ class CMB2 extends CMB2_Base {
 		if ( isset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] ) ) {
 			unset( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] );
 		}
+
 		return true;
 	}
 
@@ -1488,10 +1520,10 @@ class CMB2 extends CMB2_Base {
 	 * @return string unique nonce string.
 	 */
 	public function nonce() {
-		if ( $this->generated_nonce ) {
-			return $this->generated_nonce;
+		if ( ! $this->generated_nonce ) {
+			$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->cmb_id );
 		}
-		$this->generated_nonce = sanitize_html_class( 'nonce_' . basename( __FILE__ ) . $this->cmb_id );
+
 		return $this->generated_nonce;
 	}
 
