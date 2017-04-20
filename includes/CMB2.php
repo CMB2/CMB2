@@ -83,7 +83,7 @@ class CMB2 extends CMB2_Base {
 		'fields'           => array(),
 
 		/*
-		 * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
+		 * Handles hooking CMB2 forms/metaboxes into the post/attachement/user/options-page screens
  		 * and handles hooking in and saving those fields.
 		 */
 		'hookup'           => true,
@@ -95,6 +95,29 @@ class CMB2 extends CMB2_Base {
 		'show_in_rest'     => false,
 		'classes'          => null, // Optionally add classes to the CMB2 wrapper
 		'classes_cb'       => '', // Optionally add classes to the CMB2 wrapper (via a callback)
+
+		/*
+		 * The following parameter is for post alternate-context metaboxes only.
+		 *
+		 * To output the fields 'naked' (without a postbox wrapper/style), then
+		 * add a `'remove_box_wrap' => true` to your metabox registration array.
+		 */
+		'remove_box_wrap' => false,
+
+		/*
+		 * The following parameters are for options-page metaboxes,
+		 * and several are passed along to add_menu_page()/add_submenu_page()
+		 */
+
+		'menu_title'       => '', // Falls back to 'title' (above).
+		'parent_slug'      => '', // Used as first param in add_submenu_page().
+		'capability'       => 'manage_options', // Cap required to view options-page.
+		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
+
+		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
+		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
 	);
 
 	/**
@@ -154,6 +177,15 @@ class CMB2 extends CMB2_Base {
 		$this->meta_box = wp_parse_args( $config, $this->mb_defaults );
 		$this->meta_box['fields'] = array();
 
+		$types = $this->box_types();
+
+		if ( $this->is_options_page_mb() ) {
+			$this->mb_object_type = 'options-page';
+			$types[] = $this->mb_object_type;
+		}
+
+		// Ensures object_types is an array.
+		$this->set_prop( 'object_types', $types ) ;
 		$this->object_id( $object_id );
 		$this->mb_object_type();
 
@@ -926,6 +958,13 @@ class CMB2 extends CMB2_Base {
 				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( $_REQUEST['tag_ID'] ) : $object_id;
 				break;
 
+			case 'options-page':
+				$key = $this->doing_options_page();
+				if ( ! empty( $key ) ) {
+					$object_id = $key;
+				}
+				break;
+
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
 				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( $_REQUEST['post'] ) : $object_id;
@@ -1022,7 +1061,7 @@ class CMB2 extends CMB2_Base {
 
 		$doing_page = (
 			! empty( $_GET['page'] ) && $_GET['page'] === $key
-			|| ! empty( $_POST['object_id'] ) && $_POST['object_id'] === $key
+			|| ! empty( $_POST['action'] ) && $_POST['action'] === $key
 		);
 
 		return $doing_page ? $key : false;
@@ -1039,7 +1078,6 @@ class CMB2 extends CMB2_Base {
 		if ( ! $this->is_options_page_mb() ) {
 			return $key;
 		}
-
 
 		if ( ! empty( $this->meta_box['show_on']['value'] ) ) {
 			$values = $this->meta_box['show_on']['value'];
@@ -1102,6 +1140,13 @@ class CMB2 extends CMB2_Base {
 
 		if ( defined( 'DOING_AJAX' ) && isset( $_POST['action'] ) && 'add-tag' === $_POST['action'] ) {
 			$type = 'term';
+		}
+
+		if (
+			in_array( $pagenow, array( 'admin.php', 'admin-post.php' ), true )
+			&& $this->doing_options_page()
+		) {
+			$type = 'options-page';
 		}
 
 		return $type;
