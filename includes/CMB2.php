@@ -989,10 +989,12 @@ class CMB2 extends CMB2_Base {
 	 * Gets the box 'object_types' array based on box settings.
 	 *
 	 * @since  2.2.3
+	 * @param  array $fallback Fallback value.
+	 *
 	 * @return array Object types.
 	 */
-	public function box_types() {
-		return CMB2_Utils::ensure_array( $this->prop( 'object_types' ), array( 'post' ) );
+	public function box_types( $fallback = array() ) {
+		return CMB2_Utils::ensure_array( $this->prop( 'object_types' ), $fallback );
 	}
 
 	/**

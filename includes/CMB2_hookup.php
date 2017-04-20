@@ -114,7 +114,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 
 		if ( $this->cmb->has_columns ) {
-			foreach ( $this->cmb->prop( 'object_types' ) as $post_type ) {
+			foreach ( $this->cmb->box_types() as $post_type ) {
 				add_filter( "manage_{$post_type}_posts_columns", array( $this, 'register_column_headers' ) );
 				add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'column_display' ), 10, 2 );
 			}
@@ -344,7 +344,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 
 		$page = get_current_screen()->id;
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
+		foreach ( $this->cmb->box_types() as $object_type ) {
 			$screen = convert_to_screen( $object_type );
 
 			// If we're on the right post-type/object...
@@ -453,7 +453,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$page = get_current_screen()->id;
 		add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
 
-		foreach ( $this->cmb->prop( 'object_types' ) as $object_type ) {
+		foreach ( $this->cmb->box_types() as $object_type ) {
 			if ( count( $this->cmb->tax_metaboxes_to_remove ) ) {
 				$this->remove_default_tax_metaboxes( $object_type );
 			}
@@ -550,7 +550,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Display metaboxes for a user object
+	 * Display metaboxes for a user object.
 	 *
 	 * @since  1.0.0
 	 */
@@ -559,7 +559,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Display metaboxes for a taxonomy term object
+	 * Display metaboxes for a taxonomy term object.
 	 *
 	 * @since  2.2.0
 	 */
@@ -651,7 +651,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since  1.0.0
 	 * @param  int   $post_id Post ID
 	 * @param  mixed $post    Post object
-	 * @return null
+	 * @return void
 	 */
 	public function save_post( $post_id, $post = false ) {
 
@@ -678,7 +678,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.0.9
 	 * @param  int $comment_id Comment ID
-	 * @return null
+	 * @return void
 	 */
 	public function save_comment( $comment_id ) {
 
@@ -694,7 +694,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 *
 	 * @since  1.0.x
 	 * @param  int $user_id  User ID
-	 * @return null
+	 * @return void
 	 */
 	public function save_user( $user_id ) {
 		// check permissions
@@ -710,7 +710,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param  int    $term_id  Term ID
 	 * @param  int    $tt_id    Term Taxonomy ID
 	 * @param  string $taxonomy Taxonomy
-	 * @return null
+	 * @return void
 	 */
 	public function save_term( $term_id, $tt_id, $taxonomy = '' ) {
 		$taxonomy = $taxonomy ? $taxonomy : $tt_id;
@@ -728,7 +728,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param  int    $term_id  Term ID
 	 * @param  int    $tt_id    Term Taxonomy ID
 	 * @param  string $taxonomy Taxonomy
-	 * @return null
+	 * @return void
 	 */
 	public function delete_term( $term_id, $tt_id, $taxonomy = '' ) {
 		if ( $this->taxonomy_can_save( $taxonomy ) ) {
@@ -758,7 +758,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			// check if autosave
 			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			// get the metabox types & compare it to this type
-			&& ( $type && in_array( $type, $this->cmb->prop( 'object_types' ) ) )
+			&& ( $type && in_array( $type, $this->cmb->box_types() ) )
 			// Don't do updates during a switch-to-blog instance.
 			&& ! ( is_multisite() && ms_is_switched() )
 		) );
