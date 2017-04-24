@@ -6,14 +6,15 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_Title extends CMB2_Type_Base {
 
 	/**
 	 * Handles outputting an 'title' element
+	 *
 	 * @return string Heading element
 	 */
 	public function render() {

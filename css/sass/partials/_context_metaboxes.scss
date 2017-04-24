@@ -1,0 +1,107 @@
+/*--------------------------------------------------------------
+Context Metaboxes
+--------------------------------------------------------------*/
+
+/* Metabox collapse arrow indicators */
+.js .cmb2-postbox.context-box {
+
+	.toggle-indicator {
+		&:before {
+			content: "\f142";
+			display: inline-block;
+			font: normal 20px/1 dashicons;
+			speak: none;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			text-decoration: none !important;
+		}
+	}
+
+	&.closed {
+		.toggle-indicator {
+			&:before {
+				content: "\f140";
+			}
+		}
+	}
+
+}
+
+.cmb2-postbox.context-box {
+
+	margin-bottom: 10px;
+
+	&.context-before_permalink-box {
+		margin-top: 10px;
+	}
+
+	&.context-after_title-box {
+		margin-top: 10px;
+	}
+
+	&.context-after_editor-box {
+		margin-top: 20px;
+		margin-bottom: 0;
+	}
+
+	&.context-form_top-box {
+
+		margin-top: 10px;
+
+		.hndle {
+			font-size: 14px;
+			padding: 8px 12px;
+			margin: 0;
+			line-height: 1.4;
+		}
+	}
+
+	.hndle {
+		cursor: auto;
+	}
+}
+
+.cmb2-context-wrap {
+
+	margin-top: 10px;
+
+	&.cmb2-context-wrap-form_top {
+		margin-right: 300px;
+		width: auto;
+	}
+
+	&.cmb2-context-wrap-no-title {
+
+		.cmb2-metabox {
+			padding: 10px;
+		}
+	}
+
+	.cmb-th {
+		padding: 0 2% 0 0;
+		width: 18%;
+	}
+
+	.cmb-td {
+		width: 80%;
+		padding: 0;
+	}
+
+	.cmb-row {
+		margin-bottom: 10px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+
+}
+
+/* one column on the post write/edit screen */
+@media only screen and (max-width: 850px) {
+
+	.cmb2-context-wrap.cmb2-context-wrap-form_top {
+		margin-right: 0;
+	}
+
+}

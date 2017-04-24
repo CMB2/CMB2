@@ -3,9 +3,9 @@
  * CMB2_Utils tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-tests-base.php' );
@@ -57,6 +57,14 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'val' => '&nbsp;',
 			'empty' => false,
 		),
+		array(
+			'val' => array(),
+			'empty' => true,
+		),
+		array(
+			'val' => array( 0 ),
+			'empty' => false,
+		),
 	);
 
 	/**
@@ -68,7 +76,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		$this->post_id = $this->factory->post->create();
 		$this->img_name = 'test-image.jpg';
 
-		$filename = ( CMB2_TESTDATA.'/images/test-image.jpg' );
+		$filename = ( CMB2_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 		$upload   = wp_upload_bits( basename( $filename ), null, $contents );
 
@@ -92,12 +100,13 @@ class Test_CMB2_Utils extends Test_CMB2 {
 	function _make_attachment( $upload, $parent_post_id = -1 ) {
 
 		$type = '';
-		if ( !empty($upload['type']) ) {
+		if ( ! empty( $upload['type'] ) ) {
 			$type = $upload['type'];
 		} else {
 			$mime = wp_check_filetype( $upload['file'] );
-			if ($mime)
+			if ( $mime ) {
 				$type = $mime['type'];
+			}
 		}
 
 		$attachment = array(
@@ -106,11 +115,11 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'post_type' => 'attachment',
 			'post_parent' => $parent_post_id,
 			'post_mime_type' => $type,
-			'guid' => $upload[ 'url' ],
+			'guid' => $upload['url'],
 		);
 
 		// Save the data
-		$id = wp_insert_attachment( $attachment, $upload[ 'file' ], $parent_post_id );
+		$id = wp_insert_attachment( $attachment, $upload['file'], $parent_post_id );
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 
 		return $id;
@@ -172,6 +181,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			8 => ' ',
 			9 => "\n",
 			10 => '&nbsp;',
+			12 => array( 0 ),
 		);
 
 		$this->assertEquals( $non_empties, CMB2_Utils::filter_empty( $vals ) );
@@ -219,6 +229,37 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'errors' => array(),
 			'error_data' => array(),
 		), CMB2_Utils::ensure_array( new WP_Error ) );
+	}
+
+	public function test_url_set() {
+		$cmb2_url = str_replace(
+			array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
+			array( WP_CONTENT_URL, WP_PLUGIN_URL ),
+			cmb2_dir()
+		);
+
+		$this->assertEquals( CMB2_Utils::url(), $cmb2_url );
+	}
+
+	public function test_array_insert() {
+		$array = array(
+			'one' => array( 1,2,3 ),
+			'two' => array( 1,2,3 ),
+			'three' => array( 1,2,3 ),
+		);
+
+		$new = array(
+			'new' => array( 4, 5, 6 ),
+		);
+
+		CMB2_Utils::array_insert( $array, $new, 2 );
+
+		$this->assertEquals( array(
+			'one' => array( 1,2,3 ),
+			'new' => array( 4,5,6 ),
+			'two' => array( 1,2,3 ),
+			'three' => array( 1,2,3 ),
+		), $array );
 	}
 
 }

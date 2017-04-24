@@ -4,13 +4,14 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 /**
  * Function to encapsulate the CMB2 bootstrap process.
+ *
  * @since  2.2.0
  * @return void
  */
@@ -35,6 +36,7 @@ function cmb2_bootstrap() {
 	/**
 	 * For back-compat. Does the dirty-work of instantiating all the
 	 * CMB2 instances for the cmb2_meta_boxes filter
+	 *
 	 * @since  2.0.2
 	 */
 	$cmb_config_arrays = apply_filters( 'cmb2_meta_boxes', array() );
@@ -50,6 +52,7 @@ function cmb2_bootstrap() {
 	/**
 	 * Get all created metaboxes, and instantiate CMB2_hookup
 	 * on metaboxes which require it.
+	 *
 	 * @since  2.0.2
 	 */
 	foreach ( CMB2_Boxes::get_all() as $cmb ) {
@@ -63,7 +66,6 @@ function cmb2_bootstrap() {
 			$rest = new CMB2_REST( $cmb );
 			$rest->universal_hooks();
 		}
-
 	}
 
 	/**
@@ -72,4 +74,4 @@ function cmb2_bootstrap() {
 	do_action( 'cmb2_after_init' );
 }
 
-// End. That's it, folks! //
+/* End. That's it, folks! */

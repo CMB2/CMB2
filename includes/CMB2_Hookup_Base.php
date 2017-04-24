@@ -6,9 +6,12 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
+ *
+ * @property-read string $object_type
+ * @property-read CMB2   $cmb
  */
 abstract class CMB2_Hookup_Base {
 
@@ -20,6 +23,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * The object type we are performing the hookup for
+	 *
 	 * @var   string
 	 * @since 2.0.9
 	 */
@@ -27,6 +31,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * Constructor
+	 *
 	 * @since 2.0.0
 	 * @param CMB2 $cmb The CMB2 object to hookup
 	 */
@@ -39,6 +44,7 @@ abstract class CMB2_Hookup_Base {
 
 	/**
 	 * Ensures WordPress hook only gets fired once per object.
+	 *
 	 * @since  2.0.0
 	 * @param string   $action        The name of the filter to hook the $hook callback to.
 	 * @param callback $hook          The callback to be run when the filter is applied.
@@ -65,4 +71,20 @@ abstract class CMB2_Hookup_Base {
 		}
 	}
 
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @param string $field
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'object_type':
+			case 'cmb':
+				return $this->{$field};
+			default:
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
+		}
+	}
 }

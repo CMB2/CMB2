@@ -57,7 +57,7 @@ Main Wrap
 
 		&:not([type="hidden"]) {
 			+ input,
-			+ .button,
+			+ .button-secondary,
 			+ select {
 				margin-left: 20px;
 			}
@@ -100,7 +100,7 @@ Main Wrap
 	}
 
 	button,
-	.button {
+	.button-secondary {
 		white-space: nowrap;
 	}
 
@@ -156,6 +156,7 @@ Main Wrap
 			padding-bottom: 1.8em;
 		}
 	}
+
 }
 
 .cmb2-metabox {
@@ -347,12 +348,13 @@ span.cmb2-metabox-description {
 	.img-status {
 		clear: none;
 		display: inline-block;
-		float: left;
+		vertical-align: middle;
 		margin-right: 10px;
 		width: auto;
 
 		img {
 			max-width: 350px;
+			height: auto;
 		}
 	}
 
@@ -401,16 +403,19 @@ span.cmb2-metabox-description {
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
-	float: left;
-	margin-right: 10px;
+	vertical-align: middle;
 	width: auto;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	margin-top: 0;
 }
 
 .cmb-attach-list li {
 	clear: both;
 	display: inline-block;
-	margin-bottom: 25px;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 10px;
 
 	img {
 		cursor: move;
@@ -425,6 +430,10 @@ span.cmb2-metabox-description {
 
 .child-cmb2 .cmb-th {
 	text-align: left;
+}
+
+.cmb2-indented-hierarchy {
+	padding-left: 1.5em;
 }
 
 @media (max-width: $mobile-break) {

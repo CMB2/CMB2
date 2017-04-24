@@ -5,9 +5,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Boxes {
 
@@ -72,6 +72,7 @@ class CMB2_Boxes {
 
 	/**
 	 * Retrieve all CMB2 instances that have the specified property set.
+	 *
 	 * @since  2.2.3
 	 * @param  string $property Property name.
 	 * @param  mixed  $ignore   The value to ignore.

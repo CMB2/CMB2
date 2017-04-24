@@ -3,9 +3,9 @@
  * CMB2 core tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-rest-tests-base.php' );
@@ -52,7 +52,9 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	public function test_get_schema() {
 		$this->assertResponseStatuses( '/' . CMB2_REST::NAME_SPACE, array(
 			'GET' => 200,
-			'POST' => array( 404 => 'rest_no_route' ),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 	}
 
@@ -60,7 +62,9 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => array( 404 => 'rest_no_route' ),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 	}
 
@@ -68,13 +72,19 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => array( 404 => 'rest_no_route' ),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__;
 		$this->assertResponseStatuses( $url, array(
-			'GET' => array( 403 => 'cmb2_rest_box_not_found_error' ),
-			'POST' => array( 404 => 'rest_no_route' ),
+			'GET' => array(
+				403 => 'cmb2_rest_box_not_found_error',
+			),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 
 		$rest = new CMB2_REST( new CMB2( array(
@@ -86,8 +96,12 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test_read_box_test';
 		$this->assertResponseStatuses( $url, array(
-			'GET' => array( 403 => 'cmb2_rest_no_read_error' ),
-			'POST' => array( 404 => 'rest_no_route' ),
+			'GET' => array(
+				403 => 'cmb2_rest_no_read_error',
+			),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 
 		$rest = new CMB2_REST( new CMB2( array(
@@ -99,7 +113,9 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test_edit_box_test';
 		$this->assertResponseStatuses( $url, array(
-			'POST' => array( 404 => 'rest_no_route' ),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 	}
 
@@ -115,7 +131,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		) ) );
 		$rest->universal_hooks();
 
-		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/'. __FUNCTION__;
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__;
 		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
 	}
 
@@ -123,7 +139,9 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => array( 404 => 'rest_no_route' ),
+			'POST' => array(
+				404 => 'rest_no_route',
+			),
 		) );
 	}
 
@@ -131,8 +149,12 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
-			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
+			'POST' => array(
+				403 => 'rest_forbidden',
+			),
+			'DELETE' => array(
+				400 => 'rest_missing_callback_param',
+			),
 		) );
 
 		$mb = $this->metabox_array;
@@ -145,9 +167,15 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test2/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
-			'GET' => array( 403 => 'cmb2_rest_no_field_by_id_error' ),
-			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
+			'GET' => array(
+				403 => 'cmb2_rest_no_field_by_id_error',
+			),
+			'POST' => array(
+				403 => 'rest_forbidden',
+			),
+			'DELETE' => array(
+				400 => 'rest_missing_callback_param',
+			),
 		) );
 	}
 
@@ -155,9 +183,15 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		add_filter( 'cmb2_api_get_field_permissions_check', '__return_false' );
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
-			'GET' => array( 403 => 'rest_forbidden' ),
-			'POST' => array( 403 => 'rest_forbidden' ),
-			'DELETE' => array( 400 => 'rest_missing_callback_param' ),
+			'GET' => array(
+				403 => 'rest_forbidden',
+			),
+			'POST' => array(
+				403 => 'rest_forbidden',
+			),
+			'DELETE' => array(
+				400 => 'rest_missing_callback_param',
+			),
 		) );
 
 		$request = new WP_REST_Request( 'DELETE', $url );
@@ -178,7 +212,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		) ) );
 		$rest->universal_hooks();
 
-		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/'. __FUNCTION__ . '/fields/rest_test';
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__ . '/fields/rest_test';
 		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
 	}
 
