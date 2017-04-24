@@ -86,6 +86,9 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Animation](https://github.com/rubengc/cmb2-field-animation) by [rubengc](https://github.com/rubengc): Allows users to pickup an animation from [Animate.css](https://github.com/daneden/animate.css) (includes preview of chosen animation).
 * [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) by [rubengc](https://github.com/rubengc): Based on [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax), adds the ability to attach posts/users/terms, and the ability to limit the maximum number of attached objects.
 * [CMB2 Field Type: Visual Style Editor](https://github.com/rubengc/cmb2-field-visual-style-editor) by [rubengc](https://github.com/rubengc): Custom field for CMB2 which allows customizing style from a small set of controls.
+* [CMB2 Field Type: Content Wrap](https://github.com/rubengc/cmb2-field-content-wrap) by [rubengc](https://github.com/rubengc): Custom field for CMB2 to store a content wrap values (padding, margin or border width).
+* [CMB2 Field JS Controls](https://github.com/rubengc/cmb2-field-js-controls) by [rubengc](https://github.com/rubengc): Show any field similar to Wordpress publishing actions (Post/Page post_status, visibility and post_date submit box field).
+* [CMB2 Field Type: Position](https://github.com/rubengc/cmb2-field-position) by [rubengc](https://github.com/rubengc): CMB2 field type to setup a jquery UI position values.
 
 #### Other Helpful Resources
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
