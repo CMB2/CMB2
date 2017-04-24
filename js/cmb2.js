@@ -1,8 +1,8 @@
 /**
  * Controls the behaviours of custom metabox fields.
  *
- * @author WebDevStudios
- * @see    https://github.com/WebDevStudios/CMB2
+ * @author CMB2 team
+ * @see    https://github.com/CMB2/CMB2
  */
 
  // TODO: fix this.
@@ -64,7 +64,7 @@ window.CMB2 = window.CMB2 || {};
 		cmb.initPickers( $metabox.find('input[type="text"].cmb2-timepicker'), $metabox.find('input[type="text"].cmb2-datepicker'), $metabox.find('input[type="text"].cmb2-colorpicker') );
 
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
-		$( '<p><span class="button cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
+		$( '<p><span class="button-secondary cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
 
 		// Make File List drag/drop sortable:
 		cmb.makeListSortable();
@@ -94,7 +94,7 @@ window.CMB2 = window.CMB2 || {};
 			$repeatGroup
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
-					$( this ).find( '.button.cmb-remove-group-row' ).before( '<a class="button cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
+					$( this ).find( '.cmb-remove-group-row-button' ).before( '<a class="button-secondary cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button-secondary cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
 				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
 				.on( 'cmb2_add_row', cmb.emptyValue );
@@ -114,15 +114,20 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		// Loop repeatable group tables
-		$( '.cmb-repeatable-group' ).each( function() {
+		$( '.cmb-repeatable-group.repeatable' ).each( function() {
 			var $table = $( this );
+			var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
+
 			// Loop repeatable group table rows
 			$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
 				var $row = $( this );
+				var $rowTitle = $row.find( 'h3.cmb-group-title' );
 				// Reset rows iterator
 				$row.data( 'iterator', rowindex );
 				// Reset rows title
-				$row.find( '.cmb-group-title h4' ).text( $table.find( '.cmb-add-group-row' ).data( 'grouptitle' ).replace( '{#}', ( rowindex + 1 ) ) );
+				if ( $rowTitle.length ) {
+					$rowTitle.text( groupTitle.replace( '{#}', ( rowindex + 1 ) ) );
+				}
 			});
 		});
 	};
@@ -179,24 +184,25 @@ window.CMB2 = window.CMB2 || {};
 			return;
 		}
 
-		var media         = cmb.media;
+		var modal, media, handlers;
+
+		handlers          = cmb.mediaHandlers;
+		media             = cmb.media;
 		media.field       = formfield;
 		media.$field      = $id( media.field );
 		media.fieldData   = media.$field.data();
 		media.previewSize = media.fieldData.previewsize;
+		media.sizeName    = media.fieldData.sizename;
 		media.fieldName   = media.$field.attr('name');
 		media.isList      = isList;
 
-		var uploadStatus, attachment;
-
 		// If this field's media frame already exists, reopen it.
 		if ( media.field in media.frames ) {
-			media.frames[ media.field ].open();
-			return;
+			return media.frames[ media.field ].open();
 		}
 
 		// Create the media frame.
-		media.frames[ media.field ] = wp.media( {
+		media.frames[ media.field ] = modal = wp.media( {
 			title: cmb.metabox().find('label[for="' + media.field + '"]').text(),
 			library : media.fieldData.queryargs || {},
 			button: {
@@ -205,89 +211,156 @@ window.CMB2 = window.CMB2 || {};
 			multiple: isList ? 'add' : false
 		} );
 
+		// Enable the additional media filters: https://github.com/CMB2/CMB2/issues/873
+		modal.states.first().set( 'filterable', 'all' );
+
 		cmb.trigger( 'cmb_media_modal_init', media );
 
-		cmb.mediaHandlers.list = function( selection, returnIt ) {
-			// Get all of our selected files
-			attachment = selection.toJSON();
-
-			media.$field.val(attachment.url);
-			$id( media.field +'_id' ).val(attachment.id);
+		handlers.list = function( selection, returnIt ) {
 
 			// Setup our fileGroup array
 			var fileGroup = [];
+			var attachmentHtml;
+
+			if ( ! handlers.list.templates ) {
+				handlers.list.templates = {
+					image : wp.template( 'cmb2-list-image' ),
+					file  : wp.template( 'cmb2-list-file' ),
+				};
+			}
 
 			// Loop through each attachment
-			$( attachment ).each( function() {
-				if ( this.type && this.type === 'image' ) {
-					var width = media.previewSize[0] ? media.previewSize[0] : 50;
-					var height = media.previewSize[1] ? media.previewSize[1] : 50;
+			selection.each( function( attachment ) {
 
-					// image preview
-					uploadStatus = '<li class="img-status">'+
-						'<img width="'+ width +'" height="'+ height +'" src="' + this.url + '" class="attachment-'+ width +'px'+ height +'px" alt="'+ this.filename +'">'+
-						'<p><a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_image +'</a></p>'+
-						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
-					'</li>';
-
-				} else {
-					// Standard generic output if it's not an image.
-					uploadStatus = '<li class="file-status"><span>'+ l10n.strings.file +' <strong>'+ this.filename +'</strong></span>&nbsp;&nbsp; (<a href="' + this.url + '" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'['+ this.id +']">'+ l10n.strings.remove_file +'</a>)'+
-						'<input type="hidden" id="filelist-'+ this.id +'" data-id="'+ this.id +'" name="'+ media.fieldName +'['+ this.id +']" value="' + this.url + '">'+
-					'</li>';
-
-				}
+				// Image preview or standard generic output if it's not an image.
+				attachmentHtml = handlers.getAttachmentHtml( attachment, 'list' );
 
 				// Add our file to our fileGroup array
-				fileGroup.push( uploadStatus );
+				fileGroup.push( attachmentHtml );
 			});
 
 			if ( ! returnIt ) {
 				// Append each item from our fileGroup array to .cmb2-media-status
-				$( fileGroup ).each( function() {
-					media.$field.siblings('.cmb2-media-status').slideDown().append(this);
-				});
+				media.$field.siblings( '.cmb2-media-status' ).append( fileGroup );
 			} else {
 				return fileGroup;
 			}
 
 		};
 
-		cmb.mediaHandlers.single = function( selection ) {
-			// Only get one file from the uploader
-			attachment = selection.first().toJSON();
-
-			media.$field.val(attachment.url);
-			$id( media.field +'_id' ).val(attachment.id);
-
-			if ( attachment.type && attachment.type === 'image' ) {
-				// image preview
-				var width = media.previewSize[0] ? media.previewSize[0] : 350;
-				uploadStatus = '<div class="img-status"><img width="'+ width +'px" style="max-width: '+ width +'px; width: 100%; height: auto;" src="' + attachment.url + '" alt="'+ attachment.filename +'" title="'+ attachment.filename +'" /><p><a href="#" class="cmb2-remove-file-button" rel="' + media.field + '">'+ l10n.strings.remove_image +'</a></p></div>';
-			} else {
-				// Standard generic output if it's not an image.
-				uploadStatus = '<div class="file-status"><span>'+ l10n.strings.file +' <strong>'+ attachment.filename +'</strong></span>&nbsp;&nbsp; (<a href="'+ attachment.url +'" target="_blank" rel="external">'+ l10n.strings.download +'</a> / <a href="#" class="cmb2-remove-file-button" rel="'+ media.field +'">'+ l10n.strings.remove_file +'</a>)</div>';
+		handlers.single = function( selection ) {
+			if ( ! handlers.single.templates ) {
+				handlers.single.templates = {
+					image : wp.template( 'cmb2-single-image' ),
+					file  : wp.template( 'cmb2-single-file' ),
+				};
 			}
 
+			// Only get one file from the uploader
+			var attachment = selection.first();
+
+			media.$field.val( attachment.get( 'url' ) );
+			$id( media.field +'_id' ).val( attachment.get( 'id' ) );
+
+			// Image preview or standard generic output if it's not an image.
+			var attachmentHtml = handlers.getAttachmentHtml( attachment, 'single' );
+
 			// add/display our output
-			media.$field.siblings('.cmb2-media-status').slideDown().html(uploadStatus);
+			media.$field.siblings( '.cmb2-media-status' ).slideDown().html( attachmentHtml );
 		};
 
-		cmb.mediaHandlers.selectFile = function() {
-			var selection = media.frames[ media.field ].state().get('selection');
+		handlers.getAttachmentHtml = function( attachment, templatesId ) {
+			var isImage = 'image' === attachment.get( 'type' );
+			var data    = handlers.prepareData( attachment, isImage );
+
+			// Image preview or standard generic output if it's not an image.
+			return handlers[ templatesId ].templates[ isImage ? 'image' : 'file' ]( data );
+		};
+
+		handlers.prepareData = function( data, image ) {
+			if ( image ) {
+				// Set the correct image size data
+				handlers.getImageData.call( data, 50 );
+			}
+
+			data                   = data.toJSON();
+			data.mediaField        = media.field;
+			data.mediaFieldName    = media.fieldName;
+			data.stringRemoveImage = l10n.strings.remove_image;
+			data.stringFile        = l10n.strings.file;
+			data.stringDownload    = l10n.strings.download;
+			data.stringRemoveFile  = l10n.strings.remove_file;
+
+			return data;
+		};
+
+		handlers.getImageData = function( fallbackSize ) {
+
+			// Preview size dimensions
+			var previewW = media.previewSize[0] || fallbackSize;
+			var previewH = media.previewSize[1] || fallbackSize;
+
+			// Image dimensions and url
+			var url    = this.get( 'url' );
+			var width  = this.get( 'width' );
+			var height = this.get( 'height' );
+			var sizes  = this.get( 'sizes' );
+
+			// Get the correct dimensions and url if a named size is set and exists
+			// fallback to the 'large' size
+			if ( sizes ) {
+				if ( sizes[ media.sizeName ] ) {
+					url    = sizes[ media.sizeName ].url;
+					width  = sizes[ media.sizeName ].width;
+					height = sizes[ media.sizeName ].height;
+				} else if ( sizes.large ) {
+					url    = sizes.large.url;
+					width  = sizes.large.width;
+					height = sizes.large.height;
+				}
+			}
+
+			// Fit the image in to the preview size, keeping the correct aspect ratio
+			if ( width > previewW ) {
+				height = Math.floor( previewW * height / width );
+				width = previewW;
+			}
+
+			if ( height > previewH ) {
+				width = Math.floor( previewH * width / height );
+				height = previewH;
+			}
+
+			if ( ! width ) {
+				width = previewW;
+			}
+
+			if ( ! height ) {
+				height = 'svg' === this.get( 'filename' ).split( '.' ).pop() ? '100%' : previewH;
+			}
+
+			this.set( 'sizeUrl', url );
+			this.set( 'sizeWidth', width );
+			this.set( 'sizeHeight', height );
+
+			return this;
+		};
+
+		handlers.selectFile = function() {
+			var selection = modal.state().get( 'selection' );
 			var type = isList ? 'list' : 'single';
 
 			if ( cmb.attach_id && isList ) {
-				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( cmb.mediaHandlers.list( selection, true ) );
+				$( '[data-id="'+ cmb.attach_id +'"]' ).parents( 'li' ).replaceWith( handlers.list( selection, true ) );
 			} else {
-				cmb.mediaHandlers[type]( selection );
+				handlers[type]( selection );
 			}
 
 			cmb.trigger( 'cmb_media_modal_select', selection, media );
 		};
 
-		cmb.mediaHandlers.openModal = function() {
-			var selection = media.frames[ media.field ].state().get('selection');
+		handlers.openModal = function() {
+			var selection = modal.state().get( 'selection' );
 			var attach;
 
 			if ( ! cmb.attach_id ) {
@@ -302,19 +375,19 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		// When a file is selected, run a callback.
-		media.frames[ media.field ]
-			.on( 'select', cmb.mediaHandlers.selectFile )
-			.on( 'open', cmb.mediaHandlers.openModal );
+		modal
+			.on( 'select', handlers.selectFile )
+			.on( 'open', handlers.openModal );
 
 		// Finally, open the modal
-		media.frames[ media.field ].open();
+		modal.open();
 	};
 
 	cmb.handleRemoveMedia = function( evt ) {
 		evt.preventDefault();
 		var $this = $( this );
-		if ( $this.is( '.cmb-attach-list .cmb2-remove-file-button' ) ){
-			$this.parents('li').remove();
+		if ( $this.is( '.cmb-attach-list .cmb2-remove-file-button' ) ) {
+			$this.parents( '.cmb2-media-item' ).remove();
 			return false;
 		}
 
@@ -804,7 +877,7 @@ window.CMB2 = window.CMB2 || {};
 			focusout : function() {
 				setTimeout( function() {
 					// if it's been 2 seconds, hide our spinner
-					cmb.spinner( '.postbox .cmb2-metabox', true );
+					cmb.spinner( '.cmb2-metabox', true );
 				}, 2000);
 			},
 			keyup : function() {
@@ -892,12 +965,8 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.spinner = function( $context, hide ) {
-		if ( hide ) {
-			$('.cmb-spinner', $context ).hide();
-		}
-		else {
-			$('.cmb-spinner', $context ).show();
-		}
+		var m = hide ? 'removeClass' : 'addClass';
+		$('.cmb-spinner', $context )[ m ]( 'is-active' );
 	};
 
 	// function for running our ajax

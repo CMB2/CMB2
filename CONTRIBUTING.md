@@ -7,8 +7,9 @@ _Support is not offered for this library, and the likelihood that the maintainer
 
 Before reporting a bug
 ---
-1. Search [issues](https://github.com/WebDevStudios/CMB2/issues) to see if the issue has been previously reported.
-2. Install the trunk version of CMB2 and test there.
+1. Please review the [documentation](https://github.com/CMB2/CMB2/wiki). Most questions revolve around the [field types](https://github.com/CMB2/CMB2/wiki/Field-Types), [field parameters](https://github.com/CMB2/CMB2/wiki/Field-Parameters), or are addressed in the [troubleshooting](https://github.com/CMB2/CMB2/wiki/Troubleshooting) section.
+2. Search [issues](https://github.com/CMB2/CMB2/issues) to see if the issue has been previously reported.
+3. Install the trunk version of CMB2 and test there.
 
 
 How to report a bug
@@ -43,8 +44,8 @@ If you are looking to provide language translation files, Please do so via [WP-T
 Additional Resources
 ---
 
-* [CMB2 Documentation Wiki](https://github.com/WebDevStudios/CMB2/wiki)
-* [CMB2 Snippet Library](https://github.com/WebDevStudios/CMB2-Snippet-Library)
+* [CMB2 Documentation Wiki](https://github.com/CMB2/CMB2/wiki)
+* [CMB2 Snippet Library](https://github.com/CMB2/CMB2-Snippet-Library)
 * [CMB2 API Documentation](http://cmb2.io/api/)
 * [General GitHub Documentation](http://help.github.com/)
 * [GitHub Pull Request documentation](http://help.github.com/send-pull-requests/)

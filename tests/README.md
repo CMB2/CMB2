@@ -1,4 +1,4 @@
-# CMB Test Suite [![Travis](http://img.shields.io/travis/WebDevStudios/CMB2.svg?style=flat)]()
+# CMB Test Suite [![Travis](http://img.shields.io/travis/CMB2/CMB2.svg?style=flat)]()
 
 The CMB Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
@@ -12,7 +12,7 @@ Quick Start (For Manual Runs)
 
 ### 1. Clone this repository
 ```bash
-git clone git@github.com:WebDevStudios/CMB2.git ./
+git clone git@github.com:CMB2/CMB2.git ./
 ```
 
 ### 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation)

@@ -3,9 +3,9 @@
  * CMB2 core tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-rest-tests-base.php' );
@@ -64,7 +64,10 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 			'comment_author' => $this->administrator,
 		) );
 
-		$this->term_id = $this->factory->term->create( array( 'taxonomy' => 'category', 'name' => 'test_category' ) );
+		$this->term_id = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name' => 'test_category',
+		) );
 	}
 
 	public function tearDown() {
@@ -81,7 +84,11 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 	public function test_read_post_has_cmb2_data() {
 		wp_set_current_user( $this->subscriber );
 
-		$expected = array( 'cmb2' => array( $this->cmb_id => array(), ), );
+		$expected = array(
+			'cmb2' => array(
+				$this->cmb_id => array(),
+			),
+		);
 		foreach ( $this->metabox_array['fields'] as $field ) {
 			$expected['cmb2'][ $this->cmb_id ][ $field['id'] ] = md5( $field['id'] );
 		}
@@ -220,9 +227,11 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 		}
 
 		$request = new WP_REST_Request( 'POST', $url );
-		$request['cmb2'] = array( $cmb_id => array(
-			'rest_test2_registered_fields' => 'new value',
-		) );
+		$request['cmb2'] = array(
+			$cmb_id => array(
+				'rest_test2_registered_fields' => 'new value',
+			),
+		);
 		$request['content'] = 'test2'; // b/c comment endpoint requires wp_update_comment to pass.
 
 		$this->assertResponseStatus( 200, rest_do_request( $request ) );

@@ -498,8 +498,8 @@ msgid "CMB2"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://github.com/WebDevStudios/CMB2"
-msgstr "https://github.com/WebDevStudios/CMB2"
+msgid "https://github.com/CMB2/CMB2"
+msgstr "https://github.com/CMB2/CMB2"
 
 #. Description of the plugin/theme
 msgid ""

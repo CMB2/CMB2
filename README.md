@@ -1,54 +1,54 @@
 # CMB2
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/WebDevStudios/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Travis](https://img.shields.io/travis/WebDevStudios/CMB2.svg)](https://travis-ci.org/WebDevStudios/CMB2/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/WebDevStudios/CMB2.svg)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/WebDevStudios/CMB2.svg)](https://scrutinizer-ci.com/g/WebDevStudios/CMB2/?branch=trunk)
-[![Dockunit Status](https://dockunit.io/svg/WebDevStudios/CMB2?trunk)](https://dockunit.io/projects/WebDevStudios/CMB2#trunk)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Travis](https://img.shields.io/travis/CMB2/CMB2.svg)](https://travis-ci.org/CMB2/CMB2/)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=trunk)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=trunk)
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 ![CMB2](https://plugins.trac.wordpress.org/export/HEAD/cmb2/assets/banner-1544x500.png)
 
-**Contributors:**      [webdevstudios](https://github.com/webdevstudios), [jtsternberg](https://github.com/jtsternberg), [gregrickaby](https://github.com/gregrickaby), [tw2113](https://github.com/tw2113), [patrickgarman](https://github.com/pmgarman), [JPry](https://github.com/JPry)
-**Donate link:**       [http://webdevstudios.com](http://webdevstudios.com)  
+**Contributors:**      [jtsternberg](https://github.com/jtsternberg), [webdevstudios](https://github.com/webdevstudios), [zao](https://github.com/zao-web), [humanmade](https://github.com/humanmade)  
+**Homepage:**          [https://cmb2.io](https://cmb2.io)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
-**Tested up to:**      4.7  
-**Stable tag:**        2.2.3.1  
+**Tested up to:**      4.7.2  
+**Stable tag:**        2.2.4  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
 
-[![Wordpress plugin](http://img.shields.io/wordpress/plugin/v/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
-[![Wordpress](http://img.shields.io/wordpress/plugin/dt/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
-[![Wordpress rating](http://img.shields.io/wordpress/plugin/r/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress plugin](https://img.shields.io/wordpress/plugin/v/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress](https://img.shields.io/wordpress/plugin/dt/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
+[![Wordpress rating](https://img.shields.io/wordpress/plugin/r/cmb2.svg)](https://wordpress.org/plugins/cmb2/)
 
-Complete contributors list found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
+Complete contributors list found here: [github.com/CMB2/CMB2/graphs/contributors](https://github.com/CMB2/CMB2/graphs/contributors)
 
 ## Description
 
-CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.
+CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind. Easily manage meta for posts, terms, users, comments, or create custom option pages.
 
-**[Download plugin on wordpress.org](http://wordpress.org/plugins/cmb2/)**
+**[Download plugin on wordpress.org](https://wordpress.org/plugins/cmb2/)**
 
-CMB2 is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). To get started, please follow the examples in the included `example-functions.php` file and have a look at the [basic usage instructions](https://github.com/WebDevStudios/CMB2/wiki/Basic-Usage).
+CMB2 is a complete rewrite of [Custom Metaboxes and Fields for WordPress](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress). To get started, please follow the examples in the included `example-functions.php` file and have a look at the [basic usage instructions](https://github.com/CMB2/CMB2/wiki/Basic-Usage).
 
-You can see a list of available field types [here](https://github.com/WebDevStudios/CMB2/wiki/Field-Types#types).
+You can see a list of available field types [here](https://github.com/CMB2/CMB2/wiki/Field-Types#types).
 
 If you are coming from the original "Custom Metaboxes and Fields for WordPress" plugin, [please read this post](https://webdevstudios.com/2015/02/02/cmb2-wordpress-plugin/) for the CMB2 background story.
 
 ### Contribution
-Development occurs on Github, and all contributions welcome. Please read the [CONTRIBUTING](https://github.com/WebDevStudios/CMB2/blob/master/CONTRIBUTING.md) doc for more details.
+Development occurs on Github, and all contributions welcome. Please read the [CONTRIBUTING](https://github.com/CMB2/CMB2/blob/master/CONTRIBUTING.md) doc for more details.
 
-A complete list of all our awesome contributors found here: [github.com/WebDevStudios/CMB2/graphs/contributors](https://github.com/WebDevStudios/CMB2/graphs/contributors)
+A complete list of all our awesome contributors found here: [github.com/CMB2/CMB2/graphs/contributors](https://github.com/CMB2/CMB2/graphs/contributors)
 
 ## Features:
 
 * Create metaboxes to be used on post edit screens.
-* [Create forms to be used on an options pages](https://github.com/WebDevStudios/CMB2/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page).
+* [Create forms to be used on an options pages](https://github.com/CMB2/CMB2/wiki/Using-CMB-to-create-an-Admin-Theme-Options-Page).
 * Create forms to handle user meta and display them on user profile add/edit pages.
-* [Flexible API that allows you to use CMB forms almost anywhere, even on the front-end](https://github.com/WebDevStudios/CMB2/wiki/Bringing-Metaboxes-to-the-Front-end).
-* [Several field types are included](https://github.com/WebDevStudios/CMB2/wiki/Field-Types).
-* [Custom API hook that allows you to create your own field types](https://github.com/WebDevStudios/CMB2/wiki/Adding-your-own-field-types).
+* Create forms to handle term meta and display wherever your taxonomies are used.
+* [Flexible API that allows you to use CMB forms almost anywhere, even on the front-end](https://github.com/CMB2/CMB2/wiki/Bringing-Metaboxes-to-the-Front-end).
+* [Several field types are included](https://github.com/CMB2/CMB2/wiki/Field-Types).
+* [Custom API hook that allows you to create your own field types](https://github.com/CMB2/CMB2/wiki/Adding-your-own-field-types).
 * There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
 * Repeatable fields for most field types are supported, as well as repeatable field groups.
 * CMB2 is safe to bundle with any project. It will only load the newest version in the system.
@@ -61,7 +61,7 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 #### Custom Field Types
 * [CMB2 Field Type: CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): `custom_attached_posts`, for attaching posts to a page.
 * [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax) by [alexis-magina](https://github.com/alexis-magina): `post_search_ajax` Attach posts to each other. Same approach as [CMB2 Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) but with Ajax request, multiple/single option, and different UI.
-* [CMB2 Field Type: CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
+* [CMB2 Field Type: CMB2 Post Search field](https://github.com/CMB2/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
 * [CMB2 Field Type: CMB2 User Search field](https://github.com/Mte90/CMB2-User-Search-field) from [Mte90](https://github.com/Mte90): `user_search_text` adds a user-search dialog for searching/attaching other User IDs.
 * [CMB2 Field Type: CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) from [JayWood](https://github.com/JayWood): `rgba_colorpicker ` adds a color picker that supports RGBa, (RGB with transparency (alpha) value).
 * [CMB2 Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
@@ -73,20 +73,24 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
 
 * [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [mattkrupnik](https://github.com/mattkrupnik/): Adds a jQuery UI Slider field.
-* [WDS CMB2 Date Range Field](https://github.com/WebDevStudios/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
-* [CMB2 Remote Image Select](https://github.com/WebDevStudios/CMB2-Remote-Image-Select-Field) from [JayWood](https://github.com/JayWood) of [WebDevStudios](https://github.com/WebDevStudios): Allows users to enter a URL in a text field and select a single image for use in post meta. Similar to Facebook's featured image selector.
+* [WDS CMB2 Date Range Field](https://github.com/CMB2/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
+* [CMB2 Remote Image Select](https://github.com/CMB2/CMB2-Remote-Image-Select-Field) from [JayWood](https://github.com/JayWood) of [WebDevStudios](https://github.com/WebDevStudios): Allows users to enter a URL in a text field and select a single image for use in post meta. Similar to Facebook's featured image selector.
 * [CMB Field Type: Sorter](https://wordpress.org/plugins/cmb-field-type-sorter/): This plugin gives you two CMB field types based on the Sorter script.
 * [CMB Field Type: Tags](https://github.com/florianbeck/cmb2-field-type-tags): WordPress-Tags-like field type for CMB2. _note: this does not set the post tags, but simply provides a unique text input_
 * [CMB Field Type: Link Picker](https://wordpress.org/plugins/link-picker-for-cmb2/): Using the Link Picker for CMB2 control, you can choose a link from your WordPress site, or manually enter a link. You can also identify if the link should open in a new window, or not.
 * [CMB Field Type: MultidatesPicker](https://github.com/origgami/cmb2-multidates-picker): Creates a CMB2 field type that enables a multiple date calendar. It uses a plugin called [MultiDatesPicker v1.6.3 for jQuery UI](http://multidatespickr.sourceforge.net/).
 * [CMB Field Type: CMB2-radio-image](https://github.com/satwinderrathore/CMB2-radio-image): Image as radio buttons.
 * [CMB2 Term Select](https://github.com/florianbeck/cmb2-field-type-tags): Special CMB2 Field that allows users to define an autocomplete text field for terms. _Note: this will set the taxonomy terms, but has the option (`'apply_term' => false`) to disable and save the term ids as data instead (like for options pages, etc)._
-* [CMB2 Related Links](https://github.com/jtsternberg/CMB2-Related-Links): Allows users to add a related links via a repeating field group. Field inputs are powered by the [CMB2 Field Type: CMB2 Post Search field](https://github.com/WebDevStudios/CMB2-Post-Search-field) documented above, and so each link can be populated with existing WordPress content by clicking on the search button. _Note: this is not a standard field type, but instead a function you use in combination with CMB2::add_field()._
+* [CMB2 Related Links](https://github.com/jtsternberg/CMB2-Related-Links): Allows users to add a related links via a repeating field group. Field inputs are powered by the [CMB2 Field Type: CMB2 Post Search field](https://github.com/CMB2/CMB2-Post-Search-field) documented above, and so each link can be populated with existing WordPress content by clicking on the search button. _Note: this is not a standard field type, but instead a function you use in combination with CMB2::add_field()._
+* [CMB2 Field Type: Order](https://github.com/rubengc/cmb2-field-order) by [rubengc](https://github.com/rubengc): Allows users to define custom order of predefined options.
+* [CMB2 Field Type: Animation](https://github.com/rubengc/cmb2-field-animation) by [rubengc](https://github.com/rubengc): Allows users to pickup an animation from [Animate.css](https://github.com/daneden/animate.css) (includes preview of chosen animation).
+* [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) by [rubengc](https://github.com/rubengc): Based on [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax), adds the ability to attach posts/users/terms, and the ability to limit the maximum number of attached objects.
+* [CMB2 Field Type: Visual Style Editor](https://github.com/rubengc/cmb2-field-visual-style-editor) by [rubengc](https://github.com/rubengc): Custom field for CMB2 which allows customizing style from a small set of controls.
 
 #### Other Helpful Resources
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
-* [CMB2 Example Theme](https://github.com/WebDevStudios/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
+* [CMB2 Example Theme](https://github.com/CMB2/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
 * [facetwp-cmb2](https://github.com/FacetWP/facetwp-cmb2): FacetWP integration with CMB2.
 * [CMB2-grid](https://github.com/origgami/CMB2-grid) from [origgami](https://github.com/origgami/): A grid system for WordPress CMB2 library that allows the creation of columns for a better layout in the admin.
 * [CMB2 Metatabs Options](https://github.com/rogerlos/cmb2-metatabs-options) from [rogerlos](https://github.com/rogerlos/): CMO makes it easy to create options pages with multiple metaboxes--and optional WordPress admin tabs.
@@ -97,9 +101,9 @@ A complete list of all our awesome contributors found here: [github.com/WebDevSt
 
 
 ## Links
-* [Project Homepage](http://cmb2.io)
-* [Github project page](https://github.com/webdevstudios/CMB2)
-* [Documentation (GitHub wiki)](https://github.com/webdevstudios/CMB2/wiki)
+* [Project Homepage](https://cmb2.io)
+* [Github project page](https://github.com/CMB2/CMB2)
+* [Documentation (GitHub wiki)](https://github.com/CMB2/CMB2/wiki)
 
 ## Installation
 
@@ -118,7 +122,7 @@ If including the library in your plugin or theme:
 2. Edit to only include the fields you need and rename the functions (CMB2 directory should be left unedited in order to easily update the library).
 4. Profit.
 
-**[View CHANGELOG](https://github.com/WebDevStudios/CMB2/blob/master/CHANGELOG.md)**
+**[View CHANGELOG](https://github.com/CMB2/CMB2/blob/master/CHANGELOG.md)**
 
 ## Known Issues
 

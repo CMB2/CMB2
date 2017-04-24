@@ -1,23 +1,27 @@
 <?php
 /**
+ * The initation loader for CMB2, and the main plugin file.
+ *
  * @category     WordPress_Plugin
  * @package      CMB2
- * @author       WebDevStudios
+ * @author       CMB2 team
  * @license      GPL-2.0+
- * @link         http://webdevstudios.com
+ * @link         https://cmb2.io
  *
  * Plugin Name:  CMB2
- * Plugin URI:   https://github.com/WebDevStudios/CMB2
+ * Plugin URI:   https://github.com/CMB2/CMB2
  * Description:  CMB2 will create metaboxes and forms with custom fields that will blow your mind.
- * Author:       WebDevStudios
- * Author URI:   http://webdevstudios.com
- * Contributors: WebDevStudios (@webdevstudios / webdevstudios.com)
- *               Justin Sternberg (@jtsternberg / dsgnwrks.pro)
+ * Author:       CMB2 team
+ * Author URI:   https://cmb2.io
+ * Contributors: Justin Sternberg (@jtsternberg / dsgnwrks.pro)
+ *               WebDevStudios (@webdevstudios / webdevstudios.com)
+ *               Zao (zao.is)
+ *               Human Made (@humanmadeltd / hmn.md)
  *               Jared Atchison (@jaredatch / jaredatchison.com)
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.2.3.1
+ * Version:      2.2.4
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -27,7 +31,7 @@
  * http://www.opensource.org/licenses/gpl-license.php
  *
  * This is an add-on for WordPress
- * http://wordpress.org/
+ * https://wordpress.org/
  *
  * **********************************************************************
  * This program is free software; you can redistribute it and/or modify
@@ -42,13 +46,15 @@
  * **********************************************************************
  */
 
-/************************************************************************
-                  You should not edit the code below
-                  (or any code in the included files)
-                  or things might explode!
-*************************************************************************/
+/**
+ * *********************************************************************
+ *               You should not edit the code below
+ *               (or any code in the included files)
+ *               or things might explode!
+ * ***********************************************************************
+ */
 
-if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -57,14 +63,15 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 	 *
 	 * @category  WordPress_Plugin
 	 * @package   CMB2
-	 * @author    WebDevStudios
+	 * @author    CMB2 team
 	 * @license   GPL-2.0+
-	 * @link      http://webdevstudios.com
+	 * @link      https://cmb2.io
 	 */
-	class CMB2_Bootstrap_224_Trunk {
+	class CMB2_Bootstrap_225_Trunk {
 
 		/**
 		 * Current version number
+		 *
 		 * @var   string
 		 * @since 1.0.0
 		 */
@@ -77,20 +84,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9978;
+		const PRIORITY = 9977;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_224_Trunk object
+		 * Single instance of the CMB2_Bootstrap_225_Trunk object
 		 *
-		 * @var CMB2_Bootstrap_224_Trunk
+		 * @var CMB2_Bootstrap_225_Trunk
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_224_Trunk object
+		 * Creates/returns the single instance CMB2_Bootstrap_225_Trunk object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_224_Trunk Single instance object
+		 * @return CMB2_Bootstrap_225_Trunk Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -141,21 +148,22 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 
 			$this->l10ni18n();
 
-			// Include helper functions
+			// Include helper functions.
 			require_once 'includes/CMB2_Base.php';
 			require_once 'includes/CMB2.php';
 			require_once 'includes/helper-functions.php';
 
-			// Now kick off the class autoloader
+			// Now kick off the class autoloader.
 			spl_autoload_register( 'cmb2_autoload_classes' );
 
-			// Kick the whole thing off
-			require_once 'bootstrap.php';
+			// Kick the whole thing off.
+			require_once( cmb2_dir( 'bootstrap.php' ) );
 			cmb2_bootstrap();
 		}
 
 		/**
 		 * Registers CMB2 text domain path
+		 *
 		 * @since  2.0.0
 		 */
 		public function l10ni18n() {
@@ -181,6 +189,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_224_Trunk', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_224_Trunk::initiate();
+	CMB2_Bootstrap_225_Trunk::initiate();
 
-}
+}// End if().

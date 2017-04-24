@@ -24,6 +24,15 @@ Misc.
 		}
 	}
 }
-.postbox .cmb-spinner {
-	float: left;
+.cmb2-postbox, .cmb2-no-box-wrap {
+	.cmb-spinner {
+		float: left;
+		display: none;
+	}
+}
+.cmb-spinner {
+	display: none;
+	&.is-active {
+		display: block;
+	}
 }

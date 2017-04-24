@@ -3,9 +3,9 @@
  * CMB2_Field tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-tests-base.php' );
@@ -44,15 +44,17 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'url'         => 'https://www.youtube.com/watch?v=NCXyEKqmWdA',
 			'object_id'   => 'options-page-id',
 			'object_type' => 'options-page',
-			'oembed_args' => array( 'width' => '640' ),
+			'oembed_args' => array(
+				'width' => '640',
+			),
 			'field_id'    => 'test_embed',
 			'src'         => 'https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed',
 		);
 
-		delete_option( $this->oembed_args['object_id'] );
 	}
 
 	public function tearDown() {
+		delete_option( $this->oembed_args['object_id'] );
 		parent::tearDown();
 	}
 
@@ -86,44 +88,60 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	 * @group cmb2-ajax-embed
 	 */
 	public function test_values_cached() {
-		$expected = $this->is_connected() ? array(
-			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
-			'_oembed_time_611cd8ff569bdf3f2bd77a47ba674606' => 1456629747,
-			'_oembed_e587db3cd3a82c8215553980b4f347c1' => '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>',
-			'_oembed_time_e587db3cd3a82c8215553980b4f347c1' => 1456629747,
-		) : array(
-			'_oembed_611cd8ff569bdf3f2bd77a47ba674606' => '{{unknown}}',
-			'_oembed_e587db3cd3a82c8215553980b4f347c1' => '{{unknown}}',
-		);
-
+		$options = $this->get_option();
 		if ( $this->is_3_8() && $this->is_connected() ) {
 			$expected = array(
 				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
 				'_oembed_bc2b74b277d0e39ae9ec91eefaee8e31' => '{{unknown}}',
 			);
-		}
 
-		$options = $this->get_option();
+			foreach ( $expected as $key => $value ) {
+				$this->assertTrue( array_key_exists( $key, $options ) );
 
-		foreach ( $expected as $key => $value ) {
-			$this->assertTrue( array_key_exists( $key, $options ) );
-
-			if ( 0 !== strpos( $key, '_oembed_time_' ) ) {
-				$this->assertEquals( $expected[ $key ], $options[ $key ] );
-			} else {
-				$this->assertTrue( is_int( $value ) );
+				if ( 0 !== strpos( $key, '_oembed_time_' ) ) {
+					$this->assertEquals( $expected[ $key ], $options[ $key ] );
+				} else {
+					$this->assertTrue( is_int( $value ) );
+				}
 			}
-		}
+		} else {
+			$opt_keys = array_keys( $options );
+			$opt_values = array_values( $options );
+
+			$expected = $this->is_connected() ? array(
+				'<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
+				'time_1',
+				'<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>',
+				'time_2',
+			) : array(
+				'{{unknown}}',
+				'{{unknown}}',
+			);
+
+			foreach ( $expected as $key => $expected_value ) {
+				$opt_key = $opt_keys[ $key ];
+
+				if ( 0 !== strpos( $expected_value, 'time_' ) ) {
+					$this->assertEquals( $expected_value, $opt_values[ $key ] );
+					$this->assertTrue( 0 === strpos( $opt_key, '_oembed_' ) );
+				} else {
+					$this->assertTrue( 0 === strpos( $opt_key, '_oembed_time_' ) );
+					$this->assertTrue( is_int( $opt_values[ $key ] ) );
+				}
+			}
+		}// End if().
 	}
 
 	public function test_get_oembed_delete_with_expired_ttl() {
 		add_filter( 'oembed_ttl', '__return_zero' );
 		add_action( 'cmb2_save_options-page_fields', array( 'CMB2_Ajax', 'clean_stale_options_page_oembeds' ) );
 
-		$new = array( 'another_value' => 'value' );
+		$new = array(
+			'another_value' => 'value',
+		);
 		if ( $this->is_3_8() ) {
 			$new = array(
-				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
 			);
 		}
 		$_POST = array_merge( $new, $this->get_option() );

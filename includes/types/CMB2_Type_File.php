@@ -6,9 +6,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_File extends CMB2_Type_File_Base {
 
@@ -20,6 +20,9 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$query_args = $field->args( 'query_args' );
 		$output     = '';
 
+		// get an array of image size meta data, fallback to 'large'
+		$img_size_data = parent::get_image_size_data( $img_size, 'large' );
+
 		// if options array and 'url' => false, then hide the url field
 		$input_type = array_key_exists( 'url', $options ) && false === $options['url'] ? 'hidden' : 'text';
 
@@ -28,12 +31,13 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'class' => 'cmb2-upload-file regular-text',
 			'size'  => 45,
 			'desc'  => '',
-			'data-previewsize' => is_array( $img_size ) ? '[' . implode( ',', $img_size ) . ']' : 350,
+			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
+			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $query_args ) ? json_encode( $query_args ) : '',
 			'js_dependencies'  => 'media-editor',
 		) );
 
-		$output .= sprintf( '<input class="cmb2-upload-button button" type="button" value="%s" />', esc_attr( $this->_text( 'add_upload_file_text', esc_html__( 'Add or Upload File', 'cmb2' ) ) ) );
+		$output .= sprintf( '<input class="cmb2-upload-button button-secondary" type="button" value="%s" />', esc_attr( $this->_text( 'add_upload_file_text', esc_html__( 'Add or Upload File', 'cmb2' ) ) ) );
 
 		$output .= $this->_desc( true );
 
@@ -52,6 +56,11 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// Get ID value
 		$_id_value = $field->escaped_value( 'absint' );
 
+		// We don't want to output "0" as a value.
+		if ( ! $_id_value ) {
+			$_id_value = '';
+		}
+
 		// If there is no ID saved yet, try to get it from the url
 		if ( $meta_value && ! $_id_value ) {
 			$_id_value = CMB2_Utils::image_id_from_url( esc_url_raw( $meta_value ) );
@@ -69,10 +78,11 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			if ( $this->is_valid_img_ext( $meta_value ) ) {
 
 				if ( $_id_value ) {
-					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
+					$image = wp_get_attachment_image( $_id_value, $img_size, null, array(
+						'class' => 'cmb-file-field-image',
+					) );
 				} else {
-					$size = is_array( $img_size ) ? $img_size[0] : 350;
-					$image = '<img style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $meta_value . '" alt="" />';
+					$image = '<img style="max-width: ' . absint( $img_size_data['width'] ) . 'px; width: 100%;" src="' . $meta_value . '" class="cmb-file-field-image" alt="" />';
 				}
 
 				$output .= $this->img_status_output( array(
