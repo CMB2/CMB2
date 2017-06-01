@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 * New action hook, `cmb2_footer_enqueue`, which occurs after CMB2 enqueues its assets.
 * Example functions clean up. Props [@PavelK27](https://github.com/PavelK27) ([#866](https://github.com/CMB2/CMB2/pull/866)).
 * New `CMB2_Utils` methods, `get_available_image_sizes()` and `get_named_size()`. Props [@Cai333](https://github.com/Cai333). 
+* New before/after form hooks order. For more details see ([#954](https://github.com/CMB2/CMB2/pull/954)).
 
 ### Bug Fixes
 
