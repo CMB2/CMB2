@@ -993,6 +993,35 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Replaces keys with their value in the field
+	 *
+	 * @since  2.2.5
+	 * @param  string $value Value to update
+	 * @return string        Updated value
+	 */
+	public function replace_keys( $value ) {
+		preg_match_all( '#{([A-Za-z0-9_-]+)}#', $value, $matches );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches[1] as $match ) {
+				if ( ! isset( $this->value[ $this->index ][ $match ] ) ) {
+					continue;
+				}
+
+				$key_value = $this->value[ $this->index ][ $match ];
+				if ( is_array( $key_value ) ) {
+					$key_value = implode( ', ', $key_value );
+				}
+
+				if ( is_string( $key_value ) ) {
+					$value = str_replace( '{' . $match . '}', $key_value, $value );
+				}
+			}
+		}
+
+		return $this->replace_hash( $value );
+	}
+
+	/**
 	 * Replaces a hash key - {#} - with the repeatable index
 	 *
 	 * @since  1.2.0
