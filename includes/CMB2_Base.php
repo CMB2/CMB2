@@ -4,9 +4,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  *
  * @property-read $args        The objects array of properties/arguments.
  * @property-read $meta_box    The objects array of properties/arguments.
@@ -19,6 +19,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Current CMB2 instance ID
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -26,6 +27,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * The object properties name.
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -33,6 +35,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Object ID
+	 *
 	 * @var   mixed
 	 * @since 2.2.3
 	 */
@@ -40,6 +43,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Type of object being handled. (e.g., post, user, comment, or term)
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -47,6 +51,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Array of key => value data for saving. Likely $_POST data.
+	 *
 	 * @var   array
 	 * @since 2.2.3
 	 */
@@ -54,6 +59,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Array of field param callback results
+	 *
 	 * @var   array
 	 * @since 2.0.0
 	 */
@@ -71,6 +77,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Get started
+	 *
 	 * @since 2.2.3
 	 * @param array $args Object properties array
 	 */
@@ -92,6 +99,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Returns the object ID
+	 *
 	 * @since  2.2.3
 	 * @param  integer $object_id Object ID
 	 * @return integer Object ID
@@ -106,6 +114,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Returns the object type
+	 *
 	 * @since  2.2.3
 	 * @param  string $object_type Object Type
 	 * @return string Object type
@@ -120,6 +129,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Get the object type for the current page, based on the $pagenow global.
+	 *
 	 * @since  2.2.2
 	 * @return string  Page object type name.
 	 */
@@ -144,6 +154,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Set object property.
+	 *
 	 * @since  2.2.2
 	 * @param  string $property Metabox config property to retrieve
 	 * @param  mixed  $value    Value to set if no value found
@@ -157,6 +168,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Get object property and optionally set a fallback
+	 *
 	 * @since  2.0.0
 	 * @param  string $property Metabox config property to retrieve
 	 * @param  mixed  $fallback Fallback value to set if no value found
@@ -172,6 +184,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Get default field arguments specific to this CMB2 object.
+	 *
 	 * @since  2.2.0
 	 * @param  array      $field_args  Metabox field config array.
 	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent)
@@ -197,6 +210,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Get a new field object specific to this CMB2 object.
+	 *
 	 * @since  2.2.0
 	 * @param  array      $field_args  Metabox field config array.
 	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent)
@@ -237,6 +251,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Store results of the param callbacks for continual access
+	 *
 	 * @since  2.0.0
 	 * @param  string $param Field parameter
 	 * @return mixed         Results of param/param callback
@@ -275,6 +290,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Handles the parameter callbacks, and passes this object as parameter.
+	 *
 	 * @since  2.2.3
 	 * @param  callable $cb The callback method/function/closure
 	 * @return mixed        Return of the callback function.
@@ -285,6 +301,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Checks if field has a callback value
+	 *
 	 * @since  1.0.1
 	 * @param  string $cb Callback string
 	 * @return mixed      NULL, false for NO validation, or $cb string if it exists.
@@ -315,10 +332,10 @@ abstract class CMB2_Base {
 	 * which is callable. If so, it registers the callback, and if not,
 	 * converts the maybe-modified $val to a boolean for return.
 	 *
- 	 * The registered handlers will have a parameter name which matches the filter, except:
- 	 * - The 'cmb2_api' prefix will be removed
- 	 * - A '_cb' suffix will be added (to stay inline with other '*_cb' parameters).
- 	 *
+	 * The registered handlers will have a parameter name which matches the filter, except:
+	 * - The 'cmb2_api' prefix will be removed
+	 * - A '_cb' suffix will be added (to stay inline with other '*_cb' parameters).
+	 *
 	 * @since  2.2.3
 	 *
 	 * @param  string $hook_name     The hook name.
@@ -358,7 +375,7 @@ abstract class CMB2_Base {
 		}
 
 		// Cast to bool.
-		return !! $val;
+		return ! ! $val;
 	}
 
 	/**
@@ -386,11 +403,11 @@ abstract class CMB2_Base {
 			switch ( $message ) {
 
 				case self::DEPRECATED_PARAM:
-					$message = sprintf( __( 'The "%s" field parameter has been deprecated in favor of the "%s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					$message = sprintf( __( 'The "%1$s" field parameter has been deprecated in favor of the "%1$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
 				case self::DEPRECATED_CB_PARAM:
-					$message = sprintf( __( 'Using the "%s" field parameter as a callback has been deprecated in favor of the "%s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					$message = sprintf( __( 'Using the "%1$s" field parameter as a callback has been deprecated in favor of the "%1$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
 				default:
@@ -421,15 +438,13 @@ abstract class CMB2_Base {
 			if ( function_exists( '__' ) ) {
 				if ( ! is_null( $message ) ) {
 					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s! %3$s', 'cmb2' ), $function, $version, $message ) );
-				}
-				else {
+				} else {
 					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s with no alternative available.', 'cmb2' ), $function, $version ) );
 				}
 			} else {
 				if ( ! is_null( $message ) ) {
 					trigger_error( sprintf( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s! %3$s', $function, $version, $message ) );
-				}
-				else {
+				} else {
 					trigger_error( sprintf( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s with no alternative available.', $function, $version ) );
 				}
 			}
@@ -438,6 +453,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Magic getter for our object.
+	 *
 	 * @param string $field
 	 * @throws Exception Throws an exception if the field is invalid.
 	 * @return mixed
@@ -462,6 +478,7 @@ abstract class CMB2_Base {
 
 	/**
 	 * Allows overloading the object with methods... Whooaaa oooh it's magic, y'knoooow.
+	 *
 	 * @since 1.0.0
 	 * @param string $method Non-existent method.
 	 * @param array  $args   All arguments passed to the method
@@ -469,7 +486,7 @@ abstract class CMB2_Base {
 	public function __call( $method, $args ) {
 		$object_class = strtolower( get_class( $this ) );
 
-		if ( ! has_filter(  "{$object_class}_inherit_{$method}" ) ) {
+		if ( ! has_filter( "{$object_class}_inherit_{$method}" ) ) {
 			throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), get_class( $this ), $method ) );
 		}
 

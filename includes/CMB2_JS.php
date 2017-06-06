@@ -4,14 +4,15 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_JS {
 
 	/**
 	 * The CMB2 JS handle
+	 *
 	 * @var   string
 	 * @since 2.0.7
 	 */
@@ -19,6 +20,7 @@ class CMB2_JS {
 
 	/**
 	 * The CMB2 JS variable name
+	 *
 	 * @var   string
 	 * @since 2.0.7
 	 */
@@ -26,15 +28,19 @@ class CMB2_JS {
 
 	/**
 	 * Array of CMB2 JS dependencies
+	 *
 	 * @var   array
 	 * @since 2.0.7
 	 */
-	protected static $dependencies = array( 'jquery' => 'jquery' );
+	protected static $dependencies = array(
+		'jquery' => 'jquery',
+	);
 
 	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
+	 *
 	 * @since 2.0.7
-	 * @param array|string  $dependencies Array (or string) of dependencies to add
+	 * @param array|string $dependencies Array (or string) of dependencies to add
 	 */
 	public static function add_dependencies( $dependencies ) {
 		foreach ( (array) $dependencies as $dependency ) {
@@ -44,6 +50,7 @@ class CMB2_JS {
 
 	/**
 	 * Enqueue the CMB2 JS
+	 *
 	 * @since  2.0.7
 	 */
 	public static function enqueue() {
@@ -90,6 +97,7 @@ class CMB2_JS {
 
 	/**
 	 * We need to register colorpicker on the front-end
+	 *
 	 * @since  2.0.7
 	 */
 	protected static function colorpicker_frontend() {
@@ -105,6 +113,7 @@ class CMB2_JS {
 
 	/**
 	 * Localize the php variables for CMB2 JS
+	 *
 	 * @since  2.0.7
 	 */
 	protected static function localize( $debug ) {

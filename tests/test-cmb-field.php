@@ -3,9 +3,9 @@
  * CMB2_Field tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-tests-base.php' );
@@ -58,7 +58,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public function test_cmb2_field_instance() {
-		$this->assertInstanceOf( 'CMB2_Field', $this->field  );
+		$this->assertInstanceOf( 'CMB2_Field', $this->field );
 	}
 
 	public function test_cmb2_before_and_after_field_callbacks() {
@@ -156,7 +156,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		add_filter( 'cmb2_sanitize_text', array( __CLASS__, '_return_different_value' ) );
 		$modified = $field->save_field( 'some value to be modified' );
-		$this->assertTrue( !! $modified );
+		$this->assertTrue( ! ! $modified );
 		remove_filter( 'cmb2_sanitize_text', array( __CLASS__, '_return_different_value' ) );
 
 		// $val = $field->get_data();
@@ -205,7 +205,9 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		// Retrieve saved value(s)
 		$this->assertEquals( $cleaned_val, cmb2_options( 0 )->get( $field->id() ) );
-		$this->assertEquals( array( 'test_test' => $cleaned_val ), cmb2_options( 0 )->get_options() );
+		$this->assertEquals( array(
+			'test_test' => $cleaned_val,
+		), cmb2_options( 0 )->get_options() );
 	}
 
 	public function test_show_option_none() {
@@ -259,7 +261,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$cmb_demo = cmb2_get_metabox( array(
 			'id'            => $prefix . 'metabox',
 			'title'         => esc_html__( 'Test Metabox', 'cmb2' ),
-			'object_types'  => array( 'page', ), // Post type
+			'object_types'  => array( 'page' ), // Post type
 			'show_on_cb'    => 'yourprefix_show_if_front_page', // function should return a bool value
 			'context'       => 'normal',
 			'priority'      => 'high',
@@ -309,7 +311,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		delete_post_meta( $this->field->object_id, $this->field->_id() );
 
 		// Verify that the post-meta no longer exists
-		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+		$this->assertFalse( ! ! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
 		// Now filter the setting of the meta.. will use update_option instead
 		add_filter( "cmb2_override_{$this->field->_id()}_meta_save", array( __CLASS__, 'override_set' ), 10, 4 );
@@ -317,10 +319,10 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->field->save_field( $array_val );
 
 		// Verify that the post-meta is still empty
-		$this->assertFalse( !! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
+		$this->assertFalse( ! ! get_post_meta( $this->field->object_id, $this->field->_id(), 1 ) );
 
 		// Re-create the option key that we used to save the data
-		$opt_key = 'test-'. $this->field->object_id . '-' . $this->field->_id();
+		$opt_key = 'test-' . $this->field->object_id . '-' . $this->field->_id();
 		// And retrieve the option
 		$opt = get_option( $opt_key );
 
@@ -331,7 +333,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$value = $this->field->get_data();
 
 		// Verify that there's still nothing there in post-meta
-		$this->assertFalse( !! $value );
+		$this->assertFalse( ! ! $value );
 
 		// Now filter the getting of the meta, which will use get_option
 		add_filter( "cmb2_override_{$this->field->_id()}_meta_value", array( __CLASS__, 'override_get' ), 10, 4 );
@@ -354,7 +356,9 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public function test_get_field_clone() {
-		$field = $this->field->get_field_clone( array( 'id' => 'test_field_clone' ) );
+		$field = $this->field->get_field_clone( array(
+			'id' => 'test_field_clone',
+		) );
 
 		foreach ( $this->field_args as $key => $arg ) {
 			if ( 'id' === $key || 'default' === $key || 'default_cb' === $key ) {
@@ -406,7 +410,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button button-disabled">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button button-disabled">Remove</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -418,13 +422,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button cmb-remove-row-button">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button">Remove</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<p class="cmb-add-row">
-					<button type="button" data-selector="prouct-case-study_repeat" class="cmb-add-row-button button">Add Case Study</button>
+					<button type="button" data-selector="prouct-case-study_repeat" class="cmb-add-row-button button-secondary">Add Case Study</button>
 				</p>
 			</div>
 		</div>';
@@ -485,13 +489,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public static function override_set( $override, $args, $field_args, $field ) {
-		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		$opt_key = 'test-' . $args['id'] . '-' . $args['field_id'];
 		$updated = update_option( $opt_key, $args['value'] );
 		return true;
 	}
 
 	public static function override_get( $override_val, $object_id, $args, $field ) {
-		$opt_key = 'test-'. $args['id'] . '-' . $args['field_id'];
+		$opt_key = 'test-' . $args['id'] . '-' . $args['field_id'];
 		return get_option( $opt_key );
 	}
 

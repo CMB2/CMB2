@@ -3,9 +3,9 @@
  * CMB2 tests base
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-tests-base.php' );
@@ -36,8 +36,12 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 
 		self::setUp();
 
-		$this->subscriber = $this->factory->user->create( array( 'role' => 'subscriber' ) );
-		$this->administrator = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->subscriber = $this->factory->user->create( array(
+			'role' => 'subscriber',
+		) );
+		$this->administrator = $this->factory->user->create( array(
+			'role' => 'administrator',
+		) );
 		$this->post_id = $this->factory->post->create();
 
 		foreach ( $this->metabox_array['fields'] as $field ) {
@@ -89,7 +93,7 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 
 	protected function assertRequestResponseStatus( $method, $url, $status, $error_code = '', $debug = false ) {
 		if ( $debug ) {
-			error_log( $method . ' $url: '. print_r( $url, true ) );
+			error_log( $method . ' $url: ' . print_r( $url, true ) );
 		}
 
 		$request = new WP_REST_Request( $method, $url );
@@ -98,7 +102,7 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 
 	protected function assertResponseStatus( $status, $response, $error_code = '', $debug = false ) {
 		if ( $debug ) {
-			error_log( '$response->get_data(): '. print_r( $response->get_data(), true ) );
+			error_log( '$response->get_data(): ' . print_r( $response->get_data(), true ) );
 		}
 		$this->assertEquals( $status, $response->get_status() );
 
@@ -115,7 +119,7 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 	protected function assertResponseData( $data, $response ) {
 		$response_data = $response->get_data();
 		$tested_data = array();
-		foreach( $data as $key => $value ) {
+		foreach ( $data as $key => $value ) {
 			if ( isset( $response_data[ $key ] ) ) {
 				$tested_data[ $key ] = $response_data[ $key ];
 			} else {

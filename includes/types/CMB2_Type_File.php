@@ -6,9 +6,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_File extends CMB2_Type_File_Base {
 
@@ -37,7 +37,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'js_dependencies'  => 'media-editor',
 		) );
 
-		$output .= sprintf( '<input class="cmb2-upload-button button" type="button" value="%s" />', esc_attr( $this->_text( 'add_upload_file_text', esc_html__( 'Add or Upload File', 'cmb2' ) ) ) );
+		$output .= sprintf( '<input class="cmb2-upload-button button-secondary" type="button" value="%s" />', esc_attr( $this->_text( 'add_upload_file_text', esc_html__( 'Add or Upload File', 'cmb2' ) ) ) );
 
 		$output .= $this->_desc( true );
 
@@ -78,7 +78,9 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			if ( $this->is_valid_img_ext( $meta_value ) ) {
 
 				if ( $_id_value ) {
-					$image = wp_get_attachment_image( $_id_value, $img_size, null, array( 'class' => 'cmb-file-field-image' ) );
+					$image = wp_get_attachment_image( $_id_value, $img_size, null, array(
+						'class' => 'cmb-file-field-image',
+					) );
 				} else {
 					$image = '<img style="max-width: ' . absint( $img_size_data['width'] ) . 'px; width: 100%;" src="' . $meta_value . '" class="cmb-file-field-image" alt="" />';
 				}

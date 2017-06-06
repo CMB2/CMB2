@@ -6,49 +6,72 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
+	protected $counter = 0;
 
 	public function render() {
-		$field = $this->field;
-		$names = $this->get_object_terms();
-
-		$saved_terms = is_wp_error( $names ) || empty( $names )
-			? $field->get_default()
-			: wp_list_pluck( $names, 'slug' );
-		$terms       = $this->get_terms();
-		$name        = $this->_name() . '[]';
-		$options     = ''; $i = 1;
-
-		if ( ! $terms ) {
-			$options .= sprintf( '<li><label>%s</label></li>', esc_html( $this->_text( 'no_terms_text', esc_html__( 'No terms', 'cmb2' ) ) ) );
-		} else {
-
-			foreach ( $terms as $term ) {
-				$args = array(
-					'value' => $term->slug,
-					'label' => $term->name,
-					'type' => 'checkbox',
-					'name' => $name,
-				);
-
-				if ( is_array( $saved_terms ) && in_array( $term->slug, $saved_terms ) ) {
-					$args['checked'] = 'checked';
-				}
-				$options .= $this->list_input( $args, $i );
-				$i++;
-			}
-		}
-
-		$classes = false === $field->args( 'select_all_button' )
-			? 'cmb2-checkbox-list no-select-all cmb2-list'
-			: 'cmb2-checkbox-list cmb2-list';
-
 		return $this->rendered(
-			$this->types->radio( array( 'class' => $classes, 'options' => $options ), 'taxonomy_multicheck' )
+			$this->types->radio( array(
+				'class'   => $this->get_wrapper_classes(),
+				'options' => $this->get_term_options(),
+			), 'taxonomy_multicheck' )
 		);
 	}
+
+	protected function get_term_options() {
+		$all_terms = $this->get_terms();
+
+		if ( ! $all_terms || is_wp_error( $all_terms ) ) {
+			return $this->no_terms_result( $all_terms );
+		}
+
+		return $this->loop_terms( $all_terms, $this->get_object_term_or_default() );
+	}
+
+	protected function loop_terms( $all_terms, $saved_terms ) {
+		$options = '';
+		foreach ( $all_terms as $term ) {
+			$options .= $this->list_term_input( $term, $saved_terms );
+		}
+
+		return $options;
+	}
+
+	protected function list_term_input( $term, $saved_terms ) {
+		$args = array(
+			'value' => $term->slug,
+			'label' => $term->name,
+			'type'  => 'checkbox',
+			'name'  => $this->_name() . '[]',
+		);
+
+		if ( is_array( $saved_terms ) && in_array( $term->slug, $saved_terms ) ) {
+			$args['checked'] = 'checked';
+		}
+
+		return $this->list_input( $args, ++$this->counter );
+	}
+
+	public function get_object_term_or_default() {
+		$saved_terms = $this->get_object_terms();
+
+		return is_wp_error( $saved_terms ) || empty( $saved_terms )
+			? $this->field->get_default()
+			: wp_list_pluck( $saved_terms, 'slug' );
+	}
+
+	protected function get_wrapper_classes() {
+		$classes = 'cmb2-checkbox-list cmb2-list';
+		if ( false === $this->field->args( 'select_all_button' ) ) {
+			$classes .= 'no-select-all';
+		}
+
+		return $classes;
+
+	}
+
 }

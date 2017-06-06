@@ -15,9 +15,9 @@ if ( ! class_exists( 'WP_REST_Controller' ) ) {
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
@@ -37,6 +37,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * The current request object
+	 *
 	 * @var WP_REST_Request $request
 	 * @since 2.2.3
 	 */
@@ -44,6 +45,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * The current server object
+	 *
 	 * @var WP_REST_Server $server
 	 * @since 2.2.3
 	 */
@@ -51,6 +53,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Box object id
+	 *
 	 * @var   mixed
 	 * @since 2.2.3
 	 */
@@ -58,6 +61,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Box object type
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -79,6 +83,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * The initial route
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -86,6 +91,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Defines which endpoint the initial request is.
+	 *
 	 * @var string $request_type
 	 * @since 2.2.3
 	 */
@@ -93,6 +99,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Constructor
+	 *
 	 * @since 2.2.3
 	 */
 	public function __construct( WP_REST_Server $wp_rest_server ) {
@@ -214,8 +221,8 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 *
 	 * @since 2.2.3
 	 *
-	 * @param  mixed            $item     WordPress representation of the item.
-	 * @param  WP_REST_Request  $request  Request object.
+	 * @param  mixed           $item     WordPress representation of the item.
+	 * @param  WP_REST_Request $request  Request object.
 	 * @return WP_REST_Response $response
 	 */
 	public function prepare_item_for_response( $data, $request = null ) {
@@ -247,7 +254,9 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_rest_box( $request, $request_type );
 
 		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_read ) {
-			$this->rest_box = new WP_Error( 'cmb2_rest_no_read_error', __( 'This box does not have read permissions.', 'cmb2' ), array( 'status' => 403 ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_no_read_error', __( 'This box does not have read permissions.', 'cmb2' ), array(
+				'status' => 403,
+			) );
 		}
 	}
 
@@ -265,7 +274,9 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 		$this->initiate_rest_box( $request, $request_type );
 
 		if ( ! is_wp_error( $this->rest_box ) && ! $this->rest_box->rest_edit ) {
-			$this->rest_box = new WP_Error( 'cmb2_rest_no_write_error', __( 'This box does not have write permissions.', 'cmb2' ), array( 'status' => 403 ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_no_write_error', __( 'This box does not have write permissions.', 'cmb2' ), array(
+				'status' => 403,
+			) );
 		}
 	}
 
@@ -286,7 +297,9 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 		if ( ! $this->rest_box ) {
 
-			$this->rest_box = new WP_Error( 'cmb2_rest_box_not_found_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ), array( 'status' => 403 ) );
+			$this->rest_box = new WP_Error( 'cmb2_rest_box_not_found_error', __( 'No box found by that id. A box needs to be registered with the "show_in_rest" parameter configured.', 'cmb2' ), array(
+				'status' => 403,
+			) );
 
 		} else {
 
@@ -362,19 +375,25 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 			'type'                 => 'object',
 			'properties'           => array(
 				'description' => array(
-					'description'  => __( 'A human-readable description of the object.', 'cmb2' ),
-					'type'         => 'string',
-					'context'      => array( 'view' ),
+					'description' => __( 'A human-readable description of the object.', 'cmb2' ),
+					'type'        => 'string',
+					'context'     => array(
+						'view',
 					),
-					'name'             => array(
-						'description'  => __( 'The id for the object.', 'cmb2' ),
-						'type'         => 'integer',
-						'context'      => array( 'view' ),
-					),
+				),
 				'name' => array(
-					'description'  => __( 'The title for the object.', 'cmb2' ),
-					'type'         => 'string',
-					'context'      => array( 'view' ),
+					'description' => __( 'The id for the object.', 'cmb2' ),
+					'type'        => 'integer',
+					'context'     => array(
+						'view',
+					),
+				),
+				'name' => array(
+					'description' => __( 'The title for the object.', 'cmb2' ),
+					'type'        => 'string',
+					'context'     => array(
+						'view',
+					),
 				),
 			),
 		);
@@ -384,12 +403,13 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 	/**
 	 * Return an array of contextual links for endpoint/object
+	 *
 	 * @link http://v2.wp-api.org/extending/linking/
 	 * @link http://www.iana.org/assignments/link-relations/link-relations.xhtml
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed  $object Object to build links from.
+	 * @param  mixed $object Object to build links from.
 	 *
 	 * @return array          Array of links
 	 */
