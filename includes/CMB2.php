@@ -185,7 +185,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 		// Ensures object_types is an array.
-		$this->set_prop( 'object_types', $types ) ;
+		$this->set_prop( 'object_types', $types );
 		$this->object_id( $object_id );
 		$this->mb_object_type();
 
@@ -1288,7 +1288,7 @@ class CMB2 extends CMB2_Base {
 	 * @since 2.1.0
 	 * @param array $fields          Array of fields to add.
 	 * @param mixed $parent_field_id Parent field id or null.
- 	 *
+	 *
 	 * @return CMB2
 	 */
 	protected function add_fields( $fields, $parent_field_id = null ) {
