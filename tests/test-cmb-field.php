@@ -525,7 +525,13 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		$field = $this->new_field( $args );
 		$val = '[{\"content\":\"This is a \\\"some\\\" content\"}]';
-		$modified = $field->save_field( $val );
-		$this->assertSame( wp_unslash( $val ), $field->get_data() );
+		$unslashed_val = wp_unslash( $val );
+
+		$field->save_field( $val );
+
+		$this->assertSame( $unslashed_val, $field->get_data() );
+
+		$field->save_field( $unslashed_val );
+		$this->assertSame( $unslashed_val, $field->get_data() );
 	}
 }
