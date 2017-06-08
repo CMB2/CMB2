@@ -535,7 +535,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 			$field->save_field( $test_val );
 
-			$this->assertSame( $unslashed_val, $field->get_data() );
+			$this->assertSame( $this->is_3_8() ? $test_val : $unslashed_val, $field->get_data() );
 
 			$field->save_field( $unslashed_val );
 			$this->assertSame( $unslashed_val, $field->get_data() );
