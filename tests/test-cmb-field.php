@@ -518,4 +518,14 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		$this->assertNotFalse( $modified );
 	}
+
+	public function test_cmb2_field_save_slashed() {
+		$args = $this->field_args;
+		$args['save_field'] = true;
+
+		$field = $this->new_field( $args );
+		$val = '[{\"content\":\"This is a \\\"some\\\" content\"}]';
+		$modified = $field->save_field( $val );
+		$this->assertSame( wp_unslash( $val ), $field->get_data() );
+	}
 }
