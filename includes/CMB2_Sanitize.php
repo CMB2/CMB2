@@ -37,7 +37,7 @@ class CMB2_Sanitize {
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
 		$this->field = $field;
-		$this->value = stripslashes_deep( $value ); // get rid of those evil magic quotes
+		$this->value = $value;
 	}
 
 	/**
