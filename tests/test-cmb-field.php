@@ -524,14 +524,21 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$args['save_field'] = true;
 
 		$field = $this->new_field( $args );
-		$val = '[{\"content\":\"This is a \\\"some\\\" content\"}]';
-		$unslashed_val = wp_unslash( $val );
 
-		$field->save_field( $val );
+		$tests = array(
+			'[{\"content\":\"This is a \\\"some\\\" content\"}]',
+			'¯\\\_(ツ)_/¯',
+		);
 
-		$this->assertSame( $unslashed_val, $field->get_data() );
+		foreach ( $tests as $test_val ) {
+			$unslashed_val = wp_unslash( $test_val );
 
-		$field->save_field( $unslashed_val );
-		$this->assertSame( $unslashed_val, $field->get_data() );
+			$field->save_field( $test_val );
+
+			$this->assertSame( $unslashed_val, $field->get_data() );
+
+			$field->save_field( $unslashed_val );
+			$this->assertSame( $unslashed_val, $field->get_data() );
+		}
 	}
 }
