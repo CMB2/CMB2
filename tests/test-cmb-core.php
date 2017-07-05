@@ -314,6 +314,29 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertEquals( $val, $new_value );
 	}
 
+	public function test_cmb2_with_empty_options() {
+		$opts = cmb2_options( 'cmb_empty_option' );
+		$this->assertInternalType( 'array', $opts->get_options() );
+	}
+
+	public function test_cmb2_get_option_with_empty_options() {
+		$opts = cmb2_options( 'cmb_empty_option' );
+		$this->assertFalse( $opts->get( 'nothing' ) );
+	}
+
+	public function test_cmb2_update_option_with_empty_options() {
+		$new_value = 'Van Anh';
+
+		cmb2_update_option( 'cmb_empty_option', 'my_name', $new_value );
+
+		$get = get_option( 'cmb_empty_option' );
+		$val = cmb2_get_option( 'cmb_empty_option', 'my_name' );
+
+		$this->assertEquals( $new_value, $get['my_name'] );
+		$this->assertEquals( $val, $get['my_name'] );
+		$this->assertEquals( $val, $new_value );
+	}
+
 	public function test_class_getters() {
 		$this->assertInstanceOf( 'CMB2_Ajax', cmb2_ajax() );
 		$this->assertInstanceOf( 'CMB2_Utils', cmb2_utils() );
