@@ -200,14 +200,14 @@ class CMB2_Option {
 			$test_get = apply_filters( "cmb2_override_option_get_{$this->key}", 'cmb2_no_override_option_get', $default, $this );
 
 			if ( 'cmb2_no_override_option_get' !== $test_get ) {
-				$this->options = $test_get;
+				$this->options = (array) $test_get;
 			} else {
 				// If no override, get the option
-				$this->options = get_option( $this->key, $default );
+				$this->options = (array) get_option( $this->key, $default );
 			}
 		}
 
-		return (array) $this->options;
+		return $this->options;
 	}
 
 }
