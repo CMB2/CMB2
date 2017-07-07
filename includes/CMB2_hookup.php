@@ -179,6 +179,14 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				? in_array( $taxonomy, $show_on_term_add )
 				: (bool) $show_on_term_add;
 
+			/**
+			 * Filter to determine if the term's fields should show in the "Add term" section.
+			 *
+			 * The dynamic portion of the hook name, $cmb_id, is the metabox id.
+			 *
+			 * @param bool   $show_on_add Default is the value of the new_term_section cmb parameter.
+			 * @param object $cmb         The CMB2 instance
+			 */
 			$show_on_add = apply_filters( "cmb2_show_on_term_add_form_{$this->cmb->cmb_id}", $show_on_add, $this->cmb );
 
 			// Display form in add-new section (unless specified not to)
@@ -290,7 +298,11 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$front = is_admin() ? '' : '-front';
 		$rtl   = is_rtl() ? '-rtl' : '';
 
-		// Filter required styles and register stylesheet
+		/**
+		 * Filters the registered style dependencies for the cmb2 stylesheet.
+		 *
+		 * @param array $dependencies The registered style dependencies for the cmb2 stylesheet.
+		 */
 		$dependencies = apply_filters( 'cmb2_style_dependencies', array() );
 		wp_register_style( 'cmb2-styles', CMB2_Utils::url( "css/cmb2{$front}{$rtl}{$min}.css" ), $dependencies );
 		wp_register_style( 'cmb2-display-styles', CMB2_Utils::url( "css/cmb2-display{$rtl}{$min}.css" ), $dependencies );
@@ -904,7 +916,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @return bool         Whether object can be saved
 	 */
 	public function can_save( $type = '' ) {
-		return apply_filters( 'cmb2_can_save', (
+
+		$can_save = (
 			$this->cmb->prop( 'save_fields' )
 			// check nonce
 			&& isset( $_POST[ $this->cmb->nonce() ] )
@@ -915,7 +928,15 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			&& ( $type && in_array( $type, $this->cmb->box_types() ) )
 			// Don't do updates during a switch-to-blog instance.
 			&& ! ( is_multisite() && ms_is_switched() )
-		) );
+		);
+
+		/**
+		 * Filter to determine if metabox is allowed to save.
+		 *
+		 * @param bool   $can_save Whether the current metabox can save.
+		 * @param object $cmb      The CMB2 instance
+		 */
+		return apply_filters( 'cmb2_can_save', $can_save, $this->cmb );
 	}
 
 	/**
@@ -962,6 +983,12 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_css( $handle = 'cmb2-styles' ) {
+
+		/**
+		 * Filter to determine if CMB2'S css should be enqueued.
+		 *
+		 * @param bool $enqueue_css Default is true.
+		 */
 		if ( ! apply_filters( 'cmb2_enqueue_css', true ) ) {
 			return false;
 		}
@@ -981,6 +1008,12 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since  2.0.0
 	 */
 	public static function enqueue_cmb_js() {
+
+		/**
+		 * Filter to determine if CMB2'S JS should be enqueued.
+		 *
+		 * @param bool $enqueue_js Default is true.
+		 */
 		if ( ! apply_filters( 'cmb2_enqueue_js', true ) ) {
 			return false;
 		}
