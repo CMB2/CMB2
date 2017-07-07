@@ -82,7 +82,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 		$results = array();
 		foreach ( $possibilities as $key => $expected ) {
-			$results[ $key ] = $this->compareHTMLstrings( $expected, $actual );
+			$results[ $key ] = $this->compare_strings( $expected, $actual );
 		}
 
 		if ( ! empty( $results[0] ) && ! empty( $results[1] ) ) {
@@ -122,22 +122,43 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		wp_die( $hook . ' die' );
 	}
 
-	protected function compareHTMLstrings( $expected_string, $string_to_test ) {
-		$compare = strcmp( $expected_string, $string_to_test );
+	public static function compare_strings( $orig_string, $new_string, $orig_label = 'Expected', $compare_label = 'Actual' ) {
+		$orig_length = strlen( $orig_string );
+		$new_length  = strlen( $new_string );
+		$compare     = strcmp( $orig_string, $new_string );
 
 		if ( 0 !== $compare ) {
 
-			$compare       = strspn( $expected_string ^ $string_to_test, "\0" );
-			$chars_to_show = 75;
-			$start         = ( $compare - 5 );
-			$pointer       = '|--->>';
-			$sep           = "\n" . str_repeat( '-', 75 );
+			$label_spacer = str_repeat( ' ', abs( strlen( $compare_label ) - strlen( $orig_label ) ) );
+			$compare_spacer = $orig_spacer = '';
+
+			if ( strlen( $compare_label ) > strlen( $orig_label ) ) {
+				$orig_spacer = $label_spacer;
+			} elseif ( strlen( $compare_label ) < strlen( $orig_label ) ) {
+				$compare_spacer = $label_spacer;
+			}
+
+			$compare      = strspn( $orig_string ^ $new_string, "\0" );
+			$chars_before = 15;
+			$chars_after  = 75;
+			$start        = ( $compare - $chars_before );
+			$pointer      = '| ----> |';
+			$ol           = '  ' . $orig_label . ':  ' . $orig_spacer;
+			$cl           = '  ' . $compare_label . ':  ' . $compare_spacer;
+			$sep          = "\n" . str_repeat( '-', $chars_after + $chars_before + strlen( $pointer ) + strlen( $ol ) + 2 );
 
 			$compare = sprintf(
-			    $sep . "\nFirst difference at position %d:\n\n  Expected: \t%s\n  Actual: \t%s\n" . $sep,
-			    $compare,
-			    substr( $expected_string, $start, 5 ) . $pointer . substr( $expected_string, $compare, $chars_to_show ),
-			    substr( $string_to_test, $start, 5 ) . $pointer . substr( $string_to_test, $compare, $chars_to_show )
+				$sep . '%8$s%8$s  First difference at position %1$d.%8$s%8$s  %9$s length: %2$d, %10$s length: %3$d%8$s%8$s%4$s%5$s%8$s%6$s%7$s%8$s' . $sep,
+				$compare,
+				$orig_length,
+				$new_length,
+				$ol,
+				substr( $orig_string, $start, 15 ) . $pointer . substr( $orig_string, $compare, $chars_after ),
+				$cl,
+				substr( $new_string, $start, 15 ) . $pointer . substr( $new_string, $compare, $chars_after ),
+				"\n",
+				$orig_label,
+				$compare_label
 			);
 		}
 
@@ -187,7 +208,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
 
-		$compare = $this->compareHTMLstrings( $expected_string, $string_to_test );
+		$compare = $this->compare_strings( $expected_string, $string_to_test );
 
 		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
 	}

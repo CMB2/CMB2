@@ -51,23 +51,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 			),
 		);
 
-		$this->option_metabox_array = array(
-			'id'            => 'options_page',
-			'title'         => 'Theme Options Metabox',
-			'show_on'    => array(
-				'options-page' => array( 'theme_options' ),
-			),
-			'fields'        => array(
-				'bg_color' => array(
-					'name'    => 'Site Background Color',
-					'desc'    => 'field description (optional)',
-					'id'      => 'bg_color',
-					'type'    => 'colorpicker',
-					'default' => '#ffffff',
-				),
-			),
-		);
-
 		$this->user_metabox_array = array(
 			'id'               => 'user_metabox',
 			'title'            => 'User Profile Metabox',
@@ -134,14 +117,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
-
-		$this->options_cmb = new CMB2( $this->option_metabox_array );
-
-		$this->opt_set = array(
-			'bg_color' => '#ffffff',
-			'my_name' => 'Justin',
-		);
-		add_option( $this->options_cmb->cmb_id, $this->opt_set );
 
 		$this->post_id = $this->factory->post->create();
 
@@ -285,33 +260,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 		remove_filter( 'cmb2_wrap_classes', array( __CLASS__, 'custom_classes_filter' ), 10, 2 );
 
 		$this->assertHTMLstringsAreEqual( $expected_form, $form_get );
-	}
-
-	public function test_cmb2_options() {
-		$opts = cmb2_options( $this->options_cmb->cmb_id );
-		$this->assertEquals( $opts->get_options(), $this->opt_set );
-	}
-
-	public function test_cmb2_get_option() {
-		$get = get_option( $this->options_cmb->cmb_id );
-		$val = cmb2_get_option( $this->options_cmb->cmb_id, 'my_name' );
-
-		$this->assertEquals( $this->opt_set['my_name'], $get['my_name'] );
-		$this->assertEquals( $val, $get['my_name'] );
-		$this->assertEquals( $val, $this->opt_set['my_name'] );
-	}
-
-	public function test_cmb2_update_option() {
-		$new_value = 'James';
-
-		cmb2_update_option( $this->options_cmb->cmb_id, 'my_name', $new_value );
-
-		$get = get_option( $this->options_cmb->cmb_id );
-		$val = cmb2_get_option( $this->options_cmb->cmb_id, 'my_name' );
-
-		$this->assertEquals( $new_value, $get['my_name'] );
-		$this->assertEquals( $val, $get['my_name'] );
-		$this->assertEquals( $val, $new_value );
 	}
 
 	public function test_class_getters() {

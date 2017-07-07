@@ -518,4 +518,27 @@ class Test_CMB2_Field extends Test_CMB2 {
 
 		$this->assertNotFalse( $modified );
 	}
+
+	public function test_cmb2_field_save_slashed() {
+		$args = $this->field_args;
+		$args['save_field'] = true;
+
+		$field = $this->new_field( $args );
+
+		$tests = array(
+			'[{\"content\":\"This is a \\\"some\\\" content\"}]',
+			'¯\\\_(ツ)_/¯',
+		);
+
+		foreach ( $tests as $test_val ) {
+			$unslashed_val = wp_unslash( $test_val );
+
+			$field->save_field( $test_val );
+
+			$this->assertSame( CMB2_Utils::wp_at_least( '3.8.1' ) ? $unslashed_val : $test_val, $field->get_data() );
+
+			$field->save_field( $unslashed_val );
+			$this->assertSame( $unslashed_val, $field->get_data() );
+		}
+	}
 }
