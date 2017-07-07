@@ -977,4 +977,39 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		return '£ ' . $field_args['type'];
 	}
 
+	public function test_maybe_custom_field_object() {
+		$cmb   = new CMB2( array(
+			'id' => 'field_test',
+			'fields' => array(
+				array(
+					'name' => 'Name',
+					'desc' => 'This is a description',
+					'id'   => 'field_test_field_custom',
+					'type' => 'test_custom',
+				),
+			),
+		) );
+
+		add_action( 'cmb2_render_test_custom', function() {
+			echo 'hey macarena!';
+		} );
+
+		$field = cmb2_get_field( 'field_test', 'field_test_field_custom', $this->post_id );
+
+		$types = new CMB2_Types( $field );
+
+		$this->assertSame( false, $types->maybe_custom_field_object( 'test_custom' ) );
+
+		$this->assertSame( 'hey macarena!', $this->capture_render( array( $types, 'render' ) ) );
+
+		add_filter( 'cmb2_render_class_test_custom', function() {
+			return 'CMB2_Type_Title';
+		} );
+
+		$this->assertInstanceOf( 'CMB2_Type_Title', $types->maybe_custom_field_object( 'test_custom' ) );
+
+		$expected = '<h5 class="cmb2-metabox-title" id="field-test-field-custom">Name</h5><p class="cmb2-metabox-description">This is a description</p>';
+
+		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
+	}
 }
