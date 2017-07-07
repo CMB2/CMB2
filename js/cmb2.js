@@ -426,8 +426,10 @@ window.CMB2 = window.CMB2 || {};
 			}
 		}
 
-		$elements.filter(':checked').prop( 'checked', false );
-		$elements.filter(':selected').prop( 'selected', false );
+		$elements.filter( ':checked' ).removeAttr( 'checked' );
+		$elements.find( ':checked' ).removeAttr( 'checked' );
+		$elements.filter( ':selected' ).removeAttr( 'selected' );
+		$elements.find( ':selected' ).removeAttr( 'selected', false );
 
 		if ( $row.find('h3.cmb-group-title').length ) {
 			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
