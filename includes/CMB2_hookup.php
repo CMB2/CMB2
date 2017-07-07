@@ -915,7 +915,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			&& ( $type && in_array( $type, $this->cmb->box_types() ) )
 			// Don't do updates during a switch-to-blog instance.
 			&& ! ( is_multisite() && ms_is_switched() )
-		) );
+		), $this->cmb );
 	}
 
 	/**
