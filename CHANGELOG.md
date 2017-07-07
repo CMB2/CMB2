@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 * Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
 * Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
 * Correct the before/after form hooks order. For more details see ([#954](https://github.com/CMB2/CMB2/pull/954)).
+* Fix regression with custom fields not properly repeating. Props [@desrosj](https://github.com/desrosj) ([#969](https://github.com/CMB2/CMB2/pull/969)). Fixes [#901](https://github.com/CMB2/CMB2/issues/901).
 
 ## 2.2.4 - 2017-02-27
 
