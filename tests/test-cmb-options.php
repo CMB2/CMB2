@@ -83,6 +83,17 @@ class Test_CMB2_Options extends Test_CMB2 {
 		$opts->set( $this->opt_set );
 	}
 
+	public function test_cmb2_remove_option_bad_value() {
+		$opts = cmb2_options( $this->options_cmb->cmb_id );
+		$opts->delete_option();
+
+		$val = $opts->remove( 'my_name' );
+
+		$this->assertSame( array(), $val );
+
+		$opts->set( $this->opt_set );
+	}
+
 	public function test_cmb2_update_option() {
 		$new_value = 'James';
 
