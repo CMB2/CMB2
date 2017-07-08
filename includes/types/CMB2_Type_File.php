@@ -81,7 +81,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 
 		$output .= '<div id="' . $field->id() . '-status" class="cmb2-media-status">';
 		if ( ! empty( $a['value'] ) ) {
-			$output .= $this->get_file_preview_output( $a );
+			$output .= $this->get_file_preview_output();
 		}
 		$output .= '</div>';
 
