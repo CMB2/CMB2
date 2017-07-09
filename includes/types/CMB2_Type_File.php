@@ -69,7 +69,8 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// This is not elegant, but compensates for CMB2_Types::_id
 		// automagically & inelegantly adding the data-iterator attribute.
 		// Single responsibility principle? pffft
-		$this->args['id'] = explode( '"', $this->args['id'] )[0];
+		$parts = explode( '"', $this->args['id'] );
+		$this->args['id'] = $parts[0];
 
 		$output .= sprintf(
 			'<input class="cmb2-upload-button button-secondary" type="button" value="%1$s" />',
