@@ -15,7 +15,6 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 	/**
 	 * Handles outputting an 'file' field
 	 *
-	 * @since  2.2.5
 	 * @param  array $args Override arguments
 	 * @return string      Form input element
 	 */

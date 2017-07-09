@@ -1237,7 +1237,7 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
-	 * Returns a cloned version of this field object with, but with
+	 * Returns a cloned version of this field object, but with
 	 * modified/overridden field arguments.
 	 *
 	 * @since  2.2.2

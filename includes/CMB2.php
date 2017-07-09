@@ -1271,18 +1271,6 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Get a new field object specific to this CMB2 object.
-	 *
-	 * @since  2.2.0
-	 * @param  array      $field_args  Metabox field config array.
-	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent).
-	 * @return CMB2_Field CMB2_Field object.
-	 */
-	protected function get_new_field( $field_args, $field_group = null ) {
-		return new CMB2_Field( $this->get_default_args( $field_args, $field_group ) );
-	}
-
-	/**
 	 * When fields are added in the old-school way, intitate them as they should be
 	 *
 	 * @since 2.1.0
