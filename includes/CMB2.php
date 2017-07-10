@@ -361,18 +361,6 @@ class CMB2 extends CMB2_Base {
 		/**
 		 * Hook after form form has been rendered
 		 *
-		 * @param array  $cmb_id      The current box ID.
-		 * @param int    $object_id   The ID of the current object.
-		 * @param string $object_type The type of object you are working with.
-		 *	                           Usually `post` (this applies to all post-types).
-		 *	                           Could also be `comment`, `user` or `options-page`.
-		 * @param array  $cmb         This CMB2 object.
-		 */
-		do_action( 'cmb2_after_form', $this->cmb_id, $object_id, $object_type, $this );
-
-		/**
-		 * Hook after form form has been rendered
-		 *
 		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
 		 *
 		 * The first dynamic portion of the hook name, $object_type, is the type of object
@@ -383,6 +371,18 @@ class CMB2 extends CMB2_Base {
 		 * @param array  $cmb         This CMB2 object
 		 */
 		do_action( "cmb2_after_{$object_type}_form_{$this->cmb_id}", $object_id, $this );
+
+		/**
+		 * Hook after form form has been rendered
+		 *
+		 * @param array  $cmb_id      The current box ID.
+		 * @param int    $object_id   The ID of the current object.
+		 * @param string $object_type The type of object you are working with.
+		 *	                           Usually `post` (this applies to all post-types).
+		 *	                           Could also be `comment`, `user` or `options-page`.
+		 * @param array  $cmb         This CMB2 object.
+		 */
+		do_action( 'cmb2_after_form', $this->cmb_id, $object_id, $object_type, $this );
 
 		echo "\n<!-- End CMB2 Fields -->\n";
 
@@ -1268,18 +1268,6 @@ class CMB2 extends CMB2_Base {
 		}
 
 		return $args;
-	}
-
-	/**
-	 * Get a new field object specific to this CMB2 object.
-	 *
-	 * @since  2.2.0
-	 * @param  array      $field_args  Metabox field config array.
-	 * @param  CMB2_Field $field_group (optional) CMB2_Field object (group parent).
-	 * @return CMB2_Field CMB2_Field object.
-	 */
-	protected function get_new_field( $field_args, $field_group = null ) {
-		return new CMB2_Field( $this->get_default_args( $field_args, $field_group ) );
 	}
 
 	/**

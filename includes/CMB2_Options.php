@@ -164,9 +164,11 @@ class CMB2_Option {
 	 * @return bool           Success/Failure
 	 */
 	public function set( $options = array() ) {
-		$this->options = ! empty( $options ) || empty( $options ) && empty( $this->key )
-			? $options
-			: $this->options;
+		if ( ! empty( $options ) || empty( $options ) && empty( $this->key ) ) {
+			$this->options = $options;
+		}
+
+		$this->options = wp_unslash( $this->options ); // get rid of those evil magic quotes
 
 		if ( empty( $this->key ) ) {
 			return false;
@@ -205,7 +207,9 @@ class CMB2_Option {
 			}
 		}
 
-		return (array) $this->options;
+		$this->options = (array) $this->options;
+
+		return $this->options;
 	}
 
 }

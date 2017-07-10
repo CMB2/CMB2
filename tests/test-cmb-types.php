@@ -700,7 +700,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field_id-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'file',
@@ -724,7 +724,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			$file_name = $field_type->get_file_name_from_path( $file_url );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field_id-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
+			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
 				$this->attachment_id,
 				$file_url,
 				$file_name
@@ -977,4 +977,39 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		return '£ ' . $field_args['type'];
 	}
 
+	public function test_maybe_custom_field_object() {
+		$cmb   = new CMB2( array(
+			'id' => 'field_test',
+			'fields' => array(
+				array(
+					'name' => 'Name',
+					'desc' => 'This is a description',
+					'id'   => 'field_test_field_custom',
+					'type' => 'test_custom',
+				),
+			),
+		) );
+
+		add_action( 'cmb2_render_test_custom', function() {
+			echo 'hey macarena!';
+		} );
+
+		$field = cmb2_get_field( 'field_test', 'field_test_field_custom', $this->post_id );
+
+		$types = new CMB2_Types( $field );
+
+		$this->assertSame( false, $types->maybe_custom_field_object( 'test_custom' ) );
+
+		$this->assertSame( 'hey macarena!', $this->capture_render( array( $types, 'render' ) ) );
+
+		add_filter( 'cmb2_render_class_test_custom', function() {
+			return 'CMB2_Type_Title';
+		} );
+
+		$this->assertInstanceOf( 'CMB2_Type_Title', $types->maybe_custom_field_object( 'test_custom' ) );
+
+		$expected = '<h5 class="cmb2-metabox-title" id="field-test-field-custom">Name</h5><p class="cmb2-metabox-description">This is a description</p>';
+
+		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
+	}
 }

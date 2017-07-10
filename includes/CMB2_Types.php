@@ -215,21 +215,26 @@ class CMB2_Types {
 	 * Checks for a custom field CMB2_Type_Base class to use for rendering.
 	 *
 	 * @since 2.2.4
-	 * @param string $fieldtype Non-existent field type name
+	 *
+	 * @param string $fieldtype Non-existent field type name.
 	 * @param array  $args      Optional field arguments.
-	 * @return CMB2_Type_Base   Type object.
+	 *
+	 * @return bool|CMB2_Type_Base Type object if custom field is an object, false if field was added with
+	 *                             `cmb2_render_{$field_type}` action.
+	 * @throws Exception if custom field type class does not extend CMB2_Type_Base.
 	 */
 	public function maybe_custom_field_object( $fieldtype, $args = array() ) {
 		if ( $render_class_name = $this->get_render_type_class( $fieldtype ) ) {
-
 			$this->type = new $render_class_name( $this, $args );
 
 			if ( ! ( $this->type instanceof CMB2_Type_Base ) ) {
 				throw new Exception( __( 'Custom CMB2 field type classes must extend CMB2_Type_Base.', 'cmb2' ) );
 			}
+
+			return $this->type;
 		}
 
-		return $this->type;
+		return false;
 	}
 
 	/**

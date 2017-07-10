@@ -175,20 +175,20 @@ window.CMB2 = window.CMB2 || {};
 		cmb.attach_id = isList ? $el.find( 'input[type="hidden"]' ).data( 'id' ) : $td.find( '.cmb2-upload-file-id' ).val();
 
 		if ( cmb.attach_id ) {
-			cmb._handleMedia( $td.find( 'input.cmb2-upload-file' ).attr('id'), isList, cmb.attach_id );
+			cmb._handleMedia( $td.find( 'input.cmb2-upload-file' ).attr( 'id' ), isList, cmb.attach_id );
 		}
 	};
 
-	cmb._handleMedia = function( formfield, isList ) {
+	cmb._handleMedia = function( id, isList ) {
 		if ( ! wp ) {
 			return;
 		}
 
-		var modal, media, handlers;
+		var media, handlers;
 
 		handlers          = cmb.mediaHandlers;
 		media             = cmb.media;
-		media.field       = formfield;
+		media.field       = id;
 		media.$field      = $id( media.field );
 		media.fieldData   = media.$field.data();
 		media.previewSize = media.fieldData.previewsize;
@@ -197,13 +197,13 @@ window.CMB2 = window.CMB2 || {};
 		media.isList      = isList;
 
 		// If this field's media frame already exists, reopen it.
-		if ( media.field in media.frames ) {
-			return media.frames[ media.field ].open();
+		if ( id in media.frames ) {
+			return media.frames[ id ].open();
 		}
 
 		// Create the media frame.
-		media.frames[ media.field ] = modal = wp.media( {
-			title: cmb.metabox().find('label[for="' + media.field + '"]').text(),
+		media.frames[ id ] = wp.media( {
+			title: cmb.metabox().find('label[for="' + id + '"]').text(),
 			library : media.fieldData.queryargs || {},
 			button: {
 				text: l10n.strings[ isList ? 'upload_files' : 'upload_file' ]
@@ -212,7 +212,7 @@ window.CMB2 = window.CMB2 || {};
 		} );
 
 		// Enable the additional media filters: https://github.com/CMB2/CMB2/issues/873
-		modal.states.first().set( 'filterable', 'all' );
+		media.frames[ id ].states.first().set( 'filterable', 'all' );
 
 		cmb.trigger( 'cmb_media_modal_init', media );
 
@@ -347,7 +347,7 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		handlers.selectFile = function() {
-			var selection = modal.state().get( 'selection' );
+			var selection = media.frames[ id ].state().get( 'selection' );
 			var type = isList ? 'list' : 'single';
 
 			if ( cmb.attach_id && isList ) {
@@ -360,7 +360,7 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		handlers.openModal = function() {
-			var selection = modal.state().get( 'selection' );
+			var selection = media.frames[ id ].state().get( 'selection' );
 			var attach;
 
 			if ( ! cmb.attach_id ) {
@@ -375,12 +375,12 @@ window.CMB2 = window.CMB2 || {};
 		};
 
 		// When a file is selected, run a callback.
-		modal
+		media.frames[ id ]
 			.on( 'select', handlers.selectFile )
 			.on( 'open', handlers.openModal );
 
 		// Finally, open the modal
-		modal.open();
+		media.frames[ id ].open();
 	};
 
 	cmb.handleRemoveMedia = function( evt ) {
@@ -426,8 +426,10 @@ window.CMB2 = window.CMB2 || {};
 			}
 		}
 
-		$elements.filter(':checked').prop( 'checked', false );
-		$elements.filter(':selected').prop( 'selected', false );
+		$elements.filter( ':checked' ).removeAttr( 'checked' );
+		$elements.find( ':checked' ).removeAttr( 'checked' );
+		$elements.filter( ':selected' ).removeAttr( 'selected' );
+		$elements.find( ':selected' ).removeAttr( 'selected', false );
 
 		if ( $row.find('h3.cmb-group-title').length ) {
 			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
