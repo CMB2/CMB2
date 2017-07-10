@@ -53,7 +53,7 @@ Sidebar Placement Adjustments
 	}
 
 	.cmb-th,
-	.cmb-td,
+	.cmb-td:not(.cmb-remove-row),
 	.cmb-th + .cmb-td {
 		width: 100%;
 		display: block;
@@ -62,10 +62,6 @@ Sidebar Placement Adjustments
 
 	.closed .inside {
 		display: none;
-	}
-
-	.cmb-td .cmb-td {
-		padding-bottom: 1em;
 	}
 
 	.cmb-th {
@@ -142,23 +138,9 @@ Sidebar Placement Adjustments
 		padding-bottom: 0;
 	}
 
-	.cmb-type-colorpicker .cmb-repeat-row {
-		.cmb-td {
-			width: auto;
-			clear: none;
-			float: left;
-			padding-top: 0;
-			&.cmb-remove-row {
-				float: right;
-				margin: 0;
-			}
-		}
-	}
-
 	.cmb2-upload-button {
 		clear: both;
 		margin-top: 12px;
 	}
 
 }
-
