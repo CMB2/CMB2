@@ -810,45 +810,57 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function render_field_callback() {
 
-		// If field is requesting to not be shown on the front-end
-		if ( ! is_admin() && ! $this->args( 'on_front' ) ) {
-			return;
-		}
-
-		// If field is requesting to be conditionally shown
-		if ( ! $this->should_show() ) {
-			return;
-		}
-
-		$this->peform_param_callback( 'before_row' );
-
-		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
-
-		if ( ! $this->args( 'show_names' ) ) {
-			echo "\n\t<div class=\"cmb-td\">\n";
-
-			$this->peform_param_callback( 'label_cb' );
-
-		} else {
-
-			if ( $this->get_param_callback_result( 'label_cb' ) ) {
-				echo '<div class="cmb-th">', $this->peform_param_callback( 'label_cb' ), '</div>';
+		// Ok, callback is good, let's run it and store the result.
+        ob_start();
+			
+			// If field is requesting to not be shown on the front-end
+			if ( ! is_admin() && ! $this->args( 'on_front' ) ) {
+				return;
 			}
 
-			echo "\n\t<div class=\"cmb-td\">\n";
-		}
+			// If field is requesting to be conditionally shown
+			if ( ! $this->should_show() ) {
+				return;
+			}
 
-		$this->peform_param_callback( 'before' );
+			$this->peform_param_callback( 'before_row' );
 
-		$types = new CMB2_Types( $this );
-		$types->render();
+			printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
 
-		$this->peform_param_callback( 'after' );
+			if ( ! $this->args( 'show_names' ) ) {
+				echo "\n\t<div class=\"cmb-td\">\n";
 
-		echo "\n\t</div>\n</div>";
+				$this->peform_param_callback( 'label_cb' );
 
-		$this->peform_param_callback( 'after_row' );
+			} else {
 
+				if ( $this->get_param_callback_result( 'label_cb' ) ) {
+					echo '<div class="cmb-th">', $this->peform_param_callback( 'label_cb' ), '</div>';
+				}
+
+				echo "\n\t<div class=\"cmb-td\">\n";
+			}
+
+			$this->peform_param_callback( 'before' );
+
+			$types = new CMB2_Types( $this );
+			$types->render();
+
+			$this->peform_param_callback( 'after' );
+
+			echo "\n\t</div>\n</div>";
+
+			$this->peform_param_callback( 'after_row' );
+
+		// Grab the result from the output buffer and store it.
+        $echoed = ob_get_clean();
+
+        $outer_html =  $echoed ? $echoed : $returned;
+
+        $outer_html = apply_filters( 'cmb_output_html_row', $outer_html, $field_args, $field);            
+
+        echo $outer_html;	
+        
 		// For chaining
 		return $this;
 	}
