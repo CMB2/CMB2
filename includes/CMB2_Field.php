@@ -810,8 +810,7 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function render_field_callback() {
 
-		// Ok, callback is good, let's run it and store the result.
-        ob_start();
+		
 			
 			// If field is requesting to not be shown on the front-end
 			if ( ! is_admin() && ! $this->args( 'on_front' ) ) {
@@ -824,7 +823,10 @@ class CMB2_Field extends CMB2_Base {
 			}
 
 			$this->peform_param_callback( 'before_row' );
-
+			
+			// Ok, callback is good, let's run it and store the result.
+        		ob_start();
+			
 			printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
 
 			if ( ! $this->args( 'show_names' ) ) {
@@ -852,14 +854,14 @@ class CMB2_Field extends CMB2_Base {
 
 			$this->peform_param_callback( 'after_row' );
 
-		// Grab the result from the output buffer and store it.
-        $echoed = ob_get_clean();
+			// Grab the result from the output buffer and store it.
+			$echoed = ob_get_clean();
 
-        $outer_html =  $echoed ? $echoed : $returned;
+			$outer_html =  $echoed ? $echoed : $returned;
 
-        $outer_html = apply_filters( 'cmb_output_html_row', $outer_html, $field_args, $field);            
+			$outer_html = apply_filters( 'cmb_output_html_row', $outer_html, $field_args, $field);            
 
-        echo $outer_html;	
+			echo $outer_html;	
         
 		// For chaining
 		return $this;
