@@ -149,9 +149,9 @@ if ( ! class_exists( 'CMB2_Bootstrap_225_Trunk', false ) ) {
 			$this->l10ni18n();
 
 			// Include helper functions.
-			require_once 'includes/CMB2_Base.php';
-			require_once 'includes/CMB2.php';
-			require_once 'includes/helper-functions.php';
+			require_once CMB2_DIR . 'includes/CMB2_Base.php';
+			require_once CMB2_DIR . 'includes/CMB2.php';
+			require_once CMB2_DIR . 'includes/helper-functions.php';
 
 			// Now kick off the class autoloader.
 			spl_autoload_register( 'cmb2_autoload_classes' );
