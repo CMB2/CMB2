@@ -652,10 +652,6 @@ function yourprefix_register_theme_options_metabox() {
 		'id'       => $option_key . 'page',
 		'title'    => esc_html__( 'Theme Options', 'cmb2' ),
 		'icon_url' => 'dashicons-palmtree', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'show_on'  => array(
-			// Important, don't remove.
-			'options-page' => $option_key,
-		),
 		// 'menu_title'      => esc_html__( 'Options', 'cmb2' ), // Falls back to 'title' (above).
 		// 'parent_slug'     => 'themes.php', // Make options page a submenu item of the themes menu.
 		// 'capability'      => 'manage_options', // Cap required to view options-page.

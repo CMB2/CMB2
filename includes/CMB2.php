@@ -110,6 +110,7 @@ class CMB2 extends CMB2_Base {
 		 */
 
 		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		'option_key'       => '', // The actual option key and admin menu page slug.
 		'parent_slug'      => '', // Used as first param in add_submenu_page().
 		'capability'       => 'manage_options', // Cap required to view options-page.
 		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
@@ -177,16 +178,14 @@ class CMB2 extends CMB2_Base {
 		$this->meta_box = wp_parse_args( $config, $this->mb_defaults );
 		$this->meta_box['fields'] = array();
 
-		$types = $this->box_types();
+		// Ensures object_types is an array.
+		$this->set_prop( 'object_types', $this->box_types() ) ;
+		$this->object_id( $object_id );
 
 		if ( $this->is_options_page_mb() ) {
-			$this->mb_object_type = 'options-page';
-			$types[] = $this->mb_object_type;
+			$this->init_options_mb();
 		}
 
-		// Ensures object_types is an array.
-		$this->set_prop( 'object_types', $types ) ;
-		$this->object_id( $object_id );
 		$this->mb_object_type();
 
 		if ( ! empty( $config['fields'] ) && is_array( $config['fields'] ) ) {
@@ -1037,13 +1036,83 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Initates the object types and option key for an options page metabox.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @return void
+	 */
+	public function init_options_mb() {
+		$keys  = $this->options_page_key( true );
+		$types = $this->box_types();
+
+		if ( empty( $keys ) ) {
+			$keys = '';
+			$types = $this->deinit_options_mb( $types );
+		} else {
+
+			// Make sure 'options-page' is one of the object types.
+			$types[] = 'options-page';
+		}
+
+		// Set/Reset the option_key property.
+		$this->set_prop( 'option_key', $keys );
+
+		// Reset the object types.
+		$this->set_prop( 'object_types', array_unique( $types ) ) ;
+	}
+
+	/**
+	 * If object-page initiation failed, remove traces options page setup.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @return void
+	 */
+	protected function deinit_options_mb( $types ) {
+		if ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] ) {
+			unset( $this->meta_box['show_on']['key'] );
+		}
+
+		if ( array_key_exists( 'options-page', $this->meta_box['show_on'] ) ) {
+			unset( $this->meta_box['show_on']['options-page'] );
+		}
+
+		$index = array_search( 'options-page', $types );
+
+		if ( false !== $index ) {
+			unset( $types[ $index ] );
+		}
+
+		return $types;
+	}
+
+	/**
 	 * Determines if metabox is for an options page
 	 *
 	 * @since  1.0.1
 	 * @return boolean True/False.
 	 */
 	public function is_options_page_mb() {
-		return ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] || array_key_exists( 'options-page', $this->meta_box['show_on'] ) );
+		return (
+			// 'show_on' values checked for back-compatibility.
+			$this->is_old_school_options_page_mb()
+			|| in_array( 'options-page', $this->box_types() )
+		);
+	}
+
+	/**
+	 * Determines if metabox uses old-schoold options page config.
+	 *
+	 * @since  2.2.5
+	 * @return boolean True/False.
+	 */
+	public function is_old_school_options_page_mb() {
+		return (
+			// 'show_on' values checked for back-compatibility.
+			isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key']
+			|| array_key_exists( 'options-page', $this->meta_box['show_on'] )
+		);
 	}
 
 	/**
@@ -1054,41 +1123,54 @@ class CMB2 extends CMB2_Base {
 	 * @return bool
 	 */
 	public function doing_options_page() {
-		$key = $this->options_page_key();
-		if ( empty( $key ) ) {
-			return false;
+		$found_key = false;
+		$keys = $this->options_page_key( true );
+
+		if ( empty( $keys ) ) {
+			return $found_key;
 		}
 
-		$doing_page = (
-			! empty( $_GET['page'] ) && $_GET['page'] === $key
-			|| ! empty( $_POST['action'] ) && $_POST['action'] === $key
-		);
+		if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], $keys ) ) {
+			$found_key = $_GET['page'];
+		}
 
-		return $doing_page ? $key : false;
+		if ( ! empty( $_POST['action'] ) && in_array( $_POST['action'], $keys ) ) {
+			$found_key = $_POST['action'];
+		}
+
+		return $found_key ? $found_key : false;
 	}
 
 	/**
 	 * Get the options page key.
 	 *
 	 * @since  2.2.5
-	 * @return array
+	 * @param  bool  $return_array Whether to return an array value (since there could be multiple keys).
+	 * @return string|array
 	 */
-	public function options_page_key() {
+	public function options_page_key( $return_array = false ) {
 		$key = '';
 		if ( ! $this->is_options_page_mb() ) {
 			return $key;
 		}
 
+		$values = null;
 		if ( ! empty( $this->meta_box['show_on']['value'] ) ) {
 			$values = $this->meta_box['show_on']['value'];
 		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
 			$values = $this->meta_box['show_on']['options-page'];
+		} elseif ( $this->prop( 'option_key') ) {
+			$values = $this->prop( 'option_key');
 		}
 
 		if ( is_string( $values ) ) {
 			$key = $values;
-		} elseif ( is_array( $values ) ) {
+		} elseif ( is_array( $values ) && ! $return_array ) {
 			$key = array_shift( $values );
+		}
+
+		if ( $return_array && ! is_array( $key ) ) {
+			$key = array( $key );
 		}
 
 		return $key;

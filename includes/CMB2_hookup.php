@@ -46,12 +46,12 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	protected $columns = array();
 
 	/**
-	 * Options page key.
+	 * Options page keys.
 	 *
 	 * @var   string
 	 * @since 2.2.5
 	 */
-	protected $option_key = '';
+	protected $option_keys = '';
 
 	/**
 	 * Constructor
@@ -207,30 +207,34 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	public function options_page_hooks() {
-		$this->option_key = $this->cmb->options_page_key();
+		$this->option_keys = $this->cmb->options_page_key();
+		wp_die( '<xmp>'. __LINE__ .') $this->option_keys: '. print_r( $this->option_keys, true ) .'</xmp>' );
 
-		if ( empty( $this->option_key ) ) {
+		if ( empty( $this->option_keys ) ) {
 			return;
 		}
 
-		// Register setting to cmb2 group.
-		register_setting( 'cmb2', $this->option_key );
+		foreach ( $this->option_keys as $key ) {
 
-		// Handle saving the data.
-		add_action( 'admin_post_' . $this->option_key, array( $this, 'save_options' ) );
+			// Register setting to cmb2 group.
+			register_setting( 'cmb2', $key );
 
-		// Optionally network_admin_menu.
-		$hook = $this->cmb->prop( 'admin_menu_hook' );
+			// Handle saving the data.
+			add_action( 'admin_post_' . $key, array( $this, 'save_options' ) );
 
-		// Hook in to add our menu.
-		add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+			// Optionally network_admin_menu.
+			$hook = $this->cmb->prop( 'admin_menu_hook' );
 
-		// If in the network admin, need to use get/update_site_option.
-		if ( 'network_admin_menu' === $hook ) {
-			// Override CMB's getter.
-			add_filter( "cmb2_override_option_get_{$this->option_key}", array( $this, 'network_get_override' ), 10, 2 );
-			// Override CMB's setter.
-			add_filter( "cmb2_override_option_save_{$this->option_key}", array( $this, 'network_update_override' ), 10, 2 );
+			// Hook in to add our menu.
+			add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+
+			// If in the network admin, need to use get/update_site_option.
+			if ( 'network_admin_menu' === $hook ) {
+				// Override CMB's getter.
+				add_filter( "cmb2_override_option_get_{$key}", array( $this, 'network_get_override' ), 10, 2 );
+				// Override CMB's setter.
+				add_filter( "cmb2_override_option_save_{$key}", array( $this, 'network_update_override' ), 10, 2 );
+			}
 		}
 	}
 
