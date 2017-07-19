@@ -3,7 +3,7 @@ Contributors:      jtsternberg, webdevstudios, zao, tw2113
 Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
-Tested up to:      4.7.2
+Tested up to:      4.8.0
 Stable tag:        2.2.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
