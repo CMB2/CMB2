@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 * The `cmb2_can_save` filter now passes the CMB2 object as the 2nd parameter. Props [@Arno33](https://github.com/Arno33) ([#994](https://github.com/CMB2/CMB2/pull/994)).
 * Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
 * Improved cohesive styles for repeatable fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#819](https://github.com/CMB2/CMB2/pull/819)).
+* Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 
 ### Bug Fixes
 
