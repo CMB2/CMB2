@@ -824,8 +824,8 @@ class CMB2_Field extends CMB2_Base {
 
 			$this->peform_param_callback( 'before_row' );
 			
-			// Ok, callback is good, let's run it and store the result.
-        		ob_start();
+			// Ok, let's run it and store the result.
+        	ob_start();
 			
 			printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
 
@@ -857,9 +857,15 @@ class CMB2_Field extends CMB2_Base {
 			// Grab the result from the output buffer and store it.
 			$echoed = ob_get_clean();
 
-			$outer_html =  $echoed ? $echoed : $returned;
+			$outer_html =  $echoed ? $echoed : "";
 
-			$outer_html = apply_filters( 'cmb_output_html_row', $outer_html, $field_args, $field);            
+			/**
+			 * Filter Output row
+			 *
+			 * @param string            $outer_html Output row in HTML
+		 	 * @param CMB2_Field object $field   This field object
+			 */
+			$outer_html = apply_filters( 'cmb_output_html_row', $outer_html, $this);            
 
 			echo $outer_html;	
         
