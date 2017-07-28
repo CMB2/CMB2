@@ -393,8 +393,8 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.media.field = $this.attr('rel');
 
-		cmb.metabox().find( 'input#' + cmb.media.field ).val('');
-		cmb.metabox().find( 'input#' + cmb.media.field + '_id' ).val('');
+		cmb.metabox().find( 'input[id="' + cmb.media.field +'"]' ).val('');
+		cmb.metabox().find( 'input[id="' + cmb.media.field + '_id' +'"]' ).val('');
 		$this.parents('.cmb2-media-status').html('');
 
 		return false;
