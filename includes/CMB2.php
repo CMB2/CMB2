@@ -1162,7 +1162,7 @@ class CMB2 extends CMB2_Base {
 			$values = $this->prop( 'option_key');
 		}
 
-		if ( is_string( $values ) ) {
+		if ( $values ) {
 			$key = $values;
 		}
 
