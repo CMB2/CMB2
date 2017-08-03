@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 * The `cmb2_can_save` filter now passes the CMB2 object as the 2nd parameter. Props [@Arno33](https://github.com/Arno33) ([#994](https://github.com/CMB2/CMB2/pull/994)).
 * Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
 * Improved cohesive styles for repeatable fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#819](https://github.com/CMB2/CMB2/pull/819)).
+* Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
 * Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 
 ### Bug Fixes
@@ -23,6 +24,7 @@ All notable changes to this project will be documented in this file.
 * Fix regression with custom fields not properly repeating. Props [@desrosj](https://github.com/desrosj) ([#969](https://github.com/CMB2/CMB2/pull/969)). Fixes [#901](https://github.com/CMB2/CMB2/issues/901).
 * Fix "Illegal string offset" notices when `CMB2_Option` methods are called when the option value is empty, as well as additional unit tests for the `CMB2_Option` class. Props [@anhskohbo](https://github.com/anhskohbo) ([#993](https://github.com/CMB2/CMB2/pull/993)).
 * Fix bug where select fields or checkbox fields occasionally would retain previous group's value when adding new groups. Fixes [#853](https://github.com/CMB2/CMB2/issues/853).
+* Fix JS to prevent meta keys with `|` or `/` from breaking file fields. Props [@lipemat](https://github.com/lipemat) ([#1003](https://github.com/CMB2/CMB2/pull/1003)).
 
 ## 2.2.4 - 2017-02-27
 
