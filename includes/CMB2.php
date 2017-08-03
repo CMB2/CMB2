@@ -1043,7 +1043,7 @@ class CMB2 extends CMB2_Base {
 	 * @return void
 	 */
 	public function init_options_mb() {
-		$keys  = $this->options_page_key( true );
+		$keys  = $this->options_page_keys();
 		$types = $this->box_types();
 
 		if ( empty( $keys ) ) {
@@ -1124,7 +1124,7 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function doing_options_page() {
 		$found_key = false;
-		$keys = $this->options_page_key( true );
+		$keys = $this->options_page_keys();
 
 		if ( empty( $keys ) ) {
 			return $found_key;
@@ -1145,10 +1145,9 @@ class CMB2 extends CMB2_Base {
 	 * Get the options page key.
 	 *
 	 * @since  2.2.5
-	 * @param  bool  $return_array Whether to return an array value (since there could be multiple keys).
 	 * @return string|array
 	 */
-	public function options_page_key( $return_array = false ) {
+	public function options_page_keys() {
 		$key = '';
 		if ( ! $this->is_options_page_mb() ) {
 			return $key;
@@ -1165,11 +1164,9 @@ class CMB2 extends CMB2_Base {
 
 		if ( is_string( $values ) ) {
 			$key = $values;
-		} elseif ( is_array( $values ) && ! $return_array ) {
-			$key = array_shift( $values );
 		}
 
-		if ( $return_array && ! is_array( $key ) ) {
+		if ( ! is_array( $key ) ) {
 			$key = array( $key );
 		}
 
