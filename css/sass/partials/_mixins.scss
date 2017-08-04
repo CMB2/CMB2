@@ -26,16 +26,8 @@
 
 	label {
 		display: block;
-		margin-top: 0em;
-		padding-bottom: 5px;
-
-		&:after {
-			border-bottom: 1px solid $light-gray;
-			content: '';
-			clear: both;
-			display: block;
-			padding-top: .4em;
-		}
+		margin-top: 0;
+		margin-bottom: 0.5em;
 	}
 }
 
