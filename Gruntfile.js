@@ -314,6 +314,7 @@ module.exports = function(grunt) {
 	var tests   = ['jshint', 'phpunit'];
 
 	grunt.registerTask( 'styles', asciify.concat( styles ) );
+	grunt.registerTask( 'css', asciify.concat( styles ) );
 	grunt.registerTask( 'js', asciify.concat( js ) );
 	grunt.registerTask( 'tests', asciify.concat( tests ) );
 	grunt.registerTask( 'default', asciify.concat( styles, js, tests ) );
