@@ -16,7 +16,6 @@ All notable changes to this project will be documented in this file.
 * Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
 * Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 * Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
-* Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 
 ### Bug Fixes
 
