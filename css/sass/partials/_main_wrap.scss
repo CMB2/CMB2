@@ -120,9 +120,7 @@ Main Wrap
 		}
 	}
 
-	// /**
-	//  * Color picker
-	//  */
+	// Color picker
 	.wp-color-result,
 	.wp-picker-input-wrap {
 		vertical-align: middle;
@@ -145,7 +143,7 @@ Main Wrap
 
 		&.cmb-repeat .cmb2-metabox-description {
 			padding-top: 0;
-			padding-bottom: 1.8em;
+			padding-bottom: 1em;
 		}
 	}
 
@@ -183,10 +181,11 @@ Main Wrap
 .cmb-repeatable-grouping {
 	border: 1px solid $light-gray;
 	padding: 0 1em;
-	max-width: 1000px;
+
 	&.cmb-row {
 		margin: 0 0 0.8em;
 	}
+
 	+ .cmb-repeatable-grouping {
 	}
 }
