@@ -1,0 +1,41 @@
+// Better display on edit-tags.php
+.edit-tags-php {
+	.cmb-th {
+		font-size: 12px;
+		font-weight: inherit;
+	}
+
+	.cmb-th,
+	.cmb-th + .cmb-td {
+		width: 100%;
+		padding: 0;
+		float: none;
+	}
+
+	.cmb-row {
+		&:not(.cmb-repeatable-grouping) {
+			margin: 1em 0;
+			padding: 0;
+		}
+
+		.cmb-td > span.cmb2-metabox-description {
+			display: block;
+			font-size: 13px;
+			margin: 5px 0 0;
+			color: #666;
+		}
+
+		input + label {
+			display: inline-block;
+		}
+	}
+
+	.cmb2-metabox-title {
+		font-size: 1.1em;
+
+		+ p.cmb2-metabox-description {
+			padding-top: 0;
+		}
+	}
+
+}
