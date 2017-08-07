@@ -5,9 +5,6 @@
  * @see    https://github.com/CMB2/CMB2
  */
 
- // TODO: fix this.
- // JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
-
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
@@ -461,15 +458,9 @@ window.CMB2 = window.CMB2 || {};
 			attrs       = {
 				id: newID,
 				name: newName,
-				// value: '',
 				'data-iterator': cmb.idNumber,
 			};
 
-		}
-
-		// Clear out old values
-		if ( undefined !== typeof( oldVal ) && oldVal || checkable ) {
-			attrs.value = checkable ? checkable : '';
 		}
 
 		// Clear out textarea values
