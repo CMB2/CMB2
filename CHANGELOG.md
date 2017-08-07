@@ -16,6 +16,19 @@ All notable changes to this project will be documented in this file.
 * Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
 * Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 * Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
+* Change language throught to reflect CMB2's move to its own organization.
+* Updated several CMB2 methods to return the CMB2 object (for method chaining). Methods include: 
+	* `CMB2::show_form()`
+	* `CMB2::render_form_open()`
+	* `CMB2::render_form_close()`
+	* `CMB2::render_group_row()`
+	* `CMB2::render_hidden_fields()`
+	* `CMB2::save_fields()`
+	* `CMB2::process_fields()`
+	* `CMB2::process_field()`
+	* `CMB2::pre_process()`
+	* `CMB2::after_save()`
+	* `CMB2::add_fields()`
 
 ### Bug Fixes
 
