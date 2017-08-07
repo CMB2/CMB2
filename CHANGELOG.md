@@ -1,11 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
+## Unreleased
+
+## [2.2.5 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5]
 
 ### Enhancements
 
-* Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/72541e5351841635cb1c7568a09395d6d0786440/example-functions.php#L640-L681). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
+* Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/v2.2.5/example-functions.php#L640-L683). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
 * Improved Options Page styling. Props [@anhskohbo](https://github.com/anhskohbo) ([#1006](https://github.com/CMB2/CMB2/pull/1006)).
 * Improved cohesive styles for repeatable fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#819](https://github.com/CMB2/CMB2/pull/819)).
 * New field types, `'taxonomy_radio_hierarchical'`, and `'taxonomy_multicheck_hierarchical'`, for displaying taxonomy options in a hierarchial layout. Props to [eriktelepovsky](https://github.com/eriktelepovsky) for the [working code](https://github.com/CMB2/CMB2/issues/640#issuecomment-246938690). ([#640](https://github.com/CMB2/CMB2/issues/640))
@@ -46,7 +48,7 @@ All notable changes to this project will be documented in this file.
 * Fix jQuery Migrate's `jQuery.fn.attr('value', val) no longer sets properties` warning.
 * Fix issue with CMB2 being too aggressive with stripping slashes from values. Fixes [#981](https://github.com/CMB2/CMB2/issues/981).
 
-## 2.2.4 - 2017-02-27
+## [2.2.4 - 2017-02-27](https://github.com/CMB2/CMB2/releases/tag/v2.2.4)
 
 ### Enhancements
 
@@ -90,7 +92,7 @@ All notable changes to this project will be documented in this file.
 * Do not silence notices/errors in `CMB2_Utils::get_file_ext()`.
 * If `title` field type has no name value, then only output a span element (instead of a header element).
 
-## 2.2.3.1 - 2016-11-08
+## [2.2.3.1 - 2016-11-08](https://github.com/CMB2/CMB2/releases/tag/v2.2.3.1)
 
 ### Enhancements
 
@@ -102,7 +104,7 @@ All notable changes to this project will be documented in this file.
 * Fix `ReferenceError: tinyMCE is not defined` javascript errors (happening when trying to remove a repeatable field/group). Fixes [#790](https://github.com/CMB2/CMB2/issues/790), and [#730](https://github.com/CMB2/CMB2/issues/730).
 * Fix REST API `'show_in_rest'` examples in `example-functions.php`. Any REST API boxes/fields must use the `'cmb2_init'` hook (as opposed to the `'cmb2_admin_init'` hook).
 
-## 2.2.3 - 2016-10-25
+## [2.2.3 - 2016-10-25](https://github.com/CMB2/CMB2/releases/tag/v2.2.3)
 
 ### Enhancements
 

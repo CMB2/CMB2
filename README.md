@@ -12,8 +12,8 @@
 **Homepage:**          [https://cmb2.io](https://cmb2.io)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
-**Tested up to:**      4.8.0  
-**Stable tag:**        2.2.4  
+**Tested up to:**      4.8.1  
+**Stable tag:**        2.2.5  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
 
@@ -127,6 +127,5 @@ If including the library in your plugin or theme:
 
 ## Known Issues
 
-* Metabox containing WYSIWYG editor cannot be moved or used in a repeatable way at this time (this is a TinyMCE issue).
 * Not all fields work well in a repeatable group.
 
