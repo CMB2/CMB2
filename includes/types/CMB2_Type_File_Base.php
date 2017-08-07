@@ -6,14 +6,15 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * Determines if a file has a valid image extension
+	 *
 	 * @since  1.0.0
 	 * @param  string $file File url
 	 * @return bool         Whether file has a valid image extension
@@ -49,8 +50,9 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * file/file_list image wrap
+	 *
 	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
+	 * @param  array $args Array of arguments for output
 	 * @return string       Image wrap output
 	 */
 	public function img_status_output( $args ) {
@@ -65,8 +67,9 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * file/file_list file wrap
+	 *
 	 * @since  2.0.2
-	 * @param  array  $args Array of arguments for output
+	 * @param  array $args Array of arguments for output
 	 * @return string       File wrap output
 	 */
 	public function file_status_output( $args ) {
@@ -84,6 +87,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 	/**
 	 * Outputs the file/file_list underscore Javascript templates in the footer.
+	 *
 	 * @since  2.2.4
 	 * @return void
 	 */

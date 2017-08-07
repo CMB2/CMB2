@@ -7,9 +7,9 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  *
  * @property-read read_fields Array of readable field objects.
  * @property-read edit_fields Array of editable field objects.
@@ -20,6 +20,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * The current CMB2 REST endpoint version
+	 *
 	 * @var string
 	 * @since 2.2.3
 	 */
@@ -27,6 +28,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * The CMB2 REST base namespace (v should always be followed by $version)
+	 *
 	 * @var string
 	 * @since 2.2.3
 	 */
@@ -57,6 +59,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Array of readable field objects.
+	 *
 	 * @var   CMB2_Field[]
 	 * @since 2.2.3
 	 */
@@ -64,6 +67,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Array of editable field objects.
+	 *
 	 * @var   CMB2_Field[]
 	 * @since 2.2.3
 	 */
@@ -71,12 +75,14 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**
 	 * Whether CMB2 object is readable via the rest api.
+	 *
 	 * @var boolean
 	 */
 	protected $rest_read = false;
 
 	/**
 	 * Whether CMB2 object is editable via the rest api.
+	 *
 	 * @var boolean
 	 */
 	protected $rest_edit = false;
@@ -146,7 +152,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$alltypes = $taxonomies = array();
 
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
-			$types = array_flip( $rest_box->cmb->box_types() );
+			$types = array_flip( $rest_box->cmb->box_types( array( 'post' ) ) );
 
 			if ( isset( $types['user'] ) ) {
 				unset( $types['user'] );
@@ -201,7 +207,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @param string|array $object_types Object(s) the field is being registered
 	 *                                   to, "post"|"term"|"comment" etc.
-	 * @param string $object_types       Canonical object type for callbacks.
+	 * @param string       $object_types       Canonical object type for callbacks.
 	 *
 	 * @return void
 	 */
@@ -235,7 +241,6 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			if ( $this->can_edit( $show_in_rest ) ) {
 				$this->edit_fields[] = $field['id'];
 			}
-
 		}
 	}
 
@@ -516,7 +521,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.o
 	 *
-	 * @param  array   $values Array of values being provided.
+	 * @param  array $values Array of values being provided.
 	 * @return array           Array of updated/sanitized values.
 	 */
 	public function sanitize_box_values( array $values ) {
@@ -538,8 +543,8 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  array   $values   Array of values being provided.
-	 * @param  string  $field_id The id of the field to update.
+	 * @param  array  $values   Array of values being provided.
+	 * @param  string $field_id The id of the field to update.
 	 *
 	 * @return mixed             The results of saving/sanitizing a field value.
 	 */
@@ -569,8 +574,8 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  array       $values Array of values being provided.
-	 * @param  CMB2_Field  $field  CMB2_Field object.
+	 * @param  array      $values Array of values being provided.
+	 * @param  CMB2_Field $field  CMB2_Field object.
 	 *
 	 * @return mixed               The results of saving/sanitizing the group field value.
 	 */
@@ -676,7 +681,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  string  $cmb_id CMB2 config id
+	 * @param  string $cmb_id CMB2 config id
 	 *
 	 * @return CMB2_REST|false The CMB2_REST object or false.
 	 */
@@ -714,7 +719,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed  $value Value to check.
+	 * @param  mixed $value Value to check.
 	 *
 	 * @return boolean       Whether value is considered readable.
 	 */
@@ -733,7 +738,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param  mixed  $value Value to check.
+	 * @param  mixed $value Value to check.
 	 *
 	 * @return boolean       Whether value is considered editable.
 	 */

@@ -3,9 +3,9 @@
  * CMB2_Types tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'test-cmb-types-base.php' );
@@ -47,32 +47,32 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 
 	public function test_text_url() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'text_url', $value, '<a href="http://'. $value .'" rel="nofollow">http://'. $value .'</a>' );
+		$this->assertDisplayFieldMatches( 'text_url', $value, '<a href="http://' . $value . '" rel="nofollow">http://' . $value . '</a>' );
 	}
 
 	public function test_text_money() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'text_money', $value, '$'. $value );
+		$this->assertDisplayFieldMatches( 'text_money', $value, '$' . $value );
 	}
 
 	public function test_textarea() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
+		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>' . $value . '</p>' );
 	}
 
 	public function test_textarea_small() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
+		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>' . $value . '</p>' );
 	}
 
 	public function test_textarea_code() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'textarea_code', $value, '<xmp class="cmb2-code">'. $value .'</xmp>' );
+		$this->assertDisplayFieldMatches( 'textarea_code', $value, '<xmp class="cmb2-code">' . $value . '</xmp>' );
 	}
 
 	public function test_wysiwyg() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>'. $value .'</p>' );
+		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>' . $value . '</p>' );
 	}
 
 	public function test_text_date() {
@@ -110,7 +110,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		$tz       = $datetime->getTimezone();
 		$tzstring = $tz->getName();
 
-		$expected = date( 'm/d/Y h:i A', $time ) .', '. $tzstring;
+		$expected = date( 'm/d/Y h:i A', $time ) . ', ' . $tzstring;
 
 		$this->assertDisplayFieldMatches( 'text_datetime_timestamp_timezone', $saved_value, $expected );
 	}
@@ -122,7 +122,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 
 	public function test_colorpicker() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'colorpicker', $value, '<span class="cmb2-colorpicker-swatch"><span style="background-color:'. $value .'"></span> '. $value .'</span>' );
+		$this->assertDisplayFieldMatches( 'colorpicker', $value, '<span class="cmb2-colorpicker-swatch"><span style="background-color:' . $value . '"></span> ' . $value . '</span>' );
 	}
 
 	public function test_title() {
@@ -185,17 +185,17 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 	public function test_oembed() {
 		$vid = 'EOfy5LDpEHo';
 		$value = 'https://www.youtube.com/watch?v=' . $vid;
- 		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
+			update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
- 		$expected_field = $this->is_connected()
- 			? '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><div class="cmb2-oembed"><iframe width="300" height="169" src="www.youtube.com/embed/'. $vid .'?feature=oembed" frameborder="0" allowfullscreen></iframe></div></div>'
- 			: '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">'. sprintf( esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ), '<a href="www.youtube.com/watch?v='. $vid .'">www.youtube.com/watch?v='. $vid .'</a>', '<a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>' ) .'</p></div>';
+			$expected_field = $this->is_connected()
+				? '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><div class="cmb2-oembed"><iframe width="300" height="169" src="www.youtube.com/embed/' . $vid . '?feature=oembed" frameborder="0" allowfullscreen></iframe></div></div>'
+				: '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">' . sprintf( esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ), '<a href="www.youtube.com/watch?v=' . $vid . '">www.youtube.com/watch?v=' . $vid . '</a>', '<a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>' ) . '</p></div>';
 
- 		$actual_field = $this->capture_render( array( $this->get_field_object( 'oembed' ), 'render_column' ) );
+			$actual_field = $this->capture_render( array( $this->get_field_object( 'oembed' ), 'render_column' ) );
 
- 		if ( ! $this->is_connected() ) {
- 			$expected_field = '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">No oEmbed Results Found for <a href="www.youtube.com/watch?v='. $vid .'">www.youtube.com/watch?v='. $vid .'</a>. View more info at <a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p></div>';
- 		}
+		if ( ! $this->is_connected() ) {
+			$expected_field = '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">No oEmbed Results Found for <a href="www.youtube.com/watch?v=' . $vid . '">www.youtube.com/watch?v=' . $vid . '</a>. View more info at <a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p></div>';
+		}
 
 		$this->assertHTMLstringsAreEqual(
 			preg_replace( '~https?://~', '', $expected_field ), // normalize http differences
@@ -214,7 +214,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 				$this->attachment_id => $attach_1_url,
 				$this->attachment_id2 => $attach_2_url,
 			),
-			'<ul class="cmb2-display-file-list"><li><div class="file-status"><span>File: <strong><a href="'. $attach_1_url .'">'. CMB2_Utils::get_file_name_from_path( $attach_1_url ) .'</a></strong></span></div></li><li><div class="file-status"><span>File: <strong><a href="'. $attach_2_url .'">'. CMB2_Utils::get_file_name_from_path( $attach_2_url ) .'</a></strong></span></div></li></ul>'
+			'<ul class="cmb2-display-file-list"><li><div class="file-status"><span>File: <strong><a href="' . $attach_1_url . '">' . CMB2_Utils::get_file_name_from_path( $attach_1_url ) . '</a></strong></span></div></li><li><div class="file-status"><span>File: <strong><a href="' . $attach_2_url . '">' . CMB2_Utils::get_file_name_from_path( $attach_2_url ) . '</a></strong></span></div></li></ul>'
 		);
 	}
 
@@ -223,12 +223,12 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		$attach_1_url = get_permalink( $this->attachment_id );
 
 		$field_id = $this->text_type_field['id'];
-		update_post_meta( $this->post_id, $field_id .'_id', $this->attachment_id );
+		update_post_meta( $this->post_id, $field_id . '_id', $this->attachment_id );
 
 		$this->assertDisplayFieldMatches(
 			'file',
 			$attach_1_url,
-			'<div class="file-status"><span>File: <strong><a href="'. $attach_1_url .'">'. CMB2_Utils::get_file_name_from_path( $attach_1_url ) .'</a></strong></span></div>'
+			'<div class="file-status"><span>File: <strong><a href="' . $attach_1_url . '">' . CMB2_Utils::get_file_name_from_path( $attach_1_url ) . '</a></strong></span></div>'
 		);
 	}
 
@@ -247,7 +247,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 			'object_id' => $this->post_id,
 		) );
 
-		$string = $string ? $string : '<div class="cmb-column cmb-type-'. str_replace( '_', '-', $type ) .' cmb2-id-'. str_replace( '_', '-', $field_id ) .'" data-fieldtype="'. $type .'">'. $value_display .'</div>';
+		$string = $string ? $string : '<div class="cmb-column cmb-type-' . str_replace( '_', '-', $type ) . ' cmb2-id-' . str_replace( '_', '-', $field_id ) . '" data-fieldtype="' . $type . '">' . $value_display . '</div>';
 
 		$this->assertHTMLstringsAreEqual(
 			$string,
@@ -262,7 +262,7 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		}
 
 		$value_display = $value_display ? $value_display : $value;
-		$string = $string ? $string : '<div class="cmb-column cmb-type-'. str_replace( '_', '-', $type ) .' cmb2-id-'. str_replace( '_', '-', $field_id ) .'" data-fieldtype="'. $type .'">'. $value_display .'</div>';
+		$string = $string ? $string : '<div class="cmb-column cmb-type-' . str_replace( '_', '-', $type ) . ' cmb2-id-' . str_replace( '_', '-', $field_id ) . '" data-fieldtype="' . $type . '">' . $value_display . '</div>';
 
 		$this->assertHTMLstringsAreEqual(
 			$string,

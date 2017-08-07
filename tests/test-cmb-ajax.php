@@ -3,9 +3,9 @@
  * CMB2_Field tests
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 require_once( 'cmb-tests-base.php' );
@@ -44,7 +44,9 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			'url'         => 'https://www.youtube.com/watch?v=NCXyEKqmWdA',
 			'object_id'   => 'options-page-id',
 			'object_type' => 'options-page',
-			'oembed_args' => array( 'width' => '640' ),
+			'oembed_args' => array(
+				'width' => '640',
+			),
 			'field_id'    => 'test_embed',
 			'src'         => 'https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed',
 		);
@@ -102,7 +104,6 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 					$this->assertTrue( is_int( $value ) );
 				}
 			}
-
 		} else {
 			$opt_keys = array_keys( $options );
 			$opt_values = array_values( $options );
@@ -128,17 +129,19 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 					$this->assertTrue( is_int( $opt_values[ $key ] ) );
 				}
 			}
-		}
+		}// End if().
 	}
 
 	public function test_get_oembed_delete_with_expired_ttl() {
 		add_filter( 'oembed_ttl', '__return_zero' );
 		add_action( 'cmb2_save_options-page_fields', array( 'CMB2_Ajax', 'clean_stale_options_page_oembeds' ) );
 
-		$new = array( 'another_value' => 'value' );
+		$new = array(
+			'another_value' => 'value',
+		);
 		if ( $this->is_3_8() ) {
 			$new = array(
-				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>'
+				'_oembed_887df34cb3e109936f1e848042f873a3' => '<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
 			);
 		}
 		$_POST = array_merge( $new, $this->get_option() );

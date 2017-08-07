@@ -57,7 +57,7 @@ Main Wrap
 
 		&:not([type="hidden"]) {
 			+ input,
-			+ .button,
+			+ .button-secondary,
 			+ select {
 				margin-left: 20px;
 			}
@@ -100,7 +100,7 @@ Main Wrap
 	}
 
 	button,
-	.button {
+	.button-secondary {
 		white-space: nowrap;
 	}
 
@@ -120,9 +120,7 @@ Main Wrap
 		}
 	}
 
-	// /**
-	//  * Color picker
-	//  */
+	// Color picker
 	.wp-color-result,
 	.wp-picker-input-wrap {
 		vertical-align: middle;
@@ -143,19 +141,12 @@ Main Wrap
 			width: 100%;
 		}
 
-		&.cmb-repeat-row {
-			padding: 1.8em 0 0;
-
-			&:first-of-type {
-				padding: 0;
-			}
-		}
-
 		&.cmb-repeat .cmb2-metabox-description {
 			padding-top: 0;
-			padding-bottom: 1.8em;
+			padding-bottom: 1em;
 		}
 	}
+
 }
 
 .cmb2-metabox {
@@ -167,14 +158,6 @@ Main Wrap
 		.cmb-td,
 		.cmb-th {
 			border: 0;
-		}
-	}
-
-	> .cmb-row {
-		.cmb-repeat-table .cmb-row > .cmb-td {
-			padding-right: 20px;
-			box-sizing: border-box;
-			float: left;
 		}
 	}
 }
@@ -198,10 +181,11 @@ Main Wrap
 .cmb-repeatable-grouping {
 	border: 1px solid $light-gray;
 	padding: 0 1em;
-	max-width: 1000px;
+
 	&.cmb-row {
 		margin: 0 0 0.8em;
 	}
+
 	+ .cmb-repeatable-grouping {
 	}
 }
@@ -253,6 +237,94 @@ Main Wrap
 
 .empty-row.hidden {
 	display: none;
+}
+
+// Repeatable fields styles
+.cmb-repeat-table {
+	background-color: #fafafa;
+	border: 1px solid darken($light-gray, 3%);
+
+	.cmb-row.cmb-repeat-row {
+		position: relative;
+		counter-increment: el;
+
+		margin: 0;
+		padding: 10px 10px 10px 50px;
+		border-bottom: none !important; // Sometime, we need !important :).
+
+		& + .cmb-repeat-row {
+			border-top: solid 1px $light-gray;
+		}
+
+		&:before {
+			content: counter(el);
+			display: block;
+
+			top: 0;
+			left: 0;
+			position: absolute;
+
+			width: 35px;
+			height: 100%;
+			line-height: 35px;
+
+			color: $gray;
+			text-align: center;
+			border-right: solid 1px $light-gray;
+		}
+
+		.cmb-td {
+			margin: 0;
+			padding: 0;
+		}
+
+	}
+
+	+ .cmb-add-row {
+		margin: 0;
+
+		&:before {
+			content: '';
+			width: 1px;
+			height: 1.6em;
+			display: block;
+			margin-left: 17px;
+			background-color: darken($light-gray, 5%);
+		}
+	}
+
+	.cmb-remove-row {
+		top: 7px;
+		right: 7px;
+		position: absolute;
+
+		width: auto;
+		margin-left: 0;
+		padding: 0 !important; // Sometime, we need !important :).
+
+		display: none;
+
+		> .cmb-remove-row-button {
+			font-size: 20px;
+			text-indent: -1000px;
+
+			overflow: hidden;
+			position: relative;
+
+			height: auto;
+			line-height: 1;
+			padding: 0 10px 0;
+
+			&:before {
+				@include pseudo-dashicons("\f335");
+			}
+		}
+	}
+
+	.cmb-repeat-row:hover .cmb-remove-row {
+		display: block;
+	}
+
 }
 
 .cmb-repeatable-group {
@@ -429,6 +501,10 @@ span.cmb2-metabox-description {
 
 .child-cmb2 .cmb-th {
 	text-align: left;
+}
+
+.cmb2-indented-hierarchy {
+	padding-left: 1.5em;
 }
 
 @media (max-width: $mobile-break) {

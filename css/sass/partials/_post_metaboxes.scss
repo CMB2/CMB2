@@ -60,10 +60,6 @@ Post Metaboxes
 		line-height: 1.3;
 	}
 
-	.cmb-repeat-row .cmb-td {
-		padding-bottom: 1.8em;
-	}
-
 	.cmb-th + .cmb-td {
 		width: 80%;
 		float: right;
@@ -83,34 +79,4 @@ Post Metaboxes
 		padding-top: 1.8em;
 	}
 
-	.cmb2-metabox > .cmb-row {
-		&.table-layout, .cmb-row.table-layout {
-			.cmb-repeat-table .cmb-tbody {
-				display: table;
-				width: 100%;
-
-				input.regular-text {
-					width: 100%;
-				}
-
-				.cmb-row:not(.hidden):not(.empty-row) {
-					display: table-row;
-				}
-
-				.cmb-td {
-					display: table-cell;
-					float: none;
-					width: 100%;
-				}
-
-				.cmb-row:not(:first-of-type) .cmb-td {
-					padding-top: 1.8em;
-				}
-
-				.cmb-td.cmb-remove-row {
-					padding-right: 0;
-				}
-			}
-		}
-	}
 }
