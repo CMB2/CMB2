@@ -410,7 +410,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button-secondary cmb-remove-row-button button-disabled" title="Remove Row">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button" title="Remove Row">Remove</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">

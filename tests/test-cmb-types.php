@@ -44,7 +44,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button-secondary cmb-remove-row-button button-disabled" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
+								<button type="button" class="button-secondary cmb-remove-row-button" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">

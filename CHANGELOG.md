@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 * Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 * Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
 * Change language throught to reflect CMB2's move to its own organization.
+* Removing last repeat item row (and repeat group row) is now somewhat allowed in that the "remove" button simply resets the last item to empty. Fixes [#312](https://github.com/CMB2/CMB2/issues/312).
 * Updated several CMB2 methods to return the CMB2 object (for method chaining). Methods include: 
 	* `CMB2::show_form()`
 	* `CMB2::render_form_open()`

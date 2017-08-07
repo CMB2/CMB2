@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2017-04-19 03:43:15+00:00\n"
+"POT-Creation-Date: 2017-08-07 15:33:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-4-18 3:43+240\n"
+"PO-Revision-Date: 2017-8-7 15:33+240\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -50,7 +50,7 @@ msgstr ""
 #: example-functions.php:577 example-functions.php:584
 #: example-functions.php:591 example-functions.php:618
 #: example-functions.php:626 example-functions.php:633
-#: example-functions.php:670 tests/test-cmb-field.php:275
+#: example-functions.php:677 tests/test-cmb-field.php:275
 msgid "field description (optional)"
 msgstr ""
 
@@ -306,39 +306,39 @@ msgstr ""
 msgid "Arbitrary Term Field"
 msgstr ""
 
-#: example-functions.php:654
-msgid "Theme Options Metabox"
+#: example-functions.php:651
+msgid "Theme Options"
 msgstr ""
 
-#: example-functions.php:669
+#: example-functions.php:676
 msgid "Site Background Color"
 msgstr ""
 
-#: example-functions.php:705
+#: example-functions.php:712
 msgid "REST Test Box"
 msgstr ""
 
-#: example-functions.php:714
+#: example-functions.php:721
 msgid "REST Test Text"
 msgstr ""
 
-#: example-functions.php:715
+#: example-functions.php:722
 msgid "Will show in the REST API for this box and for pages."
 msgstr ""
 
-#: example-functions.php:721
+#: example-functions.php:728
 msgid "REST Editable Test Text"
 msgstr ""
 
-#: example-functions.php:722
+#: example-functions.php:729
 msgid "Will show in REST API \"editable\" contexts only (`POST` requests)."
 msgstr ""
 
-#: includes/CMB2.php:150
+#: includes/CMB2.php:174
 msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: includes/CMB2.php:509
+#: includes/CMB2.php:548
 msgid "Click to toggle"
 msgstr ""
 
@@ -380,7 +380,8 @@ msgid ""
 "version %2$s with no alternative available."
 msgstr ""
 
-#: includes/CMB2_Base.php:475 includes/types/CMB2_Type_Base.php:149
+#: includes/CMB2_Base.php:475 includes/CMB2_Hookup_Base.php:87
+#: includes/types/CMB2_Type_Base.php:149
 msgid "Invalid %1$s property: %2$s"
 msgstr ""
 
@@ -388,24 +389,24 @@ msgstr ""
 msgid "Invalid %1$s method: %2$s"
 msgstr ""
 
-#: includes/CMB2_Field.php:1162
+#: includes/CMB2_Field.php:1174
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1163
+#: includes/CMB2_Field.php:1175
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1185 includes/CMB2_Field.php:1189
+#: includes/CMB2_Field.php:1197 includes/CMB2_Field.php:1201
 #: tests/test-cmb-field.php:237
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:1250
+#: includes/CMB2_Field.php:1262
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: includes/CMB2_Field_Display.php:430 includes/CMB2_JS.php:167
+#: includes/CMB2_Field_Display.php:432 includes/CMB2_JS.php:167
 #: includes/types/CMB2_Type_File_Base.php:78 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:727
 msgid "File:"
@@ -501,7 +502,7 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_JS.php:166 includes/CMB2_Types.php:409
+#: includes/CMB2_JS.php:166 includes/CMB2_Types.php:412
 #: includes/types/CMB2_Type_File_Base.php:83 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
 #: tests/test-cmb-types.php:727
@@ -517,25 +518,38 @@ msgstr ""
 msgid "Select / Deselect All"
 msgstr ""
 
-#: includes/CMB2_Types.php:228
+#: includes/CMB2_Options_Hookup.php:111
+msgid "Settings updated."
+msgstr ""
+
+#: includes/CMB2_Options_Hookup.php:113
+msgid "Nothing to update."
+msgstr ""
+
+#: includes/CMB2_Types.php:231
 msgid "Custom CMB2 field type classes must extend CMB2_Type_Base."
 msgstr ""
 
-#: includes/CMB2_Types.php:344
+#: includes/CMB2_Types.php:349
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_hookup.php:153
+#: includes/CMB2_Types.php:412 tests/test-cmb-types.php:47
+#: tests/test-cmb-types.php:55
+msgid "Remove Row"
+msgstr ""
+
+#: includes/CMB2_hookup.php:163
 msgid ""
 "Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
 "install."
 msgstr ""
 
-#: includes/CMB2_hookup.php:157
+#: includes/CMB2_hookup.php:167
 msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
 msgstr ""
 
-#: includes/CMB2_hookup.php:404
+#: includes/CMB2_hookup.php:437
 msgid "Toggle panel: %s"
 msgstr ""
 
@@ -661,7 +675,7 @@ msgid ""
 "response."
 msgstr ""
 
-#: includes/types/CMB2_Type_File.php:40 tests/test-cmb-types.php:703
+#: includes/types/CMB2_Type_File.php:76 tests/test-cmb-types.php:703
 #: tests/test-cmb-types.php:727
 msgid "Add or Upload File"
 msgstr ""

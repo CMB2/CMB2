@@ -377,7 +377,7 @@ class CMB2_Types {
 			$count = count( $meta_value );
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
-				$this->repeat_row( $count < 2 );
+				$this->repeat_row();
 				$this->iterator++;
 			}
 		} else {
@@ -386,24 +386,22 @@ class CMB2_Types {
 			$this->field->escaped_value = $this->field->value = null;
 
 			// Otherwise add one row
-			$this->repeat_row( true );
+			$this->repeat_row();
 		}
 
 		// Then add an empty row
 		$this->field->escaped_value = '';
 		$this->iterator = $this->iterator ? $this->iterator : 1;
-		$this->repeat_row( false, 'empty-row hidden' );
+		$this->repeat_row( 'empty-row hidden' );
 	}
 
 	/**
 	 * Generates a repeatable row's markup
 	 *
 	 * @since 1.1.0
-	 * @param bool   $disable_remover Whether remove button should be disabled
 	 * @param string $class Repeatable table row's class
 	 */
-	protected function repeat_row( $disable_remover = false, $class = 'cmb-repeat-row' ) {
-		$disabled = $disable_remover ? ' button-disabled' : '';
+	protected function repeat_row( $class = 'cmb-repeat-row' ) {
 		?>
 
 		<div class="cmb-row <?php echo $class; ?>">
@@ -411,7 +409,7 @@ class CMB2_Types {
 				<?php $this->_render(); ?>
 			</div>
 			<div class="cmb-td cmb-remove-row">
-				<button type="button" class="button-secondary cmb-remove-row-button<?php echo $disabled; ?>" title="<?php echo esc_attr( $this->_text( 'remove_row_button_title', esc_html__( 'Remove Row', 'cmb2' ) ) ); ?>"><?php echo esc_html( $this->_text( 'remove_row_text', esc_html__( 'Remove', 'cmb2' ) ) ); ?></button>
+				<button type="button" class="button-secondary cmb-remove-row-button" title="<?php echo esc_attr( $this->_text( 'remove_row_button_title', esc_html__( 'Remove Row', 'cmb2' ) ) ); ?>"><?php echo esc_html( $this->_text( 'remove_row_text', esc_html__( 'Remove', 'cmb2' ) ) ); ?></button>
 			</div>
 		</div>
 

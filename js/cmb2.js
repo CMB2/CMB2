@@ -587,8 +587,6 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: false }, $row );
 
-		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
-
 	};
 
 	cmb.removeGroupRow = function( evt ) {
@@ -600,11 +598,7 @@ window.CMB2 = window.CMB2 || {};
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
 		if ( number < 2 ) {
-			// Needs to always be at least one group, but we will click the "add new" button followed by the "remove this" button
-			// in order to reset the group to empty values.
-			$parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ).trigger( 'click' );
-			$this.trigger( 'click' );
-			return;
+			return cmb.resetRow( $parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ), $this );
 		}
 
 		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
@@ -632,20 +626,25 @@ window.CMB2 = window.CMB2 || {};
 		var $table  = $this.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
 
-		if ( number > 2 ) {
-			if ( $parent.hasClass('empty-row') ) {
-				$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
-			}
-			$this.parents('.cmb-repeat-table .cmb-row').remove();
-			if ( number === 3 ) {
-				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
-			}
-
-			cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
-
-		} else {
-			$this.addClass( 'button-disabled' );
+		if ( number <= 2 ) {
+			return cmb.resetRow( $parent.find( '.cmb-add-row-button' ), $this );
 		}
+
+		if ( $parent.hasClass('empty-row') ) {
+			$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
+		}
+
+		$this.parents('.cmb-repeat-table .cmb-row').remove();
+
+
+		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
+	};
+
+	cmb.resetRow = function( $addNewBtn, $removeBtn ) {
+		// Click the "add new" button followed by the "remove this" button
+		// in order to reset the repeat row to empty values.
+		$addNewBtn.trigger( 'click' );
+		$removeBtn.trigger( 'click' );
 	};
 
 	cmb.shiftRows = function( evt ) {
