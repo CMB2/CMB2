@@ -121,6 +121,12 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
 
+### 2.2.5.1
+
+### Bug Fixes
+
+* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
+
 ### 2.2.5 - 2017-08-07
 
 ### Enhancements
@@ -726,6 +732,12 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.2.5.1
+
+### Bug Fixes
+
+* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
 
 ### 2.2.5 - 2017-08-07
 

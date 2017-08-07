@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [2.2.5.1 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1]
+
+### Bug Fixes
+
+* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
+
 ## [2.2.5 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5]
 
 ### Enhancements
