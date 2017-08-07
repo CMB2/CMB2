@@ -442,7 +442,6 @@ class CMB2 extends CMB2_Base {
 		$desc            = $field_group->args( 'description' );
 		$label           = $field_group->args( 'name' );
 		$group_val       = (array) $field_group->value();
-		$remove_disabled = count( $group_val ) <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
 		$field_group->peform_param_callback( 'before_group' );
@@ -463,11 +462,11 @@ class CMB2 extends CMB2_Base {
 
 		if ( ! empty( $group_val ) ) {
 			foreach ( $group_val as $group_key => $field_id ) {
-				$this->render_group_row( $field_group, $remove_disabled );
+				$this->render_group_row( $field_group );
 				$field_group->index++;
 			}
 		} else {
-			$this->render_group_row( $field_group, $remove_disabled );
+			$this->render_group_row( $field_group );
 		}
 
 		if ( $field_group->args( 'repeatable' ) ) {
@@ -528,11 +527,10 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  1.0.2
 	 * @param  CMB2_Field $field_group     CMB2_Field group field object.
-	 * @param  string     $remove_disabled Attribute string to disable the remove button.
 	 *
 	 * @return CMB2
 	 */
-	public function render_group_row( $field_group, $remove_disabled ) {
+	public function render_group_row( $field_group ) {
 
 		$field_group->peform_param_callback( 'before_group_row' );
 		$closed_class = $field_group->options( 'closed' ) ? ' closed' : '';
@@ -541,7 +539,7 @@ class CMB2 extends CMB2_Base {
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
+			echo '<button type="button" data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
 			echo '
@@ -568,7 +566,7 @@ class CMB2 extends CMB2_Base {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';
