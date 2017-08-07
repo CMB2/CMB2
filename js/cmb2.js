@@ -564,12 +564,6 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.afterRowInsert( $newRow );
 
-		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-		} else {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-		}
-
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
 
 	};
@@ -605,8 +599,11 @@ window.CMB2 = window.CMB2 || {};
 		var $parent = $this.parents('.cmb-repeatable-grouping');
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
-		// Needs to always be at least one group.
 		if ( number < 2 ) {
+			// Needs to always be at least one group, but we will click the "add new" button followed by the "remove this" button
+			// in order to reset the group to empty values.
+			$parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ).trigger( 'click' );
+			$this.trigger( 'click' );
 			return;
 		}
 
@@ -616,12 +613,6 @@ window.CMB2 = window.CMB2 || {};
 		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 		$parent.remove();
-
-		if ( number <= 2 ) {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-		} else {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-		}
 
 		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: true } );
 
