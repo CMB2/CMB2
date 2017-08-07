@@ -5,19 +5,22 @@ All notable changes to this project will be documented in this file.
 
 ### Enhancements
 
-* Enable the additional media library modal filters. Fixes [#873](https://github.com/CMB2/CMB2/issues/873).
-* Sanitize the attributes added via the `cmb2_group_wrap_attributes` filter.
-* New field parameter, `'query_args'`, which can be used by the `'taxonomy_*'` fields. Provides ability to override the arguments passed to `get_terms()`.
-* New field types, `'taxonomy_radio_hierarchical'`, and `'taxonomy_multicheck_hierarchical'`, for displaying taxonomy options in a hierarchial layout. Props to [eriktelepovsky](https://github.com/eriktelepovsky) for the [working code](https://github.com/CMB2/CMB2/issues/640#issuecomment-246938690). ([#640](https://github.com/CMB2/CMB2/issues/640))
 * Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/72541e5351841635cb1c7568a09395d6d0786440/example-functions.php#L640-L681). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
 * Improved Options Page styling. Props [@anhskohbo](https://github.com/anhskohbo) ([#1006](https://github.com/CMB2/CMB2/pull/1006)).
 * Improved cohesive styles for repeatable fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#819](https://github.com/CMB2/CMB2/pull/819)).
+* New field types, `'taxonomy_radio_hierarchical'`, and `'taxonomy_multicheck_hierarchical'`, for displaying taxonomy options in a hierarchial layout. Props to [eriktelepovsky](https://github.com/eriktelepovsky) for the [working code](https://github.com/CMB2/CMB2/issues/640#issuecomment-246938690). ([#640](https://github.com/CMB2/CMB2/issues/640))
+* Removing last repeat item row (and repeat group row) is now somewhat allowed in that the "remove" button simply resets the last item to empty. Fixes [#312](https://github.com/CMB2/CMB2/issues/312).
+* Enable the additional media library modal filters. Fixes [#873](https://github.com/CMB2/CMB2/issues/873).
+* Sanitize the attributes added via the `cmb2_group_wrap_attributes` filter.
+* New field parameter, `'query_args'`, which can be used by the `'taxonomy_*'` fields. Provides ability to override the arguments passed to `get_terms()`.
 * The `cmb2_can_save` filter now passes the CMB2 object as the 2nd parameter. Props [@Arno33](https://github.com/Arno33) ([#994](https://github.com/CMB2/CMB2/pull/994)).
 * Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
 * Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
 * Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
 * Change language throught to reflect CMB2's move to its own organization.
-* Removing last repeat item row (and repeat group row) is now somewhat allowed in that the "remove" button simply resets the last item to empty. Fixes [#312](https://github.com/CMB2/CMB2/issues/312).
+* Break `CMB2_Field:options()` method apart to allow re-setting options from field params. Related: [reaktivstudios/cmb2-flexible-content/pull/8](https://github.com/reaktivstudios/cmb2-flexible-content/pull/8).
+* New `CMB2:box_types()` method for getting the array of registered `'object_types'` for a box. Ensures the return is an array.
+* Improved inline hooks documentation.
 * Updated several CMB2 methods to return the CMB2 object (for method chaining). Methods include: 
 	* `CMB2::show_form()`
 	* `CMB2::render_form_open()`
@@ -41,6 +44,7 @@ All notable changes to this project will be documented in this file.
 * Fix bug where select fields or checkbox fields occasionally would retain previous group's value when adding new groups. Fixes [#853](https://github.com/CMB2/CMB2/issues/853).
 * Fix JS to prevent meta keys with `|` or `/` from breaking file fields. Props [@lipemat](https://github.com/lipemat) ([#1003](https://github.com/CMB2/CMB2/pull/1003)).
 * Fix jQuery Migrate's `jQuery.fn.attr('value', val) no longer sets properties` warning.
+* Fix issue with CMB2 being too aggressive with stripping slashes from values. Fixes [#981](https://github.com/CMB2/CMB2/issues/981).
 
 ## 2.2.4 - 2017-02-27
 
