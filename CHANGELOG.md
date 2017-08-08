@@ -3,11 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [2.2.5.2 - 2017-08-08][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.2]
+
+### Bug Fixes
+
+* Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/page/2/)
+* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
+
 ## [2.2.5.1 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1]
 
 ### Bug Fixes
 
-* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
+* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/)
 
 ## [2.2.5 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5]
 

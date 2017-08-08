@@ -89,12 +89,12 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( $repeatGroup.length ) {
 			$repeatGroup
+				.on( 'cmb2_add_row', cmb.emptyValue )
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
 					$( this ).find( '.cmb-remove-group-row-button' ).before( '<a class="button-secondary cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button-secondary cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
-				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
-				.on( 'cmb2_add_row', cmb.emptyValue );
+				.on( 'click', '.cmb-shift-rows', cmb.shiftRows );
 		}
 
 		// on pageload

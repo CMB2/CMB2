@@ -4,7 +4,7 @@ Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Tested up to:      4.8.1
-Stable tag:        2.2.5
+Stable tag:        2.2.5.2
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,15 +121,22 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
 
+### 2.2.5.2
+
+#### Bug Fixes
+
+* Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone.
+* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
+
 ### 2.2.5.1
 
-### Bug Fixes
+#### Bug Fixes
 
 * Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
 
 ### 2.2.5 - 2017-08-07
 
-### Enhancements
+#### Enhancements
 
 * Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/v2.2.5/example-functions.php#L640-L683). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
 * Improved Options Page styling. Props [@anhskohbo](https://github.com/anhskohbo) ([#1006](https://github.com/CMB2/CMB2/pull/1006)).
@@ -160,7 +167,7 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 	* `CMB2::after_save()`
 	* `CMB2::add_fields()`
 
-### Bug Fixes
+#### Bug Fixes
 
 * Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
 * Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
@@ -733,15 +740,22 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
+### 2.2.5.2
+
+#### Bug Fixes
+
+* Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone.
+* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
+
 ### 2.2.5.1
 
-### Bug Fixes
+#### Bug Fixes
 
 * Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
 
 ### 2.2.5 - 2017-08-07
 
-### Enhancements
+#### Enhancements
 
 * Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/v2.2.5/example-functions.php#L640-L683). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
 * Improved Options Page styling. Props [@anhskohbo](https://github.com/anhskohbo) ([#1006](https://github.com/CMB2/CMB2/pull/1006)).
@@ -772,7 +786,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 	* `CMB2::after_save()`
 	* `CMB2::add_fields()`
 
-### Bug Fixes
+#### Bug Fixes
 
 * Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
 * Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
