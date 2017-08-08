@@ -126,6 +126,7 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 #### Bug Fixes
 
 * Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone.
+* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
 
 ### 2.2.5.1
 
@@ -744,6 +745,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 #### Bug Fixes
 
 * Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone.
+* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
 
 ### 2.2.5.1
 
