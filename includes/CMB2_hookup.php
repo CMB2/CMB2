@@ -54,14 +54,24 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	protected $options_hookup = null;
 
 	/**
-	 * Constructor
+	 * A functionalized constructor, used for the hookup action callbacks.
 	 *
-	 * @since 2.0.0
-	 * @param CMB2 $cmb The CMB2 object to hookup
+	 * @since  2.2.6
+	 *
+	 * @param  CMB2 $cmb The CMB2 object to hookup
+	 *
+	 * @return CMB2_Hookup_Base $hookup The hookup object.
 	 */
-	public function __construct( CMB2 $cmb ) {
-		$this->cmb = $cmb;
-		$this->object_type = $this->cmb->mb_object_type();
+	public static function maybe_init_and_hookup( CMB2 $cmb ) {
+		if ( $cmb->prop( 'hookup' ) ) {
+
+			$hookup = new self( $cmb );
+
+			// Hook in the hookup... how meta.
+			return $hookup->universal_hooks();
+		}
+
+		return false;
 	}
 
 	public function universal_hooks() {
@@ -89,6 +99,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 					return $this->options_page_hooks();
 			}
 		}
+
+		return $this;
 	}
 
 	public function post_hooks() {
@@ -129,6 +141,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'column_display' ), 10, 2 );
 			}
 		}
+
+		return $this;
 	}
 
 	public function comment_hooks() {
@@ -139,6 +153,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_filter( 'manage_edit-comments_columns', array( $this, 'register_column_headers' ) );
 			add_action( 'manage_comments_custom_column', array( $this, 'column_display' ), 10, 3 );
 		}
+
+		return $this;
 	}
 
 	public function user_hooks() {
@@ -156,6 +172,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_filter( 'manage_users_columns', array( $this, 'register_column_headers' ) );
 			add_filter( 'manage_users_custom_column', array( $this, 'return_column_display' ), 10, 3 );
 		}
+
+		return $this;
 	}
 
 	public function term_hooks() {
@@ -204,6 +222,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		add_action( 'edited_terms', array( $this, 'save_term' ), 10, 2 );
 		add_action( 'delete_term', array( $this, 'delete_term' ), 10, 3 );
 
+		return $this;
 	}
 
 	public function options_page_hooks() {
@@ -215,6 +234,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				$this->options_hookup[ $option_key ]->hooks();
 			}
 		}
+
+		return $this;
 	}
 
 	/**
