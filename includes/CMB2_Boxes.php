@@ -79,7 +79,7 @@ class CMB2_Boxes {
 	 * @return CMB2[]           Array of matching cmb2 instances.
 	 */
 	public static function get_by_property( $property, $ignore = null ) {
-		$by_property[ $property ] = array();
+		$boxes = array();
 
 		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
 
@@ -87,10 +87,10 @@ class CMB2_Boxes {
 				continue;
 			}
 
-			$by_property[ $property ][ $cmb_id ] = $cmb;
+			$boxes[ $cmb_id ] = $cmb;
 		}
 
-		return $by_property[ $property ];
+		return $boxes;
 	}
 
 }
