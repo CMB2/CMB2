@@ -58,9 +58,9 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Display options-page output. To override, set 'display_cb' box property.
+	 * Display options-page output. Called from CMB2_Options_Hookup.
 	 *
-	 * @since  2.2.5
+	 * @since  2.XXX
 	 *
 	 * @return string
 	 */
