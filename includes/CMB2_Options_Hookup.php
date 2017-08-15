@@ -8,6 +8,7 @@
  * @since     2.XXX Now allows multiple metaboxes on an options page.
  *
  *                  New methods:
+ *                    - can_box_save              : copy of can_save not tied to $this->cmb
  *                    - check_page_is_registered  : checks to be sure page has not already been added to menu
  *                    - find_page_boxes           : finds all boxes which appear on this page
  *                    - is_updated                : were the values updated?
@@ -471,7 +472,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				$up = $box
 					->save_fields( $this->option_key, $box->object_type(), $_POST )
 					->was_updated();
-				// set updated to true without returning it to false
+				// set updated to true, prevent setting to false
 				$updated = $updated || $up;
 			}
 		}
