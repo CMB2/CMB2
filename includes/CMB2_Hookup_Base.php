@@ -38,7 +38,9 @@ abstract class CMB2_Hookup_Base {
 	 *
 	 * @return CMB2_Hookup_Base $hookup The hookup object.
 	 */
-	abstract public static function maybe_init_and_hookup( CMB2 $cmb );
+	public static function maybe_init_and_hookup( CMB2 $cmb ) {
+		throw new Exception( sprintf( esc_html__( '%1$s should be implemented by the extended class.', 'cmb2' ), __FUNCTION__ ) );
+	}
 
 	/**
 	 * Constructor
