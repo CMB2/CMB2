@@ -334,11 +334,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			'title'        => $this->page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
 		);
 		
-		// need to set this after determining the title
-		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
-		
 		// apply filters to title
 		$props['title'] = apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
+		
+		// need to set this after determining the title
+		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
 		
 		// place into class property
 		$this->shared_properties = $props;
