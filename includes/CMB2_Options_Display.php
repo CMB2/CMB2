@@ -245,7 +245,7 @@ class CMB2_Options_Display {
 	 * Display metaboxes for an options-page object.
 	 *
 	 * @since  2.XXX  Pull parent class functionality into here to allow passing multiple boxes; complete rewrite
-	 * @since  2.2.5
+	 * @since  2.2.5 (Within CMB2_Options_Hookup)
 	 *
 	 * @param \CMB2 $box
 	 * @param bool  $con Whether to add context box classes

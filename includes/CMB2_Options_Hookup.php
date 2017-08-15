@@ -10,7 +10,6 @@
  *                  New methods:
  *                    - check_page_is_registered  : checks to be sure page has not already been added to menu
  *                    - find_page_boxes           : finds all boxes which appear on this page
- *                    - find_show_on              : see if box was assigned to page via show_on
  *                    - is_updated                : were the values updated?
  *                    - menu_slug                 : determines the menu slug
  *                    - page_properties           : compiles shared properties from multiple boxes
