@@ -1,25 +1,26 @@
 <?php
 
 /**
- * Handles hooking CMB2 forms/metaboxes into the post/attachement/user screens
- * and handles hooking in and saving those fields.
+ * Handles hooking CMB2 forms/metaboxes into WordPress admin "options" pages.
  *
- * @since     2.XXX Now allows multiple metaboxes on an options page. First box encountered triggers menu hooks,
- *                  so all parameters which affect the menu must be set on first box of set.
+ *
+ *
+ * @since     2.XXX Now allows multiple metaboxes on an options page.
  *
  *                  New methods:
  *                    - check_page_is_registered  : checks to be sure page has not already been added to menu
  *                    - find_page_boxes           : finds all boxes which appear on this page
  *                    - is_updated                : were the values updated?
  *                    - menu_slug                 : determines the menu slug
- *                    - page_properties           : compiles shared properties from multiple boxes
  *                    - page_prop                 : scans $this->boxes for requested CMB2 property
+ *                    - page_properties           : compiles shared properties from multiple boxes
  *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
  *
  *                  New properties:
- *                    - boxes   : All CMB2 boxes which appear on this page
- *                    - cmb     : Explicitly declared to quiet strict mode squeaking
- *                    - page    : menu slug of page
+ *                    - boxes             : All CMB2 boxes which appear on this page
+ *                    - cmb               : Explicitly declared to quiet strict mode squeaking
+ *                    - page              : menu slug of page
+ *                    - shared_properties : ->prop() values shared across boxes
  *
  *                  New CMB2 box parameters:
  *                    - menu_slug    : ''                : allows menu item to not use option key as WP identifier
@@ -31,6 +32,9 @@
  *                    - cmb2_options_page_title  : allow changing page title to something other than box title
  *                    - cmb2_options_page_before : HTML content before form
  *                    - cmb2_options_page_after  : HTML content after form
+ *
+ *                  Removed methods:
+ *                    - options_page_metabox : now in CMB2_Options_Display
  *
  *                  See '@since' notices on existing methods and inline comments for changes.
  *                  Some whitespace and phpdoc cleanup.
@@ -98,8 +102,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param CMB2   $cmb The CMB2 object to hookup
-	 * @param string $option_key
+	 * @param CMB2   $cmb         The CMB2 object to hookup
+	 * @param string $option_key  Option key box is displaying values for
 	 */
 	public function __construct( CMB2 $cmb, $option_key ) {
 		
@@ -117,19 +121,21 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		global $wp_registered_settings;
 		
-		if ( empty( $this->option_key ) ) {
+		if ( empty( $this->option_key ) || ! empty( $wp_registered_settings[ $this->option_key ] ) ) {
 			return;
 		}
 		
-		// Check if this setting has already been registered
-		if ( empty( $wp_registered_settings[ $this->option_key ] ) ) {
-			
-			// Register setting to cmb2 group.
-			register_setting( 'cmb2', $this->option_key );
-			
-			// Handle saving the data.
-			add_action( 'admin_post_' . $this->option_key, array( $this, 'save_options' ) );
-		}
+		// page ( equal to $_GET['page'] or current_screen->id ) is equal to menu_slug
+		$this->page = $this->menu_slug( $this->cmb );
+		
+		// Set the screen ID and get boxes belonging to this screen
+		$this->find_page_boxes( $this->page );
+		
+		// Register setting to cmb2 group.
+		register_setting( 'cmb2', $this->option_key );
+		
+		// Handle saving the data.
+		add_action( 'admin_post_' . $this->option_key, array( $this, 'save_options' ) );
 		
 		// Optionally network_admin_menu. Note, cannot use page_prop this early, so this must be set on first box
 		$hook = $this->cmb->prop( 'admin_menu_hook' );
@@ -142,7 +148,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			// Override CMB's getter.
 			add_filter( "cmb2_override_option_get_{$this->option_key}", array( $this, 'network_get_override' ), 10, 2 );
 			// Override CMB's setter.
-			add_filter( "cmb2_override_option_save_{$this->option_key}", array( $this, 'network_update_override' ), 10, 2 );
+			add_filter( "cmb2_override_option_save_{$this->option_key}", array(
+				$this,
+				'network_update_override',
+			), 10, 2 );
 		}
 	}
 	
@@ -158,16 +167,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function options_page_menu_hooks() {
 		
-		// page ( equal to $_GET['page'] or current_screen->id ) is equal to menu_slug
-		$this->page  = $menu_slug = $this->menu_slug( $this->cmb );
-		
 		$parent_slug = $this->cmb->prop( 'parent_slug' );
 		
-		// Set the screen ID and get boxes belonging to this screen
-		$this->find_page_boxes( $menu_slug );
-		
 		// Menu_slug is blank, menu page is already registered, no boxes: exit
-		if ( ! $menu_slug || $this->check_page_is_registered( $menu_slug, $parent_slug ) || empty( $this->boxes ) ) {
+		if ( ! $this->page || $this->check_page_is_registered( $this->page, $parent_slug ) || empty( $this->boxes ) ) {
 			return;
 		}
 		
@@ -180,7 +183,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				$this->shared_properties['title'],
 				$this->shared_properties['menu_title'],
 				$this->shared_properties['capability'],
-				$menu_slug,
+				$this->page,
 				array( $this, 'options_page_output' )
 			);
 		} else {
@@ -188,7 +191,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				$this->shared_properties['title'],
 				$this->shared_properties['menu_title'],
 				$this->shared_properties['capability'],
-				$menu_slug,
+				$this->page,
 				array( $this, 'options_page_output' ),
 				$this->shared_properties['icon_url'],
 				$this->shared_properties['position']
@@ -252,13 +255,15 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		// include WP postbox JS
 		add_action( 'admin_enqueue_scripts', function () {
+			
 			wp_enqueue_script( 'postbox' );
 		} );
 		
 		// trigger the postbox script
 		add_action( 'admin_print_footer_scripts', function () {
+			
 			echo '<script>jQuery(document).ready(function(){postboxes.add_postbox_toggles("postbox-container");});</script>';
-		});
+		} );
 	}
 	
 	/**
@@ -266,8 +271,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since  2.XXX
 	 *
-	 * @param  string $menu_slug
-	 * @param  string $parent_slug
+	 * @param  string $menu_slug    Equal to $this->page
+	 * @param  string $parent_slug  From box properties
 	 *
 	 * @return bool
 	 */
@@ -288,20 +293,22 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param string $menu_slug
+	 * @param string $menu_slug  Equal to $this->page
 	 */
 	public function find_page_boxes( $menu_slug ) {
 		
-		if ( ! $menu_slug ) return;
+		if ( ! $menu_slug ) {
+			return;
+		}
 		
 		$all_boxes = CMB2_Boxes::get_all();
 		
 		foreach ( $all_boxes as $box ) {
 			
-			$bxslg = $box->prop('menu_slug');
+			$bxslg = $box->prop( 'menu_slug' );
 			
 			// if this box is already in the box list, or it has a menu slug set which does not match the slug, skip
-			if ( ! empty( $this->boxes[ $box->cmb_id ] ) || ( $bxslg !== null && $bxslg != $menu_slug ) ) {
+			if ( ! empty( $this->boxes[ $box->cmb_id ] ) || ( $bxslg !== NULL && $bxslg != $menu_slug ) ) {
 				continue;
 			}
 			
@@ -314,7 +321,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Finds shared properties for reference by class methods which may have been set on any of the included boxes.
+	 * Finds shared properties which may have been set on any of the included boxes. First value encountered is used if
+	 * two boxes both set the value.
 	 *
 	 * @since 2.XXX
 	 */
@@ -330,11 +338,22 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			'page_columns' => $this->page_prop( 'page_columns', 'auto' ),
 			'page_format'  => $this->page_prop( 'page_format' ),
 			'position'     => $this->page_prop( 'position' ),
-			'save_button'  => $this->page_prop( 'save_button', 'Save', false ),
+			'save_button'  => $this->page_prop( 'save_button', 'Save', FALSE ),
 			'title'        => $this->page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
 		);
 		
-		// apply filters to title
+		/**
+		 * 'cmb2_options_page_title' filter.
+		 *
+		 * Alters the title for use on the page. Note it's always a good idea to set 'menu_title' separately to
+		 * avoid excessively long menu titles
+		 *
+		 * @since 2.XXX
+		 *
+		 * @property string                'title'          Title as set via 'page_title' or first box's 'title'
+		 * @var      string                $this->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Display $this            Instance of this class
+		 */
 		$props['title'] = apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
 		
 		// need to set this after determining the title
@@ -345,18 +364,17 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Checks set of boxes for property; first box with property set is returned. This allows a later box in a page's
-	 * boxes to carry information which was not set on the "root" box.
+	 * Checks set of boxes for property; first box with property set is returned.
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param string      $property
-	 * @param null|string $fallback
+	 * @param string      $property         CMB2 box property to look for
+	 * @param null|string $fallback         Value to use as fallback
 	 * @param bool        $empty_string_ok  Flag to force using fallback if CMB2 returns empty string
 	 *
 	 * @return mixed
 	 */
-	public function page_prop( $property, $fallback = NULL, $empty_string_ok = true ) {
+	public function page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
 		
 		$prop = NULL;
 		
@@ -381,6 +399,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Display options-page output. To override, set 'display_cb' box property.
 	 *
+	 * @todo: Echo and callback returning value needs testing
+	 *
 	 * @since  2.XXX Allows multiple metaboxes to appear on single page
 	 *               Allows for return of results for testing
 	 * @since  2.2.5
@@ -391,12 +411,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function options_page_output( $echo ) {
 		
-		// allow this to return html for tests/future uses
-		$echo = $echo === '' || $echo === true;
+		// allow this to return html for tests/future uses; WP sets this to an empty string when called via action
+		$echo = $echo === '' || $echo === TRUE;
 		
 		settings_errors( "{$this->option_key}-notices" );
 		
-		$callback = $this->shared_properties[ 'display_cb' ];
+		$callback = $this->shared_properties['display_cb'];
 		
 		if ( is_callable( $callback ) ) {
 			
@@ -408,13 +428,13 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			if ( $this->shared_properties['cmb_styles'] ) {
 				self::enqueue_cmb_css();
 			}
-			if ( $this->shared_properties[ 'enqueue_js'] ) {
+			if ( $this->shared_properties['enqueue_js'] ) {
 				self::enqueue_cmb_js();
 			}
 			
 			// get instance of display class and get html output
 			$display = new CMB2_Options_Display( $this->option_key, $this->page, $this->boxes, $this->shared_properties );
-			$html = $display->options_page_output();
+			$html    = $display->options_page_output();
 		}
 		
 		if ( $echo ) {
@@ -427,7 +447,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Save data from options page, then redirects back.
 	 *
-	 * @since  2.XXX Now checks multiple boxes
+	 * @since  2.XXX Checks multiple boxes; calls $this->can_box_save() instead of $this->can_save()
 	 * @since  2.2.5
 	 *
 	 * @return void
@@ -439,31 +459,50 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$url = admin_url();
 		}
 		
-		if (
-			$this->can_save( 'options-page' )
-			// check params
-			&& isset( $_POST['submit-cmb'], $_POST['action'] )
-			&& $this->option_key === $_POST['action']
-		) {
+		$updated = FALSE;
+		
+		foreach ( $this->boxes as $box ) {
 			
-			$updated = FALSE;
-			
-			// check if values from a box are updated
-			foreach ( $this->boxes as $box ) {
-				
+			if (
+				$this->can_box_save( $box ) &&
+				isset( $_POST['submit-cmb'], $_POST['action'] ) &&
+				$this->option_key === $_POST['action']
+			) {
 				$up = $box
 					->save_fields( $this->option_key, $box->object_type(), $_POST )
-					->was_updated(); // Will be false if no values were changed/updated.
-				
-				// if $up is true, set $updated to true; prevent $updated being set back to false
+					->was_updated();
+				// set updated to true without returning it to false
 				$updated = $updated || $up;
 			}
-			
-			$url = add_query_arg( 'updated', $updated ? 'true' : 'false', $url );
 		}
 		
+		$url = add_query_arg( 'updated', $updated ? 'true' : 'false', $url );
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
 		exit;
+	}
+	
+	/**
+	 * Adaptation of parent class 'can_save' -- allows arbitrary box to be checked
+	 *
+	 * @param \CMB2 $box
+	 *
+	 * @return mixed
+	 */
+	public function can_box_save( CMB2 $box ) {
+		
+		$type = 'options-page';
+		
+		$can_save = (
+			$box->prop( 'save_fields' )
+			&& isset( $_POST[ $box->nonce() ] )
+			&& wp_verify_nonce( $_POST[ $box->nonce() ], $box->nonce() )
+			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			&& ( $type && in_array( $type, $box->box_types() ) )
+			&& ! ( is_multisite() && ms_is_switched() )
+		);
+		
+		// See CMB2_hookup->can_save()
+		return apply_filters( 'cmb2_can_save', $can_save, $box );
 	}
 	
 	/**
