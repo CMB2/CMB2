@@ -517,13 +517,82 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_select_field_after_value_update() {
-			update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], 'one' );
+		update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], 'one' );
 
 		$field = $this->get_field_object( $this->options_test['fields'][0] );
 		$this->assertHTMLstringsAreEqual(
 			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="one" selected=\'selected\'>One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
+
+		$args = array(
+			'name' => 'Name',
+			'description' => 'This is a description',
+			'id'   => 'options_test_field',
+			'type' => 'select',
+			'options' => array(
+				'1.3' => '1.3',
+				'0.8' => 0.8,
+				'0.1' => '0.1',
+				1     => '1',
+				'0.0' => '0.0',
+				0     => '0',
+				''     => 'nothing',
+				'one' => 'one',
+			),
+		);
+
+		$tests = array(
+			array(
+				'0.1',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				0.1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				.1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" selected=\'selected\'>1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'1',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" selected=\'selected\'>1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'one',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" selected=\'selected\'>one</option>',
+			),
+			array(
+				'0.0',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" selected=\'selected\'>0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				0,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" selected=\'selected\'>0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" selected=\'selected\'>nothing</option><option value="one" >one</option>',
+			),
+		);
+
+		foreach ( $tests as $index => $test ) {
+
+			update_post_meta( $this->post_id, $args['id'], $test[0] );
+			$field = $this->get_field_object( $args );
+
+			$this->assertHTMLstringsAreEqual(
+				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'">'. $test[1] .'</select><p class="cmb2-metabox-description">' . $args['description'] .'</p>',
+				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) ),
+				"Test index: $index"
+			);
+
+		}
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}

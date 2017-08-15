@@ -612,4 +612,20 @@ class CMB2_Utils {
 		return (array) $value;
 	}
 
+	/**
+	 * If number is numeric, normalize it with floatval or intval, depending on if decimal is found.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @param  mixed  $value Value to normalize (if numeric).
+	 *
+	 * @return mixed         Possibly normalized value.
+	 */
+	public static function normalize_if_numeric( $value ) {
+		if ( is_numeric( $value ) ) {
+			$value = false !== strpos( $value, '.' ) ? floatval( $value ) : intval( $value );
+		}
+
+		return $value;
+	}
 }
