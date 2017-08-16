@@ -10,6 +10,7 @@
  *                  New methods:
  *                    - can_box_save              : copy of can_save not tied to $this->cmb
  *                    - check_page_is_registered  : checks to be sure page has not already been added to menu
+ *                    - field_values_to_default   : returns field values to their default values
  *                    - find_page_boxes           : finds all boxes which appear on this page
  *                    - is_updated                : were the values updated?
  *                    - menu_slug                 : determines the menu slug
@@ -24,10 +25,12 @@
  *                    - shared_properties : ->prop() values shared across boxes
  *
  *                  New CMB2 box parameters:
- *                    - menu_slug    : ''                : allows menu item to not use option key as WP identifier
- *                    - page_title   : ''                : allows passing the options page title
- *                    - page_format  : 'simple' | 'post' : Allows options page to mimic post editor, defaults to 'simple'
- *                    - page_columns : 1 | 2 | 'auto'    : If 'post' style, how many columns. Defaults to 'auto'
+ *                    - menu_slug    : ''                   : allows menu item to not use option key as WP id
+ *                    - page_title   : ''                   : allows passing the options page title
+ *                    - page_format  : 'simple' | 'post'    : Allows post editor style; defaults to 'simple'
+ *                    - page_columns : 1 | 2 | 'auto'       : If 'post' style, how many columns. Default 'auto'
+ *                    - reset_button : ''                   : Text for reset button; empty hides reset button
+ *                    - reset_action : 'default' | 'remove' : Default is 'default'; 'remove'blanks field
  *
  *                  New filters:
  *                    - cmb2_options_page_title  : allow changing page title to something other than box title
@@ -238,8 +241,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		if ( 'true' === $_GET['updated'] ) {
 			add_settings_error( "{$this->option_key}-notices", '', __( 'Settings updated.', 'cmb2' ), 'updated' );
-		} else {
+		} else if ( 'false' === $_GET['updated'] ) {
 			add_settings_error( "{$this->option_key}-notices", '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
+		} else if ( 'reset' === $_GET['updated'] ) {
+			add_settings_error(
+				"{$this->option_key}-notices", '',
+				__( 'Options reset to defaults.', 'cmb2' ),
+				'notice-warning'
+			);
 		}
 	}
 	
@@ -339,6 +348,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			'page_columns' => $this->page_prop( 'page_columns', 'auto' ),
 			'page_format'  => $this->page_prop( 'page_format' ),
 			'position'     => $this->page_prop( 'position' ),
+			'reset_button' => $this->page_prop( 'reset_button', '' ),
+			'reset_action' => $this->page_prop( 'reset_action', 'default' ),
 			'save_button'  => $this->page_prop( 'save_button', 'Save', FALSE ),
 			'title'        => $this->page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
 		);
@@ -400,8 +411,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Display options-page output. To override, set 'display_cb' box property.
 	 *
-	 * @todo: Echo and callback returning value needs testing
-	 *
 	 * @since  2.XXX Allows multiple metaboxes to appear on single page
 	 *               Allows for return of results for testing
 	 * @since  2.2.5
@@ -421,8 +430,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		if ( is_callable( $callback ) ) {
 			
-			// the callback is expected to echo, but this will catch it if it doesn't
-			$html = $callback( $this );
+			// this will catch callbacks which return html or echo
+			ob_start();
+			$returned = $callback( $this );
+			$echoed   = ob_get_clean();
+			$html     = $echoed ? $echoed : $returned;
 			
 		} else {
 			
@@ -433,13 +445,16 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				self::enqueue_cmb_js();
 			}
 			
-			// get instance of display class and get html output
-			$display = new CMB2_Options_Display( $this->option_key, $this->page, $this->boxes, $this->shared_properties );
-			$html    = $display->options_page_output();
+			// get instance of display class
+			$dis = new CMB2_Options_Display( $this->option_key, $this->page, $this->boxes, $this->shared_properties );
+			
+			// get output from that class
+			$html = $dis->options_page_output();
 		}
 		
 		if ( $echo ) {
 			echo $html;
+			$html = true;
 		}
 		
 		return $html;
@@ -448,7 +463,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Save data from options page, then redirects back.
 	 *
-	 * @since  2.XXX Checks multiple boxes; calls $this->can_box_save() instead of $this->can_save()
+	 * @since  2.XXX Checks multiple boxes
+	 *               Calls $this->can_box_save() instead of $this->can_save()
+	 *               Allows options to be reset
 	 * @since  2.2.5
 	 *
 	 * @return void
@@ -460,24 +477,35 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$url = admin_url();
 		}
 		
+		// set the
+		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : false );
+		$option  = isset( $_POST['action'] ) ? $_POST['action'] : false;
 		$updated = FALSE;
 		
-		foreach ( $this->boxes as $box ) {
+		if ( $action && $option  ) {
 			
-			if (
-				$this->can_box_save( $box ) &&
-				isset( $_POST['submit-cmb'], $_POST['action'] ) &&
-				$this->option_key === $_POST['action']
-			) {
-				$up = $box
-					->save_fields( $this->option_key, $box->object_type(), $_POST )
-					->was_updated();
-				// set updated to true, prevent setting to false
-				$updated = $updated || $up;
+			foreach ( $this->boxes as $box ) {
+				
+				if ( $this->can_box_save( $box ) && $this->option_key === $action ) {
+					
+					// if the "reset" button was pressed, return fields to their default values
+					if ( $action == 'reset' ) {
+						$this->field_values_to_default( $box );
+						$updated = 'reset';
+					}
+					
+					$up = $box
+						->save_fields( $this->option_key, $box->object_type(), $_POST )
+						->was_updated();
+					
+					// set updated to true, prevent setting to false
+					$updated = $updated || $up;
+				}
 			}
+			
+			$url = add_query_arg( 'updated', var_export( $updated, true ), $url );
 		}
 		
-		$url = add_query_arg( 'updated', $updated ? 'true' : 'false', $url );
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
 		exit;
 	}
@@ -504,6 +532,27 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		// See CMB2_hookup->can_save()
 		return apply_filters( 'cmb2_can_save', $can_save, $box );
+	}
+	
+	/**
+	 * Changes _POST values for box fields to default values.
+	 *
+	 * @since 2.XXX
+	 *
+	 * @param \CMB2 $box
+	 */
+	public function field_values_to_default( CMB2 $box ) {
+	
+		$fields = $box->prop( 'fields' );
+		
+		/**
+		 * Depending on value set by 'reset_action', either blanks the field or reverts to default value
+		 *
+		 * @var \CMB2_Field $field
+		 */
+		foreach ( $fields as $fid => $field ) {
+			$_POST[ $fid ] = $this->shared_properties['reset_action'] == 'remove' ? '' : $field->get_default();
+		}
 	}
 	
 	/**

@@ -3,6 +3,17 @@
 /**
  * Creates and displays an options page.
  *
+ * Properties set on any metabox within page which can affect display:
+ *
+ *   - 'page_format'  : 'simple', 'post'     : Default 'simple', old school CMB2; 'post' is WP 'post' editor format
+ *   - 'page_columns' : 1, 2, 'auto'         : Default 'auto' (two columns if 'side' context box included)
+ *   - 'save_button'  : string, false        : If not set, 'Save' is used; false removes the button
+ *   - 'reset_button' : string               : If set, a reset button is added next to save with this text on it
+ *   - 'reset_action' : 'default' : 'remove' : Default 'default', saves field default values; 'remove' blanks values
+ *   - 'page_title'   : string               : If not set, first box's title is used for page title
+ *
+ * First value encountered in loop is used.
+ *
  * @since 2.XXX
  */
 
@@ -43,17 +54,18 @@ class CMB2_Options_Display {
 	/**
 	 * CMB2_Options_Display constructor.
 	 *
-	 * @param string $key
-	 * @param string $page
-	 * @param array  $boxes
-	 * @param array  $props
+	 * @param string $key   The options key
+	 * @param string $page  Page slug (also used by menu)
+	 * @param array  $boxes Boxes which are displayed on this page
+	 * @param array  $props Shared cmb2->prop() values used by the page itself
 	 *
 	 * @since 2.XXX
 	 */
-	public function __construct( $key,  $page, $boxes, $props ) {
-		$this->option_key = $key;
-		$this->page = $page;
-		$this->boxes = $boxes;
+	public function __construct( $key, $page, $boxes, $props ) {
+		
+		$this->option_key        = $key;
+		$this->page              = $page;
+		$this->boxes             = $boxes;
 		$this->shared_properties = $props;
 	}
 	
@@ -62,7 +74,7 @@ class CMB2_Options_Display {
 	 *
 	 * @since  2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function options_page_output() {
 		
@@ -79,13 +91,15 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Opening HTML for options page
+	 * Opening HTML for options page.
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function options_page_output_open() {
+		
+		$before = '';
 		
 		// add formatting class to non-post-type options pages
 		$wrapclass = $this->shared_properties['page_format'] !== 'post' ? ' cmb2-options-page' : '';
@@ -96,9 +110,19 @@ class CMB2_Options_Display {
 			$html .= "\n" . '<h1 class="wp-heading-inline">' . wp_kses_post( $this->shared_properties['title'] ) . '</h1>';
 		}
 		
-		// Allow html content to be inserted before the form
-		$before = '';
-		$html   .= "\n" . apply_filters( 'cmb2_options_page_before', $before, $this->page, $this );
+		/**
+		 * 'cmb2_options_page_before' filter.
+		 *
+		 * Allows inserting content before the page form, below the title. Any content passed in should be formatted
+		 * HTML ready to be echoed to page.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var string                $before Empty string default, can contain HTML from previous calls to filter
+		 * @var string                $this   ->page  Menu slug ($_GET['page']) value
+		 * @var \CMB2_Options_Display $this   Instance of this class
+		 */
+		$html .= "\n" . apply_filters( 'cmb2_options_page_before', $before, $this->page, $this );
 		
 		return $html;
 	}
@@ -108,13 +132,24 @@ class CMB2_Options_Display {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function options_page_output_close() {
 		
-		// allow content to be placed after the form
 		$after = '';
-		$html  = "\n" . apply_filters( 'cmb2_options_page_after', $after, $this->page, $this );
+		
+		/**
+		 * 'cmb2_options_page_after' filter.
+		 *
+		 * Allows inserting content after the page form. Content should be formatted HTML ready to be echoed to page.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var string                $before Empty string default, can contain HTML from previous calls to filter
+		 * @var string                $this   ->page  Menu slug ($_GET['page']) value
+		 * @var \CMB2_Options_Display $this   Instance of this class
+		 */
+		$html = "\n" . apply_filters( 'cmb2_options_page_after', $after, $this->page, $this );
 		
 		// close wrapper
 		$html .= "\n" . '</div>' . "\n";
@@ -127,10 +162,10 @@ class CMB2_Options_Display {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function options_page_form() {
-
+		
 		// opening form tag
 		$html = "\n" . '<form action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" '
 		        . 'method="POST" id="cmb2-option-' . $this->option_key . '" '
@@ -139,10 +174,10 @@ class CMB2_Options_Display {
 		// action input
 		$html .= "\n" . '<input type="hidden" name="action" value="' . esc_attr( $this->option_key ) . '">';
 		
-		// allows mimicing WP post editor layout
+		// allows'WP post editor' layout
 		$html .= $this->shared_properties['page_format'] !== 'post' ? $this->form_simple() : $this->form_post();
 		
-		// Allow save button to be hidden
+		// Allow save button to be hidden/assign value/assign default value
 		$html .= $this->save_button();
 		
 		// close form
@@ -152,11 +187,12 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Simple options page layout. Note multiple metaboxes in this format visually appear as one large metabox
+	 * Simple options page layout; the format originally output by CMB2_Options_Hookup.
+	 * Note multiple metaboxes in this format visually appear as one large metabox
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function form_simple() {
 		
@@ -170,19 +206,20 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Post-editor style options page. Note that the contexts 'before_permalink', 'after_title', and 'after_editor'
-	 * are not supported as they have no relevance on this page, those elements are missing.
+	 * Post-editor style options page.
+	 *
+	 * Contexts 'before_permalink', 'after_title', 'after_editor' not supported, they have no equivalent on this page.
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function form_post() {
 		
 		// determine number of columns for post-style layout
 		$columns = $this->find_page_columns();
 		
-		// array to hold boxes, sorted by context
+		// boxes, sorted by context
 		$sorted_boxes = array( 'side' => array(), 'normal' => array(), 'advanced' => array(), 'form_top' => array() );
 		
 		// sort boxes
@@ -190,27 +227,27 @@ class CMB2_Options_Display {
 			$sorted_boxes[ $box->prop( 'context' ) ][] = $box;
 		}
 		
-		// nonce fields for postboxes
+		// nonce fields
 		$html = wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', FALSE, FALSE );
 		$html .= wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', FALSE, FALSE );
 		
 		// form_top context boxes
 		foreach ( $sorted_boxes['form_top'] as $box ) {
-			$html .= $this->options_page_metabox( $box, true );
+			$html .= $this->options_page_metabox( $box, TRUE );
 		}
 		
-		// open main post area
+		// main post area
 		$html .= "\n" . '<div id="poststuff">';
 		$html .= "\n" . '<div id="post-body" class="metabox-holder columns-' . $columns . '">';
 		
-		// if there is a sidebar
+		// optional sidebar
 		if ( $columns == 2 ) {
 			
 			$html .= "\n" . '<div id="postbox-container-1" class="postbox-container">';
 			$html .= "\n" . '<div id="side-sortables" class="meta-box-sortables ui-sortable">';
 			
 			foreach ( $sorted_boxes['side'] as $box ) {
-				$html .= $this->options_page_metabox( $box, false );
+				$html .= $this->options_page_metabox( $box, FALSE );
 			}
 			
 			$html .= "\n" . '</div>';
@@ -221,17 +258,17 @@ class CMB2_Options_Display {
 		$html .= "\n" . '<div id="postbox-container-' . $columns . '" class="postbox-container">';
 		$html .= "\n" . '<div id="normal-sortables" class="meta-box-sortables ui-sortable">';
 		
-		// normal boxes
+		// 'normal' boxes
 		foreach ( $sorted_boxes['normal'] as $box ) {
-			$html .= $this->options_page_metabox( $box, false );
+			$html .= $this->options_page_metabox( $box, FALSE );
 		}
 		
 		$html .= "\n" . '</div>';
 		$html .= "\n" . '<div id="advanced-sortables" class="meta-box-sortables ui-sortable">';
 		
-		// advanced boxes
+		// 'advanced' boxes
 		foreach ( $sorted_boxes['advanced'] as $box ) {
-			$html .= $this->options_page_metabox( $box, false );
+			$html .= $this->options_page_metabox( $box, FALSE );
 		}
 		
 		$html .= "\n" . '</div>';
@@ -245,14 +282,14 @@ class CMB2_Options_Display {
 	 * Display metaboxes for an options-page object.
 	 *
 	 * @since  2.XXX  Pull parent class functionality into here to allow passing multiple boxes; complete rewrite
-	 * @since  2.2.5 (Within CMB2_Options_Hookup)
+	 * @since  2.2.5 (Originally within CMB2_Options_Hookup)
 	 *
 	 * @param \CMB2 $box
 	 * @param bool  $con Whether to add context box classes
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
-	public function options_page_metabox( CMB2 $box, $con = false ) {
+	public function options_page_metabox( CMB2 $box, $con = FALSE ) {
 		
 		if ( ! (bool) apply_filters( 'cmb2_show_on', $box->should_show(), $box->meta_box, $box ) ) {
 			return '';
@@ -262,7 +299,7 @@ class CMB2_Options_Display {
 		$remove = $this->remove_wrap( $box );
 		
 		// opening box html
-		$html   = $this->box_open( $box, $remove, $con );
+		$html = $this->box_open( $box, $remove, $con );
 		
 		// capture results from methods which only echo results
 		ob_start();
@@ -282,12 +319,12 @@ class CMB2_Options_Display {
 	 * @since 2.XXX
 	 *
 	 * @param \CMB2 $box
-	 * @param bool  $remove  Whether to remove the wrapper
-	 * @param bool  $con     Whether to add context classes
+	 * @param bool  $remove Whether to remove the wrapper
+	 * @param bool  $con    Whether to add context classes
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
-	public function box_open( CMB2 $box, $remove, $con = false ) {
+	public function box_open( CMB2 $box, $remove, $con = FALSE ) {
 		
 		// nothing from this method is needed for 'simple' format
 		if ( $this->shared_properties['page_format'] !== 'post' ) {
@@ -325,9 +362,9 @@ class CMB2_Options_Display {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param bool  $remove
+	 * @param bool $remove Should the wrap be removed
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function box_close( $remove ) {
 		
@@ -343,25 +380,40 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Save button. Default is
+	 * Save button. Optionally adds a reset button.
 	 *
-	 * @return string
+	 * @return string  Formatted HTML
 	 */
 	public function save_button() {
 		
-		// get the save button if configured
-		$sub = $this->shared_properties['save_button'];
+		$html = '';
 		
-		// If this is a string, allow it to be translated
+		// get the save button, if configured
+		$sub = $this->shared_properties['save_button'];
 		$sub = is_string( $sub ) ? __( $sub, 'cmb2' ) : $sub;
 		
-		return $sub ? "\n" . '<br class="clear">' . get_submit_button( esc_attr( $sub ), 'primary', 'submit-cmb' ) : '';
+		if ( ! $sub ) {
+			return $html;
+		}
+		
+		// get the reset button, if configured
+		$res = $this->shared_properties['reset_button'];
+		$res = is_string( $res ) && ! empty( $res ) ? __( $res, 'cmb2' ) : '';
+		
+		$html .= "\n" . '<p class="cmb-submit-wrap clear">';
+		
+		$html .= $res ? get_submit_button( esc_attr( $res ), 'secondary', 'reset-cmb', false ) : '';
+		$html .= get_submit_button( esc_attr( $sub ), 'primary', 'submit-cmb', false );
+		
+		$html .= '</p>';
+		
+		return $html;
 	}
 	
 	/**
 	 * Determines how many columns for a post-style page
 	 *
-	 * @return int
+	 * @return int  Value will be '1' or '2'
 	 */
 	public function find_page_columns() {
 		
@@ -385,12 +437,13 @@ class CMB2_Options_Display {
 	}
 	
 	/**
-	 * Adds filter to postbox_classes. This is a little kludgy but easiest way to pass a specific box, via closure
+	 * Adds filter to postbox_classes.
+	 * This is a little kludgy but easiest way to pass a specific box, via closure
 	 *
 	 * @since 2.XXX
 	 *
 	 * @param \CMB2 $box
-	 * @param bool $con
+	 * @param bool  $con Whether this is a 'context' box
 	 */
 	public function filter_postbox_classes( CMB2 $box, $con ) {
 		
@@ -419,21 +472,26 @@ class CMB2_Options_Display {
 	/**
 	 * Determines whether to remove the box wrap
 	 *
+	 * @since 2.XXX
+	 *
 	 * @param \CMB2 $box
 	 *
 	 * @return bool
 	 */
 	public function remove_wrap( CMB2 $box ) {
 		
+		$post_contexts = array( 'normal', 'advanced', 'side' );
+		
 		// if there is no title, remove
 		$remove = ! $box->prop( 'title' );
 		
 		// if remove_box_wrap is set and the context is not normal post context, remove wrap
-		$remove = ! $remove ? $box->prop( 'remove_box_wrap' ) === true  &&
-				( ! in_array( $box->prop( 'context' ), array( 'normal', 'advanced', 'side' ) ) ) : true;
+		$remove = ! $remove ?
+			$box->prop( 'remove_box_wrap' ) === TRUE && ( ! in_array( $box->prop( 'context' ), $post_contexts ) ) :
+			TRUE;
 		
 		// if this is a 'simple' form, remove the wrap
-		$remove = ! $remove ? $this->shared_properties['page_format'] !== 'post' : true;
+		$remove = ! $remove ? $this->shared_properties['page_format'] !== 'post' : TRUE;
 		
 		return $remove;
 	}
