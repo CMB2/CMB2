@@ -56,6 +56,7 @@ class CMB2 extends CMB2_Base {
 	 * Metabox Defaults
 	 *
 	 * @var   array
+	 * @since 2.XXX Added additional options page properties
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
@@ -110,15 +111,21 @@ class CMB2 extends CMB2_Base {
 		 */
 
 		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'option_key'       => '', // The actual option key and admin menu page slug.
+		'option_key'       => '', // The actual option key and admin menu page slug, unless menu_slug is set
+		'page_title'       => null, // Optionally set page title, defaults to box title
 		'parent_slug'      => '', // Used as first param in add_submenu_page().
+		'menu_slug'        => null, // Alternative to using option key for menu slug; *requires* option_key also be set
 		'capability'       => 'manage_options', // Cap required to view options-page.
 		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
 		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
 
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
 		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
+		'page_format'      => 'simple', // Can be 'simple' or 'post', which formats page like WP post editor
+		'page_columns'     => 'auto', // Only used on 'post' formats. 1, 2, or auto.
+		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'. False hides button
+		'reset_button'     => null, // Text for reset button. No default, if empty, button is not added
+		'reset_action'     => 'default', // can be either 'default' (restores default vals), or 'remove' (empties vals)
 	);
 
 	/**
@@ -1065,13 +1072,16 @@ class CMB2 extends CMB2_Base {
 		// Reset the object types.
 		$this->set_prop( 'object_types', array_unique( $types ) ) ;
 	}
-
+	
 	/**
 	 * If object-page initiation failed, remove traces options page setup.
 	 *
+	 * @since  2.XXX Updated phpdoc
 	 * @since  2.2.5
 	 *
-	 * @return void
+	 * @param array $types
+	 *
+	 * @return array
 	 */
 	protected function deinit_options_mb( $types ) {
 		if ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] ) {
@@ -1122,6 +1132,7 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Determine if we are on an options page (or saving the options page).
 	 *
+	 * @since  2.XXX Allows menu_slug to be set without losing the actual options key
 	 * @since  2.2.5
 	 *
 	 * @return bool
@@ -1134,20 +1145,25 @@ class CMB2 extends CMB2_Base {
 			return $found_key;
 		}
 
-		if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], $keys ) ) {
-			$found_key = $_GET['page'];
+		// if either value is set, check against the $keys array
+		$req = ! empty( $_GET['page'] ) ? $_GET['page'] : ( ! empty( $_POST['action'] ) ? $_POST['action'] : false );
+		
+		if ( $req && in_array( $req, $keys, true ) ) {
+			
+			// if there was a menu_slug in the keys, it's corresponding option key was its array key
+			$array_key = array_search( $req, $keys );
+			
+			// numeric key = no menu_slug
+			$found_key = ! is_numeric( $array_key ) ? $array_key : $req;
 		}
-
-		if ( ! empty( $_POST['action'] ) && in_array( $_POST['action'], $keys ) ) {
-			$found_key = $_POST['action'];
-		}
-
+		
 		return $found_key ? $found_key : false;
 	}
 
 	/**
 	 * Get the options page key.
 	 *
+	 * @since  2.XXX Added check for menu_slug; is only added if
 	 * @since  2.2.5
 	 * @return string|array
 	 */
@@ -1162,8 +1178,8 @@ class CMB2 extends CMB2_Base {
 			$values = $this->meta_box['show_on']['value'];
 		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
 			$values = $this->meta_box['show_on']['options-page'];
-		} elseif ( $this->prop( 'option_key') ) {
-			$values = $this->prop( 'option_key');
+		} elseif ( $this->prop( 'option_key' ) ) {
+			$values = $this->prop( 'option_key' );
 		}
 
 		if ( $values ) {
@@ -1172,6 +1188,14 @@ class CMB2 extends CMB2_Base {
 
 		if ( ! is_array( $key ) ) {
 			$key = array( $key );
+		}
+
+		// menu slugs must always have options_key set, if they do, add the slug to array, with the key being the
+		// option they correspond to
+		$ok = $this->prop( 'option_key' );
+		$ms = $this->prop( 'menu_slug' );
+		if ( $ms && $ok && is_string( $ok ) ) {
+			$key[ $ok ] = $ms;
 		}
 
 		return $key;
