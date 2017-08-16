@@ -204,13 +204,17 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $property->getValue( $object );
 	}
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = null ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
 
 		$compare = $this->compare_strings( $expected_string, $string_to_test );
 
-		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
+		if ( ! empty( $compare ) ) {
+			$msg .= $compare;
+		}
+
+		return $this->assertEquals( $expected_string, $string_to_test, $msg );
 	}
 
 	public function assertIsDefined( $definition ) {
