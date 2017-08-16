@@ -663,5 +663,18 @@ class CMB2_Types {
 	public function file( $args = array() ) {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_File', $args )->render();
 	}
-
+	
+	public function submit( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $args, 'submit' )->render();
+	}
+	
+	public function reset( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $args, 'reset' )->render();
+	}
+	
+	public function submit_and_reset( $submit = array(),  $reset = array() ) {
+		$sub = $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $submit, 'submit' )->render();
+		$res = $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $reset, 'reset' )->render();
+		return $sub . $res;
+	}
 }
