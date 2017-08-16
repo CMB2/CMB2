@@ -244,6 +244,8 @@ class CMB2_Sanitize {
 
 		$search = array( $wp_locale->number_format['thousands_sep'], $wp_locale->number_format['decimal_point'] );
 		$replace = array( '', '.' );
+		
+		$this->value = wp_unslash( $this->value ); // Strip slashes. Example: 2\'180.00.
 
 		// for repeatable
 		if ( is_array( $this->value ) ) {
