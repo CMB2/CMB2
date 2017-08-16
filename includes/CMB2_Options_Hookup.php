@@ -217,6 +217,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Get the menu slug. We cannot pass a fallback to CMB2 as it will prevent additional pages from being generated.
 	 *
+	 * Menu slugs must ALWAYS be accompianied by an explicit declaration of the 'option_key' box parameter.
+	 *
 	 * @param \CMB2 $box
 	 *
 	 * @return mixed|string
@@ -225,7 +227,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$menu_slug = $box->prop( 'menu_slug' );
 		
-		return empty( $menu_slug ) ? $this->option_key : $menu_slug;
+		return empty( $menu_slug ) || $menu_slug && ! $box->prop( 'option_key' ) ? $this->option_key : $menu_slug;
 	}
 	
 	/**
@@ -477,7 +479,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$url = admin_url();
 		}
 		
-		// set the
+		// set the option and action
 		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : false );
 		$option  = isset( $_POST['action'] ) ? $_POST['action'] : false;
 		$updated = FALSE;
@@ -486,7 +488,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			
 			foreach ( $this->boxes as $box ) {
 				
-				if ( $this->can_box_save( $box ) && $this->option_key === $action ) {
+				if ( $this->can_box_save( $box ) && $this->option_key === $option ) {
 					
 					// if the "reset" button was pressed, return fields to their default values
 					if ( $action == 'reset' ) {
@@ -499,7 +501,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 						->was_updated();
 					
 					// set updated to true, prevent setting to false
-					$updated = $updated || $up;
+					$updated = $updated ? $updated : $up;
 				}
 			}
 			
@@ -551,7 +553,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 * @var \CMB2_Field $field
 		 */
 		foreach ( $fields as $fid => $field ) {
-			$_POST[ $fid ] = $this->shared_properties['reset_action'] == 'remove' ? '' : $field->get_default();
+			$f = $box->get_field( $field );
+			$_POST[ $fid ] = $this->shared_properties['reset_action'] == 'remove' ? '' : $f->get_default();
 		}
 	}
 	
