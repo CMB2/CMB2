@@ -36,6 +36,9 @@
  *                    - cmb2_options_page_title  : allow changing page title to something other than box title
  *                    - cmb2_options_page_before : HTML content before form
  *                    - cmb2_options_page_after  : HTML content after form
+ *                    - cmb2_options_form_id     : ID of the options page form
+ *                    - cmb2_options_form_top    : Insert HTML after form opening tag
+ *                    - cmb2_options_form_bottom : Insert HTML before form closing tag
  *
  *                  Removed methods:
  *                    - options_page_metabox : now in CMB2_Options_Display
