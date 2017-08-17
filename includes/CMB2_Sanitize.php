@@ -270,6 +270,9 @@ class CMB2_Sanitize {
 	 * @return string Timestring
 	 */
 	public function text_date_timestamp() {
+		// date_create_from_format if there is a slash in the value.
+		$this->value = wp_unslash( $this->value );
+
 		return is_array( $this->value )
 			? array_map( array( $this->field, 'get_timestamp_from_value' ), $this->value )
 			: $this->field->get_timestamp_from_value( $this->value );
@@ -282,6 +285,8 @@ class CMB2_Sanitize {
 	 * @return string|array Timestring
 	 */
 	public function text_datetime_timestamp( $repeat = false ) {
+		// date_create_from_format if there is a slash in the value.
+		$this->value = wp_unslash( $this->value );
 
 		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
 		if ( empty( $test ) ) {
@@ -317,6 +322,9 @@ class CMB2_Sanitize {
 		if ( empty( $test ) ) {
 			return '';
 		}
+
+		// date_create_from_format if there is a slash in the value.
+		$this->value = wp_unslash( $this->value );
 
 		$utc_key = $this->field->_id() . '_utc';
 
