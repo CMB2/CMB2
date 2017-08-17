@@ -166,10 +166,36 @@ class CMB2_Options_Display {
 	 */
 	public function options_page_form() {
 		
+		$id = 'cmb2-option-' . $this->option_key;
+		$top = $bottom = '';
+		
+		/**
+		 * 'cmb2_options_form_id' filter: Change the ID of the form. If returned empty, will revert to default.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var      string                $this->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Display $this            Instance of this class
+		 */
+		$form_id = apply_filters( 'cmb2_options_form_id', $id, $this->page, $this );
+		
+		// No empty IDs
+		$form_id = empty( $form_id ) ? $id : $form_id;
+		
 		// opening form tag
 		$html = "\n" . '<form action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" '
-		        . 'method="POST" id="cmb2-option-' . $this->option_key . '" '
+		        . 'method="POST" id="' . esc_attr( $form_id ) . '" '
 		        . 'enctype="multipart/form-data" encoding="multipart/form-data">';
+		
+		/**
+		 * 'cmb2_options_form_top' filter: Insert HTML content just after form opening tag
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var      string                $this->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Display $this            Instance of this class
+		 */
+		$html .= apply_filters( 'cmb2_options_form_top', $top, $this->page, $this );
 		
 		// action input
 		$html .= "\n" . '<input type="hidden" name="action" value="' . esc_attr( $this->option_key ) . '">';
@@ -179,6 +205,16 @@ class CMB2_Options_Display {
 		
 		// Allow save button to be hidden/assign value/assign default value
 		$html .= $this->save_button();
+		
+		/**
+		 * 'cmb2_options_form_bottom' filter: Insert HTML content just before form closing tag
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var      string                $this->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Display $this            Instance of this class
+		 */
+		$html .= apply_filters( 'cmb2_options_form_bottom', $bottom, $this->page, $this );
 		
 		// close form
 		$html .= "\n" . '</form>' . "\n";
