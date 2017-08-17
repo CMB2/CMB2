@@ -89,7 +89,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	protected $page = '';
 	
 	/**
-	 * Common cmb->prop values shared across all boxes (titles
+	 * Common cmb->prop values shared across all boxes
 	 *
 	 * @var array
 	 * @since 2.XXX
