@@ -10,11 +10,11 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @method string _id()
- * @method string _name()
- * @method string _desc()
- * @method string _text()
- * @method string concat_attrs()
+ * method string _id()
+ * method string _name()
+ * method string _desc()
+ * method string _text()
+ * method string concat_attrs()
  */
 class CMB2_Types {
 
@@ -45,13 +45,16 @@ class CMB2_Types {
 	public function __construct( CMB2_Field $field ) {
 		$this->field = $field;
 	}
-
+	
 	/**
 	 * Default fallback. Allows rendering fields via "cmb2_render_$fieldtype" hook
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param string $fieldtype Non-existent field type name
 	 * @param array  $arguments All arguments passed to the method
+	 *
+	 * @return mixed|string
 	 */
 	public function __call( $fieldtype, $arguments ) {
 
@@ -133,7 +136,7 @@ class CMB2_Types {
 
 		return $default;
 	}
-
+	
 	/**
 	 * If no CMB2_Types::$type object is initiated when a proxy method is called, it means
 	 * it's a custom field type (which SHOULD be instantiating a Type), but let's try and
@@ -141,7 +144,9 @@ class CMB2_Types {
 	 *
 	 * @since  2.2.3
 	 *
-	 * @param string $method  Method attempting to be called on the CMB2_Type_Base object.
+	 * @param string $method Method attempting to be called on the CMB2_Type_Base object.
+	 *
+	 * @return bool
 	 */
 	protected function guess_type_object( $method ) {
 		$fieldtype = $this->field->type();
@@ -374,7 +379,7 @@ class CMB2_Types {
 
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
-			$count = count( $meta_value );
+		//	$count = count( $meta_value );
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
 				$this->repeat_row();
@@ -415,14 +420,17 @@ class CMB2_Types {
 
 		<?php
 	}
-
+	
 	/**
 	 * Generates description markup
 	 *
 	 * @since  1.0.0
-	 * @param  boolean $paragraph Paragraph tag or span
-	 * @param  boolean $echo      Whether to echo description or only return it
-	 * @return string             Field's description markup
+	 *
+	 * @param boolean $paragraph     Paragraph tag or span
+	 * @param boolean $echo          Whether to echo description or only return it
+	 * @param bool    $repeat_group
+	 *
+	 * @return string Field's description markup
 	 */
 	public function _desc( $paragraph = false, $echo = false, $repeat_group = false ) {
 		// Prevent description from printing multiple times for repeatable fields
@@ -433,7 +441,7 @@ class CMB2_Types {
 		$desc = $this->field->args( 'description' );
 
 		if ( ! $desc ) {
-			return;
+			return '';
 		}
 
 		$tag = $paragraph ? 'p' : 'span';
@@ -664,17 +672,7 @@ class CMB2_Types {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_File', $args )->render();
 	}
 	
-	public function submit( $args = array() ) {
-		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $args, 'submit' )->render();
-	}
-	
-	public function reset( $args = array() ) {
-		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $args, 'reset' )->render();
-	}
-	
-	public function submit_and_reset( $submit = array(),  $reset = array() ) {
-		$sub = $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $submit, 'submit' )->render();
-		$res = $this->get_new_render_type( __FUNCTION__, 'CMB2_Submit', $reset, 'reset' )->render();
-		return $sub . $res;
+	public function submit() {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Submit', $this->field->args('options') )->render();
 	}
 }
