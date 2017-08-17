@@ -355,7 +355,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			'save_button'  => $this->page_prop( 'save_button', 'Save', FALSE ),
 			'title'        => $this->page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
 		);
-		
+
 		/**
 		 * 'cmb2_options_page_title' filter.
 		 *
@@ -394,7 +394,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		foreach ( $this->boxes as $box ) {
 			
-			$prop = $box->prop( $property, $fallback );
+			$prop = $box->prop( $property );
 			
 			// if a value is found and it doesn't break empty string rules, we're done
 			if ( $prop !== NULL && ( $empty_string_ok || $prop !== '' ) ) {
@@ -402,8 +402,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			}
 		}
 		
-		// specifically checks for empty string (not false/null) and subs $fallback if flag is set
-		if ( ! $empty_string_ok && $prop === '' && is_string( $fallback ) ) {
+		if (
+			( ! $empty_string_ok && $prop === '' && is_string( $fallback ) ) // value was empty string, not ok
+			|| ( $prop === null && $empty_string_ok && $fallback !== null )  // value was null, fallback OK
+		) {
 			$prop = $fallback;
 		}
 		
