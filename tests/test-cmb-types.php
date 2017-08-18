@@ -658,9 +658,9 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			) )
 		);
 	}
-
+	
 	public function test_file_list_field_after_value_update() {
-
+		
 		$images = get_attached_media( 'image', $this->post_id );
 		$attach_1_url = get_permalink( $this->attachment_id );
 		$attach_2_url = get_permalink( $this->attachment_id2 );
@@ -676,8 +676,13 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		) );
 
 		$field_type = $this->get_field_type_object( 'file_list' );
-
-		$sizename = CMB2_Utils::wp_at_least( '4.7' ) ? 'twentyseventeen-thumbnail-avatar' : 'thumbnail';
+		
+		/**
+		 * @since 2.XXX Out-of-the-box unit testing using WP Develop does not set twentyseventeen as the default theme.
+		 * @todo: this would probably be better as function/config array which could determine appropriate strings on per-theme basis?
+		 */
+		$stylesheet = get_stylesheet();
+		$sizename = CMB2_Utils::wp_at_least( '4.7' ) && $stylesheet == 'twentyseventeen' ? 'twentyseventeen-thumbnail-avatar' : 'thumbnail';
 
 		$this->assertHTMLstringsAreEqual(
 			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
@@ -1011,5 +1016,162 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$expected = '<h5 class="cmb2-metabox-title" id="field-test-field-custom">Name</h5><p class="cmb2-metabox-description">This is a description</p>';
 
 		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
+	}
+	
+	/**
+	 * @since 2.XXX tests submit field. Function uses get_submit_button, HTML below pulled from template.php
+	 *        'Reset' and 'Save' buttons use identical internal methods, only parameters are changed.
+	 */
+	public function test_submit_field() {
+		
+		// [ 'type' => 'submit', 'options' => [ 'submit' = true ] ]
+		$base = $this->submit;
+		
+		// standard values consistent with internal defaults of tested type for HTML string generation
+		$html_cfg = array(
+			'submit' => array(
+				'name' => 'submit-cmb',
+				'id' => 'submit-cmb',
+				'classes' => ' button-primary',
+				'value' => 'Save',
+				'attr' => '',
+			),
+			'reset' => array(
+				'name' => 'reset-cmb',
+				'id' => 'reset-cmb',
+				'classes' => '',
+				'value' => 'Reset',
+				'attr' => 'style="margin-right: 10px;" ',
+			)
+		);
+		
+		// These match submit button defaults in class
+		$opt_cfg = array(
+			'id' => '',
+			'name' => 'submit-cmb',
+			'text' => 'Save',
+			'button' => 'primary',
+			'wrap' => false,
+			'attributes' => array(),
+		);
+		
+		/**
+		 * Default configuration returns a save button
+		 */
+		$args      = $base;
+		$html_vals = $html_cfg['submit'];
+		
+		$field     = $this->get_field_object( $args );
+		
+		$this->assertHTMLstringsAreEqual(
+			$this->submit_field_html( $html_vals ),
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+		/**
+		 * Changing default to false should return empty string
+		 */
+		$args = $base;
+		
+		$args['options']['submit'] = false;
+		
+		$field = $this->get_field_object( $args );
+		
+		$this->assertEquals(
+			'',
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+		/**
+		 * Changing default to empty string returns empty string
+		 */
+		$args      = $base;
+		
+		$args['options']['submit'] = '';
+		
+		$field = $this->get_field_object( $args );
+		
+		$this->assertEquals(
+			'',
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+		/**
+		 * Changing default to text string should return button with that string
+		 */
+		
+		$text = 'Test Button';
+		
+		$args      = $base;
+		$html_vals = $html_cfg['submit'];
+		
+		$args['options']['submit'] = $text;
+		$html_vals['value']        = $text;
+		
+		$field   = $this->get_field_object( $args );
+		
+		$this->assertHTMLstringsAreEqual(
+			$this->submit_field_html( $html_vals ),
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+		/**
+		 * Passing an array of parameters should produce button with those parameters
+		 */
+		$text = 'Test Button';
+		$id   = 'test_submit_id';
+		
+		$args = $base;
+		$args['options']['submit'] = $opt_cfg;
+		$html_vals = $html_cfg['submit'];
+		
+		$html_vals['value']                  = $text;
+		$args['options']['submit']['text']   = $text;
+		$html_vals['id']                     = $id;
+		$args['options']['submit']['id']     = $id;
+		
+		$field   = $this->get_field_object( $args );
+		
+		$this->assertHTMLstringsAreEqual(
+			$this->submit_field_html( $html_vals ),
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+		/**
+		 * Setting reset to true should return a reset and submit button
+		 */
+		$args = $base;
+		
+		$args['options']['reset'] = true;
+		
+		$html_vals = $html_cfg['submit'];
+		$sub = $this->submit_field_html( $html_vals );
+		
+		$html_vals = $html_cfg['reset'];
+		$res = $this->submit_field_html( $html_vals );
+		
+		$field = $this->get_field_object( $args );
+		
+		$this->assertHTMLstringsAreEqual(
+			$res . $sub,
+			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
+		);
+		
+	}
+	
+	/**
+	 * Constructs button text string to match params
+	 *
+	 * @since    2.XXX
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public function submit_field_html( $args ) {
+		
+		$html_base = '<input type="submit" name="%s" id="%s" class="button%s" value="%s" %s />';
+		
+		return sprintf( $html_base, $args['name'], $args['id'], $args['classes'], $args['value'], $args['attr'] );
 	}
 }
