@@ -230,11 +230,15 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'error_data' => array(),
 		), CMB2_Utils::ensure_array( new WP_Error ) );
 	}
-
+	
+	/**
+	 * @since 2.XXX Windows understands both '\' and '/'; added backslash to str_replace to prevent test failure
+	 *              in windows environments
+	 */
 	public function test_url_set() {
 		$cmb2_url = str_replace(
-			array( WP_CONTENT_DIR, WP_PLUGIN_DIR ),
-			array( WP_CONTENT_URL, WP_PLUGIN_URL ),
+			array( WP_CONTENT_DIR, WP_PLUGIN_DIR, '\\' ),
+			array( WP_CONTENT_URL, WP_PLUGIN_URL, '/' ),
 			cmb2_dir()
 		);
 
