@@ -58,18 +58,24 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 			return array();
 		}
 		
-		foreach( $this->type_submit_defaults() as $button => $bargs ) {
+		$defaults = $this->type_submit_defaults();
+		
+		foreach( $defaults as $button => $bargs ) {
 			
 			if ( isset( $args[ $button ] ) && is_array( $args[ $button ] ) ) {
 				
 				// make sure attributes which must be set have a value on the incoming options
 				$args[ $button ] = $this->type_submit_property_not_empty( $bargs, $args[ $button ] );
 				$args[ $button ] = array_merge( $bargs, $args[ $button ] );
+				
+			} else {
+				
+				unset( $defaults[ $button ] );
 			}
 		}
 		
 		// expose arguments to allowing filtering in base method
-		return $this->parse_args( 'submit', $this->type_submit_defaults(), $args );
+		return $this->parse_args( 'submit', $defaults, $args );
 	}
 	
 	/**
@@ -101,7 +107,7 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		foreach( $keys as $key ) {
 			
 			if ( ! isset( $args[ $key ] ) ) {
-				
+
 				continue;
 				
 			} else if ( is_bool( $args[ $key ] ) && $args[ $key ] === true ) {
@@ -109,14 +115,14 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 				// true will set the button, using defaults
 				$args[ $key ] = array();
 				
-			} else if ( is_string( $args[ $key ] ) && $args[ $key ] ) {
+			}  else if ( is_string( $args[ $key ] ) && $args[ $key ] ) {
 				
 				// a string will set the value
 				$args[ $key ] = array(
 					'text' => $args[ $key ],
 				);
 				
-			} else if ( ! is_array( $args[ $key ] ) || ( is_array( $args[ $key ] ) && empty( $args[ $key ] ) ) ) {
+			} else if ( ! is_array( $args[ $key ] ) || empty( $args[ $key ] ) ) {
 				
 				// other values, including empty arrays, should remove the button
 				unset( $args[ $key ] );
@@ -162,8 +168,8 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 			'reset' => array(
 				'id' => '',
 				'name' => 'reset-cmb',
-				'text' => '',
-				'button' => 'secondary',
+				'text' => 'Reset',
+				'button' => '',
 				'wrap' => false,
 				'attributes' => array( 'style' => 'margin-right: 10px;' ),
 			),
