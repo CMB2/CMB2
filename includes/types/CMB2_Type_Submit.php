@@ -52,6 +52,12 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 	 */
 	public function type_submit_parse_args( $args ) {
 		
+		$args = $this->type_submit_minimum_config( $args );
+		
+		if ( empty( $args ) ) {
+			return array();
+		}
+		
 		foreach( $this->type_submit_defaults() as $button => $bargs ) {
 			
 			if ( isset( $args[ $button ] ) && is_array( $args[ $button ] ) ) {
@@ -64,6 +70,60 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		// expose arguments to allowing filtering in base method
 		return $this->parse_args( 'submit', $this->type_submit_defaults(), $args );
+	}
+	
+	/**
+	 * Will create a button:
+	 *   $args[$key] = true            uses defaults
+	 *   $args[$key] = 'Whatever'      sets key using 'Whatever' as button text
+	 *   $args[$key] = array( params ) subs parameters for defaults
+	 *
+	 * Will not create a button:
+	 *   $args[$key] = ''
+	 *   $args[$key] = false
+	 *   $args[$key] = array()
+	 *   $args[$key] = 1
+	 *
+	 * @since 2.XXX
+	 *
+	 * @param $args
+	 *
+	 * @return array
+	 */
+	public function type_submit_minimum_config( $args ) {
+		
+		if ( ! is_array( $args ) ) {
+			return array();
+		}
+		
+		$keys = array_keys( $this->type_submit_defaults() );
+		
+		foreach( $keys as $key ) {
+			
+			if ( ! isset( $args[ $key ] ) ) {
+				
+				continue;
+				
+			} else if ( is_bool( $args[ $key ] ) && $args[ $key ] === true ) {
+				
+				// true will set the button, using defaults
+				$args[ $key ] = array();
+				
+			} else if ( is_string( $args[ $key ] ) && $args[ $key ] ) {
+				
+				// a string will set the value
+				$args[ $key ] = array(
+					'text' => $args[ $key ],
+				);
+				
+			} else if ( ! is_array( $args[ $key ] ) || ( is_array( $args[ $key ] ) && empty( $args[ $key ] ) ) ) {
+				
+				// other values, including empty arrays, should remove the button
+				unset( $args[ $key ] );
+			}
+		}
+		
+		return $args;
 	}
 	
 	/**
