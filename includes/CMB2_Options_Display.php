@@ -107,7 +107,8 @@ class CMB2_Options_Display {
 		$html = "\n" . '<div class="wrap' . $wrapclass . ' options-' . $this->option_key . '">';
 		
 		if ( $this->shared_properties['title'] ) {
-			$html .= "\n" . '<h1 class="wp-heading-inline">' . wp_kses_post( $this->shared_properties['title'] ) . '</h1>';
+			$html .= "\n" . '<h1 class="wp-heading-inline">'
+			         . wp_kses_post( $this->shared_properties['title'] ) . '</h1>';
 		}
 		
 		/**
@@ -200,6 +201,10 @@ class CMB2_Options_Display {
 		// action input
 		$html .= "\n" . '<input type="hidden" name="action" value="' . esc_attr( $this->option_key ) . '">';
 		
+		// boxes served by this page
+		$html .= "\n" . '<input type="hidden" name="cmb2_boxes" value="'
+		         .  implode( ',', array_keys( $this->boxes ) ) . '">';
+		
 		// allows'WP post editor' layout
 		$html .= $this->shared_properties['page_format'] !== 'post' ? $this->form_simple() : $this->form_post();
 		
@@ -244,7 +249,7 @@ class CMB2_Options_Display {
 	/**
 	 * Post-editor style options page.
 	 *
-	 * Contexts 'before_permalink', 'after_title', 'after_editor' not supported, they have no equivalent on this page.
+	 * Contexts 'before_permalink', 'after_title', 'after_editor' not supported.
 	 *
 	 * @since 2.XXX
 	 *
