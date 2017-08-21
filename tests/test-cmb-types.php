@@ -678,11 +678,18 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$field_type = $this->get_field_type_object( 'file_list' );
 		
 		/**
-		 * @since 2.XXX Out-of-the-box unit testing using WP Develop does not set twentyseventeen as the default theme.
-		 * @todo: this would probably be better as function/config array which could determine appropriate strings on per-theme basis?
+		 * WP Develop does not set twentyseventeen as the default theme; test was failing.
+		 *
+		 * Themes with special thumbnail sizenames can be set in $theme_sizenames, below.
+		 * The version check of WP is no longer needed and additional special sizenames can be added.
+		 *
+		 * @since 2.XXX
 		 */
+		$theme_sizenames = array(
+			'twentyseventeen' => 'twentyseventeen-thumbnail-avatar',
+		);
 		$stylesheet = get_stylesheet();
-		$sizename = CMB2_Utils::wp_at_least( '4.7' ) && $stylesheet == 'twentyseventeen' ? 'twentyseventeen-thumbnail-avatar' : 'thumbnail';
+		$sizename = isset( $theme_sizenames[ $stylesheet ] ) ? $theme_sizenames[ $stylesheet ] : 'thumbnail';
 
 		$this->assertHTMLstringsAreEqual(
 			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
