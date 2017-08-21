@@ -5,14 +5,18 @@
  *
  * @since     2.XXX Now allows multiple metaboxes on an options page.
  *
+ *                  New global:
+ *                    - $cmb2_options_hookup_filters : Array, tracks hooks per option
  *                  New methods:
  *                    - add_page_box              : Adds a CMB2 box to $this->boxes
  *                    - add_page_boxes            : Adds multiple CMB2 boxes to $this->boxes
  *                    - can_box_save              : copy of can_save not tied to $this->cmb
  *                    - error_already_exists      : Avoids duplicate notices
  *                    - field_values_to_default   : returns field values to their default values
+ *                    - filtered                  : adds hook to global filter list
  *                    - find_page_boxes           : finds all boxes which appear on this page
  *                    - get_prop                  : Get value of class property
+ *                    - has_filters               : checks if hookup filter has already been hooked
  *                    - is_page_registered        : checks to be sure page has not already been added to menu
  *                    - is_setting_registered     : Has the setting already been registered?
  *                    - is_updated                : were the values updated?
@@ -134,22 +138,21 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Default hooks. Also does some preliminary data prep.
+	 * Default hooks.
 	 *
 	 * @since 2.XXX  Checks if settings have already been registered
 	 * @since 2.2.5  (?) Method undocumented
 	 *
-	 * @return string   Aid to unit tests
+	 * @return array  Array of all hooks added
 	 */
 	public function hooks() {
-		
-		$return = 'page';
 		
 		// set for line lengths and readability
 		$OPT = $this->option_key;
 		
 		// Optionally network_admin_menu.
 		$hook = $this->cmb->prop( 'admin_menu_hook' );
+		$return = array( 'admin_post_' . $OPT => array(), $hook => array() );
 		
 		// if this setting has not been registered, do so
 		if ( ! $this->is_setting_registered( $OPT ) ) {
@@ -160,36 +163,112 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			// Handle saving the data.
 			add_action( 'admin_post_' . $OPT, array( $this, 'save_options' ) );
 			
-			$return = 'setting';
+			$return[ 'admin_post_' . $OPT ]['save_options'] = true;
 		}
 		
 		// Hook in determining which boxes are on page
-		add_action( $hook, array( $this, 'add_page_boxes' ), 8 );
+		if ( $this->has_filter( $hook, 'add_page_boxes' ) === false ) {
+			add_action( $hook, array( $this, 'add_page_boxes' ), 8 );
+			$return[ $hook ]['add_page_boxes'] = $this->filtered( $hook, 'add_page_boxes' );
+		}
 		
 		// Hook shared data prep
-		add_action( $hook, array( $this, 'page_properties' ), 9 );
+		if ( $this->has_filter( $hook, 'page_properties' ) === false ) {
+			add_action( $hook, array( $this, 'page_properties' ), 9 );
+			$return[ $hook ]['page_properties'] = $this->filtered( $hook, 'page_properties' );
+		}
 		
 		// Hook in to add our menu.
-		add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+		if ( $this->has_filter( $hook, 'options_page_menu_hooks' ) === false ) {
+			add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+			$return[ $hook ]['options_page_menu_hooks'] = $this->filtered( $hook, 'options_page_menu_hooks' );
+		}
 		
 		// Hook to check if updated
-		add_action( $hook, array( $this, 'postbox_scripts' ), 11 );
+		if ( $this->has_filter( $hook, 'postbox_scripts' ) === false ) {
+			add_action( $hook, array( $this, 'postbox_scripts' ), 11 );
+			$return[ $hook ]['postbox_scripts'] = $this->filtered( $hook, 'postbox_scripts' );
+		}
 		
 		// Hook to check if updated
-		add_action( $hook, array( $this, 'is_updated' ), 12 );
+		if ( $this->has_filter( $hook, 'is_updated' ) === false ) {
+			add_action( $hook, array( $this, 'is_updated' ), 12 );
+			$return[ $hook ]['is_updated'] = $this->filtered( $hook, 'is_updated' );
+		}
 		
 		// If in the network admin, need to use get/update_site_option.
 		if ( 'network_admin_menu' === $hook ) {
 			
 			// Override CMB's getter.
-			add_filter( "cmb2_override_option_get_{$OPT}", array( $this, 'network_get_override' ), 10, 2 );
+			$G = 'cmb2_override_option_get_' . $OPT;
+			if ( $this->has_filter( $hook, $G ) === false ) {
+				add_filter( $G, array( $this, 'network_get_override' ), 10, 2 );
+				$return[ $hook ][ $G ] = $this->filtered( $hook, $G );
+			}
 			
 			// Override CMB's setter.
-			add_filter( "cmb2_override_option_save_{$OPT}", array( $this, 'network_update_override', ), 10, 2 );
+			$S = 'cmb2_override_option_save_' . $OPT;
+			if ( $this->has_filter( $hook, $S ) === false ) {
+				add_filter( $S, array( $this, 'network_update_override' ), 10, 2 );
+				$return[ $hook ][ $S ] = $this->filtered( $hook, $S );
+			}
 		}
 		
-		// return the status of
-		return ! $return == 'page' ? $return : 'both';
+		return $return;
+	}
+	
+	/**
+	 * Tracks via a global if this option key has CMB2_Options_Hookup hooks, returns true if so
+	 *
+	 * @param string   $page     Equivalent to $this->page
+	 * @param string   $hook    The tag being set
+	 * @param $method  $method  Method being called
+	 *
+	 * @return bool
+	 */
+	public function has_filter( $hook, $method, $page = '' ) {
+		
+		$hook   = (string) $hook;
+		$method = (string) $method;
+		$page   = empty( $page ) ? $this->page : (string) $page ;
+		
+		global $cmb2_options_hookup_filters;
+		
+		// set empty arrays if they are not set
+		if ( empty( $cmb2_options_hookup_filters ) ) {
+			$cmb2_options_hookup_filters = array( $page => array() );
+		}
+		if ( ! isset( $cmb2_options_hookup_filters[ $page ][ $hook ] ) ) {
+			$cmb2_options_hookup_filters[ $page ][ $hook ] = array();
+		}
+		
+		return in_array( $method, $cmb2_options_hookup_filters[ $page ][ $hook ] );
+	}
+	
+	/**
+	 * Saves the method name to the global to prevent adding another hook. Forces type on parameters.
+	 *
+	 * @param string $hook    The tag being set
+	 * @param string $method  Method being called
+	 * @param string $page     Equivalent to $this->page
+	 *
+	 * @return bool
+	 */
+	public function filtered( $hook, $method, $page = '' ) {
+		
+		$hook   = (string) $hook;
+		$method = (string) $method;
+		$page   = empty( $page ) ? $this->page : (string) $page ;
+		
+		global $cmb2_options_hookup_filters;
+		
+		// checking this will ensure the arrays exist before setting
+		if ( ! $this->has_filter( $hook, $method, $page ) ) {
+			$cmb2_options_hookup_filters[ $page ][ $hook ][] = $method;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
