@@ -6,18 +6,20 @@
  * @since     2.XXX Now allows multiple metaboxes on an options page.
  *
  *                  New methods:
+ *                    - add_page_box              : Adds a CMB2 box to $this->boxes
+ *                    - add_page_boxes            : Adds multiple CMB2 boxes to $this->boxes
  *                    - can_box_save              : copy of can_save not tied to $this->cmb
-
+ *                    - error_already_exists      : Avoids duplicate notices
  *                    - field_values_to_default   : returns field values to their default values
  *                    - find_page_boxes           : finds all boxes which appear on this page
- *                    - is_updated                : were the values updated?
+ *                    - get_prop                  : Get value of class property
  *                    - is_page_registered        : checks to be sure page has not already been added to menu
  *                    - is_setting_registered     : Has the setting already been registered?
- *                    - set_page                  : determines $this->page value
+ *                    - is_updated                : were the values updated?
  *                    - page_prop                 : scans $this->boxes for requested CMB2 property
  *                    - page_properties           : compiles shared properties from multiple boxes
  *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
- *                    - get_prop                  : Get value of class property
+ *                    - set_page                  : determines $this->page value
  *
  *                  New properties:
  *                    - boxes             : All CMB2 boxes which appear on this page
@@ -119,10 +121,16 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function __construct( CMB2 $cmb, $option_key, $boxes = array(), $page = '', $shared_properties = array() ) {
 		
 		$this->cmb               = $cmb;
-		$this->option_key        = $option_key;
-		$this->page              = empty( $page ) ? $this->set_page() : $page;
-		$this->boxes             = $boxes;
-		$this->shared_properties = $shared_properties;
+		$this->option_key        = (string) $option_key;
+		$this->page              = empty( $page ) ? $this->set_page() : (string) $page;
+		
+		if ( ! empty( $boxes ) ) {
+			$this->add_page_boxes( $boxes );
+		}
+		
+		if ( ! empty( $shared_properties ) && is_array( $shared_properties ) ) {
+			$this->page_properties( $shared_properties );
+		}
 	}
 	
 	/**
@@ -131,11 +139,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since 2.XXX  Checks if settings have already been registered
 	 * @since 2.2.5  (?) Method undocumented
 	 *
-	 * @return string|bool   Aid to unit tests
+	 * @return string   Aid to unit tests
 	 */
 	public function hooks() {
 		
-		$return = false;
+		$return = 'page';
 		
 		// set for line lengths and readability
 		$OPT = $this->option_key;
@@ -156,7 +164,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 		
 		// Hook in determining which boxes are on page
-		add_action( $hook, array( $this, 'find_page_boxes' ), 8 );
+		add_action( $hook, array( $this, 'add_page_boxes' ), 8 );
 		
 		// Hook shared data prep
 		add_action( $hook, array( $this, 'page_properties' ), 9 );
@@ -165,10 +173,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
 		
 		// Hook to check if updated
-		add_action( $hook, array( $this, 'postbox_scripts' ) );
+		add_action( $hook, array( $this, 'postbox_scripts' ), 11 );
 		
 		// Hook to check if updated
-		add_action( $hook, array( $this, 'is_updated' ) );
+		add_action( $hook, array( $this, 'is_updated' ), 12 );
 		
 		// If in the network admin, need to use get/update_site_option.
 		if ( 'network_admin_menu' === $hook ) {
@@ -181,7 +189,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 		
 		// return the status of
-		return ! $return ? 'page' : 'both';
+		return ! $return == 'page' ? $return : 'both';
 	}
 	
 	/**
@@ -282,10 +290,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$menu_slug = $this->cmb->prop( 'menu_slug' );
 		
-		$this->page = empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
+		$page = empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
 			$this->option_key : $menu_slug;
 		
-		return $this->page;
+		return $page;
 	}
 	
 	/**
@@ -301,7 +309,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$UP  = isset( $_GET['updated'] ) ? $_GET['updated'] : false;
 		$PG  = isset( $_GET['page'] ) ? $_GET['page'] : false;
 		
-		if ( empty( $UP ) || $PG !== $this->page ) {
+		if ( empty( $UP ) || $PG !== $this->page || $this->error_already_exists( $OPT ) ) {
 			return false;
 		}
 		
@@ -319,6 +327,32 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 		
 		return $UP;
+	}
+	
+	/**
+	 * Checks to see if setting has already been set
+	 *
+	 * @since 2.XXX
+	 *
+	 * @param string $opt  Key sent to add_settings_error()
+	 *
+	 * @return bool
+	 */
+	public function error_already_exists( $opt ) {
+		
+		global $wp_settings_errors;
+		
+		if ( empty( $wp_settings_errors ) ) {
+			return false;
+		}
+		
+		foreach( $wp_settings_errors as $err ) {
+			if ( $err['setting'] == $opt ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -350,6 +384,65 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		return true;
 	}
+	
+	/**
+	 * Allows boxes to be passed in constructor, insures they're CMB2 instances. Can only be called if
+	 * $this->boxes is empty (ie, on initialization).
+	 *
+	 * @since 2.XXX
+	 *
+	 * @param array $boxes  Array of CMB2 boxes passed via constructor
+	 *
+	 * @return array|bool
+	 */
+	public function add_page_boxes( $boxes = array() ) {
+		
+		if ( ! empty( $this->boxes ) ) {
+			return false;
+		}
+		
+		$add = array();
+		
+		if ( ! empty( $boxes ) ) {
+			
+			// this is invoked when boxes are passed in the constructor
+			foreach( $boxes as $box ) {
+				$this->add_page_box( $box );
+			}
+		} else {
+			
+			// this looks through all configured CMB2 boxes and is the "normal" route to adding boxes
+			$this->boxes = $this->find_page_boxes();
+		}
+		
+		return empty( $this->boxes ) ? false : $add;
+	}
+	
+	/**
+	 * Adds a single box to the $this->boxes array. Can be passed a CMB2 object or a CMB2 box ID.
+	 *
+	 * @since 2.XXX
+	 *
+	 * @param \CMB2|string $box
+	 *
+	 * @return bool
+	 */
+	public function add_page_box( $box ) {
+		
+		$return = false;
+		
+		if ( is_string( $box ) ) {
+			$box = cmb2_get_metabox( $box );
+		}
+		
+		if ( ! isset( $this->boxes[ $box->cmb_id ] ) && $box instanceof CMB2 ) {
+			$this->boxes[ $box->cmb_id ] = $box;
+			$return = true;
+		}
+		
+		return $return;
+	}
+	
 	
 	/**
 	 * Finds all boxes which should appear on this page, add to $this->boxes. Note that if page is a submenu page,
@@ -399,13 +492,16 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @return bool|array
+	 * @param array $passed  Page properties passed in via constructor.
+	 *
+	 * @return array|bool
 	 */
-	public function page_properties() {
+	public function page_properties( $passed = array() ) {
 		
 		if (
-			! empty( $this->shared_properties )
-			|| $this->is_page_registered( $this->page, $this->cmb->prop( 'parent_slug' ) )
+			( ! empty( $this->shared_properties )
+				|| $this->is_page_registered( $this->page, $this->cmb->prop( 'parent_slug' ) ) )
+			&& empty( $passed )
 		) {
 			return false;
 		}
@@ -442,6 +538,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		// need to set this after determining the title
 		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
+		
+		// if passed properties, they overwrite array values
+		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
 		
 		// place into class property
 		$this->shared_properties = $props;
@@ -556,9 +655,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		// set the option and action
 		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : FALSE );
 		$option  = isset( $_POST['action'] ) ? $_POST['action'] : FALSE;
+		$boxes   = isset( $_POST['cmb2_boxes'] ) ? explode( ',', $_POST['cmb2_boxes'] ) : FALSE;
 		$updated = FALSE;
 		
-		if ( $action && $option ) {
+		if ( $action && $option && $boxes ) {
+			
+			if ( ! empty( $boxes )  && empty( $this->boxes ) ) {
+				$this->add_page_boxes( $boxes );
+			}
 			
 			foreach ( $this->boxes as $box ) {
 				
