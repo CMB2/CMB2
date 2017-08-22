@@ -454,7 +454,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	
 	/**
 	 * Allows boxes to be passed in constructor, insures they're CMB2 instances. Can only be called if
-	 * $this->boxes is empty (ie, on initialization).
+	 * $this->boxes is empty (ie, before hooks() is called).
 	 *
 	 * @since 2.XXX
 	 *
@@ -464,11 +464,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function add_page_boxes( $boxes = array() ) {
 		
+		$boxes = is_array( $boxes ) || empty( $boxes ) ? $boxes : (array) $boxes;
+		
 		if ( ! empty( $this->boxes ) ) {
 			return FALSE;
 		}
-		
-		$add = array();
 		
 		if ( ! empty( $boxes ) ) {
 			
@@ -483,7 +483,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->boxes = $this->find_page_boxes();
 		}
 		
-		return empty( $this->boxes ) ? FALSE : $add;
+		return empty( $this->boxes ) ? FALSE : $this->boxes;
 	}
 	
 	/**
@@ -493,7 +493,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @param \CMB2|string $box
 	 *
-	 * @return bool
+	 * @return mixed
 	 */
 	public function add_page_box( $box ) {
 		
@@ -503,18 +503,19 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$box = cmb2_get_metabox( $box );
 		}
 		
-		if ( ! isset( $this->boxes[ $box->cmb_id ] ) && $box instanceof CMB2 ) {
+		if ( $box instanceof CMB2 && ! isset( $this->boxes[ $box->cmb_id ] ) ) {
 			$this->boxes[ $box->cmb_id ] = $box;
-			$return                      = TRUE;
+			$return                      = $box->cmb_id;
 		}
 		
 		return $return;
 	}
 	
-	
 	/**
 	 * Finds all boxes which should appear on this page, add to $this->boxes. Note that if page is a submenu page,
 	 * all boxes which are in that submenu page must have menu_slug and parent_slug set.
+	 *
+	 * This should only be called via add_page_boxes().
 	 *
 	 * @since 2.XXX
 	 *
@@ -522,7 +523,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function find_page_boxes() {
 		
-		// Hookups below are only needed when first box set to this page is encountered
+		// Finding boxes is only needed once, called on first box added to page
 		if ( ! $this->page ) {
 			return FALSE;
 		}
@@ -535,7 +536,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$BOX = $box->prop( 'menu_slug' );
 			
 			// if this box is already in the box list, or it has a menu slug set which does not match the slug, skip
-			if ( ! empty( $page_boxes[ $box->cmb_id ] ) || ( $BOX !== NULL && $BOX != $this->page ) ) {
+			if (
+				! empty( $page_boxes[ $box->cmb_id ] )
+				|| ( $BOX !== NULL && $BOX != $this->page )
+				|| ! is_array( $box->prop( 'option_key' ) )
+				|| ( ! in_array( $this->option_key, $box->prop( 'option_key' ) ) )
+			) {
 				continue;
 			}
 			
@@ -548,8 +554,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				$page_boxes[ $box->cmb_id ] = $box;
 			}
 		}
-		
-		$this->boxes = $page_boxes;
 		
 		return $page_boxes;
 	}
