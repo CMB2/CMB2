@@ -106,8 +106,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 
-		if ( ! empty( $_GET['updated'] ) ) {
-			if ( 'true' === $_GET['updated'] ) {
+		if ( ! empty( $_GET['settings-updated'] ) ) {
+			if ( 'true' === $_GET['settings-updated'] ) {
 				add_settings_error( "{$this->option_key}-notices", '', __( 'Settings updated.', 'cmb2' ), 'updated' );
 			} else {
 				add_settings_error( "{$this->option_key}-notices", '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
@@ -174,7 +174,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 				->save_fields( $this->option_key, $this->cmb->object_type(), $_POST )
 				->was_updated(); // Will be false if no values were changed/updated.
 
-			$url = add_query_arg( 'updated', $updated ? 'true' : 'false', $url );
+			$url = add_query_arg( 'settings-updated', $updated ? 'true' : 'false', $url );
 		}
 
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
