@@ -199,4 +199,21 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		return update_site_option( $this->option_key, $option_value );
 	}
 
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @param string $field
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'object_type':
+			case 'option_key':
+			case 'cmb':
+				return $this->{$field};
+			default:
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
+		}
+	}
 }
