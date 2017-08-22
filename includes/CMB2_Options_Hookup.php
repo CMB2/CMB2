@@ -6,9 +6,10 @@
  * @since     2.XXX Now allows multiple metaboxes on an options page.
  *
  *                  New global:
- *                    - $cmb2_options_hookup_filters : Array, tracks hooks per option
+ *                    - cmb2_options_hookup_filters : Array, tracks hooks per page
+ *
  *                  New methods:
- *                    - add_page_box              : Adds a CMB2 box to $this->boxes
+ *                    - add_page_box              : Adds a CMB2 box to this->boxes
  *                    - add_page_boxes            : Adds multiple CMB2 boxes to $this->boxes
  *                    - can_box_save              : copy of can_save not tied to $this->cmb
  *                    - error_already_exists      : Avoids duplicate notices
@@ -17,13 +18,13 @@
  *                    - find_page_boxes           : finds all boxes which appear on this page
  *                    - get_prop                  : Get value of class property
  *                    - has_filters               : checks if hookup filter has already been hooked
- *                    - is_page_registered        : checks to be sure page has not already been added to menu
  *                    - is_setting_registered     : Has the setting already been registered?
  *                    - is_updated                : were the values updated?
- *                    - page_prop                 : scans $this->boxes for requested CMB2 property
+ *                    - page_prop                 : scans this->boxes for requested CMB2 property
  *                    - page_properties           : compiles shared properties from multiple boxes
  *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
- *                    - set_page                  : determines $this->page value
+ *                    - set_page                  : determines this->page value
+ *                    - set_prop                  : Allows setting class property
  *
  *                  New properties:
  *                    - boxes             : All CMB2 boxes which appear on this page
@@ -118,15 +119,15 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @param CMB2   $cmb               The CMB2 object to hookup
 	 * @param string $option_key        Option key box is displaying values for
-	 * @param string $page              Value of $_GET['page'],
+	 * @param string $page              Value of _GET['page'],
 	 * @param array  $boxes             CMB2 boxes used for this page; normally set on hookup
 	 * @param array  $shared_properties CMB2 box properties, normally set on hookup
 	 */
 	public function __construct( CMB2 $cmb, $option_key, $boxes = array(), $page = '', $shared_properties = array() ) {
 		
-		$this->cmb               = $cmb;
-		$this->option_key        = (string) $option_key;
-		$this->page              = empty( $page ) ? $this->set_page() : (string) $page;
+		$this->cmb        = $cmb;
+		$this->option_key = (string) $option_key;
+		$this->page       = empty( $page ) ? $this->set_page() : (string) $page;
 		
 		if ( ! empty( $boxes ) ) {
 			$this->add_page_boxes( $boxes );
@@ -151,11 +152,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$OPT = $this->option_key;
 		
 		// Optionally network_admin_menu.
-		$hook = $this->cmb->prop( 'admin_menu_hook' );
+		$hook   = $this->cmb->prop( 'admin_menu_hook' );
 		$return = array( 'admin_post_' . $OPT => array(), $hook => array() );
 		
 		// if this setting has not been registered, do so
-		if ( ! $this->is_setting_registered( $OPT ) ) {
+		if ( ! $this->is_setting_registered() ) {
 			
 			// Register setting to cmb2 group.
 			register_setting( 'cmb2', $OPT );
@@ -163,35 +164,35 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			// Handle saving the data.
 			add_action( 'admin_post_' . $OPT, array( $this, 'save_options' ) );
 			
-			$return[ 'admin_post_' . $OPT ]['save_options'] = true;
+			$return[ 'admin_post_' . $OPT ]['save_options'] = TRUE;
 		}
 		
 		// Hook in determining which boxes are on page
-		if ( $this->has_filter( $hook, 'add_page_boxes' ) === false ) {
+		if ( $this->has_filter( $hook, 'add_page_boxes' ) === FALSE ) {
 			add_action( $hook, array( $this, 'add_page_boxes' ), 8 );
 			$return[ $hook ]['add_page_boxes'] = $this->filtered( $hook, 'add_page_boxes' );
 		}
 		
 		// Hook shared data prep
-		if ( $this->has_filter( $hook, 'page_properties' ) === false ) {
+		if ( $this->has_filter( $hook, 'page_properties' ) === FALSE ) {
 			add_action( $hook, array( $this, 'page_properties' ), 9 );
 			$return[ $hook ]['page_properties'] = $this->filtered( $hook, 'page_properties' );
 		}
 		
 		// Hook in to add our menu.
-		if ( $this->has_filter( $hook, 'options_page_menu_hooks' ) === false ) {
+		if ( $this->has_filter( $hook, 'options_page_menu_hooks' ) === FALSE ) {
 			add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
 			$return[ $hook ]['options_page_menu_hooks'] = $this->filtered( $hook, 'options_page_menu_hooks' );
 		}
 		
 		// Hook to check if updated
-		if ( $this->has_filter( $hook, 'postbox_scripts' ) === false ) {
+		if ( $this->has_filter( $hook, 'postbox_scripts' ) === FALSE ) {
 			add_action( $hook, array( $this, 'postbox_scripts' ), 11 );
 			$return[ $hook ]['postbox_scripts'] = $this->filtered( $hook, 'postbox_scripts' );
 		}
 		
 		// Hook to check if updated
-		if ( $this->has_filter( $hook, 'is_updated' ) === false ) {
+		if ( $this->has_filter( $hook, 'is_updated' ) === FALSE ) {
 			add_action( $hook, array( $this, 'is_updated' ), 12 );
 			$return[ $hook ]['is_updated'] = $this->filtered( $hook, 'is_updated' );
 		}
@@ -201,14 +202,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			
 			// Override CMB's getter.
 			$G = 'cmb2_override_option_get_' . $OPT;
-			if ( $this->has_filter( $hook, $G ) === false ) {
+			if ( $this->has_filter( $hook, $G ) === FALSE ) {
 				add_filter( $G, array( $this, 'network_get_override' ), 10, 2 );
 				$return[ $hook ][ $G ] = $this->filtered( $hook, $G );
 			}
 			
 			// Override CMB's setter.
 			$S = 'cmb2_override_option_save_' . $OPT;
-			if ( $this->has_filter( $hook, $S ) === false ) {
+			if ( $this->has_filter( $hook, $S ) === FALSE ) {
 				add_filter( $S, array( $this, 'network_update_override' ), 10, 2 );
 				$return[ $hook ][ $S ] = $this->filtered( $hook, $S );
 			}
@@ -220,9 +221,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Tracks via a global if this option key has CMB2_Options_Hookup hooks, returns true if so
 	 *
-	 * @param string   $page     Equivalent to $this->page
-	 * @param string   $hook    The tag being set
-	 * @param $method  $method  Method being called
+	 * @param string $page   Equivalent to this->page
+	 * @param string $hook   The tag being set
+	 * @param        $method $method  Method being called
 	 *
 	 * @return bool
 	 */
@@ -230,7 +231,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$hook   = (string) $hook;
 		$method = (string) $method;
-		$page   = empty( $page ) ? $this->page : (string) $page ;
+		$page   = empty( $page ) ? $this->page : (string) $page;
 		
 		global $cmb2_options_hookup_filters;
 		
@@ -248,9 +249,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Saves the method name to the global to prevent adding another hook. Forces type on parameters.
 	 *
-	 * @param string $hook    The tag being set
-	 * @param string $method  Method being called
-	 * @param string $page     Equivalent to $this->page
+	 * @param string $hook   The tag being set
+	 * @param string $method Method being called
+	 * @param string $page   Equivalent to this->page
 	 *
 	 * @return bool
 	 */
@@ -258,103 +259,93 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$hook   = (string) $hook;
 		$method = (string) $method;
-		$page   = empty( $page ) ? $this->page : (string) $page ;
+		$page   = empty( $page ) ? $this->page : (string) $page;
 		
 		global $cmb2_options_hookup_filters;
 		
 		// checking this will ensure the arrays exist before setting
 		if ( ! $this->has_filter( $hook, $method, $page ) ) {
 			$cmb2_options_hookup_filters[ $page ][ $hook ][] = $method;
-			return true;
+			
+			return TRUE;
 		}
 		
-		return false;
+		return FALSE;
 	}
 	
 	/**
 	 * Checks to see if the setting has already been registered with WP.
 	 *
-	 * @param string $option_key
+	 * @param string $option_key Resolves to this->option_key if not passed.
 	 *
 	 * @return bool
 	 */
-	public function is_setting_registered( $option_key ) {
+	public function is_setting_registered( $option_key = '' ) {
+		
+		$option_key = empty( $option_key ) ? $this->option_key : $option_key;
 		
 		global $wp_registered_settings;
 		
-		if ( empty( $option_key ) || ! empty( $wp_registered_settings[ $option_key ] ) ) {
-			return true;
-		}
-		
-		return false;
+		return ! empty( $wp_registered_settings[ $option_key ] );
 	}
 	
 	/**
-	 * Checks to see if a menu or submenu page has already been registered
+	 * Hook up our admin menu item and admin page. Returns array for testing purposes.
 	 *
-	 * @since  2.XXX
-	 *
-	 * @param  string $menu_slug   Equal to $this->page
-	 * @param  string $parent_slug From box properties
-	 *
-	 * @return bool
-	 */
-	public function is_page_registered( $menu_slug, $parent_slug = '' ) {
-		
-		global $_registered_pages;
-		
-		// get the hook name given the menu_slug and parent_slug
-		$hookname = get_plugin_page_hookname( $menu_slug, $parent_slug );
-		
-		// see if the hookname is in the global _registered_pages var
-		return isset( $_registered_pages[ $hookname ] ) && $_registered_pages[ $hookname ] === TRUE;
-	}
-	
-	/**
-	 * Hook up our admin menu item and admin page. Used as action
-	 *
-	 * @since  2.XXX  Checks to see if page has been registered; Adds JS for postboxes; Moved 'updated' to own method
+	 * @since  2.XXX  Checks to see if page has been registered; Adds JS for postboxes; Moved 'updated'
 	 * @since  2.2.5
 	 *
-	 * @return string|bool
+	 * @return array
 	 */
 	public function options_page_menu_hooks() {
 		
 		$parent_slug = $this->cmb->prop( 'parent_slug' );
+		$return      = array();
 		
 		// Menu_slug is blank, menu page is already registered, no boxes: exit
-		if ( ! $this->page || $this->is_page_registered( $this->page, $parent_slug ) || empty( $this->boxes ) ) {
-			return false;
+		if ( ! $this->page || empty( $this->boxes ) ) {
+			return $return;
 		}
+		
+		$params = array(
+			'parent_slug' => $parent_slug,
+			'title'       => $this->shared_properties['title'],
+			'menu_title'  => $this->shared_properties['menu_title'],
+			'capability'  => $this->shared_properties['capability'],
+			'menu_slug'   => $this->page,
+			'action'      => 'options_page_output',
+			'icon_url'    => $this->shared_properties['icon_url'],
+			'position'    => $this->shared_properties['position'],
+			'cmb_styles'  => $this->shared_properties['cmb_styles'],
+		);
 		
 		if ( $parent_slug ) {
 			$page_hook = add_submenu_page(
-				$parent_slug,
-				$this->shared_properties['title'],
-				$this->shared_properties['menu_title'],
-				$this->shared_properties['capability'],
-				$this->page,
-				array( $this, 'options_page_output' )
+				$params['parent_slug'],
+				$params['title'],
+				$params['menu_title'],
+				$params['capability'],
+				$params['menu_slug'],
+				array( $this, $params['action'] )
 			);
 		} else {
 			$page_hook = add_menu_page(
-				$this->shared_properties['title'],
-				$this->shared_properties['menu_title'],
-				$this->shared_properties['capability'],
-				$this->page,
-				array( $this, 'options_page_output' ),
-				$this->shared_properties['icon_url'],
-				$this->shared_properties['position']
+				$params['title'],
+				$params['menu_title'],
+				$params['capability'],
+				$params['menu_slug'],
+				array( $this, $params['action'] ),
+				$params['icon_url'],
+				$params['position']
 			);
 		}
 		
 		// Include CMB CSS in the head to avoid FOUC; added here to take advantage of $page_hook
-		if ( $this->shared_properties['cmb_styles'] ) {
+		if ( $params['cmb_styles'] ) {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 		
-		// return indicates where the menu was added
-		return empty( $parent_slug ) ? 'menu' : 'submenu';
+		return array( 'type' => ( empty( $parent_slug ) ? 'menu' : 'submenu' ), 'params' => $params );
 	}
 	
 	/**
@@ -385,11 +376,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function is_updated() {
 		
 		$OPT = $this->option_key . '-notices';
-		$UP  = isset( $_GET['updated'] ) ? $_GET['updated'] : false;
-		$PG  = isset( $_GET['page'] ) ? $_GET['page'] : false;
+		$UP  = isset( $_GET['updated'] ) ? $_GET['updated'] : FALSE;
+		$PG  = isset( $_GET['page'] ) ? $_GET['page'] : FALSE;
 		
 		if ( empty( $UP ) || $PG !== $this->page || $this->error_already_exists( $OPT ) ) {
-			return false;
+			return FALSE;
 		}
 		
 		if ( 'true' === $UP ) {
@@ -413,7 +404,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param string $opt  Key sent to add_settings_error()
+	 * @param string $opt Key sent to add_settings_error()
 	 *
 	 * @return bool
 	 */
@@ -422,16 +413,16 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		global $wp_settings_errors;
 		
 		if ( empty( $wp_settings_errors ) ) {
-			return false;
+			return FALSE;
 		}
 		
-		foreach( $wp_settings_errors as $err ) {
+		foreach ( $wp_settings_errors as $err ) {
 			if ( $err['setting'] == $opt ) {
-				return true;
+				return TRUE;
 			}
 		}
 		
-		return false;
+		return FALSE;
 	}
 	
 	/**
@@ -443,25 +434,24 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function postbox_scripts() {
 		
-		if (
-			$this->is_page_registered( $this->page, $this->cmb->prop( 'parent_slug' ) )
-			|| $this->shared_properties['page_format'] !== 'post'
-		) {
-			return false;
+		if ( $this->shared_properties['page_format'] !== 'post' ) {
+			return FALSE;
 		}
 		
 		// include WP postbox JS
 		add_action( 'admin_enqueue_scripts', function () {
+			
 			wp_enqueue_script( 'postbox' );
 		} );
 		
 		// trigger the postbox script
 		add_action( 'admin_print_footer_scripts', function () {
+			
 			echo '<script>jQuery(document).ready(function()'
 			     . '{postboxes.add_postbox_toggles("postbox-container");});</script>';
 		} );
 		
-		return true;
+		return TRUE;
 	}
 	
 	/**
@@ -470,14 +460,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param array $boxes  Array of CMB2 boxes passed via constructor
+	 * @param array $boxes Array of CMB2 boxes passed via constructor
 	 *
 	 * @return array|bool
 	 */
 	public function add_page_boxes( $boxes = array() ) {
 		
 		if ( ! empty( $this->boxes ) ) {
-			return false;
+			return FALSE;
 		}
 		
 		$add = array();
@@ -485,7 +475,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		if ( ! empty( $boxes ) ) {
 			
 			// this is invoked when boxes are passed in the constructor
-			foreach( $boxes as $box ) {
+			foreach ( $boxes as $box ) {
 				$this->add_page_box( $box );
 			}
 		} else {
@@ -494,7 +484,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->boxes = $this->find_page_boxes();
 		}
 		
-		return empty( $this->boxes ) ? false : $add;
+		return empty( $this->boxes ) ? FALSE : $add;
 	}
 	
 	/**
@@ -508,7 +498,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function add_page_box( $box ) {
 		
-		$return = false;
+		$return = FALSE;
 		
 		if ( is_string( $box ) ) {
 			$box = cmb2_get_metabox( $box );
@@ -516,7 +506,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		if ( ! isset( $this->boxes[ $box->cmb_id ] ) && $box instanceof CMB2 ) {
 			$this->boxes[ $box->cmb_id ] = $box;
-			$return = true;
+			$return                      = TRUE;
 		}
 		
 		return $return;
@@ -534,8 +524,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function find_page_boxes() {
 		
 		// Hookups below are only needed when first box set to this page is encountered
-		if ( ! $this->page || $this->is_page_registered( $this->page, $this->cmb->prop( 'parent_slug' ) ) ) {
-			return false;
+		if ( ! $this->page ) {
+			return FALSE;
 		}
 		
 		$all_boxes  = CMB2_Boxes::get_all();
@@ -571,18 +561,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX
 	 *
-	 * @param array $passed  Page properties passed in via constructor.
+	 * @param array $passed Page properties passed in via constructor.
 	 *
 	 * @return array|bool
 	 */
 	public function page_properties( $passed = array() ) {
 		
-		if (
-			( ! empty( $this->shared_properties )
-				|| $this->is_page_registered( $this->page, $this->cmb->prop( 'parent_slug' ) ) )
-			&& empty( $passed )
-		) {
-			return false;
+		if ( ! empty( $this->shared_properties ) && empty( $passed ) ) {
+			return FALSE;
 		}
 		
 		$props = array(
@@ -739,7 +725,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		if ( $action && $option && $boxes ) {
 			
-			if ( ! empty( $boxes )  && empty( $this->boxes ) ) {
+			if ( ! empty( $boxes ) && empty( $this->boxes ) ) {
 				$this->add_page_boxes( $boxes );
 			}
 			
@@ -855,5 +841,24 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function get_prop( $property = '' ) {
 		
 		return isset( $this->{$property} ) ? $this->{$property} : NULL;
+	}
+	
+	/**
+	 * Sets class property. Useful mainly for testing, Boxes should carry all of this information.
+	 *
+	 * @param string $property Property name for internal property
+	 * @param mixed  $value    Value to set. Must match type, though contents are not verified.
+	 *
+	 * @return bool
+	 */
+	public function set_prop( $property = '', $value = NULL ) {
+		
+		if ( isset( $this->{$property} ) && $value !== NULL && gettype( $value ) === gettype( $this->{$property} ) ) {
+			$this->{$property} = $value;
+			
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 }
