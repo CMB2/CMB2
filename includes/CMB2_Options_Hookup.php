@@ -148,70 +148,63 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function hooks() {
 		
-		// set for line lengths and readability
 		$OPT = $this->option_key;
 		
 		// Optionally network_admin_menu.
-		$hook   = $this->cmb->prop( 'admin_menu_hook' );
+		$hook = $this->cmb->prop( 'admin_menu_hook' );
+		
+		// For testing purposes, return an array which records this method's set actions
 		$return = array( 'admin_post_' . $OPT => array(), $hook => array() );
 		
-		// if this setting has not been registered, do so
+		// set hooks to be called
+		$hooks = array(
+			array( 'id' => 'add_page_boxes', 'priority' => 8 ),
+			array( 'id' => 'page_properties', 'priority' => 9 ),
+			array( 'id' => 'options_page_menu_hooks', ),
+			array( 'id' => 'postbox_scripts', 'priority' => 11, ),
+			array( 'id' => 'is_updated', 'priority' => 12, ),
+			array(
+				'id'      => 'cmb2_override_option_get_' . $OPT,
+				'type'    => 'filter',
+				'args'    => 2,
+				'call'    => array( $this, 'network_get_override' ),
+				'only_if' => 'network_admin_menu',
+			),
+			array(
+				'id'      => 'cmb2_override_option_save_' . $OPT,
+				'type'    => 'filter',
+				'args'    => 2,
+				'call'    => array( $this, 'network_update_override' ),
+				'only_if' => 'network_admin_menu',
+			),
+		);
+		
+		// if setting isn't registered, add it now
 		if ( ! $this->is_setting_registered() ) {
 			
-			// Register setting to cmb2 group.
 			register_setting( 'cmb2', $OPT );
 			
-			// Handle saving the data.
-			add_action( 'admin_post_' . $OPT, array( $this, 'save_options' ) );
+			// add hook to save data
+			$hooks[] = array( 'id' => 'save_options', 'hook' => 'admin_post_' . $OPT );
+		}
+		
+		foreach ( $hooks as $f ) {
 			
-			$return[ 'admin_post_' . $OPT ]['save_options'] = TRUE;
-		}
-		
-		// Hook in determining which boxes are on page
-		if ( $this->has_filter( $hook, 'add_page_boxes' ) === FALSE ) {
-			add_action( $hook, array( $this, 'add_page_boxes' ), 8 );
-			$return[ $hook ]['add_page_boxes'] = $this->filtered( $hook, 'add_page_boxes' );
-		}
-		
-		// Hook shared data prep
-		if ( $this->has_filter( $hook, 'page_properties' ) === FALSE ) {
-			add_action( $hook, array( $this, 'page_properties' ), 9 );
-			$return[ $hook ]['page_properties'] = $this->filtered( $hook, 'page_properties' );
-		}
-		
-		// Hook in to add our menu.
-		if ( $this->has_filter( $hook, 'options_page_menu_hooks' ) === FALSE ) {
-			add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
-			$return[ $hook ]['options_page_menu_hooks'] = $this->filtered( $hook, 'options_page_menu_hooks' );
-		}
-		
-		// Hook to check if updated
-		if ( $this->has_filter( $hook, 'postbox_scripts' ) === FALSE ) {
-			add_action( $hook, array( $this, 'postbox_scripts' ), 11 );
-			$return[ $hook ]['postbox_scripts'] = $this->filtered( $hook, 'postbox_scripts' );
-		}
-		
-		// Hook to check if updated
-		if ( $this->has_filter( $hook, 'is_updated' ) === FALSE ) {
-			add_action( $hook, array( $this, 'is_updated' ), 12 );
-			$return[ $hook ]['is_updated'] = $this->filtered( $hook, 'is_updated' );
-		}
-		
-		// If in the network admin, need to use get/update_site_option.
-		if ( 'network_admin_menu' === $hook ) {
+			// set defaults if not specified in config
+			$f_hook     = ! empty( $f['hook'] ) ? $f['hook'] : $hook;
+			$f_only_if  = ! empty( $f['only_if'] ) ? $f['only_if'] : $f_hook;
+			$f_type     = ! empty( $f['type'] ) ? (string) $f['type'] : 'action';
+			$f_priority = ! empty( $f['priority'] ) ? (int) $f['priority'] : 10;
+			$f_args     = ! empty( $f['args'] ) ? (int) $f['args'] : 1;
+			$f_call     = ! empty( $f['call'] ) ? $f['call'] : array( $this, $f['id'] );
 			
-			// Override CMB's getter.
-			$G = 'cmb2_override_option_get_' . $OPT;
-			if ( $this->has_filter( $hook, $G ) === FALSE ) {
-				add_filter( $G, array( $this, 'network_get_override' ), 10, 2 );
-				$return[ $hook ][ $G ] = $this->filtered( $hook, $G );
-			}
-			
-			// Override CMB's setter.
-			$S = 'cmb2_override_option_save_' . $OPT;
-			if ( $this->has_filter( $hook, $S ) === FALSE ) {
-				add_filter( $S, array( $this, 'network_update_override' ), 10, 2 );
-				$return[ $hook ][ $S ] = $this->filtered( $hook, $S );
+			if ( ( $f_only_if === $f_hook ) && ( $this->has_filter( $f_hook, $f['id'] ) === FALSE ) ) {
+				
+				$wp_call = 'add_' . $f_type;
+				$wp_call( $f_hook, $f_call, $f_priority, $f_args );
+				
+				// set the return value for testing
+				$return[ $f_hook ][ $f['id'] ] = $this->filtered( $f_hook, $f['id'] );
 			}
 		}
 		
@@ -345,7 +338,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 		
-		return array( 'type' => ( empty( $parent_slug ) ? 'menu' : 'submenu' ), 'params' => $params );
+		return array(
+			'type'      => ( empty( $parent_slug ) ? 'menu' : 'submenu' ),
+			'params'    => $params,
+			'page_hook' => $page_hook,
+		);
 	}
 	
 	/**
@@ -396,7 +393,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_settings_error( $OPT, '', __( 'Options reset to defaults.', 'cmb2' ), 'notice-warning' );
 		}
 		
-		return $UP;
+		// adding 'return_' to string to avoid type mismatch on testing
+		return 'return_' . $UP;
 	}
 	
 	/**
@@ -478,6 +476,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			foreach ( $boxes as $box ) {
 				$this->add_page_box( $box );
 			}
+			
 		} else {
 			
 			// this looks through all configured CMB2 boxes and is the "normal" route to adding boxes
@@ -804,31 +803,35 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Replaces get_option with get_site_option
 	 *
+	 * @since 2.XXX Added test for expected value of test before returning site option
 	 * @since 2.2.5
 	 *
-	 * @param         $test
-	 * @param bool    $default
+	 * @param string $test should be 'cmb2_no_override_option_get'
+	 * @param mixed  $default
 	 *
 	 * @return mixed  Value set for the network option.
 	 */
 	public function network_get_override( $test, $default = FALSE ) {
 		
-		return get_site_option( $this->option_key, $default );
+		return $test == 'cmb2_no_override_option_get'
+			? get_site_option( $this->option_key, $default ) : $test;
 	}
 	
 	/**
 	 * Replaces update_option with update_site_option
 	 *
+	 * @since 2.XXX Added test for expected value of test
 	 * @since 2.2.5
 	 *
-	 * @param $test
-	 * @param $option_value
+	 * @param string $test should be 'cmb2_no_override_option_save'
+	 * @param mixed  $option_value
 	 *
 	 * @return bool Success/Failure
 	 */
 	public function network_update_override( $test, $option_value ) {
 		
-		return update_site_option( $this->option_key, $option_value );
+		return $test == 'cmb2_no_override_option_save'
+			? update_site_option( $this->option_key, $option_value ) : $test;
 	}
 	
 	/**
