@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Enhancements
 
-* Update to instead initate CMB2 hookup via "cmb2_init_hookup_{$cmb_id}" hook. Allows plugins to unhook/rehook/etc.
+* Update to instead initate CMB2 hookup via `"cmb2_init_hookup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 
 ### Bug Fixes
 
