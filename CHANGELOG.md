@@ -3,18 +3,28 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
+
 ### Enhancements
 
 * Update to instead initate CMB2 hookup via "cmb2_init_hookup_{$cmb_id}" hook. Allows plugins to unhook/rehook/etc.
 
 ### Bug Fixes
 
+* Spelling/Grammar fixes. Props [@garrett-eclipse](https://github.com/garrett-eclipse) ([#1012](https://github.com/CMB2/CMB2/pull/1012)).
+* Fix "PHP Strict Standards: Static function should not be abstract" notice.
+* Add `CMB2_Utils::normalize_if_numeric()` to address problems when using floats as select/radio values. Fixes [#869](https://github.com/CMB2/CMB2/issues/869). See [#1013](https://github.com/CMB2/CMB2/pull/1013).
+* Fix issues with apostrophes in money values. (e.g. in Swiss German the thousand separator is an apostrophe). Props [@ocean90](https://github.com/ocean90) ([#1014](https://github.com/CMB2/CMB2/issues/1014), [#1015](https://github.com/CMB2/CMB2/pull/1015)).
+* Provide public access to the `CMB2_Options_Hookup::$option_key` property.
+* Change the updated-settings notice query variable so that WordPress does not auto-add settings notices on top of ours.
+* For settings pages, only output settings errors if WordPress does not do it by default (for sub-pages of `options-general.php`), and if the errors are not disabled via the `'disable_settings_errors'` box property.
+
 ## [2.2.5.2 - 2017-08-08][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.2]
 
 ### Bug Fixes
 
 * Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/page/2/)
-* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
+* Fix issue in 2.2.5 with options pages not saving when `'parent_slug'` box property was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
 
 ## [2.2.5.1 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1]
 
