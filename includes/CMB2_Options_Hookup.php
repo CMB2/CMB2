@@ -41,6 +41,7 @@
  *                    - reset_action : 'default' | 'remove' : Default is 'default'; 'remove'blanks field
  *
  *                  New filters:
+ *                    - cmb2_options_page_hooks  : allow configured hooks to be altered
  *                    - cmb2_options_page_title  : allow changing page title to something other than box title
  *                    - cmb2_options_page_before : HTML content before form
  *                    - cmb2_options_page_after  : HTML content after form
@@ -141,8 +142,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Default hooks.
 	 *
-	 * @since 2.XXX  Checks if settings have already been registered
-	 * @since 2.2.5  (?) Method undocumented
+	 * @since 2.XXX  Checks if settings have already been registered, uses array of actions to add
+	 * @since 2.?.?  Method undocumented
 	 *
 	 * @return array  Array of all hooks added
 	 */
@@ -153,29 +154,29 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		// Optionally network_admin_menu.
 		$hook = $this->cmb->prop( 'admin_menu_hook' );
 		
-		// For testing purposes, return an array which records this method's set actions
+		// For testing purposes, return an array which records the actions added here
 		$return = array( 'admin_post_' . $OPT => array(), $hook => array() );
 		
-		// set hooks to be called
+		// set of hooks to be called
 		$hooks = array(
 			array( 'id' => 'add_page_boxes', 'priority' => 8 ),
 			array( 'id' => 'page_properties', 'priority' => 9 ),
-			array( 'id' => 'options_page_menu_hooks', ),
-			array( 'id' => 'postbox_scripts', 'priority' => 11, ),
-			array( 'id' => 'is_updated', 'priority' => 12, ),
+			array( 'id' => 'options_page_menu_hooks' ),
+			array( 'id' => 'postbox_scripts', 'priority' => 11 ),
+			array( 'id' => 'is_updated', 'priority' => 12 ),
 			array(
 				'id'      => 'cmb2_override_option_get_' . $OPT,
 				'type'    => 'filter',
 				'args'    => 2,
 				'call'    => array( $this, 'network_get_override' ),
-				'only_if' => 'network_admin_menu',
+				'only_if' => 'network_admin_menu'
 			),
 			array(
 				'id'      => 'cmb2_override_option_save_' . $OPT,
 				'type'    => 'filter',
 				'args'    => 2,
 				'call'    => array( $this, 'network_update_override' ),
-				'only_if' => 'network_admin_menu',
+				'only_if' => 'network_admin_menu'
 			),
 		);
 		
@@ -188,23 +189,55 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$hooks[] = array( 'id' => 'save_options', 'hook' => 'admin_post_' . $OPT );
 		}
 		
+		// set defaults if not present
+		foreach ( $hooks as $k => $f ) {
+			$hooks[ $k ]['hook']     = ! empty( $f['hook'] ) ? $f['hook'] : $hook;
+			$hooks[ $k ]['only_if']  = ! empty( $f['only_if'] ) ? $f['only_if'] : $hooks[ $k ]['hook'];
+			$hooks[ $k ]['type']     = ! empty( $f['type'] ) ? (string) $f['type'] : 'action';
+			$hooks[ $k ]['priority'] = ! empty( $f['priority'] ) ? (int) $f['priority'] : 10;
+			$hooks[ $k ]['args']     = ! empty( $f['args'] ) ? (int) $f['args'] : 1;
+			$hooks[ $k ]['call']     = ! empty( $f['call'] ) ? $f['call'] : array( $this, $f['id'] );
+		}
+		
+		/**
+		 * 'cmb2_options_page_hooks' filter.
+		 *
+		 * Allows adding or modifying calls to hooks called by this page.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @property array                 $hooks         Array of hook config arrays
+		 * @var      string                $this ->page   Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup  $this          Instance of this class
+		 */
+		$hooks = apply_filters( 'cmb2_options_page_hooks', $hooks, $this->page, $this );
+		
+		// Ensure return from filter is not empty and is an array
+		if ( empty( $hooks ) || ! is_array( $hooks ) ) {
+			return $return;
+		}
+		
+		// Returned values from filter must have all array keys set
+		$filter_keys = array( 'args', 'call', 'hook', 'id', 'only_if', 'priority', 'type' );
+		
 		foreach ( $hooks as $f ) {
 			
-			// set defaults if not specified in config
-			$f_hook     = ! empty( $f['hook'] ) ? $f['hook'] : $hook;
-			$f_only_if  = ! empty( $f['only_if'] ) ? $f['only_if'] : $f_hook;
-			$f_type     = ! empty( $f['type'] ) ? (string) $f['type'] : 'action';
-			$f_priority = ! empty( $f['priority'] ) ? (int) $f['priority'] : 10;
-			$f_args     = ! empty( $f['args'] ) ? (int) $f['args'] : 1;
-			$f_call     = ! empty( $f['call'] ) ? $f['call'] : array( $this, $f['id'] );
+			// check all keys are set
+			$fkeys = array_keys( $f ); sort( $fkeys );
+			if ( $fkeys != $filter_keys ) {
+				continue;
+			}
 			
-			if ( ( $f_only_if === $f_hook ) && ( $this->has_filter( $f_hook, $f['id'] ) === FALSE ) ) {
+			if (
+				( $f['only_if'] === $f['hook'] || empty( $f['only_if'] ) )
+				&& ( $this->has_filter( $f['hook'], $f['id'] ) === FALSE )
+			) {
 				
-				$wp_call = 'add_' . $f_type;
-				$wp_call( $f_hook, $f_call, $f_priority, $f_args );
+				$wp_call = 'add_' . $f['type'];
+				$wp_call( $f['hook'], $f['call'], $f['priority'], $f['args'] );
 				
 				// set the return value for testing
-				$return[ $f_hook ][ $f['id'] ] = $this->filtered( $f_hook, $f['id'] );
+				$return[ $f['hook'] ][ $f['id'] ] = $this->filtered( $f['hook'], $f['id'] );
 			}
 		}
 		
@@ -599,8 +632,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 * @since 2.XXX
 		 *
 		 * @property string                'title'          Title as set via 'page_title' or first box's 'title'
-		 * @var      string                $this ->page      Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Display $this Instance of this class
+		 * @var      string                $this->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup  $this Instance of this class
 		 */
 		$props['title'] = apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
 		
