@@ -33,11 +33,11 @@
  *                    - shared_properties : ->prop() values shared across boxes
  *
  *                  New CMB2 box parameters:
- *                    - menu_slug    : ''                   : allows menu item to not use option key as WP id
- *                    - page_title   : ''                   : allows passing the options page title
+ *                    - menu_slug    : null                 : allows menu item to not use option key as WP id
+ *                    - page_title   : null                 : allows passing the options page title
  *                    - page_format  : 'simple' | 'post'    : Allows post editor style; defaults to 'simple'
  *                    - page_columns : 1 | 2 | 'auto'       : If 'post' style, how many columns. Default 'auto'
- *                    - reset_button : ''                   : Text for reset button; empty hides reset button
+ *                    - reset_button : null                 : Text for reset button; empty hides reset button
  *                    - reset_action : 'default' | 'remove' : Default is 'default'; 'remove'blanks field
  *
  *                  New filters:
@@ -159,24 +159,24 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		// set of hooks to be called
 		$hooks = array(
-			array( 'id' => 'add_page_boxes', 'priority' => 8 ),
-			array( 'id' => 'page_properties', 'priority' => 9 ),
-			array( 'id' => 'options_page_menu_hooks' ),
-			array( 'id' => 'postbox_scripts', 'priority' => 11 ),
-			array( 'id' => 'is_updated', 'priority' => 12 ),
-			array(
+			'add_page_boxes'                    => array( 'id' => 'add_page_boxes', 'priority' => 8 ),
+			'page_properties'                   => array( 'id' => 'page_properties', 'priority' => 9 ),
+			'options_page_menu_hooks'           => array( 'id' => 'options_page_menu_hooks' ),
+			'postbox_scripts'                   => array( 'id' => 'postbox_scripts', 'priority' => 11 ),
+			'is_updated'                        => array( 'id' => 'is_updated', 'priority' => 12 ),
+			'cmb2_override_option_get_' . $OPT  => array(
 				'id'      => 'cmb2_override_option_get_' . $OPT,
 				'type'    => 'filter',
 				'args'    => 2,
 				'call'    => array( $this, 'network_get_override' ),
-				'only_if' => 'network_admin_menu'
+				'only_if' => 'network_admin_menu',
 			),
-			array(
+			'cmb2_override_option_save_' . $OPT => array(
 				'id'      => 'cmb2_override_option_save_' . $OPT,
 				'type'    => 'filter',
 				'args'    => 2,
 				'call'    => array( $this, 'network_update_override' ),
-				'only_if' => 'network_admin_menu'
+				'only_if' => 'network_admin_menu',
 			),
 		);
 		
@@ -206,9 +206,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 *
 		 * @since 2.XXX
 		 *
-		 * @property array                 $hooks         Array of hook config arrays
-		 * @var      string                $this ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup  $this          Instance of this class
+		 * @property array                $hooks         Array of hook config arrays
+		 * @var      string               $this          ->page   Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup $this          Instance of this class
 		 */
 		$hooks = apply_filters( 'cmb2_options_page_hooks', $hooks, $this->page, $this );
 		
@@ -223,7 +223,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		foreach ( $hooks as $f ) {
 			
 			// check all keys are set
-			$fkeys = array_keys( $f ); sort( $fkeys );
+			$fkeys = array_keys( $f );
+			sort( $fkeys );
 			if ( $fkeys != $filter_keys ) {
 				continue;
 			}
@@ -603,6 +604,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function page_properties( $passed = array() ) {
 		
+		$passed = ! is_array( $passed ) ? (array) $passed : $passed;
+		
 		if ( ! empty( $this->shared_properties ) && empty( $passed ) ) {
 			return FALSE;
 		}
@@ -632,13 +635,16 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 * @since 2.XXX
 		 *
 		 * @property string                'title'          Title as set via 'page_title' or first box's 'title'
-		 * @var      string                $this->page      Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup  $this Instance of this class
+		 * @var      string               $this ->page      Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup $this Instance of this class
 		 */
 		$props['title'] = apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
 		
 		// need to set this after determining the title
 		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
+		
+		// only these keys are allowed in passed properties
+		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( $props ) ) : $passed;
 		
 		// if passed properties, they overwrite array values
 		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
