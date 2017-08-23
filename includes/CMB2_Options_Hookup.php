@@ -644,7 +644,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
 		
 		// only these keys are allowed in passed properties
-		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( $props ) ) : $passed;
+		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
 		
 		// if passed properties, they overwrite array values
 		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
