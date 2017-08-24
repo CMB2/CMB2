@@ -25,6 +25,7 @@
  *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
  *                    - set_page                  : determines this->page value
  *                    - set_prop                  : Allows setting class property
+ *                    - shared_property_merge     : Merges shared properties with results of filter or passed values
  *
  *                  New properties:
  *                    - boxes             : All CMB2 boxes which appear on this page
@@ -42,7 +43,8 @@
  *
  *                  New filters:
  *                    - cmb2_options_page_hooks  : allow configured hooks to be altered
- *                    - cmb2_options_page_title  : allow changing page title to something other than box title
+ *                    - cmb2_options_page_title  : allow changing page title
+ *                    - cmb2_options_menu_title  : allow changing menu label
  *                    - cmb2_options_page_before : HTML content before form
  *                    - cmb2_options_page_after  : HTML content after form
  *                    - cmb2_options_form_id     : ID of the options page form
@@ -572,7 +574,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			// if this box is already in the box list, or it has a menu slug set which does not match the slug, skip
 			if (
 				! empty( $page_boxes[ $box->cmb_id ] )
-				|| ( $BOX !== NULL && $BOX != $this->page )
+				|| ( ! empty( $BOX ) && $BOX != $this->page )
 				|| ! is_array( $box->prop( 'option_key' ) )
 				|| ( ! in_array( $this->option_key, $box->prop( 'option_key' ) ) )
 			) {
@@ -611,14 +613,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 		
 		$props = array(
-			'capability'   => $this->page_prop( 'capability' ),
-			'cmb_styles'   => $this->page_prop( 'cmb_styles' ),
-			'display_cb'   => $this->page_prop( 'display_cb' ),
-			'enqueue_js'   => $this->page_prop( 'enqueue_js' ),
-			'icon_url'     => $this->page_prop( 'icon_url' ),
-			'menu_title'   => '',
+			'capability'   => $this->page_prop( 'capability', 'manage_options' ),
+			'cmb_styles'   => $this->page_prop( 'cmb_styles', true ),
+			'display_cb'   => $this->page_prop( 'display_cb', false ),
+			'enqueue_js'   => $this->page_prop( 'enqueue_js', true ),
+			'icon_url'     => $this->page_prop( 'icon_url', '' ),
+			'menu_title'   => '', // set below so filtered page title can be passed as fallback
 			'page_columns' => $this->page_prop( 'page_columns', 'auto' ),
-			'page_format'  => $this->page_prop( 'page_format' ),
+			'page_format'  => $this->page_prop( 'page_format', 'simple' ),
 			'position'     => $this->page_prop( 'position' ),
 			'reset_button' => $this->page_prop( 'reset_button', '' ),
 			'reset_action' => $this->page_prop( 'reset_action', 'default' ),
@@ -634,20 +636,47 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 *
 		 * @since 2.XXX
 		 *
-		 * @property string                'title'          Title as set via 'page_title' or first box's 'title'
-		 * @var      string               $this ->page      Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this Instance of this class
+		 * @property string               'title'        Title as set via 'page_title' or first box's 'title'
+		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup $this          Instance of this class
 		 */
-		$props['title'] = apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
+		$props['title'] = (string) apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
 		
-		// need to set this after determining the title
+		// need to set after determining the filtered title to use as fallback
 		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
 		
-		// only these keys are allowed in passed properties
-		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
+		/**
+		 * 'cmb2_options_menu_title' filter.
+		 *
+		 * Alters the title for use on the menu.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @property string               'menu_title'   Menu title as configured
+		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
+		 * @var      \CMB2_Options_Hookup $this          Instance of this class
+		 */
+		$props['menu_title'] =
+			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this->page, $this );
 		
 		// if passed properties, they overwrite array values
-		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
+		$props = ! empty( $passed ) ? $this->shared_property_merge( $props, $passed ) : $props;
+		
+		/**
+		 * 'cmb2_options_shared_properties' filter.
+		 *
+		 * Allows replacement/altering of shared_properties.
+		 *
+		 * @since 2.XXX
+		 *
+		 * @var array                $props         Properties being returned by this method
+		 * @var string               $this ->page   Menu slug ($_GET['page']) value
+		 * @var \CMB2_Options_Hookup $this          Instance of this class
+		 */
+		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this->page, $this );
+		
+		// if passed properties, they overwrite array values
+		$props = $props != $filtered ? $this->shared_property_merge( $props, $filtered ) : $props;
 		
 		// place into class property
 		$this->shared_properties = $props;
@@ -656,7 +685,71 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Checks set of boxes for property; first box with property set is returned.
+	 * Merges passed-in shared properties, ensuring that the types are OK. Removes keys which are not in $props.
+	 *
+	 * Note, does not ensure a value passed in is a legal value, ie, if a property is expecting a certain string,
+	 * only checks that the passed in value is, in fact, a string.
+	 *
+	 * @param array $props   existing shared_properties array
+	 * @param array $passed  modifications to that array
+	 *
+	 * @return array
+	 */
+	public function shared_property_merge( $props = array(), $passed = array() ) {
+		
+		if ( empty( $passed ) ) {
+			return $props;
+		}
+		
+		// remove keys from passed which are not in $props
+		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
+		
+		// there is probably a better way of checking these types...?
+		$types = array(
+			'is_bool' => array( 'cmb_styles', 'display_cb', 'enqueue_js' ),
+			'is_null' => array( 'position' ),
+			'is_string' => array(
+				'capability',
+				'icon_url',
+				'menu_title',
+				'page_columns',
+				'page_format',
+				'reset_button',
+				'reset_action',
+				'save_button',
+				'title'
+			),
+			'is_numeric' => array( 'page_columns', 'position' ),
+		);
+		$not_empty = array(
+			'reset_action',
+			'page_format',
+			'save_button',
+			'title'
+		);
+		
+		// checks the type of the passed in vars and if not OK, unsets them
+		foreach ( $passed as $key => $pass ) {
+			foreach( $types as $check => $keys ) {
+				if ( $check( $pass ) && ! in_array( $key, $keys ) ) {
+					unset( $passed[ $key ] );
+					break;
+				}
+				if ( empty( $pass ) && is_string( $pass ) && in_array( $key, $not_empty ) ) {
+					unset( $passed[ $key ] );
+					break;
+				}
+			}
+		}
+		
+		// if passed properties, they overwrite array values
+		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
+		
+		return $props;
+	}
+	
+	/**
+	 * Checks set of boxes for property; uses property set on last box where value is encountered.
 	 *
 	 * @since 2.XXX
 	 *
@@ -672,17 +765,17 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		foreach ( $this->boxes as $box ) {
 			
-			$prop = $box->prop( $property );
+			$check = $box->prop( $property );
 			
 			// if a value is found and it doesn't break empty string rules, we're done
-			if ( $prop !== NULL && ( $empty_string_ok || $prop !== '' ) ) {
-				break;
+			if ( $check !== NULL && ( $empty_string_ok || $check !== '' ) ) {
+				$prop = $check;
 			}
 		}
 		
 		if (
 			( ! $empty_string_ok && $prop === '' && is_string( $fallback ) ) // value was empty string, not ok
-			|| ( $prop === NULL && $empty_string_ok && $fallback !== NULL )  // value was null, fallback OK
+			|| ( $prop === NULL && $fallback !== NULL )  // value was null, fallback OK
 		) {
 			$prop = $fallback;
 		}
