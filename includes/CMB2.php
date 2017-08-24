@@ -106,26 +106,33 @@ class CMB2 extends CMB2_Base {
 		'remove_box_wrap' => false,
 
 		/*
-		 * The following parameters are for options-page metaboxes,
-		 * and several are passed along to add_menu_page()/add_submenu_page()
+		 * The following parameters are for options-page metaboxes which must be set on the first box
+		 * passed to the options page, if multiple boxes are passed.
+		 *
 		 */
-
-		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'option_key'       => '', // The actual option key and admin menu page slug, unless menu_slug is set
-		'page_title'       => null, // Optionally set page title, defaults to box title
-		'parent_slug'      => '', // Used as first param in add_submenu_page().
-		'menu_slug'        => null, // Alternative to using option key for menu slug; *requires* option_key also be set
-		'capability'       => 'manage_options', // Cap required to view options-page.
-		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
-
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'page_format'      => 'simple', // Can be 'simple' or 'post', which formats page like WP post editor
-		'page_columns'     => 'auto', // Only used on 'post' formats. 1, 2, or auto.
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'. False hides button
-		'reset_button'     => null, // Text for reset button. No default, if empty, button is not added
-		'reset_action'     => 'default', // can be either 'default' (restores default vals), or 'remove' (empties vals)
+		'option_key'       => '', // Option key; used as admin menu slug, unless menu_slug is set
+		'parent_slug'      => '', // Used as first param in add_submenu_page().
+		'menu_slug'        => '', // Alternative to using option key for menu slug; *requires* option_key also be set
+		
+		/*
+		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
+		 * options page. The last box which has the parameter set will override any previous box values.
+		 *
+		 * CMB_Options_Hookup() will set the value shown before the pipe as the default if the property is not
+		 * assigned to a box.
+		 */
+		'capability'    => null, // 'manage_options' | String: WP cap required to view options-page.
+		'display_cb'    => null, // false            | Bool,callable: Override the options-page output.
+		'icon_url'      => null, // ''               | String: URL to icon. Only if 'parent_slug' is empty.
+		'menu_title'    => null, // [page_title]     | String: Sets menu title, defaults to page_title
+		'page_columns'  => null, // 'auto'           | String,int: Only used on 'post' formats. 1, 2, or 'auto'.
+		'page_format'   => null, // 'simple'         | String: 'simple' or 'post', latter like WP post editor
+		'page_title'    => null, // CMB2 'title'     | String: Set page title
+		'position'      => null, // null             | Null,int: Top menu position Only if 'parent_slug' is empty.
+		'reset_action'  => null, // 'default'        | String: 'default' (field defaults); 'remove' (empties)
+		'reset_button'  => null, // ''               | String: Text for reset button. If empty, button is not added
+		'save_button'   => null, // 'Save'           | String,bool: Text for save button. False hides button
 	);
 
 	/**
