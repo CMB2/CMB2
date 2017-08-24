@@ -25,7 +25,7 @@
  *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
  *                    - set_page                  : determines this->page value
  *                    - set_prop                  : Allows setting class property
- *                    - shared_property_merge     : Merges shared properties with results of filter or passed values
+ *                    - shared_properties_merge     : Merges shared properties with results of filter or passed values
  *
  *                  New properties:
  *                    - boxes             : All CMB2 boxes which appear on this page
@@ -660,7 +660,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this->page, $this );
 		
 		// if passed properties, they overwrite array values
-		$props = ! empty( $passed ) ? $this->shared_property_merge( $props, $passed ) : $props;
+		$props = ! empty( $passed ) ? $this->shared_properties_merge( $props, $passed ) : $props;
 		
 		/**
 		 * 'cmb2_options_shared_properties' filter.
@@ -676,7 +676,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this->page, $this );
 		
 		// if passed properties, they overwrite array values
-		$props = $props != $filtered ? $this->shared_property_merge( $props, $filtered ) : $props;
+		$props = $props != $filtered ? $this->shared_properties_merge( $props, $filtered ) : $props;
 		
 		// place into class property
 		$this->shared_properties = $props;
@@ -695,7 +695,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @return array
 	 */
-	public function shared_property_merge( $props = array(), $passed = array() ) {
+	public function shared_properties_merge( $props = array(), $passed = array() ) {
 		
 		if ( empty( $passed ) ) {
 			return $props;
