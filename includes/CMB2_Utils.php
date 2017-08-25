@@ -611,5 +611,95 @@ class CMB2_Utils {
 
 		return (array) $value;
 	}
-
+	
+	/**
+	 * Ensures a hooks config array conforms to what self::add_wp_hooks() expects. Useful if a lot of hooks need to
+	 * be added, or you want to allow filtering on the hook list before setting them.
+	 *
+	 * Sample hook configuration object.
+	 *
+	 * [
+	 *   'id'      => NULL       Required; Bookkeeping only, used to return value for tests
+	 *   'hook'    => NULL       Required; The hook, defaults to $default_hook if it is passed
+	 *   'call'    => NULL       Required; Callable
+	 *   'only_if' => TRUE       This can be set as a test when configuring, such as $this == $that
+	 *                            If false, hook will not be added
+	 *   'type'     => 'action'   Can also be 'filter'
+	 *   'priority' => 10         Usual WP priority
+	 *   'args'     => 1          Number of arguments
+	 * ]
+	 *
+	 * @since  2.XXX
+	 * @param  array       $raw_hooks     Array of hook config arrays
+	 * @param  string|null $default_hook  Set via 'admin_menu_hook'
+	 * @return array|bool
+	 */
+	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = null ) {
+		
+		$hooks = array();
+		
+		// Ensure return from filter is not empty and is an array, or no hook is set
+		if ( empty( $raw_hooks ) || ! is_array( $raw_hooks ) ) {
+			return FALSE;
+		}
+		
+		// set defaults if not present
+		foreach ( $raw_hooks as $h => $cfg ) {
+			
+			// set missing values to default values
+			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )       ? $cfg['id']             : NULL;
+			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] )     ? $cfg['hook']           : $default_hook;
+			$hooks[ $h ]['only_if']  =   isset( $cfg['only_if'] )  ? $cfg['only_if']        : true;
+			$hooks[ $h ]['type']     = ! empty( $cfg['type'] )     ? (string) $cfg['type']  : 'action';
+			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] ) ? (int) $cfg['priority'] : 10;
+			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )     ? (int) $cfg['args']     : 1;
+			$hooks[ $h ]['call']     = ! empty( $cfg['call'] )     ? $cfg['call']           : null;
+			
+			// checks of values, remove the hook from the array if anything is true
+			if (
+				$hooks[ $h ]['id'] === NULL
+				|| ( $hooks[ $h ]['call'] === NULL || ! is_callable( $hooks[ $h ]['call'] ) )
+				|| $hooks[ $h ]['hook'] === NULL
+				|| ( ! in_array( $hooks[ $h ]['type'], array( 'action', 'filter' ) ) )
+				|| ! $hooks[ $h ]['only_if']
+			) {
+				unset( $hooks[ $h ] );
+			}
+		}
+		
+		return array_values( $hooks );
+	}
+	
+	/**
+	 * Adds hooks to WP from array, per above method. Returns array which can be checked for actual set hooks.
+	 * Sends arrays to above method to normalize them.
+	 *
+	 * @since  2.XXX
+	 * @param  array         $hooks          Array of hook configuration arrays
+	 * @param  string|null   $default_hook   Default hook which will be used if not in configured items
+	 * @return array|bool
+	 */
+	public static function add_wp_hooks_from_config_array( $hooks = array(), $default_hook = null ) {
+		
+		$return = array();
+		
+		$hooks = self::prepare_hooks_array( $hooks, $default_hook );
+		
+		if ( ! is_array( $hooks ) || empty( $hooks ) ) {
+			return false;
+		}
+		
+		foreach ( $hooks as $h ) {
+			// set callable
+			$wp_call = 'add_' . $h['type'];
+			
+			// call add_action() or add_filter()
+			$wp_call( $h['hook'], $h['call'], $h['priority'], $h['args'] );
+			
+			// Add to the "yes, this was set" return value
+			$return[ $h['hook'] ] = $h['id'];
+		}
+		
+		return $return;
+	}
 }
