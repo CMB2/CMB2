@@ -9,6 +9,8 @@
  * @author    CMB2 team
  * @license   GPL-2.0+
  * @link      https://cmb2.io
+ *
+ * @property  string $page  Allow IDEs, etc. to reconize property accessed via magic method.
  */
 class CMB2_Options_Page_Hookup {
 	
