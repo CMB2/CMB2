@@ -2,61 +2,10 @@
 
 /**
  * Handles hooking CMB2 forms/metaboxes into WordPress admin "options" pages.
+ * This class deals exclusively with actions on individual CMB2 boxes, it assigns the box to a specific
+ * CMB_Options_Page_Hookup object based on the value of $this->page_id
  *
- * @since     2.XXX Now allows multiple metaboxes on an options page.
- *
- *                  New global:
- *                    - cmb2_options_hookup_filters : Array, tracks hooks per page
- *
- *                  New methods:
- *                    - add_page_box              : Adds a CMB2 box to this->boxes
- *                    - add_page_boxes            : Adds multiple CMB2 boxes to $this->boxes
- *                    - can_box_save              : copy of can_save not tied to $this->cmb
- *                    - error_already_exists      : Avoids duplicate notices
- *                    - field_values_to_default   : returns field values to their default values
- *                    - filtered                  : adds hook to global filter list
- *                    - find_page_boxes           : finds all boxes which appear on this page
- *                    - get_prop                  : Get value of class property
- *                    - has_filters               : checks if hookup filter has already been hooked
- *                    - is_setting_registered     : Has the setting already been registered?
- *                    - is_updated                : were the values updated?
- *                    - page_prop                 : scans this->boxes for requested CMB2 property
- *                    - page_properties           : compiles shared properties from multiple boxes
- *                    - postbox_scripts           : Adds WP postbox JS for 'post' format pages
- *                    - set_page                  : determines this->page value
- *                    - set_prop                  : Allows setting class property
- *                    - shared_properties_merge     : Merges shared properties with results of filter or passed values
- *
- *                  New properties:
- *                    - boxes             : All CMB2 boxes which appear on this page
- *                    - cmb               : Explicitly declared to quiet strict mode squeaking
- *                    - page              : menu slug of page
- *                    - shared_properties : ->prop() values shared across boxes
- *
- *                  New CMB2 box parameters:
- *                    - menu_slug    : null                 : allows menu item to not use option key as WP id
- *                    - page_title   : null                 : allows passing the options page title
- *                    - page_format  : 'simple' | 'post'    : Allows post editor style; defaults to 'simple'
- *                    - page_columns : 1 | 2 | 'auto'       : If 'post' style, how many columns. Default 'auto'
- *                    - reset_button : null                 : Text for reset button; empty hides reset button
- *                    - reset_action : 'default' | 'remove' : Default is 'default'; 'remove'blanks field
- *
- *                  New filters:
- *                    - cmb2_options_page_hooks  : allow configured hooks to be altered
- *                    - cmb2_options_page_title  : allow changing page title
- *                    - cmb2_options_menu_title  : allow changing menu label
- *                    - cmb2_options_page_before : HTML content before form
- *                    - cmb2_options_page_after  : HTML content after form
- *                    - cmb2_options_form_id     : ID of the options page form
- *                    - cmb2_options_form_top    : Insert HTML after form opening tag
- *                    - cmb2_options_form_bottom : Insert HTML before form closing tag
- *
- *                  Removed methods:
- *                    - options_page_metabox : now in CMB2_Options_Display
- *
- *                  See '@since' notices on existing methods and inline comments for changes.
- *                  Some whitespace and phpdoc cleanup.
- *
+ * @since     2.XXX Now allows multiple metaboxes on an options page; rewrite to separate concerns
  * @since     2.0.0
  *
  * @category  WordPress_Plugin
@@ -64,48 +13,10 @@
  * @author    CMB2 team
  * @license   GPL-2.0+
  * @link      https://cmb2.io
+ *
+ * @property  CMB2 $cmb  Allow IDEs, etc. to reconize property accessed via magic method.
  */
 class CMB2_Options_Hookup extends CMB2_hookup {
-	
-	/**
-	 * The object type we are performing the hookup for
-	 *
-	 * @var   string
-	 * @since 2.0.9
-	 */
-	protected $object_type = 'options-page';
-	
-	/**
-	 * Options page key.
-	 *
-	 * @var   string
-	 * @since 2.2.5
-	 */
-	protected $option_key = '';
-	
-	/**
-	 * Stores all boxes which show_on() = true for this options key/menu_slug combination
-	 *
-	 * @var array
-	 * @since 2.XXX
-	 */
-	protected $boxes = array();
-	
-	/**
-	 * Page ID in admin
-	 *
-	 * @var string
-	 * @since 2.XXX
-	 */
-	protected $page = '';
-	
-	/**
-	 * Common cmb->prop values shared across all boxes
-	 *
-	 * @var array
-	 * @since 2.XXX
-	 */
-	protected $shared_properties = array();
 	
 	/**
 	 * CMB2 instance, added to avoid implicit assignment in constructor
@@ -116,277 +27,210 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	protected $cmb;
 	
 	/**
+	 * Options page key.
+	 *
+	 * @var   string
+	 * @since 2.2.5
+	 */
+	protected $option_key = '';
+	
+	/**
+	 * Page ID in admin
+	 *
+	 * @var string
+	 * @since 2.XXX
+	 */
+	protected $page_id = '';
+	
+	/**
+	 * Page hookup object
+	 *
+	 * @var \CMB2_Options_Page_Hookup
+	 * @since 2.XXX
+	 */
+	protected $page;
+	
+	/**
+	 * The object type we are performing the hookup for
+	 *
+	 * @var   string
+	 * @since 2.0.9
+	 */
+	protected $object_type = 'options-page';
+	
+	/**
 	 * Constructor
 	 *
+	 * @since 2.XXX                         Sets $this->page_id value, allows passing of default hooks and page
 	 * @since 2.0.0
-	 *
-	 * @param CMB2   $cmb               The CMB2 object to hookup
-	 * @param string $option_key        Option key box is displaying values for
-	 * @param string $page              Value of _GET['page'],
-	 * @param array  $boxes             CMB2 boxes used for this page; normally set on hookup
-	 * @param array  $shared_properties CMB2 box properties, normally set on hookup
+	 * @param CMB2                          $cmb        The CMB2 object to hookup
+	 * @param string                        $option_key Option key box is displaying values for
+	 * @param string                        $page_id    Value of _GET['page'], normally set automatically
+	 * @param CMB2_Options_Page_Hookup|null $page
 	 */
-	public function __construct( CMB2 $cmb, $option_key, $boxes = array(), $page = '', $shared_properties = array() ) {
+	public function __construct( CMB2 $cmb, $option_key, $page_id = '', $page = null ) {
 		
 		$this->cmb        = $cmb;
 		$this->option_key = (string) $option_key;
-		$this->page       = empty( $page ) ? $this->set_page() : (string) $page;
+		$this->page_id    = empty( $page_id ) ? $this->set_page() : (string) $page_id;
 		
-		if ( ! empty( $boxes ) ) {
-			$this->add_page_boxes( $boxes );
-		}
-		
-		if ( ! empty( $shared_properties ) && is_array( $shared_properties ) ) {
-			$this->page_properties( $shared_properties );
+		if ( $page !== null && $page instanceOf CMB2_Options_Page_Hookup ) {
+			$this->page = $page;
 		}
 	}
 	
 	/**
 	 * Default hooks.
 	 *
-	 * @since 2.XXX  Checks if settings have already been registered, uses array of actions to add
-	 * @since 2.?.?  Method undocumented
-	 *
-	 * @return array  Array of all hooks added
+	 * @since  2.XXX       Complete re-write to use close to normal CMB actions
+	 * @since  2.?.?       Method undocumented
+	 * @return array|bool  Array of hooks added
 	 */
 	public function hooks() {
 		
-		$OPT = $this->option_key;
+		// Optional 'network_admin_menu' value can be passed here
+		$wp_menu_hook = $this->cmb->prop( 'admin_menu_hook', 'admin_menu' );
 		
-		// Optionally network_admin_menu.
-		$hook = $this->cmb->prop( 'admin_menu_hook' );
+		// get the options page and add $this->cmb to it. Options page handles hooking into menus, etc.
+		$this->page = $this->get_options_page_and_add_box( $wp_menu_hook );
 		
-		// For testing purposes, return an array which records the actions added here
-		$return = array( 'admin_post_' . $OPT => array(), $hook => array() );
+		// get the box context
+		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
 		
-		// set of hooks to be called
+		// Hooks array: 'hook' will be set to 'id' if not configured.
 		$hooks = array(
-			'add_page_boxes'                    => array( 'id' => 'add_page_boxes', 'priority' => 8 ),
-			'page_properties'                   => array( 'id' => 'page_properties', 'priority' => 9 ),
-			'options_page_menu_hooks'           => array( 'id' => 'options_page_menu_hooks' ),
-			'postbox_scripts'                   => array( 'id' => 'postbox_scripts', 'priority' => 11 ),
-			'is_updated'                        => array( 'id' => 'is_updated', 'priority' => 12 ),
-			'cmb2_override_option_get_' . $OPT  => array(
-				'id'      => 'cmb2_override_option_get_' . $OPT,
-				'type'    => 'filter',
-				'args'    => 2,
-				'call'    => array( $this, 'network_get_override' ),
-				'only_if' => 'network_admin_menu',
+			array(
+				'id' => 'admin_page_hooks',
+				'call' => array( $this->page, 'hooks' ),
+				'hook' => 'admin_page_hooks'
 			),
-			'cmb2_override_option_save_' . $OPT => array(
-				'id'      => 'cmb2_override_option_save_' . $OPT,
+			array(
+				'id' => 'add_meta_boxes',
+				'call' => array( $this, 'add_metaboxes' ),
+				'hook' => 'add_meta_boxes',
+				'only_if' => $context == 'normal',
+			),
+			array(
+				'id' => 'add_context_metaboxes',
+				'call' => array( $this, 'add_context_metaboxes' ),
+				'hook' => 'edit_form_top',
+				'only_if' => $context == 'form_top',
+			),
+			array(
+				'id'   => 'save_options',
+				'call' => array( $this, 'save_options' ),
+				'hook' => 'admin_post_' . $this->option_key,
+			),
+			array(
+				'id'      => 'cmb2_override_option_get',
+				'call'    => array( $this, 'network_get_override' ),
+				'hook'    => 'cmb2_override_option_get_' . $this->option_key,
+				'only_if' => 'network_admin_menu' == $wp_menu_hook,
 				'type'    => 'filter',
 				'args'    => 2,
+			),
+			array(
+				'id'      => 'cmb2_override_option_save',
 				'call'    => array( $this, 'network_update_override' ),
-				'only_if' => 'network_admin_menu',
+				'hook'      => 'cmb2_override_option_save_' . $this->option_key,
+				'only_if' => 'network_admin_menu' == $wp_menu_hook,
+				'type'    => 'filter',
+				'args'    => 2,
 			),
 		);
 		
-		// if setting isn't registered, add it now
-		if ( ! $this->is_setting_registered() ) {
-			
-			register_setting( 'cmb2', $OPT );
-			
-			// add hook to save data
-			$hooks[] = array( 'id' => 'save_options', 'hook' => 'admin_post_' . $OPT );
-		}
-		
-		// set defaults if not present
-		foreach ( $hooks as $k => $f ) {
-			$hooks[ $k ]['hook']     = ! empty( $f['hook'] ) ? $f['hook'] : $hook;
-			$hooks[ $k ]['only_if']  = ! empty( $f['only_if'] ) ? $f['only_if'] : $hooks[ $k ]['hook'];
-			$hooks[ $k ]['type']     = ! empty( $f['type'] ) ? (string) $f['type'] : 'action';
-			$hooks[ $k ]['priority'] = ! empty( $f['priority'] ) ? (int) $f['priority'] : 10;
-			$hooks[ $k ]['args']     = ! empty( $f['args'] ) ? (int) $f['args'] : 1;
-			$hooks[ $k ]['call']     = ! empty( $f['call'] ) ? $f['call'] : array( $this, $f['id'] );
-		}
+		// set of hooks to be called; passing them through this prep filter to aid devs calling filter
+		$hooks = CMB2_Utils::prepare_hooks_array( $hooks, $wp_menu_hook );
 		
 		/**
-		 * 'cmb2_options_page_hooks' filter.
+		 * 'cmb2_options_metabox_hooks' filter.
 		 *
 		 * Allows adding or modifying calls to hooks called by this page.
 		 *
-		 * @since 2.XXX
-		 *
-		 * @property array                $hooks         Array of hook config arrays
-		 * @var      string               $this          ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this          Instance of this class
+		 * @since    2.XXX
+		 * @internal array               $hooks          Array of hook config arrays
+		 * @internal string              $this->page_id  Menu slug ($_GET['page']) value
+		 * @internal \CMB2_Options_Hookup $this          Instance of this class
 		 */
-		$hooks = apply_filters( 'cmb2_options_page_hooks', $hooks, $this->page, $this );
+		$filtered = apply_filters( 'cmb2_options_metabox_hooks', $hooks, $this->page_id, $this );
+		$hooks = $hooks != $filtered ? $filtered : $hooks;
 		
-		// Ensure return from filter is not empty and is an array
-		if ( empty( $hooks ) || ! is_array( $hooks ) ) {
-			return $return;
-		}
-		
-		// Returned values from filter must have all array keys set
-		$filter_keys = array( 'args', 'call', 'hook', 'id', 'only_if', 'priority', 'type' );
-		
-		foreach ( $hooks as $f ) {
-			
-			// check all keys are set
-			$fkeys = array_keys( $f );
-			sort( $fkeys );
-			if ( $fkeys != $filter_keys ) {
-				continue;
-			}
-			
-			if (
-				( $f['only_if'] === $f['hook'] || empty( $f['only_if'] ) )
-				&& ( $this->has_filter( $f['hook'], $f['id'] ) === FALSE )
-			) {
-				
-				$wp_call = 'add_' . $f['type'];
-				$wp_call( $f['hook'], $f['call'], $f['priority'], $f['args'] );
-				
-				// set the return value for testing
-				$return[ $f['hook'] ][ $f['id'] ] = $this->filtered( $f['hook'], $f['id'] );
-			}
-		}
-		
-		return $return;
+		// add the hooks
+		return ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
 	}
 	
 	/**
-	 * Tracks via a global if this option key has CMB2_Options_Hookup hooks, returns true if so
+	 * Options display class will uses "do metaboxes" call.
 	 *
-	 * @param string $page   Equivalent to this->page
-	 * @param string $hook   The tag being set
-	 * @param        $method $method  Method being called
-	 *
+	 * @since 2.XXX
 	 * @return bool
 	 */
-	public function has_filter( $hook, $method, $page = '' ) {
+	public function add_metaboxes() {
 		
-		$hook   = (string) $hook;
-		$method = (string) $method;
-		$page   = empty( $page ) ? $this->page : (string) $page;
-		
-		global $cmb2_options_hookup_filters;
-		
-		// set empty arrays if they are not set
-		if ( empty( $cmb2_options_hookup_filters ) ) {
-			$cmb2_options_hookup_filters = array( $page => array() );
-		}
-		if ( ! isset( $cmb2_options_hookup_filters[ $page ][ $hook ] ) ) {
-			$cmb2_options_hookup_filters[ $page ][ $hook ] = array();
+		if ( ! $this->show_on() || ! $this->cmb->prop( 'title' ) ) {
+			return false;
 		}
 		
-		return in_array( $method, $cmb2_options_hookup_filters[ $page ][ $hook ] );
-	}
-	
-	/**
-	 * Saves the method name to the global to prevent adding another hook. Forces type on parameters.
-	 *
-	 * @param string $hook   The tag being set
-	 * @param string $method Method being called
-	 * @param string $page   Equivalent to this->page
-	 *
-	 * @return bool
-	 */
-	public function filtered( $hook, $method, $page = '' ) {
+		add_filter( "postbox_classes_{$this->page_id}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
 		
-		$hook   = (string) $hook;
-		$method = (string) $method;
-		$page   = empty( $page ) ? $this->page : (string) $page;
-		
-		global $cmb2_options_hookup_filters;
-		
-		// checking this will ensure the arrays exist before setting
-		if ( ! $this->has_filter( $hook, $method, $page ) ) {
-			$cmb2_options_hookup_filters[ $page ][ $hook ][] = $method;
-			
-			return TRUE;
-		}
-		
-		return FALSE;
-	}
-	
-	/**
-	 * Checks to see if the setting has already been registered with WP.
-	 *
-	 * @param string $option_key Resolves to this->option_key if not passed.
-	 *
-	 * @return bool
-	 */
-	public function is_setting_registered( $option_key = '' ) {
-		
-		$option_key = empty( $option_key ) ? $this->option_key : $option_key;
-		
-		global $wp_registered_settings;
-		
-		return ! empty( $wp_registered_settings[ $option_key ] );
-	}
-	
-	/**
-	 * Hook up our admin menu item and admin page. Returns array for testing purposes.
-	 *
-	 * @since  2.XXX  Checks to see if page has been registered; Adds JS for postboxes; Moved 'updated'
-	 * @since  2.2.5
-	 *
-	 * @return array
-	 */
-	public function options_page_menu_hooks() {
-		
-		$parent_slug = $this->cmb->prop( 'parent_slug' );
-		$return      = array();
-		
-		// Menu_slug is blank, menu page is already registered, no boxes: exit
-		if ( ! $this->page || empty( $this->boxes ) ) {
-			return $return;
-		}
-		
-		$params = array(
-			'parent_slug' => $parent_slug,
-			'title'       => $this->shared_properties['title'],
-			'menu_title'  => $this->shared_properties['menu_title'],
-			'capability'  => $this->shared_properties['capability'],
-			'menu_slug'   => $this->page,
-			'action'      => 'options_page_output',
-			'icon_url'    => $this->shared_properties['icon_url'],
-			'position'    => $this->shared_properties['position'],
-			'cmb_styles'  => $this->shared_properties['cmb_styles'],
+		add_meta_box( 
+			$this->cmb->cmb_id, 
+			$this->cmb->prop( 'title' ), 
+			array( $this, 'metabox_callback' ), 
+			$this->object_type,
+			$this->cmb->prop( 'context' ), 
+			$this->cmb->prop( 'priority' ) 
 		);
 		
-		if ( $parent_slug ) {
-			$page_hook = add_submenu_page(
-				$params['parent_slug'],
-				$params['title'],
-				$params['menu_title'],
-				$params['capability'],
-				$params['menu_slug'],
-				array( $this, $params['action'] )
-			);
-		} else {
-			$page_hook = add_menu_page(
-				$params['title'],
-				$params['menu_title'],
-				$params['capability'],
-				$params['menu_slug'],
-				array( $this, $params['action'] ),
-				$params['icon_url'],
-				$params['position']
-			);
+		return true;
+	}
+	
+	/**
+	 * Clone of metabox_callback without demanding a post or comment ID. Also returns a value for testing/non-echo
+	 * future uses.
+	 *
+	 * @since  2.XXX
+	 */
+	public function metabox_callback() {
+		
+		ob_start();
+		$returned = $this->cmb->show_form( 0, $this->object_type );
+		$echoed   = ob_get_clean();
+		
+		if ( $echoed ) {
+			echo $echoed;
+			$returned = true;
+		};
+		
+		return $returned;
+	}
+	
+	/**
+	 * Gets the options page and adds this metabox to it.
+	 *
+	 * @since  2.XXX
+	 * @param  string $wp_menu_hook  The first box to call the page hookup constructor will set it.
+	 * @return \CMB2_Options_Page_Hookup
+	 */
+	public function get_options_page_and_add_box( $wp_menu_hook = '' ) {
+		
+		$admin_page = CMB2_Options_Pages::get( $this->page_id );
+		
+		if ( $admin_page === NULL ) {
+			$admin_page = new CMB2_Options_Page_Hookup( $this->page_id, $this->option_key, $wp_menu_hook );
+			CMB2_options_Pages::add( $admin_page );
 		}
 		
-		// Include CMB CSS in the head to avoid FOUC; added here to take advantage of $page_hook
-		if ( $params['cmb_styles'] ) {
-			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
-		}
+		$admin_page->add_hookup( $this );
 		
-		return array(
-			'type'      => ( empty( $parent_slug ) ? 'menu' : 'submenu' ),
-			'params'    => $params,
-			'page_hook' => $page_hook,
-		);
+		return $admin_page;
 	}
 	
 	/**
 	 * Get the menu slug. We cannot pass a fallback to CMB2 as it will prevent additional pages from being generated.
+	 * Menu slugs must ALWAYS be accompianied by an explicit declaration of the 'option_key' box parameter.
 	 *
-	 * - Menu slugs must ALWAYS be accompianied by an explicit declaration of the 'option_key' box parameter, on
-	 *   every box shown on the page
-	 *
+	 * @since  2.XXX
 	 * @return string
 	 */
 	public function set_page() {
@@ -400,449 +244,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Checks if settings were updated. Formerly within options_page_menu_hooks.
-	 *
-	 * @since 2.XXX
-	 *
-	 * @return bool|string
-	 */
-	public function is_updated() {
-		
-		$OPT = $this->option_key . '-notices';
-		$UP  = isset( $_GET['updated'] ) ? $_GET['updated'] : FALSE;
-		$PG  = isset( $_GET['page'] ) ? $_GET['page'] : FALSE;
-		
-		if ( empty( $UP ) || $PG !== $this->page || $this->error_already_exists( $OPT ) ) {
-			return FALSE;
-		}
-		
-		if ( 'true' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Settings updated.', 'cmb2' ), 'updated' );
-			
-		} else if ( 'false' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
-			
-		} else if ( 'reset' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Options reset to defaults.', 'cmb2' ), 'notice-warning' );
-		}
-		
-		// adding 'return_' to string to avoid type mismatch on testing
-		return 'return_' . $UP;
-	}
-	
-	/**
-	 * Checks to see if setting has already been set
-	 *
-	 * @since 2.XXX
-	 *
-	 * @param string $opt Key sent to add_settings_error()
-	 *
-	 * @return bool
-	 */
-	public function error_already_exists( $opt ) {
-		
-		global $wp_settings_errors;
-		
-		if ( empty( $wp_settings_errors ) ) {
-			return FALSE;
-		}
-		
-		foreach ( $wp_settings_errors as $err ) {
-			if ( $err['setting'] == $opt ) {
-				return TRUE;
-			}
-		}
-		
-		return FALSE;
-	}
-	
-	/**
-	 * Adds postbox scripts if page format is 'post'.
-	 *
-	 * @since 2.XXX
-	 *
-	 * @return bool
-	 */
-	public function postbox_scripts() {
-		
-		if ( $this->shared_properties['page_format'] !== 'post' ) {
-			return FALSE;
-		}
-		
-		// include WP postbox JS
-		add_action( 'admin_enqueue_scripts', function () {
-			
-			wp_enqueue_script( 'postbox' );
-		} );
-		
-		// trigger the postbox script
-		add_action( 'admin_print_footer_scripts', function () {
-			
-			echo '<script>jQuery(document).ready(function()'
-			     . '{postboxes.add_postbox_toggles("postbox-container");});</script>';
-		} );
-		
-		return TRUE;
-	}
-	
-	/**
-	 * Allows boxes to be passed in constructor, insures they're CMB2 instances. Can only be called if
-	 * $this->boxes is empty (ie, before hooks() is called).
-	 *
-	 * @since 2.XXX
-	 *
-	 * @param array $boxes Array of CMB2 boxes passed via constructor
-	 *
-	 * @return array|bool
-	 */
-	public function add_page_boxes( $boxes = array() ) {
-		
-		$boxes = is_array( $boxes ) || empty( $boxes ) ? $boxes : (array) $boxes;
-		
-		if ( ! empty( $this->boxes ) ) {
-			return FALSE;
-		}
-		
-		if ( ! empty( $boxes ) ) {
-			
-			// this is invoked when boxes are passed in the constructor
-			foreach ( $boxes as $box ) {
-				$this->add_page_box( $box );
-			}
-			
-		} else {
-			
-			// this looks through all configured CMB2 boxes and is the "normal" route to adding boxes
-			$this->boxes = $this->find_page_boxes();
-		}
-		
-		return empty( $this->boxes ) ? FALSE : $this->boxes;
-	}
-	
-	/**
-	 * Adds a single box to the $this->boxes array. Can be passed a CMB2 object or a CMB2 box ID.
-	 *
-	 * @since 2.XXX
-	 *
-	 * @param \CMB2|string $box
-	 *
-	 * @return mixed
-	 */
-	public function add_page_box( $box ) {
-		
-		$return = FALSE;
-		
-		if ( is_string( $box ) ) {
-			$box = cmb2_get_metabox( $box );
-		}
-		
-		if ( $box instanceof CMB2 && ! isset( $this->boxes[ $box->cmb_id ] ) ) {
-			$this->boxes[ $box->cmb_id ] = $box;
-			$return                      = $box->cmb_id;
-		}
-		
-		return $return;
-	}
-	
-	/**
-	 * Finds all boxes which should appear on this page, add to $this->boxes. Note that if page is a submenu page,
-	 * all boxes which are in that submenu page must have menu_slug and parent_slug set.
-	 *
-	 * This should only be called via add_page_boxes().
-	 *
-	 * @since 2.XXX
-	 *
-	 * @return array|bool
-	 */
-	public function find_page_boxes() {
-		
-		// Finding boxes is only needed once, called on first box added to page
-		if ( ! $this->page ) {
-			return FALSE;
-		}
-		
-		$all_boxes  = CMB2_Boxes::get_all();
-		$page_boxes = array();
-		
-		foreach ( $all_boxes as $box ) {
-			
-			$BOX = $box->prop( 'menu_slug' );
-			
-			// if this box is already in the box list, or it has a menu slug set which does not match the slug, skip
-			if (
-				! empty( $page_boxes[ $box->cmb_id ] )
-				|| ( ! empty( $BOX ) && $BOX != $this->page )
-				|| ! is_array( $box->prop( 'option_key' ) )
-				|| ( ! in_array( $this->option_key, $box->prop( 'option_key' ) ) )
-			) {
-				continue;
-			}
-			
-			/*
-			 * Logic:
-			 *   $bxslg == $this->page                                      : boxes specifically have this slug set
-			 *   in_array( $this->page, (array) $box->options_page_keys() ) : boxes have menu_slug as option key
-			 */
-			if ( $BOX == $this->page || in_array( $this->page, (array) $box->options_page_keys() ) ) {
-				$page_boxes[ $box->cmb_id ] = $box;
-			}
-		}
-		
-		return $page_boxes;
-	}
-	
-	/**
-	 * Finds shared properties which may have been set on any of the included boxes. First value encountered
-	 * is used if two boxes both set the value.
-	 *
-	 * @since 2.XXX
-	 *
-	 * @param array $passed Page properties passed in via constructor.
-	 *
-	 * @return array|bool
-	 */
-	public function page_properties( $passed = array() ) {
-		
-		$passed = ! is_array( $passed ) ? (array) $passed : $passed;
-		
-		if ( ! empty( $this->shared_properties ) && empty( $passed ) ) {
-			return FALSE;
-		}
-		
-		$props = array(
-			'capability'   => $this->page_prop( 'capability', 'manage_options' ),
-			'cmb_styles'   => $this->page_prop( 'cmb_styles', true ),
-			'display_cb'   => $this->page_prop( 'display_cb', false ),
-			'enqueue_js'   => $this->page_prop( 'enqueue_js', true ),
-			'icon_url'     => $this->page_prop( 'icon_url', '' ),
-			'menu_title'   => '', // set below so filtered page title can be passed as fallback
-			'page_columns' => $this->page_prop( 'page_columns', 'auto' ),
-			'page_format'  => $this->page_prop( 'page_format', 'simple' ),
-			'position'     => $this->page_prop( 'position' ),
-			'reset_button' => $this->page_prop( 'reset_button', '' ),
-			'reset_action' => $this->page_prop( 'reset_action', 'default' ),
-			'save_button'  => $this->page_prop( 'save_button', 'Save', FALSE ),
-			'title'        => $this->page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
-		);
-		
-		/**
-		 * 'cmb2_options_page_title' filter.
-		 *
-		 * Alters the title for use on the page. Note it's always a good idea to set 'menu_title' separately to
-		 * avoid excessively long menu titles
-		 *
-		 * @since 2.XXX
-		 *
-		 * @property string               'title'        Title as set via 'page_title' or first box's 'title'
-		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this          Instance of this class
-		 */
-		$props['title'] = (string) apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
-		
-		// need to set after determining the filtered title to use as fallback
-		$props['menu_title'] = $this->page_prop( 'menu_title', $props['title'] );
-		
-		/**
-		 * 'cmb2_options_menu_title' filter.
-		 *
-		 * Alters the title for use on the menu.
-		 *
-		 * @since 2.XXX
-		 *
-		 * @property string               'menu_title'   Menu title as configured
-		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this          Instance of this class
-		 */
-		$props['menu_title'] =
-			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this->page, $this );
-		
-		// if passed properties, they overwrite array values
-		$props = ! empty( $passed ) ? $this->shared_properties_merge( $props, $passed ) : $props;
-		
-		/**
-		 * 'cmb2_options_shared_properties' filter.
-		 *
-		 * Allows replacement/altering of shared_properties.
-		 *
-		 * @since 2.XXX
-		 *
-		 * @var array                $props         Properties being returned by this method
-		 * @var string               $this ->page   Menu slug ($_GET['page']) value
-		 * @var \CMB2_Options_Hookup $this          Instance of this class
-		 */
-		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this->page, $this );
-		
-		// if passed properties, they overwrite array values
-		$props = $props != $filtered ? $this->shared_properties_merge( $props, $filtered ) : $props;
-		
-		// place into class property
-		$this->shared_properties = $props;
-		
-		return $props;
-	}
-	
-	/**
-	 * Merges passed-in shared properties, ensuring that the types are OK. Removes keys which are not in $props.
-	 *
-	 * Note, does not ensure a value passed in is a legal value, ie, if a property is expecting a certain string,
-	 * only checks that the passed in value is, in fact, a string.
-	 *
-	 * @param array $props   existing shared_properties array
-	 * @param array $passed  modifications to that array
-	 *
-	 * @return array
-	 */
-	public function shared_properties_merge( $props = array(), $passed = array() ) {
-		
-		if ( empty( $passed ) ) {
-			return $props;
-		}
-		
-		// remove keys from passed which are not in $props
-		$passed = ! empty( $passed ) ? array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
-		
-		// there is probably a better way of checking these types...?
-		$types = array(
-			'is_bool' => array( 'cmb_styles', 'display_cb', 'enqueue_js' ),
-			'is_null' => array( 'position' ),
-			'is_string' => array(
-				'capability',
-				'icon_url',
-				'menu_title',
-				'page_columns',
-				'page_format',
-				'reset_button',
-				'reset_action',
-				'save_button',
-				'title'
-			),
-			'is_numeric' => array( 'page_columns', 'position' ),
-		);
-		$not_empty = array(
-			'reset_action',
-			'page_format',
-			'save_button',
-			'title'
-		);
-		
-		// checks the type of the passed in vars and if not OK, unsets them
-		foreach ( $passed as $key => $pass ) {
-			foreach( $types as $check => $keys ) {
-				if ( $check( $pass ) && ! in_array( $key, $keys ) ) {
-					unset( $passed[ $key ] );
-					break;
-				}
-				if ( empty( $pass ) && is_string( $pass ) && in_array( $key, $not_empty ) ) {
-					unset( $passed[ $key ] );
-					break;
-				}
-			}
-		}
-		
-		// if passed properties, they overwrite array values
-		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
-		
-		return $props;
-	}
-	
-	/**
-	 * Checks set of boxes for property; uses property set on last box where value is encountered.
-	 *
-	 * @since 2.XXX
-	 *
-	 * @param string      $property        CMB2 box property to look for
-	 * @param null|string $fallback        Value to use as fallback
-	 * @param bool        $empty_string_ok Flag to force using fallback if CMB2 returns empty string
-	 *
-	 * @return mixed
-	 */
-	public function page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
-		
-		$prop = NULL;
-		
-		foreach ( $this->boxes as $box ) {
-			
-			$check = $box->prop( $property );
-			
-			// if a value is found and it doesn't break empty string rules, we're done
-			if ( $check !== NULL && ( $empty_string_ok || $check !== '' ) ) {
-				$prop = $check;
-			}
-		}
-		
-		if (
-			( ! $empty_string_ok && $prop === '' && is_string( $fallback ) ) // value was empty string, not ok
-			|| ( $prop === NULL && $fallback !== NULL )  // value was null, fallback OK
-		) {
-			$prop = $fallback;
-		}
-		
-		return $prop;
-	}
-	
-	/**
-	 * Display options-page output. To override, set 'display_cb' box property.
-	 *
-	 * @since  2.XXX Allows multiple metaboxes to appear on single page
-	 *               Allows for return of results for testing
-	 * @since  2.2.5
-	 *
-	 * @param bool $echo Set to false for testing purposes, WP always sends an empty string
-	 *
-	 * @return string
-	 */
-	public function options_page_output( $echo ) {
-		
-		// allow this to return html for tests/future uses; WP sets this to an empty string when called via action
-		$echo = $echo === '' || $echo === TRUE;
-		
-		settings_errors( "{$this->option_key}-notices" );
-		
-		$callback = $this->shared_properties['display_cb'];
-		
-		if ( is_callable( $callback ) ) {
-			
-			// this will catch callbacks which return html or echo
-			ob_start();
-			$returned = $callback( $this );
-			$echoed   = ob_get_clean();
-			$html     = $echoed ? $echoed : $returned;
-			
-		} else {
-			
-			if ( $this->shared_properties['cmb_styles'] ) {
-				self::enqueue_cmb_css();
-			}
-			if ( $this->shared_properties['enqueue_js'] ) {
-				self::enqueue_cmb_js();
-			}
-			
-			// get instance of display class
-			$dis = new CMB2_Options_Display( $this->option_key, $this->page, $this->boxes, $this->shared_properties );
-			
-			// get output from that class
-			$html = $dis->options_page_output();
-		}
-		
-		if ( $echo ) {
-			echo $html;
-			$html = TRUE;
-		}
-		
-		return $html;
-	}
-	
-	/**
 	 * Save data from options page, then redirects back.
 	 *
 	 * @since  2.XXX Checks multiple boxes
 	 *               Calls $this->can_box_save() instead of $this->can_save()
 	 *               Allows options to be reset
 	 * @since  2.2.5
-	 *
 	 * @return void
 	 */
 	public function save_options() {
@@ -855,102 +262,55 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		// set the option and action
 		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : FALSE );
 		$option  = isset( $_POST['action'] ) ? $_POST['action'] : FALSE;
-		$boxes   = isset( $_POST['cmb2_boxes'] ) ? explode( ',', $_POST['cmb2_boxes'] ) : FALSE;
 		$updated = FALSE;
 		
-		if ( $action && $option && $boxes ) {
+		if ( $action && $option && $this->can_save() && $this->option_key === $option ) {
 			
-			if ( ! empty( $boxes ) && empty( $this->boxes ) ) {
-				$this->add_page_boxes( $boxes );
+			if ( $action == 'reset' ) {
+				$this->field_values_to_default();
+				$updated = 'reset';
 			}
 			
-			foreach ( $this->boxes as $box ) {
-				
-				if ( $this->can_box_save( $box ) && $this->option_key === $option ) {
-					
-					// if the "reset" button was pressed, return fields to their default values
-					if ( $action == 'reset' ) {
-						$this->field_values_to_default( $box );
-						$updated = 'reset';
-					}
-					
-					$up = $box
-						->save_fields( $this->option_key, $box->object_type(), $_POST )
-						->was_updated();
-					
-					// set updated to true, prevent setting to false
-					$updated = $updated ? $updated : $up;
-				}
-			}
+			$up = $this->cmb->save_fields( $this->option_key, $this->cmb->object_type(), $_POST )->was_updated();
 			
-			$url = add_query_arg( 'updated', var_export( $updated, TRUE ), $url );
+			$updated = $updated ? $updated : $up;
 		}
+		
+		$url = add_query_arg( 'updated', var_export( $updated, TRUE ), $url );
 		
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
 		exit;
 	}
 	
 	/**
-	 * Adaptation of parent class 'can_save' -- allows arbitrary box to be checked
-	 *
-	 * @param \CMB2 $box
-	 *
-	 * @return mixed
-	 */
-	public function can_box_save( CMB2 $box ) {
-		
-		$type = 'options-page';
-		
-		$can_save = (
-			$box->prop( 'save_fields' )
-			&& isset( $_POST[ $box->nonce() ] )
-			&& wp_verify_nonce( $_POST[ $box->nonce() ], $box->nonce() )
-			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			&& ( $type && in_array( $type, $box->box_types() ) )
-			&& ! ( is_multisite() && ms_is_switched() )
-		);
-		
-		// See CMB2_hookup->can_save()
-		return apply_filters( 'cmb2_can_save', $can_save, $box );
-	}
-	
-	/**
 	 * Changes _POST values for box fields to default values.
 	 *
 	 * @since 2.XXX
-	 *
-	 * @param \CMB2 $box
+	 * @internal \CMB2_Field $field
 	 */
-	public function field_values_to_default( CMB2 $box ) {
+	public function field_values_to_default() {
 		
-		$fields = $box->prop( 'fields' );
+		$fields = $this->cmb->prop( 'fields' );
 		
-		/**
-		 * Depending on value set by 'reset_action', either blanks the field or reverts to default value
-		 *
-		 * @var \CMB2_Field $field
-		 */
 		foreach ( $fields as $fid => $field ) {
-			$f             = $box->get_field( $field );
-			$_POST[ $fid ] = $this->shared_properties['reset_action'] == 'remove' ? '' : $f->get_default();
+			$f             = $this->cmb->get_field( $field );
+			$_POST[ $fid ] = $this->cmb->prop( 'reset_action' ) == 'remove' ? '' : $f->get_default();
 		}
 	}
 	
 	/**
 	 * Replaces get_option with get_site_option
 	 *
-	 * @since 2.XXX Added test for expected value of test before returning site option
+	 * @since 2.XXX   Added test for expected value of test before returning site option
 	 * @since 2.2.5
-	 *
 	 * @param string $test should be 'cmb2_no_override_option_get'
 	 * @param mixed  $default
-	 *
 	 * @return mixed  Value set for the network option.
 	 */
 	public function network_get_override( $test, $default = FALSE ) {
 		
-		return $test == 'cmb2_no_override_option_get'
-			? get_site_option( $this->option_key, $default ) : $test;
+		return $test == 'cmb2_no_override_option_get' ?
+			get_site_option( $this->option_key, $default ) : $test;
 	}
 	
 	/**
@@ -958,46 +318,25 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since 2.XXX Added test for expected value of test
 	 * @since 2.2.5
-	 *
 	 * @param string $test should be 'cmb2_no_override_option_save'
 	 * @param mixed  $option_value
-	 *
 	 * @return bool Success/Failure
 	 */
 	public function network_update_override( $test, $option_value ) {
 		
-		return $test == 'cmb2_no_override_option_save'
-			? update_site_option( $this->option_key, $option_value ) : $test;
+		return $test == 'cmb2_no_override_option_save' ?
+			update_site_option( $this->option_key, $option_value ) : $test;
 	}
 	
 	/**
 	 * Returns property, allows checking state of class
 	 *
-	 * @param string $property
-	 *
+	 * @since 2.XXX
+	 * @param string $property Class property to fetch
 	 * @return mixed|null
 	 */
-	public function get_prop( $property = '' ) {
+	public function __get( $property ) {
 		
 		return isset( $this->{$property} ) ? $this->{$property} : NULL;
-	}
-	
-	/**
-	 * Sets class property. Useful mainly for testing, Boxes should carry all of this information.
-	 *
-	 * @param string $property Property name for internal property
-	 * @param mixed  $value    Value to set. Must match type, though contents are not verified.
-	 *
-	 * @return bool
-	 */
-	public function set_prop( $property = '', $value = NULL ) {
-		
-		if ( isset( $this->{$property} ) && $value !== NULL && gettype( $value ) === gettype( $this->{$property} ) ) {
-			$this->{$property} = $value;
-			
-			return TRUE;
-		}
-		
-		return FALSE;
 	}
 }
