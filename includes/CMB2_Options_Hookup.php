@@ -107,7 +107,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			array(
 				'id' => 'add_meta_boxes',
 				'call' => array( $this, 'add_metaboxes' ),
-				'hook' => 'add_meta_boxes',
+				'hook' => 'add_meta_boxes_' . $this->page_id,
 				'only_if' => $context == 'normal',
 			),
 			array(
