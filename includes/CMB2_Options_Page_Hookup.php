@@ -122,9 +122,17 @@ class CMB2_Options_Page_Hookup {
 				'hook' => $this->wp_menu_hook,
 				'call' => array( $this, 'add_update_notice' ),
 			),
+			array(
+				'id' => 'do_metaboxes',
+				'hook' => 'load-' . $this->page,
+				'call' => array( $this, 'do_metaboxes' ),
+			),
 		);
 		
-		// set of hooks to be called; passing them through this prep filter to aid devs calling filter
+		/*
+		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
+		 * set, making them easier to understand for any dev asking for them by the filter below.
+		 */
 		$hooks = CMB2_Utils::prepare_hooks_array( $hooks, $this->wp_menu_hook );
 		
 		/**
@@ -140,8 +148,13 @@ class CMB2_Options_Page_Hookup {
 		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this->page, $this );
 		$hooks = $hooks != $filtered ? $filtered : $hooks;
 		
-		// add the hooks
-		return ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
+		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
+		
+		if ( $return ) {
+			$this->hooked = true;
+		}
+		
+		return $return;
 	}
 	
 	/**
@@ -335,6 +348,14 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
+	 * Do the metabox actions for this page
+	 */
+	public function do_metaboxes() {
+		do_action( 'add_meta_boxes_' . $this->page, NULL );
+		do_action( 'add_meta_boxes', $this->page, NULL );
+	}
+	
+	/**
 	 * Checks if setting is already registered.
 	 *
 	 * @since 2.XXX
@@ -396,6 +417,9 @@ class CMB2_Options_Page_Hookup {
 			'save_button'  => $this->get_page_prop( 'save_button', 'Save', FALSE ),
 			'title'        => $this->get_page_prop( 'page_title', $this->cmb->prop( 'title' ) ),
 		);
+		
+		// changes 'auto' into an int, and if not auto, ensures value is in range
+		$props['page_columns'] = $this->find_page_columns( $props['page_columns'] );
 		
 		/**
 		 * 'cmb2_options_page_title' filter.
@@ -483,6 +507,34 @@ class CMB2_Options_Page_Hookup {
 		return $prop;
 	}
 	
+	/**
+	 * Determines how many columns for a post-style page
+	 *
+	 * @since 2.XXX
+	 * @param int|string $cols Value of the shared property
+	 * @return int Value will be '1' or '2'
+	 */
+	public function find_page_columns( $cols = 'auto' ) {
+		
+		// a value was passed, it can either be 2 or 1
+		if ( $cols !== 'auto' ) {
+			return intval( $cols ) !== 2 ? 1 : 2;
+		}
+		
+		$cols = 1;
+		
+		// run through the boxes, if a side box is found, cols equals 2
+		foreach( $this->hookups as $hook ) {
+			if ( $hook->cmb->prop( 'context' ) == 'side' ) {
+				$cols = 2;
+				break;
+			}
+		}
+		
+		// if the 'side' context is in the array, page has two columns
+		return $cols;
+	}
+	
 	
 	/**
 	 * Switch for display of options page, using either the callback or internal render function
@@ -536,9 +588,7 @@ class CMB2_Options_Page_Hookup {
 		}
 			
 		// get instance of display class
-		$dis = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->hookups, $this->shared );
-			
-		// get output from that class
+		$dis  = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->shared );
 		$html = $notices . $dis->options_page_output();
 		
 		return $html;
@@ -566,17 +616,8 @@ class CMB2_Options_Page_Hookup {
 			'is_object' => array( 'display_cb' ),
 			'is_bool' => array( 'cmb_styles', 'display_cb', 'enqueue_js' ),
 			'is_null' => array( 'position' ),
-			'is_string' => array(
-				'capability',
-				'icon_url',
-				'menu_title',
-				'page_columns',
-				'page_format',
-				'reset_button',
-				'reset_action',
-				'save_button',
-				'title'
-			),
+			'is_string' => array( 'capability', 'icon_url', 'menu_title', 'page_columns', 'page_format',
+				'reset_button', 'reset_action', 'save_button', 'title' ),
 			'is_numeric' => array( 'page_columns', 'position' ),
 		);
 		$not_empty = array(
