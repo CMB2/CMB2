@@ -55,7 +55,7 @@ class CMB2_Options_Page_Display {
 	 *
 	 * @return string  Formatted HTML
 	 */
-	public function options_page_output() {
+	public function options_page() {
 		
 		// top part of page
 		$html = $this->options_page_output_open();
@@ -217,9 +217,9 @@ class CMB2_Options_Page_Display {
 		
 		$html = '';
 		
-	//	foreach ( $this->boxes as $box ) {
-	//		$html .= $this->options_page_metabox( $box );
-	//	}
+		ob_start();
+		do_action( 'cmb2_options_simple_page', 'options-page' );
+		$html .= ob_get_clean();
 		
 		return $html;
 	}
@@ -255,13 +255,15 @@ class CMB2_Options_Page_Display {
 		if ( $columns == 2 ) {
 			
 			$html .= "\n" . '<div id="postbox-container-1" class="postbox-container">';
-			$html .= "\n" . '<div id="side-sortables" class="meta-box-sortables ui-sortable">';
 			
 			ob_start();
 			do_meta_boxes( $this->page, 'side', NULL );
-			$html .= ob_get_clean();
+			$side = ob_get_clean();
 			
-			$html .= "\n" . '</div>';
+			if ( $side ) {
+				$html .= $side;
+			}
+			
 			$html .= "\n" . '</div>';
 		}
 		
@@ -273,9 +275,7 @@ class CMB2_Options_Page_Display {
 		$normal = ob_get_clean();
 		
 		if ( $normal ) {
-			$html .= "\n" . '<div id="normal-sortables" class="meta-box-sortables ui-sortable">';
 			$html .= $normal;
-			$html .= "\n" . '</div>';
 		}
 		
 		ob_start();
@@ -283,9 +283,7 @@ class CMB2_Options_Page_Display {
 		$advanced = ob_get_clean();
 		
 		if ( $advanced ) {
-			$html .= "\n" . '<div id="advanced-sortables" class="meta-box-sortables ui-sortable">';
 			$html .= $advanced;
-			$html .= "\n" . '</div>';
 		}
 		
 		$html .= "\n" . '</div>';
