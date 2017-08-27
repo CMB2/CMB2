@@ -107,10 +107,10 @@ class CMB2_Options_Page_Hookup {
 				'call' => array( '{THIS}', 'do_metaboxes' ),
 			),
 			array(
-				'id'   => 'add_cmb_css_to_head',
-				'hook' => 'admin_print_styles-{PAGEHOOK}',
-				'call' => array( 'CMB2_hookup', 'enqueue_cmb_css' ),
-				'only_if' => '{CMBSTYLES_CHECK}'
+				'id'      => 'add_cmb_css_to_head',
+				'hook'    => 'admin_print_styles-{PAGEHOOK}',
+				'call'    => array( 'CMB2_hookup', 'enqueue_cmb_css' ),
+				'only_if' => '{CMBSTYLES_CHECK}',
 			),
 		),
 	);
@@ -145,7 +145,7 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Adds hooks tied to the creation of this page.
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @return array|bool
 	 */
 	public function hooks() {
@@ -154,17 +154,20 @@ class CMB2_Options_Page_Hookup {
 			return FALSE;
 		}
 		
-		// only add hooks once
 		$this->hooked = TRUE;
 		
-		// trigger the generation of shared properties
 		$this->get_shared_props();
 		
-		// tokens needed by this method's hooks
 		$tokens = array(
-			'{POSTBOX}'       => function () { wp_enqueue_script( 'postbox' ); },
-			'{TOGGLE}'        => function () { echo '<script>jQuery(document).ready(function()'
-				     . '{postboxes.add_postbox_toggles("postbox-container");});</script>'; },
+			'{POSTBOX}'       => function () {
+				
+				wp_enqueue_script( 'postbox' );
+			},
+			'{TOGGLE}'        => function () {
+				
+				echo '<script>jQuery(document).ready(function()'
+				     . '{postboxes.add_postbox_toggles("postbox-container");});</script>';
+			},
 			'{POSTBOX_CHECK}' => $this->shared['page_format'] !== 'post',
 		);
 		
@@ -180,8 +183,9 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Prepares hooks array, applying filter
 	 *
-	 * @param string $method     The method being called, used to select hooks from class property
-	 * @param array  $add_tokens Any additional tokens needed
+	 * @since  2.XXX
+	 * @param  string $method     The method being called, used to select hooks from class property
+	 * @param  array  $add_tokens Any additional tokens needed
 	 * @return array|bool
 	 */
 	public function hooks_array( $method, $add_tokens = array() ) {
@@ -201,12 +205,9 @@ class CMB2_Options_Page_Hookup {
 		
 		/**
 		 * 'cmb2_options_page_hooks' filter.
-		 *
 		 * Allows adding or modifying calls to hooks called by this page.
 		 *
-		 * @since    2.XXX
-		 * @internal array               $hooks          Array of hook config arrays
-		 * @internal \CMB2_Options_Hookup $this          Instance of this class
+		 * @since 2.XXX
 		 */
 		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
 		
@@ -230,7 +231,7 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Adds multiple hookups. Returns hookups added.
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @param  array $hookups Array of CMB2 box objects or CMB2 box ids, or mix
 	 * @return array
 	 */
@@ -252,12 +253,13 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Checks to see if the setting is registered, and if not, registers it
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @return bool
 	 */
 	public function add_registered_setting() {
 		
 		if ( ! $this->is_setting_registered() ) {
+			
 			register_setting( 'cmb2', $this->option_key );
 			
 			return TRUE;
@@ -299,11 +301,10 @@ class CMB2_Options_Page_Hookup {
 		
 		/**
 		 * 'cmb2_options_page_menu_params' filter.
-		 *
 		 * Allows modifying the menu parameters before they're used to add a menu. All parameters
 		 * must be returned.
 		 *
-		 * @since    2.XXX
+		 * @since 2.XXX
 		 */
 		$filtered = apply_filters( 'cmb2_options_page_menu_params', $params, $this );
 		
@@ -348,12 +349,12 @@ class CMB2_Options_Page_Hookup {
 			}
 		}
 		
-		// add page hooks which needed to have $page_hook available
+		// add page hooks which need to have $page_hook available
 		$tokens = array(
 			'{PAGEHOOK}'        => $page_hook,
-			'{CMBSTYLES_CHECK}' => $params['cmb_styles'] === true
+			'{CMBSTYLES_CHECK}' => $params['cmb_styles'] === TRUE,
 		);
-		$hooks = $this->hooks_array( 'add_to_menu', $tokens );
+		$hooks  = $this->hooks_array( 'add_to_menu', $tokens );
 		
 		$hooks = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
 		
@@ -368,7 +369,7 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Adds settings notice if updated.
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @return string
 	 */
 	public function add_update_notice() {
@@ -399,13 +400,16 @@ class CMB2_Options_Page_Hookup {
 	 * @since 2.XXX
 	 */
 	public function do_metaboxes() {
-		do_action( 'add_meta_boxes_' . $this->page, $this->shared['page_format'] );
+		
+		if ( $this->shared['page_format'] == 'post' ) {
+			do_action( 'add_meta_boxes_' . $this->page, NULL );
+		}
 	}
 	
 	/**
 	 * Checks if setting is already registered.
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @return bool
 	 */
 	public function is_setting_registered() {
@@ -420,7 +424,7 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Checks to see if the page is updated.
 	 *
-	 * @since 2.XXX
+	 * @since  2.XXX
 	 * @return bool
 	 */
 	public function is_updated() {
@@ -440,7 +444,7 @@ class CMB2_Options_Page_Hookup {
 	 * on its CMB2 object. Uses the last non-null value returned.
 	 *
 	 * @since  2.XXX
-	 * @param  array $passed
+	 * @param  array $passed  Allows passing in an array for test purposes
 	 * @return array|bool
 	 */
 	public function get_shared_props( $passed = array() ) {
@@ -474,50 +478,35 @@ class CMB2_Options_Page_Hookup {
 		
 		/**
 		 * 'cmb2_options_page_title' filter.
-		 *
 		 * Alters the title for use on the page. Note it's always a good idea to set 'menu_title' separately to
 		 * avoid excessively long menu titles
 		 *
 		 * @since 2.XXX
-		 *
-		 * @property string               'title'        Title as set via 'page_title' or first box's 'title'
-		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this Instance of this class
 		 */
-		$props['title'] = (string) apply_filters( 'cmb2_options_page_title', $props['title'], $this->page, $this );
+		$props['title'] = (string) apply_filters( 'cmb2_options_page_title', $props['title'], $this );
 		
 		// need to set after determining the filtered title to use as fallback
 		$props['menu_title'] = $this->get_page_prop( 'menu_title', $props['title'] );
 		
 		/**
 		 * 'cmb2_options_menu_title' filter.
-		 *
 		 * Alters the title for use on the menu.
 		 *
 		 * @since 2.XXX
-		 *
-		 * @property string               'menu_title'   Menu title as configured
-		 * @var      string               $this ->page   Menu slug ($_GET['page']) value
-		 * @var      \CMB2_Options_Hookup $this Instance of this class
 		 */
 		$props['menu_title'] =
-			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this->page, $this );
+			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this );
 		
 		// if passed properties, they overwrite array values
 		$props = ! empty( $passed ) ? $this->merge_shared_props( $props, $passed ) : $props;
 		
 		/**
 		 * 'cmb2_options_shared_properties' filter.
-		 *
 		 * Allows replacement/altering of shared_properties.
 		 *
 		 * @since 2.XXX
-		 *
-		 * @var array                $props Properties being returned by this method
-		 * @var string               $this  ->page   Menu slug ($_GET['page']) value
-		 * @var \CMB2_Options_Hookup $this  Instance of this class
 		 */
-		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this->page, $this );
+		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this );
 		
 		// if passed properties, they overwrite array values
 		$props = $props != $filtered ? $this->merge_shared_props( $props, $filtered ) : $props;
@@ -531,27 +520,25 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Checks hookups assigned to this page for CMB properties
 	 *
-	 * @since 2.XXX
-	 * @param string $property        Property to check
-	 * @param mixed  $fallback        Fallback if prop is null
-	 * @param bool   $empty_string_ok Whether an empty string is allowed to be returned
+	 * @since  2.XXX
+	 * @param  string $property        Property to check
+	 * @param  mixed  $fallback        Fallback if prop is null
+	 * @param  bool   $empty_string_ok Whether an empty string is allowed to be returned
 	 * @return mixed
 	 */
 	public function get_page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
 		
 		$prop = NULL;
+		$ok = $empty_string_ok;
 		
 		foreach ( $this->hookups as $hookup ) {
 			$check = $hookup->cmb->prop( $property );
-			if ( $check !== NULL && ( $empty_string_ok || $check !== '' ) ) {
+			if ( $check !== NULL && ( $ok || $check !== '' ) ) {
 				$prop = $check;
 			}
 		}
 		
-		if (
-			( ! $empty_string_ok && $prop === '' && is_string( $fallback ) ) // value was empty string, flag set
-			|| ( $prop === NULL && $fallback !== NULL )  // value was null, fallback OK
-		) {
+		if ( ( ! $ok && $prop === '' && is_string( $fallback ) ) || ( $prop === NULL && $fallback !== NULL ) ) {
 			$prop = $fallback;
 		}
 		
@@ -561,8 +548,8 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Determines how many columns for a post-style page
 	 *
-	 * @since 2.XXX
-	 * @param int|string $cols Value of the shared property
+	 * @since  2.XXX
+	 * @param  int|string $cols Value of the shared property
 	 * @return int Value will be '1' or '2'
 	 */
 	public function find_page_columns( $cols = 'auto' ) {
@@ -582,7 +569,6 @@ class CMB2_Options_Page_Hookup {
 			}
 		}
 		
-		// if the 'side' context is in the array, page has two columns
 		return $cols;
 	}
 	
@@ -648,9 +634,9 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Merges shared properties that are passed via filter or constructor. Checks keys and does some type checking.
 	 *
-	 * @since 2.XXX
-	 * @param array $props  The non-altered version
-	 * @param array $passed Altered version
+	 * @since  2.XXX
+	 * @param  array $props  The non-altered version
+	 * @param  array $passed Altered version
 	 * @return array
 	 */
 	public function merge_shared_props( $props, $passed ) {
@@ -779,8 +765,8 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Changes _POST values for box fields to default values.
 	 *
-	 * @since    2.XXX
-	 * @param    \CMB2_Options_Hookup $hookup
+	 * @since 2.XXX
+	 * @param \CMB2_Options_Hookup $hookup
 	 */
 	public function field_values_to_default( $hookup ) {
 		
@@ -795,8 +781,8 @@ class CMB2_Options_Page_Hookup {
 	/**
 	 * Returns property, allows checking state of class
 	 *
-	 * @since 2.XXX
-	 * @param string $property Class property to fetch
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
 	 * @return mixed|null
 	 */
 	public function __get( $property = '' ) {
