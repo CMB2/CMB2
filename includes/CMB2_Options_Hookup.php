@@ -2,11 +2,8 @@
 
 /**
  * Handles hooking CMB2 forms/metaboxes into WordPress admin "options" pages.
- * This class deals exclusively with actions on individual CMB2 boxes, it assigns the box to a specific
- * CMB_Options_Page_Hookup object based on the value of $this->page_id
- *
- * The page hookup it is assigned to handles the page-specific actions. In addition, the hookup handles the save
- * action of boxes within it.
+ * This class deals exclusively with actions on individual CMB2 boxes; it assigns the box to a specific
+ * CMB_Options_Page_Hookup object based on $this->page_id
  *
  * @since     2.XXX Now allows multiple metaboxes on an options page; rewrite to separate concerns
  * @since     2.0.0
@@ -28,30 +25,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since 2.XXX
 	 */
 	protected $cmb;
-	
-	/**
-	 * Options page key.
-	 *
-	 * @var   string
-	 * @since 2.2.5
-	 */
-	protected $option_key = '';
-	
-	/**
-	 * Page ID in admin
-	 *
-	 * @var string
-	 * @since 2.XXX
-	 */
-	protected $page_id = '';
-	
-	/**
-	 * Page hookup object
-	 *
-	 * @var \CMB2_Options_Page_Hookup
-	 * @since 2.XXX
-	 */
-	protected $page;
 	
 	/**
 	 * Array of hook configuration arrays for standard hooks added by this class.
@@ -102,12 +75,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		array(
 			'id'   => 'cmb2_options_simple_page',
 			'hook' => 'cmb2_options_simple_page',
-			'call' => array( '{THIS}', 'simple_page_box' ),
+			'call' => array( '{THIS}', 'get_simple_page_box' ),
 		),
 		array(
 			'id'   => 'postbox_classes',
 			'hook' => 'postbox_classes_{PAGE_ID}_{CMB_ID}',
-			'call' => array( '{THIS}', 'postbox_classes' ),
+			'call' => array( '{THIS}', 'add_postbox_classes' ),
 			'type' => 'filter',
 		),
 	);
@@ -121,7 +94,31 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	protected $object_type = 'options-page';
 	
 	/**
-	 * Constructor
+	 * Options page key.
+	 *
+	 * @var   string
+	 * @since 2.2.5
+	 */
+	protected $option_key = '';
+	
+	/**
+	 * Page hookup object
+	 *
+	 * @var \CMB2_Options_Page_Hookup
+	 * @since 2.XXX
+	 */
+	protected $page;
+	
+	/**
+	 * Page ID in admin
+	 *
+	 * @var string
+	 * @since 2.XXX
+	 */
+	protected $page_id = '';
+	
+	/**
+	 * Constructor, allows injection by tests of normally determined or set properties.
 	 *
 	 * @since 2.XXX                         Sets $this->page_id value, allows passing of default hooks and page
 	 * @since 2.0.0
@@ -147,79 +144,15 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Default hooks.
-	 *
-	 * @since  2.XXX       Complete re-write to use 'normal' CMB metabox actions
-	 * @since  2.?.?       Method undocumented
-	 * @return array|bool  Array of hooks added
-	 */
-	public function hooks() {
-		
-		// Optional 'network_admin_menu' value can be passed here
-		$wp_menu_hook = $this->cmb->prop( 'admin_menu_hook', 'admin_menu' );
-		
-		// get the options page and add $this->cmb to it. Options page handles hooking into menus, etc.
-		$this->page = $this->get_options_page_and_add_box( $wp_menu_hook );
-		
-		// get the box context
-		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
-		
-		// Tokens to substitute into the standard hooks array
-		$tokens = array(
-			'{THIS}'          => $this,
-			'{PAGE}'          => $this->page,
-			'{PAGE_ID}'       => $this->page_id,
-			'{CMB_ID}'        => $this->cmb->cmb_id,
-			'{CONTEXT_CHECK}' => $context == 'form_top',
-			'{OPT}'           => $this->option_key,
-			'{NETWORK_CHECK}' => 'network_admin_menu' == $wp_menu_hook,
-			'{TYPE_CHECK}'    => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
-		);
-		
-		/*
-		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
-		 * set, making them easier to understand for any dev asking for them by the filter below.
-		 */
-		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks, $this->wp_menu_hook, $tokens );
-		
-		/**
-		 * 'cmb2_options_page_hooks_' filter.
-		 * Allows adding or modifying calls to hooks called by this page.
-		 *
-		 * @since 2.XXX
-		 */
-		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
-		$hooks    = $hooks != $filtered ? $filtered : $hooks;
-		
-		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
-		
-		return $return;
-	}
-	
-	/**
-	 * Returns the output for a 'simple' box. Allows future return of string by show_form if desired.
+	 * Returns property, allows checking state of class
 	 *
 	 * @since  2.XXX
-	 * @param  string $pageid
-	 * @return bool|string
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
 	 */
-	public function simple_page_box( $pageid = '' ) {
+	public function __get( $property ) {
 		
-		$return = FALSE;
-		
-		if ( $pageid == $this->page_id ) {
-			
-			ob_start();
-			$return = $this->cmb->show_form( 0, $this->object_type );
-			$echoed = ob_get_clean();
-			
-			if ( $echoed ) {
-				echo $echoed;
-				$return = TRUE;
-			};
-		}
-		
-		return $return;
+		return isset( $this->{$property} ) ? $this->{$property} : NULL;
 	}
 	
 	/**
@@ -237,7 +170,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		add_meta_box(
 			$this->cmb->cmb_id,
 			$this->cmb->prop( 'title' ),
-			array( $this, 'metabox_callback' ),
+			array( $this, 'get_metabox' ),
 			$this->page_id,
 			$this->cmb->prop( 'context' ),
 			$this->cmb->prop( 'priority' )
@@ -253,7 +186,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since  2.XXX
 	 * @return string|bool
 	 */
-	public function metabox_callback() {
+	public function get_metabox() {
 		
 		ob_start();
 		$returned = $this->cmb->show_form( 0, $this->object_type );
@@ -274,7 +207,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @param  string $wp_menu_hook The first box to call the page hookup constructor will set it.
 	 * @return \CMB2_Options_Page_Hookup
 	 */
-	public function get_options_page_and_add_box( $wp_menu_hook = '' ) {
+	public function get_options_page_and_add_hookup( $wp_menu_hook = '' ) {
 		
 		$admin_page = CMB2_Options_Pages::get( $this->page_id );
 		
@@ -289,20 +222,79 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Get the menu slug. We cannot pass a fallback to CMB2 as it will prevent additional pages from being generated.
-	 * Menu slugs must ALWAYS be accompianied by an explicit declaration of the 'option_key' box parameter.
+	 * Returns the output for a 'simple' box. Allows future return of string by show_form if desired.
 	 *
 	 * @since  2.XXX
-	 * @return string
+	 * @param  string $pageid
+	 * @return bool|string
 	 */
-	public function set_page() {
+	public function get_simple_page_box( $pageid = '' ) {
 		
-		$menu_slug = $this->cmb->prop( 'menu_slug' );
+		$return = FALSE;
 		
-		$page = empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
-			$this->option_key : $menu_slug;
+		if ( $pageid == $this->page_id ) {
+			
+			ob_start();
+			$return = $this->cmb->show_form( 0, $this->object_type );
+			$echoed = ob_get_clean();
+			
+			if ( $echoed ) {
+				echo $echoed;
+				$return = TRUE;
+			};
+		}
 		
-		return $page;
+		return $return;
+	}
+	
+	/**
+	 * Default hooks.
+	 *
+	 * @since  2.XXX       Complete re-write to use 'normal' CMB metabox actions
+	 * @since  2.?.?       Method undocumented
+	 * @return array|bool  Array of hooks added
+	 */
+	public function hooks() {
+		
+		// Optional 'network_admin_menu' value can be passed here
+		$wp_menu_hook = $this->cmb->prop( 'admin_menu_hook', 'admin_menu' );
+		
+		// get the options page and add $this->cmb to it. Options page handles hooking into menus, etc.
+		$this->page = $this->get_options_page_and_add_hookup( $wp_menu_hook );
+		
+		// get the box context
+		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
+		
+		// Tokens to substitute into hooks array
+		$tokens = array(
+			'{THIS}'          => $this,
+			'{PAGE}'          => $this->page,
+			'{PAGE_ID}'       => $this->page_id,
+			'{CMB_ID}'        => $this->cmb->cmb_id,
+			'{CONTEXT_CHECK}' => $context == 'form_top',
+			'{OPT}'           => $this->option_key,
+			'{NETWORK_CHECK}' => 'network_admin_menu' == $wp_menu_hook,
+			'{TYPE_CHECK}'    => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
+		);
+		
+		/*
+		 * By sending the hooks to the prepare_hooks_array method, partials will be returned with all keys set,
+		 * making life easier for any dev asking for the list via this filter.
+		 */
+		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks, $wp_menu_hook, $tokens );
+		
+		/**
+		 * 'cmb2_options_page_hooks_' filter.
+		 * Allows adding or modifying calls to hooks called by this page.
+		 *
+		 * @since 2.XXX
+		 */
+		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
+		$hooks    = $hooks != $filtered ? $filtered : $hooks;
+		
+		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $wp_menu_hook ) : FALSE;
+		
+		return $return;
 	}
 	
 	/**
@@ -336,14 +328,19 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Returns property, allows checking state of class
+	 * Get the menu slug. We cannot pass a fallback to CMB2 as it will prevent additional pages from being generated.
+	 * Menu slugs must ALWAYS be accompianied by an explicit declaration of the 'option_key' box parameter.
 	 *
 	 * @since  2.XXX
-	 * @param  string $property Class property to fetch
-	 * @return mixed|null
+	 * @return string
 	 */
-	public function __get( $property ) {
+	public function set_page() {
 		
-		return isset( $this->{$property} ) ? $this->{$property} : NULL;
+		$menu_slug = $this->cmb->prop( 'menu_slug' );
+		
+		$page = empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
+			$this->option_key : $menu_slug;
+		
+		return $page;
 	}
 }
