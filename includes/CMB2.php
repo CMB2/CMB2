@@ -119,20 +119,26 @@ class CMB2 extends CMB2_Base {
 		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
 		 * options page. The last box which has the parameter set will override any previous box values.
 		 *
-		 * CMB_Options_Hookup() will set the value shown before the pipe as the default if the property is not
+		 * CMB_Options_Page_Hookup() will set the value shown before the pipe as the default if the property is not
 		 * assigned to a box.
+		 *
+		 * 'menu_first_sub' allows overruling WP as to the label on the first submenu item of a top-level custom
+		 * page with subpages, which by default is the same as the top-level page. An example of this is WP's post
+		 * menu, with 'Posts' and 'All Posts' as the first item, which go to the same place. Note if you use this,
+		 * you will have this sub-menu even if there are no other sub-pages.
 		 */
-		'capability'    => null, // 'manage_options' | String: WP cap required to view options-page.
-		'display_cb'    => null, // false            | Bool,callable: Override the options-page output.
-		'icon_url'      => null, // ''               | String: URL to icon. Only if 'parent_slug' is empty.
-		'menu_title'    => null, // [page_title]     | String: Sets menu title, defaults to page_title
-		'page_columns'  => null, // 'auto'           | String,int: Only used on 'post' formats. 1, 2, or 'auto'.
-		'page_format'   => null, // 'simple'         | String: 'simple' or 'post', latter like WP post editor
-		'page_title'    => null, // CMB2 'title'     | String: Set page title
-		'position'      => null, // null             | Null,int: Top menu position Only if 'parent_slug' is empty.
-		'reset_action'  => null, // 'default'        | String: 'default' (field defaults); 'remove' (empties)
-		'reset_button'  => null, // ''               | String: Text for reset button. If empty, button is not added
-		'save_button'   => null, // 'Save'           | String,bool: Text for save button. False hides button
+		'capability'     => null, // 'manage_options' | String: WP cap required to view options-page.
+		'display_cb'     => null, // false            | Bool,callable: Override the options-page output.
+		'icon_url'       => null, // ''               | String: URL to icon. Only if 'parent_slug' is empty.
+		'menu_title'     => null, // [page_title]     | String: Sets menu title, defaults to page_title
+		'menu_first_sub' => null, // null             | String: Label on first submenu item, which goes to top page.
+		'page_columns'   => null, // 'auto'           | String,int: Only used on 'post' formats. 1, 2, or 'auto'.
+		'page_format'    => null, // 'simple'         | String: 'simple' or 'post', latter like WP post editor
+		'page_title'     => null, // CMB2 'title'     | String: Set page title
+		'position'       => null, // null             | Null,int: Top menu position Only if 'parent_slug' is empty.
+		'reset_action'   => null, // 'default'        | String: 'default' (field defaults); 'remove' (empties)
+		'reset_button'   => null, // ''               | String: Text for reset button. If empty, button is not added
+		'save_button'    => null, // 'Save'           | String,bool: Text for save button. False hides button
 	);
 
 	/**
