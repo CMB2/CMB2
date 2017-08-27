@@ -621,14 +621,13 @@ class CMB2_Utils {
 	 * Sample hook configuration object.
 	 *
 	 * [
-	 *   'id'      => NULL       Required; Bookkeeping only, used to return value for tests
-	 *   'hook'    => NULL       Required; The hook, defaults to $default_hook if it is passed
-	 *   'call'    => NULL       Required; Callable
-	 *   'only_if' => TRUE       This can be set as a test when configuring, such as $this == $that
-	 *                            If false, hook will not be added
+	 *   'id'       => NULL       Required; Bookkeeping only, used to return value for tests
+	 *   'hook'     => NULL       Required; The hook, defaults to $default_hook if it is passed
+	 *   'call'     => NULL       Required; Callable
 	 *   'type'     => 'action'   Can also be 'filter'
-	 *   'priority' => 10         Usual WP priority
+	 *   'priority' => 10         WP priority
 	 *   'args'     => 1          Number of arguments
+	 *   'only_if'  => TRUE       If false, hook will not be added
 	 * ]
 	 *
 	 * @since  2.XXX
@@ -639,7 +638,8 @@ class CMB2_Utils {
 	 */
 	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = null, $tokens = array() ) {
 		
-		$hooks = array();
+		$hooks        = array();
+		$default_hook = empty( $default_hook ) ? null : $default_hook;
 		
 		// Ensure return from filter is not empty and is an array, or no hook is set
 		if ( empty( $raw_hooks ) || ! is_array( $raw_hooks ) ) {
@@ -696,6 +696,7 @@ class CMB2_Utils {
 		}
 		
 		foreach ( $hooks as $h ) {
+			
 			// set callable
 			$wp_call = 'add_' . $h['type'];
 			
@@ -711,15 +712,14 @@ class CMB2_Utils {
 	
 	/**
 	 * Substitutes tokens in arrays. Method is recursive, and can check keys. Note that this returns a copy
-	 * of the original array in order to facilitate looking in the keys. There is no format required for tokens, but
-	 * good practice would be to surround with something not likely to be used elsewhere in a string.
+	 * of the original array.
 	 *
 	 * If the token value is not scalar and the token is found in the array value, the entire string
-	 * will be replaced by the token:
+	 * will be replaced by the token, as such:
 	 *
-	 *   $tokens = [ '{MYTOKEN}' => array( 'hm' ),  {ANOTHER} => 'Howdy' ]
-	 *   $array  = [ 'key1' => '{MYTOKEN} is neat', 'key2' => '{ANOTHER} partner' ]
-	 *        ---> [ 'key1' => array( 'hm' ),       'key2' => 'Howdy partner' ]
+	 *   $tokens = [ '{MYTOKEN}' => array( 'hm' ),        '{ANOTHER}' => 'Howdy'              ]
+	 *   $array  = [ 'key1'      => '{MYTOKEN} is neat',  'key2'      => '{ANOTHER} partner'  ]
+	 *   $return = [ 'key1'      => array( 'hm' ),        'key2'      => 'Howdy partner'      ]
 	 *
 	 * @since  2.XXX
 	 * @param  array $array   Array to check for tokens.
@@ -727,7 +727,7 @@ class CMB2_Utils {
 	 * @param  bool  $keys    Whether to look for tokens in the array keys.
 	 * @return array
 	 */
-	public static function replace_tokens_in_array( $array, $tokens, $keys = false ) {
+	public static function replace_tokens_in_array( $array = array(), $tokens = array(), $keys = false ) {
 		
 		if ( empty( $array ) || empty( $tokens ) || ! is_array( $array ) || ! is_array( $tokens ) ) {
 			return $array;
