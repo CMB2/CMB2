@@ -125,7 +125,8 @@ class CMB2 extends CMB2_Base {
 		 * 'menu_first_sub' allows overruling WP as to the label on the first submenu item of a top-level custom
 		 * page with subpages, which by default is the same as the top-level page. An example of this is WP's post
 		 * menu, with 'Posts' and 'All Posts' as the first item, which go to the same place. Note if you use this,
-		 * you will have this sub-menu even if there are no other sub-pages.
+		 * you will have this sub-menu even if there are no other sub-pages. This must be set on one of the boxes
+		 * in the top-level menu!
 		 */
 		'capability'     => null, // 'manage_options' | String: WP cap required to view options-page.
 		'display_cb'     => null, // false            | Bool,callable: Override the options-page output.
