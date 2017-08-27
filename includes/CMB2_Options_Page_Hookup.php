@@ -283,15 +283,16 @@ class CMB2_Options_Page_Hookup {
 		}
 		
 		$params = array(
-			'parent_slug' => $parent_slug,
-			'title'       => $this->shared['title'],
-			'menu_title'  => $this->shared['menu_title'],
-			'capability'  => $this->shared['capability'],
-			'menu_slug'   => $this->page,
-			'action'      => array( $this, 'render' ),
-			'icon_url'    => $this->shared['icon_url'],
-			'position'    => $this->shared['position'],
-			'cmb_styles'  => $this->shared['cmb_styles'],
+			'parent_slug'    => $parent_slug,
+			'title'          => $this->shared['title'],
+			'menu_title'     => $this->shared['menu_title'],
+			'capability'     => $this->shared['capability'],
+			'menu_slug'      => $this->page,
+			'action'         => array( $this, 'render' ),
+			'icon_url'       => $this->shared['icon_url'],
+			'position'       => $this->shared['position'],
+			'menu_first_sub' => $this->shared['menu_first_sub'],
+			'cmb_styles'     => $this->shared['cmb_styles'],
 		);
 		
 		$check = array_keys( $params );
@@ -302,15 +303,9 @@ class CMB2_Options_Page_Hookup {
 		 * Allows modifying the menu parameters before they're used to add a menu. All parameters
 		 * must be returned.
 		 *
-		 * @todo     : must be sure null is allowed to be a parent_slug value in shared properties
-		 *
 		 * @since    2.XXX
-		 *
-		 * @internal array                     $hooks       Array of hook config arrays
-		 * @internal string                    $this->page  Menu slug ($_GET['page']) value
-		 * @internal \CMB2_Options_Page_Hookup $this        Instance of this class
 		 */
-		$filtered = apply_filters( 'cmb2_options_page_menu_params', $params, $this->page, $this );
+		$filtered = apply_filters( 'cmb2_options_page_menu_params', $params, $this );
 		
 		// ensure that no keys required below are missing after filter
 		if ( ! is_array( $filtered ) || array_keys( $filtered ) != $check ) {
@@ -339,6 +334,18 @@ class CMB2_Options_Page_Hookup {
 				$params['icon_url'],
 				$params['position']
 			);
+			
+			// This will change the wording on the first sub-menu of the top-level menu
+			if ( ! empty( $params['menu_first_sub'] ) && is_string( $params['menu_first_sub'] ) ) {
+				add_submenu_page(
+					$params['menu_slug'],
+					$params['title'],
+					$params['menu_first_sub'],
+					$params['capability'],
+					$params['menu_slug'],
+					$params['action']
+				);
+			}
 		}
 		
 		// add page hooks which needed to have $page_hook available
@@ -445,20 +452,21 @@ class CMB2_Options_Page_Hookup {
 		$title = $this->get_page_prop( 'title' );
 		
 		$props = array(
-			'capability'   => $this->get_page_prop( 'capability', 'manage_options' ),
-			'cmb_styles'   => $this->get_page_prop( 'cmb_styles', TRUE ),
-			'display_cb'   => $this->get_page_prop( 'display_cb', FALSE ),
-			'enqueue_js'   => $this->get_page_prop( 'enqueue_js', TRUE ),
-			'icon_url'     => $this->get_page_prop( 'icon_url', '' ),
-			'menu_title'   => '', // set below so filtered page title can be passed as fallback
-			'parent_slug'  => $this->get_page_prop( 'parent_slug' ),
-			'page_columns' => $this->get_page_prop( 'page_columns', 'auto' ),
-			'page_format'  => $this->get_page_prop( 'page_format', 'simple' ),
-			'position'     => $this->get_page_prop( 'position' ),
-			'reset_button' => $this->get_page_prop( 'reset_button', '' ),
-			'reset_action' => $this->get_page_prop( 'reset_action', 'default' ),
-			'save_button'  => $this->get_page_prop( 'save_button', 'Save', FALSE ),
-			'title'        => $this->get_page_prop( 'page_title', $title ),
+			'capability'     => $this->get_page_prop( 'capability', 'manage_options' ),
+			'cmb_styles'     => $this->get_page_prop( 'cmb_styles', TRUE ),
+			'display_cb'     => $this->get_page_prop( 'display_cb', FALSE ),
+			'enqueue_js'     => $this->get_page_prop( 'enqueue_js', TRUE ),
+			'icon_url'       => $this->get_page_prop( 'icon_url', '' ),
+			'menu_title'     => '', // set below so filtered page title can be passed as fallback
+			'menu_first_sub' => $this->get_page_prop( 'menu_first_sub' ),
+			'parent_slug'    => $this->get_page_prop( 'parent_slug' ),
+			'page_columns'   => $this->get_page_prop( 'page_columns', 'auto' ),
+			'page_format'    => $this->get_page_prop( 'page_format', 'simple' ),
+			'position'       => $this->get_page_prop( 'position' ),
+			'reset_button'   => $this->get_page_prop( 'reset_button', '' ),
+			'reset_action'   => $this->get_page_prop( 'reset_action', 'default' ),
+			'save_button'    => $this->get_page_prop( 'save_button', 'Save', FALSE ),
+			'title'          => $this->get_page_prop( 'page_title', $title ),
 		);
 		
 		// changes 'auto' into an int, and if not auto, ensures value is in range
