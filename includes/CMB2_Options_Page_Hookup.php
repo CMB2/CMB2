@@ -759,7 +759,7 @@ class CMB2_Options_Page_Hookup {
 		
 		$display = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->shared );
 		
-		return $notices . $display->options_page();
+		return $notices . $display->page();
 	}
 	
 	/**
