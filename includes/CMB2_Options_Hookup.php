@@ -5,6 +5,9 @@
  * This class deals exclusively with actions on individual CMB2 boxes, it assigns the box to a specific
  * CMB_Options_Page_Hookup object based on the value of $this->page_id
  *
+ * The page hookup it is assigned to handles the page-specific actions. In addition, the hookup handles the save
+ * action of boxes within it.
+ *
  * @since     2.XXX Now allows multiple metaboxes on an options page; rewrite to separate concerns
  * @since     2.0.0
  *
@@ -50,6 +53,48 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	protected $page;
 	
+	protected $hooks = array(
+		array(
+			'id' => 'admin_page_hooks',
+			'call' => array( '{PAGE}', 'hooks' ),
+			'hook' => 'wp_loaded',
+			'priority' => 4,
+		),
+		array(
+			'id' => 'add_meta_boxes',
+			'call' => array( '{THIS}', 'add_options_metaboxes' ),
+			'hook' => 'add_meta_boxes_{PAGE_ID}',
+			'only_if' => '{TYPE_CHECK}',
+		),
+		array(
+			'id' => 'add_context_metaboxes',
+			'call' => array( '{THIS}', 'add_context_metaboxes' ),
+			'hook' => 'edit_form_top',
+			'only_if' => '{CONTEXT_CHECK}',
+		),
+		array(
+			'id'   => 'save_options',
+			'call' => array( '{PAGE}', 'save_options' ),
+			'hook' => 'admin_post_{OPT}',
+		),
+		array(
+			'id'      => 'cmb2_override_option_get',
+			'call'    => array( '{THIS}', 'network_get_override' ),
+			'hook'    => 'cmb2_override_option_get_{OPT}',
+			'only_if' => '{NETWORK_CHECK}',
+			'type'    => 'filter',
+			'args'    => 2,
+		),
+		array(
+			'id'      => 'cmb2_override_option_save',
+			'call'    => array( '{THIS}', 'network_update_override' ),
+			'hook'      => 'cmb2_override_option_save_{OPT}',
+			'only_if' => '{NETWORK_CHECK}',
+			'type'    => 'filter',
+			'args'    => 2,
+		),
+	);
+	
 	/**
 	 * The object type we are performing the hookup for
 	 *
@@ -82,6 +127,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Default hooks.
 	 *
+	 * @todo: does the context need to be swapped for all boxes if the page_format is simple?
+	 *
 	 * @since  2.XXX       Complete re-write to use close to normal CMB actions
 	 * @since  2.?.?       Method undocumented
 	 * @return array|bool  Array of hooks added
@@ -97,53 +144,25 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		// get the box context
 		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
 		
-		// Hooks array: 'hook' will be set to 'id' if not configured.
-		$hooks = array(
-			array(
-				'id' => 'admin_page_hooks',
-				'call' => array( $this->page, 'hooks' ),
-				'hook' => 'admin_page_hooks'
-			),
-			array(
-				'id' => 'add_meta_boxes',
-				'call' => array( $this, 'add_metaboxes' ),
-				'hook' => 'add_meta_boxes_' . $this->page_id,
-				'only_if' => $context == 'normal',
-			),
-			array(
-				'id' => 'add_context_metaboxes',
-				'call' => array( $this, 'add_context_metaboxes' ),
-				'hook' => 'edit_form_top',
-				'only_if' => $context == 'form_top',
-			),
-			array(
-				'id'   => 'save_options',
-				'call' => array( $this, 'save_options' ),
-				'hook' => 'admin_post_' . $this->option_key,
-			),
-			array(
-				'id'      => 'cmb2_override_option_get',
-				'call'    => array( $this, 'network_get_override' ),
-				'hook'    => 'cmb2_override_option_get_' . $this->option_key,
-				'only_if' => 'network_admin_menu' == $wp_menu_hook,
-				'type'    => 'filter',
-				'args'    => 2,
-			),
-			array(
-				'id'      => 'cmb2_override_option_save',
-				'call'    => array( $this, 'network_update_override' ),
-				'hook'      => 'cmb2_override_option_save_' . $this->option_key,
-				'only_if' => 'network_admin_menu' == $wp_menu_hook,
-				'type'    => 'filter',
-				'args'    => 2,
-			),
+		// Tokens to substitute into the standard hooks array
+		$tokens = array(
+			'{THIS}' => $this,
+			'{PAGE}' => $this->page,
+			'{PAGE_ID}' => $this->page_id,
+			'{CONTEXT_CHECK}' => $context == 'form_top',
+			'{OPT}' => $this->option_key,
+			'{NETWORK_CHECK}' => 'network_admin_menu' == $wp_menu_hook,
+			'{TYPE_CHECK}' => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
 		);
 		
-		// set of hooks to be called; passing them through this prep filter to aid devs calling filter
-		$hooks = CMB2_Utils::prepare_hooks_array( $hooks, $wp_menu_hook );
+		/*
+		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
+		 * set, making them easier to understand for any dev asking for them by the filter below.
+		 */
+		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks, $this->wp_menu_hook, $tokens );
 		
 		/**
-		 * 'cmb2_options_metabox_hooks' filter.
+		 * 'cmb2_options_page_hooks_' filter.
 		 *
 		 * Allows adding or modifying calls to hooks called by this page.
 		 *
@@ -152,22 +171,39 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 * @internal string              $this->page_id  Menu slug ($_GET['page']) value
 		 * @internal \CMB2_Options_Hookup $this          Instance of this class
 		 */
-		$filtered = apply_filters( 'cmb2_options_metabox_hooks', $hooks, $this->page_id, $this );
+		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
 		$hooks = $hooks != $filtered ? $filtered : $hooks;
 		
+		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
+		
 		// add the hooks
-		return ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
+		return $return;
 	}
 	
 	/**
 	 * Options display class will uses "do metaboxes" call.
 	 *
 	 * @since 2.XXX
+	 * @param string $type
 	 * @return bool
 	 */
-	public function add_metaboxes() {
+	public function add_options_metaboxes( $type = 'simple' ) {
 		
-		if ( ! $this->show_on() || ! $this->cmb->prop( 'title' ) ) {
+		if ( ! $this->show_on() ) {
+			return false;
+		}
+		
+		if ( $type == 'simple' ) {
+			
+			/*
+			 * If this is a 'simple' page, ie, old-school style CMB2 options page, just the metabox form
+			 * is displayed.
+			 */
+			add_action( 'cmb2_options_simple_page', array( $this, 'show_form_for_type' ) );
+			
+		} else if ( ! $this->cmb->prop( 'title' ) ) {
+			
+			// as per parent class, regular post-style boxes must have titles
 			return false;
 		}
 		
@@ -177,7 +213,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->cmb->cmb_id, 
 			$this->cmb->prop( 'title' ), 
 			array( $this, 'metabox_callback' ), 
-			$this->object_type,
+			$this->page_id,
 			$this->cmb->prop( 'context' ), 
 			$this->cmb->prop( 'priority' ) 
 		);
@@ -216,7 +252,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$admin_page = CMB2_Options_Pages::get( $this->page_id );
 		
-		if ( $admin_page === NULL ) {
+		if ( $admin_page === false ) {
 			$admin_page = new CMB2_Options_Page_Hookup( $this->page_id, $this->option_key, $wp_menu_hook );
 			CMB2_options_Pages::add( $admin_page );
 		}
@@ -241,61 +277,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->option_key : $menu_slug;
 		
 		return $page;
-	}
-	
-	/**
-	 * Save data from options page, then redirects back.
-	 *
-	 * @since  2.XXX Checks multiple boxes
-	 *               Calls $this->can_box_save() instead of $this->can_save()
-	 *               Allows options to be reset
-	 * @since  2.2.5
-	 * @return void
-	 */
-	public function save_options() {
-		
-		$url = wp_get_referer();
-		if ( ! $url ) {
-			$url = admin_url();
-		}
-		
-		// set the option and action
-		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : FALSE );
-		$option  = isset( $_POST['action'] ) ? $_POST['action'] : FALSE;
-		$updated = FALSE;
-		
-		if ( $action && $option && $this->can_save() && $this->option_key === $option ) {
-			
-			if ( $action == 'reset' ) {
-				$this->field_values_to_default();
-				$updated = 'reset';
-			}
-			
-			$up = $this->cmb->save_fields( $this->option_key, $this->cmb->object_type(), $_POST )->was_updated();
-			
-			$updated = $updated ? $updated : $up;
-		}
-		
-		$url = add_query_arg( 'updated', var_export( $updated, TRUE ), $url );
-		
-		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
-		exit;
-	}
-	
-	/**
-	 * Changes _POST values for box fields to default values.
-	 *
-	 * @since 2.XXX
-	 * @internal \CMB2_Field $field
-	 */
-	public function field_values_to_default() {
-		
-		$fields = $this->cmb->prop( 'fields' );
-		
-		foreach ( $fields as $fid => $field ) {
-			$f             = $this->cmb->get_field( $field );
-			$_POST[ $fid ] = $this->cmb->prop( 'reset_action' ) == 'remove' ? '' : $f->get_default();
-		}
 	}
 	
 	/**
