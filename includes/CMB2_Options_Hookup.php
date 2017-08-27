@@ -213,7 +213,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @param  string $wp_menu_hook The first box to call the page hookup constructor will set it.
 	 * @return \CMB2_Options_Page_Hookup
 	 */
-	public function get_options_page_and_add_hookup( $wp_menu_hook = '' ) {
+	public function get_options_page_and_add_hookup( $wp_menu_hook ) {
 		
 		$admin_page = CMB2_Options_Pages::get( $this->page_id );
 		
@@ -315,7 +315,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function network_get_override( $test, $default = FALSE ) {
 		
 		return $test == 'cmb2_no_override_option_get' ?
-			get_site_option( $this->option_key, $default ) : $test;
+			get_site_option( $this->option_key, $default ) : false;
 	}
 	
 	/**
