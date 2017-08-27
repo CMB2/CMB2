@@ -2,7 +2,6 @@
 
 /**
  * Handles creating an options page, which may contain multiple metaboxes.
- *
  * The default page format is the same as the old-school CMB2 style. It can mimic the 'post' editor, however.
  *
  * @since     2.XXX
@@ -18,7 +17,7 @@
 class CMB2_Options_Page_Hookup {
 	
 	/**
-	 * Have the page hooks have been hooked up?
+	 * Has the page been hooked up?
 	 *
 	 * @since 2.XXX
 	 * @var bool
@@ -26,49 +25,8 @@ class CMB2_Options_Page_Hookup {
 	protected $hooked = FALSE;
 	
 	/**
-	 * The page slug, equivalent to $_GET['page']
-	 *
-	 * @since 2.XXX
-	 * @var string
-	 */
-	protected $page = '';
-	
-	/**
-	 * WP Options key
-	 *
-	 * @since 2.XXX
-	 * @var string
-	 */
-	protected $option_key = '';
-	
-	/**
-	 * The first box to call this instance will set the menu hook!
-	 *
-	 * @since 2.XXX
-	 * @var string
-	 */
-	protected $wp_menu_hook = '';
-	
-	/**
-	 * CMB2 boxes which appear on this page
-	 *
-	 * @since 2.XXX
-	 * @var array
-	 */
-	protected $hookups = array();
-	
-	/**
-	 * CMB2 box properties used by this page, as pulled from collective boxes on page
-	 *
-	 * @since 2.XXX
-	 * @var array
-	 */
-	protected $shared = array();
-	
-	/**
 	 * All WP hooks added to this page via 'add_action' or 'add_filter'. The array key is the method where they
-	 * are added. Tokens will be replaced by values specified in the method (usually because they are not available
-	 * until that method).
+	 * are added.
 	 *
 	 * @since 2.XXX
 	 * @var array
@@ -116,6 +74,46 @@ class CMB2_Options_Page_Hookup {
 	);
 	
 	/**
+	 * CMB2 boxes which appear on this page
+	 *
+	 * @since 2.XXX
+	 * @var array
+	 */
+	protected $hookups = array();
+	
+	/**
+	 * WP Options key
+	 *
+	 * @since 2.XXX
+	 * @var string
+	 */
+	protected $option_key = '';
+	
+	/**
+	 * The page slug, equivalent to $_GET['page']
+	 *
+	 * @since 2.XXX
+	 * @var string
+	 */
+	protected $page = '';
+	
+	/**
+	 * CMB2 box properties used by this page, as pulled from collective boxes on page
+	 *
+	 * @since 2.XXX
+	 * @var array
+	 */
+	protected $shared = array();
+	
+	/**
+	 * The first box to call this instance will set the menu hook!
+	 *
+	 * @since 2.XXX
+	 * @var string
+	 */
+	protected $wp_menu_hook = '';
+	
+	/**
 	 * CMB2_Options_Page_Hookup constructor.
 	 *
 	 * @since 2.XXX
@@ -143,75 +141,15 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
-	 * Adds hooks tied to the creation of this page.
+	 * Returns property, allows checking state of class
 	 *
 	 * @since  2.XXX
-	 * @return array|bool
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
 	 */
-	public function hooks() {
+	public function __get( $property = '' ) {
 		
-		if ( $this->hooked ) {
-			return FALSE;
-		}
-		
-		$this->hooked = TRUE;
-		
-		$this->get_shared_props();
-		
-		$tokens = array(
-			'{POSTBOX}'       => function () {
-				
-				wp_enqueue_script( 'postbox' );
-			},
-			'{TOGGLE}'        => function () {
-				
-				echo '<script>jQuery(document).ready(function()'
-				     . '{postboxes.add_postbox_toggles("postbox-container");});</script>';
-			},
-			'{POSTBOX_CHECK}' => $this->shared['page_format'] !== 'post',
-		);
-		
-		// get hooks from class property
-		$hooks = $this->hooks_array( 'hooks', $tokens );
-		
-		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
-		
-		// call utility function to add hooks from array
-		return $return;
-	}
-	
-	/**
-	 * Prepares hooks array, applying filter
-	 *
-	 * @since  2.XXX
-	 * @param  string $method     The method being called, used to select hooks from class property
-	 * @param  array  $add_tokens Any additional tokens needed
-	 * @return array|bool
-	 */
-	public function hooks_array( $method, $add_tokens = array() ) {
-		
-		$tokens = array(
-			'{THIS}'       => $this,
-			'{WPMENUHOOK}' => $this->wp_menu_hook,
-		);
-		
-		$tokens = ! empty( $tokens ) && is_array( $tokens ) ? $tokens + $add_tokens : $tokens;
-		
-		/*
-		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
-		 * set, making them easier to understand for any dev asking for them by the filter below.
-		 */
-		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks[ $method ], $this->wp_menu_hook, $tokens );
-		
-		/**
-		 * 'cmb2_options_page_hooks' filter.
-		 * Allows adding or modifying calls to hooks called by this page.
-		 *
-		 * @since 2.XXX
-		 */
-		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
-		
-		return $hooks != $filtered ? $filtered : $hooks;
+		return isset( $this->{$property} ) ? $this->{$property} : NULL;
 	}
 	
 	/**
@@ -229,7 +167,7 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
-	 * Adds multiple hookups. Returns hookups added.
+	 * Adds multiple hookups. Returns hookups added. Mainly used for testing.
 	 *
 	 * @since  2.XXX
 	 * @param  array $hookups Array of CMB2 box objects or CMB2 box ids, or mix
@@ -248,6 +186,33 @@ class CMB2_Options_Page_Hookup {
 		}
 		
 		return $return;
+	}
+	
+	/**
+	 * Adds WP JS needed for post-style page.
+	 *
+	 * @since  2.XXX
+	 * @return bool
+	 */
+	public function add_postbox_script() {
+		
+		wp_enqueue_script( 'postbox' );
+		
+		return TRUE;
+	}
+	
+	/**
+	 * Adds script to admin footer to toggle postboxes
+	 *
+	 * @since  2.XXX
+	 * @return bool
+	 */
+	public function add_postbox_toggle() {
+		
+		echo '<script>jQuery(document).ready(function()';
+		echo '{postboxes.add_postbox_toggles("postbox-container");});</script>';
+		
+		return TRUE;
 	}
 	
 	/**
@@ -374,24 +339,49 @@ class CMB2_Options_Page_Hookup {
 	 */
 	public function add_update_notice() {
 		
-		$OPT = $this->option_key . '-notices';
-		$UP  = $this->is_updated();
+		$up   = $this->is_updated();
+		$str  = '';
+		$hook = $up === 'true' ? 'updated' : 'notice-warning';
 		
-		if ( 'true' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Settings updated.', 'cmb2' ), 'updated' );
-			
-		} else if ( 'false' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
-			
-		} else if ( 'reset' === $UP ) {
-			
-			add_settings_error( $OPT, '', __( 'Options reset to defaults.', 'cmb2' ), 'notice-warning' );
+		if ( $up === FALSE ) {
+			return FALSE;
 		}
 		
-		// adding 'return_' to string to avoid type mismatch on testing
-		return 'return_' . $UP;
+		switch ( $up ) {
+			case 'true':
+				$str = 'Settings updated.';
+				break;
+			case 'false':
+				$str = 'Nothing to update.';
+				break;
+			case 'reset':
+				$str = 'Options reset to defaults.';
+				break;
+		}
+		
+		add_settings_error( $this->option_key . '-notices', '', __( $str, 'cmb2' ), $hook );
+		
+		return $up;
+	}
+	
+	/**
+	 * Adaptation of parent class 'can_save' -- allows arbitrary box to be checked
+	 *
+	 * @param \CMB2_Options_Hookup $hookup
+	 * @return mixed
+	 */
+	public function can_save( CMB2_Options_Hookup $hookup ) {
+		
+		$can_save = (
+			$hookup->cmb->prop( 'save_fields' )
+			&& isset( $_POST[ $hookup->cmb->nonce() ] )
+			&& wp_verify_nonce( $_POST[ $hookup->cmb->nonce() ], $hookup->cmb->nonce() )
+			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			&& ( 'options-page' && in_array( 'options-page', $hookup->cmb->box_types() ) )
+			&& ! ( is_multisite() && ms_is_switched() )
+		);
+		
+		return apply_filters( 'cmb2_can_save', $can_save, $hookup->cmb );
 	}
 	
 	/**
@@ -407,36 +397,74 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
-	 * Checks if setting is already registered.
+	 * Changes _POST values for box fields to default values.
 	 *
-	 * @since  2.XXX
-	 * @return bool
+	 * @since 2.XXX
+	 * @param \CMB2_Options_Hookup $hookup
 	 */
-	public function is_setting_registered() {
+	public function field_values_to_default( $hookup ) {
 		
-		$option_key = empty( $option_key ) ? $this->option_key : $option_key;
+		$fields = $hookup->cmb->prop( 'fields' );
 		
-		global $wp_registered_settings;
-		
-		return ! empty( $wp_registered_settings[ $option_key ] );
+		foreach ( $fields as $fid => $field ) {
+			$f             = $hookup->cmb->get_field( $field );
+			$_POST[ $fid ] = $hookup->cmb->prop( 'reset_action' ) == 'remove' ? '' : $f->get_default();
+		}
 	}
 	
 	/**
-	 * Checks to see if the page is updated.
+	 * Determines how many columns for a post-style page
 	 *
 	 * @since  2.XXX
-	 * @return bool
+	 * @param  int|string $cols Value of the shared property
+	 * @return int Value will be '1' or '2'
 	 */
-	public function is_updated() {
+	public function find_page_columns( $cols = 'auto' ) {
 		
-		$UP = isset( $_GET['updated'] ) ? $_GET['updated'] : FALSE;
-		$PG = isset( $_GET['page'] ) ? $_GET['page'] : FALSE;
-		
-		if ( empty( $UP ) || $PG !== $this->page ) {
-			return FALSE;
+		// a value was passed, it can either be 2 or 1
+		if ( $cols !== 'auto' ) {
+			return intval( $cols ) !== 2 ? 1 : 2;
 		}
 		
-		return $UP;
+		$cols = 1;
+		
+		// run through the boxes, if a side box is found, cols equals 2
+		foreach ( $this->hookups as $hook ) {
+			if ( $hook->cmb->prop( 'context' ) == 'side' ) {
+				$cols = 2;
+				break;
+			}
+		}
+		
+		return $cols;
+	}
+	
+	/**
+	 * Checks hookups assigned to this page for CMB properties
+	 *
+	 * @since  2.XXX
+	 * @param  string $property        Property to check
+	 * @param  mixed  $fallback        Fallback if prop is null
+	 * @param  bool   $empty_string_ok Whether an empty string is allowed to be returned
+	 * @return mixed
+	 */
+	public function get_page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
+		
+		$prop = NULL;
+		$ok   = $empty_string_ok;
+		
+		foreach ( $this->hookups as $hookup ) {
+			$check = $hookup->cmb->prop( $property );
+			if ( $check !== NULL && ( $ok || $check !== '' ) ) {
+				$prop = $check;
+			}
+		}
+		
+		if ( ( ! $ok && $prop === '' && is_string( $fallback ) ) || ( $prop === NULL && $fallback !== NULL ) ) {
+			$prop = $fallback;
+		}
+		
+		return $prop;
 	}
 	
 	/**
@@ -444,7 +472,7 @@ class CMB2_Options_Page_Hookup {
 	 * on its CMB2 object. Uses the last non-null value returned.
 	 *
 	 * @since  2.XXX
-	 * @param  array $passed  Allows passing in an array for test purposes
+	 * @param  array $passed Allows passing in an array for test purposes
 	 * @return array|bool
 	 */
 	public function get_shared_props( $passed = array() ) {
@@ -478,8 +506,7 @@ class CMB2_Options_Page_Hookup {
 		
 		/**
 		 * 'cmb2_options_page_title' filter.
-		 * Alters the title for use on the page. Note it's always a good idea to set 'menu_title' separately to
-		 * avoid excessively long menu titles
+		 * Alters the title for use on the page.
 		 *
 		 * @since 2.XXX
 		 */
@@ -518,125 +545,110 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
-	 * Checks hookups assigned to this page for CMB properties
+	 * Adds hooks tied to the creation of this page.
 	 *
 	 * @since  2.XXX
-	 * @param  string $property        Property to check
-	 * @param  mixed  $fallback        Fallback if prop is null
-	 * @param  bool   $empty_string_ok Whether an empty string is allowed to be returned
-	 * @return mixed
+	 * @return array|bool
 	 */
-	public function get_page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
+	public function hooks() {
 		
-		$prop = NULL;
-		$ok = $empty_string_ok;
-		
-		foreach ( $this->hookups as $hookup ) {
-			$check = $hookup->cmb->prop( $property );
-			if ( $check !== NULL && ( $ok || $check !== '' ) ) {
-				$prop = $check;
-			}
+		if ( $this->hooked ) {
+			return FALSE;
 		}
 		
-		if ( ( ! $ok && $prop === '' && is_string( $fallback ) ) || ( $prop === NULL && $fallback !== NULL ) ) {
-			$prop = $fallback;
-		}
+		$this->hooked = TRUE;
 		
-		return $prop;
+		$this->get_shared_props();
+		
+		$tokens = array(
+			'{POSTBOX}'       => array( $this, 'add_postbox_script' ),
+			'{TOGGLE}'        => array( $this, 'add_postbox_toggle' ),
+			'{POSTBOX_CHECK}' => $this->shared['page_format'] !== 'post',
+		);
+		
+		// get hooks from class property
+		$hooks = $this->hooks_array( 'hooks', $tokens );
+		
+		// use CMB_Utils method to add hooks
+		$return = ! empty( $hooks ) ?
+			CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
+		
+		return $return;
 	}
 	
 	/**
-	 * Determines how many columns for a post-style page
+	 * Prepares hooks array, applying filter
 	 *
 	 * @since  2.XXX
-	 * @param  int|string $cols Value of the shared property
-	 * @return int Value will be '1' or '2'
+	 * @param  string $method     The method being called, used to select hooks from class property
+	 * @param  array  $add_tokens Any additional tokens needed
+	 * @return array|bool
 	 */
-	public function find_page_columns( $cols = 'auto' ) {
+	public function hooks_array( $method, $add_tokens = array() ) {
 		
-		// a value was passed, it can either be 2 or 1
-		if ( $cols !== 'auto' ) {
-			return intval( $cols ) !== 2 ? 1 : 2;
-		}
+		$tokens = array(
+			'{THIS}'       => $this,
+			'{WPMENUHOOK}' => $this->wp_menu_hook,
+		);
 		
-		$cols = 1;
+		$tokens = ! empty( $tokens ) && is_array( $tokens ) ? $tokens + $add_tokens : $tokens;
 		
-		// run through the boxes, if a side box is found, cols equals 2
-		foreach ( $this->hookups as $hook ) {
-			if ( $hook->cmb->prop( 'context' ) == 'side' ) {
-				$cols = 2;
-				break;
-			}
-		}
+		/*
+		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
+		 * set, making them easier to understand for any dev asking for them by the filter below.
+		 */
+		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks[ $method ], $this->wp_menu_hook, $tokens );
 		
-		return $cols;
-	}
-	
-	
-	/**
-	 * Switch for display of options page, using either the callback or internal render function
-	 *
-	 * @since  2.XXX
-	 * @param  bool|string $echo Allows this method to return instead of echoing. WP will set this to ''.
-	 * @return bool|string
-	 */
-	public function render( $echo ) {
+		/**
+		 * 'cmb2_options_page_hooks' filter.
+		 * Allows adding or modifying calls to hooks called by this page.
+		 *
+		 * @since 2.XXX
+		 */
+		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
 		
-		$echo     = $echo === '' || $echo === TRUE;
-		$callback = $this->shared['display_cb'];
-		
-		if ( is_callable( $callback ) ) {
-			ob_start();
-			$returned = $callback( $this );
-			$echoed   = ob_get_clean();
-			$html     = $echoed ? $echoed : $returned;
-		} else {
-			$html = $this->render_html();
-		}
-		
-		if ( $echo ) {
-			echo $html;
-			$html = TRUE;
-		}
-		
-		return $html;
+		return $hooks != $filtered ? $filtered : $hooks;
 	}
 	
 	/**
-	 * Returns the rendered HTML from options display class
+	 * Checks if setting is already registered.
 	 *
-	 * @since 2.XXX
-	 * @return string
+	 * @since  2.XXX
+	 * @return bool
 	 */
-	public function render_html() {
+	public function is_setting_registered() {
 		
-		ob_start();
-		settings_errors( "{$this->option_key}-notices" );
-		$notices = ob_get_clean();
+		$option_key = empty( $option_key ) ? $this->option_key : $option_key;
 		
-		// We will use first hookup in our array to trigger the style/js
-		$hup = reset( $this->hookups );
+		global $wp_registered_settings;
 		
-		if ( $this->shared['cmb_styles'] ) {
-			$hup::enqueue_cmb_css();
+		return ! empty( $wp_registered_settings[ $option_key ] );
+	}
+	
+	/**
+	 * Checks to see if the page is updated.
+	 *
+	 * @since  2.XXX
+	 * @return bool
+	 */
+	public function is_updated() {
+		
+		$up   = isset( $_GET['updated'] ) ? $_GET['updated'] : FALSE;
+		$page = isset( $_GET['page'] ) ? $_GET['page'] : FALSE;
+		
+		if ( empty( $up ) || $page !== $this->page ) {
+			return FALSE;
 		}
-		if ( $this->shared['enqueue_js'] ) {
-			$hup::enqueue_cmb_js();
-		}
 		
-		// get instance of display class
-		$dis  = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->shared );
-		$html = $notices . $dis->options_page();
-		
-		return $html;
+		return $up;
 	}
 	
 	/**
 	 * Merges shared properties that are passed via filter or constructor. Checks keys and does some type checking.
 	 *
 	 * @since  2.XXX
-	 * @param  array $props  The non-altered version
-	 * @param  array $passed Altered version
+	 * @param  array $props  The non-altered array
+	 * @param  array $passed Modified version
 	 * @return array
 	 */
 	public function merge_shared_props( $props, $passed ) {
@@ -695,6 +707,62 @@ class CMB2_Options_Page_Hookup {
 	}
 	
 	/**
+	 * Switch for display of options page, using either the callback or internal render function
+	 *
+	 * @since  2.XXX
+	 * @param  bool|string $echo Allows this method to return instead of echoing. WP will set this to ''.
+	 * @return bool|string
+	 */
+	public function render( $echo ) {
+		
+		$echo     = $echo === '' || $echo === TRUE;
+		$callback = $this->shared['display_cb'];
+		
+		if ( is_callable( $callback ) ) {
+			ob_start();
+			$returned = $callback( $this );
+			$echoed   = ob_get_clean();
+			$html     = $echoed ? $echoed : $returned;
+		} else {
+			$html = $this->render_html();
+		}
+		
+		if ( $echo ) {
+			echo $html;
+			$html = TRUE;
+		}
+		
+		return $html;
+	}
+	
+	/**
+	 * Returns the rendered HTML from options display class
+	 *
+	 * @since 2.XXX
+	 * @return string
+	 */
+	public function render_html() {
+		
+		ob_start();
+		settings_errors( $this->option_key . '-notices' );
+		$notices = ob_get_clean();
+		
+		// Use first hookup in our array to trigger the style/js
+		$hookup = reset( $this->hookups );
+		
+		if ( $this->shared['cmb_styles'] ) {
+			$hookup::enqueue_cmb_css();
+		}
+		if ( $this->shared['enqueue_js'] ) {
+			$hookup::enqueue_cmb_js();
+		}
+		
+		$display = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->shared );
+		
+		return $notices . $display->options_page();
+	}
+	
+	/**
 	 * Save data from options page, then redirects back.
 	 *
 	 * @since  2.XXX Checks multiple boxes
@@ -702,12 +770,8 @@ class CMB2_Options_Page_Hookup {
 	 */
 	public function save_options() {
 		
-		$url = wp_get_referer();
-		if ( ! $url ) {
-			$url = admin_url();
-		}
+		$url = wp_get_referer() ? wp_get_referer() : admin_url();
 		
-		// set the option and action
 		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : FALSE );
 		$option  = isset( $_POST['action'] ) ? $_POST['action'] : FALSE;
 		$updated = FALSE;
@@ -733,60 +797,8 @@ class CMB2_Options_Page_Hookup {
 		}
 		
 		$url = add_query_arg( 'updated', var_export( $updated, TRUE ), $url );
-		
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
 		
 		exit;
-	}
-	
-	/**
-	 * Adaptation of parent class 'can_save' -- allows arbitrary box to be checked
-	 *
-	 * @param \CMB2_Options_Hookup $hookup
-	 * @return mixed
-	 */
-	public function can_save( CMB2_Options_Hookup $hookup ) {
-		
-		$type = 'options-page';
-		
-		$can_save = (
-			$hookup->cmb->prop( 'save_fields' )
-			&& isset( $_POST[ $hookup->cmb->nonce() ] )
-			&& wp_verify_nonce( $_POST[ $hookup->cmb->nonce() ], $hookup->cmb->nonce() )
-			&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			&& ( $type && in_array( $type, $hookup->cmb->box_types() ) )
-			&& ! ( is_multisite() && ms_is_switched() )
-		);
-		
-		// See CMB2_hookup->can_save()
-		return apply_filters( 'cmb2_can_save', $can_save, $hookup->cmb );
-	}
-	
-	/**
-	 * Changes _POST values for box fields to default values.
-	 *
-	 * @since 2.XXX
-	 * @param \CMB2_Options_Hookup $hookup
-	 */
-	public function field_values_to_default( $hookup ) {
-		
-		$fields = $hookup->cmb->prop( 'fields' );
-		
-		foreach ( $fields as $fid => $field ) {
-			$f             = $hookup->cmb->get_field( $field );
-			$_POST[ $fid ] = $hookup->cmb->prop( 'reset_action' ) == 'remove' ? '' : $f->get_default();
-		}
-	}
-	
-	/**
-	 * Returns property, allows checking state of class
-	 *
-	 * @since  2.XXX
-	 * @param  string $property Class property to fetch
-	 * @return mixed|null
-	 */
-	public function __get( $property = '' ) {
-		
-		return isset( $this->{$property} ) ? $this->{$property} : NULL;
 	}
 }
