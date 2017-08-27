@@ -14,7 +14,11 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property  CMB2 $cmb  Allow IDEs, etc. to reconize property accessed via magic method.
+ * @property  \CMB2                     $cmb
+ * @property  string                    $option_key
+ * @property  string                    $page_id
+ * @property  \CMB2_Options_Page_Hookup $page
+ * @property  array                     $hooks
  */
 class CMB2_Options_Hookup extends CMB2_hookup {
 	
