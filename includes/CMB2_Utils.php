@@ -616,6 +616,8 @@ class CMB2_Utils {
 	 * Ensures a hooks config array conforms to what self::add_wp_hooks() expects. Useful if a lot of hooks need to
 	 * be added, or you want to allow filtering on the hook list before setting them.
 	 *
+	 * Will substitute tokens, see method documentation below.
+	 *
 	 * Sample hook configuration object.
 	 *
 	 * [
@@ -630,11 +632,12 @@ class CMB2_Utils {
 	 * ]
 	 *
 	 * @since  2.XXX
-	 * @param  array       $raw_hooks     Array of hook config arrays
-	 * @param  string|null $default_hook  Set via 'admin_menu_hook'
+	 * @param  array       $raw_hooks    Array of hook config arrays
+	 * @param  string|null $default_hook Set via 'admin_menu_hook'
+	 * @param  array       $tokens       Array of tokens, if substituting tokens.
 	 * @return array|bool
 	 */
-	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = null ) {
+	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = null, $tokens = array() ) {
 		
 		$hooks = array();
 		
@@ -645,6 +648,9 @@ class CMB2_Utils {
 		
 		// set defaults if not present
 		foreach ( $raw_hooks as $h => $cfg ) {
+			
+			// replace tokens
+			$cfg = ! empty( $tokens ) ? self::replace_tokens_in_array( $cfg, $tokens ) : $cfg;
 			
 			// set missing values to default values
 			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )       ? $cfg['id']             : NULL;
@@ -675,15 +681,15 @@ class CMB2_Utils {
 	 * Sends arrays to above method to normalize them.
 	 *
 	 * @since  2.XXX
-	 * @param  array         $hooks          Array of hook configuration arrays
-	 * @param  string|null   $default_hook   Default hook which will be used if not in configured items
+	 * @param  array       $hooks         Array of hook configuration arrays
+	 * @param  string|null $default_hook  Default hook which will be used if not in configured items
+	 * @param  array       $tokens        Array of tokens to substitute
 	 * @return array|bool
 	 */
-	public static function add_wp_hooks_from_config_array( $hooks = array(), $default_hook = null ) {
+	public static function add_wp_hooks_from_config_array( $hooks = array(), $default_hook = null, $tokens = array() ) {
 		
 		$return = array();
-		
-		$hooks = self::prepare_hooks_array( $hooks, $default_hook );
+		$hooks  = self::prepare_hooks_array( $hooks, $default_hook, $tokens );
 		
 		if ( ! is_array( $hooks ) || empty( $hooks ) ) {
 			return false;
@@ -697,9 +703,73 @@ class CMB2_Utils {
 			$wp_call( $h['hook'], $h['call'], $h['priority'], $h['args'] );
 			
 			// Add to the "yes, this was set" return value
-			$return[ $h['hook'] ] = $h['id'];
+			$return[] = array(  $h['hook']  => $h['id'] );
 		}
 		
 		return $return;
 	}
+	
+	/**
+	 * Substitutes tokens in arrays. Method is recursive, and can check keys. Note that this returns a copy
+	 * of the original array in order to facilitate looking in the keys. There is no format required for tokens, but
+	 * good practice would be to surround with something not likely to be used elsewhere in a string.
+	 *
+	 * If the token value is not scalar and the token is found in the array value, the entire string
+	 * will be replaced by the token:
+	 *
+	 *   $tokens = [ '{MYTOKEN}' => array( 'hm' ),  {ANOTHER} => 'Howdy' ]
+	 *   $array  = [ 'key1' => '{MYTOKEN} is neat', 'key2' => '{ANOTHER} partner' ]
+	 *        ---> [ 'key1' => array( 'hm' ),       'key2' => 'Howdy partner' ]
+	 *
+	 * @since  2.XXX
+	 * @param  array $array   Array to check for tokens.
+	 * @param  array $tokens  Tokens. Key should be the token, value what should be subbed
+	 * @param  bool  $keys    Whether to look for tokens in the array keys.
+	 * @return array
+	 */
+	public static function replace_tokens_in_array( $array, $tokens, $keys = false ) {
+		
+		if ( empty( $array ) || empty( $tokens ) || ! is_array( $array ) || ! is_array( $tokens ) ) {
+			return $array;
+		}
+		
+		$return = array();
+		
+		foreach ( $array as $a => $value ) {
+			
+			$ret_key = $a;
+			$ret_val = $value;
+			
+			// this method only checks strings and arrays for tokens
+			if ( is_string( $ret_val ) ) {
+				
+				foreach ( $tokens as $t => $token ) {
+					
+					// check the array key; only sub if array key is string and token is a string
+					if ( $keys && is_string( $a ) && strpos( $a, $t ) !== FALSE && is_string( $token ) ) {
+						$ret_key = str_replace( $t, $token, $a );
+					}
+					
+					if ( is_string( $value ) && strpos( $value, $t ) !== FALSE ) {
+						
+						// non-scalar and bool values for token (callable, array, etc) are substituted whole
+						if ( ! is_scalar( $token ) || is_bool( $token ) ) {
+							$ret_val = $token;
+						} else {
+							$ret_val = str_replace( $t, (string) $token, $ret_val );
+						}
+					}
+				}
+				
+			} else if ( is_array( $ret_val ) ) {
+				
+				$ret_val = self::replace_tokens_in_array( $ret_val, $tokens, $keys );
+			}
+			
+			$return[ $ret_key ] = $ret_val;
+		}
+		
+		return $return;
+	}
+
 }
