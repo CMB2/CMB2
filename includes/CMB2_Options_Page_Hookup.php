@@ -153,7 +153,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  string $property Class property to fetch
 	 * @return mixed|null
 	 */
-	public function __get( $property = '' ) {
+	public function __get( $property ) {
 		
 		return isset( $this->{$property} ) ? $this->{$property} : NULL;
 	}
