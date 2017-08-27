@@ -330,7 +330,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function network_update_override( $test, $option_value ) {
 		
 		return $test == 'cmb2_no_override_option_save' ?
-			update_site_option( $this->option_key, $option_value ) : $test;
+			update_site_option( $this->option_key, $option_value ) : false;
 	}
 	
 	/**
