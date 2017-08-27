@@ -53,7 +53,7 @@ class CMB2_Options_Page_Display {
 	 * @since  2.XXX
 	 * @return string  Formatted HTML
 	 */
-	public function options_page() {
+	public function page() {
 		
 		$before = $after = '';
 		
@@ -76,7 +76,7 @@ class CMB2_Options_Page_Display {
 		$html .= apply_filters( 'cmb2_options_page_before', $before, $this );
 		
 		// the form itself, built potentially from multiple option boxes
-		$html .= $this->options_page_form();
+		$html .= $this->page_form();
 		
 		/**
 		 * 'cmb2_options_page_after' filter.
@@ -98,7 +98,7 @@ class CMB2_Options_Page_Display {
 	 * @since 2.XXX
 	 * @return string  Formatted HTML
 	 */
-	public function options_page_form() {
+	public function page_form() {
 		
 		$id = 'cmb2-option-' . $this->option_key;
 		$top = $bottom = '';
@@ -132,7 +132,7 @@ class CMB2_Options_Page_Display {
 		
 		// allows'WP post editor' layout
 		$html .= $this->shared['page_format'] !== 'post' ?
-			$this->form_simple() : $this->form_post();
+			$this->page_form_simple() : $this->page_form_post();
 		
 		// Allow save button to be hidden/assign value/assign default value
 		$html .= $this->save_button();
@@ -157,7 +157,7 @@ class CMB2_Options_Page_Display {
 	 * @since  2.XXX
 	 * @return string  Formatted HTML
 	 */
-	public function form_simple() {
+	public function page_form_simple() {
 		
 		ob_start();
 		do_action( 'cmb2_options_simple_page', $this->page );
@@ -173,7 +173,7 @@ class CMB2_Options_Page_Display {
 	 * @since  2.XXX
 	 * @return string  Formatted HTML
 	 */
-	public function form_post() {
+	public function page_form_post() {
 		
 		// determine number of columns for post-style layout
 		$columns = $this->shared['page_columns'];
