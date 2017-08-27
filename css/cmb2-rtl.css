@@ -74,7 +74,7 @@ Main Wrap
 /* line 59, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap input:not([type="hidden"]) + input,
-.cmb2-wrap input:not([type="hidden"]) + .button,
+.cmb2-wrap input:not([type="hidden"]) + .button-secondary,
 .cmb2-wrap input:not([type="hidden"]) + select {
 	margin-right: 20px;
 }
@@ -124,7 +124,7 @@ Main Wrap
 /* line 102, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap button,
-.cmb2-wrap .button {
+.cmb2-wrap .button-secondary {
 	white-space: nowrap;
 }
 
@@ -152,27 +152,27 @@ Main Wrap
 	width: 100%;
 }
 
-/* line 126, sass/partials/_main_wrap.scss */
+/* line 124, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-input-wrap {
 	vertical-align: middle;
 }
 
-/* line 131, sass/partials/_main_wrap.scss */
+/* line 129, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-container {
 	margin: 0 0 0 10px;
 }
 
-/* line 136, sass/partials/_main_wrap.scss */
+/* line 134, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row {
 	margin: 0;
 }
 
-/* line 139, sass/partials/_main_wrap.scss */
+/* line 137, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row:after {
 	content: '';
@@ -181,33 +181,21 @@ Main Wrap
 	width: 100%;
 }
 
-/* line 146, sass/partials/_main_wrap.scss */
-
-.cmb2-wrap .cmb-row.cmb-repeat-row {
-	padding: 1.8em 0 0;
-}
-
-/* line 149, sass/partials/_main_wrap.scss */
-
-.cmb2-wrap .cmb-row.cmb-repeat-row:first-of-type {
-	padding: 0;
-}
-
-/* line 154, sass/partials/_main_wrap.scss */
+/* line 144, sass/partials/_main_wrap.scss */
 
 .cmb2-wrap .cmb-row.cmb-repeat .cmb2-metabox-description {
 	padding-top: 0;
-	padding-bottom: 1.8em;
+	padding-bottom: 1em;
 }
 
-/* line 161, sass/partials/_main_wrap.scss */
+/* line 152, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox {
 	clear: both;
 	margin: 0;
 }
 
-/* line 167, sass/partials/_main_wrap.scss */
+/* line 158, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-td,
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-th,
@@ -216,21 +204,13 @@ Main Wrap
 	border: 0;
 }
 
-/* line 174, sass/partials/_main_wrap.scss */
-
-.cmb2-metabox > .cmb-row .cmb-repeat-table .cmb-row > .cmb-td {
-	padding-left: 20px;
-	box-sizing: border-box;
-	float: right;
-}
-
-/* line 182, sass/partials/_main_wrap.scss */
+/* line 165, sass/partials/_main_wrap.scss */
 
 .cmb-add-row {
 	margin: 1.8em 0 0;
 }
 
-/* line 186, sass/partials/_main_wrap.scss */
+/* line 169, sass/partials/_main_wrap.scss */
 
 .cmb-nested .cmb-td,
 .cmb-repeatable-group .cmb-th,
@@ -238,7 +218,7 @@ Main Wrap
 	border: 0;
 }
 
-/* line 192, sass/partials/_main_wrap.scss */
+/* line 175, sass/partials/_main_wrap.scss */
 
 .cmb-row:last-of-type,
 .cmb2-wrap .cmb-row:last-of-type,
@@ -246,21 +226,20 @@ Main Wrap
 	border-bottom: 0;
 }
 
-/* line 198, sass/partials/_main_wrap.scss */
+/* line 181, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-grouping {
 	border: 1px solid #e9e9e9;
 	padding: 0 1em;
-	max-width: 1000px;
 }
 
-/* line 202, sass/partials/_main_wrap.scss */
+/* line 185, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-grouping.cmb-row {
 	margin: 0 0 0.8em;
 }
 
-/* line 209, sass/partials/_main_wrap.scss */
+/* line 193, sass/partials/_main_wrap.scss */
 
 .cmb-th {
 	color: #222222;
@@ -272,7 +251,7 @@ Main Wrap
 	width: 200px;
 }
 
-/* line 223, sass/partials/_main_wrap.scss */
+/* line 207, sass/partials/_main_wrap.scss */
 
 .cmb-td {
 	line-height: 1.3;
@@ -281,50 +260,164 @@ Main Wrap
 	vertical-align: middle;
 }
 
-/* line 232, sass/partials/_main_wrap.scss */
+/* line 216, sass/partials/_main_wrap.scss */
 
 .cmb-type-title .cmb-td {
 	padding: 0;
 }
 
-/* line 237, sass/partials/_main_wrap.scss */
+/* line 221, sass/partials/_main_wrap.scss */
 
 .cmb-th label {
 	display: block;
 	padding: 5px 0;
 }
 
-/* line 242, sass/partials/_main_wrap.scss */
+/* line 226, sass/partials/_main_wrap.scss */
 
 .cmb-th + .cmb-td {
 	float: right;
 }
 
-/* line 246, sass/partials/_main_wrap.scss */
+/* line 230, sass/partials/_main_wrap.scss */
 
 .cmb-td .cmb-td {
 	padding-bottom: 1em;
 }
 
-/* line 250, sass/partials/_main_wrap.scss */
+/* line 234, sass/partials/_main_wrap.scss */
 
 .cmb-remove-row {
 	text-align: left;
 }
 
-/* line 254, sass/partials/_main_wrap.scss */
+/* line 238, sass/partials/_main_wrap.scss */
 
 .empty-row.hidden {
 	display: none;
 }
 
-/* line 260, sass/partials/_main_wrap.scss */
+/* line 243, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table {
+	background-color: #fafafa;
+	border: 1px solid #e1e1e1;
+}
+
+/* line 247, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-row.cmb-repeat-row {
+	position: relative;
+	counter-increment: el;
+	margin: 0;
+	padding: 10px 50px 10px 10px;
+	border-bottom: none !important;
+}
+
+/* line 255, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-row.cmb-repeat-row + .cmb-repeat-row {
+	border-top: solid 1px #e9e9e9;
+}
+
+/* line 259, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-row.cmb-repeat-row:before {
+	content: counter(el);
+	display: block;
+	top: 0;
+	right: 0;
+	position: absolute;
+	width: 35px;
+	height: 100%;
+	line-height: 35px;
+	color: #aaaaaa;
+	text-align: center;
+	border-left: solid 1px #e9e9e9;
+}
+
+/* line 276, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-row.cmb-repeat-row .cmb-td {
+	margin: 0;
+	padding: 0;
+}
+
+/* line 283, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table + .cmb-add-row {
+	margin: 0;
+}
+
+/* line 286, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table + .cmb-add-row:before {
+	content: '';
+	width: 1px;
+	height: 1.6em;
+	display: block;
+	margin-right: 17px;
+	background-color: gainsboro;
+}
+
+/* line 296, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-remove-row {
+	top: 7px;
+	left: 7px;
+	position: absolute;
+	width: auto;
+	margin-right: 0;
+	padding: 0 !important;
+	display: none;
+}
+
+/* line 307, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button {
+	font-size: 20px;
+	text-indent: -1000px;
+	overflow: hidden;
+	position: relative;
+	height: auto;
+	line-height: 1;
+	padding: 0 10px 0;
+}
+
+/* line 318, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button:before {
+	content: "";
+	font-family: 'Dashicons';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	text-indent: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+/* line 324, sass/partials/_main_wrap.scss */
+
+.cmb-repeat-table .cmb-repeat-row:hover .cmb-remove-row {
+	display: block;
+}
+
+/* line 332, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-th {
 	padding: 5px;
 }
 
-/* line 264, sass/partials/_main_wrap.scss */
+/* line 336, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-title {
 	background-color: #e9e9e9;
@@ -335,7 +428,7 @@ Main Wrap
 	line-height: 1.4;
 }
 
-/* line 272, sass/partials/_main_wrap.scss */
+/* line 344, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-title h4 {
 	border: 0;
@@ -345,14 +438,14 @@ Main Wrap
 	padding: 0.5em 0.75em;
 }
 
-/* line 280, sass/partials/_main_wrap.scss */
+/* line 352, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-title .cmb-th {
 	display: block;
 	width: 100%;
 }
 
-/* line 286, sass/partials/_main_wrap.scss */
+/* line 358, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-group-description .cmb-th {
 	font-size: 1.2em;
@@ -367,21 +460,11 @@ Main Wrap
 
 .cmb-repeatable-group .cmb-group-description .cmb-th label {
 	display: block;
-	margin-top: 0em;
-	padding-bottom: 5px;
+	margin-top: 0;
+	margin-bottom: 0.5em;
 }
 
-/* line 32, sass/partials/_mixins.scss */
-
-.cmb-repeatable-group .cmb-group-description .cmb-th label:after {
-	border-bottom: 1px solid #e9e9e9;
-	content: '';
-	clear: both;
-	display: block;
-	padding-top: .4em;
-}
-
-/* line 290, sass/partials/_main_wrap.scss */
+/* line 362, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows {
 	font-size: 1em;
@@ -389,7 +472,7 @@ Main Wrap
 	text-decoration: none;
 }
 
-/* line 295, sass/partials/_main_wrap.scss */
+/* line 367, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows .dashicons {
 	font-size: 1.5em;
@@ -398,19 +481,19 @@ Main Wrap
 	width: 1em;
 }
 
-/* line 301, sass/partials/_main_wrap.scss */
+/* line 373, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb-shift-rows .dashicons.dashicons-arrow-down-alt2 {
 	line-height: 1.3em;
 }
 
-/* line 308, sass/partials/_main_wrap.scss */
+/* line 380, sass/partials/_main_wrap.scss */
 
 .cmb-repeatable-group .cmb2-upload-button {
 	float: left;
 }
 
-/* line 314, sass/partials/_main_wrap.scss */
+/* line 386, sass/partials/_main_wrap.scss */
 
 p.cmb2-metabox-description {
 	color: #aaaaaa;
@@ -419,14 +502,14 @@ p.cmb2-metabox-description {
 	padding-top: .5em;
 }
 
-/* line 321, sass/partials/_main_wrap.scss */
+/* line 393, sass/partials/_main_wrap.scss */
 
 span.cmb2-metabox-description {
 	color: #aaaaaa;
 	font-style: italic;
 }
 
-/* line 326, sass/partials/_main_wrap.scss */
+/* line 398, sass/partials/_main_wrap.scss */
 
 .cmb2-metabox-title {
 	margin: 0 0 5px 0;
@@ -434,42 +517,43 @@ span.cmb2-metabox-description {
 	font-size: 14px;
 }
 
-/* line 332, sass/partials/_main_wrap.scss */
+/* line 404, sass/partials/_main_wrap.scss */
 
 .cmb-inline ul {
 	padding: 4px 0 0 0;
 }
 
-/* line 336, sass/partials/_main_wrap.scss */
+/* line 408, sass/partials/_main_wrap.scss */
 
 .cmb-inline li {
 	display: inline-block;
 	padding-left: 18px;
 }
 
-/* line 341, sass/partials/_main_wrap.scss */
+/* line 413, sass/partials/_main_wrap.scss */
 
 .cmb-type-textarea-code pre {
 	margin: 0;
 }
 
-/* line 347, sass/partials/_main_wrap.scss */
+/* line 419, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status {
 	clear: none;
 	display: inline-block;
-	float: right;
+	vertical-align: middle;
 	margin-left: 10px;
 	width: auto;
 }
 
-/* line 354, sass/partials/_main_wrap.scss */
+/* line 426, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img {
 	max-width: 350px;
+	height: auto;
 }
 
-/* line 359, sass/partials/_main_wrap.scss */
+/* line 432, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
@@ -481,21 +565,21 @@ span.cmb2-metabox-description {
 	padding: 5px;
 }
 
-/* line 369, sass/partials/_main_wrap.scss */
+/* line 442, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .embed-status {
 	float: right;
 	max-width: 800px;
 }
 
-/* line 374, sass/partials/_main_wrap.scss */
+/* line 447, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status,
 .cmb2-media-status .embed-status {
 	position: relative;
 }
 
-/* line 377, sass/partials/_main_wrap.scss */
+/* line 450, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button,
 .cmb2-media-status .embed-status .cmb2-remove-file-button {
@@ -508,38 +592,41 @@ span.cmb2-metabox-description {
 	width: 16px;
 }
 
-/* line 391, sass/partials/_main_wrap.scss */
+/* line 464, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status .cmb2-remove-file-button {
 	top: 10px;
 }
 
-/* line 396, sass/partials/_main_wrap.scss */
+/* line 469, sass/partials/_main_wrap.scss */
 
 .cmb2-media-status .img-status img,
 .cmb2-media-status .file-status > span {
 	cursor: pointer;
 }
 
-/* line 402, sass/partials/_main_wrap.scss */
+/* line 475, sass/partials/_main_wrap.scss */
 
 .cmb-type-file-list .cmb2-media-status .img-status {
 	clear: none;
-	float: right;
-	margin-left: 10px;
+	vertical-align: middle;
 	width: auto;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	margin-top: 0;
 }
 
-/* line 409, sass/partials/_main_wrap.scss */
+/* line 484, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li {
 	clear: both;
 	display: inline-block;
-	margin-bottom: 25px;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
 
-/* line 415, sass/partials/_main_wrap.scss */
+/* line 491, sass/partials/_main_wrap.scss */
 
 .cmb-attach-list li img {
 	cursor: move;
@@ -547,16 +634,22 @@ span.cmb2-metabox-description {
 	margin-left: 10px;
 }
 
-/* line 422, sass/partials/_main_wrap.scss */
+/* line 498, sass/partials/_main_wrap.scss */
 
 .cmb2-remove-wrapper {
 	margin: 0;
 }
 
-/* line 426, sass/partials/_main_wrap.scss */
+/* line 502, sass/partials/_main_wrap.scss */
 
 .child-cmb2 .cmb-th {
 	text-align: right;
+}
+
+/* line 506, sass/partials/_main_wrap.scss */
+
+.cmb2-indented-hierarchy {
+	padding-right: 1.5em;
 }
 
 /*--------------------------------------------------------------
@@ -579,28 +672,28 @@ Post Metaboxes
 
 /* line 16, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-wrap,
+.cmb2-postbox .cmb2-wrap,
 .cmb-type-group .cmb2-wrap {
 	margin: 0;
 }
 
 /* line 19, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-wrap > .cmb-field-list > .cmb-row,
+.cmb2-postbox .cmb2-wrap > .cmb-field-list > .cmb-row,
 .cmb-type-group .cmb2-wrap > .cmb-field-list > .cmb-row {
 	padding: 1.8em 0;
 }
 
 /* line 25, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb2-wrap input[type=text].cmb2-oembed,
+.cmb2-postbox .cmb2-wrap input[type=text].cmb2-oembed,
 .cmb-type-group .cmb2-wrap input[type=text].cmb2-oembed {
 	width: 100%;
 }
 
 /* line 31, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-row,
+.cmb2-postbox .cmb-row,
 .cmb-type-group .cmb-row {
 	padding: 0 0 1.8em;
 	margin: 0 0 0.8em;
@@ -608,7 +701,7 @@ Post Metaboxes
 
 /* line 35, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-row .cmbhandle,
+.cmb2-postbox .cmb-row .cmbhandle,
 .cmb-type-group .cmb-row .cmbhandle {
 	left: -1em;
 	position: relative;
@@ -616,7 +709,7 @@ Post Metaboxes
 
 /* line 41, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-repeatable-grouping,
+.cmb2-postbox .cmb-repeatable-grouping,
 .cmb-type-group .cmb-repeatable-grouping {
 	padding: 0 1em;
 	max-width: 100%;
@@ -625,14 +718,14 @@ Post Metaboxes
 
 /* line 47, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-repeatable-group > .cmb-row,
+.cmb2-postbox .cmb-repeatable-group > .cmb-row,
 .cmb-type-group .cmb-repeatable-group > .cmb-row {
 	padding-bottom: 0;
 }
 
 /* line 51, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-th,
+.cmb2-postbox .cmb-th,
 .cmb-type-group .cmb-th {
 	width: 18%;
 	padding: 0 0 0 2%;
@@ -640,7 +733,7 @@ Post Metaboxes
 
 /* line 57, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-td,
+.cmb2-postbox .cmb-td,
 .cmb-type-group .cmb-td {
 	margin-bottom: 0;
 	padding: 0;
@@ -649,92 +742,230 @@ Post Metaboxes
 
 /* line 63, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-repeat-row .cmb-td,
-.cmb-type-group .cmb-repeat-row .cmb-td {
-	padding-bottom: 1.8em;
-}
-
-/* line 67, sass/partials/_post_metaboxes.scss */
-
-.postbox-container .cmb-th + .cmb-td,
+.cmb2-postbox .cmb-th + .cmb-td,
 .cmb-type-group .cmb-th + .cmb-td {
 	width: 80%;
 	float: left;
 }
 
-/* line 72, sass/partials/_post_metaboxes.scss */
+/* line 68, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-row:not(:last-of-type),
-.postbox-container .cmb-repeatable-group:not(:last-of-type),
+.cmb2-postbox .cmb-row:not(:last-of-type),
+.cmb2-postbox .cmb-repeatable-group:not(:last-of-type),
 .cmb-type-group .cmb-row:not(:last-of-type),
 .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
 	border-bottom: 1px solid #e9e9e9;
 }
 
-/* line 81, sass/partials/_post_metaboxes.scss */
+/* line 77, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-repeat-group-field,
-.postbox-container .cmb-remove-field-row,
+.cmb2-postbox .cmb-repeat-group-field,
+.cmb2-postbox .cmb-remove-field-row,
 .cmb-type-group .cmb-repeat-group-field,
 .cmb-type-group .cmb-remove-field-row {
 	padding-top: 1.8em;
 }
 
-/* line 88, sass/partials/_post_metaboxes.scss */
+/*--------------------------------------------------------------
+Context Metaboxes
+--------------------------------------------------------------*/
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody,
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody {
-	display: table;
-	width: 100%;
+/* Metabox collapse arrow indicators */
+
+/* line 9, sass/partials/_context_metaboxes.scss */
+
+.js .cmb2-postbox.context-box .toggle-indicator:before {
+	content: "\f142";
+	display: inline-block;
+	font: normal 20px/1 dashicons;
+	speak: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration: none !important;
 }
 
-/* line 92, sass/partials/_post_metaboxes.scss */
+/* line 22, sass/partials/_context_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text,
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody input.regular-text {
-	width: 100%;
+.js .cmb2-postbox.context-box.closed .toggle-indicator:before {
+	content: "\f140";
 }
 
-/* line 96, sass/partials/_post_metaboxes.scss */
+/* line 30, sass/partials/_context_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row),
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(.hidden):not(.empty-row) {
-	display: table-row;
+.cmb2-postbox.context-box {
+	margin-bottom: 10px;
 }
 
-/* line 100, sass/partials/_post_metaboxes.scss */
+/* line 34, sass/partials/_context_metaboxes.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td,
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td {
-	display: table-cell;
+.cmb2-postbox.context-box.context-before_permalink-box {
+	margin-top: 10px;
+}
+
+/* line 38, sass/partials/_context_metaboxes.scss */
+
+.cmb2-postbox.context-box.context-after_title-box {
+	margin-top: 10px;
+}
+
+/* line 42, sass/partials/_context_metaboxes.scss */
+
+.cmb2-postbox.context-box.context-after_editor-box {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+
+/* line 47, sass/partials/_context_metaboxes.scss */
+
+.cmb2-postbox.context-box.context-form_top-box {
+	margin-top: 10px;
+}
+
+/* line 51, sass/partials/_context_metaboxes.scss */
+
+.cmb2-postbox.context-box.context-form_top-box .hndle {
+	font-size: 14px;
+	padding: 8px 12px;
+	margin: 0;
+	line-height: 1.4;
+}
+
+/* line 59, sass/partials/_context_metaboxes.scss */
+
+.cmb2-postbox.context-box .hndle {
+	cursor: auto;
+}
+
+/* line 64, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap {
+	margin-top: 10px;
+}
+
+/* line 68, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap.cmb2-context-wrap-form_top {
+	margin-left: 300px;
+	width: auto;
+}
+
+/* line 75, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap.cmb2-context-wrap-no-title .cmb2-metabox {
+	padding: 10px;
+}
+
+/* line 80, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-th {
+	padding: 0 0 0 2%;
+	width: 18%;
+}
+
+/* line 85, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-td {
+	width: 80%;
+	padding: 0;
+}
+
+/* line 90, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-row {
+	margin-bottom: 10px;
+}
+
+/* line 93, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap .cmb-row:last-of-type {
+	margin-bottom: 0;
+}
+
+/* one column on the post write/edit screen */
+
+/*--------------------------------------------------------------
+Options page
+--------------------------------------------------------------*/
+
+/* line 4, sass/partials/_options-page.scss */
+
+.cmb2-options-page {
+	max-width: 1200px;
+}
+
+/* line 7, sass/partials/_options-page.scss */
+
+.cmb2-options-page.wrap > h2 {
+	margin-bottom: 1em;
+}
+
+/* line 11, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb2-metabox > .cmb-row {
+	padding: 1em;
+	margin-top: -1px;
+	background: #ffffff;
+	border: 1px solid #e9e9e9;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* line 18, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th {
+	padding: 0;
+	font-weight: initial;
+}
+
+/* line 23, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th + .cmb-td {
 	float: none;
-	width: 100%;
+	padding: 0 1em 0 0;
+	margin-right: 200px;
 }
 
-/* line 106, sass/partials/_post_metaboxes.scss */
+/* line 36, sass/partials/_options-page.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td,
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-row:not(:first-of-type) .cmb-td {
-	padding-top: 1.8em;
+.cmb2-options-page .cmb2-wrap .cmb-type-title {
+	margin-top: 1em;
+	padding: 0.6em 1em;
+	background-color: #fafafa;
 }
 
-/* line 110, sass/partials/_post_metaboxes.scss */
+/* line 41, sass/partials/_options-page.scss */
 
-.postbox-container .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
-.postbox-container .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
-.cmb-type-group .cmb2-metabox > .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row,
-.cmb-type-group .cmb2-metabox > .cmb-row .cmb-row.table-layout .cmb-repeat-table .cmb-tbody .cmb-td.cmb-remove-row {
-	padding-left: 0;
+.cmb2-options-page .cmb2-wrap .cmb-type-title .cmb2-metabox-title {
+	font-size: 12px;
+	margin-top: 0;
+	margin-bottom: 0;
+	text-transform: uppercase;
+}
+
+/* line 48, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb2-wrap .cmb-type-title .cmb2-metabox-description {
+	padding-top: 0.25em;
+}
+
+/* line 54, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb-repeatable-group .cmb-group-description .cmb-th {
+	padding: 0 0 0.8em 0;
+}
+
+/* line 58, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb-repeatable-group .cmb-group-name {
+	font-size: 16px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+/* line 64, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb-repeatable-group .cmb-th > .cmb2-metabox-description {
+	font-weight: 400;
+	padding-bottom: 0 !important;
 }
 
 /*--------------------------------------------------------------
@@ -757,22 +988,22 @@ Misc.
 
 /* line 18, sass/partials/_misc.scss */
 
-.cmb2-options-page .cmb2-metabox-title {
-	font-size: 1.3em;
-	margin: 1em 0;
-}
-
-/* line 21, sass/partials/_misc.scss */
-
-.cmb2-options-page .cmb2-metabox-title + p.cmb2-metabox-description {
-	margin-top: -1.6em;
-	margin-bottom: .8em;
-}
-
-/* line 27, sass/partials/_misc.scss */
-
-.postbox .cmb-spinner {
+.cmb2-postbox .cmb-spinner,
+.cmb2-no-box-wrap .cmb-spinner {
 	float: right;
+	display: none;
+}
+
+/* line 24, sass/partials/_misc.scss */
+
+.cmb-spinner {
+	display: none;
+}
+
+/* line 26, sass/partials/_misc.scss */
+
+.cmb-spinner.is-active {
+	display: block;
 }
 
 /*--------------------------------------------------------------
@@ -852,10 +1083,10 @@ Sidebar Placement Adjustments
 /* line 55, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-th,
-.inner-sidebar .cmb-td,
+.inner-sidebar .cmb-td:not(.cmb-remove-row),
 .inner-sidebar .cmb-th + .cmb-td,
 #side-sortables .cmb-th,
-#side-sortables .cmb-td,
+#side-sortables .cmb-td:not(.cmb-remove-row),
 #side-sortables .cmb-th + .cmb-td {
 	width: 100%;
 	display: block;
@@ -870,13 +1101,6 @@ Sidebar Placement Adjustments
 }
 
 /* line 67, sass/partials/_sidebar_placements.scss */
-
-.inner-sidebar .cmb-td .cmb-td,
-#side-sortables .cmb-td .cmb-td {
-	padding-bottom: 1em;
-}
-
-/* line 71, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-th,
 #side-sortables .cmb-th {
@@ -894,19 +1118,8 @@ Sidebar Placement Adjustments
 .inner-sidebar .cmb-th label,
 #side-sortables .cmb-th label {
 	display: block;
-	margin-top: 0em;
-	padding-bottom: 5px;
-}
-
-/* line 32, sass/partials/_mixins.scss */
-
-.inner-sidebar .cmb-th label:after,
-#side-sortables .cmb-th label:after {
-	border-bottom: 1px solid #e9e9e9;
-	content: '';
-	clear: both;
-	display: block;
-	padding-top: .4em;
+	margin-top: 0;
+	margin-bottom: 0.5em;
 }
 
 /* line 14, sass/partials/_mixins.scss */
@@ -917,35 +1130,35 @@ Sidebar Placement Adjustments
 	line-height: 1.4em;
 }
 
-/* line 78, sass/partials/_sidebar_placements.scss */
+/* line 74, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-description .cmb-th,
 #side-sortables .cmb-group-description .cmb-th {
 	padding-top: 0;
 }
 
-/* line 81, sass/partials/_sidebar_placements.scss */
+/* line 77, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-description .cmb2-metabox-description,
 #side-sortables .cmb-group-description .cmb2-metabox-description {
 	padding: 0;
 }
 
-/* line 88, sass/partials/_sidebar_placements.scss */
+/* line 84, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-group-title .cmb-th,
 #side-sortables .cmb-group-title .cmb-th {
 	padding: 0;
 }
 
-/* line 94, sass/partials/_sidebar_placements.scss */
+/* line 90, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-repeatable-grouping + .cmb-repeatable-grouping,
 #side-sortables .cmb-repeatable-grouping + .cmb-repeatable-grouping {
 	margin-top: 1em;
 }
 
-/* line 103, sass/partials/_sidebar_placements.scss */
+/* line 99, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-media-status .img-status img,
 .inner-sidebar .cmb2-media-status .embed-status img,
@@ -955,7 +1168,7 @@ Sidebar Placement Adjustments
 	height: auto;
 }
 
-/* line 111, sass/partials/_sidebar_placements.scss */
+/* line 107, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-list label,
 #side-sortables .cmb2-list label {
@@ -963,7 +1176,7 @@ Sidebar Placement Adjustments
 	font-weight: normal;
 }
 
-/* line 116, sass/partials/_sidebar_placements.scss */
+/* line 112, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-metabox-description,
 #side-sortables .cmb2-metabox-description {
@@ -971,7 +1184,7 @@ Sidebar Placement Adjustments
 	padding: 7px 0 0;
 }
 
-/* line 123, sass/partials/_sidebar_placements.scss */
+/* line 119, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-type-checkbox .cmb-td label,
 .inner-sidebar .cmb-type-checkbox .cmb2-metabox-description,
@@ -981,14 +1194,14 @@ Sidebar Placement Adjustments
 	display: inline;
 }
 
-/* line 130, sass/partials/_sidebar_placements.scss */
+/* line 126, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-row .cmb2-metabox-description,
 #side-sortables .cmb-row .cmb2-metabox-description {
 	padding-bottom: 1.8em;
 }
 
-/* line 134, sass/partials/_sidebar_placements.scss */
+/* line 130, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-metabox-title,
 #side-sortables .cmb2-metabox-title {
@@ -996,7 +1209,7 @@ Sidebar Placement Adjustments
 	font-style: italic;
 }
 
-/* line 139, sass/partials/_sidebar_placements.scss */
+/* line 135, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb-remove-row,
 #side-sortables .cmb-remove-row {
@@ -1005,25 +1218,7 @@ Sidebar Placement Adjustments
 	padding-bottom: 0;
 }
 
-/* line 146, sass/partials/_sidebar_placements.scss */
-
-.inner-sidebar .cmb-type-colorpicker .cmb-repeat-row .cmb-td,
-#side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td {
-	width: auto;
-	clear: none;
-	float: right;
-	padding-top: 0;
-}
-
-/* line 151, sass/partials/_sidebar_placements.scss */
-
-.inner-sidebar .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row,
-#side-sortables .cmb-type-colorpicker .cmb-repeat-row .cmb-td.cmb-remove-row {
-	float: left;
-	margin: 0;
-}
-
-/* line 158, sass/partials/_sidebar_placements.scss */
+/* line 141, sass/partials/_sidebar_placements.scss */
 
 .inner-sidebar .cmb2-upload-button,
 #side-sortables .cmb2-upload-button {
@@ -1032,12 +1227,6 @@ Sidebar Placement Adjustments
 }
 
 /* line 2, sass/partials/_collapsible_ui.scss */
-
-.cmb2-metabox .cmb-type-group {
-	max-width: 1000px;
-}
-
-/* line 5, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox .cmbhandle {
 	color: #aaa;
@@ -1049,7 +1238,7 @@ Sidebar Placement Adjustments
 	position: relative;
 }
 
-/* line 13, sass/partials/_collapsible_ui.scss */
+/* line 10, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox .cmbhandle:before {
 	content: '\f142';
@@ -1065,13 +1254,13 @@ Sidebar Placement Adjustments
 	text-decoration: none !important;
 }
 
-/* line 30, sass/partials/_collapsible_ui.scss */
+/* line 27, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox .postbox.closed .cmbhandle:before {
 	content: '\f140';
 }
 
-/* line 36, sass/partials/_collapsible_ui.scss */
+/* line 33, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
 	-webkit-appearance: none !important;
@@ -1081,17 +1270,19 @@ Sidebar Placement Adjustments
 	right: 0;
 	top: .5em;
 	line-height: 1em;
-	cursor: pointer;
 	padding: 2px 6px 3px;
+	opacity: .5;
 }
 
-/* line 46, sass/partials/_collapsible_ui.scss */
+/* line 43, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
+	cursor: pointer;
 	color: #a00;
+	opacity: 1;
 }
 
-/* line 48, sass/partials/_collapsible_ui.scss */
+/* line 47, sass/partials/_collapsible_ui.scss */
 
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
 	color: #f00;
@@ -1311,7 +1502,16 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 151, sass/partials/_jquery_ui.scss */
+/* line 149, sass/partials/_jquery_ui.scss */
+
+.cmb2-element.ui-datepicker select.ui-datepicker-month option,
+.cmb2-element.ui-datepicker select.ui-datepicker-year option,
+.cmb2-element .ui-datepicker select.ui-datepicker-month option,
+.cmb2-element .ui-datepicker select.ui-datepicker-year option {
+	color: #333;
+}
+
+/* line 154, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker thead,
 .cmb2-element .ui-datepicker thead {
@@ -1319,21 +1519,21 @@ Sidebar Placement Adjustments
 	font-weight: 600;
 }
 
-/* line 154, sass/partials/_jquery_ui.scss */
+/* line 157, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker thead th,
 .cmb2-element .ui-datepicker thead th {
 	font-weight: normal;
 }
 
-/* line 159, sass/partials/_jquery_ui.scss */
+/* line 162, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker th,
 .cmb2-element .ui-datepicker th {
 	padding: 10px;
 }
 
-/* line 163, sass/partials/_jquery_ui.scss */
+/* line 166, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td,
 .cmb2-element .ui-datepicker td {
@@ -1341,14 +1541,14 @@ Sidebar Placement Adjustments
 	border: 1px solid #f4f4f4;
 }
 
-/* line 168, sass/partials/_jquery_ui.scss */
+/* line 171, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-datepicker-other-month,
 .cmb2-element .ui-datepicker td.ui-datepicker-other-month {
 	border: transparent;
 }
 
-/* line 172, sass/partials/_jquery_ui.scss */
+/* line 175, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end,
 .cmb2-element .ui-datepicker td.ui-datepicker-week-end {
@@ -1356,7 +1556,7 @@ Sidebar Placement Adjustments
 	border: 1px solid #f4f4f4;
 }
 
-/* line 175, sass/partials/_jquery_ui.scss */
+/* line 178, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today,
 .cmb2-element .ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today {
@@ -1365,21 +1565,21 @@ Sidebar Placement Adjustments
 	box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* line 182, sass/partials/_jquery_ui.scss */
+/* line 185, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-datepicker-today,
 .cmb2-element .ui-datepicker td.ui-datepicker-today {
 	background-color: #f0f0c0;
 }
 
-/* line 186, sass/partials/_jquery_ui.scss */
+/* line 189, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-datepicker-current-day,
 .cmb2-element .ui-datepicker td.ui-datepicker-current-day {
 	background: #bbdd88;
 }
 
-/* line 190, sass/partials/_jquery_ui.scss */
+/* line 193, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td .ui-state-default,
 .cmb2-element .ui-datepicker td .ui-state-default {
@@ -1394,14 +1594,14 @@ Sidebar Placement Adjustments
 	color: #444;
 }
 
-/* line 202, sass/partials/_jquery_ui.scss */
+/* line 205, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td.ui-state-disabled .ui-state-default,
 .cmb2-element .ui-datepicker td.ui-state-disabled .ui-state-default {
 	opacity: 0.5;
 }
 
-/* line 207, sass/partials/_jquery_ui.scss */
+/* line 210, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-widget-header,
 .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1410,14 +1610,14 @@ Sidebar Placement Adjustments
 	background: #00a0d2;
 }
 
-/* line 212, sass/partials/_jquery_ui.scss */
+/* line 215, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker thead,
 .cmb2-element .ui-datepicker thead {
 	background: #32373c;
 }
 
-/* line 216, sass/partials/_jquery_ui.scss */
+/* line 219, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker td .ui-state-hover,
 .cmb2-element.ui-datepicker td .ui-state-active,
@@ -1427,14 +1627,14 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 221, sass/partials/_jquery_ui.scss */
+/* line 224, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div,
 .cmb2-element .ui-datepicker .ui-timepicker-div {
 	font-size: 14px;
 }
 
-/* line 223, sass/partials/_jquery_ui.scss */
+/* line 226, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div dl,
 .cmb2-element .ui-datepicker .ui-timepicker-div dl {
@@ -1442,7 +1642,7 @@ Sidebar Placement Adjustments
 	padding: 0 .6em;
 }
 
-/* line 226, sass/partials/_jquery_ui.scss */
+/* line 229, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dt,
 .cmb2-element .ui-datepicker .ui-timepicker-div dl dt {
@@ -1451,21 +1651,21 @@ Sidebar Placement Adjustments
 	padding: 0 5px 0 0;
 }
 
-/* line 231, sass/partials/_jquery_ui.scss */
+/* line 234, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dd,
 .cmb2-element .ui-datepicker .ui-timepicker-div dl dd {
 	margin: 0 40% 10px 10px;
 }
 
-/* line 233, sass/partials/_jquery_ui.scss */
+/* line 236, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dd select,
 .cmb2-element .ui-datepicker .ui-timepicker-div dl dd select {
 	width: 100%;
 }
 
-/* line 239, sass/partials/_jquery_ui.scss */
+/* line 242, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane,
 .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane {
@@ -1473,7 +1673,7 @@ Sidebar Placement Adjustments
 	text-align: right;
 }
 
-/* line 243, sass/partials/_jquery_ui.scss */
+/* line 246, sass/partials/_jquery_ui.scss */
 
 .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-primary,
 .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-secondary,
@@ -1486,7 +1686,7 @@ Sidebar Placement Adjustments
 	margin: 0 .4em .4em .6em;
 }
 
-/* line 257, sass/partials/_jquery_ui.scss */
+/* line 260, sass/partials/_jquery_ui.scss */
 
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1495,14 +1695,14 @@ Sidebar Placement Adjustments
 	background: #00a0d2;
 }
 
-/* line 262, sass/partials/_jquery_ui.scss */
+/* line 265, sass/partials/_jquery_ui.scss */
 
 .admin-color-fresh .cmb2-element.ui-datepicker thead,
 .admin-color-fresh .cmb2-element .ui-datepicker thead {
 	background: #32373c;
 }
 
-/* line 266, sass/partials/_jquery_ui.scss */
+/* line 269, sass/partials/_jquery_ui.scss */
 
 .admin-color-fresh .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-fresh .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1510,7 +1710,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 274, sass/partials/_jquery_ui.scss */
+/* line 277, sass/partials/_jquery_ui.scss */
 
 .admin-color-blue .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-blue .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1519,14 +1719,14 @@ Sidebar Placement Adjustments
 	background: #52accc;
 }
 
-/* line 279, sass/partials/_jquery_ui.scss */
+/* line 282, sass/partials/_jquery_ui.scss */
 
 .admin-color-blue .cmb2-element.ui-datepicker thead,
 .admin-color-blue .cmb2-element .ui-datepicker thead {
 	background: #4796b3;
 }
 
-/* line 288, sass/partials/_jquery_ui.scss */
+/* line 291, sass/partials/_jquery_ui.scss */
 
 .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-active,
@@ -1536,14 +1736,14 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 293, sass/partials/_jquery_ui.scss */
+/* line 296, sass/partials/_jquery_ui.scss */
 
 .admin-color-blue .cmb2-element.ui-datepicker td.ui-datepicker-today,
 .admin-color-blue .cmb2-element .ui-datepicker td.ui-datepicker-today {
 	background: #eee;
 }
 
-/* line 302, sass/partials/_jquery_ui.scss */
+/* line 305, sass/partials/_jquery_ui.scss */
 
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1552,14 +1752,14 @@ Sidebar Placement Adjustments
 	background: #59524c;
 }
 
-/* line 307, sass/partials/_jquery_ui.scss */
+/* line 310, sass/partials/_jquery_ui.scss */
 
 .admin-color-coffee .cmb2-element.ui-datepicker thead,
 .admin-color-coffee .cmb2-element .ui-datepicker thead {
 	background: #46403c;
 }
 
-/* line 311, sass/partials/_jquery_ui.scss */
+/* line 314, sass/partials/_jquery_ui.scss */
 
 .admin-color-coffee .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-coffee .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1567,7 +1767,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 319, sass/partials/_jquery_ui.scss */
+/* line 322, sass/partials/_jquery_ui.scss */
 
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1576,14 +1776,14 @@ Sidebar Placement Adjustments
 	background: #523f6d;
 }
 
-/* line 324, sass/partials/_jquery_ui.scss */
+/* line 327, sass/partials/_jquery_ui.scss */
 
 .admin-color-ectoplasm .cmb2-element.ui-datepicker thead,
 .admin-color-ectoplasm .cmb2-element .ui-datepicker thead {
 	background: #413256;
 }
 
-/* line 328, sass/partials/_jquery_ui.scss */
+/* line 331, sass/partials/_jquery_ui.scss */
 
 .admin-color-ectoplasm .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-ectoplasm .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1591,7 +1791,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 336, sass/partials/_jquery_ui.scss */
+/* line 339, sass/partials/_jquery_ui.scss */
 
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1600,14 +1800,14 @@ Sidebar Placement Adjustments
 	background: #363b3f;
 }
 
-/* line 341, sass/partials/_jquery_ui.scss */
+/* line 344, sass/partials/_jquery_ui.scss */
 
 .admin-color-midnight .cmb2-element.ui-datepicker thead,
 .admin-color-midnight .cmb2-element .ui-datepicker thead {
 	background: #26292c;
 }
 
-/* line 345, sass/partials/_jquery_ui.scss */
+/* line 348, sass/partials/_jquery_ui.scss */
 
 .admin-color-midnight .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-midnight .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1615,7 +1815,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 353, sass/partials/_jquery_ui.scss */
+/* line 356, sass/partials/_jquery_ui.scss */
 
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1624,14 +1824,14 @@ Sidebar Placement Adjustments
 	background: #738e96;
 }
 
-/* line 358, sass/partials/_jquery_ui.scss */
+/* line 361, sass/partials/_jquery_ui.scss */
 
 .admin-color-ocean .cmb2-element.ui-datepicker thead,
 .admin-color-ocean .cmb2-element .ui-datepicker thead {
 	background: #627c83;
 }
 
-/* line 362, sass/partials/_jquery_ui.scss */
+/* line 365, sass/partials/_jquery_ui.scss */
 
 .admin-color-ocean .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-ocean .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1639,7 +1839,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 370, sass/partials/_jquery_ui.scss */
+/* line 373, sass/partials/_jquery_ui.scss */
 
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1650,7 +1850,7 @@ Sidebar Placement Adjustments
 	background: #cf4944;
 }
 
-/* line 376, sass/partials/_jquery_ui.scss */
+/* line 379, sass/partials/_jquery_ui.scss */
 
 .admin-color-sunrise .cmb2-element.ui-datepicker th,
 .admin-color-sunrise .cmb2-element .ui-datepicker th {
@@ -1658,7 +1858,7 @@ Sidebar Placement Adjustments
 	background: #be3631;
 }
 
-/* line 381, sass/partials/_jquery_ui.scss */
+/* line 384, sass/partials/_jquery_ui.scss */
 
 .admin-color-sunrise .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-sunrise .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1666,7 +1866,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 389, sass/partials/_jquery_ui.scss */
+/* line 392, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1675,7 +1875,7 @@ Sidebar Placement Adjustments
 	background: #e5e5e5;
 }
 
-/* line 394, sass/partials/_jquery_ui.scss */
+/* line 397, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-month,
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-year,
@@ -1684,14 +1884,14 @@ Sidebar Placement Adjustments
 	color: #555;
 }
 
-/* line 399, sass/partials/_jquery_ui.scss */
+/* line 402, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker thead,
 .admin-color-light .cmb2-element .ui-datepicker thead {
 	background: #888;
 }
 
-/* line 403, sass/partials/_jquery_ui.scss */
+/* line 406, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-title,
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-default,
@@ -1704,7 +1904,7 @@ Sidebar Placement Adjustments
 	color: #555;
 }
 
-/* line 411, sass/partials/_jquery_ui.scss */
+/* line 414, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-active,
@@ -1713,14 +1913,14 @@ Sidebar Placement Adjustments
 	background: #ccc;
 }
 
-/* line 415, sass/partials/_jquery_ui.scss */
+/* line 418, sass/partials/_jquery_ui.scss */
 
 .admin-color-light .cmb2-element.ui-datepicker td.ui-datepicker-today,
 .admin-color-light .cmb2-element .ui-datepicker td.ui-datepicker-today {
 	background: #eee;
 }
 
-/* line 423, sass/partials/_jquery_ui.scss */
+/* line 426, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1729,14 +1929,14 @@ Sidebar Placement Adjustments
 	background: #56b274;
 }
 
-/* line 428, sass/partials/_jquery_ui.scss */
+/* line 431, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker thead,
 .admin-color-bbp-evergreen .cmb2-element .ui-datepicker thead {
 	background: #36533f;
 }
 
-/* line 432, sass/partials/_jquery_ui.scss */
+/* line 435, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-bbp-evergreen .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1744,7 +1944,7 @@ Sidebar Placement Adjustments
 	color: #fff;
 }
 
-/* line 440, sass/partials/_jquery_ui.scss */
+/* line 443, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-datepicker-header,
@@ -1753,14 +1953,14 @@ Sidebar Placement Adjustments
 	background: #4ca26a;
 }
 
-/* line 445, sass/partials/_jquery_ui.scss */
+/* line 448, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-mint .cmb2-element.ui-datepicker thead,
 .admin-color-bbp-mint .cmb2-element .ui-datepicker thead {
 	background: #4f6d59;
 }
 
-/* line 449, sass/partials/_jquery_ui.scss */
+/* line 452, sass/partials/_jquery_ui.scss */
 
 .admin-color-bbp-mint .cmb2-element.ui-datepicker td .ui-state-hover,
 .admin-color-bbp-mint .cmb2-element .ui-datepicker td .ui-state-hover {
@@ -1770,9 +1970,19 @@ Sidebar Placement Adjustments
 
 /*# sourceMappingURL=cmb2.css.map */
 
+@media only screen and (max-width: 850px) {
+
+/* line 103, sass/partials/_context_metaboxes.scss */
+
+.cmb2-context-wrap.cmb2-context-wrap-form_top {
+	margin-left: 0;
+}
+
+}
+
 @media (max-width: 450px) {
 
-/* line 209, sass/partials/_main_wrap.scss */
+/* line 193, sass/partials/_main_wrap.scss */
 
 .cmb-th {
 	font-size: 1.2em;
@@ -1787,21 +1997,11 @@ Sidebar Placement Adjustments
 
 .cmb-th label {
 	display: block;
-	margin-top: 0em;
-	padding-bottom: 5px;
+	margin-top: 0;
+	margin-bottom: 0.5em;
 }
 
-/* line 32, sass/partials/_mixins.scss */
-
-.cmb-th label:after {
-	border-bottom: 1px solid #e9e9e9;
-	content: '';
-	clear: both;
-	display: block;
-	padding-top: .4em;
-}
-
-/* line 431, sass/partials/_main_wrap.scss */
+/* line 511, sass/partials/_main_wrap.scss */
 
 .cmb-th,
 .cmb-td,
@@ -1811,13 +2011,20 @@ Sidebar Placement Adjustments
 	width: 100%;
 }
 
-/* line 72, sass/partials/_post_metaboxes.scss */
+/* line 68, sass/partials/_post_metaboxes.scss */
 
-.postbox-container .cmb-row:not(:last-of-type),
-.postbox-container .cmb-repeatable-group:not(:last-of-type),
+.cmb2-postbox .cmb-row:not(:last-of-type),
+.cmb2-postbox .cmb-repeatable-group:not(:last-of-type),
 .cmb-type-group .cmb-row:not(:last-of-type),
 .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
 	border-bottom: 0;
+}
+
+/* line 23, sass/partials/_options-page.scss */
+
+.cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th + .cmb-td {
+	padding: 0;
+	margin-right: 0;
 }
 
 }

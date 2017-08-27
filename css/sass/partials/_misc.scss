@@ -14,16 +14,16 @@ Misc.
 	}
 }
 
-.cmb2-options-page {
-	.cmb2-metabox-title {
-		font-size: 1.3em;
-		margin: 1em 0;
-		+ p.cmb2-metabox-description {
-			margin-top: -1.6em;
-			margin-bottom: .8em;
-		}
+.cmb2-postbox, .cmb2-no-box-wrap {
+	.cmb-spinner {
+		float: left;
+		display: none;
 	}
 }
-.postbox .cmb-spinner {
-	float: left;
+
+.cmb-spinner {
+	display: none;
+	&.is-active {
+		display: block;
+	}
 }

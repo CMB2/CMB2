@@ -4,20 +4,21 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 
 /**
  * Retrieves an instance of CMB2_Option based on the option key
  *
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  */
 class CMB2_Options {
 	/**
 	 * Array of all CMB2_Option instances
+	 *
 	 * @var   array
 	 * @since 1.0.0
 	 */
@@ -38,24 +39,27 @@ class CMB2_Options {
  * for a specific option key
  *
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  */
 class CMB2_Option {
 
 	/**
 	 * Options array
+	 *
 	 * @var array
 	 */
 	protected $options = array();
 
 	/**
 	 * Current option key
+	 *
 	 * @var string
 	 */
 	protected $key = '';
 
 	/**
 	 * Initiate option object
+	 *
 	 * @param string $option_key Option key where data will be saved.
 	 *                           Leave empty for temporary data store.
 	 * @since 2.0.0
@@ -66,6 +70,7 @@ class CMB2_Option {
 
 	/**
 	 * Delete the option from the db
+	 *
 	 * @since  2.0.0
 	 * @return bool  Delete success or failure
 	 */
@@ -77,8 +82,9 @@ class CMB2_Option {
 
 	/**
 	 * Removes an option from an option array
+	 *
 	 * @since  1.0.1
-	 * @param  string  $field_id Option array field key
+	 * @param  string $field_id Option array field key
 	 * @return array             Modified options
 	 */
 	public function remove( $field_id, $resave = false ) {
@@ -98,9 +104,10 @@ class CMB2_Option {
 
 	/**
 	 * Retrieves an option from an option array
+	 *
 	 * @since  1.0.1
-	 * @param  string  $field_id Option array field key
-	 * @param  mixed   $default  Fallback value for the option
+	 * @param  string $field_id Option array field key
+	 * @param  mixed  $default  Fallback value for the option
 	 * @return array             Requested field or default
 	 */
 	public function get( $field_id, $default = false ) {
@@ -117,11 +124,12 @@ class CMB2_Option {
 
 	/**
 	 * Updates Option data
+	 *
 	 * @since  1.0.1
-	 * @param  string  $field_id   Option array field key
-	 * @param  mixed   $value      Value to update data with
-	 * @param  bool    $resave     Whether to re-save the data
-	 * @param  bool    $single     Whether data should not be an array
+	 * @param  string $field_id   Option array field key
+	 * @param  mixed  $value      Value to update data with
+	 * @param  bool   $resave     Whether to re-save the data
+	 * @param  bool   $single     Whether data should not be an array
 	 * @return boolean             Return status of update
 	 */
 	public function update( $field_id, $value = '', $resave = false, $single = true ) {
@@ -135,7 +143,6 @@ class CMB2_Option {
 			} else {
 				$this->options[ $field_id ] = $value;
 			}
-
 		}
 
 		if ( $resave || true === $field_id ) {
@@ -148,6 +155,7 @@ class CMB2_Option {
 	/**
 	 * Saves the option array
 	 * Needs to be run after finished using remove/update_option
+	 *
 	 * @uses apply_filters() Calls 'cmb2_override_option_save_{$this->key}' hook
 	 * to allow overwriting the option value to be stored.
 	 *
@@ -156,9 +164,11 @@ class CMB2_Option {
 	 * @return bool           Success/Failure
 	 */
 	public function set( $options = array() ) {
-		$this->options = ! empty( $options ) || empty( $options ) && empty( $this->key )
-			? $options
-			: $this->options;
+		if ( ! empty( $options ) || empty( $options ) && empty( $this->key ) ) {
+			$this->options = $options;
+		}
+
+		$this->options = wp_unslash( $this->options ); // get rid of those evil magic quotes
 
 		if ( empty( $this->key ) ) {
 			return false;
@@ -176,6 +186,7 @@ class CMB2_Option {
 
 	/**
 	 * Retrieve option value based on name of option.
+	 *
 	 * @uses apply_filters() Calls 'cmb2_override_option_get_{$this->key}' hook to allow
 	 * 	overwriting the option value to be retrieved.
 	 *
@@ -196,7 +207,9 @@ class CMB2_Option {
 			}
 		}
 
-		return (array) $this->options;
+		$this->options = (array) $this->options;
+
+		return $this->options;
 	}
 
 }

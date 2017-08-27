@@ -6,21 +6,29 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Type_Title extends CMB2_Type_Base {
 
 	/**
 	 * Handles outputting an 'title' element
+	 *
 	 * @return string Heading element
 	 */
 	public function render() {
+		$name = $this->field->args( 'name' );
+		$tag  = 'span';
+
+		if ( ! empty( $name ) ) {
+			$tag = $this->field->object_type == 'post' ? 'h5' : 'h3';
+		}
+
 		$a = $this->parse_args( 'title', array(
-			'tag'   => $this->field->object_type == 'post' ? 'h5' : 'h3',
-			'class' => 'cmb2-metabox-title',
-			'name'  => $this->field->args( 'name' ),
+			'tag'   => $tag,
+			'class' => empty( $name ) ? 'cmb2-metabox-title-anchor' : 'cmb2-metabox-title',
+			'name'  => $name,
 			'desc'  => $this->_desc( true ),
 			'id'    => str_replace( '_', '-', sanitize_html_class( $this->field->id() ) ),
 		) );

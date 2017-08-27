@@ -8,7 +8,10 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON( 'package.json' ),
 
 		phpunit: {
-			classes: {}
+			classes: {},
+			options: {
+				excludeGroup: 'cmb2-ajax-embed',
+			}
 		},
 
 		githooks: {
@@ -36,8 +39,8 @@ module.exports = function(grunt) {
 					},
 					processPot: function( pot, options ) {
 						pot.headers['report-msgid-bugs-to'] = 'http://wordpress.org/support/plugin/cmb2';
-						pot.headers['last-translator'] = 'WebDevStudios contact@webdevstudios.com';
-						pot.headers['language-team'] = 'WebDevStudios contact@webdevstudios.com';
+						pot.headers['last-translator'] = 'CMB2 Team hello@cmb2.io';
+						pot.headers['language-team'] = 'CMB2 Team hello@cmb2.io';
 						var today = new Date();
 						pot.headers['po-revision-date'] = today.getFullYear() +'-'+ ( today.getMonth() + 1 ) +'-'+ today.getDate() +' '+ today.getUTCHours() +':'+ today.getUTCMinutes() +'+'+ today.getTimezoneOffset();
 						return pot;
@@ -311,6 +314,7 @@ module.exports = function(grunt) {
 	var tests   = ['jshint', 'phpunit'];
 
 	grunt.registerTask( 'styles', asciify.concat( styles ) );
+	grunt.registerTask( 'css', asciify.concat( styles ) );
 	grunt.registerTask( 'js', asciify.concat( js ) );
 	grunt.registerTask( 'tests', asciify.concat( tests ) );
 	grunt.registerTask( 'default', asciify.concat( styles, js, tests ) );

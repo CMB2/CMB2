@@ -6,14 +6,15 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 class CMB2_Utils {
 
 	/**
 	 * The WordPress ABSPATH constant.
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
@@ -21,6 +22,7 @@ class CMB2_Utils {
 
 	/**
 	 * The url which is used to load local resources.
+	 *
 	 * @var   string
 	 * @since 2.0.0
 	 */
@@ -28,8 +30,9 @@ class CMB2_Utils {
 
 	/**
 	 * Utility method that attempts to get an attachment's ID by it's url
+	 *
 	 * @since  1.0.0
-	 * @param  string  $img_url Attachment url
+	 * @param  string $img_url Attachment url
 	 * @return int|false            Attachment ID or false
 	 */
 	public static function image_id_from_url( $img_url ) {
@@ -53,7 +56,7 @@ class CMB2_Utils {
 					'compare' => 'LIKE',
 					'key'     => '_wp_attachment_metadata',
 				),
-			)
+			),
 		);
 
 		$query = new WP_Query( $query_args );
@@ -69,14 +72,123 @@ class CMB2_Utils {
 					break;
 				}
 			}
-
 		}
 
 		return 0 === $attachment_id ? false : $attachment_id;
 	}
 
 	/**
+	 * Utility method to get a combined list of default and custom registered image sizes
+	 *
+	 * @since  2.2.4
+	 * @link   http://core.trac.wordpress.org/ticket/18947
+	 * @global array $_wp_additional_image_sizes
+	 * @return array The image sizes
+	 */
+	static function get_available_image_sizes() {
+		global $_wp_additional_image_sizes;
+
+		$default_image_sizes = array( 'thumbnail', 'medium', 'large' );
+		foreach ( $default_image_sizes as $size ) {
+			$image_sizes[ $size ] = array(
+				'height' => intval( get_option( "{$size}_size_h" ) ),
+				'width'  => intval( get_option( "{$size}_size_w" ) ),
+				'crop'   => get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false,
+			);
+		}
+
+		if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) ) {
+			$image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
+		}
+
+		return $image_sizes;
+	}
+
+	/**
+	 * Utility method to return the closest named size from an array of values
+	 *
+	 * Based off of WordPress's image_get_intermediate_size()
+	 * If the size matches an existing size then it will be used. If there is no
+	 * direct match, then the nearest image size larger than the specified size
+	 * will be used. If nothing is found, then the function will return false.
+	 * Uses get_available_image_sizes() to get all available sizes.
+	 *
+	 * @since  2.2.4
+	 * @param  array|string $size Image size. Accepts an array of width and height (in that order)
+	 * @return false|string       Named image size e.g. 'thumbnail'
+	 */
+	public static function get_named_size( $size ) {
+		$data = array();
+
+		// Find the best match when '$size' is an array.
+		if ( is_array( $size ) ) {
+			$image_sizes = self::get_available_image_sizes();
+			$candidates = array();
+
+			foreach ( $image_sizes as $_size => $data ) {
+
+				// If there's an exact match to an existing image size, short circuit.
+				if ( $data['width'] == $size[0] && $data['height'] == $size[1] ) {
+					$candidates[ $data['width'] * $data['height'] ] = array( $_size, $data );
+					break;
+				}
+
+				// If it's not an exact match, consider larger sizes with the same aspect ratio.
+				if ( $data['width'] >= $size[0] && $data['height'] >= $size[1] ) {
+
+					/*
+					 * To test for varying crops, we constrain the dimensions of the larger image
+					 * to the dimensions of the smaller image and see if they match.
+					 */
+					if ( $data['width'] > $size[0] ) {
+						$constrained_size = wp_constrain_dimensions( $data['width'], $data['height'], $size[0] );
+						$expected_size = array( $size[0], $size[1] );
+					} else {
+						$constrained_size = wp_constrain_dimensions( $size[0], $size[1], $data['width'] );
+						$expected_size = array( $data['width'], $data['height'] );
+					}
+
+					// If the image dimensions are within 1px of the expected size, we consider it a match.
+					$matched = ( abs( $constrained_size[0] - $expected_size[0] ) <= 1 && abs( $constrained_size[1] - $expected_size[1] ) <= 1 );
+
+					if ( $matched ) {
+						$candidates[ $data['width'] * $data['height'] ] = array( $_size, $data );
+					}
+				}
+			}
+
+			if ( ! empty( $candidates ) ) {
+				// Sort the array by size if we have more than one candidate.
+				if ( 1 < count( $candidates ) ) {
+					ksort( $candidates );
+				}
+
+				$data = array_shift( $candidates );
+				$data = $data[0];
+			} elseif ( ! empty( $image_sizes['thumbnail'] ) && $image_sizes['thumbnail']['width'] >= $size[0] && $image_sizes['thumbnail']['width'] >= $size[1] ) {
+				/*
+				 * When the size requested is smaller than the thumbnail dimensions, we
+				 * fall back to the thumbnail size.
+				 */
+				$data = 'thumbnail';
+			} else {
+				return false;
+			}
+		} elseif ( ! empty( $image_sizes[ $size ] ) ) {
+			$data = $size;
+		}// End if().
+
+		// If we still don't have a match at this point, return false.
+		if ( empty( $data ) ) {
+			return false;
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Utility method that returns time string offset by timezone
+	 *
 	 * @since  1.0.0
 	 * @param  string $tzstring Time string
 	 * @return string           Offset time string
@@ -96,7 +208,6 @@ class CMB2_Utils {
 			} catch ( Exception $e ) {
 				self::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}
-
 		}
 
 		return $tz_offset;
@@ -137,6 +248,7 @@ class CMB2_Utils {
 
 	/**
 	 * Returns a timestamp, first checking if value already is a timestamp.
+	 *
 	 * @since  2.0.0
 	 * @param  string|int $string Possible timestamp string
 	 * @return int   	            Time stamp
@@ -153,8 +265,9 @@ class CMB2_Utils {
 
 	/**
 	 * Determine if a value is a valid timestamp
+	 *
 	 * @since  2.0.0
-	 * @param  mixed  $timestamp Value to check
+	 * @param  mixed $timestamp Value to check
 	 * @return boolean           Whether value is a valid timestamp
 	 */
 	public static function is_valid_time_stamp( $timestamp ) {
@@ -165,26 +278,29 @@ class CMB2_Utils {
 
 	/**
 	 * Checks if a value is 'empty'. Still accepts 0.
+	 *
 	 * @since  2.0.0
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
 	 */
 	public static function isempty( $value ) {
-		return null === $value || '' === $value || false === $value;
+		return null === $value || '' === $value || false === $value || array() === $value;
 	}
 
 	/**
 	 * Checks if a value is not 'empty'. 0 doesn't count as empty.
+	 *
 	 * @since  2.2.2
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
 	 */
-	public static function notempty( $value ){
-		return null !== $value && '' !== $value && false !== $value;
+	public static function notempty( $value ) {
+		return null !== $value && '' !== $value && false !== $value && array() !== $value;
 	}
 
 	/**
 	 * Filters out empty values (not including 0).
+	 *
 	 * @since  2.2.2
 	 * @param  mixed $value Value to check
 	 * @return bool         True or false
@@ -195,6 +311,7 @@ class CMB2_Utils {
 
 	/**
 	 * Insert a single array item inside another array at a set position
+	 *
 	 * @since  2.0.2
 	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
 	 * @param  array $new      New array to insert
@@ -210,6 +327,7 @@ class CMB2_Utils {
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
+	 *
 	 * @since  1.0.1
 	 * @return string URL to CMB2 resources
 	 */
@@ -232,6 +350,7 @@ class CMB2_Utils {
 
 	/**
 	 * Converts a system path to a URL
+	 *
 	 * @since  2.2.2
 	 * @param  string $dir Directory path to convert.
 	 * @return string      Converted URL.
@@ -265,7 +384,6 @@ class CMB2_Utils {
 		}
 
 		// Check to see if it's anywhere in the root directory
-
 		$site_dir = self::normalize_path( self::$ABSPATH );
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
@@ -308,6 +426,7 @@ class CMB2_Utils {
 
 	/**
 	 * Get timestamp from text date
+	 *
 	 * @since  2.2.0
 	 * @param  string $value       Date value
 	 * @param  string $date_format Expected date format
@@ -355,7 +474,7 @@ class CMB2_Utils {
 			'i' => 'mm',  // Minute with leading 0,
 			's' => 'ss',  // Second with leading 0,
 			'a' => 'tt',  // am/pm
-			'A' => 'TT'   // AM/PM
+			'A' => 'TT',// AM/PM
 		);
 
 		foreach ( $supported_options as $php => $js ) {
@@ -370,12 +489,13 @@ class CMB2_Utils {
 
 	/**
 	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+	 *
 	 * @since  2.2.0
 	 * @param  $value Value to wrap/escape
 	 * @return string Modified value
 	 */
 	public static function wrap_escaped_chars( $value ) {
-		return "&#39;" . str_replace( '\\', '', $value[0] ) . "&#39;";
+		return '&#39;' . str_replace( '\\', '', $value[0] ) . '&#39;';
 	}
 
 	/**
@@ -383,10 +503,10 @@ class CMB2_Utils {
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  string  $function Function name
-	 * @param  int     $line     Line number
-	 * @param  mixed   $msg      Message to output
-	 * @param  mixed   $debug    Variable to print_r
+	 * @param  string $function Function name
+	 * @param  int    $line     Line number
+	 * @param  mixed  $msg      Message to output
+	 * @param  mixed  $debug    Variable to print_r
 	 */
 	public static function log_if_debug( $function, $line, $msg, $debug = null ) {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -396,17 +516,19 @@ class CMB2_Utils {
 
 	/**
 	 * Determine a file's extension
+	 *
 	 * @since  1.0.0
-	 * @param  string       $file File url
+	 * @param  string $file File url
 	 * @return string|false       File extension or false
 	 */
 	public static function get_file_ext( $file ) {
-		$parsed = @parse_url( $file, PHP_URL_PATH );
+		$parsed = parse_url( $file, PHP_URL_PATH );
 		return $parsed ? strtolower( pathinfo( $parsed, PATHINFO_EXTENSION ) ) : false;
 	}
 
 	/**
 	 * Get the file name from a url
+	 *
 	 * @since  2.0.0
 	 * @param  string $value File url or path
 	 * @return string        File name
@@ -418,8 +540,9 @@ class CMB2_Utils {
 
 	/**
 	 * Check if WP version is at least $version.
+	 *
 	 * @since  2.2.2
-	 * @param  string  $version WP version string to compare.
+	 * @param  string $version WP version string to compare.
 	 * @return bool             Result of comparison check.
 	 */
 	public static function wp_at_least( $version ) {
@@ -428,9 +551,10 @@ class CMB2_Utils {
 
 	/**
 	 * Combines attributes into a string for a form element.
+	 *
 	 * @since  1.1.0
-	 * @param  array  $attrs        Attributes to concatenate.
-	 * @param  array  $attr_exclude Attributes that should NOT be concatenated.
+	 * @param  array $attrs        Attributes to concatenate.
+	 * @param  array $attr_exclude Attributes that should NOT be concatenated.
 	 * @return string               String of attributes for form element.
 	 */
 	public static function concat_attrs( $attrs, $attr_exclude = array() ) {
@@ -441,11 +565,67 @@ class CMB2_Utils {
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
-				$quotes = false !== stripos( $attr, 'data-' ) ? "'" : '"';
+				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
 		return $attributes;
 	}
 
+	/**
+	 * Check if given attribute is a data attribute.
+	 *
+	 * @since  2.2.5
+	 *
+	 * @param  string  $att HTML attribute
+	 *
+	 * @return boolean
+	 */
+	public static function is_data_attribute( $att ) {
+		return 0 === stripos( $att, 'data-' );
+	}
+
+	/**
+	 * Ensures value is an array.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  mixed $value   Value to ensure is array.
+	 * @param  array $default Default array. Defaults to empty array.
+	 *
+	 * @return array          The array.
+	 */
+	public static function ensure_array( $value, $default = array() ) {
+		if ( empty( $value ) ) {
+			return $default;
+		}
+
+		if ( is_array( $value ) || is_object( $value ) ) {
+			return (array) $value;
+		}
+
+		// Not sure anything would be non-scalar that is not an array or object?
+		if ( ! is_scalar( $value ) ) {
+			return $default;
+		}
+
+		return (array) $value;
+	}
+
+	/**
+	 * If number is numeric, normalize it with floatval or intval, depending on if decimal is found.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @param  mixed  $value Value to normalize (if numeric).
+	 *
+	 * @return mixed         Possibly normalized value.
+	 */
+	public static function normalize_if_numeric( $value ) {
+		if ( is_numeric( $value ) ) {
+			$value = false !== strpos( $value, '.' ) ? floatval( $value ) : intval( $value );
+		}
+
+		return $value;
+	}
 }

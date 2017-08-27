@@ -8,7 +8,7 @@
  *
  * @category  WordPress_Plugin
  * @package   CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
  */
 class CMB2_Ajax {
@@ -22,6 +22,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Instance of this class
+	 *
 	 * @since 2.2.2
 	 * @var object
 	 */
@@ -29,8 +30,9 @@ class CMB2_Ajax {
 
 	/**
 	 * Get the singleton instance of this class
+	 *
 	 * @since 2.2.2
-	 * @return object
+	 * @return CMB2_Ajax
 	 */
 	public static function get_instance() {
 		if ( ! ( self::$instance instanceof self ) ) {
@@ -42,6 +44,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Constructor
+	 *
 	 * @since 2.2.0
 	 */
 	protected function __construct() {
@@ -53,6 +56,7 @@ class CMB2_Ajax {
 
 	/**
 	 * Handles our oEmbed ajax request
+	 *
 	 * @since  0.9.5
 	 * @return object oEmbed embed code | fallback | error message
 	 */
@@ -78,7 +82,9 @@ class CMB2_Ajax {
 		$oembed_url = esc_url( $oembed_string );
 
 		// Set args
-		$embed_args = array( 'width' => $embed_width );
+		$embed_args = array(
+			'width' => $embed_width,
+		);
 
 		$this->ajax_update = true;
 
@@ -96,8 +102,9 @@ class CMB2_Ajax {
 
 	/**
 	 * Retrieves oEmbed from url/object ID
+	 *
 	 * @since  0.9.5
-	 * @param  array  $args      Arguments for method
+	 * @param  array $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
 	public function get_oembed_no_edit( $args ) {
@@ -161,8 +168,9 @@ class CMB2_Ajax {
 
 	/**
 	 * Retrieves oEmbed from url/object ID
+	 *
 	 * @since  0.9.5
-	 * @param  array  $args      Arguments for method
+	 * @param  array $args      Arguments for method
 	 * @return string            html markup with embed or fallback
 	 */
 	public function get_oembed( $args ) {
@@ -238,9 +246,8 @@ class CMB2_Ajax {
 	/**
 	 * Gets/updates the cached oEmbed value from/to relevant object metadata (vs postmeta)
 	 *
-	 * @since  1.3.0
-	 * @param  string  $meta_key   Postmeta's key
-	 * @param  mixed   $meta_value (Optional) value of the postmeta to be saved
+	 * @since 1.3.0
+	 * @param string $meta_key Postmeta's key
 	 */
 	protected function cache_action( $meta_key ) {
 		$func_args = func_get_args();
@@ -272,17 +279,18 @@ class CMB2_Ajax {
 	/**
 	 * Hooks in when options-page data is saved to clean stale
 	 * oembed cache data from the option value.
+	 *
 	 * @since  2.2.0
-	 * @param  string  $option_key The options-page option key
+	 * @param  string $option_key The options-page option key
 	 * @return void
 	 */
 	public static function clean_stale_options_page_oembeds( $option_key ) {
 		$options = cmb2_options( $option_key )->get_options();
+		$modified = false;
 		if ( is_array( $options ) ) {
 
 			$ttl = apply_filters( 'oembed_ttl', DAY_IN_SECONDS, '', array(), 0 );
 			$now = time();
-			$modified = false;
 
 			foreach ( $options as $key => $value ) {
 				// Check for cached oembed data
@@ -295,14 +303,15 @@ class CMB2_Ajax {
 						unset( $options[ $key ] );
 						unset( $options[ str_replace( '_oembed_time_', '_oembed_', $key ) ] );
 					}
-				}
-				// Remove the cached unknown values
+				} // End if().
+				// Remove the cached unknown values.
 				elseif ( '{{unknown}}' === $value ) {
 					$modified = true;
 					unset( $options[ $key ] );
 				}
 			}
 		}
+
 		// Update the option and remove stale cache data
 		if ( $modified ) {
 			$updated = cmb2_options( $option_key )->set( $options );

@@ -147,7 +147,16 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		} );
 
 		if ( true === initiated ) {
-			window.QTags._buttonsInit();
+			if ( 'undefined' !== typeof window.QTags ) {
+				window.QTags._buttonsInit();
+			}
+
+			// Hook in our event callbacks.
+			$( document )
+				.on( 'cmb2_add_row', wysiwyg.addRow )
+				.on( 'cmb2_remove_group_row_start', wysiwyg.destroyRowEditors )
+				.on( 'cmb2_shift_rows_start', wysiwyg.shiftStart )
+				.on( 'cmb2_shift_rows_complete', wysiwyg.shiftComplete );
 		}
 	};
 
@@ -273,11 +282,13 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		$toReplace.replaceWith( data.template( data ) );
 
 		window.tinyMCE.init( tinyMCEPreInit.mceInit[ data.id ] );
-		window.quicktags( tinyMCEPreInit.qtInit[ data.id ] );
+		if ( 'function' === typeof window.quicktags ) {
+			window.quicktags( tinyMCEPreInit.qtInit[ data.id ] );
+		}
 
 		$( document.getElementById( data.id ) ).parents( '.wp-editor-wrap' ).removeClass( 'html-active' ).addClass( 'tmce-active' );
 
-		if ( false !== buttonsInit ) {
+		if ( false !== buttonsInit && 'undefined' !== typeof window.QTags ) {
 			window.QTags._buttonsInit();
 		}
 
@@ -315,11 +326,6 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	};
 
 	// Hook in our event callbacks.
-	$( document )
-		.on( 'cmb_init', wysiwyg.initAll )
-		.on( 'cmb2_add_row', wysiwyg.addRow )
-		.on( 'cmb2_remove_group_row_start', wysiwyg.destroyRowEditors )
-		.on( 'cmb2_shift_rows_start', wysiwyg.shiftStart )
-		.on( 'cmb2_shift_rows_complete', wysiwyg.shiftComplete );
+	$( document ).on( 'cmb_init', wysiwyg.initAll );
 
 } )( window, document, jQuery, window.CMB2.wysiwyg );

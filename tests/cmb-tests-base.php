@@ -3,9 +3,9 @@
  * CMB2 tests base
  *
  * @package   Tests_CMB2
- * @author    WebDevStudios
+ * @author    CMB2 team
  * @license   GPL-2.0+
- * @link      http://webdevstudios.com
+ * @link      https://cmb2.io
  */
 abstract class Test_CMB2 extends WP_UnitTestCase {
 
@@ -27,7 +27,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			'/[\t\n\r]/', // Remove tabs and newlines
 			'/\s{2,}/', // Replace repeating spaces with one space
 			'/> </', // Remove spaces between carats
-		), array(
+			), array(
 			'',
 			' ',
 			'><',
@@ -36,7 +36,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 	public function is_connected() {
 		$connected = @fsockopen( 'www.youtube.com', 80 );
-		if ( $connected ){
+		if ( $connected ) {
 			$is_conn = true;
 			fclose( $connected );
 		} else {
@@ -82,7 +82,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 
 		$results = array();
 		foreach ( $possibilities as $key => $expected ) {
-			$results[ $key ] = $this->compareHTMLstrings( $expected, $actual );
+			$results[ $key ] = $this->compare_strings( $expected, $actual );
 		}
 
 		if ( ! empty( $results[0] ) && ! empty( $results[1] ) ) {
@@ -103,10 +103,8 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	protected function capture_render( $cb ) {
 		ob_start();
 		call_user_func( $cb );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
+		// grab the data from the output buffer and add it to our $content variable
+		return ob_get_clean();
 	}
 
 	protected function render_field( $field ) {
@@ -124,22 +122,43 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		wp_die( $hook . ' die' );
 	}
 
-	protected function compareHTMLstrings( $expected_string, $string_to_test ) {
-		$compare = strcmp( $expected_string, $string_to_test );
+	public static function compare_strings( $orig_string, $new_string, $orig_label = 'Expected', $compare_label = 'Actual' ) {
+		$orig_length = strlen( $orig_string );
+		$new_length  = strlen( $new_string );
+		$compare     = strcmp( $orig_string, $new_string );
 
 		if ( 0 !== $compare ) {
 
-			$compare       = strspn( $expected_string ^ $string_to_test, "\0" );
-			$chars_to_show = 75;
-			$start         = ( $compare - 5 );
-			$pointer       = '|--->>';
-			$sep           = "\n". str_repeat( '-', 75 );
+			$label_spacer = str_repeat( ' ', abs( strlen( $compare_label ) - strlen( $orig_label ) ) );
+			$compare_spacer = $orig_spacer = '';
+
+			if ( strlen( $compare_label ) > strlen( $orig_label ) ) {
+				$orig_spacer = $label_spacer;
+			} elseif ( strlen( $compare_label ) < strlen( $orig_label ) ) {
+				$compare_spacer = $label_spacer;
+			}
+
+			$compare      = strspn( $orig_string ^ $new_string, "\0" );
+			$chars_before = 15;
+			$chars_after  = 75;
+			$start        = ( $compare - $chars_before );
+			$pointer      = '| ----> |';
+			$ol           = '  ' . $orig_label . ':  ' . $orig_spacer;
+			$cl           = '  ' . $compare_label . ':  ' . $compare_spacer;
+			$sep          = "\n" . str_repeat( '-', $chars_after + $chars_before + strlen( $pointer ) + strlen( $ol ) + 2 );
 
 			$compare = sprintf(
-			    $sep . "\nFirst difference at position %d:\n\n  Expected: \t%s\n  Actual: \t%s\n" . $sep,
-			    $compare,
-			    substr( $expected_string, $start, 5 ) . $pointer . substr( $expected_string, $compare, $chars_to_show ),
-			    substr( $string_to_test, $start, 5 ) . $pointer . substr( $string_to_test, $compare, $chars_to_show )
+				$sep . '%8$s%8$s  First difference at position %1$d.%8$s%8$s  %9$s length: %2$d, %10$s length: %3$d%8$s%8$s%4$s%5$s%8$s%6$s%7$s%8$s' . $sep,
+				$compare,
+				$orig_length,
+				$new_length,
+				$ol,
+				substr( $orig_string, $start, 15 ) . $pointer . substr( $orig_string, $compare, $chars_after ),
+				$cl,
+				substr( $new_string, $start, 15 ) . $pointer . substr( $new_string, $compare, $chars_after ),
+				"\n",
+				$orig_label,
+				$compare_label
 			);
 		}
 
@@ -155,7 +174,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @return mixed Method return.
 	 */
 	public function invokeMethod( $object, $methodName ) {
-		if ( version_compare(phpversion(), '5.3', '<' ) ) {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
 			$this->markTestSkipped( 'PHP version does not support ReflectionClass::setAccessible()' );
 		}
 
@@ -169,13 +188,33 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $method->invokeArgs( $object, $args );
 	}
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
+	/**
+	 * Get protected/private property of a class.
+	 *
+	 * @param object $object       Instantiated object that we will get property for.
+	 * @param string $propertyName Property to get.
+	 *
+	 * @return mixed               Value of property.
+	 */
+	protected function getProperty( $object, $propertyName ) {
+		$reflection = new \ReflectionClass( get_class( $object ) );
+		$property = $reflection->getProperty( $propertyName );
+		$property->setAccessible( true );
+
+		return $property->getValue( $object );
+	}
+
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = null ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
 
-		$compare = $this->compareHTMLstrings( $expected_string, $string_to_test );
+		$compare = $this->compare_strings( $expected_string, $string_to_test );
 
-		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
+		if ( ! empty( $compare ) ) {
+			$msg .= $compare;
+		}
+
+		return $this->assertEquals( $expected_string, $string_to_test, $msg );
 	}
 
 	public function assertIsDefined( $definition ) {

@@ -8,7 +8,7 @@
  * @category YourThemeOrPlugin
  * @package  Demo_CMB2
  * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
- * @link     https://github.com/WebDevStudios/CMB2
+ * @link     https://github.com/CMB2/CMB2
  */
 
 /**
@@ -24,13 +24,13 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 /**
  * Conditionally displays a metabox when used as a callback in the 'show_on_cb' cmb2_box parameter
  *
- * @param  CMB2 object $cmb CMB2 object
+ * @param  CMB2 object $cmb CMB2 object.
  *
  * @return bool             True if metabox should show
  */
 function yourprefix_show_if_front_page( $cmb ) {
-	// Don't show this metabox if it's not the front page template
-	if ( $cmb->object_id !== get_option( 'page_on_front' ) ) {
+	// Don't show this metabox if it's not the front page template.
+	if ( get_option( 'page_on_front' ) !== $cmb->object_id ) {
 		return false;
 	}
 	return true;
@@ -39,12 +39,12 @@ function yourprefix_show_if_front_page( $cmb ) {
 /**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
  *
- * @param  CMB2_Field object $field Field object
+ * @param  CMB2_Field object $field Field object.
  *
  * @return bool                     True if metabox should show
  */
 function yourprefix_hide_if_no_cats( $field ) {
-	// Don't show this field if not in the cats category
+	// Don't show this field if not in the cats category.
 	if ( ! has_tag( 'cats', $field->object_id ) ) {
 		return false;
 	}
@@ -55,7 +55,7 @@ function yourprefix_hide_if_no_cats( $field ) {
  * Manually render a field.
  *
  * @param  array      $field_args Array of field arguments.
- * @param  CMB2_Field $field      The field object
+ * @param  CMB2_Field $field      The field object.
  */
 function yourprefix_render_row_cb( $field_args, $field ) {
 	$classes     = $field->row_classes();
@@ -65,10 +65,10 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 	$value       = $field->escaped_value();
 	$description = $field->args( 'description' );
 	?>
-	<div class="custom-field-row <?php echo $classes; ?>">
-		<p><label for="<?php echo $id; ?>"><?php echo $label; ?></label></p>
-		<p><input id="<?php echo $id; ?>" type="text" name="<?php echo $name; ?>" value="<?php echo $value; ?>"/></p>
-		<p class="description"><?php echo $description; ?></p>
+	<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
+		<p><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></p>
+		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo $value; ?>"/></p>
+		<p class="description"><?php echo esc_html( $description ); ?></p>
 	</div>
 	<?php
 }
@@ -77,13 +77,13 @@ function yourprefix_render_row_cb( $field_args, $field ) {
  * Manually render a field column display.
  *
  * @param  array      $field_args Array of field arguments.
- * @param  CMB2_Field $field      The field object
+ * @param  CMB2_Field $field      The field object.
  */
 function yourprefix_display_text_small_column( $field_args, $field ) {
 	?>
-	<div class="custom-column-display <?php echo $field->row_classes(); ?>">
+	<div class="custom-column-display <?php echo esc_attr( $field->row_classes() ); ?>">
 		<p><?php echo $field->escaped_value(); ?></p>
-		<p class="description"><?php echo $field->args( 'description' ); ?></p>
+		<p class="description"><?php echo esc_html( $field->args( 'description' ) ); ?></p>
 	</div>
 	<?php
 }
@@ -91,8 +91,8 @@ function yourprefix_display_text_small_column( $field_args, $field ) {
 /**
  * Conditionally displays a message if the $post_id is 2
  *
- * @param  array             $field_args Array of field parameters
- * @param  CMB2_Field object $field      Field object
+ * @param  array             $field_args Array of field parameters.
+ * @param  CMB2_Field object $field      Field object.
  */
 function yourprefix_before_row_if_2( $field_args, $field ) {
 	if ( 2 == $field->object_id ) {
@@ -115,7 +115,7 @@ function yourprefix_register_demo_metabox() {
 	$cmb_demo = new_cmb2_box( array(
 		'id'            => $prefix . 'metabox',
 		'title'         => esc_html__( 'Test Metabox', 'cmb2' ),
-		'object_types'  => array( 'page', ), // Post type
+		'object_types'  => array( 'page' ), // Post type
 		// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
 		// 'context'    => 'normal',
 		// 'priority'   => 'high',
@@ -385,7 +385,9 @@ function yourprefix_register_demo_metabox() {
 		'desc'    => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'      => $prefix . 'wysiwyg',
 		'type'    => 'wysiwyg',
-		'options' => array( 'textarea_rows' => 5, ),
+		'options' => array(
+			'textarea_rows' => 5,
+		),
 	) );
 
 	$cmb_demo->add_field( array(
@@ -418,7 +420,7 @@ function yourprefix_register_demo_metabox() {
 		'name'         => 'Testing Field Parameters',
 		'id'           => $prefix . 'parameters',
 		'type'         => 'text',
-		'before_row'   => 'yourprefix_before_row_if_2', // callback
+		'before_row'   => 'yourprefix_before_row_if_2', // callback.
 		'before'       => '<p>Testing <b>"before"</b> parameter</p>',
 		'before_field' => '<p>Testing <b>"before_field"</b> parameter</p>',
 		'after_field'  => '<p>Testing <b>"after_field"</b> parameter</p>',
@@ -441,11 +443,13 @@ function yourprefix_register_about_page_metabox() {
 	$cmb_about_page = new_cmb2_box( array(
 		'id'           => $prefix . 'metabox',
 		'title'        => esc_html__( 'About Page Metabox', 'cmb2' ),
-		'object_types' => array( 'page', ), // Post type
+		'object_types' => array( 'page' ), // Post type
 		'context'      => 'normal',
 		'priority'     => 'high',
 		'show_names'   => true, // Show field names on the left
-		'show_on'      => array( 'id' => array( 2, ) ), // Specific post IDs to display this metabox
+		'show_on'      => array(
+			'id' => array( 2 ),
+		), // Specific post IDs to display this metabox
 	) );
 
 	$cmb_about_page->add_field( array(
@@ -470,7 +474,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 	$cmb_group = new_cmb2_box( array(
 		'id'           => $prefix . 'metabox',
 		'title'        => esc_html__( 'Repeating Field Group', 'cmb2' ),
-		'object_types' => array( 'page', ),
+		'object_types' => array( 'page' ),
 	) );
 
 	// $group_field_id is the field id string, so in this case: $prefix . 'demo'
@@ -635,30 +639,38 @@ function yourprefix_register_taxonomy_metabox() {
 
 add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
 /**
- * Hook in and register a metabox to handle a theme options page
+ * Hook in and register a metabox to handle a theme options page and adds a menu item.
  */
 function yourprefix_register_theme_options_metabox() {
 
-	$option_key = 'yourprefix_theme_options';
-
 	/**
-	 * Metabox for an options page. Will not be added automatically, but needs to be called with
-	 * the `cmb2_metabox_form` helper function. See wiki for more info.
+	 * Registers options page menu item and form.
 	 */
 	$cmb_options = new_cmb2_box( array(
-		'id'      => $option_key . 'page',
-		'title'   => esc_html__( 'Theme Options Metabox', 'cmb2' ),
-		'hookup'  => false, // Do not need the normal user/post hookup
-		'show_on' => array(
-			// These are important, don't remove
-			'key'   => 'options-page',
-			'value' => array( $option_key )
-		),
+		'id'           => 'yourprefix_theme_options_page',
+		'title'        => esc_html__( 'Theme Options', 'cmb2' ),
+		'object_types' => array( 'options-page' ),
+
+		/*
+		 * The following parameters are specific to the options-page box
+		 * Several of these parameters are passed along to add_menu_page()/add_submenu_page().
+		 */
+
+		'option_key'      => 'yourprefix_theme_options', // The option key and admin menu page slug.
+		'icon_url'        => 'dashicons-palmtree', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		// 'menu_title'      => esc_html__( 'Options', 'cmb2' ), // Falls back to 'title' (above).
+		// 'parent_slug'     => 'themes.php', // Make options page a submenu item of the themes menu.
+		// 'capability'      => 'manage_options', // Cap required to view options-page.
+		// 'position'        => 1, // Menu position. Only applicable if 'parent_slug' is left empty.
+		// 'admin_menu_hook' => 'network_admin_menu', // 'network_admin_menu' to add network-level options page.
+		// 'display_cb'      => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		// 'save_button'     => esc_html__( 'Save Theme Options', 'cmb2' ), // The text for the options-page save button. Defaults to 'Save'.
+		// 'disable_settings_errors' => true, // On settings pages (not options-general.php sub-pages), allows disabling.
 	) );
 
 	/**
 	 * Options fields ids only need
-	 * to be unique within this option group.
+	 * to be unique within this box.
 	 * Prefix is not needed.
 	 */
 	$cmb_options->add_field( array(
@@ -669,4 +681,55 @@ function yourprefix_register_theme_options_metabox() {
 		'default' => '#ffffff',
 	) );
 
+}
+
+/**
+ * Only show this box in the CMB2 REST API if the user is logged in.
+ *
+ * @param  bool                 $is_allowed     Whether this box and its fields are allowed to be viewed.
+ * @param  CMB2_REST_Controller $cmb_controller The controller object.
+ *                                              CMB2 object available via `$cmb_controller->rest_box->cmb`.
+ *
+ * @return bool                 Whether this box and its fields are allowed to be viewed.
+ */
+function yourprefix_limit_rest_view_to_logged_in_users( $is_allowed, $cmb_controller ) {
+	if ( ! is_user_logged_in() ) {
+		$is_allowed = false;
+	}
+
+	return $is_allowed;
+}
+
+add_action( 'cmb2_init', 'yourprefix_register_rest_api_box' );
+/**
+ * Hook in and add a box to be available in the CMB2 REST API. Can only happen on the 'cmb2_init' hook.
+ * More info: https://github.com/CMB2/CMB2/wiki/REST-API
+ */
+function yourprefix_register_rest_api_box() {
+	$prefix = 'yourprefix_rest_';
+
+	$cmb_rest = new_cmb2_box( array(
+		'id'            => $prefix . 'metabox',
+		'title'         => esc_html__( 'REST Test Box', 'cmb2' ),
+		'object_types'  => array( 'page' ), // Post type
+		'show_in_rest' => WP_REST_Server::ALLMETHODS, // WP_REST_Server::READABLE|WP_REST_Server::EDITABLE, // Determines which HTTP methods the box is visible in.
+		// Optional callback to limit box visibility.
+		// See: https://github.com/CMB2/CMB2/wiki/REST-API#permissions
+		// 'get_box_permissions_check_cb' => 'yourprefix_limit_rest_view_to_logged_in_users',
+	) );
+
+	$cmb_rest->add_field( array(
+		'name'       => esc_html__( 'REST Test Text', 'cmb2' ),
+		'desc'       => esc_html__( 'Will show in the REST API for this box and for pages.', 'cmb2' ),
+		'id'         => $prefix . 'text',
+		'type'       => 'text',
+	) );
+
+	$cmb_rest->add_field( array(
+		'name'       => esc_html__( 'REST Editable Test Text', 'cmb2' ),
+		'desc'       => esc_html__( 'Will show in REST API "editable" contexts only (`POST` requests).', 'cmb2' ),
+		'id'         => $prefix . 'editable_text',
+		'type'       => 'text',
+		'show_in_rest' => WP_REST_Server::EDITABLE,// WP_REST_Server::ALLMETHODS|WP_REST_Server::READABLE, // Determines which HTTP methods the field is visible in. Will override the cmb2_box 'show_in_rest' param.
+	) );
 }
