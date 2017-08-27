@@ -160,10 +160,10 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Options display class will uses "do metaboxes" call.
+	 * Options display class will uses "do metaboxes" call. Args places into array to allow for testing.
 	 *
 	 * @since 2.XXX
-	 * @return bool
+	 * @return bool|array
 	 */
 	public function add_options_metabox() {
 		
@@ -171,7 +171,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			return FALSE;
 		}
 		
-		add_meta_box(
+		$args = array(
 			$this->cmb->cmb_id,
 			$this->cmb->prop( 'title' ),
 			array( $this, 'get_metabox' ),
@@ -180,7 +180,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->cmb->prop( 'priority' )
 		);
 		
-		return TRUE;
+		add_meta_box( $args[0], $args[1], $args[2], $args[3], $args[4], $args[5] );
+		
+		return $args;
 	}
 	
 	/**
