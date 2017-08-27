@@ -68,7 +68,6 @@ class CMB2_Options_Page_Display {
 		
 		/**
 		 * 'cmb2_options_page_before' filter.
-		 *
 		 * Allows inserting content before the page form, below the title. Any content passed in should be formatted
 		 * HTML ready to be echoed to page.
 		 *
@@ -81,7 +80,6 @@ class CMB2_Options_Page_Display {
 		
 		/**
 		 * 'cmb2_options_page_after' filter.
-		 *
 		 * Allows inserting content after the page form. Content should be formatted HTML ready to be echoed to page.
 		 *
 		 * @since 2.XXX
@@ -106,7 +104,8 @@ class CMB2_Options_Page_Display {
 		$top = $bottom = '';
 		
 		/**
-		 * 'cmb2_options_form_id' filter: Change the ID of the form. If returned empty, will revert to default.
+		 * 'cmb2_options_form_id' filter
+		 * Change the ID of the form. If returned empty, will revert to default.
 		 *
 		 * @since 2.XXX
 		 */
@@ -121,7 +120,8 @@ class CMB2_Options_Page_Display {
 		        . 'enctype="multipart/form-data" encoding="multipart/form-data">';
 		
 		/**
-		 * 'cmb2_options_form_top' filter: Insert HTML content just after form opening tag
+		 * 'cmb2_options_form_top' filter
+		 * Insert HTML content just after form opening tag
 		 *
 		 * @since 2.XXX
 		 */
@@ -138,13 +138,13 @@ class CMB2_Options_Page_Display {
 		$html .= $this->save_button();
 		
 		/**
-		 * 'cmb2_options_form_bottom' filter: Insert HTML content just before form closing tag
+		 * 'cmb2_options_form_bottom' filter
+		 * Insert HTML content just before form closing tag
 		 *
 		 * @since 2.XXX
 		 */
 		$html .= apply_filters( 'cmb2_options_form_bottom', $bottom, $this );
 		
-		// close form
 		$html .= '</form>';
 		
 		return $html;
@@ -159,12 +159,10 @@ class CMB2_Options_Page_Display {
 	 */
 	public function form_simple() {
 		
-		$html = '';
 		ob_start();
-		do_action( 'cmb2_options_simple_page', 'options-page' );
-		$html .= ob_get_clean();
+		do_action( 'cmb2_options_simple_page', $this->page );
 		
-		return $html;
+		return ob_get_clean();
 	}
 	
 	/**
