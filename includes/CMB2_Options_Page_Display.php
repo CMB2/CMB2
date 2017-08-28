@@ -4,8 +4,17 @@
  * Creates and displays an options page.
  *
  * @since 2.XXX
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    CMB2 team
+ * @license   GPL-2.0+
+ * @link      https://cmb2.io
+ *
+ * @property string $option_key
+ * @property string $page
+ * @property array  $shared
  */
-
 class CMB2_Options_Page_Display {
 	
 	/**
@@ -63,6 +72,18 @@ class CMB2_Options_Page_Display {
 		
 		$props = ! is_array( $props ) ? (array) $props : $props;
 		$this->shared = array_merge( $this->shared, $props );
+	}
+	
+	/**
+	 * Returns property, allows checking state of class
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function __get( $property ) {
+		
+		return isset( $this->{$property} ) ? $this->{$property} : NULL;
 	}
 	
 	/**
