@@ -28,6 +28,10 @@ class CMB2_Options_Pages {
 	 */
 	public static function add( CMB2_Options_Page_Hookup $page ) {
 		
+		if ( ! $page instanceof CMB2_Options_Page_Hookup ) {
+			return false;
+		}
+		
 		self::$pages[ $page->page ] = $page;
 		
 		return $page->page;
@@ -42,7 +46,7 @@ class CMB2_Options_Pages {
 	 */
 	public static function get( $page ) {
 		
-		if ( empty( self::$pages ) || empty( self::$pages[ $page ] ) ) {
+		if ( ! is_string( $page ) || empty( $page ) || empty( self::$pages ) || empty( self::$pages[ $page ] ) ) {
 			return FALSE;
 		}
 		
@@ -64,10 +68,14 @@ class CMB2_Options_Pages {
 	 * Retrieve all CMB2_Options_Page_Hookup instances that have the same options key.
 	 *
 	 * @since  2.XXX
-	 * @param  string $key Key matching options-key
-	 * @return CMB2[]       Array of matching CMB2_Options_Page_Hookup instances
+	 * @param  string $key  Key matching options-key
+	 * @return bool|CMB2[]  Array of matching CMB2_Options_Page_Hookup instances
 	 */
 	public static function get_by_options_key( $key ) {
+		
+		if ( ! is_string( $key ) ) {
+			return false;
+		}
 		
 		$pages = array();
 		
@@ -89,12 +97,26 @@ class CMB2_Options_Pages {
 	 */
 	public static function remove( $page ) {
 		
+		if ( ! is_string( $page ) || empty( $page ) ) {
+			return false;
+		}
+		
 		if ( array_key_exists( $page, self::$pages ) ) {
+			
 			unset( self::$pages[ $page ] );
 			
 			return TRUE;
 		}
 		
 		return FALSE;
+	}
+	
+	/**
+	 * Clears all hookups from class.
+	 *
+	 * @since 2.XXX
+	 */
+	public static function clear() {
+		self::$pages = array();
 	}
 }
