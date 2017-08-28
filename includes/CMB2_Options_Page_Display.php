@@ -14,7 +14,7 @@ class CMB2_Options_Page_Display {
 	 * @var string
 	 * @since 2.XXX
 	 */
-	protected $option_key;
+	protected $option_key = '';
 	
 	/**
 	 * The page id, same as menu_slug
@@ -22,15 +22,31 @@ class CMB2_Options_Page_Display {
 	 * @var string
 	 * @since 2.XXX
 	 */
-	protected $page;
+	protected $page = '';
 	
 	/**
-	 * Shared cmb->prop values
+	 * Shared cmb->prop values. This array is merged with passed-in $props
 	 *
 	 * @var array
 	 * @since 2.XXX
 	 */
-	protected $shared;
+	protected $shared = array(
+		'capability' => '',
+		'cmb_styles' => '',
+		'display_cb' => '',
+		'enqueue_js' => '',
+		'icon_url' => '',
+		'menu_title' => '',
+		'menu_first_sub' => '',
+		'parent_slug' => '',
+		'page_columns' => '',
+		'page_format' => '',
+		'position' => '',
+		'reset_button' => '',
+		'reset_action' => '',
+		'save_button' => '',
+		'title' => '',
+	);
 	
 	/**
 	 * CMB2_Options_Display constructor.
@@ -42,9 +58,11 @@ class CMB2_Options_Page_Display {
 	 */
 	public function __construct( $key, $page, $props ) {
 		
-		$this->option_key = $key;
-		$this->page       = $page;
-		$this->shared     = $props;
+		$this->option_key = (string) $key;
+		$this->page       = (string) $page;
+		
+		$props = ! is_array( $props ) ? (array) $props : $props;
+		$this->shared = array_merge( $this->shared, $props );
 	}
 	
 	/**
