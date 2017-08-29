@@ -79,7 +79,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		array(
 			'id'   => 'cmb2_options_simple_page',
 			'hook' => 'cmb2_options_simple_page',
-			'call' => array( '{THIS}', 'get_simple_page_box' ),
+			'call' => array( '{CMB}', 'show_form' ),
+			'only_if' => '{PAGE_CHECK}',
+			'args'    => 2,
 		),
 		array(
 			'id'   => 'postbox_classes',
@@ -187,21 +189,20 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	
 	/**
 	 * Clone of metabox_callback w/o ID. Also returns a value for testing/non-echo.
-	 * future uses.
 	 *
 	 * @since  2.XXX
-	 * @return string|bool
+	 * @param  bool|string $echo
+	 * @return string
 	 */
-	public function get_metabox() {
+	public function get_metabox( $echo = TRUE ) {
 		
-		ob_start();
-		$returned = $this->cmb->show_form( 0, $this->object_type );
-		$echoed   = ob_get_clean();
+		$echo = $echo !== FALSE;
 		
-		if ( $echoed ) {
-			echo $echoed;
-			$returned = TRUE;
-		};
+		$returned = CMB2_Utils::do_void_action( array( 0, $this->object_type ), array( $this->cmb, 'show_form' ) );
+		
+		if ( $echo ) {
+			echo $returned;
+		}
 		
 		return $returned;
 	}
@@ -228,32 +229,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Returns the output for a 'simple' box. Allows future return of string by show_form if desired.
-	 *
-	 * @since  2.XXX
-	 * @param  string $pageid
-	 * @return bool|string
-	 */
-	public function get_simple_page_box( $pageid = '' ) {
-		
-		$return = FALSE;
-		
-		if ( $pageid == $this->page_id ) {
-			
-			ob_start();
-			$return = $this->cmb->show_form( 0, $this->object_type );
-			$echoed = ob_get_clean();
-			
-			if ( $echoed ) {
-				echo $echoed;
-				$return = TRUE;
-			};
-		}
-		
-		return $return;
-	}
-	
-	/**
 	 * Default hooks.
 	 *
 	 * @since  2.XXX       Complete re-write to use 'normal' CMB metabox actions
@@ -276,9 +251,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			'{THIS}'          => $this,
 			'{PAGE}'          => $this->page,
 			'{PAGE_ID}'       => $this->page_id,
+			'{CMB}'           => $this->cmb,
 			'{CMB_ID}'        => $this->cmb->cmb_id,
-			'{CONTEXT_CHECK}' => $context == 'form_top',
 			'{OPT}'           => $this->option_key,
+			'{CONTEXT_CHECK}' => $context == 'form_top',
+			'{PAGE_CHECK}'    => isset( $_GET['page'] ) && $_GET['page'] == $this->page_id,
 			'{NETWORK_CHECK}' => 'network_admin_menu' == $wp_menu_hook,
 			'{TYPE_CHECK}'    => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
 		);
