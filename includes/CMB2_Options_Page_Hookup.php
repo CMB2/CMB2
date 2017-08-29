@@ -66,9 +66,9 @@ class CMB2_Options_Page_Hookup {
 		),
 		'add_to_menu' => array(
 			array(
-				'id'   => 'do_metaboxes',
+				'id'   => 'add_metaboxes',
 				'hook' => 'load-{PAGEHOOK}',
-				'call' => array( '{THIS}', 'do_metaboxes' ),
+				'call' => array( '{THIS}', 'add_metaboxes' ),
 			),
 			array(
 				'id'      => 'add_cmb_css_to_head',
@@ -192,6 +192,22 @@ class CMB2_Options_Page_Hookup {
 		}
 		
 		return $return;
+	}
+	
+	/**
+	 * Adds metaboxes to page
+	 *
+	 * @since 2.XXX
+	 * @return bool
+	 */
+	public function add_metaboxes() {
+		
+		if ( $this->shared['page_format'] == 'post' ) {
+			do_action( 'add_meta_boxes_' . $this->page, NULL );
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -575,7 +591,7 @@ class CMB2_Options_Page_Hookup {
 		// get hooks from class property
 		$hooks = $this->hooks_array( 'hooks', $tokens );
 		
-		// use CMB_Utils method to add hooks
+		// use CMB2_Utils method to add hooks
 		$return = ! empty( $hooks ) ?
 			CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
 		
@@ -719,23 +735,19 @@ class CMB2_Options_Page_Hookup {
 	 * @param  bool|string $echo Allows this method to return instead of echoing. WP will set this to ''.
 	 * @return bool|string
 	 */
-	public function render( $echo ) {
+	public function render( $echo = TRUE ) {
 		
-		$echo     = $echo === '' || $echo === TRUE;
+		$echo     = $echo !== FALSE;
 		$callback = $this->shared['display_cb'];
 		
 		if ( is_callable( $callback ) ) {
-			ob_start();
-			$returned = $callback( $this );
-			$echoed   = ob_get_clean();
-			$html     = $echoed ? $echoed : $returned;
+			$html = CMB2_Utils::do_void_action( array( $this ), $callback );
 		} else {
 			$html = $this->render_html();
 		}
 		
 		if ( $echo ) {
 			echo $html;
-			$html = TRUE;
 		}
 		
 		return $html;
@@ -749,9 +761,7 @@ class CMB2_Options_Page_Hookup {
 	 */
 	public function render_html() {
 		
-		ob_start();
-		settings_errors( $this->option_key . '-notices' );
-		$notices = ob_get_clean();
+		$notices = CMB2_Utils::do_void_action( array( $this->option_key . '-notices' ), 'settings_errors' );
 		
 		// Use first hookup in our array to trigger the style/js
 		$hookup = reset( $this->hookups );
