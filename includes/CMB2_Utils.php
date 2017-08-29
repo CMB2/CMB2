@@ -769,13 +769,97 @@ class CMB2_Utils {
 				}
 				
 			} else if ( is_array( $ret_val ) ) {
-				
 				$ret_val = self::replace_tokens_in_array( $ret_val, $tokens, $keys );
 			}
-			
 			$return[ $ret_key ] = $ret_val;
 		}
-		
 		return $return;
+	}
+	
+	/**
+	 * Allow arbitrary output functions to be called for actions which echo their return.
+	 *
+	 * @since  2.XXX
+	 * @param  array  $args   Argument array expected as params of the function
+	 * @param  string $call   Callable function, do_action, do_meta_boxes, etc.
+	 * @param  array  $checks Array of checks to perform against arguments
+	 * @return string         Formatted HTML
+	 */
+	public static function do_void_action( $args = array(), $checks = array(), $call = 'do_action' ) {
+		
+		$html = '';
+		
+		// allow passing of callable as second arg if checks are not included
+		$call   = is_callable( $checks ) ? $checks : $call;
+		$checks = is_callable( $checks ) ? array() : $checks;
+		
+		if (
+			empty( $call )
+			|| ! is_callable( $call )
+			|| empty( $args )
+			|| ! is_array( $args )
+			|| ! is_array( $checks )
+			|| ! self::do_void_action_arg_checks( $args, $checks )
+		) {
+			return $html;
+		}
+		
+		ob_start();
+		$returned = call_user_func_array( $call, $args );
+		$html     = ob_get_clean();
+		
+		$html = empty( $returned ) || ! is_string( $returned ) ? $html : $returned;
+		
+		return $html;
+	}
+	
+	/**
+	 * Checks arguments array against checks array to see if the argument should be allowed. Works with string
+	 * and numeric indexed arrays, as long as the arguments correspond.
+	 *
+	 * $args = [ 'howdy', 'hello' ]
+	 * $checks = [ null, [ 'hi', 'hello' ] ]
+	 *
+	 * Passes, since [0] will be skipped, [1] 'hello' in check array.
+	 *
+	 * $args = [ 'howdy', 'hello' ]
+	 * $checks = [ 'hi', [ 'hi', 'hello' ] ]
+	 *
+	 * Fails, since [0] $args and $check both have gettype value of 'string' and don't match
+	 *
+	 * @since  2.XXX
+	 * @param  array $args    arguments array
+	 * @param  array $checks  checks whose keys match the arguments to check against
+	 * @param  bool  $skip    true: check skipped if value is null
+	 * @return bool
+	 */
+	public static function do_void_action_arg_checks( $args = array(), $checks = array(), $skip = true ) {
+		
+		$ok = true;
+		
+		if ( empty( $checks ) || ! is_array( $args ) || ! is_array( $checks ) || ! is_bool( $skip )) {
+			return $ok;
+		}
+		
+		foreach ( $args as $key => $value ) {
+			
+			$defined = get_defined_vars();
+			$isset   = array_key_exists( $key, $defined['checks'] );
+			
+			if ( $isset && ( ( $skip && ! is_null( $checks[ $key ] ) ) || ! $skip  ) )  {
+				if (
+					( is_array( $checks[ $key ] ) && ! in_array( $value, $checks[ $key ], true ) )
+					|| (
+						! is_array( $checks[ $key ] )
+						&& ( gettype( $value ) != gettype( $checks[ $key ] ) || $value !== $checks[ $key ] )
+					)
+				) {
+					$ok = false;
+					break;
+				}
+			}
+		}
+		
+		return $ok;
 	}
 }
