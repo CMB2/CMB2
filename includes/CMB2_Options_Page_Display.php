@@ -21,7 +21,7 @@ class CMB2_Options_Page_Display {
 	/**
 	 * Options key
 	 *
-	 * @var string
+	 * @var   string
 	 * @since 2.XXX
 	 */
 	protected $option_key = '';
@@ -29,7 +29,7 @@ class CMB2_Options_Page_Display {
 	/**
 	 * The page id, same as menu_slug
 	 *
-	 * @var string
+	 * @var   string
 	 * @since 2.XXX
 	 */
 	protected $page = '';
@@ -37,7 +37,7 @@ class CMB2_Options_Page_Display {
 	/**
 	 * Shared cmb->prop values used on this page. This array is merged with passed-in $props
 	 *
-	 * @var array
+	 * @var   array
 	 * @since 2.XXX
 	 */
 	protected $shared = array(
@@ -52,7 +52,7 @@ class CMB2_Options_Page_Display {
 	 * Default arguments used by page() and page_form(). Reconciled with $shared on construct
 	 *
 	 * @since 2.XXX
-	 * @var array
+	 * @var   array
 	 */
 	protected $default_args = array();
 	
@@ -79,7 +79,7 @@ class CMB2_Options_Page_Display {
 	 * Returns property, allows checking state of class
 	 *
 	 * @since  2.XXX
-	 * @param  string $property Class property to fetch
+	 * @param  string      $property Class property to fetch
 	 * @return mixed|null
 	 */
 	public function __get( $property ) {
@@ -91,19 +91,27 @@ class CMB2_Options_Page_Display {
 	 * Merges default args. Does not set $this->default_args!
 	 *
 	 * @since  2.XXX
-	 * @param  string $option_key  Defaults to this->option_key
-	 * @param  array  $shared      Defaults to this->shared
+	 * @param  string $option_key Defaults to this->option_key
+	 * @param  string $page       Defaults to this->page
+	 * @param  array  $shared     Defaults to this->shared
 	 * @return array|mixed|null
 	 */
-	public function merge_default_args( $option_key = '', $shared = array() ) {
+	public function merge_default_args( $option_key = '', $page = '', $shared = array() ) {
 		
 		$option_key = empty( $option_key ) || ! is_string( $option_key ) ?
 			$this->option_key : $option_key;
+		
+		$page = empty( $page ) || ! is_string( $page ) ?
+			$this->page : $page;
 		
 		$shared = ! is_array( $shared) || empty( $shared ) ?
 			$this->shared : array_merge( $this->shared, $shared );
 		
 		$default_args = array(
+			'checks'         => array(
+				'context' => array( 'edit_form_after_title', ),
+				'metaboxes' => array( null, array( 'side', 'normal', 'advanced' ), )
+			),
 			'option_key'     => $option_key,
 			'page_format'    => $shared['page_format'],
 			'simple_action'  => 'cmb2_options_simple_page',
@@ -118,10 +126,27 @@ class CMB2_Options_Page_Display {
 			'save_button'    => $shared['save_button'],
 			'reset_button'   => $shared['reset_button'],
 			'button_wrap'    => true,
-			'title'          => $shared['title']
+			'title'          => $shared['title'],
+			'page'           => $page,
 		);
 		
 		return $default_args;
+	}
+	
+	/**
+	 * Merges inserted page arguments with defaults.
+	 *
+	 * @since 2.XXX
+	 * @param array $inserted
+	 * @param array $defaults
+	 * @return array
+	 */
+	public function merge_inserted_args( $inserted = array(), $defaults = array() ) {
+		
+		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
+		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
+		
+		return array_replace_recursive( $defaults, $inserted );
 	}
 	
 	/**
@@ -133,8 +158,7 @@ class CMB2_Options_Page_Display {
 	 */
 	public function page( $inserted_args = array() ) {
 		
-		$inserted_args = ! is_array( $inserted_args ) ? (array) $inserted_args : $inserted_args;
-		$args = array_replace_recursive( $this->default_args, $inserted_args );
+		$args = $this->merge_inserted_args( $inserted_args );
 		
 		$before_html = $after_html = '';
 		
@@ -182,8 +206,7 @@ class CMB2_Options_Page_Display {
 	 */
 	public function page_form( $inserted_args = array() ) {
 		
-		$inserted_args = ! is_array( $inserted_args ) ? (array) $inserted_args : $inserted_args;
-		$args          = array_replace_recursive( $this->default_args, $inserted_args );
+		$args = $this->merge_inserted_args( $inserted_args );
 		
 		$id = 'cmb2-option-' . $args['option_key'];
 		$top_html = $bottom_html = '';
@@ -195,11 +218,8 @@ class CMB2_Options_Page_Display {
 		 * @since 2.XXX
 		 */
 		$form_id = apply_filters( 'cmb2_options_form_id', $id, $this );
-		
-		// No empty IDs
 		$form_id = empty( $form_id ) ? $id : $form_id;
 		
-		// opening form tag
 		$html = '<form action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" '
 		        . 'method="POST" id="' . esc_attr( $form_id ) . '" '
 		        . 'enctype="multipart/form-data" encoding="multipart/form-data">';
@@ -212,15 +232,11 @@ class CMB2_Options_Page_Display {
 		 */
 		$html .= apply_filters( 'cmb2_options_form_top', $top_html, $this );
 		
-		// Submit action hidden field
 		$html .= '<input type="hidden" name="action" value="' . esc_attr( $args['option_key'] ) . '">';
 		
-		// Add form, using the type specified
 		$html .= $args['page_format'] !== 'post' ?
-			$this->page_form_simple( $args['simple_action'] ) :
-			$this->page_form_post( $args['page_nonces'], $args['page_columns'], $args['page_boxes'] );
+			CMB2_Utils::do_void_action( array( $args['simple_action'] ) ) : $this->page_form_post( $args );
 		
-		// Get save button
 		$html .= $this->save_button( $args['save_button'], $args['reset_button'], $args['button_wrap'] );
 		
 		/**
@@ -237,73 +253,44 @@ class CMB2_Options_Page_Display {
 	}
 	
 	/**
-	 * Simple options page layout; the format originally output by CMB2_Options_Hookup.
-	 * Note multiple metaboxes in this format visually appear as one large metabox
-	 *
-	 * @since  2.XXX
-	 * @param  string  $action  Allows injecting the action, or removing it
-	 * @param  string  $page    Defaults to $this->page
-	 * @return string           Formatted HTML
-	 */
-	public function page_form_simple( $action = 'cmb2_options_simple_page', $page = '' ) {
-		
-		$html   = '';
-		$action = ! is_string( $action ) || empty( $action ) ? ''          : $action;
-		$page   = ! is_string( $page )   || empty( $page )   ? $this->page : $page;
-		
-		if ( $action ) {
-			ob_start();
-			do_action( $action, $page );
-			$html = ob_get_clean();
-		}
-		
-		return $html;
-	}
-	
-	/**
 	 * Post-editor style options page.
-	 *
 	 * Contexts 'before_permalink', 'after_title', 'after_editor' not supported.
 	 *
 	 * @since  2.XXX
-	 * @param  bool  $nonces Whether to return nonce fields
-	 * @param  int   $cols   Number of columns, defaults to $shared['page_columns']
-	 * @param  array $boxes  Array of strings to populate meta/context box locations. Merged with defaults.
-	 * @return string        Formatted HTML
+	 * @param  array  $inserted_args Allows injecting the page_form arguments
+	 * @return string                Formatted HTML
 	 */
-	public function page_form_post( $nonces = TRUE, $cols = 0, $boxes = array() ) {
+	public function page_form_post( $inserted_args = array() ) {
 		
-		$default_boxes = array(
-			'top'      => 'edit_form_after_title',
-			'side'     => 'side',
-			'normal'   => 'normal',
-			'advanced' => 'advanced',
-		);
-		$boxes         = is_array( $boxes ) ? $boxes : (array) $boxes;
-		$loc           = array_merge( $default_boxes, $boxes );
-		
-		$cols = intval( $cols ) < 1 ? $this->shared['page_columns'] : intval( $cols );
-		
+		$args = $this->merge_inserted_args( $inserted_args );
 		$html = '';
 		
 		// nonce fields
-		$html .= $this->page_form_post_nonces( $nonces );
+		$html .= $this->page_form_post_nonces( $args['page_nonces'] );
 		
 		// form_top context boxes
-		$html .= $this->page_form_post_context_boxes( $loc['top'] );
+		$html .= CMB2_Utils::do_void_action( array( $args['page_metaboxes']['top'],  ), $args['checks']['context'] );
 		
 		// main post area
 		$html .= '<div id="poststuff">';
-		$html .= '<div id="post-body" class="metabox-holder columns-' . $cols . '">';
+		$html .= '<div id="post-body" class="metabox-holder columns-' . $args['page_columns'] . '">';
 		
 		// optional sidebar
-		$html .= $this->page_form_post_sidebar( $cols, $loc['side'] );
+		$html .= $this->page_form_post_sidebar( $args );
 		
 		// main column
-		$html .= '<div id="postbox-container-' . $cols . '" class="postbox-container">';
+		$html .= '<div id="postbox-container-' . $args['page_columns'] . '" class="postbox-container">';
 		
-		$html .= $this->page_form_post_meta_boxes( $loc['normal'] );
-		$html .= $this->page_form_post_meta_boxes( $loc['advanced'] );
+		$html .= CMB2_Utils::do_void_action(
+			array( $args['page'], $args['page_metaboxes']['normal'], null ),
+			$args['checks']['metaboxes'],
+			'do_meta_boxes'
+		);
+		$html .= CMB2_Utils::do_void_action(
+			array( $args['page'], $args['page_metaboxes']['advanced'], null ),
+			$args['checks']['metaboxes'],
+			'do_meta_boxes'
+		);
 		
 		$html .= '</div>';
 		$html .= '</div>';
@@ -315,20 +302,24 @@ class CMB2_Options_Page_Display {
 	 * Adds optional sidebar to post-style form
 	 *
 	 * @since  2.XXX
-	 * @param  int    $cols Allow injection of columns for testing. Uses shared columns if not set
-	 * @param  string $side Allow injection of side box location
-	 * @return string
+	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @return string                Formatted HTML
 	 */
-	public function page_form_post_sidebar( $cols = 0, $side = 'side' ) {
+	public function page_form_post_sidebar( $inserted_args = array() ) {
+		
+		$args = $this->merge_inserted_args( $inserted_args );
 		
 		$html = '';
-		$cols = intval( $cols ) < 1 ? $this->shared['page_columns'] : intval( $cols );
 		
-		if ( $cols == 2 ) {
+		if ( $args['page_columns'] == 2 ) {
 			
 			$html .= '<div id="postbox-container-1" class="postbox-container">';
 			
-			$html .= $this->page_form_post_meta_boxes( $side );
+			$html .= CMB2_Utils::do_void_action(
+				array( $args['page'], $args['page_metaboxes']['side'], null ),
+				$args['checks']['metaboxes'],
+				'do_meta_boxes'
+			);
 			
 			$html .= '</div>';
 		}
@@ -349,52 +340,6 @@ class CMB2_Options_Page_Display {
 		
 		$html .= $nonces ? wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', FALSE, FALSE ) : '';
 		$html .= $nonces ? wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', FALSE, FALSE ) : '';
-		
-		return $html;
-	}
-	
-	/**
-	 * Returns CMB2 context boxes for a given location. Checks against allowed locations
-	 *
-	 * @since  2.XXX
-	 * @param  string $location
-	 * @return string
-	 */
-	public function page_form_post_context_boxes( $location = '' ) {
-		
-		$html = '';
-		$ok   = array( 'edit_form_after_title' );
-		
-		if ( empty( $location ) || ! is_string( $location ) || ! in_array( $location, $ok ) ) {
-			return $html;
-		}
-		
-		ob_start();
-		do_action( $location, $this->page );
-		$html .= ob_get_clean();
-		
-		return $html;
-	}
-	
-	/**
-	 * Returns WP do_meta_boxes output for a given location. Checks against allowable locations.
-	 *
-	 * @since  2.XXX
-	 * @param  string $location Meta box context
-	 * @return string
-	 */
-	public function page_form_post_meta_boxes( $location = '' ) {
-		
-		$html = '';
-		$ok   = array( 'side', 'normal', 'advanced' );
-		
-		if ( empty( $location ) || ! is_string( $location ) || ! in_array( $location, $ok ) ) {
-			return $html;
-		}
-		
-		ob_start();
-		do_meta_boxes( $this->page, $location, NULL );
-		$html .= ob_get_clean();
 		
 		return $html;
 	}
