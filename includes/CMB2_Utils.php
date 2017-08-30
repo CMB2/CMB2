@@ -837,22 +837,48 @@ class CMB2_Utils {
 		
 		$ok = true;
 		
-		if ( empty( $checks ) || ! is_array( $args ) || ! is_array( $checks ) || ! is_bool( $skip )) {
+		if ( empty( $checks ) || ! is_array( $args ) || ! is_array( $checks ) || ! is_bool( $skip ) ) {
 			return $ok;
 		}
 		
-		foreach ( $args as $key => $value ) {
+		// convert all keys to strings to eliminate possibilty of loose type checking
+		$n_args = array();
+		$n_chks = array();
+		
+		foreach( $args as $key => $val ) {
+			$n_args[ 'zzz' . $key ] = $val;
+		}
+		foreach( $checks as $key => $val ) {
+			$n_chks[ 'zzz' . $key ] = $val;
+		}
+		
+		// allow for null values to have been set in arrays
+		$defined        = get_defined_vars();
+		$defined_checks = $defined['n_chks'];
+		
+		foreach ( $n_args as $key => $value ) {
 			
-			$defined = get_defined_vars();
-			$isset   = array_key_exists( $key, $defined['checks'] );
-			
-			if ( $isset && ( ( $skip && ! is_null( $checks[ $key ] ) ) || ! $skip  ) )  {
-				if (
-					( is_array( $checks[ $key ] ) && ! in_array( $value, $checks[ $key ], true ) )
-					|| (
-						! is_array( $checks[ $key ] )
-						&& ( gettype( $value ) != gettype( $checks[ $key ] ) || $value !== $checks[ $key ] )
-					)
+			$isset = array_key_exists( $key, $defined_checks );
+
+			/*
+			 * Check $value only if these two conditions are met (no check available? $value is ok):
+			 * 1: $n_arg key exists in $n_chk (as defined by bool $isset)
+			 * 2: One of these conditions is met:
+			 *    - value isn't null and $skip is true
+			 *    - $skip is false
+			 */
+			if ( $isset && (  (  $skip && ! is_null( $n_chks[ $key ] )  ) || ! $skip )  )  {
+				
+				/*
+				 * Value is NOT ok if either of these two conditions is true:
+				 * 1: check is an array of possibilities, and $value isn't in that array
+				 * 2: check is not an array, and one of these conditions is met:
+				 *    - the var type of $value does not match the check var type
+				 *    - $value does not match the check value
+				 */
+				if ( ( is_array( $n_chks[ $key ] ) && ! in_array( $value, $n_chks[ $key ], true ) )
+					|| ( ! is_array( $n_chks[ $key ] )
+						&& ( gettype( $value ) != gettype( $n_chks[ $key ] ) || $value !== $n_chks[ $key ] ) )
 				) {
 					$ok = false;
 					break;
