@@ -817,23 +817,28 @@ class CMB2_Utils {
 	 * Checks arguments array against checks array to see if the argument should be allowed. Works with string
 	 * and numeric indexed arrays. Array keys are normalized to string keys.
 	 *
-	 * This uses strict type checking, '3' !== 3, 1 !== true, etc.
+	 * You can send an array of possible ok values for each argument:
+	 *   $args = [ 'myarg' => 'a' ]
+	 *   $check = [ 'myarg' => [ 'a', 'b', 'c' ] ]
+	 * And method will return true if the argument is in the check array.
+	 *
+	 * This uses strict type checking, '3' !== 3, 1 !== true, objects must be the same instance, etc.
 	 *
 	 * You can use null in the check array to have this method skip the argument if sending "plain" numeric arrays.
 	 * Turn this off by setting $skip to false.
 	 *
-	 * $args   = [ true, 3 ]
+	 *   $args   = [ true, 3 ]
 	 *
-	 * $checks = []                         true, nothing to check
-	 * $checks = [ true ]                   true, second argument not checked
-	 * $checks = [ true, null ]             true if $skip === true, false if $skip === false
-	 * $checks = [ 1 ]                      false, fails strict type checking
-	 * $checks = [ [ true ] ]               true - array check scalar value for multiple 'ok' values
-	 * $checks = [ null, 3 ]                true if $skip, false if ! $skip
-	 * $checks = [ false, 3 ]               false
-	 * $checks = [ true, "3" ]              false - type is checked
-	 * $checks = [ true, [ 2, 3 ] ]         true
-	 * $checks = [ true, [ 2, "3" ] ]       false
+	 *   $checks = []                         true, nothing to check
+	 *   $checks = [ true ]                   true, second argument not checked
+	 *   $checks = [ true, null ]             true if $skip === true, false if $skip === false
+	 *   $checks = [ 1 ]                      false, fails strict type checking
+	 *   $checks = [ [ true ] ]               true - array check scalar value for multiple 'ok' values
+	 *   $checks = [ null, 3 ]                true if $skip, false if ! $skip
+	 *   $checks = [ false, 3 ]               false
+	 *   $checks = [ true, "3" ]              false - type is checked
+	 *   $checks = [ true, [ 2, 3 ] ]         true
+	 *   $checks = [ true, [ 2, "3" ] ]       false
 	 *
 	 * @since  2.XXX
 	 * @param  array $args    arguments array
@@ -849,7 +854,7 @@ class CMB2_Utils {
 			return $ok;
 		}
 		
-		// convert all keys to strings to eliminate possibilty of loose type checking
+		// normalize by converting all keys to strings, eliminates possibilty of loose type checking on keys
 		$n_args = array();
 		$n_chks = array();
 		
@@ -860,37 +865,38 @@ class CMB2_Utils {
 			$n_chks[ 'zzz' . $key ] = $val;
 		}
 		
-		// allow for null values to have been set in arrays
+		// allow for null values in arrays
 		$defined        = get_defined_vars();
 		$defined_checks = $defined['n_chks'];
 		
 		foreach ( $n_args as $key => $value ) {
 			
-			$isset = array_key_exists( $key, $defined_checks );
-
-			/*
-			 * Check $value only if these two conditions are met (no check available? $value is ok):
-			 * 1: $n_arg key exists in $n_chk (as defined by bool $isset)
-			 * 2: One of these conditions is met:
-			 *    - value isn't null and $skip is true
-			 *    - $skip is false
-			 */
-			if ( $isset && (  (  $skip && ! is_null( $n_chks[ $key ] )  ) || ! $skip )  )  {
+			// if at any time this is set to false, the rest of the tests are skipped
+			$fail = true;
+			
+			// does the argument key exist in the check array?
+			$fail = $fail && array_key_exists( $key, $defined_checks );
+			
+			// if $skip is true, is the check value not null, or is $skip set to false?
+			$fail = $fail && ( $skip ? ! is_null( $n_chks[ $key ] ) : true );
+			
+			if ( $fail && is_array( $n_chks[ $key ] ) ) {
+			
+				// check if arg value exists in array of possible values, strict type checking
+				$fail = ! in_array( $value, $n_chks[ $key ], true );
 				
-				/*
-				 * Value is NOT ok if either of these two conditions is true:
-				 * 1: check is an array of possibilities, and $value isn't in that array
-				 * 2: check is not an array, and one of these conditions is met:
-				 *    - the var type of $value does not match the check var type
-				 *    - $value does not match the check value
-				 */
-				if ( ( is_array( $n_chks[ $key ] ) && ! in_array( $value, $n_chks[ $key ], true ) )
-					|| ( ! is_array( $n_chks[ $key ] )
-						&& ( gettype( $value ) != gettype( $n_chks[ $key ] ) || $value !== $n_chks[ $key ] ) )
-				) {
-					$ok = false;
-					break;
-				}
+			} else if ( $fail )  {
+				
+				// keep the fail flag set if types don't match
+				$fail = gettype( $value ) !== gettype( $n_chks[ $key ] );
+				
+				// if fail flag was turned off, make sure values match
+				$fail = $fail ? $fail : $value !== $n_chks[ $key ];
+			}
+			
+			if ( $fail ) {
+				$ok = false;
+				break;
 			}
 		}
 		
