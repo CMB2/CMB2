@@ -486,6 +486,10 @@ class CMB2_Sanitize {
 		// If there is no ID saved yet, try to get it from the url
 		if ( $this->value && ! $id_val ) {
 			$id_val = CMB2_Utils::image_id_from_url( $this->value );
+
+		// If there is an ID but user emptied the input value, remove the ID.
+		} elseif ( ! $this->value && $id_val ) {
+			$id_val = null;
 		}
 
 		return $id_field->save_field( $id_val );

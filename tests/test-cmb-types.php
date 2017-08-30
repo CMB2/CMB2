@@ -869,16 +869,16 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_file_field_after_value_update() {
-			update_post_meta( $this->post_id, $this->text_type_field['id'], get_permalink( $this->attachment_id ) );
-			update_post_meta( $this->post_id, $this->text_type_field['id'] . '_id', $this->attachment_id );
+		update_post_meta( $this->post_id, $this->text_type_field['id'], get_permalink( $this->attachment_id ) );
+		update_post_meta( $this->post_id, $this->text_type_field['id'] . '_id', $this->attachment_id );
 
-			$field_type = $this->get_field_type_object( array(
-				'type'         => 'file',
-				'preview_size' => array( 199, 199 ),
-			) );
+		$field_type = $this->get_field_type_object( array(
+			'type'         => 'file',
+			'preview_size' => array( 199, 199 ),
+		) );
 
-			$file_url = get_permalink( $this->attachment_id );
-			$file_name = $field_type->get_file_name_from_path( $file_url );
+		$file_url = get_permalink( $this->attachment_id );
+		$file_name = $field_type->get_file_name_from_path( $file_url );
 
 		$this->assertHTMLstringsAreEqual(
 			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
@@ -891,6 +891,30 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] . '_id' );
+	}
+
+	public function test_file_field_id_value_empty_after_input_value_empty() {
+		$field = $this->get_field_object( array(
+			'id' => 'test_value_input_empty',
+			'type' => 'file',
+		) );
+
+		$file_url = get_permalink( $this->attachment_id );
+		$field->save_field_from_data( array(
+			'test_value_input_empty' => $file_url,
+			'test_value_input_empty_id' => $this->attachment_id,
+		) );
+
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty', true ), $file_url );
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty_id', true ), (string) $this->attachment_id );
+
+		$field->save_field_from_data( array(
+			'test_value_input_empty' => '',
+			'test_value_input_empty_id' => $this->attachment_id,
+		) );
+
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty', true ), '' );
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty_id', true ), '' );
 	}
 
 	public function test_oembed_field() {
