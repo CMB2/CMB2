@@ -799,7 +799,7 @@ class CMB2_Utils {
 			|| empty( $args )
 			|| ! is_array( $args )
 			|| ! is_array( $checks )
-			|| ! self::do_void_action_arg_checks( $args, $checks )
+			|| ! self::check_args( $args, $checks )
 		) {
 			return $html;
 		}
@@ -815,25 +815,33 @@ class CMB2_Utils {
 	
 	/**
 	 * Checks arguments array against checks array to see if the argument should be allowed. Works with string
-	 * and numeric indexed arrays, as long as the arguments correspond.
+	 * and numeric indexed arrays. Array keys are normalized to string keys.
 	 *
-	 * $args = [ 'howdy', 'hello' ]
-	 * $checks = [ null, [ 'hi', 'hello' ] ]
+	 * This uses strict type checking, '3' !== 3, 1 !== true, etc.
 	 *
-	 * Passes, since [0] will be skipped, [1] 'hello' in check array.
+	 * You can use null in the check array to have this method skip the argument if sending "plain" numeric arrays.
+	 * Turn this off by setting $skip to false.
 	 *
-	 * $args = [ 'howdy', 'hello' ]
-	 * $checks = [ 'hi', [ 'hi', 'hello' ] ]
+	 * $args   = [ true, 3 ]
 	 *
-	 * Fails, since [0] $args and $check both have gettype value of 'string' and don't match
+	 * $checks = []                         true, nothing to check
+	 * $checks = [ true ]                   true, second argument not checked
+	 * $checks = [ true, null ]             true if $skip === true, false if $skip === false
+	 * $checks = [ 1 ]                      false, fails strict type checking
+	 * $checks = [ [ true ] ]               true - array check scalar value for multiple 'ok' values
+	 * $checks = [ null, 3 ]                true if $skip, false if ! $skip
+	 * $checks = [ false, 3 ]               false
+	 * $checks = [ true, "3" ]              false - type is checked
+	 * $checks = [ true, [ 2, 3 ] ]         true
+	 * $checks = [ true, [ 2, "3" ] ]       false
 	 *
 	 * @since  2.XXX
 	 * @param  array $args    arguments array
-	 * @param  array $checks  checks whose keys match the arguments to check against
-	 * @param  bool  $skip    true: check skipped if value is null
+	 * @param  array $checks  checks whose keys match the arguments to be checked
+	 * @param  bool  $skip    true: will skip check if
 	 * @return bool
 	 */
-	public static function do_void_action_arg_checks( $args = array(), $checks = array(), $skip = true ) {
+	public static function check_args( $args = array(), $checks = array(), $skip = true ) {
 		
 		$ok = true;
 		
