@@ -843,7 +843,7 @@ class CMB2_Utils {
 	 * @since  2.XXX
 	 * @param  array $args    arguments array
 	 * @param  array $checks  checks whose keys match the arguments to be checked
-	 * @param  bool  $skip    true: will skip check if
+	 * @param  bool  $skip    true: will skip check if check value is null
 	 * @return bool
 	 */
 	public static function check_args( $args = array(), $checks = array(), $skip = true ) {
@@ -901,5 +901,45 @@ class CMB2_Utils {
 		}
 		
 		return $ok;
+	}
+	
+	/**
+	 * Does array_replace_recursive, but with typematching set to strict.
+	 * Only exception is Array base values of null, which can be replaced if the $replace type doesn't match.
+	 * $newkeys set to false by default to prevent new keys from being introduced to $array
+	 *
+	 * @since  2.XXX
+	 * @param  array $array    Base array
+	 * @param  array $replace  Replacement values
+	 * @param  bool  $newkeys  Allow new keys to be added to base array
+	 * @return array
+	 */
+	public static function array_replace_recursive_strict( $array = array(), $replace = array(), $newkeys = false ) {
+	
+		// no point in going any further
+		if ( empty( $array ) || empty( $replace ) || ! is_array( $array ) || ! is_array( $replace ) ) {
+			return $array;
+		}
+		
+		// only use keys from replace present in $array if $newkeys is false
+		$replace = $newkeys ? $replace : array_intersect_key( $replace, $array );
+		
+		foreach ( $replace as $rkey => $rvalue ) {
+			
+			// will not replace the value if the var types don't match and the base array value is not null
+			if (
+				array_key_exists( $rkey, $array )
+				&& ! is_null( $array[ $rkey ] )
+				&& gettype( $rvalue ) !== gettype( $array[ $rkey ] )
+			) {
+				continue;
+			}
+			
+			$array[ $rkey ] = is_array( $rvalue ) ?
+				self::array_replace_recursive_strict( $array[ $rkey ], $rvalue, $newkeys ) :
+				$rvalue;
+		}
+		
+		return $array;
 	}
 }
