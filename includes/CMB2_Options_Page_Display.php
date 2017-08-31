@@ -70,7 +70,7 @@ class CMB2_Options_Page_Display {
 		$this->page       = (string) $page;
 		
 		$props        = ! is_array( $props ) ? (array) $props : $props;
-		$this->shared = array_merge( $this->shared, $props );
+		$this->shared = CMB2_Utils::array_replace_recursive_strict( $this->shared, $props );
 		
 		$this->default_args = $this->merge_default_args();
 	}
@@ -105,7 +105,7 @@ class CMB2_Options_Page_Display {
 			$this->page : $page;
 		
 		$shared = ! is_array( $shared) || empty( $shared ) ?
-			$this->shared : array_merge( $this->shared, $shared );
+			$this->shared : CMB2_Utils::array_replace_recursive_strict( $this->shared, $shared );
 		
 		$default_args = array(
 			'checks'         => array(
@@ -146,7 +146,7 @@ class CMB2_Options_Page_Display {
 		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
 		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
 		
-		return array_replace_recursive( $defaults, $inserted );
+		return CMB2_Utils::array_replace_recursive_strict( $defaults, $inserted );
 	}
 	
 	/**
@@ -173,8 +173,8 @@ class CMB2_Options_Page_Display {
 		
 		/**
 		 * 'cmb2_options_page_before' filter.
-		 * Allows inserting content before the page form, below the title. Any content passed in should be formatted
-		 * HTML ready to be echoed to page.
+		 * Allows inserting content before the page form, below the title. Any content passed in
+		 * should be formatted HTML to be echoed to page.
 		 *
 		 * @since 2.XXX
 		 */
@@ -185,13 +185,12 @@ class CMB2_Options_Page_Display {
 		
 		/**
 		 * 'cmb2_options_page_after' filter.
-		 * Allows inserting content after the page form. Content should be formatted HTML ready to be echoed to page.
+		 * Allows inserting content after the page form. Content should be formatted HTML to be echoed to page.
 		 *
 		 * @since 2.XXX
 		 */
 		$html .= apply_filters( 'cmb2_options_page_after', $after_html, $this );
 		
-		// close wrapper
 		$html .= '</div>';
 		
 		return $html;
@@ -233,11 +232,11 @@ class CMB2_Options_Page_Display {
 		$html .= apply_filters( 'cmb2_options_form_top', $top_html, $this );
 		
 		$html .= '<input type="hidden" name="action" value="' . esc_attr( $args['option_key'] ) . '">';
-		
+
 		$html .= $args['page_format'] !== 'post' ?
 			CMB2_Utils::do_void_action( array( $args['simple_action'] ) ) : $this->page_form_post( $args );
 		
-		$html .= $this->save_button( $args['save_button'], $args['reset_button'], $args['button_wrap'] );
+		$html .= $this->save_button( $args );
 		
 		/**
 		 * 'cmb2_options_form_bottom' filter
@@ -348,12 +347,16 @@ class CMB2_Options_Page_Display {
 	 * Save button. Optionally adds a reset button. Can set either or both.
 	 *
 	 * @since  2.XXX
-	 * @param  string $save_button  Text of saved button, uses shared['save_button'] as default
-	 * @param  string $reset_button Text of reset button, uses shared['reset_button'] as default
-	 * @param  bool   $button_wrap  Whether to add a wrapper or not
-	 * @return string               Formatted HTML
+	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @return string                Formatted HTML
 	 */
-	public function save_button( $save_button = '', $reset_button = '', $button_wrap = TRUE ) {
+	public function save_button( $inserted_args = array() ) {
+		
+		$args = $this->merge_inserted_args( $inserted_args );
+		
+		$save_button  = $args['save_button'];
+		$reset_button = $args['reset_button'];
+		$button_wrap  = $args['button_wrap'];
 		
 		$save_button = empty( $save_button ) ? $this->shared['save_button'] : $save_button;
 		$save_button = is_string( $save_button ) && ! empty( $save_button ) ? __( $save_button, 'cmb2' ) : '';
