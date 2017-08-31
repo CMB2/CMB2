@@ -1,7 +1,9 @@
 <?php
 
 /**
- * CMB2_Options_Page_Hookup object instance registry.
+ * CMB2_Page_Hookup object instance registry.
+ *
+ * @since 2.XXX
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -9,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Options_Pages {
+class CMB2_Pages {
 	
 	/**
 	 * Array of all page hookup objects
@@ -20,15 +22,15 @@ class CMB2_Options_Pages {
 	protected static $pages = array();
 	
 	/**
-	 * Add a CMB2_Options_Page_Hookup instance object to the registry.
+	 * Add a CMB2__Page_Hookup instance object to the registry.
 	 *
 	 * @since 2.XXX
-	 * @param CMB2_Options_Page_Hookup $page
+	 * @param CMB2_Page_Hookup $page
 	 * @return string
 	 */
-	public static function add( CMB2_Options_Page_Hookup $page ) {
+	public static function add( CMB2_Page_Hookup $page ) {
 		
-		if ( ! $page instanceof CMB2_Options_Page_Hookup ) {
+		if ( ! $page instanceof CMB2_Page_Hookup ) {
 			return false;
 		}
 		
@@ -38,11 +40,11 @@ class CMB2_Options_Pages {
 	}
 	
 	/**
-	 * Retrieve a CMB2_Options_Page_Hookup instance by cmb id.
+	 * Retrieve a CMB2_Page_Hookup instance by cmb id.
 	 *
 	 * @since 2.XXX
-	 * @param string $page A CMB2_Options_Page_Hookup instance id.
-	 * @return CMB2_Options_Page_Hookup|bool  False or CMB2_Options_Page_Hookup object instance.
+	 * @param string $page A CMB2_Page_Hookup instance id.
+	 * @return CMB2_Page_Hookup|bool  False or CMB2__Page_Hookup object instance.
 	 */
 	public static function get( $page ) {
 		
@@ -54,10 +56,10 @@ class CMB2_Options_Pages {
 	}
 	
 	/**
-	 * Retrieve all CMB2_Options_Page_Hookup instances registered.
+	 * Retrieve all CMB2_Page_Hookup instances registered.
 	 *
 	 * @since  2.XXX
-	 * @return CMB2_Options_Page_Hookup[] Array of all registered CMB2_Options_Page_Hookup instances.
+	 * @return CMB2_Page_Hookup[] Array of all registered CMB2_Page_Hookup instances.
 	 */
 	public static function get_all() {
 		
@@ -65,11 +67,11 @@ class CMB2_Options_Pages {
 	}
 	
 	/**
-	 * Retrieve all CMB2_Options_Page_Hookup instances that have the same options key.
+	 * Retrieve all CMB2_Page_Hookup instances that have the same options key.
 	 *
 	 * @since  2.XXX
 	 * @param  string $key  Key matching options-key
-	 * @return bool|CMB2[]  Array of matching CMB2_Options_Page_Hookup instances
+	 * @return bool|CMB2[]  Array of matching CMB2__Page_Hookup instances
 	 */
 	public static function get_by_options_key( $key ) {
 		
@@ -89,10 +91,10 @@ class CMB2_Options_Pages {
 	}
 	
 	/**
-	 * Remove a CMB2_Options_Page_Hookup instance object from the registry.
+	 * Remove a CMB2_Page_Hookup instance object from the registry.
 	 *
 	 * @since 2.XXX
-	 * @param string $page A CMB2_Options_Page_Hookup instance id.
+	 * @param string $page A CMB2_Page_Hookup instance id.
 	 * @return bool
 	 */
 	public static function remove( $page ) {
