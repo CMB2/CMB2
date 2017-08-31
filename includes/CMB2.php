@@ -119,7 +119,7 @@ class CMB2 extends CMB2_Base {
 		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
 		 * options page. The last box which has the parameter set will override any previous box values.
 		 *
-		 * CMB_Options_Page_Hookup() will set the value shown before the pipe as the default if the property is not
+		 * CMB_Page_Hookup() will set the value shown before the pipe as the default if the property is not
 		 * assigned to a box.
 		 *
 		 * 'menu_first_sub' allows overruling WP as to the label on the first submenu item of a top-level custom
