@@ -79,7 +79,7 @@ class CMB2_Options_Page_Display {
 	 * Returns property, allows checking state of class
 	 *
 	 * @since  2.XXX
-	 * @param  string      $property Class property to fetch
+	 * @param  string $property Class property to fetch
 	 * @return mixed|null
 	 */
 	public function __get( $property ) {
@@ -104,13 +104,13 @@ class CMB2_Options_Page_Display {
 		$page = empty( $page ) || ! is_string( $page ) ?
 			$this->page : $page;
 		
-		$shared = ! is_array( $shared) || empty( $shared ) ?
+		$shared = ! is_array( $shared ) || empty( $shared ) ?
 			$this->shared : CMB2_Utils::array_replace_recursive_strict( $this->shared, $shared );
 		
 		$default_args = array(
 			'checks'         => array(
-				'context' => array( 'edit_form_after_title', ),
-				'metaboxes' => array( null, array( 'side', 'normal', 'advanced' ), )
+				'context'   => array( 'edit_form_after_title', ),
+				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
 			),
 			'option_key'     => $option_key,
 			'page_format'    => $shared['page_format'],
@@ -125,7 +125,7 @@ class CMB2_Options_Page_Display {
 			),
 			'save_button'    => $shared['save_button'],
 			'reset_button'   => $shared['reset_button'],
-			'button_wrap'    => true,
+			'button_wrap'    => TRUE,
 			'title'          => $shared['title'],
 			'page'           => $page,
 		);
@@ -153,7 +153,7 @@ class CMB2_Options_Page_Display {
 	 * Display options-page output. Called from CMB2_Options_Hookup.
 	 *
 	 * @since  2.XXX
-	 * @param  array  $inserted_args Inserted argument array; keys should be in
+	 * @param  array $inserted_args Inserted argument array; keys should be in
 	 * @return string                Formatted HTML
 	 */
 	public function page( $inserted_args = array() ) {
@@ -207,7 +207,7 @@ class CMB2_Options_Page_Display {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
-		$id = 'cmb2-option-' . $args['option_key'];
+		$id       = 'cmb2-option-' . $args['option_key'];
 		$top_html = $bottom_html = '';
 		
 		/**
@@ -232,7 +232,7 @@ class CMB2_Options_Page_Display {
 		$html .= apply_filters( 'cmb2_options_form_top', $top_html, $this );
 		
 		$html .= '<input type="hidden" name="action" value="' . esc_attr( $args['option_key'] ) . '">';
-
+		
 		$html .= $args['page_format'] !== 'post' ?
 			CMB2_Utils::do_void_action( array( $args['simple_action'] ) ) : $this->page_form_post( $args );
 		
@@ -256,19 +256,19 @@ class CMB2_Options_Page_Display {
 	 * Contexts 'before_permalink', 'after_title', 'after_editor' not supported.
 	 *
 	 * @since  2.XXX
-	 * @param  array  $inserted_args Allows injecting the page_form arguments
+	 * @param  array $inserted_args Allows injecting the page_form arguments
 	 * @return string                Formatted HTML
 	 */
 	public function page_form_post( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		$html = '';
-		
+
 		// nonce fields
 		$html .= $this->page_form_post_nonces( $args );
 		
 		// form_top context boxes
-		$html .= CMB2_Utils::do_void_action( array( $args['page_metaboxes']['top'],  ), $args['checks']['context'] );
+		$html .= CMB2_Utils::do_void_action( array( $args['page_metaboxes']['top'], ), $args['checks']['context'] );
 		
 		// main post area
 		$html .= '<div id="poststuff">';
@@ -281,12 +281,12 @@ class CMB2_Options_Page_Display {
 		$html .= '<div id="postbox-container-' . $args['page_columns'] . '" class="postbox-container">';
 		
 		$html .= CMB2_Utils::do_void_action(
-			array( $args['page'], $args['page_metaboxes']['normal'], null ),
+			array( $args['page'], $args['page_metaboxes']['normal'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
 		);
 		$html .= CMB2_Utils::do_void_action(
-			array( $args['page'], $args['page_metaboxes']['advanced'], null ),
+			array( $args['page'], $args['page_metaboxes']['advanced'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
 		);
@@ -301,7 +301,7 @@ class CMB2_Options_Page_Display {
 	 * Adds optional sidebar to post-style form
 	 *
 	 * @since  2.XXX
-	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
 	public function page_form_post_sidebar( $inserted_args = array() ) {
@@ -315,7 +315,7 @@ class CMB2_Options_Page_Display {
 			$html .= '<div id="postbox-container-1" class="postbox-container">';
 			
 			$html .= CMB2_Utils::do_void_action(
-				array( $args['page'], $args['page_metaboxes']['side'], null ),
+				array( $args['page'], $args['page_metaboxes']['side'], NULL ),
 				$args['checks']['metaboxes'],
 				'do_meta_boxes'
 			);
@@ -330,7 +330,7 @@ class CMB2_Options_Page_Display {
 	 * Returns WP nonce fields for post form
 	 *
 	 * @since  2.XXX
-	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
 	public function page_form_post_nonces( $inserted_args = array() ) {
@@ -349,7 +349,7 @@ class CMB2_Options_Page_Display {
 	 * Save button. Optionally adds a reset button. Can set either or both.
 	 *
 	 * @since  2.XXX
-	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
 	public function save_button( $inserted_args = array() ) {
