@@ -1,7 +1,14 @@
 <?php
 
 /**
- * Creates and displays an options page.
+ * Returns rendered HTML used within a WordPress settings page.
+ *
+ * Supports two types of page:
+ *   simple   "Old School" CMB2 style options page
+ *   post     Mimics the Post editor, with option side column, draggable metaboxes, etc.
+ *
+ * Most of the code on this page is used to generate a 'post' style page. The 'simple' style page
+ * simply calls an action hook set within CMB2_Page_Hookup.
  *
  * @since     2.XXX
  *
@@ -16,7 +23,7 @@
  * @property array  $shared
  * @property array  $default_args
  */
-class CMB2_Options_Page_Display {
+class CMB2_Page_Display {
 	
 	/**
 	 * Options key
@@ -70,7 +77,7 @@ class CMB2_Options_Page_Display {
 		$this->page       = (string) $page;
 		
 		$props        = ! is_array( $props ) ? (array) $props : $props;
-		$this->shared = CMB2_Utils::array_replace_recursive_strict( $this->shared, $props );
+		$this->shared = CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $props );
 		
 		$this->default_args = $this->merge_default_args();
 	}
@@ -152,7 +159,7 @@ class CMB2_Options_Page_Display {
 			$this->page : $page;
 		
 		$shared = ! is_array( $shared ) || empty( $shared ) ?
-			$this->shared : CMB2_Utils::array_replace_recursive_strict( $this->shared, $shared );
+			$this->shared : CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $shared );
 		
 		$default_args = array(
 			'checks'         => array(
@@ -193,7 +200,7 @@ class CMB2_Options_Page_Display {
 		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
 		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
 		
-		return CMB2_Utils::array_replace_recursive_strict( $defaults, $inserted );
+		return CMB2_Page_Utils::array_replace_recursive_strict( $defaults, $inserted );
 	}
 	
 	/**
@@ -234,7 +241,7 @@ class CMB2_Options_Page_Display {
 		$html .= '<input type="hidden" name="action" value="' . esc_attr( $args['option_key'] ) . '">';
 		
 		$html .= $args['page_format'] !== 'post' ?
-			CMB2_Utils::do_void_action( array( $args['simple_action'] ) ) : $this->page_form_post( $args );
+			CMB2_Page_Utils::do_void_action( array( $args['simple_action'] ) ) : $this->page_form_post( $args );
 		
 		$html .= $this->save_button( $args );
 		
@@ -268,7 +275,7 @@ class CMB2_Options_Page_Display {
 		$html .= $this->page_form_post_nonces( $args );
 		
 		// form_top context boxes
-		$html .= CMB2_Utils::do_void_action( array( $args['page_metaboxes']['top'], ), $args['checks']['context'] );
+		$html .= CMB2_Page_Utils::do_void_action( array( $args['page_metaboxes']['top'], ), $args['checks']['context'] );
 		
 		// main post area
 		$html .= '<div id="poststuff">';
@@ -280,12 +287,12 @@ class CMB2_Options_Page_Display {
 		// main column
 		$html .= '<div id="postbox-container-' . $args['page_columns'] . '" class="postbox-container">';
 		
-		$html .= CMB2_Utils::do_void_action(
+		$html .= CMB2_Page_Utils::do_void_action(
 			array( $args['page'], $args['page_metaboxes']['normal'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
 		);
-		$html .= CMB2_Utils::do_void_action(
+		$html .= CMB2_Page_Utils::do_void_action(
 			array( $args['page'], $args['page_metaboxes']['advanced'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
@@ -314,7 +321,7 @@ class CMB2_Options_Page_Display {
 			
 			$html .= '<div id="postbox-container-1" class="postbox-container">';
 			
-			$html .= CMB2_Utils::do_void_action(
+			$html .= CMB2_Page_Utils::do_void_action(
 				array( $args['page'], $args['page_metaboxes']['side'], NULL ),
 				$args['checks']['metaboxes'],
 				'do_meta_boxes'
