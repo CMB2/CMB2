@@ -88,68 +88,6 @@ class CMB2_Options_Page_Display {
 	}
 	
 	/**
-	 * Merges default args. Does not set $this->default_args!
-	 *
-	 * @since  2.XXX
-	 * @param  string $option_key Defaults to this->option_key
-	 * @param  string $page       Defaults to this->page
-	 * @param  array  $shared     Defaults to this->shared
-	 * @return array|mixed|null
-	 */
-	public function merge_default_args( $option_key = '', $page = '', $shared = array() ) {
-		
-		$option_key = empty( $option_key ) || ! is_string( $option_key ) ?
-			$this->option_key : $option_key;
-		
-		$page = empty( $page ) || ! is_string( $page ) ?
-			$this->page : $page;
-		
-		$shared = ! is_array( $shared ) || empty( $shared ) ?
-			$this->shared : CMB2_Utils::array_replace_recursive_strict( $this->shared, $shared );
-		
-		$default_args = array(
-			'checks'         => array(
-				'context'   => array( 'edit_form_after_title', ),
-				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
-			),
-			'option_key'     => $option_key,
-			'page_format'    => $shared['page_format'],
-			'simple_action'  => 'cmb2_options_simple_page',
-			'page_nonces'    => TRUE,
-			'page_columns'   => $shared['page_columns'],
-			'page_metaboxes' => array(
-				'top'      => 'edit_form_after_title',
-				'side'     => 'side',
-				'normal'   => 'normal',
-				'advanced' => 'advanced',
-			),
-			'save_button'    => $shared['save_button'],
-			'reset_button'   => $shared['reset_button'],
-			'button_wrap'    => TRUE,
-			'title'          => $shared['title'],
-			'page'           => $page,
-		);
-		
-		return $default_args;
-	}
-	
-	/**
-	 * Merges inserted page arguments with defaults.
-	 *
-	 * @since 2.XXX
-	 * @param array $inserted
-	 * @param array $defaults
-	 * @return array
-	 */
-	public function merge_inserted_args( $inserted = array(), $defaults = array() ) {
-		
-		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
-		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
-		
-		return CMB2_Utils::array_replace_recursive_strict( $defaults, $inserted );
-	}
-	
-	/**
 	 * Display options-page output. Called from CMB2_Options_Hookup.
 	 *
 	 * @since  2.XXX
@@ -197,13 +135,75 @@ class CMB2_Options_Page_Display {
 	}
 	
 	/**
+	 * Merges default args. Does not set $this->default_args!
+	 *
+	 * @since  2.XXX
+	 * @param  string $option_key Defaults to this->option_key
+	 * @param  string $page       Defaults to this->page
+	 * @param  array  $shared     Defaults to this->shared
+	 * @return array|mixed|null
+	 */
+	protected function merge_default_args( $option_key = '', $page = '', $shared = array() ) {
+		
+		$option_key = empty( $option_key ) || ! is_string( $option_key ) ?
+			$this->option_key : $option_key;
+		
+		$page = empty( $page ) || ! is_string( $page ) ?
+			$this->page : $page;
+		
+		$shared = ! is_array( $shared ) || empty( $shared ) ?
+			$this->shared : CMB2_Utils::array_replace_recursive_strict( $this->shared, $shared );
+		
+		$default_args = array(
+			'checks'         => array(
+				'context'   => array( 'edit_form_after_title', ),
+				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
+			),
+			'option_key'     => $option_key,
+			'page_format'    => $shared['page_format'],
+			'simple_action'  => 'cmb2_options_simple_page',
+			'page_nonces'    => TRUE,
+			'page_columns'   => $shared['page_columns'],
+			'page_metaboxes' => array(
+				'top'      => 'edit_form_after_title',
+				'side'     => 'side',
+				'normal'   => 'normal',
+				'advanced' => 'advanced',
+			),
+			'save_button'    => $shared['save_button'],
+			'reset_button'   => $shared['reset_button'],
+			'button_wrap'    => TRUE,
+			'title'          => $shared['title'],
+			'page'           => $page,
+		);
+		
+		return $default_args;
+	}
+	
+	/**
+	 * Merges inserted page arguments with defaults.
+	 *
+	 * @since 2.XXX
+	 * @param array $inserted
+	 * @param array $defaults
+	 * @return array
+	 */
+	protected function merge_inserted_args( $inserted = array(), $defaults = array() ) {
+		
+		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
+		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
+		
+		return CMB2_Utils::array_replace_recursive_strict( $defaults, $inserted );
+	}
+	
+	/**
 	 * Options page form. Adds post-style structure for pages where that is desired.
 	 *
 	 * @since  2.XXX
 	 * @param  array $inserted_args Allows injecting the page_form arguments
 	 * @return string               Formatted HTML
 	 */
-	public function page_form( $inserted_args = array() ) {
+	protected function page_form( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
@@ -259,7 +259,7 @@ class CMB2_Options_Page_Display {
 	 * @param  array $inserted_args Allows injecting the page_form arguments
 	 * @return string                Formatted HTML
 	 */
-	public function page_form_post( $inserted_args = array() ) {
+	protected function page_form_post( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		$html = '';
@@ -304,7 +304,7 @@ class CMB2_Options_Page_Display {
 	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
-	public function page_form_post_sidebar( $inserted_args = array() ) {
+	protected function page_form_post_sidebar( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
@@ -333,7 +333,7 @@ class CMB2_Options_Page_Display {
 	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
-	public function page_form_post_nonces( $inserted_args = array() ) {
+	protected function page_form_post_nonces( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
@@ -352,7 +352,7 @@ class CMB2_Options_Page_Display {
 	 * @param  array $inserted_args Allows inserting page arguments
 	 * @return string                Formatted HTML
 	 */
-	public function save_button( $inserted_args = array() ) {
+	protected function save_button( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
