@@ -921,12 +921,12 @@ class CMB2_Utils {
 			return $array;
 		}
 		
-		// only use keys from replace present in $array if $newkeys is false
+		// if $newkeys is false, only use values from $replace present in $array
 		$replace = $newkeys ? $replace : array_intersect_key( $replace, $array );
 		
 		foreach ( $replace as $rkey => $rvalue ) {
 			
-			// will not replace the value if the var types don't match and the base array value is not null
+			// will not replace the value if the var types don't match and the $array value is not null
 			if (
 				array_key_exists( $rkey, $array )
 				&& ! is_null( $array[ $rkey ] )
