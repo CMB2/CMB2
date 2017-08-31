@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Handles hooking CMB2 forms/metaboxes into WordPress admin "options" pages.
  * This class deals exclusively with actions on individual CMB2 boxes; it assigns the box to a specific
- * CMB_Options_Page_Hookup object based on $this->page_id
+ * CMB_Page_Hookup object based on $this->page_id
  *
  * @since     2.XXX Now allows multiple metaboxes on an options page; rewrite to separate concerns
  * @since     2.0.0
@@ -14,11 +13,11 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property  \CMB2                     $cmb
- * @property  string                    $option_key
- * @property  string                    $page_id
- * @property  \CMB2_Options_Page_Hookup $page
- * @property  array                     $hooks
+ * @property  \CMB2              $cmb
+ * @property  string             $option_key
+ * @property  string             $page_id
+ * @property  \CMB2_Page_Hookup  $page
+ * @property  array              $hooks
  */
 class CMB2_Options_Hookup extends CMB2_hookup {
 	
@@ -110,7 +109,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Page hookup object
 	 *
-	 * @var \CMB2_Options_Page_Hookup
+	 * @var \CMB2_Page_Hookup
 	 * @since 2.XXX
 	 */
 	protected $page;
@@ -126,13 +125,13 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Constructor, allows injection by tests of normally determined or set properties.
 	 *
-	 * @since 2.XXX                         Sets $this->page_id value, allows passing of default hooks and page
+	 * @since 2.XXX                  Sets $this->page_id value, allows passing of default hooks and page
 	 * @since 2.0.0
-	 * @param CMB2                          $cmb        The CMB2 object to hookup
-	 * @param string                        $option_key Option key box is displaying values for
-	 * @param string                        $page_id    Value of _GET['page'], normally set automatically
-	 * @param CMB2_Options_Page_Hookup|null $page       Page_Hookup instance for this box
-	 * @param array                         $hooks      Array of hook config arrays
+	 * @param CMB2                   $cmb        The CMB2 object to hookup
+	 * @param string                 $option_key Option key box is displaying values for
+	 * @param string                 $page_id    Value of _GET['page'], normally set automatically
+	 * @param CMB2_Page_Hookup|null  $page       Page_Hookup instance for this box
+	 * @param array                  $hooks      Array of hook config arrays
 	 */
 	public function __construct( CMB2 $cmb, $option_key, $page_id = '', $page = NULL, $hooks = array() ) {
 		
@@ -140,7 +139,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$this->option_key = (string) $option_key;
 		$this->page_id    = empty( $page_id ) ? $this->set_page() : (string) $page_id;
 		
-		if ( $page !== NULL && $page instanceOf CMB2_Options_Page_Hookup ) {
+		if ( $page !== NULL && $page instanceOf CMB2_Page_Hookup ) {
 			$this->page = $page;
 		}
 		
@@ -198,7 +197,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		
 		$echo = $echo !== FALSE;
 		
-		$returned = CMB2_Utils::do_void_action( array( 0, $this->object_type ), array( $this->cmb, 'show_form' ) );
+		$returned = CMB2_Page_Utils::do_void_action( array( 0, $this->object_type ), array( $this->cmb, 'show_form' ) );
 		
 		if ( $echo ) {
 			echo $returned;
@@ -212,15 +211,15 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since  2.XXX
 	 * @param  string $wp_menu_hook The first box to call the page hookup constructor will set it.
-	 * @return \CMB2_Options_Page_Hookup
+	 * @return \CMB2_Page_Hookup
 	 */
 	public function get_options_page_and_add_hookup( $wp_menu_hook ) {
 		
-		$admin_page = CMB2_Options_Pages::get( $this->page_id );
+		$admin_page = CMB2_Pages::get( $this->page_id );
 		
 		if ( $admin_page === FALSE ) {
-			$admin_page = new CMB2_Options_Page_Hookup( $this->page_id, $this->option_key, $wp_menu_hook );
-			CMB2_options_Pages::add( $admin_page );
+			$admin_page = new CMB2_Page_Hookup( $this->page_id, $this->option_key, $wp_menu_hook );
+			CMB2_Pages::add( $admin_page );
 		}
 		
 		$admin_page->add_hookup( $this );
@@ -264,7 +263,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 * By sending the hooks to the prepare_hooks_array method, partials will be returned with all keys set,
 		 * making life easier for any dev asking for the list via this filter.
 		 */
-		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks, $wp_menu_hook, $tokens );
+		$hooks = CMB2_Page_Utils::prepare_hooks_array( $this->hooks, $wp_menu_hook, $tokens );
 		
 		/**
 		 * 'cmb2_options_page_hooks_' filter.
@@ -275,7 +274,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
 		$hooks    = $hooks != $filtered ? $filtered : $hooks;
 		
-		$return = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $wp_menu_hook ) : FALSE;
+		$return = ! empty( $hooks ) ? CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks, $wp_menu_hook ) : FALSE;
 		
 		return $return;
 	}
