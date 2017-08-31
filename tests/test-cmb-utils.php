@@ -265,7 +265,6 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'three' => array( 1,2,3 ),
 		), $array );
 	}
-
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {
