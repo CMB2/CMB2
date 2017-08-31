@@ -20,7 +20,7 @@
  * @property  array  $shared
  * @property  string $wp_menu_hook
  */
-class CMB2_Options_Page_Hookup {
+class CMB2_Page_Hookup {
 	
 	/**
 	 * Has the page been hooked up?
@@ -120,7 +120,7 @@ class CMB2_Options_Page_Hookup {
 	protected $wp_menu_hook = '';
 	
 	/**
-	 * CMB2_Options_Page_Hookup constructor.
+	 * CMB2__Page_Hookup constructor.
 	 *
 	 * @since 2.XXX
 	 * @param string $page         The page slug, equivalent to $_GET['page']
@@ -179,7 +179,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  array $hookups Array of CMB2 box objects or CMB2 box ids, or mix
 	 * @return array
 	 */
-	public function add_hookups( $hookups = array() ) {
+	protected function add_hookups( $hookups = array() ) {
 		
 		$return = array();
 		
@@ -343,7 +343,7 @@ class CMB2_Options_Page_Hookup {
 		);
 		$hooks  = $this->hooks_array( 'add_to_menu', $tokens );
 		
-		$hooks = ! empty( $hooks ) ? CMB2_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
+		$hooks = ! empty( $hooks ) ? CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks ) : FALSE;
 		
 		return array(
 			'type'      => ( empty( $parent_slug ) ? 'menu' : 'submenu' ),
@@ -392,7 +392,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param \CMB2_Options_Hookup $hookup
 	 * @return mixed
 	 */
-	public function can_save( CMB2_Options_Hookup $hookup ) {
+	protected function can_save( CMB2_Options_Hookup $hookup ) {
 		
 		$can_save = (
 			$hookup->cmb->prop( 'save_fields' )
@@ -424,7 +424,7 @@ class CMB2_Options_Page_Hookup {
 	 * @since 2.XXX
 	 * @param \CMB2_Options_Hookup $hookup
 	 */
-	public function field_values_to_default( $hookup ) {
+	protected function field_values_to_default( $hookup ) {
 		
 		$fields = $hookup->cmb->prop( 'fields' );
 		
@@ -441,7 +441,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  int|string $cols Value of the shared property
 	 * @return int Value will be '1' or '2'
 	 */
-	public function find_page_columns( $cols = 'auto' ) {
+	protected function find_page_columns( $cols = 'auto' ) {
 		
 		// a value was passed, it can either be 2 or 1
 		if ( $cols !== 'auto' ) {
@@ -470,7 +470,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  bool   $empty_string_ok Whether an empty string is allowed to be returned
 	 * @return mixed
 	 */
-	public function get_page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
+	protected function get_page_prop( $property, $fallback = NULL, $empty_string_ok = TRUE ) {
 		
 		$prop = NULL;
 		$ok   = $empty_string_ok;
@@ -497,7 +497,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  array $passed Allows passing in an array for test purposes
 	 * @return array|bool
 	 */
-	public function get_shared_props( $passed = array() ) {
+	protected function get_shared_props( $passed = array() ) {
 		
 		if ( ( ! empty( $this->shared ) && empty( $passed ) ) || ! is_array( $passed ) ) {
 			return FALSE;
@@ -593,7 +593,7 @@ class CMB2_Options_Page_Hookup {
 		
 		// use CMB2_Utils method to add hooks
 		$return = ! empty( $hooks ) ?
-			CMB2_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
+			CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks, $this->wp_menu_hook ) : FALSE;
 		
 		return $return;
 	}
@@ -606,7 +606,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  array  $add_tokens Any additional tokens needed
 	 * @return array|bool
 	 */
-	public function hooks_array( $method, $add_tokens = array() ) {
+	protected function hooks_array( $method, $add_tokens = array() ) {
 		
 		$tokens = array(
 			'{THIS}'       => $this,
@@ -619,7 +619,7 @@ class CMB2_Options_Page_Hookup {
 		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
 		 * set, making them easier to understand for any dev asking for them by the filter below.
 		 */
-		$hooks = CMB2_Utils::prepare_hooks_array( $this->hooks[ $method ], $this->wp_menu_hook, $tokens );
+		$hooks = CMB2_Page_Utils::prepare_hooks_array( $this->hooks[ $method ], $this->wp_menu_hook, $tokens );
 		
 		/**
 		 * 'cmb2_options_page_hooks' filter.
@@ -638,7 +638,7 @@ class CMB2_Options_Page_Hookup {
 	 * @since  2.XXX
 	 * @return bool
 	 */
-	public function is_setting_registered() {
+	protected function is_setting_registered() {
 		
 		$option_key = empty( $option_key ) ? $this->option_key : $option_key;
 		
@@ -653,7 +653,7 @@ class CMB2_Options_Page_Hookup {
 	 * @since  2.XXX
 	 * @return bool
 	 */
-	public function is_updated() {
+	protected function is_updated() {
 		
 		$up   = isset( $_GET['updated'] ) ? $_GET['updated'] : FALSE;
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : FALSE;
@@ -673,7 +673,7 @@ class CMB2_Options_Page_Hookup {
 	 * @param  array $passed Modified version
 	 * @return array
 	 */
-	public function merge_shared_props( $props, $passed ) {
+	protected function merge_shared_props( $props, $passed ) {
 		
 		if ( empty( $passed ) ) {
 			return $props;
@@ -741,7 +741,7 @@ class CMB2_Options_Page_Hookup {
 		$callback = $this->shared['display_cb'];
 		
 		if ( is_callable( $callback ) ) {
-			$html = CMB2_Utils::do_void_action( array( $this ), $callback );
+			$html = CMB2_Page_Utils::do_void_action( array( $this ), $callback );
 		} else {
 			$html = $this->render_html();
 		}
@@ -759,9 +759,9 @@ class CMB2_Options_Page_Hookup {
 	 * @since 2.XXX
 	 * @return string
 	 */
-	public function render_html() {
+	protected function render_html() {
 		
-		$notices = CMB2_Utils::do_void_action( array( $this->option_key . '-notices' ), 'settings_errors' );
+		$notices = CMB2_Page_Utils::do_void_action( array( $this->option_key . '-notices' ), 'settings_errors' );
 		
 		// Use first hookup in our array to trigger the style/js
 		$hookup = reset( $this->hookups );
@@ -773,7 +773,7 @@ class CMB2_Options_Page_Hookup {
 			$hookup::enqueue_cmb_js();
 		}
 		
-		$display = new CMB2_Options_Page_Display( $this->option_key, $this->page, $this->shared );
+		$display = new CMB2_Page_Display( $this->option_key, $this->page, $this->shared );
 		
 		return $notices . $display->page();
 	}
