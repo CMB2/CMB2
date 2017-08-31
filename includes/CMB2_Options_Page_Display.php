@@ -265,7 +265,7 @@ class CMB2_Options_Page_Display {
 		$html = '';
 		
 		// nonce fields
-		$html .= $this->page_form_post_nonces( $args['page_nonces'] );
+		$html .= $this->page_form_post_nonces( $args );
 		
 		// form_top context boxes
 		$html .= CMB2_Utils::do_void_action( array( $args['page_metaboxes']['top'],  ), $args['checks']['context'] );
@@ -330,15 +330,17 @@ class CMB2_Options_Page_Display {
 	 * Returns WP nonce fields for post form
 	 *
 	 * @since  2.XXX
-	 * @param  bool $nonces Whether to return nonce fields
-	 * @return string
+	 * @param  array  $inserted_args Allows inserting page arguments
+	 * @return string                Formatted HTML
 	 */
-	public function page_form_post_nonces( $nonces = TRUE ) {
+	public function page_form_post_nonces( $inserted_args = array() ) {
+		
+		$args = $this->merge_inserted_args( $inserted_args );
 		
 		$html = '';
 		
-		$html .= $nonces ? wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', FALSE, FALSE ) : '';
-		$html .= $nonces ? wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', FALSE, FALSE ) : '';
+		$html .= $args['page_nonces'] ? wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', FALSE, FALSE ) : '';
+		$html .= $args['page_nonces'] ? wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', FALSE, FALSE ) : '';
 		
 		return $html;
 	}
