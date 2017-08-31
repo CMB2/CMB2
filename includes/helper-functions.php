@@ -23,6 +23,7 @@ function cmb2_dir( $path = '' ) {
 /**
  * Autoloads files with CMB2 classes when needed
  *
+ * @since  2.XXX  Added 'pages' path
  * @since  1.0.0
  * @param  string $class_name Name of the class being requested
  */
@@ -39,6 +40,10 @@ function cmb2_autoload_classes( $class_name ) {
 
 	if ( 'CMB2_REST' === $class_name || 0 === strpos( $class_name, 'CMB2_REST_' ) ) {
 		$path .= '/rest-api';
+	}
+	
+	if ( 'CMB2_Pages' === $class_name || 0 === strpos( $class_name, 'CMB2_Page_' ) ) {
+		$path .= '/pages';
 	}
 
 	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
