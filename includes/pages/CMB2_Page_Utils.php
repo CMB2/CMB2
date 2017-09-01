@@ -1,8 +1,9 @@
 <?php
+
 /**
  * CMB2 Page Utilities
  *
- * @since  2.XXX
+ * @since     2.XXX
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -36,10 +37,10 @@ class CMB2_Page_Utils {
 	 * @param  array       $tokens       Array of tokens, if substituting tokens.
 	 * @return array|bool
 	 */
-	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = null, $tokens = array() ) {
+	public static function prepare_hooks_array( $raw_hooks = array(), $default_hook = NULL, $tokens = array() ) {
 		
 		$hooks        = array();
-		$default_hook = empty( $default_hook ) ? null : $default_hook;
+		$default_hook = empty( $default_hook ) ? NULL : $default_hook;
 		
 		// Ensure return from filter is not empty and is an array, or no hook is set
 		if ( empty( $raw_hooks ) || ! is_array( $raw_hooks ) ) {
@@ -53,13 +54,13 @@ class CMB2_Page_Utils {
 			$cfg = ! empty( $tokens ) ? self::replace_tokens_in_array( $cfg, $tokens ) : $cfg;
 			
 			// set missing values to default values
-			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )       ? $cfg['id']             : NULL;
-			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] )     ? $cfg['hook']           : $default_hook;
-			$hooks[ $h ]['only_if']  =   isset( $cfg['only_if'] )  ? $cfg['only_if']        : true;
-			$hooks[ $h ]['type']     = ! empty( $cfg['type'] )     ? (string) $cfg['type']  : 'action';
+			$hooks[ $h ]['id']       = ! empty( $cfg['id'] ) ? $cfg['id'] : NULL;
+			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] ) ? $cfg['hook'] : $default_hook;
+			$hooks[ $h ]['only_if']  = isset( $cfg['only_if'] ) ? $cfg['only_if'] : TRUE;
+			$hooks[ $h ]['type']     = ! empty( $cfg['type'] ) ? (string) $cfg['type'] : 'action';
 			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] ) ? (int) $cfg['priority'] : 10;
-			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )     ? (int) $cfg['args']     : 1;
-			$hooks[ $h ]['call']     = ! empty( $cfg['call'] )     ? $cfg['call']           : null;
+			$hooks[ $h ]['args']     = ! empty( $cfg['args'] ) ? (int) $cfg['args'] : 1;
+			$hooks[ $h ]['call']     = ! empty( $cfg['call'] ) ? $cfg['call'] : NULL;
 			
 			// checks of values, remove the hook from the array if anything is true
 			if (
@@ -81,18 +82,18 @@ class CMB2_Page_Utils {
 	 * Sends arrays to above method to normalize them.
 	 *
 	 * @since  2.XXX
-	 * @param  array       $hooks         Array of hook configuration arrays
-	 * @param  string|null $default_hook  Default hook which will be used if not in configured items
-	 * @param  array       $tokens        Array of tokens to substitute
+	 * @param  array       $hooks        Array of hook configuration arrays
+	 * @param  string|null $default_hook Default hook which will be used if not in configured items
+	 * @param  array       $tokens       Array of tokens to substitute
 	 * @return array|bool
 	 */
-	public static function add_wp_hooks_from_config_array( $hooks = array(), $default_hook = null, $tokens = array() ) {
+	public static function add_wp_hooks_from_config_array( $hooks = array(), $default_hook = NULL, $tokens = array() ) {
 		
 		$return = array();
 		$hooks  = self::prepare_hooks_array( $hooks, $default_hook, $tokens );
 		
 		if ( ! is_array( $hooks ) || empty( $hooks ) ) {
-			return false;
+			return FALSE;
 		}
 		
 		foreach ( $hooks as $h ) {
@@ -104,7 +105,7 @@ class CMB2_Page_Utils {
 			$wp_call( $h['hook'], $h['call'], $h['priority'], $h['args'] );
 			
 			// Add to the "yes, this was set" return value
-			$return[] = array(  $h['hook']  => $h['id'] );
+			$return[] = array( $h['hook'] => $h['id'] );
 		}
 		
 		return $return;
@@ -122,12 +123,12 @@ class CMB2_Page_Utils {
 	 *   $return = [ 'key1'      => array( 'hm' ),        'key2'      => 'Howdy partner'      ]
 	 *
 	 * @since  2.XXX
-	 * @param  array $array   Array to check for tokens.
-	 * @param  array $tokens  Tokens. Key should be the token, value what should be subbed
-	 * @param  bool  $keys    Whether to look for tokens in the array keys.
+	 * @param  array $array  Array to check for tokens.
+	 * @param  array $tokens Tokens. Key should be the token, value what should be subbed
+	 * @param  bool  $keys   Whether to look for tokens in the array keys.
 	 * @return array
 	 */
-	public static function replace_tokens_in_array( $array = array(), $tokens = array(), $keys = false ) {
+	public static function replace_tokens_in_array( $array = array(), $tokens = array(), $keys = FALSE ) {
 		
 		if ( empty( $array ) || empty( $tokens ) || ! is_array( $array ) || ! is_array( $tokens ) ) {
 			return $array;
@@ -166,6 +167,7 @@ class CMB2_Page_Utils {
 			}
 			$return[ $ret_key ] = $ret_val;
 		}
+		
 		return $return;
 	}
 	
@@ -234,14 +236,14 @@ class CMB2_Page_Utils {
 	 *   $checks = [ true, [ 2, "3" ] ]       false
 	 *
 	 * @since  2.XXX
-	 * @param  array $args    arguments array
-	 * @param  array $checks  checks whose keys match the arguments to be checked
-	 * @param  bool  $skip    true: will skip check if check value is null
+	 * @param  array $args   arguments array
+	 * @param  array $checks checks whose keys match the arguments to be checked
+	 * @param  bool  $skip   true: will skip check if check value is null
 	 * @return bool
 	 */
-	public static function check_args( $args = array(), $checks = array(), $skip = true ) {
+	public static function check_args( $args = array(), $checks = array(), $skip = TRUE ) {
 		
-		$ok = true;
+		$ok = TRUE;
 		
 		if ( empty( $checks ) || ! is_array( $args ) || ! is_array( $checks ) || ! is_bool( $skip ) ) {
 			return $ok;
@@ -251,10 +253,10 @@ class CMB2_Page_Utils {
 		$n_args = array();
 		$n_chks = array();
 		
-		foreach( $args as $key => $val ) {
+		foreach ( $args as $key => $val ) {
 			$n_args[ 'zzz' . $key ] = $val;
 		}
-		foreach( $checks as $key => $val ) {
+		foreach ( $checks as $key => $val ) {
 			$n_chks[ 'zzz' . $key ] = $val;
 		}
 		
@@ -265,20 +267,20 @@ class CMB2_Page_Utils {
 		foreach ( $n_args as $key => $value ) {
 			
 			// if at any time this is set to false, the rest of the tests are skipped
-			$fail = true;
+			$fail = TRUE;
 			
 			// does the argument key exist in the check array?
 			$fail = $fail && array_key_exists( $key, $defined_checks );
 			
 			// if $skip is true, is the check value not null, or is $skip set to false?
-			$fail = $fail && ( $skip ? ! is_null( $n_chks[ $key ] ) : true );
+			$fail = $fail && ( $skip ? ! is_null( $n_chks[ $key ] ) : TRUE );
 			
 			if ( $fail && is_array( $n_chks[ $key ] ) ) {
-			
-				// check if arg value exists in array of possible values, strict type checking
-				$fail = ! in_array( $value, $n_chks[ $key ], true );
 				
-			} else if ( $fail )  {
+				// check if arg value exists in array of possible values, strict type checking
+				$fail = ! in_array( $value, $n_chks[ $key ], TRUE );
+				
+			} else if ( $fail ) {
 				
 				// keep the fail flag set if types don't match
 				$fail = gettype( $value ) !== gettype( $n_chks[ $key ] );
@@ -288,7 +290,7 @@ class CMB2_Page_Utils {
 			}
 			
 			if ( $fail ) {
-				$ok = false;
+				$ok = FALSE;
 				break;
 			}
 		}
@@ -302,13 +304,13 @@ class CMB2_Page_Utils {
 	 * $newkeys set to false by default to prevent new keys from being introduced to $array
 	 *
 	 * @since  2.XXX
-	 * @param  array $array    Base array
-	 * @param  array $replace  Replacement values
-	 * @param  bool  $newkeys  Allow new keys to be added to base array
+	 * @param  array $array   Base array
+	 * @param  array $replace Replacement values
+	 * @param  bool  $newkeys Allow new keys to be added to base array
 	 * @return array
 	 */
-	public static function array_replace_recursive_strict( $array = array(), $replace = array(), $newkeys = false ) {
-	
+	public static function array_replace_recursive_strict( $array = array(), $replace = array(), $newkeys = FALSE ) {
+		
 		// no point in going any further
 		if ( empty( $array ) || empty( $replace ) || ! is_array( $array ) || ! is_array( $replace ) ) {
 			return $array;
