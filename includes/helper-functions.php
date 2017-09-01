@@ -42,7 +42,7 @@ function cmb2_autoload_classes( $class_name ) {
 		$path .= '/rest-api';
 	}
 	
-	if ( 'CMB2_Pages' === $class_name || 0 === strpos( $class_name, 'CMB2_Page_' ) ) {
+	if ( 'CMB2_Pages' === $class_name || 'CMB2_Page' === $class_name  || 0 === strpos( $class_name, 'CMB2_Page_' ) ) {
 		$path .= '/pages';
 	}
 
