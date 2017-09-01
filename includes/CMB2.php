@@ -1,6 +1,7 @@
 <?php
 /**
  * CMB2 - The core metabox object
+ * The main CMB2 object for storing box data/properties.
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -9,14 +10,10 @@
  * @link      https://cmb2.io
  *
  * @property-read string $cmb_id
- * @property-read array $meta_box
- * @property-read array $updated
- * @property-read bool  $has_columns
- * @property-read array $tax_metaboxes_to_remove
- */
-
-/**
- * The main CMB2 object for storing box data/properties.
+ * @property-read array  $meta_box
+ * @property-read array  $updated
+ * @property-read bool   $has_columns
+ * @property-read array  $tax_metaboxes_to_remove
  */
 class CMB2 extends CMB2_Base {
 
@@ -111,9 +108,10 @@ class CMB2 extends CMB2_Base {
 		 *
 		 */
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'option_key'       => '', // Option key; used as admin menu slug, unless menu_slug is set
+		'option_key'       => '', // Option key; admin menu slug, unless menu_slug is set
 		'parent_slug'      => '', // Used as first param in add_submenu_page().
-		'menu_slug'        => '', // Alternative to using option key for menu slug; *requires* option_key also be set
+		'menu_slug'        => '', // Alternative menu slug; *requires* option_key also be set
+		'hookup_class'     => '', // object/class name: Call different CMB2_Page child, default 'CMB2_Page_Hookup'
 		
 		/*
 		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
@@ -650,12 +648,13 @@ class CMB2 extends CMB2_Base {
 
 		return $this;
 	}
-
+	
 	/**
 	 * Returns array of sanitized field values (without saving them)
 	 *
 	 * @since  2.0.3
 	 * @param  array $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
+	 * @return mixed
 	 */
 	public function get_sanitized_values( array $data_to_sanitize ) {
 		$this->data_to_save = $data_to_sanitize;
@@ -1722,5 +1721,4 @@ class CMB2 extends CMB2_Base {
 				return parent::__get( $property );
 		}
 	}
-
 }
