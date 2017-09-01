@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Handles hooking CMB2 forms/metaboxes into WordPress admin "options" pages.
  * This class deals exclusively with actions on individual CMB2 boxes; it assigns the box to a specific
@@ -13,11 +14,11 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property  \CMB2              $cmb
- * @property  string             $option_key
- * @property  string             $page_id
- * @property  \CMB2_Page_Hookup  $page
- * @property  array              $hooks
+ * @property-read \CMB2             $cmb
+ * @property-read string            $option_key
+ * @property-read string            $object_type
+ * @property      string            $page_id
+ * @property      \CMB2_Page_Hookup $page
  */
 class CMB2_Options_Hookup extends CMB2_hookup {
 	
@@ -28,67 +29,6 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since 2.XXX
 	 */
 	protected $cmb;
-	
-	/**
-	 * Array of hook configuration arrays for standard hooks added by this class.
-	 *
-	 * @var array
-	 * @since 2.XXX
-	 */
-	protected $hooks = array(
-		array(
-			'id'       => 'admin_page_hooks',
-			'call'     => array( '{PAGE}', 'hooks' ),
-			'hook'     => 'wp_loaded',
-			'priority' => 4,
-		),
-		array(
-			'id'      => 'add_meta_boxes',
-			'call'    => array( '{THIS}', 'add_options_metabox' ),
-			'hook'    => 'add_meta_boxes_{PAGE_ID}',
-			'only_if' => '{TYPE_CHECK}',
-		),
-		array(
-			'id'      => 'add_context_metaboxes',
-			'call'    => array( '{THIS}', 'add_context_metaboxes' ),
-			'hook'    => 'edit_form_top',
-			'only_if' => '{CONTEXT_CHECK}',
-		),
-		array(
-			'id'   => 'save_options',
-			'call' => array( '{PAGE}', 'save_options' ),
-			'hook' => 'admin_post_{OPT}',
-		),
-		array(
-			'id'      => 'cmb2_override_option_get',
-			'call'    => array( '{THIS}', 'network_get_override' ),
-			'hook'    => 'cmb2_override_option_get_{OPT}',
-			'only_if' => '{NETWORK_CHECK}',
-			'type'    => 'filter',
-			'args'    => 2,
-		),
-		array(
-			'id'      => 'cmb2_override_option_save',
-			'call'    => array( '{THIS}', 'network_update_override' ),
-			'hook'    => 'cmb2_override_option_save_{OPT}',
-			'only_if' => '{NETWORK_CHECK}',
-			'type'    => 'filter',
-			'args'    => 2,
-		),
-		array(
-			'id'   => 'cmb2_options_simple_page',
-			'hook' => 'cmb2_options_simple_page',
-			'call' => array( '{CMB}', 'show_form' ),
-			'only_if' => '{PAGE_CHECK}',
-			'args'    => 2,
-		),
-		array(
-			'id'   => 'postbox_classes',
-			'hook' => 'postbox_classes_{PAGE_ID}_{CMB_ID}',
-			'call' => array( '{THIS}', 'add_postbox_classes' ),
-			'type' => 'filter',
-		),
-	);
 	
 	/**
 	 * The object type we are performing the hookup for
@@ -125,43 +65,21 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Constructor, allows injection by tests of normally determined or set properties.
 	 *
-	 * @since 2.XXX                  Sets $this->page_id value, allows passing of default hooks and page
+	 * @since 2.XXX   Sets $this->page_id value
 	 * @since 2.0.0
-	 * @param CMB2                   $cmb        The CMB2 object to hookup
-	 * @param string                 $option_key Option key box is displaying values for
-	 * @param string                 $page_id    Value of _GET['page'], normally set automatically
-	 * @param CMB2_Page_Hookup|null  $page       Page_Hookup instance for this box
-	 * @param array                  $hooks      Array of hook config arrays
+	 * @param CMB2   $cmb        CMB2 object to hookup
+	 * @param string $option_key Option key box is displaying values for
 	 */
-	public function __construct( CMB2 $cmb, $option_key, $page_id = '', $page = NULL, $hooks = array() ) {
+	public function __construct( CMB2 $cmb, $option_key ) {
 		
 		$this->cmb        = $cmb;
 		$this->option_key = (string) $option_key;
-		$this->page_id    = empty( $page_id ) ? $this->set_page() : (string) $page_id;
-		
-		if ( $page !== NULL && $page instanceOf CMB2_Page_Hookup ) {
-			$this->page = $page;
-		}
-		
-		if ( ! empty( $hooks ) ) {
-			$this->hooks = $hooks;
-		}
+		$this->page_id    = $this->get_page_id();
 	}
 	
 	/**
-	 * Returns property, allows checking state of class
-	 *
-	 * @since  2.XXX
-	 * @param  string $property Class property to fetch
-	 * @return mixed|null
-	 */
-	public function __get( $property ) {
-		
-		return isset( $this->{$property} ) ? $this->{$property} : NULL;
-	}
-	
-	/**
-	 * Options display class will uses "do metaboxes" call. Args places into array to allow for testing.
+	 * Options display class will uses "do metaboxes" call.
+	 * Uses an array so that the call parameters can be returned.
 	 *
 	 * @since 2.XXX
 	 * @return bool|array
@@ -178,7 +96,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			array( $this, 'get_metabox' ),
 			$this->page_id,
 			$this->cmb->prop( 'context' ),
-			$this->cmb->prop( 'priority' )
+			$this->cmb->prop( 'priority' ),
 		);
 		
 		add_meta_box( $args[0], $args[1], $args[2], $args[3], $args[4], $args[5] );
@@ -187,7 +105,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 	
 	/**
-	 * Clone of metabox_callback w/o ID. Also returns a value for testing/non-echo.
+	 * Clone of metabox_callback w/o ID. Returns a value for testing/non-echo use.
 	 *
 	 * @since  2.XXX
 	 * @param  bool|string $echo
@@ -196,35 +114,13 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function get_metabox( $echo = TRUE ) {
 		
 		$echo = $echo !== FALSE;
-		
-		$returned = CMB2_Page_Utils::do_void_action( array( 0, $this->object_type ), array( $this->cmb, 'show_form' ) );
+		$ret  = CMB2_Page_Utils::do_void_action( array( 0, $this->object_type ), array( $this->cmb, 'show_form' ) );
 		
 		if ( $echo ) {
-			echo $returned;
+			echo $ret;
 		}
 		
-		return $returned;
-	}
-	
-	/**
-	 * Gets the options page and adds this metabox to it.
-	 *
-	 * @since  2.XXX
-	 * @param  string $wp_menu_hook The first box to call the page hookup constructor will set it.
-	 * @return \CMB2_Page_Hookup
-	 */
-	public function get_options_page_and_add_hookup( $wp_menu_hook ) {
-		
-		$admin_page = CMB2_Pages::get( $this->page_id );
-		
-		if ( $admin_page === FALSE ) {
-			$admin_page = new CMB2_Page_Hookup( $this->page_id, $this->option_key, $wp_menu_hook );
-			CMB2_Pages::add( $admin_page );
-		}
-		
-		$admin_page->add_hookup( $this );
-		
-		return $admin_page;
+		return $ret;
 	}
 	
 	/**
@@ -237,44 +133,27 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function hooks() {
 		
 		// Optional 'network_admin_menu' value can be passed here
-		$wp_menu_hook = $this->cmb->prop( 'admin_menu_hook', 'admin_menu' );
+		$menu_hook = $this->cmb->prop( 'admin_menu_hook', 'admin_menu' );
 		
 		// get the options page and add $this->cmb to it. Options page handles hooking into menus, etc.
-		$this->page = $this->get_options_page_and_add_hookup( $wp_menu_hook );
-		
-		// get the box context
-		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
-		
-		// Tokens to substitute into hooks array
-		$tokens = array(
-			'{THIS}'          => $this,
-			'{PAGE}'          => $this->page,
-			'{PAGE_ID}'       => $this->page_id,
-			'{CMB}'           => $this->cmb,
-			'{CMB_ID}'        => $this->cmb->cmb_id,
-			'{OPT}'           => $this->option_key,
-			'{CONTEXT_CHECK}' => $context == 'form_top',
-			'{PAGE_CHECK}'    => isset( $_GET['page'] ) && $_GET['page'] == $this->page_id,
-			'{NETWORK_CHECK}' => 'network_admin_menu' == $wp_menu_hook,
-			'{TYPE_CHECK}'    => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
-		);
+		$this->page = $this->get_page_hookup( $menu_hook );
 		
 		/*
 		 * By sending the hooks to the prepare_hooks_array method, partials will be returned with all keys set,
 		 * making life easier for any dev asking for the list via this filter.
 		 */
-		$hooks = CMB2_Page_Utils::prepare_hooks_array( $this->hooks, $wp_menu_hook, $tokens );
+		$hooks = CMB2_Page_Utils::prepare_hooks_array( $this->get_hooks( $menu_hook ), $menu_hook );
 		
 		/**
-		 * 'cmb2_options_page_hooks_' filter.
+		 * 'cmb2_options_hookup_hooks' filter.
 		 * Allows adding or modifying calls to hooks called by this page.
 		 *
 		 * @since 2.XXX
 		 */
-		$filtered = apply_filters( 'cmb2_options_page_hooks', $hooks, $this );
+		$filtered = apply_filters( 'cmb2_options_hookup_hooks', $hooks, $this );
 		$hooks    = $hooks != $filtered ? $filtered : $hooks;
 		
-		$return = ! empty( $hooks ) ? CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks, $wp_menu_hook ) : FALSE;
+		$return = ! empty( $hooks ) ? CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks, $menu_hook ) : FALSE;
 		
 		return $return;
 	}
@@ -291,7 +170,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function network_get_override( $test, $default = FALSE ) {
 		
 		return $test == 'cmb2_no_override_option_get' ?
-			get_site_option( $this->option_key, $default ) : false;
+			get_site_option( $this->option_key, $default ) : FALSE;
 	}
 	
 	/**
@@ -306,7 +185,112 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function network_update_override( $test, $option_value ) {
 		
 		return $test == 'cmb2_no_override_option_save' ?
-			update_site_option( $this->option_key, $option_value ) : false;
+			update_site_option( $this->option_key, $option_value ) : FALSE;
+	}
+	
+	/**
+	 * Gets the options page and adds this metabox to it. Allows alternative derived class of CMB2_Page to be
+	 * injected.
+	 *
+	 * @since  2.XXX
+	 * @param  string $wp_menu_hook The first box to call the page hookup constructor will set it.
+	 * @return bool|\CMB2_Page_Hookup
+	 */
+	protected function get_page_hookup( $wp_menu_hook ) {
+		
+		$admin_page   = CMB2_Pages::get( $this->page_id );
+		
+		if ( $admin_page === FALSE ) {
+			
+			$hookup_class = 'CMB2_Page_Hookup';
+			$class        = $this->cmb->prop( 'hookup_class', null );
+			
+			if (
+				! empty( $class )
+				&& is_string( $class )
+				&& class_exists( $class )
+				&& 'CMB2_Page' == get_parent_class( $class )
+			) {
+				$hookup_class = $class;
+			}
+			
+			if ( $class instanceof CMB2_Page ) {
+				$admin_page = $class;
+			} else if ( is_string( $hookup_class ) ) {
+				$admin_page = new $hookup_class( $this->page_id, $this->option_key, $wp_menu_hook );
+			}
+			
+			CMB2_Pages::add( $admin_page );
+		}
+		
+		if ( $admin_page !== false ) {
+			$admin_page->add_hookup( $this );
+		}
+		
+		return $admin_page;
+	}
+	
+	/**
+	 * Default hooks added by this class.
+	 *
+	 * @since  2.XXX
+	 * @param $wp_menu_hook
+	 * @return array
+	 */
+	protected function get_hooks( $wp_menu_hook ) {
+		
+		// get the box context
+		$context = $this->cmb->prop( 'context' ) ? $this->cmb->prop( 'context' ) : 'normal';
+		
+		return array(
+			array(
+				'id'       => 'admin_page_hooks',
+				'call'     => array( $this->page, 'hooks' ),
+				'hook'     => 'wp_loaded',
+				'priority' => 4,
+			),
+			array(
+				'id'      => 'add_meta_boxes',
+				'call'    => array( $this, 'add_options_metabox' ),
+				'hook'    => 'add_meta_boxes_' . $this->page_id,
+				'only_if' => in_array( $context, array( 'normal', 'advanced', 'side' ) ),
+			),
+			array(
+				'id'      => 'add_context_metaboxes',
+				'call'    => array( $this, 'add_context_metaboxes' ),
+				'hook'    => 'edit_form_top',
+				'only_if' => $context == 'form_top',
+			),
+			array(
+				'id'      => 'cmb2_override_option_get',
+				'call'    => array( $this, 'network_get_override' ),
+				'hook'    => 'cmb2_override_option_get_' . $this->option_key,
+				'only_if' => 'network_admin_menu' == $wp_menu_hook,
+				'type'    => 'filter',
+				'args'    => 2,
+			),
+			array(
+				'id'      => 'cmb2_override_option_save',
+				'call'    => array( $this, 'network_update_override' ),
+				'hook'    => 'cmb2_override_option_save_' . $this->option_key,
+				'only_if' => 'network_admin_menu' == $wp_menu_hook,
+				'type'    => 'filter',
+				'args'    => 2,
+			),
+			array(
+				'id'      => 'cmb2_options_simple_page',
+				'hook'    => 'cmb2_options_simple_page',
+				'call'    => array( $this->cmb, 'show_form' ),
+				'only_if' => isset( $_GET['page'] ) && $_GET['page'] == $this->page_id,
+				'args'    => 2,
+			),
+			array(
+				'id'   => 'postbox_classes',
+				'hook' => 'postbox_classes_' . $this->page_id . '_' . $this->cmb->cmb_id,
+				'call' => array( $this, 'add_postbox_classes' ),
+				'type' => 'filter',
+			),
+		);
 	}
 	
 	/**
@@ -316,13 +300,61 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since  2.XXX
 	 * @return string
 	 */
-	public function set_page() {
+	protected function get_page_id() {
 		
 		$menu_slug = $this->cmb->prop( 'menu_slug' );
 		
-		$page = empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
+		return empty( $menu_slug ) || ( $menu_slug && ! $this->cmb->prop( 'option_key' ) ) ?
 			$this->option_key : $menu_slug;
+	}
+	
+	/**
+	 * Returns property, allows checking state of class
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function __get( $property ) {
 		
-		return $page;
+		return isset( $this->{$property} ) ? $this->{$property} : NULL;
+	}
+	
+	/**
+	 * Allows setting of class properties, mainly used by unit tests.
+	 *
+	 * @since  2.XXX
+	 * @param  string $property
+	 * @param  mixed  $value
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function __set( $property, $value ) {
+		
+		switch ( $property ) {
+			
+			case 'page_id':
+				
+				if ( ! empty( $value ) && is_string( $value ) ) {
+					$this->page_id = $value;
+				}
+				
+				return $this->page_id;
+				break;
+			
+			case 'page':
+				
+				if ( $value !== NULL && $value instanceOf CMB2_Page_Hookup ) {
+					$this->page = $value;
+				}
+				
+				return $this->page;
+				break;
+			
+			default:
+				
+				throw new Exception( 'Cannot set ' . $property . ' in ' . __CLASS__ );
+				break;
+		}
 	}
 }
