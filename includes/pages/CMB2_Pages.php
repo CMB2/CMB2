@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CMB2_Page_Hookup object instance registry.
+ * CMB2_Page object instance registry.
  *
  * @since 2.XXX
  *
@@ -17,7 +17,7 @@ class CMB2_Pages {
 	 * Array of all page hookup objects
 	 *
 	 * @since 2.XXX
-	 * @var array
+	 * @var CMB2_Page[]
 	 */
 	protected static $pages = array();
 	
@@ -25,16 +25,16 @@ class CMB2_Pages {
 	 * Add a CMB2__Page_Hookup instance object to the registry.
 	 *
 	 * @since 2.XXX
-	 * @param CMB2_Page_Hookup $page
+	 * @param CMB2_Page $page
 	 * @return string
 	 */
-	public static function add( CMB2_Page_Hookup $page ) {
+	public static function add( CMB2_Page $page ) {
 		
-		if ( ! $page instanceof CMB2_Page_Hookup ) {
+		if ( ! $page instanceof CMB2_Page ) {
 			return false;
 		}
 		
-		self::$pages[ $page->page ] = $page;
+		self::$pages[ $page->page_id ] = $page;
 		
 		return $page->page;
 	}
@@ -44,7 +44,7 @@ class CMB2_Pages {
 	 *
 	 * @since 2.XXX
 	 * @param string $page A CMB2_Page_Hookup instance id.
-	 * @return CMB2_Page_Hookup|bool  False or CMB2__Page_Hookup object instance.
+	 * @return CMB2_Page|bool  False or CMB2_Page object instance.
 	 */
 	public static function get( $page ) {
 		
@@ -59,7 +59,7 @@ class CMB2_Pages {
 	 * Retrieve all CMB2_Page_Hookup instances registered.
 	 *
 	 * @since  2.XXX
-	 * @return CMB2_Page_Hookup[] Array of all registered CMB2_Page_Hookup instances.
+	 * @return CMB2_Page[] Array of all registered CMB2_Pageinstances.
 	 */
 	public static function get_all() {
 		
@@ -71,7 +71,7 @@ class CMB2_Pages {
 	 *
 	 * @since  2.XXX
 	 * @param  string $key  Key matching options-key
-	 * @return bool|CMB2[]  Array of matching CMB2__Page_Hookup instances
+	 * @return bool|CMB2[]  Array of matching CMB2_Page instances
 	 */
 	public static function get_by_options_key( $key ) {
 		
@@ -94,7 +94,7 @@ class CMB2_Pages {
 	 * Remove a CMB2_Page_Hookup instance object from the registry.
 	 *
 	 * @since 2.XXX
-	 * @param string $page A CMB2_Page_Hookup instance id.
+	 * @param string $page A CMB2_Page instance id.
 	 * @return bool
 	 */
 	public static function remove( $page ) {
