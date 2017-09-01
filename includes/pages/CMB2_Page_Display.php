@@ -19,7 +19,7 @@
  * @link      https://cmb2.io
  *
  * @property string $option_key
- * @property string $page
+ * @property string $page_id
  * @property array  $shared
  * @property array  $default_args
  */
@@ -39,7 +39,7 @@ class CMB2_Page_Display {
 	 * @var   string
 	 * @since 2.XXX
 	 */
-	protected $page = '';
+	protected $page_id = '';
 	
 	/**
 	 * Shared cmb->prop values used on this page. This array is merged with passed-in $props
@@ -74,7 +74,7 @@ class CMB2_Page_Display {
 	public function __construct( $key, $page, $props ) {
 		
 		$this->option_key = (string) $key;
-		$this->page       = (string) $page;
+		$this->page_id    = (string) $page;
 		
 		$props        = ! is_array( $props ) ? (array) $props : $props;
 		$this->shared = CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $props );
@@ -156,7 +156,7 @@ class CMB2_Page_Display {
 			$this->option_key : $option_key;
 		
 		$page = empty( $page ) || ! is_string( $page ) ?
-			$this->page : $page;
+			$this->page_id : $page;
 		
 		$shared = ! is_array( $shared ) || empty( $shared ) ?
 			$this->shared : CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $shared );
@@ -397,7 +397,7 @@ class CMB2_Page_Display {
 		 *
 		 * @since 2.XXX
 		 */
-		$html = apply_filters( 'cmb2_options_page_save_html', $html, $pieces, $this->page );
+		$html = apply_filters( 'cmb2_options_page_save_html', $html, $pieces, $this->page_id );
 		
 		return is_string( $html ) && ! empty( $html ) ? $html : '';
 	}
