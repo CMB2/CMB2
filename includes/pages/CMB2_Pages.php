@@ -1,7 +1,24 @@
 <?php
 
 /**
- * CMB2_Page object instance registry.
+ * Class CMB2_Pages
+ * Holds CMB2_Page instances.
+ *
+ * Uses: None
+ * Applies CMB2 Filters: None
+ *
+ * Public methods:
+ *     add()                 Add a new CMB2_Page instance
+ *     get()                 Retrive by CMB2_Page->page_id
+ *     get_all()             Get all instances
+ *     get_by_options_key()  Get all instances sharing the same CMB2_Page->option_key
+ *     remove()              Remove a CMB2_Page instance by page_id
+ *     clear()               Remove all instances
+ *
+ * Public methods accessed via callback: None
+ * Protected methods: None
+ * Private methods: None
+ * Magic methods: None
  *
  * @since 2.XXX
  *
@@ -17,15 +34,15 @@ class CMB2_Pages {
 	 * Array of all page hookup objects
 	 *
 	 * @since 2.XXX
-	 * @var CMB2_Page[]
+	 * @var   CMB2_Page[]
 	 */
 	protected static $pages = array();
 	
 	/**
 	 * Add a CMB2__Page_Hookup instance object to the registry.
 	 *
-	 * @since 2.XXX
-	 * @param CMB2_Page $page
+	 * @since  2.XXX
+	 * @param  CMB2_Page $page
 	 * @return string
 	 */
 	public static function add( CMB2_Page $page ) {
@@ -40,11 +57,11 @@ class CMB2_Pages {
 	}
 	
 	/**
-	 * Retrieve a CMB2_Page_Hookup instance by cmb id.
+	 * Retrieve a CMB2_Page_Hookup instance by cmb id
 	 *
-	 * @since 2.XXX
-	 * @param string $page A CMB2_Page_Hookup instance id.
-	 * @return CMB2_Page|bool  False or CMB2_Page object instance.
+	 * @since  2.XXX
+	 * @param  string         $page  CMB2_Page instance id
+	 * @return CMB2_Page|bool        False or CMB2_Page object instance.
 	 */
 	public static function get( $page ) {
 		
@@ -93,8 +110,8 @@ class CMB2_Pages {
 	/**
 	 * Remove a CMB2_Page_Hookup instance object from the registry.
 	 *
-	 * @since 2.XXX
-	 * @param string $page A CMB2_Page instance id.
+	 * @since  2.XXX
+	 * @param  string $page A CMB2_Page instance id.
 	 * @return bool
 	 */
 	public static function remove( $page ) {
