@@ -2,6 +2,23 @@
 
 /**
  * CMB2 Page Utilities
+ * Helper methods used by other classes.
+ *
+ * Uses: None
+ * Applies CMB2 Filters: None
+ *
+ * Public methods:
+ *     prepare_hooks_array()             Normalizes an array of 'hook' config arrays
+ *     add_wp_hooks_from_config_array()  Adds hooks passed via array of hook config arrays
+ *     replace_tokens_in_array()         Simple tokenizing engine, recursive
+ *     do_void_action()                  Allows returning string from void functions or actions
+ *     check_args()                      Checks passed arguments array against an array of OK values
+ *     array_replace_recursive_strict()  array_replace_recursive() with type checking
+ *
+ * Public methods accessed via callback: None
+ * Protected methods: None
+ * Private methods: None
+ * Magic methods: None
  *
  * @since     2.XXX
  *
