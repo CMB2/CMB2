@@ -1,14 +1,40 @@
 <?php
 
 /**
- * Returns rendered HTML used within a WordPress settings page.
+ * Class CMB2_Page_Display
+ * Renders HTML for options page. Most methods accept the same arguments array, which is constructed when
+ * class in instantated.
  *
- * Supports two types of page:
- *   simple   "Old School" CMB2 style options page
- *   post     Mimics the Post editor, with option side column, draggable metaboxes, etc.
+ * Uses:
+ *     CMB2_Page_Utils                 Static class, utility functions
  *
- * Most of the code on this page is used to generate a 'post' style page. The 'simple' style page
- * simply calls an action hook set within CMB2_Page_Hookup.
+ * Applies CMB2 Filters:
+ *     'cmb2_options_page_before'      Insert HTML before <form> tag
+ *     'cmb2_options_page_after'       Insert HTML after </form> tag
+ *     'cmb2_options_form_id'          Adjust the options form id
+ *     'cmb2_options_form_top'         Insert HTML just after <form> tag
+ *     'cmb2_options_form_bottom'      Insert HTML just before </form> tag
+ *     'cmb2_options_page_save_html'   Manipulate the HTML containing the Save and Reset buttons
+ *
+ * Public methods:
+ *     render()                        Get notices, adds needed CSS/JS, calls page_html()
+ *
+ * Public methods accessed via callback: None
+ *
+ * Protected methods:
+ *     merge_default_args()            Called by constructor to merge defaults with values in CMB2_Page instance
+ *     merge_inserted_args()           Called by all methods which accept args array, merges passed into defaults
+ *     page_html()                     Page wrapper. Calls page_form() and save_button()
+ *     page_form()                     Adds form. If page type is 'post', calls page_form_post()
+ *     page_form_post()                'post' style form, adds metaboxes, etc. Calls _sidebar(), _nonces()
+ *     page_form_post_sidebar()        'post' style sidebar and 'side' metaboxes, if configured
+ *     page_form_post_nonces()         'post' metabox nonces needed by WP
+ *     save_button()                   Generates 'save' and 'reset' buttons with optional wrapper.
+ *
+ * Private methods: None
+ *
+ * Magic methods:
+ *     __get()                         Magic getter which passes back a reference
  *
  * @since     2.XXX
  *
@@ -18,42 +44,17 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property string $option_key
- * @property string $page_id
- * @property array  $shared
- * @property array  $default_args
+ * @property-read array     $default_args
  */
 class CMB2_Page_Display {
 	
 	/**
-	 * Options key
+	 * Page Instance
 	 *
-	 * @var   string
 	 * @since 2.XXX
+	 * @var   CMB2_Page
 	 */
-	protected $option_key = '';
-	
-	/**
-	 * The page id, same as menu_slug
-	 *
-	 * @var   string
-	 * @since 2.XXX
-	 */
-	protected $page_id = '';
-	
-	/**
-	 * Shared cmb->prop values used on this page. This array is merged with passed-in $props
-	 *
-	 * @var   array
-	 * @since 2.XXX
-	 */
-	protected $shared = array(
-		'page_columns' => 1,
-		'page_format'  => 'simple',
-		'reset_button' => '',
-		'save_button'  => 'Save',
-		'title'        => '',
-	);
+	protected $page;
 	
 	/**
 	 * Default arguments used by page() and page_form(). Reconciled with $shared on construct
@@ -61,47 +62,120 @@ class CMB2_Page_Display {
 	 * @since 2.XXX
 	 * @var   array
 	 */
-	protected $default_args = array();
+	protected $default_args = array(
+		'checks'         => array(
+			'context'   => array( 'edit_form_after_title', ),
+			'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
+		),
+		'option_key'     => '',
+		'page_format'    => 'simple',
+		'simple_action'  => 'cmb2_options_simple_page',
+		'page_nonces'    => TRUE,
+		'page_columns'   => 1,
+		'page_metaboxes' => array(
+			'top'      => 'edit_form_after_title',
+			'side'     => 'side',
+			'normal'   => 'normal',
+			'advanced' => 'advanced',
+		),
+		'save_button'    => '',
+		'reset_button'   => '',
+		'button_wrap'    => TRUE,
+		'title'          => '',
+		'page_id'        => '',
+	);
 	
 	/**
 	 * CMB2_Options_Display constructor.
 	 *
 	 * @since 2.XXX
-	 * @param string $key   The options key
-	 * @param string $page  Page slug (also used by menu)
-	 * @param array  $props Shared cmb2->prop() values used by the page itself
+	 * @param CMB2_Page $page  Page slug (also used by menu)
 	 */
-	public function __construct( $key, $page, $props ) {
+	public function __construct( CMB2_Page $page ) {
 		
-		$this->option_key = (string) $key;
-		$this->page_id    = (string) $page;
-		
-		$props        = ! is_array( $props ) ? (array) $props : $props;
-		$this->shared = CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $props );
-		
+		$this->page         = $page;
 		$this->default_args = $this->merge_default_args();
 	}
 	
 	/**
-	 * Returns property, allows checking state of class
+	 * Public accessor to this class
+	 *
+	 * @since 2.XXX
+	 * @return string
+	 */
+	public function render() {
+		
+		$notices = CMB2_Page_Utils::do_void_action( array( $this->page->option_key . '-notices' ), 'settings_errors' );
+		
+		// Use first hookup in our array to trigger the style/js
+		$hookup = reset( $this->page->hookups );
+		
+		if ( $this->page->shared['cmb_styles'] ) {
+			$hookup::enqueue_cmb_css();
+		}
+		if ( $this->page->shared['enqueue_js'] ) {
+			$hookup::enqueue_cmb_js();
+		}
+		
+		return $notices . $this->page_html();
+	}
+	
+	
+	/**
+	 * Merges default args. Does not set $this->default_args!
 	 *
 	 * @since  2.XXX
-	 * @param  string $property Class property to fetch
-	 * @return mixed|null
+	 * @param  array $args
+	 *
+	 * @return array
 	 */
-	public function __get( $property ) {
+	protected function merge_default_args( $args = array() ) {
 		
-		return isset( $this->{$property} ) ? $this->{$property} : NULL;
+		$merged  = array(
+			'option_key'   => $this->page->option_key,
+			'page_format'  => $this->page->shared['page_format'],
+			'page_columns' => $this->page->shared['page_columns'],
+			'save_button'  => $this->page->shared['save_button'],
+			'reset_button' => $this->page->shared['reset_button'],
+			'title'        => $this->page->shared['title'],
+			'page_id'      => $this->page->page_id,
+		);
+		
+		// insert the values from the hookup object into the defaults
+		$merged = CMB2_Page_Utils::array_replace_recursive_strict( $this->default_args, $merged );
+		
+		// merge any inserted arguments
+		if ( ! empty( $args ) && is_array( $args ) ) {
+			$merged = CMB2_Page_Utils::array_replace_recursive_strict( $merged, $args );
+		}
+		
+		return $merged;
 	}
 	
 	/**
-	 * Display options-page output. Called from CMB2_Options_Hookup.
+	 * Merges inserted page arguments with defaults.
+	 *
+	 * @since 2.XXX
+	 * @param array $inserted
+	 * @param array $defaults
+	 * @return array
+	 */
+	protected function merge_inserted_args( $inserted = array(), $defaults = array() ) {
+		
+		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
+		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
+		
+		return CMB2_Page_Utils::array_replace_recursive_strict( $defaults, $inserted );
+	}
+	
+	/**
+	 * Display options-page output.
 	 *
 	 * @since  2.XXX
-	 * @param  array $inserted_args Inserted argument array; keys should be in
+	 * @param  array $inserted_args  Inserted argument array; keys should be in
 	 * @return string                Formatted HTML
 	 */
-	public function page( $inserted_args = array() ) {
+	protected function page_html( $inserted_args = array() ) {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		
@@ -139,68 +213,6 @@ class CMB2_Page_Display {
 		$html .= '</div>';
 		
 		return $html;
-	}
-	
-	/**
-	 * Merges default args. Does not set $this->default_args!
-	 *
-	 * @since  2.XXX
-	 * @param  string $option_key Defaults to this->option_key
-	 * @param  string $page       Defaults to this->page
-	 * @param  array  $shared     Defaults to this->shared
-	 * @return array|mixed|null
-	 */
-	protected function merge_default_args( $option_key = '', $page = '', $shared = array() ) {
-		
-		$option_key = empty( $option_key ) || ! is_string( $option_key ) ?
-			$this->option_key : $option_key;
-		
-		$page = empty( $page ) || ! is_string( $page ) ?
-			$this->page_id : $page;
-		
-		$shared = ! is_array( $shared ) || empty( $shared ) ?
-			$this->shared : CMB2_Page_Utils::array_replace_recursive_strict( $this->shared, $shared );
-		
-		$default_args = array(
-			'checks'         => array(
-				'context'   => array( 'edit_form_after_title', ),
-				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
-			),
-			'option_key'     => $option_key,
-			'page_format'    => $shared['page_format'],
-			'simple_action'  => 'cmb2_options_simple_page',
-			'page_nonces'    => TRUE,
-			'page_columns'   => $shared['page_columns'],
-			'page_metaboxes' => array(
-				'top'      => 'edit_form_after_title',
-				'side'     => 'side',
-				'normal'   => 'normal',
-				'advanced' => 'advanced',
-			),
-			'save_button'    => $shared['save_button'],
-			'reset_button'   => $shared['reset_button'],
-			'button_wrap'    => TRUE,
-			'title'          => $shared['title'],
-			'page'           => $page,
-		);
-		
-		return $default_args;
-	}
-	
-	/**
-	 * Merges inserted page arguments with defaults.
-	 *
-	 * @since 2.XXX
-	 * @param array $inserted
-	 * @param array $defaults
-	 * @return array
-	 */
-	protected function merge_inserted_args( $inserted = array(), $defaults = array() ) {
-		
-		$inserted = ! is_array( $inserted ) ? (array) $inserted : $inserted;
-		$defaults = ! is_array( $defaults ) || empty( $defaults ) ? $this->default_args : $defaults;
-		
-		return CMB2_Page_Utils::array_replace_recursive_strict( $defaults, $inserted );
 	}
 	
 	/**
@@ -288,12 +300,12 @@ class CMB2_Page_Display {
 		$html .= '<div id="postbox-container-' . $args['page_columns'] . '" class="postbox-container">';
 		
 		$html .= CMB2_Page_Utils::do_void_action(
-			array( $args['page'], $args['page_metaboxes']['normal'], NULL ),
+			array( $args['page_id'], $args['page_metaboxes']['normal'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
 		);
 		$html .= CMB2_Page_Utils::do_void_action(
-			array( $args['page'], $args['page_metaboxes']['advanced'], NULL ),
+			array( $args['page_id'], $args['page_metaboxes']['advanced'], NULL ),
 			$args['checks']['metaboxes'],
 			'do_meta_boxes'
 		);
@@ -322,7 +334,7 @@ class CMB2_Page_Display {
 			$html .= '<div id="postbox-container-1" class="postbox-container">';
 			
 			$html .= CMB2_Page_Utils::do_void_action(
-				array( $args['page'], $args['page_metaboxes']['side'], NULL ),
+				array( $args['page_id'], $args['page_metaboxes']['side'], NULL ),
 				$args['checks']['metaboxes'],
 				'do_meta_boxes'
 			);
@@ -400,5 +412,20 @@ class CMB2_Page_Display {
 		$html = apply_filters( 'cmb2_options_page_save_html', $html, $pieces, $this->page_id );
 		
 		return is_string( $html ) && ! empty( $html ) ? $html : '';
+	}
+	
+	/**
+	 * Returns property asked for. Note asking for any property with the method returning a reference
+	 * means a PHP warning or error, you have been warned!
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function &__get( $property ) {
+		
+		$return = isset( $this->{$property} ) ? $this->{$property} : NULL;
+		
+		return $return;
 	}
 }
