@@ -88,7 +88,7 @@ class CMB2_Page_Hooks {
 				array(
 					'id'   => 'register_setting',
 					'hook' => $this->page->wp_menu_hook,
-					'call' => array( $this, 'add_registered_setting' ),
+					'call' => array( $this->page, 'add_registered_setting' ),
 				),
 				
 				array(
