@@ -281,7 +281,7 @@ class CMB2_Page {
 				break;
 		}
 		
-		add_settings_error( $this->option_key . '-notices', '', __( $str, 'cmb2' ), $hook );
+		add_settings_error( $this->option_key . '-notices', 'cmb2', __( $str, 'cmb2' ), $hook );
 		
 		return $up;
 	}
