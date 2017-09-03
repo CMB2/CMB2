@@ -53,7 +53,7 @@ class CMB2_Pages {
 		
 		self::$pages[ $page->page_id ] = $page;
 		
-		return $page->page;
+		return $page->page_id;
 	}
 	
 	/**
