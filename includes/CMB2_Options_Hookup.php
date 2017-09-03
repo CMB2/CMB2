@@ -317,7 +317,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			),
 			array(
 				'id'   => 'postbox_classes',
-				'call' => array( $this, 'add_postbox_classes' ),
+				'call' => array( $this, 'postbox_classes' ),
 				'hook' => 'postbox_classes_' . $this->page_id . '_' . $this->cmb->cmb_id,
 				'type' => 'filter',
 			),
