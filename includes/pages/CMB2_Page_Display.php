@@ -44,7 +44,8 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property-read array     $default_args
+ * @property-read array      $default_args
+ * @property-read \CMB2_Page  $page
  */
 class CMB2_Page_Display {
 	
