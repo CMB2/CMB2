@@ -21,7 +21,9 @@
  *     hooks_array()                  Normalizes hooks, applies filter
  *
  * Private methods: None
- * Magic methods: None
+ *
+ * Magic methods:
+ *     __get()
  *
  * @since     2.XXX
  *
@@ -123,6 +125,7 @@ class CMB2_Page_Hooks {
 			),
 		);
 		
+		// page_hook is set after first call to this method
 		$when = $this->page->page_hook === '' ? 'early' : 'late';
 		
 		return $hooks[ $when ];
@@ -153,5 +156,20 @@ class CMB2_Page_Hooks {
 		$filtered = apply_filters( 'cmb2_options_pagehooks', $hooks, $this );
 		
 		return $hooks != $filtered ? $filtered : $hooks;
+	}
+	
+	/**
+	 * Returns property asked for. Note asking for any property with the method returning a reference
+	 * means a PHP warning or error, you have been warned!
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function &__get( $property ) {
+		
+		$return = isset( $this->{$property} ) ? $this->{$property} : NULL;
+		
+		return $return;
 	}
 }
