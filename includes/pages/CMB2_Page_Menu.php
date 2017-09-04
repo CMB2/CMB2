@@ -20,7 +20,9 @@
  *     menu_parameters()                Gets values needed from CMB2_Page instance
  *
  * Private methods: None
- * Magic methods: None
+ *
+ * Magic methods:
+ *     __get()
  *
  * @since     2.XXX
  *
@@ -56,21 +58,11 @@ class CMB2_Page_Menu {
 	 * @return array
 	 */
 	public function add_to_menu() {
-		
+
 		$return = array();
-		
-		// this class shouldn't be working at all if these are true, but just to be sure...
-		if ( empty( $this->page->page_id ) || empty( $this->page->hookups ) ) {
-			return $return;
-		}
-		
-		// get menu parameters
+
+		// get menu parameters; will always return parameters. Whether they will actually add a menu is WP's call.
 		$params = $this->menu_parameters();
-		
-		// if parameters return was bogus, exit
-		if ( empty( $params ) ) {
-			return $return;
-		}
 		
 		// gets menu parameters and adds menu to WP admin menu
 		$page_hook = $this->add_to_admin_menu( $params );
@@ -92,14 +84,14 @@ class CMB2_Page_Menu {
 	 *
 	 * @since  2.XXX
 	 * @param  array $params  It is assumed that array has been checked before passing
-	 * @return false|null|string
+	 * @return false|string
 	 */
 	protected function add_to_admin_menu( $params ) {
 		
 		$menu = $submenu = NULL;
 		
 		// if null is passed, the page is created but not added to the menu system
-		if ( empty( $params['parent_slug'] ) && $params['parent_slug'] !== NULL ) {
+		if ( empty( $params['parent_slug'] ) && ! $params['hide_menu'] ) {
 			
 			$menu = add_menu_page(
 				$params['title'],
@@ -119,8 +111,12 @@ class CMB2_Page_Menu {
 		}
 		
 		// Add submenu page
-		if ( $params['parent_slug'] || $params['parent_slug'] === NULL ) {
+		if ( $params['parent_slug'] || $params['hide_menu'] ) {
 			
+			if ( $params['hide_menu'] ) {
+				$params['parent_slug'] = null;
+			}
+
 			$submenu = add_submenu_page(
 				$params['parent_slug'],
 				$params['title'],
@@ -131,7 +127,7 @@ class CMB2_Page_Menu {
 			);
 		}
 		
-		return $menu !== NULL ? $menu : $submenu;
+		return ( $menu === null && $submenu === null ) ? false : ( $menu !== NULL ? $menu : $submenu );
 	}
 	
 	/**
@@ -140,22 +136,23 @@ class CMB2_Page_Menu {
 	 *
 	 * @since  2.XXX
 	 * @param  array $add  Array of parameters to swap with the default values
-	 * @return array|bool
+	 * @return array
 	 */
 	protected function menu_parameters( $add = array() ) {
 		
 		$add = ! is_array( $add ) ? array() : $add;
 		
 		$defaults = array(
-			'parent_slug'    => $this->page->shared['parent_slug'],
-			'title'          => $this->page->shared['title'],
-			'menu_title'     => $this->page->shared['menu_title'],
-			'capability'     => $this->page->shared['capability'],
-			'menu_slug'      => $this->page->page_id,
 			'action'         => array( $this->page, 'render' ),
+			'capability'     => $this->page->shared['capability'],
+			'hide_menu'      => $this->page->shared['hide_menu'],
 			'icon_url'       => $this->page->shared['icon_url'],
-			'position'       => $this->page->shared['position'],
 			'menu_first_sub' => $this->page->shared['menu_first_sub'],
+			'menu_slug'      => $this->page->page_id,
+			'menu_title'     => $this->page->shared['menu_title'],
+			'parent_slug'    => $this->page->shared['parent_slug'],
+			'position'       => $this->page->shared['position'],
+			'title'          => $this->page->shared['title'],
 		);
 		
 		$params = CMB2_Page_Utils::array_replace_recursive_strict( $defaults, $add );
@@ -170,10 +167,25 @@ class CMB2_Page_Menu {
 		$filtered = apply_filters( 'cmb2_options_page_menu_params', $params, $this );
 		
 		// ensure that no keys required below are missing after filter
-		if ( ! is_array( $filtered ) || array_keys( $filtered ) != array_keys( $defaults ) ) {
-			return FALSE;
+		if ( ! is_array( $filtered ) ) {
+			return $defaults;
 		}
 		
-		return $filtered;
+		return CMB2_Page_Utils::array_replace_recursive_strict( $defaults, $filtered );
+	}
+	
+	/**
+	 * Returns property asked for. Note asking for any property with the method returning a reference
+	 * means a PHP warning or error, you have been warned!
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function &__get( $property ) {
+		
+		$return = isset( $this->{$property} ) ? $this->{$property} : NULL;
+		
+		return $return;
 	}
 }
