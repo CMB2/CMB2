@@ -23,7 +23,9 @@
  *     merge_shared_props()               If list was filtered, ensure it conforms. Includes type-checking
  *
  * Private methods: None
- * Magic methods: None
+ *
+ * Magic methods:
+ *     __get()
  *
  * @since     2.XXX
  *
@@ -140,10 +142,11 @@ class CMB2_Page_Shared {
 			'cmb_styles'     => TRUE,
 			'display_cb'     => FALSE,
 			'enqueue_js'     => TRUE,
+			'hide_menu'      => FALSE,
 			'icon_url'       => '',
 			'menu_title'     => '',
 			'menu_first_sub' => null,
-			'parent_slug'    => null,
+			'parent_slug'    => '',
 			'page_columns'   => 'auto',
 			'page_format'    => 'simple',
 			'position'       => null,
@@ -158,10 +161,11 @@ class CMB2_Page_Shared {
 			'cmb_styles'     => $this->get_page_prop( 'cmb_styles', $defaults['cmb_styles'] ),
 			'display_cb'     => $this->get_page_prop( 'display_cb', $defaults['display_cb'] ),
 			'enqueue_js'     => $this->get_page_prop( 'enqueue_js', $defaults['enqueue_js'] ),
+			'hide_menu'      => $this->get_page_prop( 'hide_menu', $defaults['hide_menu'] ),
 			'icon_url'       => $this->get_page_prop( 'icon_url', $defaults['icon_url'] ),
 			'menu_title'     => '',
 			'menu_first_sub' => $this->get_page_prop( 'menu_first_sub' ),
-			'parent_slug'    => $this->get_page_prop( 'parent_slug' ),
+			'parent_slug'    => $this->get_page_prop( 'parent_slug', $defaults['parent_slug'] ),
 			'page_columns'   => $this->get_page_prop( 'page_columns', $defaults['page_columns'] ),
 			'page_format'    => $this->get_page_prop( 'page_format', $defaults['page_format'] ),
 			'position'       => $this->get_page_prop( 'position' ),
@@ -241,6 +245,7 @@ class CMB2_Page_Shared {
 			'cmb_styles'     => array( 'bool' ),
 			'display_cb'     => array( 'object', 'bool' ),
 			'enqueue_js'     => array( 'bool' ),
+			'hide_menu'      => array( 'bool' ),
 			'icon_url'       => array( 'string' ),
 			'menu_title'     => array( 'string' ),
 			'menu_first_sub' => array( 'null', 'string' ),
@@ -276,5 +281,20 @@ class CMB2_Page_Shared {
 		$props = ! empty( $passed ) ? array_merge( $props, $passed ) : $props;
 		
 		return $props;
+	}
+	
+	/**
+	 * Returns property asked for. Note asking for any property with the method returning a reference
+	 * means a PHP warning or error, you have been warned!
+	 *
+	 * @since  2.XXX
+	 * @param  string $property Class property to fetch
+	 * @return mixed|null
+	 */
+	public function &__get( $property ) {
+		
+		$return = isset( $this->{$property} ) ? $this->{$property} : NULL;
+		
+		return $return;
 	}
 }
