@@ -31,6 +31,7 @@
  * Protected methods:
  *     is_setting_registered()   Checks whether ->option_key is already registered
  *     is_updated()              Checks if _GET['updated'] is set
+ *     maybe_scripts()           Checks if JS and/or CSS should be added
  *
  * Private methods:
  *     _class()                  Used to call helper classes, checks ->classes for instance or calls new
@@ -158,6 +159,7 @@ class CMB2_Page {
 		}
 		
 		$this->hooked = TRUE;
+		
 		$this->shared = $this->_class( 'Shared' )->return_shared_properties();
 		$this->maybe_scripts();
 		$this->_class( 'Hooks' )->hooks();
@@ -471,6 +473,7 @@ class CMB2_Page {
 				break;
 			
 			case 'shared':
+				
 				if ( ! empty( $value ) && is_array( $value ) ) {
 					$this->shared = $value;
 				}
