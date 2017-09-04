@@ -109,9 +109,9 @@ class CMB2 extends CMB2_Base {
 		 */
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
 		'option_key'       => '', // Option key; admin menu slug, unless menu_slug is set
-		'parent_slug'      => null, // Used as first param in add_submenu_page(). This can legally be null.
-		'menu_slug'        => '', // Alternative menu slug; *requires* option_key also be set
-		'hookup_class'     => '', // object/class name: Call different CMB2_Page child, default 'CMB2_Page_Hookup'
+		'parent_slug'      => '', // Used as first param in add_submenu_page()
+		'menu_slug'        => '', // Alternative menu slug
+		'hookup_class'     => '', // object/class name: Call different CMB2_Page child, default 'CMB2_Page'
 		
 		/*
 		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
@@ -126,18 +126,19 @@ class CMB2 extends CMB2_Base {
 		 * you will have this sub-menu even if there are no other sub-pages. This must be set on one of the boxes
 		 * in the top-level menu!
 		 */
-		'capability'     => null, // 'manage_options' | String: WP cap required to view options-page.
-		'display_cb'     => null, // false            | Bool,callable: Override the options-page output.
-		'icon_url'       => null, // ''               | String: URL to icon. Only if 'parent_slug' is empty.
-		'menu_title'     => null, // [page_title]     | String: Sets menu title, defaults to page_title
-		'menu_first_sub' => null, // null             | String: Label on first submenu item, which goes to top page.
-		'page_columns'   => null, // 'auto'           | String,int: Only used on 'post' formats. 1, 2, or 'auto'.
-		'page_format'    => null, // 'simple'         | String: 'simple' or 'post', latter like WP post editor
-		'page_title'     => null, // CMB2 'title'     | String: Set page title
-		'position'       => null, // null             | Null,int: Top menu position Only if 'parent_slug' is empty.
-		'reset_action'   => null, // 'default'        | String: 'default' (field defaults); 'remove' (empties)
-		'reset_button'   => null, // ''               | String: Text for reset button. If empty, button is not added
-		'save_button'    => null, // 'Save'           | String,bool: Text for save button. False hides button
+		'capability'     => null, // 'manage_options' | String        |  WP cap required to view options-page.
+		'display_cb'     => null, // false            | Bool,callable | Override the options-page output.
+		'hide_menu'      => null, // false            | Bool          | Whether to hide from menu
+		'icon_url'       => null, // ''               | String        | URL to icon. Only if 'parent_slug' is empty.
+		'menu_title'     => null, // [page_title]     | String        | Sets menu title, defaults to page_title
+		'menu_first_sub' => null, // null             | String        | Label on first submenu item
+		'page_columns'   => null, // 'auto'           | String,int    | Only used on 'post'. 1, 2, or 'auto'.
+		'page_format'    => null, // 'simple'         | String        | 'simple' or 'post', latter like post editor
+		'page_title'     => null, // CMB2 'title'     | String        | Set page title
+		'position'       => null, // null             | Null,int      | Top menu position
+		'reset_action'   => null, // 'default'        | String        | 'default' (field defaults); 'remove'
+		'reset_button'   => null, // ''               | String        | Text for reset button. Empty = no button
+		'save_button'    => null, // 'Save'           | String,bool   | Text for save button. False hides button
 	);
 
 	/**
