@@ -152,13 +152,14 @@ class CMB2_Page {
 	 * @return array|bool
 	 */
 	public function init() {
-		
+
 		if ( $this->hooked ) {
 			return FALSE;
 		}
 		
 		$this->hooked = TRUE;
 		$this->shared = $this->_class( 'Shared' )->return_shared_properties();
+		$this->maybe_scripts();
 		$this->_class( 'Hooks' )->hooks();
 		
 		return TRUE;
@@ -370,6 +371,38 @@ class CMB2_Page {
 		}
 		
 		return $up;
+	}
+	
+	/**
+	 * Checks shared props to see if JS or CSS should be added, does the appropriate thing
+	 *
+	 * @since  2.XXX
+	 * @return array
+	 */
+	protected function maybe_scripts() {
+		
+		// Add filters to remove JS or CSS
+		if ( ! $this->shared['cmb_styles'] ) {
+			add_filter( 'cmb2_enqueue_css', false );
+		}
+		if ( ! $this->shared['enqueue_js'] ) {
+			add_filter( 'cmb2_enqueue_js', false );
+		}
+		
+		// ensure the JS or CSS is added
+		if ( $this->shared['enqueue_js'] || $this->shared['cmb_styles'] ) {
+			foreach ( $this->hookups as $hookup ) {
+				if ( $this->shared['cmb_styles'] ) {
+					$hookup::enqueue_cmb_css();
+				}
+				if ( $this->shared['enqueue_js'] ) {
+					$hookup::enqueue_cmb_js();
+				}
+			}
+		}
+
+		// return array for testing purposes
+		return array( 'js' => $this->shared['enqueue_js'], 'css' => $this->shared['cmb_styles'] );
 	}
 	
 	/**
