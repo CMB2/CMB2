@@ -108,16 +108,6 @@ class CMB2_Page_Display {
 		
 		$notices = CMB2_Page_Utils::do_void_action( array( $this->page->option_key . '-notices' ), 'settings_errors' );
 		
-		// Use first hookup in our array to trigger the style/js
-		$hookup = reset( $this->page->hookups );
-		
-		if ( $this->page->shared['cmb_styles'] ) {
-			$hookup::enqueue_cmb_css();
-		}
-		if ( $this->page->shared['enqueue_js'] ) {
-			$hookup::enqueue_cmb_js();
-		}
-		
 		return $notices . $this->page_html();
 	}
 	
