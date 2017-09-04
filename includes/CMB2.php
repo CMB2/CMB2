@@ -109,7 +109,7 @@ class CMB2 extends CMB2_Base {
 		 */
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
 		'option_key'       => '', // Option key; admin menu slug, unless menu_slug is set
-		'parent_slug'      => '', // Used as first param in add_submenu_page().
+		'parent_slug'      => null, // Used as first param in add_submenu_page(). This can legally be null.
 		'menu_slug'        => '', // Alternative menu slug; *requires* option_key also be set
 		'hookup_class'     => '', // object/class name: Call different CMB2_Page child, default 'CMB2_Page_Hookup'
 		
