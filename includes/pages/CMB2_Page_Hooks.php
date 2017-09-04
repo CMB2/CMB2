@@ -90,7 +90,6 @@ class CMB2_Page_Hooks {
 					'hook' => $this->page->wp_menu_hook,
 					'call' => array( $this->page, 'add_registered_setting' ),
 				),
-				
 				array(
 					'id'      => 'postbox',
 					'hook'    => 'admin_enqueue_scripts',
@@ -108,7 +107,6 @@ class CMB2_Page_Hooks {
 					'hook' => 'admin_post_' . $this->page->option_key,
 					'call' => array( $this->page, 'save' ),
 				),
-			
 			),
 			'late'  => array(
 				array(
