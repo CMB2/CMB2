@@ -86,9 +86,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 			),
 		);
 		
-		/**
-		 * @since 2.XXX Added 'page_title', 'menu_slug', 'page_format', 'page_columns', 'reset_button', 'reset_action'
-		 */
 		$this->defaults = array(
 			'id'               => $this->cmb_id,
 			'title'            => '',
@@ -111,20 +108,24 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'classes'          => null,
 			'classes_cb'       => '',
 			'remove_box_wrap'  => false,
-			'parent_slug'      => '',
-			'capability'       => 'manage_options',
-			'icon_url'         => '',
-			'position'         => null,
 			'admin_menu_hook'  => 'admin_menu',
-			'display_cb'       => false,
-			'save_button'      => '',
 			'option_key'       => '',
-			'page_title'       => null,
-			'menu_slug'        => null,
-			'page_format'      => 'simple',
-			'page_columns'     => 'auto',
-			'reset_button'     => null,
-			'reset_action'     => 'default'
+			'parent_slug'      => '',
+			'menu_slug'        => '',   // @since 2.XXX
+			'hookup_class'     => '',   // @since 2.XXX
+			'capability'       => null,
+			'display_cb'       => null,
+			'hide_menu'        => null, // @since 2.XXX
+			'icon_url'         => null,
+			'menu_title'       => null, // @since 2.XXX
+			'menu_first_sub'   => null, // @since 2.XXX
+			'page_columns'     => null, // @since 2.XXX
+			'page_format'      => null, // @since 2.XXX
+			'page_title'       => null, // @since 2.XXX
+			'position'         => null,
+			'reset_action'     => null, // @since 2.XXX
+			'reset_button'     => null, // @since 2.XXX
+			'save_button'      => null,
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
