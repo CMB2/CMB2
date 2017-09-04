@@ -134,27 +134,51 @@ class CMB2_Page_Shared {
 		}
 		
 		$title = $this->get_page_prop( 'title' );
-		
-		$props = array(
-			'capability'     => $this->get_page_prop( 'capability', 'manage_options' ),
-			'cmb_styles'     => $this->get_page_prop( 'cmb_styles', TRUE ),
-			'display_cb'     => $this->get_page_prop( 'display_cb', FALSE ),
-			'enqueue_js'     => $this->get_page_prop( 'enqueue_js', TRUE ),
-			'icon_url'       => $this->get_page_prop( 'icon_url', '' ),
-			'menu_title'     => '', // set below so filtered page title can be passed as fallback
-			'menu_first_sub' => $this->get_page_prop( 'menu_first_sub' ),
-			'parent_slug'    => $this->get_page_prop( 'parent_slug' ),
-			'page_columns'   => $this->get_page_prop( 'page_columns', 'auto' ),
-			'page_format'    => $this->get_page_prop( 'page_format', 'simple' ),
-			'position'       => $this->get_page_prop( 'position' ),
-			'reset_button'   => $this->get_page_prop( 'reset_button', '' ),
-			'reset_action'   => $this->get_page_prop( 'reset_action', 'default' ),
-			'save_button'    => $this->get_page_prop( 'save_button', 'Save', FALSE ),
-			'title'          => $this->get_page_prop( 'page_title', $title ),
+
+		$defaults = array(
+			'capability'     => 'manage_options',
+			'cmb_styles'     => TRUE,
+			'display_cb'     => FALSE,
+			'enqueue_js'     => TRUE,
+			'icon_url'       => '',
+			'menu_title'     => '',
+			'menu_first_sub' => null,
+			'parent_slug'    => null,
+			'page_columns'   => 'auto',
+			'page_format'    => 'simple',
+			'position'       => null,
+			'reset_button'   => '',
+			'reset_action'   => 'default',
+			'save_button'    => 'Save',
+			'title'          => $title,
 		);
 		
+		$props = array(
+			'capability'     => $this->get_page_prop( 'capability', $defaults['capability'] ),
+			'cmb_styles'     => $this->get_page_prop( 'cmb_styles', $defaults['cmb_styles'] ),
+			'display_cb'     => $this->get_page_prop( 'display_cb', $defaults['display_cb'] ),
+			'enqueue_js'     => $this->get_page_prop( 'enqueue_js', $defaults['enqueue_js'] ),
+			'icon_url'       => $this->get_page_prop( 'icon_url', $defaults['icon_url'] ),
+			'menu_title'     => '',
+			'menu_first_sub' => $this->get_page_prop( 'menu_first_sub' ),
+			'parent_slug'    => $this->get_page_prop( 'parent_slug' ),
+			'page_columns'   => $this->get_page_prop( 'page_columns', $defaults['page_columns'] ),
+			'page_format'    => $this->get_page_prop( 'page_format', $defaults['page_format'] ),
+			'position'       => $this->get_page_prop( 'position' ),
+			'reset_button'   => $this->get_page_prop( 'reset_button', $defaults['reset_button'] ),
+			'reset_action'   => $this->get_page_prop( 'reset_action', $defaults['reset_action'] ),
+			'save_button'    => $this->get_page_prop( 'save_button', $defaults['save_button'], FALSE ),
+			'title'          => $this->get_page_prop( 'page_title', $defaults['title'] ),
+		);
+
 		// changes 'auto' into an int, and if not auto, ensures value is in range
 		$props['page_columns'] = $this->find_page_columns( $props['page_columns'] );
+		
+		// position should be an integer
+		$props['position']     = ! is_null( $props['position'] ) ? intval( $props['position'] ) : null;
+		
+		// normalize the values to ensure correct types
+		$props = $this->merge_shared_props( $defaults, $props );
 		
 		/**
 		 * 'cmb2_options_page_title' filter.
@@ -175,7 +199,7 @@ class CMB2_Page_Shared {
 		 */
 		$props['menu_title'] =
 			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this );
-		
+
 		// if passed properties, they overwrite array values
 		$props = ! empty( $passed ) ? $this->merge_shared_props( $props, $passed ) : $props;
 		
@@ -186,10 +210,10 @@ class CMB2_Page_Shared {
 		 * @since 2.XXX
 		 */
 		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this );
-		
+
 		// if passed properties, they overwrite array values
 		$props = $props != $filtered ? $this->merge_shared_props( $props, $filtered ) : $props;
-		
+
 		return $props;
 	}
 	
@@ -212,42 +236,39 @@ class CMB2_Page_Shared {
 			array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
 		
 		// there is probably a better way of checking these types...?
-		$types     = array(
-			'is_object'  => array( 'display_cb' ),
-			'is_bool'    => array( 'cmb_styles', 'display_cb', 'enqueue_js' ),
-			'is_null'    => array( 'position', 'parent_slug' ),
-			'is_string'  => array(
-				'capability',
-				'icon_url',
-				'menu_title',
-				'page_columns',
-				'page_format',
-				'parent_slug',
-				'reset_button',
-				'reset_action',
-				'save_button',
-				'title',
-			),
-			'is_numeric' => array( 'page_columns', 'position' ),
+		$allowed = array(
+			'capability'     => array( 'string' ),
+			'cmb_styles'     => array( 'bool' ),
+			'display_cb'     => array( 'object', 'bool' ),
+			'enqueue_js'     => array( 'bool' ),
+			'icon_url'       => array( 'string' ),
+			'menu_title'     => array( 'string' ),
+			'menu_first_sub' => array( 'null', 'string' ),
+			'parent_slug'    => array( 'null', 'string' ),
+			'page_columns'   => array( 'numeric' ),
+			'page_format'    => array( 'string' ),
+			'position'       => array( 'null', 'numeric' ),
+			'reset_button'   => array( 'string' ),
+			'reset_action'   => array( 'string' ),
+			'save_button'    => array( 'string' ),
+			'title'          => array( 'string' ),
 		);
-		$not_empty = array(
-			'reset_action',
-			'page_format',
-			'save_button',
-			'title',
-		);
+		$not_empty = array( 'reset_action', 'page_format', 'save_button', 'title', );
 		
 		// checks the type of the passed in vars and if not OK, unsets them
 		foreach ( $passed as $key => $pass ) {
-			foreach ( $types as $check => $keys ) {
-				if ( $check( $pass ) && ! in_array( $key, $keys ) ) {
-					unset( $passed[ $key ] );
-					break;
+			
+			$failed = count( $allowed[ $key ] );
+			
+			foreach( $allowed[ $key ] as $test ) {
+				$call = 'is_' . $test;
+				if ( ! $call( $pass ) ) {
+					$failed = $failed - 1;
 				}
-				if ( empty( $pass ) && is_string( $pass ) && in_array( $key, $not_empty ) ) {
-					unset( $passed[ $key ] );
-					break;
-				}
+			}
+			
+			if ( $failed < 1 || ( $pass === '' && in_array( $key, $not_empty ) ) ) {
+				unset( $passed[ $key ] );
 			}
 		}
 		
