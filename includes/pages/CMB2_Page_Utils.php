@@ -245,7 +245,7 @@ class CMB2_Page_Utils {
 	 *   $checks = [ true ]                   true, second argument not checked
 	 *   $checks = [ true, null ]             true if $skip === true, false if $skip === false
 	 *   $checks = [ 1 ]                      false, fails strict type checking
-	 *   $checks = [ [ true ] ]               true - array check scalar value for multiple 'ok' values
+	 *   $checks = [ [ true ] ]               true - array when checking scalar value assumed to contain 'ok' values
 	 *   $checks = [ null, 3 ]                true if $skip, false if ! $skip
 	 *   $checks = [ false, 3 ]               false
 	 *   $checks = [ true, "3" ]              false - type is checked
@@ -317,7 +317,7 @@ class CMB2_Page_Utils {
 	
 	/**
 	 * Does array_replace_recursive, but with typematching set to strict.
-	 * Only exception is Array base values of null, which can be replaced if the $replace type doesn't match.
+	 * Only exception is $array root values of null, which can be replaced if the $replace type doesn't match.
 	 * $newkeys set to false by default to prevent new keys from being introduced to $array
 	 *
 	 * @since  2.XXX
