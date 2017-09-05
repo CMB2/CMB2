@@ -24,18 +24,18 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		foreach ( $a as $butt ) {
 			
-			if ( $butt[ 'text' ] ) {
+			if ( $butt['text'] ) {
 				
-				if ( ! empty( $butt[ 'id' ] ) ) {
-					$butt[ 'attributes' ]['id'] = $butt[ 'id' ];
+				if ( ! empty( $butt['id'] ) ) {
+					$butt['attributes']['id'] = $butt['id'];
 				}
 				
 				$ret .= get_submit_button(
-					esc_attr( __( $butt[ 'text' ] ) ),
-					$butt[ 'button' ],
-					$butt[ 'name' ],
-					$butt[ 'wrap' ],
-					$butt[ 'attributes' ]
+					esc_attr( __( $butt['text'] ) ),
+					$butt['button'],
+					$butt['name'],
+					$butt['wrap'],
+					$butt['attributes']
 				);
 			}
 		}
@@ -60,7 +60,7 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		$defaults = $this->type_submit_defaults();
 		
-		foreach( $defaults as $button => $bargs ) {
+		foreach ( $defaults as $button => $bargs ) {
 			
 			if ( isset( $args[ $button ] ) && is_array( $args[ $button ] ) ) {
 				
@@ -104,18 +104,18 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		$keys = array_keys( $this->type_submit_defaults() );
 		
-		foreach( $keys as $key ) {
+		foreach ( $keys as $key ) {
 			
 			if ( ! isset( $args[ $key ] ) ) {
-
+				
 				continue;
 				
-			} else if ( is_bool( $args[ $key ] ) && $args[ $key ] === true ) {
+			} else if ( is_bool( $args[ $key ] ) && $args[ $key ] === TRUE ) {
 				
 				// true will set the button, using defaults
 				$args[ $key ] = array();
 				
-			}  else if ( is_string( $args[ $key ] ) && $args[ $key ] ) {
+			} else if ( is_string( $args[ $key ] ) && $args[ $key ] ) {
 				
 				// a string will set the value
 				$args[ $key ] = array(
@@ -145,7 +145,7 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		$checks = empty( $checks ) ? array( 'name', 'button', 'wrap' ) : $checks;
 		
-		foreach( $checks as $check ) {
+		foreach ( $checks as $check ) {
 			if ( empty( $button_args[ $check ] ) ) {
 				$button_args[ $check ] = $button_defaults[ $check ];
 			}
@@ -165,22 +165,22 @@ class CMB2_Type_Submit extends CMB2_Type_Base {
 		
 		return ! empty( $defaults ) ? $defaults :
 			array(
-			'reset' => array(
-				'id' => '',
-				'name' => 'reset-cmb',
-				'text' => 'Reset',
-				'button' => '',
-				'wrap' => false,
-				'attributes' => array( 'style' => 'margin-right: 10px;' ),
-			),
-			'submit' => array(
-				'id' => '',
-				'name' => 'submit-cmb',
-				'text' => 'Save',
-				'button' => 'primary',
-				'wrap' => false,
-				'attributes' => array(),
-			),
-		);
+				'reset'  => array(
+					'id'         => '',
+					'name'       => 'reset-cmb',
+					'text'       => 'Reset',
+					'button'     => '',
+					'wrap'       => FALSE,
+					'attributes' => array( 'style' => 'margin-right: 10px;' ),
+				),
+				'submit' => array(
+					'id'         => '',
+					'name'       => 'submit-cmb',
+					'text'       => 'Save',
+					'button'     => 'primary',
+					'wrap'       => FALSE,
+					'attributes' => array(),
+				),
+			);
 	}
 }
