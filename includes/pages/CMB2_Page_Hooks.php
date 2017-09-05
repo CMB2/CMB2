@@ -6,30 +6,24 @@
  * determined by examining CMB2_Page->page_hook.
  *
  * Uses:
- *     CMB2_Page_Utils                Static class, utility functions
- *
+ *     CMB2_Page_Utils                   Static class, utility functions
  * Applies CMB2 Filters:
- *     'cmb2_options_pagehooks'       Allows manipulation of hooks array before they're added.
- *
+ *     'cmb2_options_pagehooks'          Allows manipulation of hooks array before they're added.
  * Public methods directly accessed:
- *     hooks()                        Calls get_hooks(), uses utility to add hooks to WP
- *
+ *     hooks()                           Calls get_hooks(), uses utility to add hooks to WP
  * Public methods accessed via callback: None
- *
  * Protected methods:
- *     get_hooks()                    Contains array of hooks. Returns either 'early' or 'late' subset.
- *     hooks_array()                  Normalizes hooks, applies filter
- *
- * Private methods: None
- *
+ *     get_hooks()                       Contains array of hooks. Returns either 'early' or 'late' subset.
+ *     hooks_array()                     Normalizes hooks, applies filter
+ * Private methods:                      None
  * Magic methods:
- *     __get()
+ *     __get()                           Allows examining $page
  *
- * @category  WordPress_Plugin
- * @package   CMB2
- * @author    CMB2 team
- * @license   GPL-2.0+
- * @link      https://cmb2.io
+ * @category      WordPress_Plugin
+ * @package       CMB2
+ * @author        CMB2 team
+ * @license       GPL-2.0+
+ * @link          https://cmb2.io
  *
  * @since         2.XXX
  * @property-read CMB2_Page $page
@@ -74,7 +68,7 @@ class CMB2_Page_Hooks {
 	 * @return array
 	 */
 	protected function get_hooks() {
-
+		
 		$hooks = array(
 			'early' => array(
 				array(
@@ -154,7 +148,7 @@ class CMB2_Page_Hooks {
 		 *
 		 * @since 2.XXX
 		 */
-		$filtered =  CMB2_Page_Utils::prepare_hooks_array( apply_filters( 'cmb2_options_pagehooks', $hooks, $this ) );
+		$filtered = CMB2_Page_Utils::prepare_hooks_array( apply_filters( 'cmb2_options_pagehooks', $hooks, $this ) );
 		
 		return $hooks != $filtered ? $filtered : $hooks;
 	}
