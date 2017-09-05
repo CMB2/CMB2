@@ -4,28 +4,22 @@
  * Class CMB2_Page_Shared
  * Examines all boxes on page and returns array of common values
  *
- * Uses: None
- *
+ * Uses:                                  None
  * Applies CMB2 Filters:
  *     'cmb2_options_page_title'          Allows manipulation of the page title
  *     'cmb2_options_menu_title'          Allows manipulation of the menu label
  *     'cmb2_options_shared_properties'   Allows direct manipulation of the entire shared props array
- *
  * Public methods:
  *     return_shared_properties()         Calls get_shared_props()
- *
- * Public methods accessed via callback: None
- *
+ * Public methods accessed via callback:  None
  * Protected methods:
  *     find_page_columns()                Allows use of 'auto' for 'post' style pages
  *     get_page_prop()                    Accesses CMB2->prop() with additional rules for fallbacks
  *     get_shared_props()                 Uses a default list to call get_page_prop() for each
  *     merge_shared_props()               If list was filtered, ensure it conforms. Includes type-checking
- *
- * Private methods: None
- *
+ * Private methods:                       None
  * Magic methods:
- *     __get()
+ *     __get()                            Allows examining $page
  *
  * @since     2.XXX
  *
@@ -136,7 +130,7 @@ class CMB2_Page_Shared {
 		}
 		
 		$title = $this->get_page_prop( 'title' );
-
+		
 		$defaults = array(
 			'capability'     => 'manage_options',
 			'cmb_styles'     => TRUE,
@@ -145,11 +139,11 @@ class CMB2_Page_Shared {
 			'hide_menu'      => FALSE,
 			'icon_url'       => '',
 			'menu_title'     => '',
-			'menu_first_sub' => null,
+			'menu_first_sub' => NULL,
 			'parent_slug'    => '',
 			'page_columns'   => 'auto',
 			'page_format'    => 'simple',
-			'position'       => null,
+			'position'       => NULL,
 			'reset_button'   => '',
 			'reset_action'   => 'default',
 			'save_button'    => 'Save',
@@ -174,16 +168,16 @@ class CMB2_Page_Shared {
 			'save_button'    => $this->get_page_prop( 'save_button', $defaults['save_button'], FALSE ),
 			'title'          => $this->get_page_prop( 'page_title', $defaults['title'] ),
 		);
-
+		
 		// changes 'auto' into an int, and if not auto, ensures value is in range
 		$props['page_columns'] = $this->find_page_columns( $props['page_columns'] );
 		
 		// position should be an integer
-		$props['position']     = ! is_null( $props['position'] ) ? intval( $props['position'] ) : null;
-
+		$props['position'] = ! is_null( $props['position'] ) ? intval( $props['position'] ) : NULL;
+		
 		// normalize the values to ensure correct types
 		$props = $this->merge_shared_props( $defaults, $props );
-
+		
 		/**
 		 * 'cmb2_options_page_title' filter.
 		 * Alters the title for use on the page.
@@ -203,7 +197,7 @@ class CMB2_Page_Shared {
 		 */
 		$props['menu_title'] =
 			(string) apply_filters( 'cmb2_options_menu_title', $props['menu_title'], $this );
-
+		
 		// if passed properties, they overwrite array values
 		$props = ! empty( $passed ) ? $this->merge_shared_props( $props, $passed ) : $props;
 		
@@ -214,10 +208,10 @@ class CMB2_Page_Shared {
 		 * @since 2.XXX
 		 */
 		$filtered = apply_filters( 'cmb2_options_shared_properties', $props, $this );
-
+		
 		// if passed properties, they overwrite array values
 		$props = $props != $filtered ? $this->merge_shared_props( $props, $filtered ) : $props;
-
+		
 		return $props;
 	}
 	
@@ -240,7 +234,7 @@ class CMB2_Page_Shared {
 			array_intersect_key( $passed, array_flip( array_keys( $props ) ) ) : $passed;
 		
 		// there is probably a better way of checking these types...?
-		$allowed = array(
+		$allowed   = array(
 			'capability'     => array( 'string' ),
 			'cmb_styles'     => array( 'bool' ),
 			'display_cb'     => array( 'object', 'bool' ),
@@ -265,7 +259,7 @@ class CMB2_Page_Shared {
 			
 			$failed = count( $allowed[ $key ] );
 			
-			foreach( $allowed[ $key ] as $test ) {
+			foreach ( $allowed[ $key ] as $test ) {
 				$call = 'is_' . $test;
 				if ( ! $call( $pass ) ) {
 					$failed = $failed - 1;
