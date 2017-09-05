@@ -142,7 +142,7 @@ class CMB2_Page_Hooks {
 	protected function hooks_array( $hooks, $tokens = array() ) {
 		
 		/*
-		 * By sending the hooks to the prepare_hooks_array method, they will be returned will all keys
+		 * By sending the hooks to the prepare_hooks_array method, they will be returned with all keys
 		 * set, making them easier to understand for any dev asking for them by the filter below.
 		 */
 		$hooks = CMB2_Page_Utils::prepare_hooks_array( $hooks, $this->page->wp_menu_hook, $tokens );
