@@ -70,18 +70,32 @@ class CMB2_Page_Utils {
 			// replace tokens
 			$cfg = ! empty( $tokens ) ? self::replace_tokens_in_array( $cfg, $tokens ) : $cfg;
 			
-			// set missing values to default values
+			// must have id
 			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )        ? $cfg['id']             : NULL;
+			
+			// must have hook, but can default to $default_hook if passed
 			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] )      ? $cfg['hook']           : $default_hook;
+			
+			// this is the bool result of a test performed when creating the array entry
 			$hooks[ $h ]['only_if']  = isset( $cfg['only_if'] )     ? $cfg['only_if']        : TRUE;
-			$hooks[ $h ]['type']     = ! empty( $cfg['type'] )      ? (string) $cfg['type']  : 'action';
-			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] )  ? (int) $cfg['priority'] : 10;
-			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10                     : $hooks[ $h ]['priority'];
-			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )      ? (int) $cfg['args']     : 1;
-			$hooks[ $h ]['args']     = $hooks[ $h ]['args'] < 1     ? 1                      : $hooks[ $h ]['args'];
+			
+			// the call must be callable, checked below
 			$hooks[ $h ]['call']     = ! empty( $cfg['call'] )      ? $cfg['call']           : NULL;
 			
-			// checks of values, remove the hook from the array if anything is true
+			// type will either be 'action' or 'filter', 'action' is default
+			$hooks[ $h ]['type'] = ! empty( $cfg['type'] )      ? (string) $cfg['type']  : 'action';
+			$hooks[ $h ]['type'] = ! in_array( $hooks[ $h ]['type'], array( 'action', 'filter' ) ) ?
+				'action' : $hooks[ $h ]['type'];
+			
+			// Priority will always be an integer, 10 if garbage value found
+			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] )  ? (int) $cfg['priority'] : 10;
+			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10                     : $hooks[ $h ]['priority'];
+			
+			// Args will always be an integer greater than 0, 1 if garbage value found
+			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )      ? (int) $cfg['args']     : 1;
+			$hooks[ $h ]['args']     = $hooks[ $h ]['args'] < 1     ? 1                      : $hooks[ $h ]['args'];
+			
+			// remove the hook from the array if anything below is true
 			if (
 				$hooks[ $h ]['id'] === NULL
 				|| ( $hooks[ $h ]['call'] === NULL || ! is_callable( $hooks[ $h ]['call'] ) )
