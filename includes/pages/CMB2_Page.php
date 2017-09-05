@@ -11,12 +11,9 @@
  *     CMB2_Page_Save            Saves options via settings api
  *     CMB2_Page_Shared          Reconciles CMB2 box properties that can be set on any box
  *     CMB2_Page_Utils           Static class, utility functions
- *
- * Applies CMB2 Filters: None
- *
+ * Applies CMB2 Filters:         None
  * Public methods:
- *     set_options_hookup()       Adds CMB2_Options_Hookup instance to ->hookups
- *
+ *     set_options_hookup()      Adds CMB2_Options_Hookup instance to ->hookups
  * Public methods accessed via callback:
  *     init()                    Sets up class for use by determining shared vars, adds 'early' hooks
  *     add_metaboxes()           'post' only: triggers add_meta_boxes{->page_hook} action
@@ -27,21 +24,18 @@
  *     add_update_notice()       Checks if page is updated, and adds notices if so
  *     render()                  Outputs HTML, the callback passed to add_[sub]menu_page()
  *     save()                    Saves options on submit from page
- *
  * Protected methods:
  *     is_setting_registered()   Checks whether ->option_key is already registered
  *     is_updated()              Checks if _GET['updated'] is set
  *     maybe_scripts()           Checks if JS and/or CSS should be added
- *
  * Private methods:
  *     _class()                  Used to call helper classes, checks ->classes for instance or calls new
- *
  * Magic methods:
  *     __get()                   Magic getter which passes back a reference, allowing direct checking of keys, etc.
  *     __isset()                 Allows determining whether property is empty or not
  *     __set()                   Used only by unit tests. Throws exception if property is not $hookups or $shared
  *
- * @since 2.XXX
+ * @since     2.XXX
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -154,7 +148,7 @@ class CMB2_Page {
 	 * @return array|bool
 	 */
 	public function init() {
-
+		
 		if ( $this->hooked ) {
 			return FALSE;
 		}
@@ -221,7 +215,7 @@ class CMB2_Page {
 	 * Checks to see if the setting is registered, and if not, registers it
 	 *
 	 * @since  2.XXX
-	 * @param string $setting  Optionally pass a setting to test this function
+	 * @param string $setting Optionally pass a setting to test this function
 	 * @return bool
 	 */
 	public function add_registered_setting( $setting = '' ) {
@@ -327,7 +321,7 @@ class CMB2_Page {
 	 * @param bool $redirect Allows testing of this method
 	 * @return mixed
 	 */
-	public function save( $redirect = true ) {
+	public function save( $redirect = TRUE ) {
 		
 		$test = $this->_class( 'Save' )->save_options( $redirect );
 		
@@ -393,10 +387,10 @@ class CMB2_Page {
 		
 		// Add filters to remove JS or CSS
 		if ( ! $this->shared['cmb_styles'] ) {
-			add_filter( 'cmb2_enqueue_css', false );
+			add_filter( 'cmb2_enqueue_css', FALSE );
 		}
 		if ( ! $this->shared['enqueue_js'] ) {
-			add_filter( 'cmb2_enqueue_js', false );
+			add_filter( 'cmb2_enqueue_js', FALSE );
 		}
 		
 		// ensure the JS or CSS is added
@@ -410,7 +404,7 @@ class CMB2_Page {
 				}
 			}
 		}
-
+		
 		// return array for testing purposes
 		return array( 'js' => $this->shared['enqueue_js'], 'css' => $this->shared['cmb_styles'] );
 	}
@@ -488,7 +482,7 @@ class CMB2_Page {
 				
 				return $this->shared;
 				break;
-				
+			
 			case 'page_hook':
 				
 				if ( ! empty( $value ) && is_string( $value ) ) {
