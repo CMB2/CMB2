@@ -5,24 +5,18 @@
  * Prepares parameters and adds page to WordPress admin menu.
  *
  * Uses:
- *     CMB2_Page_Utils                  Static class, utility functions
- *
+ *     CMB2_Page_Utils                   Static class, utility functions
  * Applies CMB2 Filters:
- *     'cmb2_options_page_menu_params'  Allows manipulation of menu params before calling WP menu functions
- *
+ *     'cmb2_options_page_menu_params'   Allows manipulation of menu params before calling WP menu functions
  * Public methods:
- *     add_to_menu()                    Calls add_to_admin_menu(), menu_parameters()
- *
+ *     add_to_menu()                     Calls add_to_admin_menu(), menu_parameters()
  * Public methods accessed via callback: None
- *
  * Protected methods:
- *     add_to_admin_menu()              Calls appropriate WP function add_menu_page() or add_submenu_page()
- *     menu_parameters()                Gets values needed from CMB2_Page instance
- *
- * Private methods: None
- *
+ *     add_to_admin_menu()               Calls appropriate WP function add_menu_page() or add_submenu_page()
+ *     menu_parameters()                 Gets values needed from CMB2_Page instance
+ * Private methods:                      None
  * Magic methods:
- *     __get()
+ *     __get()                           Allows examining $page
  *
  * @since     2.XXX
  *
@@ -58,9 +52,9 @@ class CMB2_Page_Menu {
 	 * @return array
 	 */
 	public function add_to_menu() {
-
+		
 		$return = array();
-
+		
 		// get menu parameters; will always return parameters. Whether they will actually add a menu is WP's call.
 		$params = $this->menu_parameters();
 		
@@ -83,7 +77,7 @@ class CMB2_Page_Menu {
 	 * Adds page to wordpress admin menu and returns page hook.
 	 *
 	 * @since  2.XXX
-	 * @param  array $params  It is assumed that array has been checked before passing
+	 * @param  array $params It is assumed that array has been checked before passing
 	 * @return false|string
 	 */
 	protected function add_to_admin_menu( $params ) {
@@ -114,9 +108,9 @@ class CMB2_Page_Menu {
 		if ( $params['parent_slug'] || $params['hide_menu'] ) {
 			
 			if ( $params['hide_menu'] ) {
-				$params['parent_slug'] = null;
+				$params['parent_slug'] = NULL;
 			}
-
+			
 			$submenu = add_submenu_page(
 				$params['parent_slug'],
 				$params['title'],
@@ -127,7 +121,7 @@ class CMB2_Page_Menu {
 			);
 		}
 		
-		return ( $menu === null && $submenu === null ) ? false : ( $menu !== NULL ? $menu : $submenu );
+		return ( $menu === NULL && $submenu === NULL ) ? FALSE : ( $menu !== NULL ? $menu : $submenu );
 	}
 	
 	/**
@@ -135,7 +129,7 @@ class CMB2_Page_Menu {
 	 * the defaults.
 	 *
 	 * @since  2.XXX
-	 * @param  array $add  Array of parameters to swap with the default values
+	 * @param  array $add Array of parameters to swap with the default values
 	 * @return array
 	 */
 	protected function menu_parameters( $add = array() ) {
