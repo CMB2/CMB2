@@ -71,29 +71,29 @@ class CMB2_Page_Utils {
 			$cfg = ! empty( $tokens ) ? self::replace_tokens_in_array( $cfg, $tokens ) : $cfg;
 			
 			// must have id
-			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )        ? $cfg['id']             : NULL;
+			$hooks[ $h ]['id'] = empty( $cfg['id'] ) ? NULL : $cfg['id'];
 			
 			// must have hook, but can default to $default_hook if passed
-			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] )      ? $cfg['hook']           : $default_hook;
+			$hooks[ $h ]['hook'] = empty( $cfg['hook'] ) ? $default_hook : $cfg['hook'];
 			
 			// this is the bool result of a test performed when creating the array entry
-			$hooks[ $h ]['only_if']  = isset( $cfg['only_if'] )     ? $cfg['only_if']        : TRUE;
+			$hooks[ $h ]['only_if'] = isset( $cfg['only_if'] ) ? $cfg['only_if'] : TRUE;
 			
 			// the call must be callable, checked below
-			$hooks[ $h ]['call']     = ! empty( $cfg['call'] )      ? $cfg['call']           : NULL;
+			$hooks[ $h ]['call'] = empty( $cfg['call'] ) ? NULL : $cfg['call'];
 			
 			// type will either be 'action' or 'filter', 'action' is default
-			$hooks[ $h ]['type'] = ! empty( $cfg['type'] )      ? (string) $cfg['type']  : 'action';
-			$hooks[ $h ]['type'] = ! in_array( $hooks[ $h ]['type'], array( 'action', 'filter' ) ) ?
-				'action' : $hooks[ $h ]['type'];
+			$hooks[ $h ]['type'] = empty( $cfg['type'] ) ? 'action' : (string) $cfg['type'];
+			$hooks[ $h ]['type'] = in_array( $hooks[ $h ]['type'], array( 'action', 'filter' ) ) ?
+				$hooks[ $h ]['type'] : 'action';
 			
 			// Priority will always be an integer, 10 if garbage value found
-			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] )  ? (int) $cfg['priority'] : 10;
-			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10                     : $hooks[ $h ]['priority'];
+			$hooks[ $h ]['priority'] = empty( $cfg['priority'] ) ? 10 : (int) $cfg['priority'];
+			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10 : $hooks[ $h ]['priority'];
 			
 			// Args will always be an integer greater than 0, 1 if garbage value found
-			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )      ? (int) $cfg['args']     : 1;
-			$hooks[ $h ]['args']     = $hooks[ $h ]['args'] < 1     ? 1                      : $hooks[ $h ]['args'];
+			$hooks[ $h ]['args'] = empty( $cfg['args'] )  ? 1 : (int) $cfg['args'];
+			$hooks[ $h ]['args'] = $hooks[ $h ]['args'] < 1 ? 1                  : $hooks[ $h ]['args'];
 			
 			// remove the hook from the array if anything below is true
 			if (
