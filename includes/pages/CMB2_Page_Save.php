@@ -47,13 +47,15 @@ class CMB2_Page_Save {
 	}
 	
 	/**
-	 * Save data from options page, then redirects back.
+	 * Save data from options page, then redirects back. If $redirect is false (for testing) returns array.
 	 *
-	 * @since  2.XXX Checks multiple boxes
-	 * @return void
+	 * @since  2.XXX
+	 * @param  bool   $redirect  Allows examing results during unit testing
+	 * @return mixed
 	 */
-	public function save_options() {
+	public function save_options( $redirect = true ) {
 		
+		$ret = array();
 		$url = wp_get_referer() ? wp_get_referer() : admin_url();
 		
 		$action  = isset( $_POST['submit-cmb'] ) ? 'save' : ( isset( $_POST['reset-cmb'] ) ? 'reset' : FALSE );
@@ -76,14 +78,23 @@ class CMB2_Page_Save {
 						->was_updated();
 					
 					$updated = $updated ? $updated : $up;
+					$ret[] = array( $updated, $hookup->cmb->cmb_id );
 				}
 			}
 		}
 		
-		$url = add_query_arg( 'updated', var_export( $updated, TRUE ), $url );
-		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
+		$updated = is_bool( $updated ) ? var_export( $updated, TRUE ) : $updated;
+		$url = add_query_arg( 'updated', $updated, $url );
 		
-		exit;
+		if ( $redirect ) {
+			
+			wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
+			exit;
+			
+		} else {
+			
+			return array( $url, $ret );
+		}
 	}
 	
 	/**
