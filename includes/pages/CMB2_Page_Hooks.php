@@ -25,13 +25,14 @@
  * Magic methods:
  *     __get()
  *
- * @since     2.XXX
- *
  * @category  WordPress_Plugin
  * @package   CMB2
  * @author    CMB2 team
  * @license   GPL-2.0+
  * @link      https://cmb2.io
+ *
+ * @since         2.XXX
+ * @property-read CMB2_Page $page
  */
 class CMB2_Page_Hooks {
 	
@@ -153,7 +154,7 @@ class CMB2_Page_Hooks {
 		 *
 		 * @since 2.XXX
 		 */
-		$filtered = apply_filters( 'cmb2_options_pagehooks', $hooks, $this );
+		$filtered =  CMB2_Page_Utils::prepare_hooks_array( apply_filters( 'cmb2_options_pagehooks', $hooks, $this ) );
 		
 		return $hooks != $filtered ? $filtered : $hooks;
 	}
