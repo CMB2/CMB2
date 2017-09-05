@@ -221,13 +221,16 @@ class CMB2_Page {
 	 * Checks to see if the setting is registered, and if not, registers it
 	 *
 	 * @since  2.XXX
+	 * @param string $setting  Optionally pass a setting to test this function
 	 * @return bool
 	 */
-	public function add_registered_setting() {
+	public function add_registered_setting( $setting = '' ) {
 		
-		if ( ! $this->is_setting_registered() ) {
+		$setting = empty( $setting ) ? $this->option_key : $setting;
+		
+		if ( ! $this->is_setting_registered( $setting ) ) {
 			
-			register_setting( 'cmb2', $this->option_key );
+			register_setting( 'cmb2', $setting );
 			
 			return TRUE;
 		}
