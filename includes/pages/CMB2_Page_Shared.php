@@ -180,10 +180,10 @@ class CMB2_Page_Shared {
 		
 		// position should be an integer
 		$props['position']     = ! is_null( $props['position'] ) ? intval( $props['position'] ) : null;
-		
+
 		// normalize the values to ensure correct types
 		$props = $this->merge_shared_props( $defaults, $props );
-		
+
 		/**
 		 * 'cmb2_options_page_title' filter.
 		 * Alters the title for use on the page.
@@ -255,7 +255,7 @@ class CMB2_Page_Shared {
 			'position'       => array( 'null', 'numeric' ),
 			'reset_button'   => array( 'string' ),
 			'reset_action'   => array( 'string' ),
-			'save_button'    => array( 'string' ),
+			'save_button'    => array( 'string', 'bool' ),
 			'title'          => array( 'string' ),
 		);
 		$not_empty = array( 'reset_action', 'page_format', 'save_button', 'title', );
