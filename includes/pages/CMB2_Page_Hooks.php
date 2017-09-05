@@ -74,7 +74,7 @@ class CMB2_Page_Hooks {
 	 * @return array
 	 */
 	protected function get_hooks() {
-		
+
 		$hooks = array(
 			'early' => array(
 				array(
@@ -97,13 +97,13 @@ class CMB2_Page_Hooks {
 					'id'      => 'postbox',
 					'hook'    => 'admin_enqueue_scripts',
 					'call'    => array( $this->page, 'add_postbox_script' ),
-					'only_if' => $this->page->shared['page_format'] !== 'post',
+					'only_if' => $this->page->shared['page_format'] == 'post',
 				),
 				array(
 					'id'      => 'toggle',
 					'hook'    => 'admin_print_footer_scripts',
 					'call'    => array( $this->page, 'add_postbox_toggle' ),
-					'only_if' => $this->page->shared['page_format'] !== 'post',
+					'only_if' => $this->page->shared['page_format'] == 'post',
 				),
 				array(
 					'id'   => 'save_options',
