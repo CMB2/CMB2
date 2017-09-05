@@ -71,13 +71,15 @@ class CMB2_Page_Utils {
 			$cfg = ! empty( $tokens ) ? self::replace_tokens_in_array( $cfg, $tokens ) : $cfg;
 			
 			// set missing values to default values
-			$hooks[ $h ]['id']       = ! empty( $cfg['id'] ) ? $cfg['id'] : NULL;
-			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] ) ? $cfg['hook'] : $default_hook;
-			$hooks[ $h ]['only_if']  = isset( $cfg['only_if'] ) ? $cfg['only_if'] : TRUE;
-			$hooks[ $h ]['type']     = ! empty( $cfg['type'] ) ? (string) $cfg['type'] : 'action';
-			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] ) ? (int) $cfg['priority'] : 10;
-			$hooks[ $h ]['args']     = ! empty( $cfg['args'] ) ? (int) $cfg['args'] : 1;
-			$hooks[ $h ]['call']     = ! empty( $cfg['call'] ) ? $cfg['call'] : NULL;
+			$hooks[ $h ]['id']       = ! empty( $cfg['id'] )        ? $cfg['id']             : NULL;
+			$hooks[ $h ]['hook']     = ! empty( $cfg['hook'] )      ? $cfg['hook']           : $default_hook;
+			$hooks[ $h ]['only_if']  = isset( $cfg['only_if'] )     ? $cfg['only_if']        : TRUE;
+			$hooks[ $h ]['type']     = ! empty( $cfg['type'] )      ? (string) $cfg['type']  : 'action';
+			$hooks[ $h ]['priority'] = ! empty( $cfg['priority'] )  ? (int) $cfg['priority'] : 10;
+			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10                     : $hooks[ $h ]['priority'];
+			$hooks[ $h ]['args']     = ! empty( $cfg['args'] )      ? (int) $cfg['args']     : 1;
+			$hooks[ $h ]['args']     = $hooks[ $h ]['args'] < 1     ? 1                      : $hooks[ $h ]['args'];
+			$hooks[ $h ]['call']     = ! empty( $cfg['call'] )      ? $cfg['call']           : NULL;
 			
 			// checks of values, remove the hook from the array if anything is true
 			if (
