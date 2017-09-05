@@ -321,10 +321,14 @@ class CMB2_Page {
 	 * Gateway to CMB2_Page_Save->save_options, a void function.
 	 *
 	 * @since 2.XXX
+	 * @param bool $redirect Allows testing of this method
+	 * @return mixed
 	 */
-	public function save() {
+	public function save( $redirect = true ) {
 		
-		$this->_class( 'Save' )->save_options();
+		$test = $this->_class( 'Save' )->save_options( $redirect );
+		
+		return $test;
 	}
 	
 	/**
