@@ -86,15 +86,12 @@ class CMB2_Page_Save {
 		$updated = is_bool( $updated ) ? var_export( $updated, TRUE ) : $updated;
 		$url = add_query_arg( 'updated', $updated, $url );
 		
-		if ( $redirect ) {
-			
-			wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
-			exit;
-			
-		} else {
-			
+		if ( $redirect === false ) {
 			return array( $url, $ret );
 		}
+		
+		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
+		exit;
 	}
 	
 	/**
