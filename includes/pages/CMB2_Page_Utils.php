@@ -5,8 +5,7 @@
  * Helper methods used by other classes.
  *
  * Uses: None
- * Applies CMB2 Filters: None
- *
+ * Applies CMB2 Filters:                 None
  * Public methods:
  *     prepare_hooks_array()             Normalizes an array of 'hook' config arrays
  *     add_wp_hooks_from_config_array()  Adds hooks passed via array of hook config arrays
@@ -14,11 +13,10 @@
  *     do_void_action()                  Allows returning string from void functions or actions
  *     check_args()                      Checks passed arguments array against an array of OK values
  *     array_replace_recursive_strict()  array_replace_recursive() with type checking
- *
  * Public methods accessed via callback: None
- * Protected methods: None
- * Private methods: None
- * Magic methods: None
+ * Protected methods:                    None
+ * Private methods:                      None
+ * Magic methods:                        None
  *
  * @since     2.XXX
  *
@@ -92,8 +90,8 @@ class CMB2_Page_Utils {
 			$hooks[ $h ]['priority'] = $hooks[ $h ]['priority'] < 1 ? 10 : $hooks[ $h ]['priority'];
 			
 			// Args will always be an integer greater than 0, 1 if garbage value found
-			$hooks[ $h ]['args'] = empty( $cfg['args'] )  ? 1 : (int) $cfg['args'];
-			$hooks[ $h ]['args'] = $hooks[ $h ]['args'] < 1 ? 1                  : $hooks[ $h ]['args'];
+			$hooks[ $h ]['args'] = empty( $cfg['args'] ) ? 1 : (int) $cfg['args'];
+			$hooks[ $h ]['args'] = $hooks[ $h ]['args'] < 1 ? 1 : $hooks[ $h ]['args'];
 			
 			// remove the hook from the array if anything below is true
 			if (
