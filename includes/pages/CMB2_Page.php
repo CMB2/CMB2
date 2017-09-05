@@ -56,6 +56,7 @@
  * @property       array                 $shared
  * @property       string                $page_hook
  * @property-read  string                $wp_menu_hook
+ * @property-read  array                 $classes
  */
 class CMB2_Page {
 	
@@ -209,7 +210,7 @@ class CMB2_Page {
 	 */
 	public function add_postbox_toggle() {
 		
-		echo '<script>jQuery(document).ready(function()';
+		echo '<script id="cmb2-page-toggle">jQuery(document).ready(function()';
 		echo '{postboxes.add_postbox_toggles("postbox-container");});</script>';
 		
 		return TRUE;
