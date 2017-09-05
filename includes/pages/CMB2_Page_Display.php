@@ -7,7 +7,6 @@
  *
  * Uses:
  *     CMB2_Page_Utils                 Static class, utility functions
- *
  * Applies CMB2 Filters:
  *     'cmb2_options_page_before'      Insert HTML before <form> tag
  *     'cmb2_options_page_after'       Insert HTML after </form> tag
@@ -15,12 +14,9 @@
  *     'cmb2_options_form_top'         Insert HTML just after <form> tag
  *     'cmb2_options_form_bottom'      Insert HTML just before </form> tag
  *     'cmb2_options_page_save_html'   Manipulate the HTML containing the Save and Reset buttons
- *
  * Public methods:
  *     render()                        Get notices, adds needed CSS/JS, calls page_html()
- *
  * Public methods accessed via callback: None
- *
  * Protected methods:
  *     merge_default_args()            Called by constructor to merge defaults with values in CMB2_Page instance
  *     merge_inserted_args()           Called by all methods which accept args array, merges passed into defaults
@@ -30,9 +26,7 @@
  *     page_form_post_sidebar()        'post' style sidebar and 'side' metaboxes, if configured
  *     page_form_post_nonces()         'post' metabox nonces needed by WP
  *     save_button()                   Generates 'save' and 'reset' buttons with optional wrapper.
- *
  * Private methods: None
- *
  * Magic methods:
  *     __get()                         Magic getter which passes back a reference
  *
@@ -45,7 +39,7 @@
  * @link      https://cmb2.io
  *
  * @property-read array      $default_args
- * @property-read \CMB2_Page  $page
+ * @property-read \CMB2_Page $page
  */
 class CMB2_Page_Display {
 	
@@ -90,7 +84,7 @@ class CMB2_Page_Display {
 	 * CMB2_Options_Display constructor.
 	 *
 	 * @since 2.XXX
-	 * @param CMB2_Page $page  Page slug (also used by menu)
+	 * @param CMB2_Page $page Page slug (also used by menu)
 	 */
 	public function __construct( CMB2_Page $page ) {
 		
@@ -122,7 +116,7 @@ class CMB2_Page_Display {
 	 */
 	protected function merge_default_args( $args = array() ) {
 		
-		$merged  = array(
+		$merged = array(
 			'option_key'   => $this->page->option_key,
 			'page_format'  => $this->page->shared['page_format'],
 			'page_columns' => $this->page->shared['page_columns'],
@@ -163,7 +157,7 @@ class CMB2_Page_Display {
 	 * Display options-page output.
 	 *
 	 * @since  2.XXX
-	 * @param  array $inserted_args  Inserted argument array; keys should be in
+	 * @param  array $inserted_args Inserted argument array; keys should be in
 	 * @return string                Formatted HTML
 	 */
 	protected function page_html( $inserted_args = array() ) {
@@ -273,7 +267,7 @@ class CMB2_Page_Display {
 		
 		$args = $this->merge_inserted_args( $inserted_args );
 		$html = '';
-
+		
 		// nonce fields
 		$html .= $this->page_form_post_nonces( $args );
 		
