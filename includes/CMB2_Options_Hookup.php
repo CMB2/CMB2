@@ -180,7 +180,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 *
 		 * @since 2.XXX
 		 */
-		$filtered = apply_filters( 'cmb2_options_hookup_hooks', $hooks, $this );
+		$filtered = CMB2_Page_Utils::prepare_hooks_array( apply_filters( 'cmb2_options_hookup_hooks', $hooks, $this ) );
 		$hooks    = $hooks != $filtered ? $filtered : $hooks;
 		
 		$return = ! empty( $hooks ) ? CMB2_Page_Utils::add_wp_hooks_from_config_array( $hooks, $menu_hook ) : FALSE;
