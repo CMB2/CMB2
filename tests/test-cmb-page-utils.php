@@ -68,6 +68,12 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 				'call' => 'phpversion',
 			),
 			array(
+				'id' => 'ok-type-will-be-corrected',
+				'hook' => 'test_hook',
+				'call' => 'phpversion',
+				'type' => 'blah',
+			),
+			array(
 				'id' => 'ok-partial-if-default-hook-set',
 				'call' => 'phpversion',
 			),
@@ -91,12 +97,6 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 				'only_if' => false,
 			),
 			array(
-				'id' => 'bad-type-not-filter-or-action',
-				'hook' => 'test_hook',
-				'call' => 'phpversion',
-				'type' => 'blah',
-			),
-			array(
 				'id' => 'ok-if-tokens-sent',
 				'hook' => 'test_hook',
 				'call' => '{PHP}',
@@ -114,6 +114,15 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 			),
 			array(
 				'id' => 'ok-partial',
+				'hook' => 'test_hook',
+				'only_if' => true,
+				'type' => 'action',
+				'priority' => 10,
+				'args' => 1,
+				'call' => 'phpversion',
+			),
+			array(
+				'id' => 'ok-type-will-be-corrected',
 				'hook' => 'test_hook',
 				'only_if' => true,
 				'type' => 'action',
@@ -196,6 +205,12 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 				'call' => 'phpversion',
 			),
 			array(
+				'id' => 'ok-type-will-be-fixed',
+				'hook' => 'test_hook',
+				'call' => 'phpversion',
+				'type' => 'blah',
+			),
+			array(
 				'id' => 'ok-partial-if-default-hook-set',
 				'call' => 'phpversion',
 			),
@@ -219,19 +234,17 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 				'only_if' => false,
 			),
 			array(
-				'id' => 'bad-type-not-filter-or-action',
-				'hook' => 'test_hook',
-				'call' => 'phpversion',
-				'type' => 'blah',
-			),
-			array(
 				'id' => 'ok-if-tokens-sent',
 				'hook' => 'test_hook',
 				'call' => '{PHP}',
 			),
 		);
 		
-		$expect                = array( array( 'test_hook' => 'ok-full' ), array( 'test_hook' => 'ok-partial' ), );
+		$expect  = array(
+			array( 'test_hook' => 'ok-full' ),
+			array( 'test_hook' => 'ok-partial' ),
+			array( 'test_hook' => 'ok-type-will-be-fixed' ),
+		);
 		
 		$expect_with_default   = $expect;
 		$expect_with_default[] = array( 'test_hook' => 'ok-partial-if-default-hook-set' );
@@ -243,22 +256,13 @@ class Test_CMB2_Page_Utils extends Test_CMB2 {
 		$this->assertFalse( $UTIL::$CHECK( 'test' ) );
 		
 		// $test --> $expect
-		$this->assertEquals(
-			$expect,
-			$UTIL::$CHECK( $test )
-		);
+		$this->assertEquals( $expect, $UTIL::$CHECK( $test ) );
 		
 		// $test, 'test_hook' --> $expect_with_default
-		$this->assertEquals(
-			$expect_with_default,
-			$UTIL::$CHECK( $test, 'test_hook' )
-		);
+		$this->assertEquals( $expect_with_default, $UTIL::$CHECK( $test, 'test_hook' ) );
 		
 		// $test, '', $token --> $expect_with_token
-		$this->assertEquals(
-			$expect_with_tokens,
-			$UTIL::$CHECK( $test, '', $token )
-		);
+		$this->assertEquals( $expect_with_tokens, $UTIL::$CHECK( $test, '', $token ) );
 	}
 	
 	/**
