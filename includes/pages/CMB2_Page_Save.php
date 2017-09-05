@@ -4,20 +4,16 @@
  * Class CMB2_Page_Save
  * Saves options data via the settings API.
  *
- * Uses: None
- * Applies CMB2 Filters: None
- *
+ * Uses:                                 None
+ * Applies CMB2 Filters:                 None
  * Public methods:
- *     save_options()             Loops through boxes on this page and saves values
- *
+ *     save_options()                    Loops through boxes on this page and saves values
  * Public methods accessed via callback: None
- *
  * Protected methods:
- *     can_save()                 Checks if fields can be saved legally
- *     field_values_to_default()  If action was 'reset', determines new values of fields.
- *
- * Private methods: None
- * Magic methods: None
+ *     can_save()                        Checks if fields can be saved legally
+ *     field_values_to_default()         If action was 'reset', determines new values of fields.
+ * Private methods:                      None
+ * Magic methods:                        None
  *
  * @since     2.XXX
  *
@@ -36,7 +32,7 @@ class CMB2_Page_Save {
 	protected $page;
 	
 	/**
-	 * CMB2_Page_Save constructor.
+	 * CMB2_Page_Save constructor
 	 *
 	 * @since 2.XXX
 	 * @param \CMB2_Page $page
@@ -50,10 +46,10 @@ class CMB2_Page_Save {
 	 * Save data from options page, then redirects back. If $redirect is false (for testing) returns array.
 	 *
 	 * @since  2.XXX
-	 * @param  bool   $redirect  Allows examing results during unit testing
+	 * @param  bool $redirect Allows examing results during unit testing
 	 * @return mixed
 	 */
-	public function save_options( $redirect = true ) {
+	public function save_options( $redirect = TRUE ) {
 		
 		$ret = array();
 		$url = wp_get_referer() ? wp_get_referer() : admin_url();
@@ -78,15 +74,15 @@ class CMB2_Page_Save {
 						->was_updated();
 					
 					$updated = $updated ? $updated : $up;
-					$ret[] = array( $updated, $hookup->cmb->cmb_id );
+					$ret[]   = array( $updated, $hookup->cmb->cmb_id );
 				}
 			}
 		}
 		
 		$updated = is_bool( $updated ) ? var_export( $updated, TRUE ) : $updated;
-		$url = add_query_arg( 'updated', $updated, $url );
+		$url     = add_query_arg( 'updated', $updated, $url );
 		
-		if ( $redirect === false ) {
+		if ( $redirect === FALSE ) {
 			return array( $url, $ret );
 		}
 		
