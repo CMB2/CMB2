@@ -54,7 +54,7 @@
  * @property-read  string                $option_key
  * @property-read  string                $page_id
  * @property       array                 $shared
- * @property-read  string                $page_hook
+ * @property       string                $page_hook
  * @property-read  string                $wp_menu_hook
  */
 class CMB2_Page {
@@ -451,7 +451,7 @@ class CMB2_Page {
 	 * @since  2.XXX
 	 * @param  string $property Class property to set
 	 * @param  mixed  $value    Value to add
-	 * @return array|\CMB2_Options_Hookup[]
+	 * @return string|array|\CMB2_Options_Hookup[]
 	 * @throws \Exception
 	 */
 	public function __set( $property, $value ) {
@@ -479,6 +479,15 @@ class CMB2_Page {
 				}
 				
 				return $this->shared;
+				break;
+				
+			case 'page_hook':
+				
+				if ( ! empty( $value ) && is_string( $value ) ) {
+					$this->page_hook = $value;
+				}
+				
+				return $this->page_hook;
 				break;
 			
 			default:
