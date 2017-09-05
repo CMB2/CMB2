@@ -5,22 +5,20 @@
  * Holds CMB2_Page instances.
  *
  * Uses: None
- * Applies CMB2 Filters: None
- *
+ * Applies CMB2 Filters:                 None
  * Public methods:
- *     add()                 Add a new CMB2_Page instance
- *     get()                 Retrive by CMB2_Page->page_id
- *     get_all()             Get all instances
- *     get_by_options_key()  Get all instances sharing the same CMB2_Page->option_key
- *     remove()              Remove a CMB2_Page instance by page_id
- *     clear()               Remove all instances
- *
+ *     add()                             Add a new CMB2_Page instance
+ *     get()                             Retrive by CMB2_Page->page_id
+ *     get_all()                         Get all instances
+ *     get_by_options_key()              Get all instances sharing the same CMB2_Page->option_key
+ *     remove()                          Remove a CMB2_Page instance by page_id
+ *     clear()                           Remove all instances
  * Public methods accessed via callback: None
- * Protected methods: None
- * Private methods: None
- * Magic methods: None
+ * Protected methods:                    None
+ * Private methods:                      None
+ * Magic methods:                        None
  *
- * @since 2.XXX
+ * @since     2.XXX
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -48,7 +46,7 @@ class CMB2_Pages {
 	public static function add( CMB2_Page $page ) {
 		
 		if ( ! $page instanceof CMB2_Page ) {
-			return false;
+			return FALSE;
 		}
 		
 		self::$pages[ $page->page_id ] = $page;
@@ -60,7 +58,7 @@ class CMB2_Pages {
 	 * Retrieve a CMB2_Page_Hookup instance by cmb id
 	 *
 	 * @since  2.XXX
-	 * @param  string         $page  CMB2_Page instance id
+	 * @param  string $page CMB2_Page instance id
 	 * @return CMB2_Page|bool        False or CMB2_Page object instance.
 	 */
 	public static function get( $page ) {
@@ -87,13 +85,13 @@ class CMB2_Pages {
 	 * Retrieve all CMB2_Page_Hookup instances that have the same options key.
 	 *
 	 * @since  2.XXX
-	 * @param  string $key  Key matching options-key
+	 * @param  string $key Key matching options-key
 	 * @return bool|CMB2[]  Array of matching CMB2_Page instances
 	 */
 	public static function get_by_options_key( $key ) {
 		
 		if ( ! is_string( $key ) ) {
-			return false;
+			return FALSE;
 		}
 		
 		$pages = array();
@@ -117,7 +115,7 @@ class CMB2_Pages {
 	public static function remove( $page ) {
 		
 		if ( ! is_string( $page ) || empty( $page ) ) {
-			return false;
+			return FALSE;
 		}
 		
 		if ( array_key_exists( $page, self::$pages ) ) {
@@ -136,6 +134,7 @@ class CMB2_Pages {
 	 * @since 2.XXX
 	 */
 	public static function clear() {
+		
 		self::$pages = array();
 	}
 }
