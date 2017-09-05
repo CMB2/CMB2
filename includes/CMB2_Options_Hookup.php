@@ -10,26 +10,20 @@
  * Uses:
  *     CMB2_Page                    Handles all page-specific hookups, rendering, etc.
  *     CMB2_Page_Utils              Static class, utility functions
- *
  * Applies CMB2 Filters:
  *     'cmb2_options_hookup_hooks'  Allows manipulation of hooks being added for thie CMB2 instance
- *
  * Public methods:
  *     hooks()                      Public accessor, calls get_page_hookup() and get_hooks()
- *
  * Public methods accessed via callback:
  *     add_options_metabox()        Calls add_meta_box()
  *     get_metabox()                Callback from add_meta_box()
  *     network_get_override()       If options page is on multisite network menu
  *     network_update_override()    If options page is on multisite network menu
- *
  * Protected methods:
  *     get_page_hookup()            Gets instance of CMB2_Page and adds $this to it
  *     get_hooks()                  Get hooks array needed for this box
  *     get_page_id()                Determine the page id based on passed params
- *
- * Private methods: None
- *
+ * Private methods:                 None
  * Magic methods:
  *     __get()                      Magic getter
  *     __set()                      Used only by unit tests.
@@ -43,11 +37,11 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  *
- * @property-read \CMB2       $cmb
- * @property-read string      $option_key
- * @property-read string      $object_type
- * @property      string      $page_id
- * @property      \CMB2_Page  $page
+ * @property-read \CMB2      $cmb
+ * @property-read string     $option_key
+ * @property-read string     $object_type
+ * @property      string     $page_id
+ * @property      \CMB2_Page $page
  */
 class CMB2_Options_Hookup extends CMB2_hookup {
 	
@@ -230,12 +224,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	protected function get_page_hookup( $wp_menu_hook ) {
 		
-		$admin_page   = CMB2_Pages::get( $this->page_id );
+		$admin_page = CMB2_Pages::get( $this->page_id );
 		
 		if ( $admin_page === FALSE ) {
 			
 			$hookup_class = 'CMB2_Page';
-			$class        = $this->cmb->prop( 'hookup_class', null );
+			$class        = $this->cmb->prop( 'hookup_class', NULL );
 			
 			if (
 				! empty( $class )
@@ -255,7 +249,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			CMB2_Pages::add( $admin_page );
 		}
 		
-		if ( $admin_page !== false ) {
+		if ( $admin_page !== FALSE ) {
 			$admin_page->set_options_hookup( $this );
 		}
 		
