@@ -250,7 +250,7 @@ class CMB2_Page {
 			
 			$this->page_hook = $menu['page_hook'];
 			
-			$this->_class( 'Hooks' )->hooks();
+			$menu['hooks'] = $this->_class( 'Hooks' )->hooks();
 		}
 		
 		return $menu;
