@@ -657,11 +657,12 @@ class Test_CMB2_Page_Shared extends Test_CMB2_Options_Base {
 			$try_object[ $key ] = $obj;
 		}
 		
-		$expected_bool               = $base;
-		$expected_bool['cmb_styles'] = TRUE;
-		$expected_bool['display_cb'] = TRUE;
-		$expected_bool['enqueue_js'] = TRUE;
-		$expected_bool['hide_menu']  = TRUE;
+		$expected_bool                = $base;
+		$expected_bool['cmb_styles']  = TRUE;
+		$expected_bool['display_cb']  = TRUE;
+		$expected_bool['enqueue_js']  = TRUE;
+		$expected_bool['hide_menu']   = TRUE;
+		$expected_bool['save_button'] = TRUE;
 		
 		$try_bool = $base;
 		foreach ( $try_bool as $key => $value ) {
