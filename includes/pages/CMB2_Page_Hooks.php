@@ -3,7 +3,7 @@
 /**
  * Class CMB2_Page_Hooks
  * Gets and normalizes hook configuration arrays, and adds hooks. Can be called 'early' or 'late', which is
- * determined by examine CMB2_Page->page_hook.
+ * determined by examining CMB2_Page->page_hook.
  *
  * Uses:
  *     CMB2_Page_Utils                Static class, utility functions
@@ -125,7 +125,7 @@ class CMB2_Page_Hooks {
 			),
 		);
 		
-		// page_hook is set after first call to this method
+		// page_hook is set when page is added to admin menu; late hooks are called just after
 		$when = $this->page->page_hook === '' ? 'early' : 'late';
 		
 		return $hooks[ $when ];
