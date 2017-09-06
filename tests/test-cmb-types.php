@@ -658,9 +658,9 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			) )
 		);
 	}
-	
+
 	public function test_file_list_field_after_value_update() {
-		
+
 		$images = get_attached_media( 'image', $this->post_id );
 		$attach_1_url = get_permalink( $this->attachment_id );
 		$attach_2_url = get_permalink( $this->attachment_id2 );
