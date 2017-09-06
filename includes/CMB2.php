@@ -649,7 +649,7 @@ class CMB2 extends CMB2_Base {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Returns array of sanitized field values (without saving them)
 	 *
