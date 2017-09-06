@@ -378,7 +378,7 @@ class CMB2_Types {
 
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
-		//	$count = count( $meta_value );
+		// $count = count( $meta_value ); RNL: IDE says this var is never used
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
 				$this->repeat_row();
@@ -419,10 +419,11 @@ class CMB2_Types {
 
 		<?php
 	}
-	
+
 	/**
 	 * Generates description markup
 	 *
+	 * @since  2.XXX Return on line 444 returns string as expected.
 	 * @since  1.0.0
 	 *
 	 * @param boolean $paragraph     Paragraph tag or span
