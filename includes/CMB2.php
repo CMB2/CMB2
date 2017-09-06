@@ -1086,7 +1086,7 @@ class CMB2 extends CMB2_Base {
 		// Reset the object types.
 		$this->set_prop( 'object_types', array_unique( $types ) ) ;
 	}
-	
+
 	/**
 	 * If object-page initiation failed, remove traces options page setup.
 	 *
