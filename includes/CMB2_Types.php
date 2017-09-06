@@ -45,12 +45,11 @@ class CMB2_Types {
 	public function __construct( CMB2_Field $field ) {
 		$this->field = $field;
 	}
-	
+
 	/**
 	 * Default fallback. Allows rendering fields via "cmb2_render_$fieldtype" hook
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $fieldtype Non-existent field type name
 	 * @param array  $arguments All arguments passed to the method
 	 *
@@ -136,7 +135,7 @@ class CMB2_Types {
 
 		return $default;
 	}
-	
+
 	/**
 	 * If no CMB2_Types::$type object is initiated when a proxy method is called, it means
 	 * it's a custom field type (which SHOULD be instantiating a Type), but let's try and
