@@ -379,7 +379,7 @@ class CMB2_Page_Display {
 			'button_wrap'  => $button_wrap ?
 				'<p class="cmb-submit-wrap clear">%s%s</p>' : '%s%s',
 			'reset_button' => $reset_button ?
-				get_submit_button( esc_attr( $reset_button ), 'secondary', 'reset-cmb', FALSE ) : '',
+				get_submit_button( esc_attr( $reset_button ), '', 'reset-cmb', FALSE ) : '',
 			'save_button'  => $save_button ?
 				get_submit_button( esc_attr( $save_button ), 'primary', 'submit-cmb', FALSE ) : '',
 		);
