@@ -325,7 +325,7 @@ class CMB2_Utils {
 		$after  = array_diff_key( $array, $before );
 		$array  = array_merge( $before, $new, $after );
 	}
-	
+
 	/**
 	 * Defines the url which is used to load local resources.
 	 * This may need to be filtered for local Window installations.
@@ -618,5 +618,5 @@ class CMB2_Utils {
 
 		return (array) $value;
 	}
-	
+
 }
