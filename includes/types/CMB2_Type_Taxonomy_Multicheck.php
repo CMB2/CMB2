@@ -67,11 +67,10 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 	protected function get_wrapper_classes() {
 		$classes = 'cmb2-checkbox-list cmb2-list';
 		if ( false === $this->field->args( 'select_all_button' ) ) {
-			$classes .= 'no-select-all';
+			$classes .= ' no-select-all';
 		}
 
 		return $classes;
-
 	}
 
 }
