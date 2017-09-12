@@ -130,6 +130,7 @@ class CMB2 extends CMB2_Base {
 		 * in the top-level menu!
 		 */
 		'capability'     => null, // 'manage_options' | String        |  WP cap required to view options-page.
+		'disable_settings_errors' => null, // false   | bool          | Disable settings notices from displaying
 		'display_cb'     => null, // false            | Bool,callable | Override the options-page output.
 		'hide_menu'      => null, // false            | Bool          | Whether to hide from menu
 		'icon_url'       => null, // ''               | String        | URL to icon. Only if 'parent_slug' is empty.
@@ -142,9 +143,6 @@ class CMB2 extends CMB2_Base {
 		'reset_action'   => null, // 'default'        | String        | 'default' (field defaults); 'remove'
 		'reset_button'   => null, // ''               | String        | Text for reset button. Empty = no button
 		'save_button'    => null, // 'Save'           | String,bool   | Text for save button. False hides button
-		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
-		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 	);
 
 	/**
