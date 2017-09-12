@@ -265,6 +265,29 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			'three' => array( 1,2,3 ),
 		), $array );
 	}
+
+	public function test_normalize_if_numeric() {
+		$tests = array(
+			array( '0.1', 0.10000000000000001 ),
+			array( 0.1, 0.1 ),
+			array( .1, .1 ),
+			array( 1, 1 ),
+			array( '1', 1 ),
+			array( 'one', 'one' ),
+			array( '0.0', 0.0 ),
+			array( 0, 0 ),
+			array( '', '' ),
+		);
+		foreach ( $tests as $index => $test ) {
+			$this->assertSame(
+				$test[1],
+				CMB2_Utils::normalize_if_numeric( $test[0] ),
+				"Test index: $index"
+			);
+		}
+
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {

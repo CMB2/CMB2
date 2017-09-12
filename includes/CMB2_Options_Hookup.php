@@ -182,6 +182,24 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		return $return;
 	}
 	
+
+	/**
+	 * Outputs the settings notices if a) not a sub-page of 'options-general.php'
+	 * (because settings_errors() already called in wp-admin/options-head.php),
+	 * and b) the 'disable_settings_errors' prop is not set or truthy.
+	 *
+	 * @since  2.2.5
+	 * @return void
+	 */
+	public function maybe_output_settings_notices() {
+		global $parent_file;
+
+		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php
+		if ( 'options-general.php' !== $parent_file && ! $this->cmb->prop( 'disable_settings_errors' ) ) {
+			settings_errors( "{$this->option_key}-notices" );
+		}
+	}
+
 	/**
 	 * Hook: 'cmb2_override_option_get_' . $this->option_key
 	 * Replaces get_option with get_site_option

@@ -541,4 +541,38 @@ class Test_CMB2_Field extends Test_CMB2 {
 			$this->assertSame( $unslashed_val, $field->get_data() );
 		}
 	}
+
+	public function test_cmb2_money_field_save_slashed() {
+		$args = $this->field_args;
+		$args['save_field'] = true;
+		$args['type'] = 'text_money';
+
+		$field = $this->new_field( $args );
+
+		$this->cmb2_money_field_save_slashed( $field, '¯\\\_(ツ)_/¯', '0.00' );
+		$this->cmb2_money_field_save_slashed( $field, '5,000.23', '5,000.23' );
+		$this->cmb2_money_field_save_slashed( $field, '444446000.23', '444,446,000.23' );
+
+		global $wp_locale;
+
+		$thousands_sep = $wp_locale->number_format['thousands_sep'];
+		// Replace with the Swiss German thousand separator, which is a `'`.
+		$wp_locale->number_format['thousands_sep'] = "'";
+
+		$this->cmb2_money_field_save_slashed( $field, "2\'180.00", "2'180.00" );
+		$this->cmb2_money_field_save_slashed( $field, "444\'446\'000.23", "444'446'000.23" );
+		$this->cmb2_money_field_save_slashed( $field, "444'446'000.23", "444'446'000.23" );
+		$this->cmb2_money_field_save_slashed( $field, '444446000.23', "444'446'000.23" );
+
+		$wp_locale->number_format['thousands_sep'] = $thousands_sep;
+	}
+
+	protected function cmb2_money_field_save_slashed( $field, $test_val, $expected ) {
+		$field->save_field( $test_val );
+		$this->assertSame( $expected, $field->get_data() );
+
+		$field->save_field( $expected );
+		$this->assertSame( $expected, $field->get_data() );
+	}
+
 }

@@ -85,7 +85,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 				),
 			),
 		);
-		
+
 		$this->defaults = array(
 			'id'               => $this->cmb_id,
 			'title'            => '',
@@ -126,6 +126,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'reset_action'     => null, // @since 2.XXX
 			'reset_button'     => null, // @since 2.XXX
 			'save_button'      => null,
+			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );

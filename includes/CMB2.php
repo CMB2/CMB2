@@ -1,7 +1,6 @@
 <?php
 /**
  * CMB2 - The core metabox object
- * The main CMB2 object for storing box data/properties.
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -10,10 +9,14 @@
  * @link      https://cmb2.io
  *
  * @property-read string $cmb_id
- * @property-read array  $meta_box
- * @property-read array  $updated
- * @property-read bool   $has_columns
- * @property-read array  $tax_metaboxes_to_remove
+ * @property-read array $meta_box
+ * @property-read array $updated
+ * @property-read bool  $has_columns
+ * @property-read array $tax_metaboxes_to_remove
+ */
+
+/**
+ * The main CMB2 object for storing box data/properties.
  */
 class CMB2 extends CMB2_Base {
 
@@ -139,6 +142,9 @@ class CMB2 extends CMB2_Base {
 		'reset_action'   => null, // 'default'        | String        | 'default' (field defaults); 'remove'
 		'reset_button'   => null, // ''               | String        | Text for reset button. Empty = no button
 		'save_button'    => null, // 'Save'           | String,bool   | Text for save button. False hides button
+		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
+		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 	);
 
 	/**
@@ -655,7 +661,6 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  2.0.3
 	 * @param  array $data_to_sanitize Array of field_id => value data for sanitizing (likely $_POST data).
-	 * @return mixed
 	 */
 	public function get_sanitized_values( array $data_to_sanitize ) {
 		$this->data_to_save = $data_to_sanitize;
@@ -1090,12 +1095,9 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * If object-page initiation failed, remove traces options page setup.
 	 *
-	 * @since  2.XXX Updated phpdoc
 	 * @since  2.2.5
 	 *
-	 * @param array $types
-	 *
-	 * @return array
+	 * @return void
 	 */
 	protected function deinit_options_mb( $types ) {
 		if ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] ) {
@@ -1170,7 +1172,7 @@ class CMB2 extends CMB2_Base {
 			// numeric key = no menu_slug
 			$found_key = ! is_numeric( $array_key ) ? $array_key : $req;
 		}
-		
+
 		return $found_key ? $found_key : false;
 	}
 
@@ -1722,4 +1724,5 @@ class CMB2 extends CMB2_Base {
 				return parent::__get( $property );
 		}
 	}
+
 }
