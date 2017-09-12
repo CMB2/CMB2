@@ -18,6 +18,7 @@
  *     render()                        Get notices, adds needed CSS/JS, calls page_html()
  * Public methods accessed via callback: None
  * Protected methods:
+ *     maybe_output_settings_notices() Check if settings notices should be disabled for this page
  *     merge_default_args()            Called by constructor to merge defaults with values in CMB2_Page instance
  *     merge_inserted_args()           Called by all methods which accept args array, merges passed into defaults
  *     page_html()                     Page wrapper. Calls page_form() and save_button()
@@ -58,26 +59,27 @@ class CMB2_Page_Display {
 	 * @var   array
 	 */
 	protected $default_args = array(
-		'checks'         => array(
+		'checks'                  => array(
 			'context'   => array( 'edit_form_after_title', ),
 			'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
 		),
-		'option_key'     => '',
-		'page_format'    => 'simple',
-		'simple_action'  => 'cmb2_options_simple_page',
-		'page_nonces'    => TRUE,
-		'page_columns'   => 1,
-		'page_metaboxes' => array(
+		'disable_settings_errors' => TRUE,
+		'option_key'              => '',
+		'page_format'             => 'simple',
+		'simple_action'           => 'cmb2_options_simple_page',
+		'page_nonces'             => TRUE,
+		'page_columns'            => 1,
+		'page_metaboxes'          => array(
 			'top'      => 'edit_form_after_title',
 			'side'     => 'side',
 			'normal'   => 'normal',
 			'advanced' => 'advanced',
 		),
-		'save_button'    => '',
-		'reset_button'   => '',
-		'button_wrap'    => TRUE,
-		'title'          => '',
-		'page_id'        => '',
+		'save_button'             => '',
+		'reset_button'            => '',
+		'button_wrap'             => TRUE,
+		'title'                   => '',
+		'page_id'                 => '',
 	);
 	
 	/**
@@ -100,11 +102,31 @@ class CMB2_Page_Display {
 	 */
 	public function render() {
 		
-		$notices = CMB2_Page_Utils::do_void_action( array( $this->page->option_key . '-notices' ), 'settings_errors' );
+		$notices = $this->maybe_output_settings_notices();
 		
 		return $notices . $this->page_html();
 	}
 	
+	/**
+	 * Outputs the settings notices if a) not a sub-page of 'options-general.php'
+	 * (because settings_errors() already called in wp-admin/options-head.php),
+	 * and b) the 'disable_settings_errors' prop is not set or truthy.
+	 *
+	 * @since  2.XXX  Moved from CMB2_Options_Hookup (trunk)
+	 * @since  2.2.5
+	 * @return string
+	 */
+	protected function maybe_output_settings_notices() {
+		
+		global $parent_file;
+
+		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php
+		if ( 'options-general.php' !== $parent_file && ! $this->default_args['disable_settings_errors'] ) {
+			return CMB2_Page_Utils::do_void_action( array( $this->page->option_key . '-notices' ), 'settings_errors' );
+		}
+		
+		return '';
+	}
 	
 	/**
 	 * Merges default args. Does not set $this->default_args!
@@ -117,13 +139,14 @@ class CMB2_Page_Display {
 	protected function merge_default_args( $args = array() ) {
 		
 		$merged = array(
-			'option_key'   => $this->page->option_key,
-			'page_format'  => $this->page->shared['page_format'],
-			'page_columns' => $this->page->shared['page_columns'],
-			'save_button'  => $this->page->shared['save_button'],
-			'reset_button' => $this->page->shared['reset_button'],
-			'title'        => $this->page->shared['title'],
-			'page_id'      => $this->page->page_id,
+			'disable_settings_errors' => $this->page->shared['disable_settings_errors'],
+			'option_key'              => $this->page->option_key,
+			'page_format'             => $this->page->shared['page_format'],
+			'page_columns'            => $this->page->shared['page_columns'],
+			'save_button'             => $this->page->shared['save_button'],
+			'reset_button'            => $this->page->shared['reset_button'],
+			'title'                   => $this->page->shared['title'],
+			'page_id'                 => $this->page->page_id,
 		);
 		
 		// insert the values from the hookup object into the defaults
