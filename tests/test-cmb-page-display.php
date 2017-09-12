@@ -10,6 +10,7 @@
  * public __construct()                       test_invalid_CMB2PageDisplay_no_params()                 1
  * "                                          test_CMB2PageDisplay_construct_and_get()                 4
  * public render()                            test_protected_CMB2PageDisplay_render()                  2
+ * protected maybe_output_settings_notices()
  * protected merge_default_args()             test_protected_CMB2PageDisplay_merge_default_args()      4
  * protected merge_inserted_args()            test_protected_CMB2PageDisplay_merge_inserted_args()     4
  * protected page_html()                      test_CMB2PageDisplay_page_html()                         5
@@ -63,6 +64,7 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 	}
 	
 	public function tearDown() {
+		
 		$this->clear_test_properties();
 		parent::tearDown();
 	}
@@ -115,6 +117,7 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 				'context'   => array( 'edit_form_after_title', ),
 				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
 			),
+			'disable_settings_errors' => false,
 			'option_key'     => $opt,
 			'page_format'    => 'simple',
 			'simple_action'  => 'cmb2_options_simple_page',
@@ -177,6 +180,7 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 				'context'   => array( 'edit_form_after_title', ),
 				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
 			),
+			'disable_settings_errors' => false,
 			'option_key'     => $opt,
 			'page_format'    => 'simple',
 			'simple_action'  => 'cmb2_options_simple_page',
@@ -281,6 +285,7 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 				'context'   => array( 'edit_form_after_title', ),
 				'metaboxes' => array( NULL, array( 'side', 'normal', 'advanced' ), ),
 			),
+			'disable_settings_errors' => false,
 			'option_key'     => $opt,
 			'page_format'    => 'simple',
 			'simple_action'  => 'cmb2_options_simple_page',
@@ -1152,7 +1157,7 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 		/*
 		 * It should add any settings errors
 		 */
-		
+
 		add_settings_error( $opt . '-notices', 'cmb2', 'test', 'updated' );
 		
 		$test   = $DISPLAY->render();
@@ -1162,6 +1167,100 @@ class Test_CMB2_Page_Display extends Test_CMB2_Options_Base {
 		$expect = $notice . $expect_open_simple . $expect_title . $form . $expect_close;
 		
 		$this->assertHTMLstringsAreEqual( $expect, $test );
+		
+		$this->clear_test_properties();
+	}
+	
+	/**
+	 * CMB2_Page_Display->maybe_output_settings_notices()
+	 *
+	 * Checks to see if either the shared property 'disable_settings_errors' is true or the global
+	 * $parent_page is NOT options-general.php before adding settings notices.
+	 *
+	 * Note that the previous test added a settings error to this option key.
+	 *
+	 * @since 2.XXX
+	 * @group method_protected
+	 * @group cmb2_page_display
+	 */
+	public function test_protected_CMB2PageDisplay_maybe_output_settings_notices() {
+		
+		$cmbids = array(
+			'test' . rand( 10000, 99999 ),
+		);
+		
+		$cfgs = $this->cmb2_box_config( $cmbids[0] );
+		$cfg  = $cfgs[ $cmbids[0] ];
+		
+		$cfg['disable_settings_errors'] = FALSE;
+		
+		$cmb2 = $this->get_cmb2( $cfg );
+		$opt  = $this->get_option_key( $cmb2 );
+		
+		$this->assertFalse( $cmb2->prop( 'disable_settings_errors' ) );
+		
+		$HOOKUP = new CMB2_Options_Hookup( $cmb2, $opt );
+		$HOOKUP->hooks();
+		$HOOKUP->page->set_options_hookup( $HOOKUP );
+		$HOOKUP->page->init();
+		
+		$DISPLAY = new CMB2_Page_Display( $HOOKUP->page );
+		
+		$notice = '<div id=\'setting-error-cmb2\' class=\'updated settings-error notice is-dismissible\'>'
+		          . '<p><strong>test</strong></p></div>';
+		
+		/*
+		 * Should return a notice
+		 */
+		
+		$test   = $this->invokeMethod( $DISPLAY, 'maybe_output_settings_notices' );
+		$expect = $notice;
+		
+		$this->assertHTMLstringsAreEqual( $expect, $test );
+		
+		/*
+		 * Should not return a notice if $parent_page is set to 'options-general.php'
+		 */
+		
+		$GLOBALS['parent_file'] = 'options-general.php';
+		
+		$test = $this->invokeMethod( $DISPLAY, 'maybe_output_settings_notices' );
+		
+		$this->assertEmpty( $test );
+		
+		$this->clear_test_properties();
+		
+		/*
+		 * Should not return notice if shared value is true
+		 */
+		
+		$cmbids = array(
+			'test' . rand( 10000, 99999 ),
+		);
+		
+		$cfgs = $this->cmb2_box_config( $cmbids[0] );
+		$cfg  = $cfgs[ $cmbids[0] ];
+		
+		$cfg['disable_settings_errors'] = TRUE;
+		
+		$cmb2 = $this->get_cmb2( $cfg );
+		$opt  = $this->get_option_key( $cmb2 );
+
+		$this->assertTrue( $cmb2->prop( 'disable_settings_errors' ) );
+		
+		$HOOKUP = new CMB2_Options_Hookup( $cmb2, $opt );
+		$HOOKUP->hooks();
+		$HOOKUP->page->set_options_hookup( $HOOKUP );
+		$HOOKUP->page->init();
+		
+		$DISPLAY = new CMB2_Page_Display( $HOOKUP->page );
+		
+		$GLOBALS['parent_file'] = 'something.php';
+		
+		add_settings_error( $opt . '-notices', 'cmb2', 'test', 'updated' );
+		
+		$test = $this->invokeMethod( $DISPLAY, 'maybe_output_settings_notices' );
+		$this->assertEmpty( $test );
 		
 		$this->clear_test_properties();
 	}

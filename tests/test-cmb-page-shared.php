@@ -380,41 +380,43 @@ class Test_CMB2_Page_Shared extends Test_CMB2_Options_Base {
 	public function test_CMB2PageShared_get_shared_props() {
 		
 		$defaults = array(
-			'capability'     => 'manage_options',
-			'cmb_styles'     => TRUE,
-			'display_cb'     => FALSE,
-			'enqueue_js'     => TRUE,
-			'hide_menu'      => FALSE,
-			'icon_url'       => '',
-			'menu_title'     => '',
-			'menu_first_sub' => NULL,
-			'parent_slug'    => '',
-			'page_columns'   => 'auto',
-			'page_format'    => 'simple',
-			'position'       => NULL,
-			'reset_button'   => '',
-			'reset_action'   => 'default',
-			'save_button'    => 'Save',
-			'title'          => 'Test Box',
+			'capability'              => 'manage_options',
+			'cmb_styles'              => TRUE,
+			'disable_settings_errors' => FALSE,
+			'display_cb'              => FALSE,
+			'enqueue_js'              => TRUE,
+			'hide_menu'               => FALSE,
+			'icon_url'                => '',
+			'menu_title'              => '',
+			'menu_first_sub'          => NULL,
+			'parent_slug'             => '',
+			'page_columns'            => 'auto',
+			'page_format'             => 'simple',
+			'position'                => NULL,
+			'reset_button'            => '',
+			'reset_action'            => 'default',
+			'save_button'             => 'Save',
+			'title'                   => 'Test Box',
 		);
 		
 		$expected_no_params = array(
-			'capability'     => 'manage_options',
-			'cmb_styles'     => TRUE,
-			'display_cb'     => FALSE,
-			'enqueue_js'     => TRUE,
-			'hide_menu'      => FALSE,
-			'icon_url'       => '',
-			'menu_title'     => 'Test Box',
-			'menu_first_sub' => NULL,
-			'parent_slug'    => '',
-			'page_columns'   => 1,
-			'page_format'    => 'simple',
-			'position'       => NULL,
-			'reset_button'   => '',
-			'reset_action'   => 'default',
-			'save_button'    => 'Save',
-			'title'          => 'Test Box',
+			'capability'              => 'manage_options',
+			'cmb_styles'              => TRUE,
+			'disable_settings_errors' => FALSE,
+			'display_cb'              => FALSE,
+			'enqueue_js'              => TRUE,
+			'hide_menu'               => FALSE,
+			'icon_url'                => '',
+			'menu_title'              => 'Test Box',
+			'menu_first_sub'          => NULL,
+			'parent_slug'             => '',
+			'page_columns'            => 1,
+			'page_format'             => 'simple',
+			'position'                => NULL,
+			'reset_button'            => '',
+			'reset_action'            => 'default',
+			'save_button'             => 'Save',
+			'title'                   => 'Test Box',
 		);
 		
 		$unset_cfg_keys = array(
@@ -610,22 +612,23 @@ class Test_CMB2_Page_Shared extends Test_CMB2_Options_Base {
 		
 		// arrays are not an allowed type
 		$base = array(
-			'capability'     => array(),
-			'cmb_styles'     => array(),
-			'display_cb'     => array(),
-			'enqueue_js'     => array(),
-			'hide_menu'      => array(),
-			'icon_url'       => array(),
-			'menu_title'     => array(),
-			'menu_first_sub' => array(),
-			'parent_slug'    => array(),
-			'page_columns'   => array(),
-			'page_format'    => array(),
-			'position'       => array(),
-			'reset_button'   => array(),
-			'reset_action'   => array(),
-			'save_button'    => array(),
-			'title'          => array(),
+			'capability'              => array(),
+			'cmb_styles'              => array(),
+			'disable_settings_errors' => array(),
+			'display_cb'              => array(),
+			'enqueue_js'              => array(),
+			'hide_menu'               => array(),
+			'icon_url'                => array(),
+			'menu_title'              => array(),
+			'menu_first_sub'          => array(),
+			'parent_slug'             => array(),
+			'page_columns'            => array(),
+			'page_format'             => array(),
+			'position'                => array(),
+			'reset_button'            => array(),
+			'reset_action'            => array(),
+			'save_button'             => array(),
+			'title'                   => array(),
 		);
 		
 		$obj = new stdClass();
@@ -657,12 +660,13 @@ class Test_CMB2_Page_Shared extends Test_CMB2_Options_Base {
 			$try_object[ $key ] = $obj;
 		}
 		
-		$expected_bool                = $base;
-		$expected_bool['cmb_styles']  = TRUE;
-		$expected_bool['display_cb']  = TRUE;
-		$expected_bool['enqueue_js']  = TRUE;
-		$expected_bool['hide_menu']   = TRUE;
-		$expected_bool['save_button'] = TRUE;
+		$expected_bool                            = $base;
+		$expected_bool['cmb_styles']              = TRUE;
+		$expected_bool['disable_settings_errors'] = TRUE;
+		$expected_bool['display_cb']              = TRUE;
+		$expected_bool['enqueue_js']              = TRUE;
+		$expected_bool['hide_menu']               = TRUE;
+		$expected_bool['save_button']             = TRUE;
 		
 		$try_bool = $base;
 		foreach ( $try_bool as $key => $value ) {

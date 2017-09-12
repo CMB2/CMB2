@@ -114,6 +114,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'menu_slug'        => '',   // @since 2.XXX
 			'hookup_class'     => '',   // @since 2.XXX
 			'capability'       => null,
+			'disable_settings_errors' => false,
 			'display_cb'       => null,
 			'hide_menu'        => null, // @since 2.XXX
 			'icon_url'         => null,
@@ -126,7 +127,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'reset_action'     => null, // @since 2.XXX
 			'reset_button'     => null, // @since 2.XXX
 			'save_button'      => null,
-			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
