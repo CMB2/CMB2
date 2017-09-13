@@ -1100,17 +1100,17 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed  Default field value
 	 */
 	public function get_default() {
-		if ( null !== $this->args['default'] ) {
-			return $this->args['default'];
+		$default = $this->args['default'];
+
+		if ( null !== $default ) {
+			return apply_filters( 'cmb2_default_filter', $default, $this );
 		}
 
 		$param = is_callable( $this->args['default_cb'] ) ? 'default_cb' : 'default';
-		$default = $this->get_param_callback_result( $param );
+		$default = $this->args['default'] = $this->get_param_callback_result( $param );
 
-		// Allow a filter override of the default value
-		$this->args['default'] = apply_filters( 'cmb2_default_filter', $default, $this );
-
-		return $this->args['default'];
+		// Allow a filter override of the default value.
+		return apply_filters( 'cmb2_default_filter', $this->args['default'], $this );
 	}
 
 	/**
