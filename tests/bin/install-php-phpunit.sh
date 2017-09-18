@@ -11,7 +11,14 @@ ORIG_DIR=`pwd`;
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PHP52_PATH=$HOME/.phpbrew/php/php-5.2.17
 
+travis_fold() {
+  local action=$1
+  local name=$2
+  echo -en "travis_fold:${action}:${name}\r"
+}
+
 # install phpunit
+travis_fold start installphpunit
 
 mkdir -p $HOME/phpunit-bin
 
@@ -27,8 +34,12 @@ fi
 
 export PATH=$HOME/phpunit-bin/:$PATH
 
+travis_fold end installphpunit
+
 if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; then
   PHPBREW_BUILT_CHECK=$HOME/.phpbrew/bashrc
+
+  travis_fold start installphpbrew
 
   # directory to install phpbrew into
   mkdir -p $HOME/php-utils-bin
@@ -40,9 +51,13 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
   # needs to be on the path for switching php versions to work
 	export PATH=$HOME/php-utils-bin:$PATH
 
+  travis_fold end installphpbrew
+
   # php and phpunit3.6 installs should be cached, only build if they're not there.
   if [ ! -f $PHPBREW_BUILT_CHECK ]; then
-    
+
+    travis_fold start buildphpunit
+
     # init with known --old to get 5.2 and 5.3
     $HOME/php-utils-bin/phpbrew init
     $HOME/php-utils-bin/phpbrew known --old
@@ -106,6 +121,8 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
 
     # clean up build directory
     rm -rf $HOME/.phpbrew/build/*
+
+    travis_fold end buildphpunit
   fi
 
   # all needed php versions and phpunit versions are installed, either from the above
