@@ -911,22 +911,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$this->assertEquals( implode( ' ', $expected ), $cmb->group_wrap_attributes( $field_group ) );
 
-		$json = '{"glossary": {"title": "example glossary","GlossDiv": {"title": "S","GlossList": {"GlossEntry": {"ID": "SGML","SortAs": "SGML","GlossTerm": "Standard Generalized Markup Language","Acronym": "SGML","Abbrev": "ISO 8879:1986","GlossDef": {"para": "A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso": ["GML", "XML"]},"GlossSee": "<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>"}}}}}';
+		$this->json = '{"glossary": {"title": "example glossary","GlossDiv": {"title": "S","GlossList": {"GlossEntry": {"ID": "SGML","SortAs": "SGML","GlossTerm": "Standard Generalized Markup Language","Acronym": "SGML","Abbrev": "ISO 8879:1986","GlossDef": {"para": "A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso": ["GML", "XML"]},"GlossSee": "<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>"}}}}}';
 
-		add_filter( 'cmb2_group_wrap_attributes', function( $group_wrap_atts, $field_group ) use ( $json ) {
-			$group_wrap_atts['heyo'] = "it's Zao";
-			$group_wrap_atts['data-json'] = $json;
-
-			$group_wrap_atts['"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>'] = 'hackers';
-			$group_wrap_atts['hackers'] = '"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>';
-
-			return $group_wrap_atts;
-		}, 10, 2 );
+		add_filter( 'cmb2_group_wrap_attributes', array( $this, 'for_testing_cmb2_group_wrap_attributes' ) , 10, 2 );
 
 		$clean_json = str_replace(
 			'<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>',
 			'xssClick to Download',
-			$json
+			$this->json
 		);
 
 		$expected[] = 'heyo="it\'s Zao"';
@@ -935,6 +927,16 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$expected[] = 'hackers="&quot;&gt;&lt;script&gt;xss&lt;/script&gt;&lt;a href=&quot;http://xssattackexamples.com/&quot;&gt;Click to Download&lt;/a&gt;"';
 
 		$this->assertHTMLstringsAreEqual( implode( ' ', $expected ), $cmb->group_wrap_attributes( $field_group ) );
+	}
+
+	public function for_testing_cmb2_group_wrap_attributes( $group_wrap_atts, $field_group ) {
+		$group_wrap_atts['heyo'] = "it's Zao";
+		$group_wrap_atts['data-json'] = $this->json;
+
+		$group_wrap_atts['"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>'] = 'hackers';
+		$group_wrap_atts['hackers'] = '"><script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>';
+
+		return $group_wrap_atts;
 	}
 
 	public static function overloading_test( $cmb2, $noun = '' ) {

@@ -1171,9 +1171,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			),
 		) );
 
-		add_action( 'cmb2_render_test_custom', function() {
-			echo 'hey macarena!';
-		} );
+		add_action( 'cmb2_render_test_custom', array( __CLASS__, 'hey_macarena' ) );
 
 		$field = cmb2_get_field( 'field_test', 'field_test_field_custom', $this->post_id );
 
@@ -1183,9 +1181,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertSame( 'hey macarena!', $this->capture_render( array( $types, 'render' ) ) );
 
-		add_filter( 'cmb2_render_class_test_custom', function() {
-			return 'CMB2_Type_Title';
-		} );
+		add_filter( 'cmb2_render_class_test_custom', array( __CLASS__, 'return_cmb2_type_title' ) );
 
 		$this->assertInstanceOf( 'CMB2_Type_Title', $types->maybe_custom_field_object( 'test_custom' ) );
 
@@ -1193,4 +1189,13 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
 	}
+
+	public static function hey_macarena() {
+		echo 'hey macarena!';
+	}
+
+	public static function return_cmb2_type_title() {
+		return 'CMB2_Type_Title';
+	}
+
 }
