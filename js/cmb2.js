@@ -791,7 +791,11 @@ window.CMB2 = window.CMB2 || {};
 
 		options.onClose = function( dateText, inst ) {
 			// Remove the class when we're done with it (and hide to remove FOUC).
-			$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
+			var $picker = $id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
+			if ( 'timepicker' === method && ! $( inst.input ).val() ) {
+				// Set the timepicker field value if it's empty.
+				inst.input.val( $picker.find( '.ui_tpicker_time' ).text() );
+			}
 
 			// Let's be sure to call onClose if it was added
 			if ( 'function' === typeof existing.onClose ) {
