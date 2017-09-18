@@ -96,6 +96,11 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 	}
 
 	public function test_text_datetime_timestamp_timezone() {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			$this->assertTrue( true );
+			return;
+		}
+
 		$time = time();
 
 		$sanitizer = new CMB2_Sanitize( $this->get_field_object( 'text_datetime_timestamp_timezone' ), array(

@@ -345,6 +345,11 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public function test_get_cmb() {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			$this->assertTrue( true );
+			return;
+		}
+
 		$cmb = new_cmb2_box( array(
 			'id'            => 'metabox',
 			'object_types'  => array( 'post' ),

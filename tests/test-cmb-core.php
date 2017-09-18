@@ -447,6 +447,10 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	public function test_group_field_param_callbacks() {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			$this->assertTrue( true );
+			return;
+		}
 
 		// Retrieve a CMB2 instance
 		$cmb = cmb2_get_metabox( 'test2' );
