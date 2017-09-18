@@ -499,7 +499,7 @@ class CMB2_Utils {
 	}
 
 	/**
-	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
+	 * Helper function for CMB_Utils::php_to_js_dateformat().
 	 *
 	 * @since  2.2.0
 	 * @param  $value Value to wrap/escape
