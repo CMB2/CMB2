@@ -197,7 +197,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @return mixed               Value of property.
 	 */
 	protected function getProperty( $object, $propertyName ) {
-		$reflection = new \ReflectionClass( get_class( $object ) );
+		$reflection = new ReflectionClass( get_class( $object ) );
 		$property = $reflection->getProperty( $propertyName );
 		$property->setAccessible( true );
 
