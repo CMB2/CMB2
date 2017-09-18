@@ -56,6 +56,7 @@ class CMB2 extends CMB2_Base {
 	 * Metabox Defaults
 	 *
 	 * @var   array
+	 * @since 2.XXX Added additional options page properties
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
@@ -105,21 +106,43 @@ class CMB2 extends CMB2_Base {
 		'remove_box_wrap' => false,
 
 		/*
-		 * The following parameters are for options-page metaboxes,
-		 * and several are passed along to add_menu_page()/add_submenu_page()
+		 * The following parameters are for options-page metaboxes which must be set on the first box
+		 * passed to the options page, if multiple boxes are passed.
+		 *
 		 */
-
-		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'option_key'       => '', // The actual option key and admin menu page slug.
-		'parent_slug'      => '', // Used as first param in add_submenu_page().
-		'capability'       => 'manage_options', // Cap required to view options-page.
-		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
-
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
-		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+		'option_key'       => '', // Option key; admin menu slug, unless menu_slug is set
+		'parent_slug'      => '', // Used as first param in add_submenu_page()
+		'menu_slug'        => '', // Alternative menu slug
+		'hookup_class'     => '', // object/class name: Call different CMB2_Page child, default 'CMB2_Page'
+		
+		/*
+		 * The following parameters are for options-page metaboxes which can be set on any box of a multi-box
+		 * options page. The last box which has the parameter set will override any previous box values.
+		 *
+		 * CMB_Page_Hookup() will set the value shown before the pipe as the default if the property is not
+		 * assigned to a box.
+		 *
+		 * 'menu_first_sub' allows overruling WP as to the label on the first submenu item of a top-level custom
+		 * page with subpages, which by default is the same as the top-level page. An example of this is WP's post
+		 * menu, with 'Posts' and 'All Posts' as the first item, which go to the same place. Note if you use this,
+		 * you will have this sub-menu even if there are no other sub-pages. This must be set on one of the boxes
+		 * in the top-level menu!
+		 */
+		'capability'     => null, // 'manage_options' | String        |  WP cap required to view options-page.
+		'disable_settings_errors' => null, // false   | bool          | Disable settings notices from displaying
+		'display_cb'     => null, // false            | Bool,callable | Override the options-page output.
+		'hide_menu'      => null, // false            | Bool          | Whether to hide from menu
+		'icon_url'       => null, // ''               | String        | URL to icon. Only if 'parent_slug' is empty.
+		'menu_title'     => null, // [page_title]     | String        | Sets menu title, defaults to page_title
+		'menu_first_sub' => null, // null             | String        | Label on first submenu item
+		'page_columns'   => null, // 'auto'           | String,int    | Only used on 'post'. 1, 2, or 'auto'.
+		'page_format'    => null, // 'simple'         | String        | 'simple' or 'post', latter like post editor
+		'page_title'     => null, // CMB2 'title'     | String        | Set page title
+		'position'       => null, // null             | Null,int      | Top menu position
+		'reset_action'   => null, // 'default'        | String        | 'default' (field defaults); 'remove'
+		'reset_button'   => null, // ''               | String        | Text for reset button. Empty = no button
+		'save_button'    => null, // 'Save'           | String,bool   | Text for save button. False hides button
 	);
 
 	/**
@@ -1123,6 +1146,7 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Determine if we are on an options page (or saving the options page).
 	 *
+	 * @since  2.XXX Allows menu_slug to be set without losing the actual options key
 	 * @since  2.2.5
 	 *
 	 * @return bool
@@ -1135,12 +1159,16 @@ class CMB2 extends CMB2_Base {
 			return $found_key;
 		}
 
-		if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], $keys ) ) {
-			$found_key = $_GET['page'];
-		}
-
-		if ( ! empty( $_POST['action'] ) && in_array( $_POST['action'], $keys ) ) {
-			$found_key = $_POST['action'];
+		// if either value is set, check against the $keys array
+		$req = ! empty( $_GET['page'] ) ? $_GET['page'] : ( ! empty( $_POST['action'] ) ? $_POST['action'] : false );
+		
+		if ( $req && in_array( $req, $keys, true ) ) {
+			
+			// if there was a menu_slug in the keys, it's corresponding option key was its array key
+			$array_key = array_search( $req, $keys );
+			
+			// numeric key = no menu_slug
+			$found_key = ! is_numeric( $array_key ) ? $array_key : $req;
 		}
 
 		return $found_key ? $found_key : false;
@@ -1149,6 +1177,7 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * Get the options page key.
 	 *
+	 * @since  2.XXX Added check for menu_slug; is only added if
 	 * @since  2.2.5
 	 * @return string|array
 	 */
@@ -1163,8 +1192,8 @@ class CMB2 extends CMB2_Base {
 			$values = $this->meta_box['show_on']['value'];
 		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
 			$values = $this->meta_box['show_on']['options-page'];
-		} elseif ( $this->prop( 'option_key') ) {
-			$values = $this->prop( 'option_key');
+		} elseif ( $this->prop( 'option_key' ) ) {
+			$values = $this->prop( 'option_key' );
 		}
 
 		if ( $values ) {
@@ -1173,6 +1202,14 @@ class CMB2 extends CMB2_Base {
 
 		if ( ! is_array( $key ) ) {
 			$key = array( $key );
+		}
+
+		// menu slugs must always have options_key set, if they do, add the slug to array, with the key being the
+		// option they correspond to
+		$ok = $this->prop( 'option_key' );
+		$ms = $this->prop( 'menu_slug' );
+		if ( $ms && $ok && is_string( $ok ) ) {
+			$key[ $ok ] = $ms;
 		}
 
 		return $key;

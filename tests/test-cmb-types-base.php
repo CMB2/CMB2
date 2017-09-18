@@ -131,6 +131,14 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 			'post_mime_type' => 'image/jpeg',
 			'post_type' => 'attachment',
 		) );
+		
+		/** @since 2.XXX Submit field with minimal configuration */
+		$this->submit = array(
+			'type' => 'submit',
+			'options' => array(
+				'submit' => true,
+			)
+		);
 	}
 
 	public function tearDown() {

@@ -80,6 +80,7 @@ class CMB2_Utils {
 	/**
 	 * Utility method to get a combined list of default and custom registered image sizes
 	 *
+	 * @since  2.XXX Set $image_sizes initially in proper scope
 	 * @since  2.2.4
 	 * @link   http://core.trac.wordpress.org/ticket/18947
 	 * @global array $_wp_additional_image_sizes
@@ -88,6 +89,7 @@ class CMB2_Utils {
 	static function get_available_image_sizes() {
 		global $_wp_additional_image_sizes;
 
+		$image_sizes = array();
 		$default_image_sizes = array( 'thumbnail', 'medium', 'large' );
 		foreach ( $default_image_sizes as $size ) {
 			$image_sizes[ $size ] = array(
@@ -301,9 +303,10 @@ class CMB2_Utils {
 	/**
 	 * Filters out empty values (not including 0).
 	 *
+	 * @since  2.XXX Updated this doc block to reflect return type of array
 	 * @since  2.2.2
 	 * @param  mixed $value Value to check
-	 * @return bool         True or false
+	 * @return array
 	 */
 	public static function filter_empty( $value ) {
 		return array_filter( $value, array( __CLASS__, 'notempty' ) );
@@ -328,7 +331,9 @@ class CMB2_Utils {
 	 * This may need to be filtered for local Window installations.
 	 * If resources do not load, please check the wiki for details.
 	 *
+	 * @since  2.XXX Added param to docblock
 	 * @since  1.0.1
+	 * @param  string $path
 	 * @return string URL to CMB2 resources
 	 */
 	public static function url( $path = '' ) {
@@ -490,8 +495,9 @@ class CMB2_Utils {
 	/**
 	 * Helper function for CMB_Utils->php_to_js_dateformat, because php 5.2 was retarded.
 	 *
+	 * @since  2.XXX Updated this docblock to reflect param type
 	 * @since  2.2.0
-	 * @param  $value Value to wrap/escape
+	 * @param  string $value Value to wrap/escape
 	 * @return string Modified value
 	 */
 	public static function wrap_escaped_chars( $value ) {
@@ -552,6 +558,7 @@ class CMB2_Utils {
 	/**
 	 * Combines attributes into a string for a form element.
 	 *
+	 * @since  2.XXX               Removed second parameter from is_data_attribute(), method calls for one
 	 * @since  1.1.0
 	 * @param  array $attrs        Attributes to concatenate.
 	 * @param  array $attr_exclude Attributes that should NOT be concatenated.
@@ -565,7 +572,7 @@ class CMB2_Utils {
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double
-				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
+				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
