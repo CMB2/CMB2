@@ -384,7 +384,7 @@ class CMB2_Utils {
 		}
 
 		// Check to see if it's anywhere in the root directory
-		$site_dir = self::normalize_path( self::$ABSPATH );
+		$site_dir = self::get_normalized_abspath();
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
 		$url = str_replace(
@@ -394,6 +394,17 @@ class CMB2_Utils {
 		);
 
 		return set_url_scheme( $url );
+	}
+
+	/**
+	 * Get the normalized absolute path defined by WordPress.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @return string  Normalized absolute path.
+	 */
+	protected static function get_normalized_abspath() {
+		return self::normalize_path( self::$ABSPATH );
 	}
 
 	/**
