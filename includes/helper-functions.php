@@ -404,3 +404,18 @@ if ( ! function_exists( 'date_create_from_format' ) ) {
 		return new DateTime( $ymd );
 	}
 }// End if().
+
+if ( ! function_exists( 'date_timestamp_get' ) ) {
+
+	/**
+	 * Returns the Unix timestamp representing the date.
+	 * Reimplementation of DateTime::getTimestamp for PHP < 5.3. :(
+	 *
+	 * @param DateTime
+	 *
+	 * @return int
+	 */
+	function date_timestamp_get( DateTime $date ) {
+		return $date->format( 'U' );
+	}
+}// End if().
