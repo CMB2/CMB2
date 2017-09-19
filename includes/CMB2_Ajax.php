@@ -124,7 +124,7 @@ class CMB2_Ajax {
 
 		$this->embed_args =& $args;
 
-		/**
+		/*
 		 * Set the post_ID so oEmbed won't fail
 		 * wp-includes/class-wp-embed.php, WP_Embed::shortcode()
 		 */
@@ -267,7 +267,7 @@ class CMB2_Ajax {
 		} else {
 
 			$args = array( $this->object_type, $this->object_id, $meta_key );
-			$args[] = 'update' === $action ? $func_args : true;
+			$args[] = 'update' === $action ? $func_args[1] : true;
 
 			// Cache the result to our metadata
 			$status = call_user_func_array( $action . '_metadata', $args );
