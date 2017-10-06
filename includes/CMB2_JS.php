@@ -124,12 +124,13 @@ class CMB2_JS {
 
 		$localized = true;
 		$l10n = array(
-			'ajax_nonce'       => wp_create_nonce( 'ajax_nonce' ),
-			'ajaxurl'          => admin_url( '/admin-ajax.php' ),
-			'script_debug'     => $debug,
-			'up_arrow_class'   => 'dashicons dashicons-arrow-up-alt2',
-			'down_arrow_class' => 'dashicons dashicons-arrow-down-alt2',
-			'defaults'         => array(
+			'ajax_nonce'        => wp_create_nonce( 'ajax_nonce' ),
+			'ajaxurl'           => admin_url( '/admin-ajax.php' ),
+			'script_debug'      => $debug,
+			'up_arrow_class'    => 'dashicons dashicons-arrow-up-alt2',
+			'down_arrow_class'  => 'dashicons dashicons-arrow-down-alt2',
+			'user_can_richedit' => user_can_richedit(),
+			'defaults'          => array(
 				'color_picker' => false,
 				'date_picker'  => array(
 					'changeMonth'     => true,
