@@ -79,7 +79,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		// Test another oembed URL
 		$args['url'] = 'https://twitter.com/Jtsternberg/status/703434891518726144';
 
-		$args['oembed_result'] = sprintf( '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>', $args['url'] );
+		$args['oembed_result'] = sprintf( '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch%1$s">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="%2$s%1$s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>', CMB2_Utils::wp_at_least( '4.8.2' ) ? '?ref_src=twsrc%5Etfw' : '', $args['url'] );
 
 		$this->assertOEmbedResult( $args );
 	}
@@ -111,7 +111,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			$expected = $this->is_connected() ? array(
 				'<iframe width="640" height="360" src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed" frameborder="0" allowfullscreen></iframe>',
 				'time_1',
-				'<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>',
+				sprintf( '<blockquote class="twitter-tweet" data-width="550"><p lang="en" dir="ltr">That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch%1$s">@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144%1$s">February 27, 2016</a></blockquote><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>', CMB2_Utils::wp_at_least( '4.8.2' ) ? '?ref_src=twsrc%5Etfw' : '' ),
 				'time_2',
 			) : array(
 				'{{unknown}}',
@@ -122,7 +122,7 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 				$opt_key = $opt_keys[ $key ];
 
 				if ( 0 !== strpos( $expected_value, 'time_' ) ) {
-					$this->assertEquals( $expected_value, $opt_values[ $key ] );
+					$this->assertHTMLstringsAreEqual( $expected_value, $opt_values[ $key ] );
 					$this->assertTrue( 0 === strpos( $opt_key, '_oembed_' ) );
 				} else {
 					$this->assertTrue( 0 === strpos( $opt_key, '_oembed_time_' ) );
