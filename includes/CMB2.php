@@ -469,12 +469,13 @@ class CMB2 extends CMB2_Base {
 			return;
 		}
 
-		$desc            = $field_group->args( 'description' );
-		$label           = $field_group->args( 'name' );
-		$group_val       = (array) $field_group->value();
 		$field_group->index = 0;
 
 		$field_group->peform_param_callback( 'before_group' );
+
+		$desc      = $field_group->args( 'description' );
+		$label     = $field_group->args( 'name' );
+		$group_val = (array) $field_group->value();
 
 		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', $this->group_wrap_attributes( $field_group ), '>';
 
