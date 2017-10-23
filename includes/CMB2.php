@@ -428,18 +428,41 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Render a repeatable group.
+	 * Render a group of fields.
 	 *
-	 * @param array $args Array of field arguments for a group field parent.
+	 * @param array|CMB2_Field $args Array of field arguments for a group field parent or the group parent field.
 	 * @return CMB2_Field|null Group field object.
 	 */
 	public function render_group( $args ) {
+		$field_group = false;
 
-		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
+		if ( $args instanceof CMB2_Field  ) {
+			$field_group = 'group' === $args->type() ? $args : false;
+		} elseif ( isset( $args['id'], $args['fields'] ) && is_array( $args['fields'] ) ) {
+			$field_group = $this->get_field( $args );
+		}
+
+		if ( ! $field_group ) {
 			return;
 		}
 
-		$field_group = $this->get_field( $args );
+		$field_group->render_context = 'edit';
+		$field_group->peform_param_callback( 'render_row_cb' );
+
+		return $field_group;
+	}
+
+	/**
+	 * The default callback to render a group of fields.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @param  array      $field_args  Array of field arguments for the group field parent.
+	 * @param  CMB2_Field $field_group The CMB2_Field group object.
+	 *
+	 * @return CMB2_Field|null Group field object.
+	 */
+	public function render_group_callback( $field_args, $field_group ) {
 
 		// If field is requesting to be conditionally shown.
 		if ( ! $field_group || ! $field_group->should_show() ) {
@@ -1410,6 +1433,12 @@ class CMB2 extends CMB2_Base {
 
 				// Initiate oembed Ajax hooks.
 				cmb2_ajax();
+				break;
+
+			case 'group':
+				if ( empty( $field['render_row_cb'] ) ) {
+					$field['render_row_cb'] = array( $this, 'render_group_callback' );
+				}
 				break;
 		}
 
