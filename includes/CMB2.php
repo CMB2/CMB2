@@ -1293,11 +1293,14 @@ class CMB2 extends CMB2_Base {
 	 * Get a field object
 	 *
 	 * @since  2.0.3
-	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object.
-	 * @param  CMB2_Field|null         $field_group (optional) CMB2_Field object (group parent).
+	 * @param  string|array|CMB2_Field $field        Metabox field id or field config array or CMB2_Field object.
+	 * @param  CMB2_Field|null         $field_group  (optional) CMB2_Field object (group parent).
+	 * @param  bool                    $reset_cached (optional) Reset the internal cache for this field object.
+	 *                                               Use sparingly.
+	 *
 	 * @return CMB2_Field|false                     CMB2_Field object (or false).
 	 */
-	public function get_field( $field, $field_group = null ) {
+	public function get_field( $field, $field_group = null, $reset_cached = false ) {
 		if ( $field instanceof CMB2_Field ) {
 			return $field;
 		}
@@ -1314,7 +1317,8 @@ class CMB2 extends CMB2_Base {
 		list( $field_id, $sub_field_id ) = $ids;
 
 		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
-		if ( array_key_exists( $index, $this->fields ) ) {
+
+		if ( array_key_exists( $index, $this->fields ) && ! $reset_cached ) {
 			return $this->fields[ $index ];
 		}
 

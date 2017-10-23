@@ -289,6 +289,21 @@ abstract class CMB2_Base {
 	}
 
 	/**
+	 * Unset the cached results of the param callback.
+	 *
+	 * @since  2.2.6
+	 * @param  string $param Field parameter
+	 * @return CMB2_Base
+	 */
+	public function unset_param_callback_cache( $param ) {
+		if ( isset( $this->callback_results[ $param ] ) ) {
+			unset( $this->callback_results[ $param ] );
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Handles the parameter callbacks, and passes this object as parameter.
 	 *
 	 * @since  2.2.3
