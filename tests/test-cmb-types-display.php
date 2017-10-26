@@ -189,23 +189,32 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 	 */
 	public function test_oembed() {
 		$vid = 'EOfy5LDpEHo';
-		$value = 'https://www.youtube.com/watch?v=' . $vid;
-			update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
-
-			$expected_field = $this->is_connected()
-				? '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><div class="cmb2-oembed"><iframe width="300" height="169" src="www.youtube.com/embed/' . $vid . '?feature=oembed" frameborder="0" allowfullscreen></iframe></div></div>'
-				: '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">' . sprintf( esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ), '<a href="www.youtube.com/watch?v=' . $vid . '">www.youtube.com/watch?v=' . $vid . '</a>', '<a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>' ) . '</p></div>';
-
-			$actual_field = $this->capture_render( array( $this->get_field_object( 'oembed' ), 'render_column' ) );
-
-		if ( ! $this->is_connected() ) {
-			$expected_field = '<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">No oEmbed Results Found for <a href="www.youtube.com/watch?v=' . $vid . '">www.youtube.com/watch?v=' . $vid . '</a>. View more info at <a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>.</p></div>';
-		}
-
-		$this->assertHTMLstringsAreEqual(
-			preg_replace( '~https?://~', '', $expected_field ), // normalize http differences
-			preg_replace( '~https?://~', '', $actual_field ) // normalize http differences
+		$args = array(
+			'src'       => 'http://www.youtube.com/embed/' . $vid . '?feature=oembed',
+			'url'       => 'https://www.youtube.com/watch?v=' . $vid,
+			'field_id'  => 'field_test_field',
+			'object_id' => $this->post_id,
 		);
+
+		update_post_meta( $this->post_id, $this->text_type_field['id'], $args['url'] );
+
+		$result_verifiers = array(
+			'connected' => array(
+				'<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><div class="cmb2-oembed"><iframe ',
+				'src="www.youtube.com/embed/' . $vid . '?feature=oembed"',
+				'</iframe></div></div>',
+			),
+			'no_connection' => array(
+				'<div class="cmb-column cmb-type-oembed cmb2-id-field-test-field" data-fieldtype="oembed"><p class="ui-state-error-text">' . sprintf( esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ), '<a href="www.youtube.com/watch?v=' . $vid . '">www.youtube.com/watch?v=' . $vid . '</a>', '<a href="codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>' ) . '</p></div>',
+			),
+		);
+
+		$cb = array( $this->get_field_object( 'oembed' ), 'render_column' );
+		$actual_field = $this->capture_render( $cb );
+
+		$this->assertVerifiersMatch( $result_verifiers, $actual_field );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
 	public function test_file_list() {
