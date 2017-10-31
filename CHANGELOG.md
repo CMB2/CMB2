@@ -8,8 +8,6 @@ All notable changes to this project will be documented in this file.
 * Ensure `'file'` field type ID is removed from the database if the `'file'` field type's value is empty ([Support thread](https://wordpress.org/support/topic/bug-field-of-type-file-does-not-delete-postmeta-properly/)).
 * Fix JS errors when `user_can_richedit()` is false ("Disable the visual editor when writing" user option is checked, or various unsupported browsers). See [#1031](https://github.com/CMB2/CMB2/pull/1031).
 
-## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
-
 ### Enhancements
 
 * Update to instead initate CMB2 hookup via `"cmb2_init_hoo0kup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
@@ -17,6 +15,12 @@ All notable changes to this project will be documented in this file.
 * Allow using the `'render_row_cb'` param for group fields. Fixes [#1041](https://github.com/CMB2/CMB2/issues/1041).
 * Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
 * Allow resetting cached callback results (`CMB2_Base::unset_param_callback_cache()`).
+
+## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
+
+### Enhancements
+
+* Update to instead initate CMB2 hookup via `"cmb2_init_hoo0kup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 
 ### Bug Fixes
 
