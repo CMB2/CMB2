@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 * Allow using the `'render_row_cb'` param for group fields. Fixes [#1041](https://github.com/CMB2/CMB2/issues/1041).
 * Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
 * Allow resetting cached callback results (`CMB2_Base::unset_param_callback_cache()`).
+* Portuguese translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
 
 ## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
 
