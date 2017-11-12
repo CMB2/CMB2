@@ -421,6 +421,18 @@ window.CMB2 = window.CMB2 || {};
 					}
 				});
 			}
+
+			// Fix hidden empty rows
+			$row.find('.empty-row').find(cmb.repeatUpdate).each(function() {
+				var $emptyField = $( this );
+				var oldIndex = $emptyField.attr('id').split('_').pop();
+				var oldNameRegex = new RegExp('\\['+oldIndex+'\\]$');
+				var oldIdRegex = new RegExp('_'+oldIndex+'$');
+				var newName = $emptyField.attr('name').replace(oldNameRegex, '[' + (prevNum + 1) + ']' );
+				var newId = $emptyField.attr('id').replace(oldIdRegex, '_' + ( prevNum + 1 ) );
+				$emptyField.attr('name', newName);
+				$emptyField.attr('id', newId);
+			});
 		}
 
 		$elements.filter( ':checked' ).removeAttr( 'checked' );
@@ -433,13 +445,13 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		$elements.each( function() {
-			cmb.elReplacements( $( this ), prevNum );
+			cmb.elReplacements( $( this ), prevNum, group );
 		} );
 
 		return cmb;
 	};
 
-	cmb.elReplacements = function( $newInput, prevNum ) {
+	cmb.elReplacements = function( $newInput, prevNum, group ) {
 		var oldFor    = $newInput.attr( 'for' );
 		var oldVal    = $newInput.val();
 		var type      = $newInput.prop( 'type' );
@@ -451,10 +463,22 @@ window.CMB2 = window.CMB2 || {};
 			attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
 		} else {
 			var oldName = $newInput.attr( 'name' );
-			// Replace 'name' attribute key
-			var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
+			var newName;
 			oldID       = $newInput.attr( 'id' );
-			newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+			// Handle adding groups vs rows.
+			if ( group ) {
+				// Expect another bracket after group's index closing bracket.
+				newName = oldName ? oldName.replace( '['+ prevNum +'][', '['+ cmb.idNumber +'][' ) : '';
+				// Expect another underscore after group's index trailing underscore.
+				newID   = oldID ? oldID.replace( '_' + prevNum + '_', '_' + cmb.idNumber + '_' ) : '';
+			}
+			else {
+				// Row indexes are at the very end of the string.
+				var lastNameIndex = new RegExp( '\\[' + prevNum + '\\]$' );
+				var lastIdIndex = new RegExp( '_' + prevNum + '$' );
+				newName = oldName ? oldName.replace( lastNameIndex, '[' + cmb.idNumber + ']' ) : '';
+				newID   = oldID ? oldID.replace( lastIdIndex, '_' + cmb.idNumber ) : '';
+			}
 			attrs       = {
 				id: newID,
 				name: newName,
