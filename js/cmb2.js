@@ -401,7 +401,8 @@ window.CMB2 = window.CMB2 || {};
 		var $elements = $row.find( cmb.repeatUpdate );
 		if ( group ) {
 
-			var $other  = $row.find( '[id]' ).not( cmb.repeatUpdate );
+			var $other = $row.find( '[id]' ).not( cmb.repeatUpdate );
+			var $empty = $row.find('.empty-row').find( cmb.repeatUpdate );
 
 			// Remove extra ajaxed rows
 			$row.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
@@ -423,16 +424,19 @@ window.CMB2 = window.CMB2 || {};
 			}
 
 			// Fix hidden empty rows
-			$row.find('.empty-row').find(cmb.repeatUpdate).each(function() {
-				var $emptyField = $( this );
-				var oldIndex = $emptyField.attr('id').split('_').pop();
-				var oldNameRegex = new RegExp('\\['+oldIndex+'\\]$');
-				var oldIdRegex = new RegExp('_'+oldIndex+'$');
-				var newName = $emptyField.attr('name').replace(oldNameRegex, '[' + (prevNum + 1) + ']' );
-				var newId = $emptyField.attr('id').replace(oldIdRegex, '_' + ( prevNum + 1 ) );
-				$emptyField.attr('name', newName);
-				$emptyField.attr('id', newId);
-			});
+			if ( $empty.length ) {
+				$empty.each(function() {
+					var $emptyField = $( this );
+					var oldIndex    = $emptyField.attr('id').split('_').pop();
+					var NameRegex   = new RegExp( '\\['+oldIndex+'\\]$' );
+					var IdRegex     = new RegExp( '_'+oldIndex+'$' );
+					var newName     = $emptyField.attr('name').replace( NameRegex, '[' + (prevNum + 1) + ']' );
+					var newId       = $emptyField.attr('id').replace( IdRegex, '_' + ( prevNum + 1 ) );
+
+					$emptyField.attr('name', newName);
+					$emptyField.attr('id', newId);
+				});
+			}
 		}
 
 		$elements.filter( ':checked' ).removeAttr( 'checked' );
@@ -475,11 +479,12 @@ window.CMB2 = window.CMB2 || {};
 			else {
 				// Row indexes are at the very end of the string.
 				var lastNameIndex = new RegExp( '\\[' + prevNum + '\\]$' );
-				var lastIdIndex = new RegExp( '_' + prevNum + '$' );
+				var lastIdIndex   = new RegExp( '_' + prevNum + '$' );
 				newName = oldName ? oldName.replace( lastNameIndex, '[' + cmb.idNumber + ']' ) : '';
 				newID   = oldID ? oldID.replace( lastIdIndex, '_' + cmb.idNumber ) : '';
 			}
-			attrs       = {
+
+			attrs = {
 				id: newID,
 				name: newName,
 				'data-iterator': cmb.idNumber,
