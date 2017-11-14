@@ -106,12 +106,32 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 
-		if ( ! empty( $_GET['settings-updated'] ) ) {
-			if ( 'true' === $_GET['settings-updated'] ) {
-				add_settings_error( "{$this->option_key}-notices", '', __( 'Settings updated.', 'cmb2' ), 'updated' );
-			} else {
-				add_settings_error( "{$this->option_key}-notices", '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
-			}
+		$this->maybe_register_message();
+	}
+
+	/**
+	 * Add a settings message if on this settings page.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @return void
+	 */
+	public function maybe_register_message() {
+		$is_options_page = isset( $_GET['page'] ) && $this->option_key === $_GET['page'];
+		$should_notify   = isset( $_GET['settings-updated'] ) && $is_options_page;
+		$is_updated      = $should_notify && 'true' === $_GET['settings-updated'];
+		$setting         = "{$this->option_key}-notices";
+		$code            = '';
+		$message         = __( 'Nothing to update.', 'cmb2' );
+		$type            = 'notice-warning';
+
+		if ( $is_updated ) {
+			$message = __( 'Settings updated.', 'cmb2' );
+			$type    = 'updated';
+		}
+
+		if ( $should_notify ) {
+			add_settings_error( $setting, $code, $message, $type );
 		}
 	}
 
