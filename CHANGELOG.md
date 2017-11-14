@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 * Allow resetting cached callback results (`CMB2_Base::unset_param_callback_cache()`).
 * Persian translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
 * Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes.
+* Updated many the oembed-related unit tests to more reliably test the relevant parts, and not so much the actual success of the WordPress functions.
 
 ## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
 
