@@ -3,16 +3,6 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Bug Fixes
-
-* Ensure `'file'` field type ID is removed from the database if the `'file'` field type's value is empty ([Support thread](https://wordpress.org/support/topic/bug-field-of-type-file-does-not-delete-postmeta-properly/)).
-* Fix JS errors when `user_can_richedit()` is false ("Disable the visual editor when writing" user option is checked, or various unsupported browsers). See [#1031](https://github.com/CMB2/CMB2/pull/1031).
-* Fix issue where some European date formats (e.g. `F j, Y`) would not properly translate into jQuery UI date formats. [Support thread](https://wordpress.org/support/topic/using-wordpresss-date-time-format-settings)
-* Fix repeating fields within repeating groups having the values/indexes incorrectly associated. Props [@daggerhart](https://github.com/daggerhart) ([#1047](https://github.com/CMB2/CMB2/pull/1047)). Fixes [#1035](https://github.com/CMB2/CMB2/issues/1035), [#348](https://github.com/CMB2/CMB2/issues/348).
-* Fixed multiple update messages on settings pages when CMB2 option pages were registered ([#1049](https://github.com/CMB2/CMB2/issues/1049)).
-* Fix issue where using multiple oembed fields could cause incorrectly cached arguments to be used.
-* Fix bug where `'select_all_button' => false` was not working for `'taxonomy_multicheck'` field type ([#1005](https://github.com/CMB2/CMB2/issues/1005)).
-
 ### Enhancements
 
 * Update to instead initate CMB2 hookup via `"cmb2_init_hoo0kup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
@@ -23,6 +13,16 @@ All notable changes to this project will be documented in this file.
 * Persian translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
 * Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes.
 * Updated many the oembed-related unit tests to more reliably test the relevant parts, and not so much the actual success of the WordPress functions.
+
+### Bug Fixes
+
+* Ensure `'file'` field type ID is removed from the database if the `'file'` field type's value is empty ([Support thread](https://wordpress.org/support/topic/bug-field-of-type-file-does-not-delete-postmeta-properly/)).
+* Fix JS errors when `user_can_richedit()` is false ("Disable the visual editor when writing" user option is checked, or various unsupported browsers). See [#1031](https://github.com/CMB2/CMB2/pull/1031).
+* Fix issue where some European date formats (e.g. `F j, Y`) would not properly translate into jQuery UI date formats. [Support thread](https://wordpress.org/support/topic/using-wordpresss-date-time-format-settings)
+* Fix repeating fields within repeating groups having the values/indexes incorrectly associated. Props [@daggerhart](https://github.com/daggerhart) ([#1047](https://github.com/CMB2/CMB2/pull/1047)). Fixes [#1035](https://github.com/CMB2/CMB2/issues/1035), [#348](https://github.com/CMB2/CMB2/issues/348).
+* Fixed multiple update messages on settings pages when CMB2 option pages were registered ([#1049](https://github.com/CMB2/CMB2/issues/1049)).
+* Fix issue where using multiple oembed fields could cause incorrectly cached arguments to be used.
+* Fix bug where `'select_all_button' => false` was not working for `'taxonomy_multicheck'` field type ([#1005](https://github.com/CMB2/CMB2/issues/1005)).
 
 ## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
 
