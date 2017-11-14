@@ -106,6 +106,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [Project Homepage](https://cmb2.io)
 * [Github project page](https://github.com/CMB2/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/CMB2/CMB2/wiki)
+* [Snippet Library](https://github.com/CMB2/CMB2-Snippet-Library/)
 
 ## Installation
 
