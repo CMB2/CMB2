@@ -171,7 +171,17 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 		$this->cmb->save_fields();
 		$options = $this->get_option();
 
-		$this->assertEquals( $new, $options );
+		if ( $this->is_3_8() ) {
+			foreach ( array(
+				'<iframe',
+				'src="https://www.youtube.com/embed/NCXyEKqmWdA?feature=oembed"',
+				'</iframe>',
+			) as $part ) {
+				$this->assertTrue( false !== strpos( $options['_oembed_887df34cb3e109936f1e848042f873a3'], $part ), $part );
+			}
+		} else {
+			$this->assertEquals( $new, $options );
+		}
 	}
 
 	protected function get_option() {
