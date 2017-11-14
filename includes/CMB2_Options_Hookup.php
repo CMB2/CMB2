@@ -110,7 +110,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 
 	/**
-	 * Add a settings message if on this settings page.
+	 * If there is a message callback, let it determine how to register the message,
+	 * else add a settings message if on this settings page.
 	 *
 	 * @since  2.2.6
 	 *
@@ -118,7 +119,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function maybe_register_message() {
 		$is_options_page = isset( $_GET['page'] ) && $this->option_key === $_GET['page'];
-		$should_notify   = isset( $_GET['settings-updated'] ) && $is_options_page;
+		$should_notify   = ! $this->cmb->prop( 'disable_settings_errors' ) && isset( $_GET['settings-updated'] ) && $is_options_page;
 		$is_updated      = $should_notify && 'true' === $_GET['settings-updated'];
 		$setting         = "{$this->option_key}-notices";
 		$code            = '';
@@ -130,7 +131,39 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$type    = 'updated';
 		}
 
-		if ( $should_notify ) {
+		// Check if parameter has registered a callback.
+		if ( $cb = $this->cmb->maybe_callback( 'message_cb' ) ) {
+
+			/**
+			 * The 'message_cb' callback will receive the following parameters.
+			 * Unless there are other reasons for notifications, the callback should only
+			 * `add_settings_error()` if `$args['should_notify']` is truthy.
+			 *
+			 * @param CMB2  $cmb The CMB2 object.
+			 * @param array $args {
+			 *     An array of message arguments
+			 *
+			 *     @type bool   $is_options_page Whether current page is this options page.
+			 *     @type bool   $should_notify   Whether options were saved and we should be notified.
+			 *     @type bool   $is_updated      Whether options were updated with save (or stayed the same).
+			 *     @type string $setting         For add_settings_error(), Slug title of the setting to which
+			 *                                   this error applies.
+			 *     @type string $code            For add_settings_error(), Slug-name to identify the error.
+			 *                                   Used as part of 'id' attribute in HTML output.
+			 *     @type string $message         For add_settings_error(), The formatted message text to display
+			 *                                   to the user (will be shown inside styled `<div>` and `<p>` tags).
+			 *                                   Will be 'Settings updated.' if $is_updated is true, else 'Nothing to update.'
+			 *     @type string $type            For add_settings_error(), Message type, controls HTML class.
+			 *                                   Accepts 'error', 'updated', '', 'notice-warning', etc.
+			 *                                   Will be 'updated' if $is_updated is true, else 'notice-warning'.
+			 * }
+			 */
+			$args = compact( 'is_options_page', 'should_notify', 'is_updated', 'setting', 'code', 'message', 'type' );
+
+			$this->cmb->do_callback( $cb, $args );
+
+		} elseif ( $should_notify ) {
+
 			add_settings_error( $setting, $code, $message, $type );
 		}
 	}
@@ -174,7 +207,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		global $parent_file;
 
 		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php
-		if ( 'options-general.php' !== $parent_file && ! $this->cmb->prop( 'disable_settings_errors' ) ) {
+		if ( 'options-general.php' !== $parent_file ) {
 			settings_errors( "{$this->option_key}-notices" );
 		}
 	}

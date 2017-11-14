@@ -114,6 +114,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'admin_menu_hook'  => 'admin_menu',
 			'display_cb'       => false,
 			'save_button'      => '',
+			'message_cb'       => '',
 			'option_key'       => '',
 			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 		);
