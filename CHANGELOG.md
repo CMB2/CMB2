@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 * Persian translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
 * Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes.
 * Updated many the oembed-related unit tests to more reliably test the relevant parts, and not so much the actual success of the WordPress functions.
+* Updated travis config to Install PHP5.2/5.3 on trusty for unit tests. Stolen from [gutenberg/pull/2049](https://github.com/WordPress/gutenberg/pull/2049). Intended to compensate for Travis removing support for PHP 5.2/5.3.
 
 ### Bug Fixes
 
