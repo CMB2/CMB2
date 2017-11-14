@@ -1649,11 +1649,12 @@ class CMB2 extends CMB2_Base {
 	 * Handles metabox property callbacks, and passes this $cmb object as property.
 	 *
 	 * @since  2.2.3
-	 * @param  callable $cb The callback method/function/closure.
-	 * @return mixed        Return of the callback function.
+	 * @param  callable $cb                The callback method/function/closure
+	 * @param  mixed    $additional_params Any additoinal parameters which should be passed to the callback.
+	 * @return mixed                       Return of the callback function.
 	 */
-	protected function do_callback( $cb ) {
-		return call_user_func( $cb, $this );
+	public function do_callback( $cb, $additional_params = null ) {
+		return call_user_func( $cb, $this, $additional_params );
 	}
 
 	/**
