@@ -126,7 +126,6 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 #### Enhancements
 
-* Update to instead initate CMB2 hookup via `"cmb2_init_hoo0kup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 * Move the fetching of group label and description to _after_ calling `'before_group'` parameter.
 * Allow using the `'render_row_cb'` param for group fields. Fixes [#1041](https://github.com/CMB2/CMB2/issues/1041).
 * Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
@@ -150,7 +149,7 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 #### Enhancements
 
-* Update to instead initate CMB2 hookup via "cmb2_init_hookup_{$cmb_id}" hook. Allows plugins to unhook/rehook/etc.
+* Update to instead initate CMB2 hookup via `"cmb2_init_hookup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 
 #### Bug Fixes
 
@@ -785,7 +784,6 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 #### Enhancements
 
-* Update to instead initate CMB2 hookup via `"cmb2_init_hoo0kup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 * Move the fetching of group label and description to _after_ calling `'before_group'` parameter.
 * Allow using the `'render_row_cb'` param for group fields. Fixes [#1041](https://github.com/CMB2/CMB2/issues/1041).
 * Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
