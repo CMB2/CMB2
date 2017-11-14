@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 * Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
 * Allow resetting cached callback results (`CMB2_Base::unset_param_callback_cache()`).
 * Persian translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
-* Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes.
+* Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes. An example has been added to [example-functions.php](https://github.com/CMB2/CMB2/commit/43d513c135e52c327bafa06309821c29323ae2dd#diff-378c74d0ffffc1759b8779a135476777).
 * Updated many the oembed-related unit tests to more reliably test the relevant parts, and not so much the actual success of the WordPress functions.
 * Updated travis config to Install PHP5.2/5.3 on trusty for unit tests. Stolen from [gutenberg/pull/2049](https://github.com/WordPress/gutenberg/pull/2049). Intended to compensate for Travis removing support for PHP 5.2/5.3.
 
