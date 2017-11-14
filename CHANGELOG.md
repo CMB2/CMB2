@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Enhancements
+### Bug Fixes
+
+## [2.2.6 - 2017-11-14][https://github.com/CMB2/CMB2/releases/tag/v2.2.6]
 
 ### Enhancements
 

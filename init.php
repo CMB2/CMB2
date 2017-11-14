@@ -21,7 +21,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.2.5.3
+ * Version:      2.2.6
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -54,7 +54,7 @@
  * ***********************************************************************
  */
 
-if ( ! class_exists( 'CMB2_Bootstrap_226_Trunk', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_226', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -67,7 +67,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_226_Trunk', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      https://cmb2.io
 	 */
-	class CMB2_Bootstrap_226_Trunk {
+	class CMB2_Bootstrap_226 {
 
 		/**
 		 * Current version number
@@ -75,7 +75,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_226_Trunk', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.2.5.3';
+		const VERSION = '2.2.6';
 
 		/**
 		 * Current version hook priority.
@@ -84,20 +84,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_226_Trunk', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9973;
+		const PRIORITY = 9972;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_226_Trunk object
+		 * Single instance of the CMB2_Bootstrap_226 object
 		 *
-		 * @var CMB2_Bootstrap_226_Trunk
+		 * @var CMB2_Bootstrap_226
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_226_Trunk object
+		 * Creates/returns the single instance CMB2_Bootstrap_226 object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_226_Trunk Single instance object
+		 * @return CMB2_Bootstrap_226 Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -189,6 +189,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_226_Trunk', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_226_Trunk::initiate();
+	CMB2_Bootstrap_226::initiate();
 
 }// End if().
