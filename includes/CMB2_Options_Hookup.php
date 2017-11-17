@@ -186,6 +186,9 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>
+			<?php if ( $this->cmb->prop( 'description' ) ) : ?>
+				<p><?php echo wp_kses_post( $this->cmb->prop( 'description' ) ); ?></p>
+			<?php endif; ?>
 			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $this->option_key ); ?>">
 				<?php $this->options_page_metabox(); ?>
