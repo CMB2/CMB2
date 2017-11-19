@@ -48,14 +48,14 @@ class CMB2_Option {
 	 *
 	 * @var array
 	 */
-	protected $options = array();
+	public $options = array();
 
 	/**
 	 * Current option key
 	 *
 	 * @var string
 	 */
-	protected $key = '';
+	public $key = '';
 
 	/**
 	 * Initiate option object
