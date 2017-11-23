@@ -39,8 +39,13 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		if ( preg_match( '/^' . $hex_color . '/i', $meta_value ) ) {
 			// Value is just 123abc, so prepend #
 			$meta_value = '#' . $meta_value;
-		} elseif ( ! preg_match( '/^#' . $hex_color . '/i', $meta_value ) ) {
-			// Value doesn't match #123abc, so sanitize to just #
+		} elseif (
+			// If value doesn't match #123abc...
+			! preg_match( '/^#' . $hex_color . '/i', $meta_value )
+			// And value doesn't match rgba()...
+			&& 0 !== strpos( trim( $meta_value ), 'rgba' )
+		) {
+			// Then sanitize to just #.
 			$meta_value = '#';
 		}
 
