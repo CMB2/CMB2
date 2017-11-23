@@ -260,6 +260,9 @@ function yourprefix_register_demo_metabox() {
 		'id'      => $prefix . 'colorpicker',
 		'type'    => 'colorpicker',
 		'default' => '#ffffff',
+		// 'options' => array(
+		// 	'alpha' => true, // Make this a rgba color picker.
+		// ),
 		// 'attributes' => array(
 		// 	'data-colorpicker' => json_encode( array(
 		// 		'palettes' => array( '#3dd0cc', '#ff834c', '#4fa2c0', '#0bc991', ),

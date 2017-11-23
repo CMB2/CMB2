@@ -1446,6 +1446,12 @@ class CMB2 extends CMB2_Base {
 					$field['render_row_cb'] = array( $this, 'render_group_callback' );
 				}
 				break;
+			case 'colorpicker':
+				// https://github.com/JayWood/CMB2_RGBa_Picker
+				// Dequeue the rgba_colorpicker custom field script if it is used,
+				// since we now enqueue our own more current version.
+				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
+				break;
 		}
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
