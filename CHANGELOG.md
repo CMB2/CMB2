@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-## [2.2.6 - 2017-11-14][https://github.com/CMB2/CMB2/releases/tag/v2.2.6]
+## [2.2.6 - 2017-11-14](https://github.com/CMB2/CMB2/releases/tag/v2.2.6)
 
 ### Enhancements
 
@@ -31,7 +31,7 @@ All notable changes to this project will be documented in this file.
 * Fix issue where using multiple oembed fields could cause incorrectly cached arguments to be used.
 * Fix bug where `'select_all_button' => false` was not working for `'taxonomy_multicheck'` field type ([#1005](https://github.com/CMB2/CMB2/issues/1005)).
 
-## [2.2.5.3 - 2017-08-22][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3]
+## [2.2.5.3 - 2017-08-22](https://github.com/CMB2/CMB2/releases/tag/v2.2.5.3)
 
 ### Enhancements
 
@@ -47,20 +47,20 @@ All notable changes to this project will be documented in this file.
 * Change the updated-settings notice query variable so that WordPress does not auto-add settings notices on top of ours.
 * For settings pages, only output settings errors if WordPress does not do it by default (for sub-pages of `options-general.php`), and if the errors are not disabled via the `'disable_settings_errors'` box property.
 
-## [2.2.5.2 - 2017-08-08][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.2]
+## [2.2.5.2 - 2017-08-08](https://github.com/CMB2/CMB2/releases/tag/v2.2.5.2)
 
 ### Bug Fixes
 
 * Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/page/2/)
 * Fix issue in 2.2.5 with options pages not saving when `'parent_slug'` box property was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
 
-## [2.2.5.1 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1]
+## [2.2.5.1 - 2017-08-07](https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1)
 
 ### Bug Fixes
 
 * Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/)
 
-## [2.2.5 - 2017-08-07][https://github.com/CMB2/CMB2/releases/tag/v2.2.5]
+## [2.2.5 - 2017-08-07](https://github.com/CMB2/CMB2/releases/tag/v2.2.5)
 
 ### Enhancements
 
