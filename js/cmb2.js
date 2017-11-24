@@ -478,10 +478,8 @@ window.CMB2 = window.CMB2 || {};
 			}
 			else {
 				// Row indexes are at the very end of the string.
-				var lastNameIndex = new RegExp( '\\[' + prevNum + '\\]$' );
-				var lastIdIndex   = new RegExp( '_' + prevNum + '$' );
-				newName = oldName ? oldName.replace( lastNameIndex, '[' + cmb.idNumber + ']' ) : '';
-				newID   = oldID ? oldID.replace( lastIdIndex, '_' + cmb.idNumber ) : '';
+				newName = oldName ? cmb.replaceLast( oldName, '['+ prevNum +'][', '['+ cmb.idNumber +'][' ) : '';
+				newID   = oldID ? cmb.replaceLast( oldID, '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 			}
 
 			attrs = {
@@ -1050,6 +1048,15 @@ window.CMB2 = window.CMB2 || {};
 		var args = Array.prototype.slice.call( arguments, 2 );
 		args.push( cmb );
 		$el.trigger( evtName, args );
+	};
+
+	cmb.replaceLast = function( string, search, replace ) {
+		// find the index of last time word was used
+		var n = string.lastIndexOf( search );
+
+		// slice the string in 2, one from the start to the lastIndexOf
+		// and then replace the word in the rest
+		return string.slice( 0, n ) + string.slice( n ).replace( search, replace );
 	};
 
 	$( cmb.init );
