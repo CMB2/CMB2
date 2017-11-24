@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+* Fix issue (introduced in 2.2.6) with complex fields set as repeatable not being able to save additional fields. Fixes [#1054](https://github.com/CMB2/CMB2/issues/1054).
+
 ## [2.2.6 - 2017-11-14](https://github.com/CMB2/CMB2/releases/tag/v2.2.6)
 
 ### Enhancements
