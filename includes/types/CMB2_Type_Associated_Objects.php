@@ -148,7 +148,9 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				'findtxt'         => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
 				'groupId'         => $this->field->group ? $this->field->group->id() : false,
 				'fieldId'         => $this->field->_id(),
-				'exclude'         => isset( $args['post__not_in'] ) ? $args['post__not_in'] : array(),
+				'exclude'         => isset( $this->query_args['post__not_in'] )
+					? $this->query_args['post__not_in']
+					: array(),
 				'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) )
 			) );
 
@@ -206,10 +208,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				'posts_per_page' => 100,
 			) );
 
-			// TODO: Remove reliance on superglobal?
-			if ( isset( $_POST['post'] ) ) {
-				$this->query_args['post__not_in'] = array( absint( $_POST['post'] ) );
-			}
+			$this->query_args['post__not_in'] = array( $this->field->object_id() );
 
 			// loop through post types to get labels for all
 			$this->post_type_labels = array();
@@ -241,7 +240,9 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			// Setup our args
 			$this->query_args = wp_parse_args( $this->query_args, array(
 				'number' => 100,
+				'exclude' => array( $this->field->object_id() ),
 			) );
+
 			$this->post_type_labels = $this->_text( 'users_text', esc_html__( 'Users' ) );
 		}
 
