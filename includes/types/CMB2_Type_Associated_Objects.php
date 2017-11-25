@@ -200,19 +200,19 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		if ( 'post' === $this->query_object_type ) {
 
 			// Setup our args
-			$this->query_object_type = wp_parse_args( $this->query_args, array(
+			$this->query_args = wp_parse_args( $this->query_args, array(
 				'post_type'      => 'post',
 				'posts_per_page' => 100,
 			) );
 
 			// TODO: Remove reliance on superglobal?
 			if ( isset( $_POST['post'] ) ) {
-				$this->query_object_type['post__not_in'] = array( absint( $_POST['post'] ) );
+				$this->query_args['post__not_in'] = array( absint( $_POST['post'] ) );
 			}
 
 			// loop through post types to get labels for all
 			$this->post_type_labels = array();
-			foreach ( (array) $this->query_object_type['post_type'] as $post_type ) {
+			foreach ( (array) $this->query_args['post_type'] as $post_type ) {
 				// Get post type object for attached post type
 				$post_type_obj = get_post_type_object( $post_type );
 
@@ -222,11 +222,11 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				}
 
 				if ( is_post_type_hierarchical( $post_type_obj ) ) {
-					$this->query_object_type['orderby'] = isset( $this->query_object_type['orderby'] )
-						? $this->query_object_type['orderby']
+					$this->query_args['orderby'] = isset( $this->query_args['orderby'] )
+						? $this->query_args['orderby']
 						: 'name';
-					$this->query_object_type['order']   = isset( $this->query_object_type['order'] )
-						? $this->query_object_type['order']
+					$this->query_args['order']   = isset( $this->query_args['order'] )
+						? $this->query_args['order']
 						: 'ASC';
 				}
 
@@ -238,7 +238,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		} else {
 			// Setup our args
-			$this->query_object_type = wp_parse_args( $this->query_args, array(
+			$this->query_args = wp_parse_args( $this->query_args, array(
 				'number' => 100,
 			) );
 			$this->post_type_labels = $this->_text( 'users_text', esc_html__( 'Users' ) );

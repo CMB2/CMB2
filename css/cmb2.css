@@ -1970,52 +1970,52 @@ Sidebar Placement Adjustments
 
 /* line 2, sass/partials/_associated_objects.scss */
 
-.postbox-container .cmb-type-associated-object .cmb-th + .cmb-td {
+.postbox-container .cmb-type-associated-objects .cmb-th + .cmb-td {
 	width: 100%;
 }
 
 /* line 6, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .cmb-type-custom_attached_posts {
+.cmb-type-associated-objects .cmb-type-custom_attached_posts {
 	padding-top: 0;
 }
 
 /* line 10, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .associated-objects-wrap {
+.cmb-type-associated-objects .associated-objects-wrap {
 	display: inline-block;
 	width: 100%;
 }
 
 /* line 15, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .column-wrap {
+.cmb-type-associated-objects .column-wrap {
 	float: left;
 	width: 45%;
 }
 
 /* line 20, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .retrieved-wrap {
+.cmb-type-associated-objects .retrieved-wrap {
 	margin-right: 10%;
 }
 
 /* line 24, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .associated-objects-section {
+.cmb-type-associated-objects .associated-objects-section {
 	margin-bottom: 5px;
 }
 
 /* line 28, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .search-wrap .regular-text {
+.cmb-type-associated-objects .search-wrap .regular-text {
 	width: 100%;
 	margin: 0 0 7px 0;
 }
 
 /* line 33, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .connected {
+.cmb-type-associated-objects .connected {
 	background: #F4F4F4;
 	cursor: pointer;
 	height: 300px;
@@ -2026,19 +2026,19 @@ Sidebar Placement Adjustments
 
 /* line 42, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .has-thumbnails.connected {
+.cmb-type-associated-objects .has-thumbnails.connected {
 	height: 30em;
 }
 
 /* line 46, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .has-thumbnails li {
+.cmb-type-associated-objects .has-thumbnails li {
 	clear: both;
 }
 
 /* line 49, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .has-thumbnails li::after {
+.cmb-type-associated-objects .has-thumbnails li::after {
 	content: ' ';
 	display: block;
 	clear: both;
@@ -2046,7 +2046,7 @@ Sidebar Placement Adjustments
 
 /* line 55, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .has-thumbnails li img {
+.cmb-type-associated-objects .has-thumbnails li img {
 	margin-right: 10px;
 	vertical-align: middle;
 	float: left;
@@ -2054,7 +2054,7 @@ Sidebar Placement Adjustments
 
 /* line 61, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .has-thumbnails li a {
+.cmb-type-associated-objects .has-thumbnails li a {
 	text-indent: 55px;
 }
 
@@ -2066,7 +2066,7 @@ Sidebar Placement Adjustments
 
 /* line 69, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .connected li {
+.cmb-type-associated-objects .connected li {
 	border-bottom: 1px solid #f1f1f1;
 	margin: 0;
 	padding: 10px 40px 10px 10px;
@@ -2075,13 +2075,13 @@ Sidebar Placement Adjustments
 
 /* line 76, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .connected li.odd {
+.cmb-type-associated-objects .connected li.odd {
 	background-color: #f9f9f9;
 }
 
 /* line 80, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-object .connected li:hover {
+.cmb-type-associated-objects .connected li:hover {
 	background: #e6e6e6;
 }
 
