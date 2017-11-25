@@ -429,7 +429,7 @@ class CMB2_Sanitize {
 	 * @since  2.2.7
 	 * @return array Sanitized data
 	 */
-	public function associated_objects() {
+	public function associated_objects( $repeat = false ) {
 		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
 		if ( false !== $repeat_value ) {
 			return $repeat_value;
