@@ -42,6 +42,13 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	protected $this->post_type_labels = array();
 
 	/**
+	 * The type of field
+	 *
+	 * @var string
+	 */
+	public $type = 'associated_objects';
+
+	/**
 	 * [$hooked description]
 	 *
 	 * @var boolean
@@ -56,7 +63,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @param CMB2_Types $types
 	 * @param array      $args
 	 */
-	public function __construct( CMB2_Types $types, $args = array(), $type = '' ) {
+	public function __construct( CMB2_Types $types, $args = array() ) {
 		parent::__construct( $types, $args );
 		$this->type = $type ? $type : $this->type;
 
