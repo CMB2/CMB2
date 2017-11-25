@@ -91,6 +91,8 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			add_action( 'admin_footer', 'find_posts_div' );
 		}
 
+		$this->field->add_js_dependencies( 'cmb2-associated-objects' );
+
 		$this->query_args = (array) $this->field->options( 'query_args' );
 		$this->setup_query_args();
 

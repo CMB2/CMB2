@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.6.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2017-11-25 19:03:26+00:00\n"
+"POT-Creation-Date: 2017-11-25 19:41:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-11-25 19:3+300\n"
+"PO-Revision-Date: 2017-11-25 19:41+300\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -410,7 +410,7 @@ msgstr ""
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: includes/CMB2_Field_Display.php:435 includes/CMB2_JS.php:232
+#: includes/CMB2_Field_Display.php:435 includes/CMB2_JS.php:227
 #: includes/types/CMB2_Type_File_Base.php:78 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:884
 msgid "File:"
@@ -420,109 +420,109 @@ msgstr ""
 msgid "%1$s should be implemented by the extended class."
 msgstr ""
 
-#: includes/CMB2_JS.php:171 includes/CMB2_JS.php:212
+#: includes/CMB2_JS.php:166 includes/CMB2_JS.php:207
 msgid "Clear"
 msgstr ""
 
-#: includes/CMB2_JS.php:172
+#: includes/CMB2_JS.php:167
 msgid "Default"
 msgstr ""
 
-#: includes/CMB2_JS.php:173
+#: includes/CMB2_JS.php:168
 msgid "Select Color"
 msgstr ""
 
-#: includes/CMB2_JS.php:174
+#: includes/CMB2_JS.php:169
 msgid "Current Color"
 msgstr ""
 
-#: includes/CMB2_JS.php:203
+#: includes/CMB2_JS.php:198
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
 msgstr ""
 
-#: includes/CMB2_JS.php:204
+#: includes/CMB2_JS.php:199
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
 msgstr ""
 
-#: includes/CMB2_JS.php:205
+#: includes/CMB2_JS.php:200
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
 msgstr ""
 
-#: includes/CMB2_JS.php:206
+#: includes/CMB2_JS.php:201
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
 msgstr ""
 
-#: includes/CMB2_JS.php:207
+#: includes/CMB2_JS.php:202
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
 msgstr ""
 
-#: includes/CMB2_JS.php:208
+#: includes/CMB2_JS.php:203
 msgid "Next"
 msgstr ""
 
-#: includes/CMB2_JS.php:209
+#: includes/CMB2_JS.php:204
 msgid "Prev"
 msgstr ""
 
-#: includes/CMB2_JS.php:210
+#: includes/CMB2_JS.php:205
 msgid "Today"
 msgstr ""
 
-#: includes/CMB2_JS.php:211 includes/CMB2_JS.php:221
+#: includes/CMB2_JS.php:206 includes/CMB2_JS.php:216
 msgid "Done"
 msgstr ""
 
-#: includes/CMB2_JS.php:215
+#: includes/CMB2_JS.php:210
 msgid "Choose Time"
 msgstr ""
 
-#: includes/CMB2_JS.php:216
+#: includes/CMB2_JS.php:211
 msgid "Time"
 msgstr ""
 
-#: includes/CMB2_JS.php:217
+#: includes/CMB2_JS.php:212
 msgid "Hour"
 msgstr ""
 
-#: includes/CMB2_JS.php:218
+#: includes/CMB2_JS.php:213
 msgid "Minute"
 msgstr ""
 
-#: includes/CMB2_JS.php:219
+#: includes/CMB2_JS.php:214
 msgid "Second"
 msgstr ""
 
-#: includes/CMB2_JS.php:220
+#: includes/CMB2_JS.php:215
 msgid "Now"
 msgstr ""
 
-#: includes/CMB2_JS.php:228
+#: includes/CMB2_JS.php:223
 msgid "Use this file"
 msgstr ""
 
-#: includes/CMB2_JS.php:229
+#: includes/CMB2_JS.php:224
 msgid "Use these files"
 msgstr ""
 
-#: includes/CMB2_JS.php:230 includes/types/CMB2_Type_File_Base.php:63
+#: includes/CMB2_JS.php:225 includes/types/CMB2_Type_File_Base.php:63
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_JS.php:231 includes/CMB2_Types.php:412
+#: includes/CMB2_JS.php:226 includes/CMB2_Types.php:412
 #: includes/types/CMB2_Type_File_Base.php:83 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
 #: tests/test-cmb-types.php:884
 msgid "Remove"
 msgstr ""
 
-#: includes/CMB2_JS.php:233 includes/types/CMB2_Type_File_Base.php:81
+#: includes/CMB2_JS.php:228 includes/types/CMB2_Type_File_Base.php:81
 #: tests/test-cmb-types-base.php:149 tests/test-cmb-types.php:884
 msgid "Download"
 msgstr ""
 
-#: includes/CMB2_JS.php:234
+#: includes/CMB2_JS.php:229
 msgid "Select / Deselect All"
 msgstr ""
 
@@ -684,35 +684,35 @@ msgid ""
 "response."
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:100
+#: includes/types/CMB2_Type_Associated_Objects.php:102
 msgid "Filter %s"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:120
+#: includes/types/CMB2_Type_Associated_Objects.php:123
 msgid "Available %s"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:140
+#: includes/types/CMB2_Type_Associated_Objects.php:143
 msgid "Search"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:146
+#: includes/types/CMB2_Type_Associated_Objects.php:149
 msgid "An error has occurred. Please reload the page and try again."
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:147
+#: includes/types/CMB2_Type_Associated_Objects.php:150
 msgid "Find Posts or Pages"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:161
+#: includes/types/CMB2_Type_Associated_Objects.php:166
 msgid "Attached %s"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:244
+#: includes/types/CMB2_Type_Associated_Objects.php:248
 msgid "Users"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:329
+#: includes/types/CMB2_Type_Associated_Objects.php:333
 msgid "Edit"
 msgstr ""
 
@@ -752,12 +752,12 @@ msgstr ""
 msgid "https://cmb2.io"
 msgstr ""
 
-#: includes/CMB2_JS.php:202
+#: includes/CMB2_JS.php:197
 msgctxt "Valid formatDate string for jquery-ui datepicker"
 msgid "mm/dd/yy"
 msgstr ""
 
-#: includes/CMB2_JS.php:222
+#: includes/CMB2_JS.php:217
 msgctxt ""
 "Valid formatting string, as per "
 "http://trentrichardson.com/examples/timepicker/"
