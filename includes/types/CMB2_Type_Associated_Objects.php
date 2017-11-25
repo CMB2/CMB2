@@ -101,9 +101,10 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 
 		// Check to see if we have any meta values saved yet
-		$attached = (array) $this->field->escaped_value();
+		$attached = $this->field->escaped_value();
+		$attached = empty( $attached ) ? array() : (array) $attached;
 
-		$objects = $this->get_all_objects( $args, $attached );
+		$objects = $this->get_all_objects( $attached );
 
 		// If there are no posts found, just stop
 		if ( empty( $objects ) ) {
@@ -442,12 +443,12 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 *
 	 * @since  1.2.4
 	 *
-	 * @param  array  $args     Array of query args.
 	 * @param  array  $attached Array of attached object ids.
 	 *
 	 * @return array            Array of attached object ids.
 	 */
-	public function get_all_objects( $args, $attached = array() ) {
+	public function get_all_objects( $attached = array() ) {
+		$args = $this->query_args;
 		$objects = $this->get_objects( $args );
 
 		$attached_objects = array();
