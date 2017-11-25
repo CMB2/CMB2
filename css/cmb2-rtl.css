@@ -1970,53 +1970,47 @@ Sidebar Placement Adjustments
 
 /* line 2, sass/partials/_associated_objects.scss */
 
-.postbox-container .cmb-type-associated-objects .cmb-th + .cmb-td {
-	width: 100%;
-}
-
-/* line 6, sass/partials/_associated_objects.scss */
-
 .cmb-type-associated-objects .cmb-type-custom_attached_posts {
 	padding-top: 0;
 }
 
-/* line 10, sass/partials/_associated_objects.scss */
+/* line 6, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .associated-objects-wrap {
 	display: inline-block;
 	width: 100%;
 }
 
-/* line 15, sass/partials/_associated_objects.scss */
+/* line 11, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .column-wrap {
 	float: right;
 	width: 45%;
 }
 
-/* line 20, sass/partials/_associated_objects.scss */
+/* line 16, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .retrieved-wrap {
 	margin-left: 10%;
 }
 
-/* line 24, sass/partials/_associated_objects.scss */
+/* line 20, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .associated-objects-section {
 	margin-bottom: 5px;
 }
 
-/* line 28, sass/partials/_associated_objects.scss */
+/* line 24, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .search-wrap .regular-text {
 	width: 100%;
 	margin: 0 0 7px 0;
 }
 
-/* line 33, sass/partials/_associated_objects.scss */
+/* line 29, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .connected {
-	background: #F4F4F4;
+	background: #f4f4f4;
 	cursor: pointer;
 	height: 300px;
 	overflow-y: scroll;
@@ -2024,19 +2018,19 @@ Sidebar Placement Adjustments
 	width: 100%;
 }
 
-/* line 42, sass/partials/_associated_objects.scss */
+/* line 38, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .has-thumbnails.connected {
 	height: 30em;
 }
 
-/* line 46, sass/partials/_associated_objects.scss */
+/* line 42, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .has-thumbnails li {
 	clear: both;
 }
 
-/* line 49, sass/partials/_associated_objects.scss */
+/* line 45, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .has-thumbnails li::after {
 	content: ' ';
@@ -2044,7 +2038,7 @@ Sidebar Placement Adjustments
 	clear: both;
 }
 
-/* line 55, sass/partials/_associated_objects.scss */
+/* line 51, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .has-thumbnails li img {
 	margin-left: 10px;
@@ -2052,61 +2046,23 @@ Sidebar Placement Adjustments
 	float: right;
 }
 
-/* line 61, sass/partials/_associated_objects.scss */
+/* line 57, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .has-thumbnails li a {
 	text-indent: 55px;
 }
 
-/* line 65, sass/partials/_associated_objects.scss */
-
-.associated-objects-wrap .attached {
-	float: left;
-}
-
-/* line 69, sass/partials/_associated_objects.scss */
+/* line 62, sass/partials/_associated_objects.scss */
 
 .cmb-type-associated-objects .connected li {
-	border-bottom: 1px solid #f1f1f1;
 	margin: 0;
 	padding: 10px 10px 10px 40px;
 	position: relative;
 }
 
-/* line 76, sass/partials/_associated_objects.scss */
+/* line 67, sass/partials/_associated_objects.scss */
 
-.cmb-type-associated-objects .connected li.odd {
-	background-color: #f9f9f9;
-}
-
-/* line 80, sass/partials/_associated_objects.scss */
-
-.cmb-type-associated-objects .connected li:hover {
-	background: #e6e6e6;
-}
-
-/* line 84, sass/partials/_associated_objects.scss */
-
-.associated-objects-wrap .retrieved li.added {
-	opacity: .5;
-}
-
-/* line 88, sass/partials/_associated_objects.scss */
-
-.associated-objects-wrap .retrieved li.added:hover {
-	background: #fff;
-	cursor: initial;
-}
-
-/* line 93, sass/partials/_associated_objects.scss */
-
-.associated-objects-wrap .retrieved li.added:hover .add-remove {
-	background-position: 0 -22px;
-}
-
-/* line 97, sass/partials/_associated_objects.scss */
-
-.connected li .add-remove {
+.cmb-type-associated-objects .connected li .add-remove {
 	display: block;
 	height: 17px;
 	margin-top: -8px;
@@ -2116,13 +2072,56 @@ Sidebar Placement Adjustments
 	width: 22px;
 }
 
-/* line 107, sass/partials/_associated_objects.scss */
+/* line 78, sass/partials/_associated_objects.scss */
 
-ul.hide-selected li.added {
+.cmb-type-associated-objects .connected li.odd {
+	background-color: #f9f9f9;
+}
+
+/* line 82, sass/partials/_associated_objects.scss */
+
+.cmb-type-associated-objects .connected li:hover {
+	background: #e9e9e9;
+}
+
+/* line 89, sass/partials/_associated_objects.scss */
+
+.postbox-container .cmb-type-associated-objects .cmb-th + .cmb-td {
+	width: 100%;
+}
+
+/* line 94, sass/partials/_associated_objects.scss */
+
+.cmb-type-associated-objects ul.hide-selected li.added {
 	display: none;
 }
 
-/* line 111, sass/partials/_associated_objects.scss */
+/* line 101, sass/partials/_associated_objects.scss */
+
+.associated-objects-wrap .attached {
+	float: left;
+}
+
+/* line 107, sass/partials/_associated_objects.scss */
+
+.associated-objects-wrap .retrieved li.added {
+	opacity: .5;
+}
+
+/* line 110, sass/partials/_associated_objects.scss */
+
+.associated-objects-wrap .retrieved li.added:hover {
+	background: #ffffff;
+	cursor: initial;
+}
+
+/* line 115, sass/partials/_associated_objects.scss */
+
+.associated-objects-wrap .retrieved li.added:hover .add-remove {
+	background-position: 0 -22px;
+}
+
+/* line 123, sass/partials/_associated_objects.scss */
 
 .cmb2-associated-objects-search-button span {
 	color: #999;
