@@ -39,7 +39,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 *
 	 * @var array
 	 */
-	protected $this->post_type_labels = array();
+	protected $post_type_labels = array();
 
 	/**
 	 * The type of field
@@ -54,6 +54,13 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @var boolean
 	 */
 	protected static $hooked = false;
+
+	/**
+	 * [$query_object_type description]
+	 *
+	 * @var string
+	 */
+	protected $query_object_type = 'post';
 
 	/**
 	 * Constructor
@@ -72,13 +79,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			self::$hooked = true;
 		}
 	}
-
-	/**
-	 * [$query_object_type description]
-	 *
-	 * @var string
-	 */
-	protected $query_object_type = 'post'
 
 	public function render( $args ) {
 		if ( ! is_admin() ) {
