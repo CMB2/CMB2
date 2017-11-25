@@ -4,7 +4,6 @@
  *
  * @todo Make field type for all object types, to and from.
  * @todo Maybe remove dependence on super-globals?
- * @todo Remove output buffer and instead concatenate string.
  * @todo Replace WP core `find_posts_div()` markup and ajax completely.
  * @todo Unit tests for field.
  * @todo Add example to example-functions.php. See https://github.com/CMB2/cmb2-attached-posts/blob/master/example-field-setup.php
@@ -39,7 +38,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 *
 	 * @var array
 	 */
-	protected $post_type_labels = array();
+	protected $object_type_labels = array();
 
 	/**
 	 * The type of field
@@ -63,6 +62,13 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	protected $query_object_type = 'post';
 
 	/**
+	 * The field instance's query handler.
+	 *
+	 * @var CMB2_Type_Associated_Objects_Query
+	 */
+	protected $query;
+
+	/**
 	 * Constructor
 	 *
 	 * @since 2.2.2
@@ -79,6 +85,11 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return CMB2_Type_Base|string
+	 */
 	public function render( $args = array() ) {
 		if ( ! is_admin() ) {
 			// Will need custom styling!
@@ -92,51 +103,53 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 
 		$this->field->add_js_dependencies( 'cmb2-associated-objects' );
-
-		$this->query_args = (array) $this->field->options( 'query_args' );
-		$this->setup_query_args();
+		$this->query_object_type = $this->field->options( 'query_object_type' );
+		$this->query_args = $this->field->options( 'query_args' );
+		$this->query = $this->get_query( $this->query_object_type, $this->query_args );
 
 		$filter_boxes = '';
-		// Check 'filter' setting
-		if ( $this->field->options( 'filter_boxes' ) ) {
-			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb' ), $this->post_type_labels ) . '" class="regular-text search" name="%s" /></div>';
-		}
+		// Set .has_thumbnail
+		$has_thumbnail = $this->field->options( 'show_thumbnails' ) ? ' has-thumbnails' : '';
+		$hide_selected = $this->field->options( 'hide_selected' ) ? ' hide-selected' : '';
 
 		// Check to see if we have any meta values saved yet
-		$attached = $this->field->escaped_value();
+		$attached = $this->get_attached();
 		$attached = empty( $attached ) ? array() : (array) $attached;
 
 		$objects = $this->get_all_objects( $attached );
+		$object_type_labels = $this->query->get_all_object_type_labels();
+		$this->do_type_label = count( $object_type_labels ) > 1;
 
 		// If there are no posts found, just stop
 		if ( empty( $objects ) ) {
 			return;
 		}
 
-		ob_start();
+		$rendered = '';
 
 		// Wrap our lists
-		echo '<div class="associated-objects-wrap widefat" data-fieldname="'. $this->_name() .'">';
+		$rendered.= '<div class="associated-objects-wrap widefat" data-fieldname="'. $this->_name() .'">';
 
 		// Open our retrieved, or found posts, list
-		echo '<div class="retrieved-wrap column-wrap">';
-		echo '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), $this->post_type_labels ) . '</h4>';
+		$rendered.= '<div class="retrieved-wrap column-wrap">';
+		$rendered.= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
 
-		// Set .has_thumbnail
-		$has_thumbnail = $this->field->options( 'show_thumbnails' ) ? ' has-thumbnails' : '';
-		$hide_selected = $this->field->options( 'hide_selected' ) ? ' hide-selected' : '';
-
-		if ( $filter_boxes ) {
-			printf( $filter_boxes, 'available-search' );
+		// Check 'filter' setting
+		if ( $this->field->options( 'filter_boxes' ) ) {
+			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb' ), $this->object_type_labels ) . '" class="regular-text search" name="%s" /></div>';
 		}
 
-		echo '<ul class="retrieved connected' . $has_thumbnail . $hide_selected . '">';
+		if ( $filter_boxes ) {
+			$rendered.= sprintf( $filter_boxes, 'available-search' );
+		}
+
+		$rendered.= '<ul class="retrieved connected' . $has_thumbnail . $hide_selected . '">';
 
 		// Loop through our posts as list items
-		$this->get_retrieved( $objects, $attached );
+		$rendered.= $this->render_retrieved( $objects, $attached );
 
 		// Close our retrieved, or found, posts
-		echo '</ul><!-- .retrieved -->';
+		$rendered.= '</ul><!-- .retrieved -->';
 
 		// @todo make User search work.
 		if ( 'post' === $this->query_object_type ) {
@@ -156,164 +169,41 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) )
 			) );
 
-			echo '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\''. $js_data .'\'>'. $findtxt .' <span title="'. esc_attr( $findtxt ) .'" class="dashicons dashicons-search"></span></button></p>';
+			$rendered.= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\''. $js_data .'\'>'. $findtxt .' <span title="'. esc_attr( $findtxt ) .'" class="dashicons dashicons-search"></span></button></p>';
 		}
 
-		echo '</div><!-- .retrieved-wrap -->';
+		$rendered.= '</div><!-- .retrieved-wrap -->';
 
 		// Open our attached posts list
-		echo '<div class="attached-wrap column-wrap">';
-		echo '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), $this->post_type_labels ) . '</h4>';
+		$rendered.= '<div class="attached-wrap column-wrap">';
+		$rendered.= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
 
 		if ( $filter_boxes ) {
-			printf( $filter_boxes, 'attached-search' );
+			$rendered.= sprintf( $filter_boxes, 'attached-search' );
 		}
 
-		echo '<ul class="attached connected', $has_thumbnail ,'">';
+		$rendered.= '<ul class="attached connected' . $has_thumbnail . '">';
 
 		// If we have any ids saved already, display them
-		$ids = $this->get_attached( $attached );
+		$rendered.= $this->render_attached( $attached );
 
 		// Close up shop
-		echo '</ul><!-- #attached -->';
-		echo '</div><!-- .attached-wrap -->';
+		$rendered.= '</ul><!-- #attached -->';
+		$rendered.= '</div><!-- .attached-wrap -->';
 
-		echo $this->types->input( array(
+		$rendered.= $this->types->input( array(
 			'type'  => 'hidden',
 			'class' => 'associated-objects-ids',
-			'value' => ! empty( $ids ) ? implode( ',', $ids ) : '',
+			'value' => ! empty( $attached ) ? implode( ',', $attached ) : '',
 			'desc'  => '',
 		) );
 
-		echo '</div><!-- .associated-objects-wrap -->';
+		$rendered.= '</div><!-- .associated-objects-wrap -->';
 
 		// Display our description if one exists
-		$this->_desc( true, true );
-
-		// Get the contents of the output buffer.
-		$rendered = ob_get_clean();
+		$rendered.= $this->_desc( true );
 
 		return $this->rendered( $rendered );
-	}
-
-	protected function setup_query_args() {
-		$this->query_object_type = $this->field->options( 'query_object_type' );
-		if ( empty( $this->query_object_type ) ) {
-			$this->query_object_type = 'post';
-		}
-
-		if ( 'post' === $this->query_object_type ) {
-
-			// Setup our args
-			$this->query_args = wp_parse_args( $this->query_args, array(
-				'post_type'      => 'post',
-				'posts_per_page' => 100,
-			) );
-
-			$this->query_args['post__not_in'] = array( $this->field->object_id() );
-
-			// loop through post types to get labels for all
-			$this->post_type_labels = array();
-			foreach ( (array) $this->query_args['post_type'] as $post_type ) {
-				// Get post type object for attached post type
-				$post_type_obj = get_post_type_object( $post_type );
-
-				// continue if we don't have a label for the post type
-				if ( ! $post_type_obj || ! isset( $post_type_obj->labels->name ) ) {
-					continue;
-				}
-
-				if ( is_post_type_hierarchical( $post_type_obj ) ) {
-					$this->query_args['orderby'] = isset( $this->query_args['orderby'] )
-						? $this->query_args['orderby']
-						: 'name';
-					$this->query_args['order']   = isset( $this->query_args['order'] )
-						? $this->query_args['order']
-						: 'ASC';
-				}
-
-				$this->post_type_labels[] = $post_type_obj->labels->name;
-			}
-
-			$this->do_type_label    = count( $this->post_type_labels ) > 1;
-			$this->post_type_labels = implode( '/', $this->post_type_labels );
-
-		} else {
-			// Setup our args
-			$this->query_args = wp_parse_args( $this->query_args, array(
-				'number' => 100,
-				'exclude' => array( $this->field->object_id() ),
-			) );
-
-			$this->post_type_labels = $this->_text( 'users_text', esc_html__( 'Users' ) );
-		}
-
-	}
-
-	/**
-	 * Outputs the <li>s in the retrieved (left) column.
-	 *
-	 * @since  1.2.5
-	 *
-	 * @param  mixed  $objects  Posts or users.
-	 * @param  array  $attached Array of attached posts/users.
-	 *
-	 * @return void
-	 */
-	protected function get_retrieved( $objects, $attached ) {
-		$count = 0;
-
-		// Loop through our posts as list items
-		foreach ( $objects as $object ) {
-
-			// Set our zebra stripes
-			$class = ++$count % 2 == 0 ? 'even' : 'odd';
-
-			// Set a class if our post is in our attached meta
-			$class .= ! empty ( $attached ) && in_array( $this->get_id( $object ), $attached ) ? ' added' : '';
-
-			echo $this->get_list_item( $object, $class );
-		}
-	}
-
-	/**
-	 * Outputs the <li>s in the attached (right) column.
-	 *
-	 * @since  1.2.5
-	 *
-	 * @param  array  $attached Array of attached posts/users.
-	 *
-	 * @return void
-	 */
-	protected function get_attached( $attached ) {
-		$ids = array();
-
-		// Remove any empty values
-		$attached = array_filter( $attached );
-
-		if ( empty( $attached ) ) {
-			return $ids;
-		}
-
-		$count = 0;
-
-		// Loop through and build our existing display items
-		foreach ( $attached as $id ) {
-			$object = $this->get_object( $id );
-			$id     = $this->get_id( $object );
-
-			if ( empty( $object ) ) {
-				continue;
-			}
-
-			// Set our zebra stripes
-			$class = ++$count % 2 == 0 ? 'even' : 'odd';
-
-			echo $this->get_list_item( $object, $class, 'dashicons-minus' );
-			$ids[ $id ] = $id;
-		}
-
-		return $ids;
 	}
 
 	/**
@@ -325,120 +215,122 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @param  string  $li_class   The list item (zebra) class.
 	 * @param  string  $icon_class The icon class. Either 'dashicons-plus' or 'dashicons-minus'.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_list_item( $object, $li_class, $icon_class = 'dashicons-plus' ) {
+		$label = '';
+
+		if ( $this->do_type_label ) {
+			$label = ' &mdash; <span class="object-label">'. $this->query->get_object_type_label( $object ) . '</span>';
+		}
+
 		// Build our list item
 		return sprintf(
 			'<li data-id="%1$d" class="%2$s" target="_blank">%3$s<a title="' . __( 'Edit' ) . '" href="%4$s">%5$s</a>%6$s<span class="dashicons %7$s add-remove"></span></li>',
-			$this->get_id( $object ),
+			$this->query->get_id( $object ),
 			$li_class,
-			$this->get_thumb( $object ),
-			$this->get_edit_link( $object ),
-			$this->get_title( $object ),
-			$this->get_object_label( $object ),
+			$this->query->get_thumb( $object ),
+			$this->query->get_edit_link( $object ),
+			$this->query->get_title( $object ),
+			$label,
 			$icon_class
 		);
 	}
 
 	/**
-	 * Get thumbnail for the object.
+	 * Returns the <li>s in the retrieved (left) column.
 	 *
-	 * @since  1.2.4
+	 * @since  1.2.5
 	 *
-	 * @param  mixed  $object Post or User
+	 * @param  mixed  $objects  Posts or users.
+	 * @param  array  $attached Array of attached posts/users.
 	 *
-	 * @return string         The thumbnail, if endabled/found.
+	 * @return string
 	 */
-	public function get_thumb( $object ) {
-		$thumbnail = '';
+	protected function render_retrieved( $objects, $attached ) {
+		$count = 0;
+		$rendered = '';
 
-		if ( $this->field->options( 'show_thumbnails' ) ) {
-			// Set thumbnail if the options is true
-			$thumbnail = 'user' === $this->field->options( 'query_object_type' )
-				? get_avatar( $object->ID, 25 )
-				: get_the_post_thumbnail( $object->ID, array( 50, 50 ) );
+		// Loop through our posts as list items
+		foreach ( $objects as $object ) {
+
+			// Set our zebra stripes
+			$class = ++$count % 2 == 0 ? 'even' : 'odd';
+
+			// Set a class if our post is in our attached meta
+			$class .= ! empty ( $attached ) && in_array( $this->query->get_id( $object ), $attached ) ? ' added' : '';
+
+			$rendered.= $this->get_list_item( $object, $class );
 		}
 
-		return $thumbnail;
+		return $rendered;
 	}
 
 	/**
-	 * Get ID for the object.
+	 * Returns the <li>s in the attached (right) column.
 	 *
-	 * @since  1.2.4
+	 * @since  1.2.5
 	 *
-	 * @param  mixed  $object Post or User
+	 * @param  array  $attached Array of attached posts/users.
 	 *
-	 * @return int            The object ID.
+	 * @return string
 	 */
-	public function get_id( $object ) {
-		return $object->ID;
-	}
+	protected function render_attached( $attached ) {
+		$rendered = '';
 
-	/**
-	 * Get title for the object.
-	 *
-	 * @since  1.2.4
-	 *
-	 * @param  mixed  $object Post or User
-	 *
-	 * @return string         The object title.
-	 */
-	public function get_title( $object ) {
-		return 'user' === $this->field->options( 'query_object_type' )
-			? $object->data->display_name
-			: get_the_title( $object );
-	}
+		// Remove any empty values
+		$attached = array_filter( $attached );
+		$this->query->set_include( $attached );
 
-	/**
-	 * Get object label.
-	 *
-	 * @since  1.2.6
-	 *
-	 * @param  mixed  $object Post or User
-	 *
-	 * @return string         The object label.
-	 */
-	public function get_object_label( $object ) {
-		if ( ! $this->do_type_label ) {
-			return '';
+		if ( empty( $attached ) ) {
+			return $rendered;
 		}
 
-		$post_type_obj = get_post_type_object( $object->post_type );
-		$label = isset( $post_type_obj->labels->singular_name ) ? $post_type_obj->labels->singular_name : $post_type_obj->label;
+		$count = 0;
 
-		return ' &mdash; <span class="object-label">'. $label .'</span>';
+		// Loop through and build our existing display items
+		foreach ( $attached as $id ) {
+			$object = $this->query->get_object( $id );
+
+			if ( empty( $object ) ) {
+				continue;
+			}
+
+			// Set our zebra stripes
+			$class = ++$count % 2 == 0 ? 'even' : 'odd';
+
+			$rendered.= $this->get_list_item( $object, $class, 'dashicons-minus' );
+		}
+
+		return $rendered;
 	}
 
 	/**
-	 * Get edit link for the object.
+	 * Returns a filtered array of object IDs.
 	 *
-	 * @since  1.2.4
-	 *
-	 * @param  mixed  $object Post or User
-	 *
-	 * @return string         The object edit link.
+	 * @return array
 	 */
-	public function get_edit_link( $object ) {
-		return 'user' === $this->field->options( 'query_object_type' )
-			? get_edit_user_link( $object->ID )
-			: get_edit_post_link( $object );
-	}
+	function get_attached() {
+		$attached = $this->field->escaped_value();
+		$attached = array_filter( $attached );
+		$ids = array();
 
-	/**
-	 * Get object by id.
-	 *
-	 * @since  1.2.4
-	 *
-	 * @param  int   $id Post or User ID.
-	 *
-	 * @return mixed     Post or User if found.
-	 */
-	public function get_object( $id ) {
-		return 'user' === $this->field->options( 'query_object_type' )
-			? get_user_by( 'id', absint( $id ) )
-			: get_post( absint( $id ) );
+		if ( empty( $attached ) ) {
+			return array();
+		}
+
+		// Loop through and build our existing display items
+		foreach ( $attached as $id ) {
+			$object = $this->query->get_object( $id );
+			$id     = $this->query->get_id( $object );
+
+			if ( empty( $object ) ) {
+				continue;
+			}
+			$ids[ $id ] = $id;
+		}
+
+		return $ids;
 	}
 
 	/**
@@ -451,42 +343,44 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return array            Array of attached object ids.
 	 */
 	public function get_all_objects( $attached = array() ) {
-		$args = $this->query_args;
-		$objects = $this->get_objects( $args );
-
-		$attached_objects = array();
-		foreach ( $objects as $object ) {
-			$attached_objects[ $this->get_id( $object ) ] = $object;
-		}
+		$objects = $this->query->execute_query();
 
 		if ( ! empty( $attached ) ) {
-			$is_users = 'user' === $this->field->options( 'query_object_type' );
-			$args[ $is_users ? 'include' : 'post__in' ] = $attached;
-			$args[ $is_users ? 'number' : 'posts_per_page' ] = count( $attached );
+			$this->query->set_include( $attached );
+			$this->query->set_number( count( $attached ) );
 
-			$new = $this->get_objects( $args );
+			$new = $this->query->execute_query();
 
 			foreach ( $new as $object ) {
-				if ( ! isset( $attached_objects[ $this->get_id( $object ) ] ) ) {
-					$attached_objects[ $this->get_id( $object ) ] = $object;
+				if ( ! isset( $objects[ $this->query->get_id( $object ) ] ) ) {
+					$objects[ $this->query->get_id( $object ) ] = $object;
 				}
 			}
 		}
 
-		return $attached_objects;
+		return $objects;
 	}
 
 	/**
-	 * Peforms a get_posts or get_users query.
+	 * @param string $query_object_type
+	 * @param array $args
 	 *
-	 * @since  1.2.4
-	 *
-	 * @param  array  $args Array of query args.
-	 *
-	 * @return array        Array of results.
+	 * @return CMB2_Type_Associated_Objects_Query
 	 */
-	public function get_objects( $args ) {
-		return call_user_func( 'user' === $this->field->options( 'query_object_type' ) ? 'get_users' : 'get_posts', $args );
+	public function get_query( $query_object_type = 'post', $args ) {
+		switch ( $query_object_type ) {
+			case 'user';
+				$query = new CMB2_Type_Associated_Users_Query( $args );
+				break;
+			case 'term':
+				$query = new CMB2_Type_Associated_Terms_Query( $args );
+				break;
+			case 'post':
+			default:
+				$query = new CMB2_Type_Associated_Posts_Query( $args );
+		}
+
+		return $query;
 	}
 
 	/**
@@ -606,4 +500,508 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 	}
 
+}
+
+/**
+ * Class CMB2_Type_Associated_Objects_Query
+ */
+abstract class CMB2_Type_Associated_Objects_Query {
+	/**
+	 * Map of query type to appropriate callback.
+	 *
+	 * @var array
+	 */
+	protected $query_type_callbacks = array(
+		'post' => 'get_posts',
+		'user' => 'get_users',
+		'term' => 'get_terms',
+	);
+
+	/**
+	 * @var array
+	 */
+	protected $original_args = array();
+
+	/**
+	 * @var array
+	 */
+	protected $query_args = array();
+
+	/**
+	 * @var array
+	 */
+	public $objects = array();
+
+	/**
+	 * CMB2_Type_Associated_Objects_Query constructor.
+	 *
+	 * @param $args
+	 */
+	public function __construct( $args ) {
+		$this->original_args = $args;
+		$this->set_query_args( $args );
+	}
+
+	/**
+	 * @param $args
+	 */
+	public function set_query_args( $args ) {
+		$this->query_args = wp_parse_args( $args, $this->default_query_args() );
+	}
+
+	/**
+	 * Reset the query args to their original values.
+	 */
+	public function reset_query_args() {
+		$this->set_query_args( $this->original_args );
+	}
+
+	/**
+	 * Execute the appropriate query callback for the current query type.
+	 *
+	 * @return array
+	 */
+	public function execute_query() {
+		if ( !isset( $this->query_type_callbacks[ $this->query_type() ] ) || !is_callable( $this->query_type_callbacks[ $this->query_type() ] ) ) {
+			return array();
+		}
+
+		$this->objects = array();
+		$objects = call_user_func( $this->query_type_callbacks[ $this->query_type() ], $this->query_args );
+
+		foreach ($objects as $object) {
+			$this->objects[ $this->get_id( $object ) ] = $object;
+		}
+
+		return $this->objects;
+	}
+
+	/**
+	 * @return string
+	 */
+	abstract function query_type();
+
+	/**
+	 * @return array
+	 */
+	abstract function default_query_args();
+
+	/**
+	 * @param object $object
+	 *
+	 * @return int
+	 */
+	abstract function get_id( $object );
+
+	/**
+	 *
+	 * @param object $object
+	 *
+	 * @return string
+	 */
+	abstract function get_title( $object );
+
+	/**
+	 * @param $object
+	 *
+	 * @return string
+	 */
+	abstract function get_thumb( $object );
+
+	/**
+	 * @param $object
+	 *
+	 * @return string
+	 */
+	abstract function get_edit_link( $object );
+
+	/**
+	 * @param $id
+	 *
+	 * @return object
+	 */
+	abstract function get_object( $id );
+
+	/**
+	 * @param object $object
+	 *
+	 * @return mixed
+	 */
+	abstract function get_object_type_label( $object );
+
+	/**
+	 * @return array
+	 */
+	abstract function get_all_object_type_labels();
+
+	/**
+	 * @param $ids
+	 *
+	 * @return void
+	 */
+	public function set_include( $ids ) {
+		$this->query_args['include'] = $ids;
+	}
+
+	/**
+	 * @param int $count
+	 *
+	 * @return void
+	 */
+	public function set_number( $count ) {
+		$this->query_args['number'] = $count;
+	}
+
+	/**
+	 * @param $ids
+	 *
+	 * @return void
+	 */
+	public function set_exclude( $ids ) {
+		$this->query_args['exclude'] = $ids;
+	}
+
+}
+
+/**
+ * Class CMB2_Type_Associated_Posts_Query
+ */
+class CMB2_Type_Associated_Posts_Query extends CMB2_Type_Associated_Objects_Query {
+
+	/**
+	 * @return string
+	 */
+	public function query_type() {
+		return 'post';
+	}
+
+	/**
+	 * @return array
+	 */
+	public function default_query_args() {
+		return array(
+			'post_type'      => 'post',
+			'posts_per_page' => 100,
+			'orderby' => 'name',
+			'order' => 'ASC',
+			'ignore_sticky_posts' => TRUE,
+			'post__not_in' => array(),
+		);
+	}
+
+	/**
+	 * @param WP_Post $object
+	 *
+	 * @return string
+	 */
+	public function get_title( $object ) {
+		return get_the_title( $object->ID );
+	}
+
+	/**
+	 * @param WP_Post $object
+	 *
+	 * @return string
+	 */
+	public function get_thumb( $object ) {
+		return get_the_post_thumbnail( $object->ID, array( 50, 50 ) );
+	}
+
+	/**
+	 * @param WP_Post $object
+	 *
+	 * @return string
+	 */
+	public function get_edit_link( $object ) {
+		return get_edit_post_link( $object );
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return null|WP_Post
+	 */
+	public function get_object( $id ) {
+		return get_post( $id );
+	}
+
+	/**
+	 * @param WP_Post $object
+	 *
+	 * @return int
+	 */
+	public function get_id( $object ) {
+		return $object->ID;
+	}
+
+	/**
+	 * @param $ids
+	 *
+	 * @return void
+	 */
+	public function set_include( $ids ) {
+		$this->query_args['post__in'] = (array) $ids;
+	}
+
+	/**
+	 * @param $count
+	 *
+	 * @return void
+	 */
+	public function set_number( $count ) {
+		$this->query_args['posts_per_page'] = $count;
+	}
+
+	/**
+	 * @param $ids
+	 *
+	 * @return void
+	 */
+	public function set_exclude( $ids ) {
+		$this->query_args['post__not_in'] = (array) $ids;
+	}
+
+	/**
+	 * @param object $object
+	 *
+	 * @return mixed
+	 */
+	public function get_object_type_label( $object ) {
+		$post_type_obj = get_post_type_object( $object->post_type );
+		$label = isset( $post_type_obj->labels->singular_name ) ? $post_type_obj->labels->singular_name : $post_type_obj->label;
+		return $label;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_all_object_type_labels() {
+		$labels = array();
+
+		foreach ( (array) $this->query_args['post_type'] as $post_type ) {
+			// Get post type object for attached post type
+			$post_type_obj = get_post_type_object( $post_type );
+
+			// continue if we don't have a label for the post type
+			if ( ! $post_type_obj || ! isset( $post_type_obj->labels->name ) ) {
+				continue;
+			}
+
+			$labels[] = $post_type_obj->labels->name;
+		}
+
+		return $labels;
+	}
+}
+
+/**
+ * Class CMB2_Type_Associated_Users_Query
+ */
+class CMB2_Type_Associated_Users_Query extends CMB2_Type_Associated_Objects_Query {
+
+	/**
+	 * @return string
+	 */
+	public function query_type() {
+		return 'user';
+	}
+
+	/**
+	 * @return array
+	 */
+	public function default_query_args() {
+		return array(
+			'number' => 100,
+			'exclude' => array(),
+		);
+	}
+
+	/**
+	 *
+	 * @param WP_User $object
+	 *
+	 * @return string
+	 */
+	public function get_title( $object ) {
+		return $object->data->display_name;
+	}
+
+	/**
+	 * @param WP_User $object
+	 *
+	 * @return false|string
+	 */
+	public function get_thumb( $object ) {
+		return get_avatar( $object->ID, 25 );
+	}
+
+	/**
+	 * @param WP_User $object
+	 *
+	 * @return string
+	 */
+	public function get_edit_link( $object ) {
+		return get_edit_user_link( $object->ID );
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return false|WP_User
+	 */
+	public function get_object( $id ) {
+		return get_user_by( 'id', absint( $id ) );
+	}
+
+	/**
+	 * @param WP_User $object
+	 *
+	 * @return mixed
+	 */
+	public function get_id( $object ) {
+		return $object->ID;
+	}
+
+	/**
+	 * @param WP_User $object
+	 *
+	 * @return string
+	 */
+	public function get_object_type_label( $object ) {
+		return __( 'Users' );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_all_object_type_labels() {
+		return array(
+			__( 'Users' ),
+		);
+	}
+}
+
+/**
+ * Class CMB2_Type_Associated_Terms_Query
+ */
+class CMB2_Type_Associated_Terms_Query extends CMB2_Type_Associated_Objects_Query {
+
+	/**
+	 * @var mixed string|array
+	 */
+	protected $taxonomies = 'post_tag';
+
+	/**
+	 * Constructor.
+	 *
+	 * @param $args
+	 */
+	public function __construct( $args ) {
+		parent::__construct( $args );
+
+		if ( !empty( $args['taxonomy'] ) ) {
+			$this->taxonomies = $args['taxonomy'];
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function query_type() {
+		return 'term';
+	}
+
+	/**
+	 * @return array
+	 */
+	public function default_query_args() {
+		return array(
+			'taxonomy' => $this->taxonomies,
+			'hide_empty' => false,
+		);
+	}
+
+	/**
+	 * @param WP_Term $object
+	 *
+	 * @return int
+	 */
+	public function get_id( $object ) {
+		return $object->term_id;
+	}
+
+	/**
+	 *
+	 * @param WP_Term $object
+	 *
+	 * @return string
+	 */
+	public function get_title( $object ) {
+		return $object->name;
+	}
+
+	/**
+	 * @param WP_Term $object
+	 *
+	 * @return string
+	 */
+	public function get_thumb( $object ) {
+		return '';
+	}
+
+	/**
+	 * @param WP_Term $object
+	 *
+	 * @return string
+	 */
+	public function get_edit_link( $object ) {
+		return get_edit_term_link( $object->term_id, $object->taxonomy );
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return false|WP_Term
+	 */
+	public function get_object( $id ) {
+		$found = false;
+
+		foreach ( (array) $this->taxonomies as $taxonomy ) {
+			$term = get_term( $id, $taxonomy );
+
+			if ( !empty($term) && !$term instanceof WP_Error ) {
+				$found = $term;
+				break;
+			}
+		}
+
+		return $found;
+	}
+
+	/**
+	 * @param WP_Term $object
+	 *
+	 * @return string
+	 */
+	public function get_object_type_label( $object ) {
+		$taxonomy = get_taxonomy( $object->taxonomy );
+		return $taxonomy->labels->name;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_all_object_type_labels() {
+		$labels = array();
+
+		foreach ( (array) $this->taxonomies as $taxonomy ) {
+			$tax = get_taxonomy( $taxonomy );
+
+			if ( !empty( $tax ) ) {
+				$labels[] = $tax->labels->name;
+			}
+		}
+
+		return $labels;
+	}
 }
