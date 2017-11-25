@@ -72,7 +72,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 */
 	public function __construct( CMB2_Types $types, $args = array() ) {
 		parent::__construct( $types, $args );
-		$this->type = $type ? $type : $this->type;
 
 		if ( ! self::$hooked ) {
 			add_action( 'cmb2_attached_posts_field_add_find_posts_div', array( __CLASS__, 'add_find_posts_div' ) );
@@ -80,7 +79,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 	}
 
-	public function render( $args ) {
+	public function render( $args = array() ) {
 		if ( ! is_admin() ) {
 			// Will need custom styling!
 			// @todo add styles for front-end
@@ -102,7 +101,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 
 		// Check to see if we have any meta values saved yet
-		$attached = (array) $field->escaped_value();
+		$attached = (array) $this->field->escaped_value();
 
 		$objects = $this->get_all_objects( $args, $attached );
 
@@ -184,7 +183,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		echo '</div><!-- .associated-objects-wrap -->';
 
 		// Display our description if one exists
-		$field_type->_desc( true, true );
+		$this->_desc( true, true );
 
 		// Get the contents of the output buffer.
 		$rendered = ob_get_clean();
@@ -194,6 +193,9 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 	protected function setup_query_args() {
 		$this->query_object_type = $this->field->options( 'query_object_type' );
+		if ( empty( $this->query_object_type ) ) {
+			$this->query_object_type = 'post';
+		}
 
 		if ( 'post' === $this->query_object_type ) {
 

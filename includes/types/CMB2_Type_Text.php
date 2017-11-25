@@ -26,6 +26,7 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 	 *
 	 * @param CMB2_Types $types
 	 * @param array      $args
+	 * @param string     $type
 	 */
 	public function __construct( CMB2_Types $types, $args = array(), $type = '' ) {
 		parent::__construct( $types, $args );
