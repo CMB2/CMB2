@@ -17,7 +17,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Type_Associated_Object extends CMB2_Type_Text {
+class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 	/**
 	 * Whether to output the type label.

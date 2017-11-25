@@ -1452,8 +1452,8 @@ class CMB2 extends CMB2_Base {
 				// since we now enqueue our own more current version.
 				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
 				break;
-			case 'associated_object':
-				add_action( 'cmb2_after_init', array( 'CMB2_Type_Associated_Object', 'ajax_find_associated' ) );
+			case 'associated_objects':
+				add_action( 'cmb2_after_init', array( 'CMB2_Type_Associated_Objects', 'ajax_find_associated' ) );
 				break;
 		}
 

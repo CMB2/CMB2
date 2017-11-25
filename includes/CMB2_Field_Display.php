@@ -96,8 +96,8 @@ class CMB2_Field_Display {
 			case 'oembed':
 				$type = new CMB2_Display_oEmbed( $field );
 				break;
-			case 'associated_object':
-				$type = new CMB2_Display_Associated_Object( $field );
+			case 'associated_objects':
+				$type = new CMB2_Display_Associated_Objects( $field );
 				break;
 			default:
 				$type = new self( $field );
@@ -486,7 +486,7 @@ class CMB2_Display_oEmbed extends CMB2_Field_Display {
 	}
 }
 
-class CMB2_Display_Associated_Object extends CMB2_Field_Display {
+class CMB2_Display_Associated_Objects extends CMB2_Field_Display {
 	/**
 	 * Display oembed value.
 	 *
