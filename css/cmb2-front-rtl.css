@@ -1486,6 +1486,144 @@ Sidebar Placement Adjustments
   color: #fff;
 }
 
+/* line 2, sass/partials/_associated_objects.scss */
+.postbox-container .cmb-type-associated-object .cmb-th + .cmb-td {
+  width: 100%;
+}
+
+/* line 6, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .cmb-type-custom_attached_posts {
+  padding-top: 0;
+}
+
+/* line 10, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .associated-objects-wrap {
+  display: inline-block;
+  width: 100%;
+}
+
+/* line 15, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .column-wrap {
+  float: right;
+  width: 45%;
+}
+
+/* line 20, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .retrieved-wrap {
+  margin-left: 10%;
+}
+
+/* line 24, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .associated-objects-section {
+  margin-bottom: 5px;
+}
+
+/* line 28, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .search-wrap .regular-text {
+  width: 100%;
+  margin: 0 0 7px 0;
+}
+
+/* line 33, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .connected {
+  background: #F4F4F4;
+  cursor: pointer;
+  height: 300px;
+  overflow-y: scroll;
+  padding: 0;
+  width: 100%;
+}
+
+/* line 42, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .has-thumbnails.connected {
+  height: 30em;
+}
+
+/* line 46, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .has-thumbnails li {
+  clear: both;
+}
+
+/* line 49, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .has-thumbnails li::after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+/* line 55, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .has-thumbnails li img {
+  margin-left: 10px;
+  vertical-align: middle;
+  float: right;
+}
+
+/* line 61, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .has-thumbnails li a {
+  text-indent: 55px;
+}
+
+/* line 65, sass/partials/_associated_objects.scss */
+.associated-objects-wrap .attached {
+  float: left;
+}
+
+/* line 69, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .connected li {
+  border-bottom: 1px solid #f1f1f1;
+  margin: 0;
+  padding: 10px 10px 10px 40px;
+  position: relative;
+}
+
+/* line 76, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .connected li.odd {
+  background-color: #f9f9f9;
+}
+
+/* line 80, sass/partials/_associated_objects.scss */
+.cmb-type-associated-object .connected li:hover {
+  background: #e6e6e6;
+}
+
+/* line 84, sass/partials/_associated_objects.scss */
+.associated-objects-wrap .retrieved li.added {
+  opacity: .5;
+}
+
+/* line 88, sass/partials/_associated_objects.scss */
+.associated-objects-wrap .retrieved li.added:hover {
+  background: #fff;
+  cursor: initial;
+}
+
+/* line 93, sass/partials/_associated_objects.scss */
+.associated-objects-wrap .retrieved li.added:hover .add-remove {
+  background-position: 0 -22px;
+}
+
+/* line 97, sass/partials/_associated_objects.scss */
+.connected li .add-remove {
+  display: block;
+  height: 17px;
+  margin-top: -8px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 22px;
+}
+
+/* line 107, sass/partials/_associated_objects.scss */
+ul.hide-selected li.added {
+  display: none;
+}
+
+/* line 111, sass/partials/_associated_objects.scss */
+.cmb2-associated-objects-search-button span {
+  color: #999;
+  margin: .2em 1px 0 -.2em;
+}
+
 /**
  * CMB2 Frontend
  */

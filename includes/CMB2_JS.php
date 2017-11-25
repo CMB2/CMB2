@@ -88,12 +88,40 @@ class CMB2_JS {
 		$enqueue_wysiwyg = isset( $dependencies['cmb2-wysiwyg'] ) && $debug;
 		unset( $dependencies['cmb2-wysiwyg'] );
 
+		// if cmb2-associated-objects
+		$enqueue_associated = isset( $dependencies['cmb2-associated-objects'] ) && $debug;
+		if ( $enqueue_associated ) {
+			unset( $dependencies['cmb2-associated-objects'] );
+			$dependencies['jquery-ui-core'];
+			$dependencies['jquery-ui-widget'];
+			$dependencies['jquery-ui-mouse'];
+			$dependencies['jquery-ui-draggable'];
+			$dependencies['jquery-ui-droppable'];
+			$dependencies['jquery-ui-sortable'];
+			$dependencies['wp-backbone'];
+		}
+
 		// Enqueue cmb JS
 		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), $dependencies, CMB2_VERSION, true );
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
 		if ( $enqueue_wysiwyg ) {
 			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
+		}
+
+		// if SCRIPT_DEBUG, we need to enqueue separately.
+		if ( $enqueue_associated ) {
+			$dependencies = array(
+				'jquery-ui-core',
+				'jquery-ui-widget',
+				'jquery-ui-mouse',
+				'jquery-ui-draggable',
+				'jquery-ui-droppable',
+				'jquery-ui-sortable',
+				'wp-backbone',
+			);
+
+			wp_enqueue_script( 'cmb2-associated-objects', CMB2_Utils::url( 'js/cmb2-associated-objects.js' ), $dependencies, CMB2_VERSION, true );
 		}
 
 		self::localize( $debug );

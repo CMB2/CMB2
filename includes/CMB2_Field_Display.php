@@ -96,6 +96,9 @@ class CMB2_Field_Display {
 			case 'oembed':
 				$type = new CMB2_Display_oEmbed( $field );
 				break;
+			case 'associated_object':
+				$type = new CMB2_Display_Associated_Object( $field );
+				break;
 			default:
 				$type = new self( $field );
 				break;
@@ -480,5 +483,90 @@ class CMB2_Display_oEmbed extends CMB2_Field_Display {
 			),
 			'field_id'    => $this->field->id(),
 		) );
+	}
+}
+
+class CMB2_Display_Associated_Object extends CMB2_Field_Display {
+	/**
+	 * Display oembed value.
+	 *
+	 * @since 2.2.7
+	 */
+	protected function _display() {
+		$return = '';
+
+		// If repeatable
+		if ( $this->field->args( 'repeatable' ) ) {
+			$rows = array();
+
+			// And has a repeatable value
+			if ( is_array( $this->field->value ) ) {
+
+				// Then loop and output.
+				foreach ( $this->field->value as $val ) {
+					$rows[] = $this->_display_render( $val );
+				}
+			}
+
+			if ( ! empty( $rows ) ) {
+
+				$return .= '<ul class="cmb2-' . str_replace( '_', '-', $this->field->type() ) . '"><li>';
+				foreach ( (array) $rows as $row ) {
+					$return .= sprintf( '<li>%s</a>', $row );
+				}
+				$return .= '</ul>';
+
+			} else {
+				$return .= '&mdash;';
+			}
+
+		} else {
+			$return .= $this->_display_render( $this->field->value );
+		}
+
+		echo $return;
+	}
+
+	/**
+	 * Outputs the display of our custom field per repeatable value, if applicable.
+	 *
+	 * @todo  Make other object types work.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @param mixed      $val   The field value.
+	 */
+	public function _display_render( $val ) {
+		$return = '';
+		$posts = array();
+
+		if ( ! empty( $val ) ) {
+			foreach ( (array) $val as $id ) {
+				$title = get_the_title( $id );
+				if ( $title ) {
+					$edit_link = get_edit_post_link( $id );
+					$posts[ $id ] = compact( 'title', 'edit_link' );
+				}
+			}
+		}
+
+		if ( ! empty( $posts ) ) {
+
+			$return .= '<ol>';
+			foreach ( (array) $posts as $id => $post ) {
+				$return .= sprintf(
+					'<li id="attached-%d"><a href="%s">%s</a></li>',
+					$id,
+					$post['edit_link'],
+					$post['title']
+				);
+			}
+			$return .= '</ol>';
+
+		} else {
+			$return .= '&mdash;';
+		}
+
+		return $return;
 	}
 }

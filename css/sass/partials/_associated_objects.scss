@@ -1,0 +1,114 @@
+// TODO: Sassify, update class names
+.postbox-container .cmb-type-associated-object .cmb-th + .cmb-td {
+	width: 100%;
+}
+
+.cmb-type-associated-object .cmb-type-custom_attached_posts {
+	padding-top: 0;
+}
+
+.cmb-type-associated-object .associated-objects-wrap {
+	display: inline-block;
+	width: 100%;
+}
+
+.cmb-type-associated-object .column-wrap {
+	float: left;
+	width: 45%;
+}
+
+.cmb-type-associated-object .retrieved-wrap {
+	margin-right: 10%;
+}
+
+.cmb-type-associated-object .associated-objects-section {
+	margin-bottom: 5px;
+}
+
+.cmb-type-associated-object .search-wrap .regular-text {
+	width: 100%;
+	margin: 0 0 7px 0;
+}
+
+.cmb-type-associated-object .connected {
+	background: #F4F4F4;
+	cursor: pointer;
+	height: 300px;
+	overflow-y: scroll;
+	padding: 0;
+	width: 100%;
+}
+
+.cmb-type-associated-object .has-thumbnails.connected {
+	height: 30em;
+}
+
+.cmb-type-associated-object .has-thumbnails li {
+	clear: both;
+}
+.cmb-type-associated-object .has-thumbnails li::after {
+	content: ' ';
+	display: block;
+	clear: both;
+}
+
+.cmb-type-associated-object .has-thumbnails li img {
+	margin-right: 10px;
+	vertical-align: middle;
+	float: left;
+}
+
+.cmb-type-associated-object .has-thumbnails li a {
+	text-indent: 55px;
+}
+
+.associated-objects-wrap .attached {
+	float: right;
+}
+
+.cmb-type-associated-object .connected li {
+	border-bottom: 1px solid #f1f1f1;
+	margin: 0;
+	padding: 10px 40px 10px 10px;
+	position: relative;
+}
+
+.cmb-type-associated-object .connected li.odd {
+	background-color: #f9f9f9;
+}
+
+.cmb-type-associated-object .connected li:hover {
+	background: #e6e6e6;
+}
+
+.associated-objects-wrap .retrieved li.added {
+	opacity: .5;
+}
+
+.associated-objects-wrap .retrieved li.added:hover {
+	background: #fff;
+	cursor: initial;
+}
+
+.associated-objects-wrap .retrieved li.added:hover .add-remove {
+	background-position: 0 -22px;
+}
+
+.connected li .add-remove {
+	display: block;
+	height: 17px;
+	margin-top: -8px;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	width: 22px;
+}
+
+ul.hide-selected li.added{
+    display: none;
+}
+
+.cmb2-associated-objects-search-button span {
+	color: #999;
+	margin: .2em -.2em 0 1px;
+}

@@ -424,6 +424,27 @@ class CMB2_Sanitize {
 	}
 
 	/**
+	 * Sanitize associated object fields
+	 *
+	 * @since  2.2.7
+	 * @return array Sanitized data
+	 */
+	public function associated_object() {
+		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
+		if ( false !== $repeat_value ) {
+			return $repeat_value;
+		}
+
+		$sanitized_val = array();
+
+		if ( ! empty( $this->value ) ) {
+			$sanitized_val = explode( ',', sanitize_text_field( $this->value ) );
+		}
+
+		return $sanitized_val;
+	}
+
+	/**
 	 * Handles saving of attachment post ID and sanitizing file url
 	 *
 	 * @since  1.1.0
