@@ -435,10 +435,10 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		if ( empty( $this->id_data['keys'] ) ) {
-			return $this->set_root_value( '', $a['single'] );
+			return $this->remove_root_value( $old );
 		} else {
 			$root = $this->get_root_value( $a['single'] );
-			$root = $this->multidimensional_replace( $root, $this->id_data['keys'], '' );
+			$root = $this->multidimensional_replace( $root, $this->id_data['keys'], '' ); // TODO: Consider about this.
 
 			return $this->set_root_value( $root, $a['single'] );
 		}
@@ -1482,6 +1482,24 @@ class CMB2_Field extends CMB2_Base {
 
 		// Update metadata.
 		return update_metadata( $this->object_type, $this->object_id, $id_base, $value );
+	}
+
+	/**
+	 * Remove the root value for a setting, especially for multidimensional ones.
+	 *
+	 * @param  string $old_value The old value.
+	 * @return bool
+	 */
+	protected function remove_root_value( $old_value = '' ) {
+		$id_base = $this->id_data['base'];
+
+		// Options page handling (or temp data store).
+		if ( 'options-page' === $this->object_type || empty( $this->object_id ) ) {
+			return cmb2_options( $this->object_id )->remove( $id_base );
+		}
+
+		// Remove metadata.
+		return delete_metadata( $this->object_type, $this->object_id, $id_base, $old_value );
 	}
 
 	/**
