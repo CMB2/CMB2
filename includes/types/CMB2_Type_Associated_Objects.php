@@ -309,11 +309,12 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		// Loop through and build our existing display items
 		foreach ( $attached as $id ) {
 			$object = $this->query->get_object( $id );
-			$id     = $this->query->get_id( $object );
 
 			if ( empty( $object ) ) {
 				continue;
 			}
+
+			$id = $this->query->get_id( $object );
 			$ids[ $id ] = $id;
 		}
 
