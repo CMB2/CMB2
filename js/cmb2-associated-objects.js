@@ -31,7 +31,7 @@ window.CMB2.associated = window.CMB2.associated || {};
 			.on( 'click', '.associated-objects-wrap .attached .add-remove', app._removeRowFromAttached )
 			// Listen for search events
 			.on( 'keyup', '.associated-objects-wrap input.search', app._handleFilter )
-			.on( 'click', '.cmb-type-custom-associated-objects .cmb-td .cmb2-associated-objects-search-button', app._openSearch );
+			.on( 'click', '.cmb2-associated-objects-search-button', app._openSearch );
 
 		$( document.body ).on( 'click', '.ui-find-overlay', app.closeSearch );
 	};

@@ -181,9 +181,9 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return string
 	 */
 	public function button_data_for_js() {
-		return json_encode( array(
+		$args = array(
 			'queryObjectType' => $this->query->get_query_type(),
-			'types'           => (array) $this->query->get_query_type(),
+			'types'           => (array) $this->query->get_query_arg( 'post_type' ),
 			'cmbId'           => $this->field->cmb_id,
 			'errortxt'        => esc_attr( $this->_text( 'error_text', __( 'An error has occurred. Please reload the page and try again.' ) ) ),
 			'findtxt'         => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
@@ -191,7 +191,8 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			'fieldId'         => $this->field->_id(),
 			'exclude'         => $this->query->get_query_arg( 'post__not_in', array() ),
 			'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
-		) );
+		);
+		return json_encode( $args );
 	}
 
 	/**
