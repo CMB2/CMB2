@@ -509,4 +509,14 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 	}
 
+	/**
+	 * Magic getter for our object. Provides access to protected properties, but prevents overriding.
+	 *
+	 * @param string $field
+	 *
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		return $this->{$field};
+	}
 }
