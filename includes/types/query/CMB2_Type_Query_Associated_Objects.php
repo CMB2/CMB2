@@ -74,6 +74,15 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	}
 
 	/**
+	 * Get the query object type.
+	 *
+	 * @return string
+	 */
+	public function get_query_type() {
+		return $this->query_type;
+	}
+
+	/**
 	 * Execute the appropriate query callback for the current query type.
 	 *
 	 * @return array
@@ -173,5 +182,4 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	public function set_exclude( $ids ) {
 		$this->query_args['exclude'] = $ids;
 	}
-
 }

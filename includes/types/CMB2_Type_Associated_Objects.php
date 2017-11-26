@@ -27,13 +27,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	protected $do_type_label = false;
 
 	/**
-	 * [$this->post_type_labels description]
-	 *
-	 * @var array
-	 */
-	protected $object_type_labels = array();
-
-	/**
 	 * The type of field
 	 *
 	 * @var string
@@ -46,13 +39,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @var boolean
 	 */
 	protected static $hooked = false;
-
-	/**
-	 * [$query_object_type description]
-	 *
-	 * @var string
-	 */
-	protected $query_object_type = 'post';
 
 	/**
 	 * The field instance's query handler.
@@ -73,7 +59,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		parent::__construct( $types, $args );
 
 		if ( ! self::$hooked ) {
-			add_action( 'cmb2_attached_posts_field_add_find_posts_div', array( __CLASS__, 'add_find_posts_div' ) );
+			add_action( 'cmb2_type_associated_objects_add_find_posts_div', array( __CLASS__, 'hook_find_posts_div' ) );
 			self::$hooked = true;
 		}
 	}
@@ -84,55 +70,56 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return CMB2_Type_Base|string
 	 */
 	public function render( $args = array() ) {
-		if ( ! is_admin() ) {
-			// Will need custom styling!
-			// @todo add styles for front-end
-			require_once( ABSPATH . 'wp-admin/includes/template.php' );
-			do_action( 'cmb2_attached_posts_field_add_find_posts_div' );
-		} else {
-			// markup needed for modal
-			// @todo Replace with our own markup.
-			add_action( 'admin_footer', 'find_posts_div' );
-		}
-
-		$this->field->add_js_dependencies( 'cmb2-associated-objects' );
-		$this->query_object_type = $this->field->options( 'query_object_type' );
 		$this->query = $this->get_query(
-			$this->query_object_type,
+			$this->field->options( 'query_object_type' ),
 			$this->field->options( 'query_args' )
 		);
-
-		$filter_boxes = '';
-		// Set .has_thumbnail
-		$has_thumbnail = $this->field->options( 'show_thumbnails' ) ? ' has-thumbnails' : '';
-		$hide_selected = $this->field->options( 'hide_selected' ) ? ' hide-selected' : '';
 
 		// Check to see if we have any meta values saved yet
 		$attached = $this->get_attached();
 		$attached = empty( $attached ) ? array() : (array) $attached;
 
-		$objects = $this->get_all_objects( $attached );
-		$object_type_labels = $this->query->get_all_object_type_labels();
-		$this->do_type_label = count( $object_type_labels ) > 1;
+		// Fetch the objects.
+		$objects  = $this->get_all_objects( $attached );
 
-		// If there are no posts found, just stop
+		// If there are no objects found, just stop
 		if ( empty( $objects ) ) {
 			return;
 		}
 
-		$rendered = '';
+		if ( is_admin() ) {
+			// markup needed for modal
+			// @todo Replace with our own markup.
+			add_action( 'admin_footer', 'find_posts_div' );
+		} else {
+			// Will need custom styling!
+			// @todo add styles for front-end
+			require_once( ABSPATH . 'wp-admin/includes/template.php' );
+			do_action( 'cmb2_type_associated_objects_add_find_posts_div' );
+		}
+
+		$this->field->add_js_dependencies( 'cmb2-associated-objects' );
+
+		// Set .has_thumbnail
+		$has_thumbnail       = $this->field->options( 'show_thumbnails' ) ? ' has-thumbnails' : '';
+		$hide_selected       = $this->field->options( 'hide_selected' ) ? ' hide-selected' : '';
+		$object_type_labels  = $this->query->get_all_object_type_labels();
+		$combined_label      = implode( '/', $object_type_labels );
+		$this->do_type_label = count( $object_type_labels ) > 1;
+		$rendered            = '';
+		$filter_boxes        = '';
+
+		// Check 'filter' setting
+		if ( $this->field->options( 'filter_boxes' ) ) {
+			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb' ), $combined_label ) . '" class="regular-text search" name="%s" /></div>';
+		}
 
 		// Wrap our lists
 		$rendered .= '<div class="associated-objects-wrap widefat" data-fieldname="' . $this->_name() . '">';
 
-		// Open our retrieved, or found posts, list
+		// Open our retrieved, or found objects, list
 		$rendered .= '<div class="retrieved-wrap column-wrap">';
-		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
-
-		// Check 'filter' setting
-		if ( $this->field->options( 'filter_boxes' ) ) {
-			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb' ), $this->object_type_labels ) . '" class="regular-text search" name="%s" /></div>';
-		}
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), $combined_label ) . '</h4>';
 
 		if ( $filter_boxes ) {
 			$rendered .= sprintf( $filter_boxes, 'available-search' );
@@ -140,36 +127,23 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		$rendered .= '<ul class="retrieved connected' . $has_thumbnail . $hide_selected . '">';
 
-		// Loop through our posts as list items
-		$rendered .= $this->render_retrieved( $objects, $attached );
+		// Loop through our objects as list items
+		$rendered .= $this->get_rendered_retrieved( $objects, $attached );
 
-		// Close our retrieved, or found, posts
+		// Close our retrieved, or found, objects
 		$rendered .= '</ul><!-- .retrieved -->';
 
-		// @todo make User search work.
-		if ( 'post' === $this->query_object_type ) {
+		// @todo make other object types search work.
+		if ( 'post' === $this->query->get_query_type() ) {
 			$findtxt = $this->_text( 'find_text', __( 'Search' ) );
-
-			$js_data = json_encode( array(
-				'queryObjectType' => $this->query_object_type,
-				'types'           => (array) $this->query_object_type,
-				'cmbId'           => $this->field->cmb_id,
-				'errortxt'        => esc_attr( $this->_text( 'error_text', __( 'An error has occurred. Please reload the page and try again.' ) ) ),
-				'findtxt'         => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
-				'groupId'         => $this->field->group ? $this->field->group->id() : false,
-				'fieldId'         => $this->field->_id(),
-				'exclude'         => $this->query->get_query_arg( 'post__not_in', array() ),
-				'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
-			) );
-
-			$rendered .= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\'' . $js_data . '\'>' . $findtxt . ' <span title="' . esc_attr( $findtxt ) . '" class="dashicons dashicons-search"></span></button></p>';
+			$rendered .= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\'' . $this->button_data_for_js() . '\'>' . $findtxt . ' <span title="' . esc_attr( $findtxt ) . '" class="dashicons dashicons-search"></span></button></p>';
 		}
 
 		$rendered .= '</div><!-- .retrieved-wrap -->';
 
-		// Open our attached posts list
+		// Open our attached objects list
 		$rendered .= '<div class="attached-wrap column-wrap">';
-		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), $combined_label ) . '</h4>';
 
 		if ( $filter_boxes ) {
 			$rendered .= sprintf( $filter_boxes, 'attached-search' );
@@ -177,8 +151,8 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		$rendered .= '<ul class="attached connected' . $has_thumbnail . '">';
 
-		// If we have any ids saved already, display them
-		$rendered .= $this->render_attached( $attached );
+		// If we have any ids saved already, get them
+		$rendered .= $this->get_rendered_attached( $attached );
 
 		// Close up shop
 		$rendered .= '</ul><!-- #attached -->';
@@ -200,6 +174,27 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	}
 
 	/**
+	 * Get the JSON encoded data for our objects-search button.
+	 *
+	 * @since  2.2.7
+	 *
+	 * @return string
+	 */
+	public function button_data_for_js() {
+		return json_encode( array(
+			'queryObjectType' => $this->query->get_query_type(),
+			'types'           => (array) $this->query->get_query_type(),
+			'cmbId'           => $this->field->cmb_id,
+			'errortxt'        => esc_attr( $this->_text( 'error_text', __( 'An error has occurred. Please reload the page and try again.' ) ) ),
+			'findtxt'         => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
+			'groupId'         => $this->field->group ? $this->field->group->id() : false,
+			'fieldId'         => $this->field->_id(),
+			'exclude'         => $this->query->get_query_arg( 'post__not_in', array() ),
+			'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
+		) );
+	}
+
+	/**
 	 * Outputs a column list item.
 	 *
 	 * @since  1.2.5
@@ -214,7 +209,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		$label = '';
 
 		if ( $this->do_type_label ) {
-			$label = ' &mdash; <span class="object-label">' . $this->query->get_object_type_label( $object ) . '</span>';
+			$label = '<span class="object-label-separator"> &mdash; </span><span class="object-label">' . $this->query->get_object_type_label( $object ) . '</span>';
 		}
 
 		// Build our list item
@@ -236,15 +231,15 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @since  1.2.5
 	 *
 	 * @param  mixed  $objects  Posts or users.
-	 * @param  array  $attached Array of attached posts/users.
+	 * @param  array  $attached Array of attached objects.
 	 *
 	 * @return string
 	 */
-	protected function render_retrieved( $objects, $attached ) {
+	protected function get_rendered_retrieved( $objects, $attached ) {
 		$count = 0;
 		$rendered = '';
 
-		// Loop through our posts as list items
+		// Loop through our objects as list items
 		foreach ( $objects as $object ) {
 
 			// Set our zebra stripes
@@ -264,11 +259,11 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 *
 	 * @since  1.2.5
 	 *
-	 * @param  array  $attached Array of attached posts/users.
+	 * @param  array  $attached Array of attached objects.
 	 *
 	 * @return string
 	 */
-	protected function render_attached( $attached ) {
+	protected function get_rendered_attached( $attached ) {
 		$rendered = '';
 
 		// Remove any empty values
@@ -395,7 +390,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Add the find posts div via a hook so we can relocate it manually
 	 */
-	public static function add_find_posts_div() {
+	public static function hook_find_posts_div() {
 		add_action( 'wp_footer', 'find_posts_div' );
 	}
 
@@ -464,7 +459,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 
 		if ( ! empty( $_POST['retrieved'] ) && is_array( $_POST['retrieved'] ) ) {
-			// Exclude posts/users already existing.
+			// Exclude objects already existing.
 			$ids = array_map( 'absint', $_POST['retrieved'] );
 
 			if ( ! empty( $_POST['exclude'] ) && is_array( $_POST['exclude'] ) ) {
@@ -504,7 +499,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			$field = $cmb->get_field( $field, $group );
 		}
 
-		if ( $field && ( $cb = $field->maybe_callback( 'attached_posts_search_query_cb' ) ) ) {
+		if ( $field && ( $cb = $field->maybe_callback( 'search_query_cb' ) ) ) {
 			call_user_func( $cb, $query, $field );
 		}
 	}
@@ -520,7 +515,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		switch ( $property ) {
 			case 'do_type_label':
 			case 'object_type_labels':
-			case 'query_object_type':
 			case 'query':
 				return $this->{$property};
 			default:
