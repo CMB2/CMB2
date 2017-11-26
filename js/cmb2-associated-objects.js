@@ -329,9 +329,10 @@ window.CMB2.associated = window.CMB2.associated || {};
 				return;
 			}
 
-			var $lastRow = app.$lastRow();
+			var $lastRow  = app.$lastRow();
 			var nextClass = $lastRow.hasClass( 'even' ) ? 'odd' : 'even';
-			var ids = [];
+			var linkTmpl  = this.linkTmpl;
+			var ids       = [];
 
 			$checked.each( function() {
 				ids.push( this.value );
@@ -341,7 +342,7 @@ window.CMB2.associated = window.CMB2.associated || {};
 					title    : $row.find( 'label' ).html(),
 					type     : $row.find( '> td' ).eq( 2 ).text(),
 					id       : this.value,
-					linkTmpl : this.linkTmpl,
+					linkTmpl : linkTmpl,
 					class    : nextClass
 				} );
 
