@@ -128,11 +128,11 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		$rendered = '';
 
 		// Wrap our lists
-		$rendered.= '<div class="associated-objects-wrap widefat" data-fieldname="'. $this->_name() .'">';
+		$rendered .= '<div class="associated-objects-wrap widefat" data-fieldname="' . $this->_name() . '">';
 
 		// Open our retrieved, or found posts, list
-		$rendered.= '<div class="retrieved-wrap column-wrap">';
-		$rendered.= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
+		$rendered .= '<div class="retrieved-wrap column-wrap">';
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
 
 		// Check 'filter' setting
 		if ( $this->field->options( 'filter_boxes' ) ) {
@@ -140,16 +140,16 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		}
 
 		if ( $filter_boxes ) {
-			$rendered.= sprintf( $filter_boxes, 'available-search' );
+			$rendered .= sprintf( $filter_boxes, 'available-search' );
 		}
 
-		$rendered.= '<ul class="retrieved connected' . $has_thumbnail . $hide_selected . '">';
+		$rendered .= '<ul class="retrieved connected' . $has_thumbnail . $hide_selected . '">';
 
 		// Loop through our posts as list items
-		$rendered.= $this->render_retrieved( $objects, $attached );
+		$rendered .= $this->render_retrieved( $objects, $attached );
 
 		// Close our retrieved, or found, posts
-		$rendered.= '</ul><!-- .retrieved -->';
+		$rendered .= '</ul><!-- .retrieved -->';
 
 		// @todo make User search work.
 		if ( 'post' === $this->query_object_type ) {
@@ -166,42 +166,42 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				'exclude'         => isset( $this->query_args['post__not_in'] )
 					? $this->query_args['post__not_in']
 					: array(),
-				'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) )
+				'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
 			) );
 
-			$rendered.= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\''. $js_data .'\'>'. $findtxt .' <span title="'. esc_attr( $findtxt ) .'" class="dashicons dashicons-search"></span></button></p>';
+			$rendered .= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\'' . $js_data . '\'>' . $findtxt . ' <span title="' . esc_attr( $findtxt ) . '" class="dashicons dashicons-search"></span></button></p>';
 		}
 
-		$rendered.= '</div><!-- .retrieved-wrap -->';
+		$rendered .= '</div><!-- .retrieved-wrap -->';
 
 		// Open our attached posts list
-		$rendered.= '<div class="attached-wrap column-wrap">';
-		$rendered.= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
+		$rendered .= '<div class="attached-wrap column-wrap">';
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), implode( '/', $object_type_labels ) ) . '</h4>';
 
 		if ( $filter_boxes ) {
-			$rendered.= sprintf( $filter_boxes, 'attached-search' );
+			$rendered .= sprintf( $filter_boxes, 'attached-search' );
 		}
 
-		$rendered.= '<ul class="attached connected' . $has_thumbnail . '">';
+		$rendered .= '<ul class="attached connected' . $has_thumbnail . '">';
 
 		// If we have any ids saved already, display them
-		$rendered.= $this->render_attached( $attached );
+		$rendered .= $this->render_attached( $attached );
 
 		// Close up shop
-		$rendered.= '</ul><!-- #attached -->';
-		$rendered.= '</div><!-- .attached-wrap -->';
+		$rendered .= '</ul><!-- #attached -->';
+		$rendered .= '</div><!-- .attached-wrap -->';
 
-		$rendered.= $this->types->input( array(
+		$rendered .= $this->types->input( array(
 			'type'  => 'hidden',
 			'class' => 'associated-objects-ids',
 			'value' => ! empty( $attached ) ? implode( ',', $attached ) : '',
 			'desc'  => '',
 		) );
 
-		$rendered.= '</div><!-- .associated-objects-wrap -->';
+		$rendered .= '</div><!-- .associated-objects-wrap -->';
 
 		// Display our description if one exists
-		$rendered.= $this->_desc( true );
+		$rendered .= $this->_desc( true );
 
 		return $this->rendered( $rendered );
 	}
@@ -221,7 +221,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		$label = '';
 
 		if ( $this->do_type_label ) {
-			$label = ' &mdash; <span class="object-label">'. $this->query->get_object_type_label( $object ) . '</span>';
+			$label = ' &mdash; <span class="object-label">' . $this->query->get_object_type_label( $object ) . '</span>';
 		}
 
 		// Build our list item
@@ -258,9 +258,9 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			$class = ++$count % 2 == 0 ? 'even' : 'odd';
 
 			// Set a class if our post is in our attached meta
-			$class .= ! empty ( $attached ) && in_array( $this->query->get_id( $object ), $attached ) ? ' added' : '';
+			$class .= ! empty( $attached ) && in_array( $this->query->get_id( $object ), $attached ) ? ' added' : '';
 
-			$rendered.= $this->get_list_item( $object, $class );
+			$rendered .= $this->get_list_item( $object, $class );
 		}
 
 		return $rendered;
@@ -299,7 +299,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			// Set our zebra stripes
 			$class = ++$count % 2 == 0 ? 'even' : 'odd';
 
-			$rendered.= $this->get_list_item( $object, $class, 'dashicons-minus' );
+			$rendered .= $this->get_list_item( $object, $class, 'dashicons-minus' );
 		}
 
 		return $rendered;

@@ -85,7 +85,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		}
 		$output .= '</div>';
 
- 		return $this->rendered( $output );
+		return $this->rendered( $output );
 	}
 
 	public function get_file_preview_output() {

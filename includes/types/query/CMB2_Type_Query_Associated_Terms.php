@@ -29,7 +29,7 @@ class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Object
 	public function __construct( $args ) {
 		parent::__construct( $args );
 
-		if ( !empty( $args['taxonomy'] ) ) {
+		if ( ! empty( $args['taxonomy'] ) ) {
 			$this->taxonomies = $args['taxonomy'];
 		}
 	}
@@ -99,7 +99,7 @@ class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Object
 		foreach ( (array) $this->taxonomies as $taxonomy ) {
 			$term = get_term( $id, $taxonomy );
 
-			if ( !empty($term) && !$term instanceof WP_Error ) {
+			if ( ! empty( $term ) && ! $term instanceof WP_Error ) {
 				$found = $term;
 				break;
 			}
@@ -127,7 +127,7 @@ class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Object
 		foreach ( (array) $this->taxonomies as $taxonomy ) {
 			$tax = get_taxonomy( $taxonomy );
 
-			if ( !empty( $tax ) ) {
+			if ( ! empty( $tax ) ) {
 				$labels[] = $tax->labels->name;
 			}
 		}

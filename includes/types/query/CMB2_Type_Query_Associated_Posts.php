@@ -32,7 +32,7 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 			'posts_per_page' => 100,
 			'orderby' => 'name',
 			'order' => 'ASC',
-			'ignore_sticky_posts' => TRUE,
+			'ignore_sticky_posts' => true,
 			'post__not_in' => array(),
 		);
 	}

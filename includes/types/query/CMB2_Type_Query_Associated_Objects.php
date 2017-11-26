@@ -71,14 +71,14 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 * @return array
 	 */
 	public function execute_query() {
-		if ( !isset( $this->query_type_callbacks[ $this->query_type() ] ) || !is_callable( $this->query_type_callbacks[ $this->query_type() ] ) ) {
+		if ( ! isset( $this->query_type_callbacks[ $this->query_type() ] ) || ! is_callable( $this->query_type_callbacks[ $this->query_type() ] ) ) {
 			return array();
 		}
 
 		$this->objects = array();
 		$objects = call_user_func( $this->query_type_callbacks[ $this->query_type() ], $this->query_args );
 
-		foreach ($objects as $object) {
+		foreach ( $objects as $object ) {
 			$this->objects[ $this->get_id( $object ) ] = $object;
 		}
 
