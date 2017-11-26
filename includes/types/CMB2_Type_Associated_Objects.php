@@ -361,6 +361,22 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return CMB2_Type_Query_Associated_Objects
 	 */
 	public function get_query( $query_object_type = 'post', $args ) {
+
+		/**
+		 * A filter to bypass fetching the default CMB2_Type_Query_Associated_Objects object.
+		 *
+		 * Passing a CMB2_Type_Query_Associated_Objects object will short-circuit the method.
+		 *
+		 * @param null|CMB2_Type_Query_Associated_Objects $query Default null value.
+		 * @param string $query_object_type The object type being requested.
+		 * @param array $args Array of arguments for the CMB2_Type_Query_Associated_Objects object.
+		 */
+		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $query_object_type, $args, $this );
+
+		if ( $query instanceof CMB2_Type_Query_Associated_Objects ) {
+			return $query;
+		}
+
 		switch ( $query_object_type ) {
 			case 'user';
 				$query = new CMB2_Type_Query_Associated_Users( $args );
