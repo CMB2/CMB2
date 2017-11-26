@@ -55,7 +55,18 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 * @param $args
 	 */
 	public function set_query_args( $args ) {
+		if ( ! is_array( $args ) ) {
+			$args = array();
+		}
 		$this->query_args = wp_parse_args( $args, $this->default_query_args() );
+	}
+
+	/**
+	 * @param $arg
+	 * @param $fallback
+	 */
+	public function get_query_arg( $arg, $fallback = null ) {
+		return isset( $this->query_args[ $arg ] ) ? $this->query_args[ $arg ] : $fallback;
 	}
 
 	/**
