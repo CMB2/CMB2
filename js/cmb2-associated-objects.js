@@ -192,7 +192,7 @@ window.CMB2.associated = window.CMB2.associated || {};
 
 	app.rowTmpl = function( row ) {
 		row.type = app.doType ? ' &mdash; <span class="object-label">'+ row.type +'</span>' : '';
-		return '<li data-id="'+ row.id +'" class="'+ row.class +' ui-draggable ui-draggable-handle"><a title="'+ app.editTitle +'" href="'+ row.linkTmpl.replace( 'REPLACEME', row.id ) +'">'+ row.title +'</a>'+ row.type +'<span class="dashicons dashicons-plus add-remove"></span></li>';
+		return '<li data-id="'+ row.id +'" class="'+ row.class +' ui-draggable ui-draggable-handle"><a title="'+ app.editTitle +'" href="'+ row.linkTmpl.replace( 'REPLACEME', row.id ) +'" target="_blank">'+ row.title +'</a>'+ row.type +'<span class="dashicons dashicons-plus add-remove"></span></li>';
 	};
 
 	app.$retrievedPosts = function() {

@@ -215,7 +215,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		// Build our list item
 		return sprintf(
-			'<li data-id="%1$d" class="%2$s" target="_blank">%3$s<a title="' . __( 'Edit' ) . '" href="%4$s">%5$s</a>%6$s<span class="dashicons %7$s add-remove"></span></li>',
+			'<li data-id="%1$d" class="%2$s">%3$s<a title="' . __( 'Edit' ) . '" href="%4$s" target="_blank">%5$s</a>%6$s<span class="dashicons %7$s add-remove"></span></li>',
 			$this->query->get_id( $object ),
 			$li_class,
 			$this->query->get_thumb( $object ),
