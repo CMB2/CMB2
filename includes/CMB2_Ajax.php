@@ -50,6 +50,8 @@ class CMB2_Ajax {
 	protected function __construct() {
 		add_action( 'wp_ajax_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
 		add_action( 'wp_ajax_nopriv_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
+		add_action( 'wp_ajax_cmb2_find_associated_objects', array( $this, 'find_associated_objects' ) );
+		add_action( 'wp_ajax_nopriv_cmb2_find_associated_objects', array( $this, 'find_associated_objects' ) );
 		// Need to occasionally clean stale oembed cache data from the option value.
 		add_action( 'cmb2_save_options-page_fields', array( __CLASS__, 'clean_stale_options_page_oembeds' ) );
 	}
@@ -316,6 +318,21 @@ class CMB2_Ajax {
 		if ( $modified ) {
 			$updated = cmb2_options( $option_key )->set( $options );
 		}
+	}
+
+	/**
+	 * Handle the associated object search query
+	 *
+	 * @since  2.2.7
+	 * @return void
+	 */
+	public function find_associated_objects() {
+		if ( ! isset( $_POST['cmb2_associated_objects_search'], $_POST['retrieved'], $_POST['action'] ) ) {
+			return;
+		}
+
+		$associated_objects_search = new CMB2_Associated_Objects_Search( $_POST );
+		$associated_objects_search->do_search();
 	}
 
 }

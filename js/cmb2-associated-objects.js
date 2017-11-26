@@ -280,17 +280,17 @@ window.CMB2.associated = window.CMB2.associated || {};
 			} ).get();
 
 			var data = {
-				ps                   : this.$input.val(),
-				action               : 'find_posts',
-				query_object_type    : this.queryObjectType,
-				search_types         : this.types,
-				cmb_id               : this.cmbId,
-				group_id             : this.groupId,
-				field_id             : this.fieldId,
-				exclude              : this.exclude,
-				retrieved            : retrieved,
-				_ajax_nonce          : $( '#find-posts #_ajax_nonce' ).val(),
-				cmb2_attached_search : true,
+				ps                : this.$input.val(),
+				action            : 'cmb2_find_associated_objects',
+				query_object_type : this.queryObjectType,
+				search_types      : this.types,
+				cmb_id            : this.cmbId,
+				group_id          : this.groupId,
+				field_id          : this.fieldId,
+				exclude           : this.exclude,
+				retrieved         : retrieved,
+				_ajax_nonce       : $( '#find-posts #_ajax_nonce' ).val(),
+				cmb2_associated_objects_search : true,
 			};
 
 			$.post( l10n.ajaxurl, data )

@@ -90,6 +90,62 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function get_search_column_one( $object ) {
+		$title = $this->get_title( $object );
+		return trim( $title ) ? $title : __( '(no title)' );
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_search_column_two( $object ) {
+		$obj = get_post_type_object( $object->post_type );
+
+		return isset( $obj->labels->singular_name )
+			? $obj->labels->singular_name
+			: parent::get_search_column_one( $object );
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_search_column_three( $object ) {
+		if ( '0000-00-00 00:00:00' == $object->post_date ) {
+			$time = '';
+		} else {
+			/* translators: date format in table columns, see https://secure.php.net/date */
+			$time = mysql2date( __( 'Y/m/d' ), $object->post_date );
+		}
+
+		return $time;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_search_column_four( $object ) {
+		switch ( $object->post_status ) {
+			case 'publish' :
+			case 'private' :
+				$stat = __( 'Published' );
+				break;
+			case 'future' :
+				$stat = __( 'Scheduled' );
+				break;
+			case 'pending' :
+				$stat = __( 'Pending Review' );
+				break;
+			case 'draft' :
+				$stat = __( 'Draft' );
+				break;
+		}
+
+		return esc_html( $stat );
+	}
+
+	/**
 	 * @param $ids
 	 *
 	 * @return void

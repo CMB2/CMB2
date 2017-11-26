@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.2.6.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2017-11-26 03:07:08+00:00\n"
+"POT-Creation-Date: 2017-11-26 06:23:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-11-25 3:7+300\n"
+"PO-Revision-Date: 2017-11-26 6:23+300\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -346,18 +346,28 @@ msgstr ""
 msgid "Click to toggle"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:75
+#: includes/CMB2_Ajax.php:77
 msgid "Please Try Again"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:181 tests/cmb-tests-base.php:50
+#: includes/CMB2_Ajax.php:183 tests/cmb-tests-base.php:50
 msgid "Remove Embed"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:189 includes/helper-functions.php:109
+#: includes/CMB2_Ajax.php:191 includes/helper-functions.php:109
 #: tests/cmb-tests-base.php:68 tests/test-cmb-types-display.php:208
 #. translators: 1: results for. 2: link to codex.wordpress.org/Embeds
 msgid "No oEmbed Results Found for %1$s. View more info at %2$s."
+msgstr ""
+
+#: includes/CMB2_Associated_Objects_Search.php:212
+msgid "No items found."
+msgstr ""
+
+#: includes/CMB2_Associated_Objects_Search.php:233
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:97
+#: includes/types/query/CMB2_Type_Query_Associated_Users.php:119
+msgid "(no title)"
 msgstr ""
 
 #: includes/CMB2_Base.php:422
@@ -692,23 +702,23 @@ msgstr ""
 msgid "Available %s"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:138
+#: includes/types/CMB2_Type_Associated_Objects.php:137
 msgid "Search"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:146
+#: includes/types/CMB2_Type_Associated_Objects.php:144
 msgid "Attached %s"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:188
+#: includes/types/CMB2_Type_Associated_Objects.php:186
 msgid "An error has occurred. Please reload the page and try again."
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:189
+#: includes/types/CMB2_Type_Associated_Objects.php:187
 msgid "Find Posts or Pages"
 msgstr ""
 
-#: includes/types/CMB2_Type_Associated_Objects.php:219
+#: includes/types/CMB2_Type_Associated_Objects.php:216
 msgid "Edit"
 msgstr ""
 
@@ -726,9 +736,58 @@ msgstr ""
 msgid "No terms"
 msgstr ""
 
+#: includes/types/query/CMB2_Type_Query_Associated_Objects.php:277
+msgid "Title"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Objects.php:284
+msgid "Type"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Objects.php:291
+msgid "Date"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Objects.php:298
+msgid "Status"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:119
+#. translators: date format in table columns, see https:secure.php.net/date
+msgid "Y/m/d"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:132
+msgid "Published"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:135
+msgid "Scheduled"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:138
+msgid "Pending Review"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Posts.php:141
+msgid "Draft"
+msgstr ""
+
 #: includes/types/query/CMB2_Type_Query_Associated_Users.php:95
 #: includes/types/query/CMB2_Type_Query_Associated_Users.php:103
 msgid "Users"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Users.php:156
+msgid "Username"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Users.php:163
+msgid "Name"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Users.php:170
+msgid "Role"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -763,4 +822,9 @@ msgctxt ""
 "Valid formatting string, as per "
 "http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
+msgstr ""
+
+#: includes/types/query/CMB2_Type_Query_Associated_Users.php:137
+msgctxt "no user roles"
+msgid "None"
 msgstr ""

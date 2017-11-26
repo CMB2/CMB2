@@ -181,7 +181,7 @@ class CMB2 extends CMB2_Base {
 		$this->meta_box['fields'] = array();
 
 		// Ensures object_types is an array.
-		$this->set_prop( 'object_types', $this->box_types() ) ;
+		$this->set_prop( 'object_types', $this->box_types() );
 		$this->object_id( $object_id );
 
 		if ( $this->is_options_page_mb() ) {
@@ -437,7 +437,7 @@ class CMB2 extends CMB2_Base {
 	public function render_group( $args ) {
 		$field_group = false;
 
-		if ( $args instanceof CMB2_Field  ) {
+		if ( $args instanceof CMB2_Field ) {
 			$field_group = 'group' === $args->type() ? $args : false;
 		} elseif ( isset( $args['id'], $args['fields'] ) && is_array( $args['fields'] ) ) {
 			$field_group = $this->get_field( $args );
@@ -1089,7 +1089,7 @@ class CMB2 extends CMB2_Base {
 		$this->set_prop( 'option_key', $keys );
 
 		// Reset the object types.
-		$this->set_prop( 'object_types', array_unique( $types ) ) ;
+		$this->set_prop( 'object_types', array_unique( $types ) );
 	}
 
 	/**
@@ -1188,8 +1188,8 @@ class CMB2 extends CMB2_Base {
 			$values = $this->meta_box['show_on']['value'];
 		} elseif ( ! empty( $this->meta_box['show_on']['options-page'] ) ) {
 			$values = $this->meta_box['show_on']['options-page'];
-		} elseif ( $this->prop( 'option_key') ) {
-			$values = $this->prop( 'option_key');
+		} elseif ( $this->prop( 'option_key' ) ) {
+			$values = $this->prop( 'option_key' );
 		}
 
 		if ( $values ) {
@@ -1389,7 +1389,7 @@ class CMB2 extends CMB2_Base {
 	 * @since 2.1.0
 	 * @param array $fields          Array of fields to add.
 	 * @param mixed $parent_field_id Parent field id or null.
- 	 *
+	 *
 	 * @return CMB2
 	 */
 	protected function add_fields( $fields, $parent_field_id = null ) {
@@ -1451,9 +1451,6 @@ class CMB2 extends CMB2_Base {
 				// Dequeue the rgba_colorpicker custom field script if it is used,
 				// since we now enqueue our own more current version.
 				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
-				break;
-			case 'associated_objects':
-				add_action( 'cmb2_after_init', array( 'CMB2_Type_Associated_Objects', 'ajax_find_associated' ) );
 				break;
 		}
 

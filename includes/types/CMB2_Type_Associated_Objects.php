@@ -196,7 +196,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Outputs a column list item.
 	 *
-	 * @since  1.2.5
+	 * @since  2.2.7
 	 *
 	 * @param  mixed  $object     Post or User.
 	 * @param  string  $li_class   The list item (zebra) class.
@@ -227,7 +227,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Returns the <li>s in the retrieved (left) column.
 	 *
-	 * @since  1.2.5
+	 * @since  2.2.7
 	 *
 	 * @param  mixed  $objects  Posts or users.
 	 * @param  array  $attached Array of attached objects.
@@ -256,7 +256,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Returns the <li>s in the attached (right) column.
 	 *
-	 * @since  1.2.5
+	 * @since  2.2.7
 	 *
 	 * @param  array  $attached Array of attached objects.
 	 *
@@ -324,7 +324,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Fetches the default query for items, and combines with any objects attached.
 	 *
-	 * @since  1.2.4
+	 * @since  2.2.7
 	 *
 	 * @param  array  $attached Array of attached object ids.
 	 *
@@ -355,36 +355,12 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 *
 	 * @return CMB2_Type_Query_Associated_Objects
 	 */
-	public function get_query( $query_object_type = 'post', $args ) {
-
-		/**
-		 * A filter to bypass fetching the default CMB2_Type_Query_Associated_Objects object.
-		 *
-		 * Passing a CMB2_Type_Query_Associated_Objects object will short-circuit the method.
-		 *
-		 * @param null|CMB2_Type_Query_Associated_Objects $query Default null value.
-		 * @param string $query_object_type The object type being requested.
-		 * @param array $args Array of arguments for the CMB2_Type_Query_Associated_Objects object.
-		 */
-		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $query_object_type, $args, $this );
-
-		if ( $query instanceof CMB2_Type_Query_Associated_Objects ) {
-			return $query;
-		}
-
-		switch ( $query_object_type ) {
-			case 'user';
-				$query = new CMB2_Type_Query_Associated_Users( $args );
-				break;
-			case 'term':
-				$query = new CMB2_Type_Query_Associated_Terms( $args );
-				break;
-			case 'post':
-			default:
-				$query = new CMB2_Type_Query_Associated_Posts( $args );
-		}
-
-		return $query;
+	public function get_query( $query_object_type, $args ) {
+		return CMB2_Type_Query_Associated_Objects::get_query_object(
+			$query_object_type,
+			$args,
+			$this->field
+		);
 	}
 
 	/**
@@ -392,116 +368,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 */
 	public static function hook_find_posts_div() {
 		add_action( 'wp_footer', 'find_posts_div' );
-	}
-
-	/**
-	 * Sanitizes/formats the associated-objects field value.
-	 *
-	 * @since  1.2.4
-	 *
-	 * @param  string  $sanitized_val The sanitized value to be saved.
-	 * @param  string  $val           The unsanitized value.
-	 *
-	 * @return string                 The (maybe-modified) sanitized value to be saved.
-	 */
-	public function sanitize( $sanitized_val, $val ) {
-		if ( ! empty( $val ) ) {
-			$sanitized_val = explode( ',', $val );
-		}
-
-		return $sanitized_val;
-	}
-
-	/**
-	 * Check to see if we have a post type set and, if so, add the
-	 * pre_get_posts action to set the queried post type
-	 *
-	 * @since  1.2.4
-	 *
-
-	 * @return void
-	 */
-	public static function ajax_find_associated() {
-		if (
-			defined( 'DOING_AJAX' )
-			&& DOING_AJAX
-			&& isset( $_POST['cmb2_attached_search'], $_POST['retrieved'], $_POST['action'], $_POST['search_types'] )
-			&& 'find_posts' == $_POST['action']
-			&& ! empty( $_POST['search_types'] )
-		) {
-			// This is not working until we fix the user query bit.
-			if ( ! empty( $_POST['query_object_type'] ) && is_array( $_POST['query_object_type'] ) && in_array( 'user', $_POST['query_object_type'], true ) ) {
-				add_action( 'pre_get_users', array( __CLASS__, 'modify_query' ) );
-			} else {
-				add_action( 'pre_get_posts', array( __CLASS__, 'modify_query' ) );
-			}
-		}
-	}
-
-	/**
-	 * Modify the search query.
-	 *
-	 * @since  1.2.4
-	 *
-	 * @param  WP_Query  $query WP_Query instance during the pre_get_posts hook.
-	 *
-	 * @return void
-	 */
-	public static function modify_query( $query ) {
-		$is_users = 'pre_get_users' === current_filter();
-
-		if ( $is_users ) {
-			// This is not working until we fix the user query bit.
-		} else {
-			$types = $_POST['search_types'];
-			$types = is_array( $types ) ? array_map( 'esc_attr', $types ) : esc_attr( $types );
-			$query->set( 'post_type', $types );
-		}
-
-		if ( ! empty( $_POST['retrieved'] ) && is_array( $_POST['retrieved'] ) ) {
-			// Exclude objects already existing.
-			$ids = array_map( 'absint', $_POST['retrieved'] );
-
-			if ( ! empty( $_POST['exclude'] ) && is_array( $_POST['exclude'] ) ) {
-				// Exclude the post that we're looking at.
-				$exclude = array_map( 'absint', $_POST['exclude'] );
-				$ids = array_merge( $ids, $exclude );
-			}
-
-			$query->set( $is_users ? 'exclude' : 'post__not_in', $ids );
-		}
-
-		self::maybe_callback( $query, $_POST );
-	}
-
-	/**
-	 * If field has a 'attached_posts_search_query_cb', run the callback.
-	 *
-	 * @since  1.2.4
-	 *
-	 * @param  WP_Query $query     WP_Query instance during the pre_get_posts hook.
-	 * @param  array    $post_args The $_POST array.
-	 *
-	 * @return void
-	 */
-	public static function maybe_callback( $query, $post_args ) {
-		$cmb   = isset( $post_args['cmb_id'] ) ? $post_args['cmb_id'] : '';
-		$group = isset( $post_args['group_id'] ) ? $post_args['group_id'] : '';
-		$field = isset( $post_args['field_id'] ) ? $post_args['field_id'] : '';
-
-		$cmb = cmb2_get_metabox( $cmb );
-		if ( $cmb && $group ) {
-			$group = $cmb->get_field( $group );
-		}
-
-		if ( $cmb && $field ) {
-			$group = $group ? $group : null;
-			$field = $cmb->get_field( $field, $group );
-		}
-
-		if ( $field && ( $cb = $field->maybe_callback( 'search_query_cb' ) ) ) {
-			call_user_func( $cb, $query, $field );
-		}
 	}
 
 	/**
@@ -514,7 +380,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	public function __get( $property ) {
 		switch ( $property ) {
 			case 'do_type_label':
-			case 'object_type_labels':
 			case 'query':
 				return $this->{$property};
 			default:
