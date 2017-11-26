@@ -15,16 +15,13 @@
  * Class CMB2_Type_Query_Associated_Objects
  */
 abstract class CMB2_Type_Query_Associated_Objects {
+
 	/**
-	 * Map of query type to appropriate callback.
+	 * The query object type.
 	 *
-	 * @var array
+	 * @var string
 	 */
-	protected $query_type_callbacks = array(
-		'post' => 'get_posts',
-		'user' => 'get_users',
-		'term' => 'get_terms',
-	);
+	protected $query_type = '';
 
 	/**
 	 * @var array
@@ -82,12 +79,8 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 * @return array
 	 */
 	public function execute_query() {
-		if ( ! isset( $this->query_type_callbacks[ $this->query_type() ] ) || ! is_callable( $this->query_type_callbacks[ $this->query_type() ] ) ) {
-			return array();
-		}
-
 		$this->objects = array();
-		$objects = call_user_func( $this->query_type_callbacks[ $this->query_type() ], $this->query_args );
+		$objects = $this->fetch();
 
 		foreach ( $objects as $object ) {
 			$this->objects[ $this->get_id( $object ) ] = $object;
@@ -99,19 +92,19 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	/**
 	 * @return string
 	 */
-	abstract function query_type();
+	abstract public function fetch();
 
 	/**
 	 * @return array
 	 */
-	abstract function default_query_args();
+	abstract public function default_query_args();
 
 	/**
 	 * @param object $object
 	 *
 	 * @return int
 	 */
-	abstract function get_id( $object );
+	abstract public function get_id( $object );
 
 	/**
 	 *
@@ -119,40 +112,40 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 *
 	 * @return string
 	 */
-	abstract function get_title( $object );
+	abstract public function get_title( $object );
 
 	/**
 	 * @param $object
 	 *
 	 * @return string
 	 */
-	abstract function get_thumb( $object );
+	abstract public function get_thumb( $object );
 
 	/**
 	 * @param $object
 	 *
 	 * @return string
 	 */
-	abstract function get_edit_link( $object );
+	abstract public function get_edit_link( $object );
 
 	/**
 	 * @param $id
 	 *
 	 * @return object
 	 */
-	abstract function get_object( $id );
+	abstract public function get_object( $id );
 
 	/**
 	 * @param object $object
 	 *
 	 * @return mixed
 	 */
-	abstract function get_object_type_label( $object );
+	abstract public function get_object_type_label( $object );
 
 	/**
 	 * @return array
 	 */
-	abstract function get_all_object_type_labels();
+	abstract public function get_all_object_type_labels();
 
 	/**
 	 * @param $ids

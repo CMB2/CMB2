@@ -17,6 +17,13 @@
 class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Objects {
 
 	/**
+	 * The query object type.
+	 *
+	 * @var string
+	 */
+	protected $query_type = 'term';
+
+	/**
 	 * @var mixed string|array
 	 */
 	protected $taxonomies = 'post_tag';
@@ -35,10 +42,10 @@ class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Object
 	}
 
 	/**
-	 * @return string
+	 * @return mixed
 	 */
-	public function query_type() {
-		return 'term';
+	public function fetch() {
+		return get_terms( $this->query_args );
 	}
 
 	/**

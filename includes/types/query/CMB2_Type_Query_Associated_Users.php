@@ -17,10 +17,17 @@
 class CMB2_Type_Query_Associated_Users extends CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * @return string
+	 * The query object type.
+	 *
+	 * @var string
 	 */
-	public function query_type() {
-		return 'user';
+	protected $query_type = 'user';
+
+	/**
+	 * @return mixed
+	 */
+	public function fetch() {
+		return get_users( $this->query_args );
 	}
 
 	/**

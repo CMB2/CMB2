@@ -17,10 +17,17 @@
 class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * @return string
+	 * The query object type.
+	 *
+	 * @var string
 	 */
-	public function query_type() {
-		return 'post';
+	protected $query_type = 'post';
+
+	/**
+	 * @return mixed
+	 */
+	public function fetch() {
+		return get_posts( $this->query_args );
 	}
 
 	/**
