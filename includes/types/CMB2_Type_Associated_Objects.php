@@ -134,10 +134,8 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 		$rendered .= '</ul><!-- .retrieved -->';
 
 		// @todo make other object types search work.
-		if ( 'post' === $this->query->get_query_type() ) {
-			$findtxt = $this->_text( 'find_text', __( 'Search' ) );
-			$rendered .= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\'' . $this->button_data_for_js() . '\'>' . $findtxt . ' <span title="' . esc_attr( $findtxt ) . '" class="dashicons dashicons-search"></span></button></p>';
-		}
+		$findtxt = $this->_text( 'find_text', __( 'Search' ) );
+		$rendered .= '<p><button type="button" class="button cmb2-associated-objects-search-button" data-search=\'' . $this->button_data_for_js() . '\'>' . $findtxt . ' <span title="' . esc_attr( $findtxt ) . '" class="dashicons dashicons-search"></span></button></p>';
 
 		$rendered .= '</div><!-- .retrieved-wrap -->';
 
