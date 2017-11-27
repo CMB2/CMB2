@@ -540,7 +540,7 @@ class CMB2_Field extends CMB2_Base {
 	public function save_field_from_data( array $data_to_save ) {
 		$this->data_to_save = $data_to_save;
 
-		$meta_value = $this->get_root_value_from_data( $data_to_save );
+		$meta_value = $this->get_root_value_from_data( $this->data_to_save );
 
 		return $this->save_field( $meta_value );
 	}
