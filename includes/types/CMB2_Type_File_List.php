@@ -43,7 +43,7 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 			'id'  => '',
 		) );
 
-		$output .= '<ul id="' . $this->_id( '-status' ) . '" class="cmb2-media-status cmb-attach-list">';
+		$output .= '<ul id="' . $this->_id( '-status', false ) . '" class="cmb2-media-status cmb-attach-list">';
 
 		if ( $meta_value && is_array( $meta_value ) ) {
 

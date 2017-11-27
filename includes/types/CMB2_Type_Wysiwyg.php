@@ -23,7 +23,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 	public function render() {
 		$field = $this->field;
 		$a = $this->parse_args( 'wysiwyg', array(
-			'id'      => $this->_id(),
+			'id'      => $this->_id( '', false ),
 			'value'   => $field->escaped_value( 'stripslashes' ),
 			'desc'    => $this->_desc( true ),
 			'options' => $field->options(),

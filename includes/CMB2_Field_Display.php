@@ -403,7 +403,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		$id = $this->field->get_field_clone( array(
-			'id' => $this->field->_id() . '_id',
+			'id' => $this->field->_id( '', false ) . '_id',
 		) )->escaped_value( 'absint' );
 
 		$this->file_output( $this->value, $id, $type );

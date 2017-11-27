@@ -607,7 +607,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$this->cmb->data_to_save[ $field->_id() ] = $values[ $this->cmb->cmb_id ][ $field->_id() ];
+		$this->cmb->data_to_save[ $field->_id( '', false ) ] = $values[ $this->cmb->cmb_id ][ $field->_id( '', false ) ];
 
 		return $this->cmb->save_group_field( $field );
 	}

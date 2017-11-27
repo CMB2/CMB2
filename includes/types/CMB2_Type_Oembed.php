@@ -25,7 +25,7 @@ class CMB2_Type_Oembed extends CMB2_Type_Text {
 				'oembed_args' => array(
 					'width' => '640',
 				),
-				'field_id'    => $this->_id(),
+				'field_id'    => $this->_id( '', false ),
 			) )
 			: '';
 

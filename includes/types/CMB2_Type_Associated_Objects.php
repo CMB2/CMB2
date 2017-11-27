@@ -186,7 +186,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			'errortxt'        => esc_attr( $this->_text( 'error_text', __( 'An error has occurred. Please reload the page and try again.' ) ) ),
 			'findtxt'         => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
 			'groupId'         => $this->field->group ? $this->field->group->id() : false,
-			'fieldId'         => $this->field->_id(),
+			'fieldId'         => $this->field->_id( '', false ),
 			'exclude'         => $this->query->get_query_arg( 'post__not_in', array() ),
 			'linkTmpl'        => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
 		);
