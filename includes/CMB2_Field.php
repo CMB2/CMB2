@@ -150,10 +150,6 @@ class CMB2_Field extends CMB2_Base {
 		$this->id_data['keys'] = preg_split( '/\[/', str_replace( ']', '', $this->group ? $this->group->id( true ) : $this->id( true ) ) );
 		$this->id_data['base'] = array_shift( $this->id_data['keys'] );
 
-		if ( ! empty( $this->id_data['keys'] ) ) {
-			// ..
-		}
-
 		if ( $this->object_id ) {
 			$this->value = $this->get_data();
 		}
