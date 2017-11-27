@@ -33,14 +33,6 @@ class CMB2_Field extends CMB2_Base {
 	public $args = array();
 
 	/**
-	 * ID Data.
-	 *
-	 * @var   array
-	 * @since 2.2.6
-	 */
-	protected $id_data = array();
-
-	/**
 	 * Field group object or false (if no group)
 	 *
 	 * @var   mixed
@@ -121,6 +113,14 @@ class CMB2_Field extends CMB2_Base {
 		'after_group_row',
 		'after_group',
 	);
+
+	/**
+	 * ID Data.
+	 *
+	 * @var   array
+	 * @since 2.2.x
+	 */
+	protected $id_data = array();
 
 	/**
 	 * Constructs our field object
@@ -516,7 +516,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Get root value from an array data.
 	 *
-	 * @since  2.2.6
+	 * @since  2.2.x
 	 * @param  array $data The data like $_POST.
 	 * @return mixed
 	 */
@@ -1443,7 +1443,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Get the root value for a setting, especially for multidimensional ones.
 	 *
-	 * @since  2.2.6
+	 * @since  2.2.x
 	 * @return mixed
 	 */
 	protected function get_root_value( $is_single = true ) {
@@ -1457,7 +1457,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Set the root value for a setting, especially for multidimensional ones.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param mixed $value Value to set as root of multidimensional setting.
 	 * @return bool Whether the multidimensional root was updated successfully.
@@ -1487,6 +1487,8 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Remove the root value for a setting, especially for multidimensional ones.
 	 *
+	 * @since 2.2.x
+	 *
 	 * @param  string $old_value The old value.
 	 * @return bool
 	 */
@@ -1505,7 +1507,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Multidimensional helper function.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param $root
 	 * @param $keys
@@ -1561,7 +1563,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Will attempt to remove a specific value in a multidimensional array.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param $root
 	 * @param $keys
@@ -1584,7 +1586,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Will attempt to replace a specific value in a multidimensional array.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param $root
 	 * @param $keys
@@ -1610,7 +1612,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Will attempt to fetch a specific value from a multidimensional array.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param $root
 	 * @param $keys
@@ -1631,7 +1633,7 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Will attempt to check if a specific value in a multidimensional array is set.
 	 *
-	 * @since 2.2.6
+	 * @since 2.2.x
 	 *
 	 * @param $root
 	 * @param $keys
