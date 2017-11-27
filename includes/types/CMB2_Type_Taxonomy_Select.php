@@ -51,7 +51,7 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 
 		if ( ! empty( $option_none ) ) {
 
-			$field_id = $this->_id();
+			$field_id = $this->_id( '', false );
 
 			/**
 			 * Default (option-none) taxonomy-select value.

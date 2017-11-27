@@ -438,7 +438,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 
 		$links = array(
 			'self' => array(
-				'href' => rest_url( trailingslashit( $boxbase ) . 'fields/' . $field->_id() . $query_string ),
+				'href' => rest_url( trailingslashit( $boxbase ) . 'fields/' . $field->_id( '', false ) . $query_string ),
 			),
 			'collection' => array(
 				'href' => rest_url( trailingslashit( $boxbase ) . 'fields' . $query_string ),
