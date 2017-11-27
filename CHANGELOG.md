@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
 ### Enhancements
+
+* Switching to the more communicative and standard [Semantic Versioning](https://semver.org/). ([#1061](https://github.com/CMB2/CMB2/issues/1061)).
+
 ### Bug Fixes
 
 ## [2.2.6.1 - 2017-11-24](https://github.com/CMB2/CMB2/releases/tag/v2.2.6.1)

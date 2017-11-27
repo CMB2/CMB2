@@ -478,7 +478,7 @@ window.CMB2 = window.CMB2 || {};
 			}
 			else {
 				// Row indexes are at the very end of the string.
-				newName = oldName ? cmb.replaceLast( oldName, '['+ prevNum +'][', '['+ cmb.idNumber +'][' ) : '';
+				newName = oldName ? cmb.replaceLast( oldName, '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
 				newID   = oldID ? cmb.replaceLast( oldID, '_'+ prevNum, '_'+ cmb.idNumber ) : '';
 			}
 
