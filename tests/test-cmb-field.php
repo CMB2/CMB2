@@ -580,4 +580,61 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertSame( $expected, $field->get_data() );
 	}
 
+	/**
+	 * @dataProvider get_root_value_from_data_samples
+	 */
+	public function test_get_root_value_from_data( $field_id, $expected, $data ) {
+		$args = $this->field_args;
+		$args['id'] = $field_id;
+		$field = $this->new_field( $args );
+
+		$this->assertEquals( $expected, $field->get_root_value_from_data( $data ) );
+	}
+
+	public function get_root_value_from_data_samples() {
+		$data1 = array( '_meta_post_image' => array( 'some' => array( 'nested' => array( 'url' => 'http://example.com' ) ) ) );
+		$data2 = array( 'sample_field' => 'simple text' );
+
+		return array(
+			array( '_meta_post_image[some][nested][url]', 'http://example.com', $data1 ),
+			array( '_meta_post_image[some]', array( 'nested' => array( 'url' => 'http://example.com' ) ), $data1 ),
+			array( 'non_field', null, $data1 ),
+			array( 'sample_field', 'simple text', $data2 ),
+			array( 'non_field', null, $data2 ),
+		);
+	}
+
+	public function test_basic_field_multidimention() {
+		$args = $this->field_args;
+		$args['id'] = '_meta_post_image[some][nested][url]';
+		$args['save_field'] = true;
+
+		$field = $this->new_field( $args );
+		$modified = $field->save_field_from_data(
+			array( '_meta_post_image' => array( 'some' => array( 'nested' => array( 'url' => 'This is link' ) ) ) )
+		);
+		$this->assertNotFalse( $modified );
+
+		// Assert get value.
+		$meta_value = get_post_meta( $this->post_id, '_meta_post_image', true );
+		$this->assertTrue( isset( $meta_value['some']['nested']['url'] ) );
+		$this->assertEquals( 'This is link', $meta_value['some']['nested']['url'] );
+
+		// Assert update value.
+		$modified = $field->save_field_from_data(
+			array( '_meta_post_image' => array( 'some' => array( 'nested' => array( 'url' => 'This is another link' ) ) ) )
+		);
+		$this->assertNotFalse( $modified );
+		$meta_value = get_post_meta( $this->post_id, '_meta_post_image', true );
+		$this->assertEquals( 'This is another link', $meta_value['some']['nested']['url'] );
+
+		// Assert remove key.
+		$modified = $field->save_field_from_data(
+			array( '_meta_post_image' => array( 'some' => array( 'nested' => array( 'url' => '' ) ) ) )
+		);
+		$this->assertNotFalse( $modified );
+		$meta_value = get_post_meta( $this->post_id, '_meta_post_image', true );
+		$this->assertArrayNotHasKey( 'url', $meta_value['some']['nested'] );
+	}
+
 }
