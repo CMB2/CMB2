@@ -437,10 +437,10 @@ class CMB2_Field extends CMB2_Base {
 		if ( empty( $this->id_data['keys'] ) ) {
 			return $this->remove_root_value( $old );
 		} else {
-			$root = $this->get_root_value( $a['single'] );
-			$root = $this->multidimensional_replace( $root, $this->id_data['keys'], '' ); // TODO: Consider about this.
+			$root = $this->get_root_value( $a['single'] || $a['repeat'] );
+			$root = $this->multidimensional_remove( $root, $this->id_data['keys'] );
 
-			return $this->set_root_value( $root, $a['single'] );
+			return $this->set_root_value( $root, $a['single'] || $a['repeat'] );
 		}
 	}
 
@@ -1556,6 +1556,29 @@ class CMB2_Field extends CMB2_Base {
 			'node' => &$node,
 			'key'  => $last,
 		);
+	}
+
+	/**
+	 * Will attempt to remove a specific value in a multidimensional array.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @return mixed
+	 */
+	final protected function multidimensional_remove( $root, $keys ) {
+		if ( empty( $keys ) ) { // If there are no keys, we're replacing the root.
+			return;
+		}
+
+		$result = $this->multidimensional( $root, $keys, true );
+
+		if ( isset( $result ) ) {
+			unset( $result['node'][ $result['key'] ] );
+		}
+
+		return $root;
 	}
 
 	/**
