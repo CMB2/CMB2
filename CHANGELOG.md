@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 * With 2.3.0, will be fully switching to the more communicative and standard [Semantic Versioning](https://semver.org/). ([#1061](https://github.com/CMB2/CMB2/issues/1061)).
+* Updated Italian translation. Props [@Mte90](https://github.com/Mte90) ([#1067](https://github.com/CMB2/CMB2/issues/1067)).
 
 ### Bug Fixes
 
