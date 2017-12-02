@@ -117,14 +117,14 @@ class CMB2_Ajax {
 
 		$args = wp_parse_args( $args, array(
 			'object_type' => 'post',
-			'oembed_args' => $this->embed_args,
+			'oembed_args' => array(),
 			'field_id'    => false,
 			'wp_error'    => false,
 		) );
 
 		$this->embed_args =& $args;
 
-		/**
+		/*
 		 * Set the post_ID so oEmbed won't fail
 		 * wp-includes/class-wp-embed.php, WP_Embed::shortcode()
 		 */
@@ -267,7 +267,7 @@ class CMB2_Ajax {
 		} else {
 
 			$args = array( $this->object_type, $this->object_id, $meta_key );
-			$args[] = 'update' === $action ? $func_args : true;
+			$args[] = 'update' === $action ? $func_args[1] : true;
 
 			// Cache the result to our metadata
 			$status = call_user_func_array( $action . '_metadata', $args );

@@ -5,9 +5,6 @@
  * @see    https://github.com/CMB2/CMB2
  */
 
- // TODO: fix this.
- // JQMIGRATE: jQuery.fn.attr('value') no longer gets properties
-
 /**
  * Custom jQuery for Custom Metaboxes and Fields
  */
@@ -92,12 +89,12 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( $repeatGroup.length ) {
 			$repeatGroup
+				.on( 'cmb2_add_row', cmb.emptyValue )
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
 					$( this ).find( '.cmb-remove-group-row-button' ).before( '<a class="button-secondary cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button-secondary cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
 				})
-				.on( 'click', '.cmb-shift-rows', cmb.shiftRows )
-				.on( 'cmb2_add_row', cmb.emptyValue );
+				.on( 'click', '.cmb-shift-rows', cmb.shiftRows );
 		}
 
 		// on pageload
@@ -404,7 +401,7 @@ window.CMB2 = window.CMB2 || {};
 		var $elements = $row.find( cmb.repeatUpdate );
 		if ( group ) {
 
-			var $other  = $row.find( '[id]' ).not( cmb.repeatUpdate );
+			var $other = $row.find( '[id]' ).not( cmb.repeatUpdate );
 
 			// Remove extra ajaxed rows
 			$row.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
@@ -436,13 +433,13 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		$elements.each( function() {
-			cmb.elReplacements( $( this ), prevNum );
+			cmb.elReplacements( $( this ), prevNum, group );
 		} );
 
 		return cmb;
 	};
 
-	cmb.elReplacements = function( $newInput, prevNum ) {
+	cmb.elReplacements = function( $newInput, prevNum, group ) {
 		var oldFor    = $newInput.attr( 'for' );
 		var oldVal    = $newInput.val();
 		var type      = $newInput.prop( 'type' );
@@ -454,22 +451,27 @@ window.CMB2 = window.CMB2 || {};
 			attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
 		} else {
 			var oldName = $newInput.attr( 'name' );
-			// Replace 'name' attribute key
-			var newName = oldName ? oldName.replace( '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
-			oldID       = $newInput.attr( 'id' );
-			newID       = oldID ? oldID.replace( '_'+ prevNum, '_'+ cmb.idNumber ) : '';
-			attrs       = {
+			var newName;
+			oldID = $newInput.attr( 'id' );
+
+			// Handle adding groups vs rows.
+			if ( group ) {
+				// Expect another bracket after group's index closing bracket.
+				newName = oldName ? oldName.replace( '['+ prevNum +'][', '['+ cmb.idNumber +'][' ) : '';
+				// Expect another underscore after group's index trailing underscore.
+				newID   = oldID ? oldID.replace( '_' + prevNum + '_', '_' + cmb.idNumber + '_' ) : '';
+			}
+			else {
+				// Row indexes are at the very end of the string.
+				newName = oldName ? cmb.replaceLast( oldName, '[' + prevNum + ']', '[' + cmb.idNumber + ']' ) : '';
+				newID   = oldID ? cmb.replaceLast( oldID, '_' + prevNum, '_' + cmb.idNumber ) : '';
+			}
+
+			attrs = {
 				id: newID,
-				name: newName,
-				// value: '',
-				'data-iterator': cmb.idNumber,
+				name: newName
 			};
 
-		}
-
-		// Clear out old values
-		if ( undefined !== typeof( oldVal ) && oldVal || checkable ) {
-			attrs.value = checkable ? checkable : '';
 		}
 
 		// Clear out textarea values
@@ -479,6 +481,10 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( checkable ) {
 			$newInput.removeAttr( 'checked' );
+		}
+
+		if ( ! group && $newInput[0].hasAttribute( 'data-iterator' ) ) {
+			attrs['data-iterator'] = cmb.idNumber;
 		}
 
 		$newInput
@@ -564,12 +570,6 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.afterRowInsert( $newRow );
 
-		if ( $table.find('.cmb-repeatable-grouping').length <= 1 ) {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-		} else {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-		}
-
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
 
 	};
@@ -593,8 +593,6 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: false }, $row );
 
-		$table.find( '.cmb-remove-row-button' ).removeClass( 'button-disabled' );
-
 	};
 
 	cmb.removeGroupRow = function( evt ) {
@@ -605,9 +603,8 @@ window.CMB2 = window.CMB2 || {};
 		var $parent = $this.parents('.cmb-repeatable-grouping');
 		var number  = $table.find('.cmb-repeatable-grouping').length;
 
-		// Needs to always be at least one group.
 		if ( number < 2 ) {
-			return;
+			return cmb.resetRow( $parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ), $this );
 		}
 
 		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
@@ -616,12 +613,6 @@ window.CMB2 = window.CMB2 || {};
 		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 		$parent.remove();
-
-		if ( number <= 2 ) {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', true );
-		} else {
-			$table.find('.cmb-remove-group-row').prop( 'disabled', false );
-		}
 
 		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: true } );
 
@@ -641,20 +632,25 @@ window.CMB2 = window.CMB2 || {};
 		var $table  = $this.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
 
-		if ( number > 2 ) {
-			if ( $parent.hasClass('empty-row') ) {
-				$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
-			}
-			$this.parents('.cmb-repeat-table .cmb-row').remove();
-			if ( number === 3 ) {
-				$table.find( '.cmb-remove-row-button' ).addClass( 'button-disabled' );
-			}
-
-			cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
-
-		} else {
-			$this.addClass( 'button-disabled' );
+		if ( number <= 2 ) {
+			return cmb.resetRow( $parent.find( '.cmb-add-row-button' ), $this );
 		}
+
+		if ( $parent.hasClass('empty-row') ) {
+			$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
+		}
+
+		$this.parents('.cmb-repeat-table .cmb-row').remove();
+
+
+		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
+	};
+
+	cmb.resetRow = function( $addNewBtn, $removeBtn ) {
+		// Click the "add new" button followed by the "remove this" button
+		// in order to reset the repeat row to empty values.
+		$addNewBtn.trigger( 'click' );
+		$removeBtn.trigger( 'click' );
 	};
 
 	cmb.shiftRows = function( evt ) {
@@ -810,7 +806,11 @@ window.CMB2 = window.CMB2 || {};
 
 		options.onClose = function( dateText, inst ) {
 			// Remove the class when we're done with it (and hide to remove FOUC).
-			$id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
+			var $picker = $id( 'ui-datepicker-div' ).removeClass( 'cmb2-element' ).hide();
+			if ( 'timepicker' === method && ! $( inst.input ).val() ) {
+				// Set the timepicker field value if it's empty.
+				inst.input.val( $picker.find( '.ui_tpicker_time' ).text() );
+			}
 
 			// Let's be sure to call onClose if it was added
 			if ( 'function' === typeof existing.onClose ) {
@@ -1036,6 +1036,15 @@ window.CMB2 = window.CMB2 || {};
 		var args = Array.prototype.slice.call( arguments, 2 );
 		args.push( cmb );
 		$el.trigger( evtName, args );
+	};
+
+	cmb.replaceLast = function( string, search, replace ) {
+		// find the index of last time word was used
+		var n = string.lastIndexOf( search );
+
+		// slice the string in 2, one from the start to the lastIndexOf
+		// and then replace the word in the rest
+		return string.slice( 0, n ) + string.slice( n ).replace( search, replace );
 	};
 
 	$( cmb.init );

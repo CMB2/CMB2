@@ -289,14 +289,30 @@ abstract class CMB2_Base {
 	}
 
 	/**
+	 * Unset the cached results of the param callback.
+	 *
+	 * @since  2.2.6
+	 * @param  string $param Field parameter
+	 * @return CMB2_Base
+	 */
+	public function unset_param_callback_cache( $param ) {
+		if ( isset( $this->callback_results[ $param ] ) ) {
+			unset( $this->callback_results[ $param ] );
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Handles the parameter callbacks, and passes this object as parameter.
 	 *
 	 * @since  2.2.3
-	 * @param  callable $cb The callback method/function/closure
-	 * @return mixed        Return of the callback function.
+	 * @param  callable $cb                The callback method/function/closure
+	 * @param  mixed    $additional_params Any additoinal parameters which should be passed to the callback.
+	 * @return mixed                       Return of the callback function.
 	 */
-	protected function do_callback( $cb ) {
-		return call_user_func( $cb, $this->{$this->properties_name}, $this );
+	protected function do_callback( $cb, $additional_params = null ) {
+		return call_user_func( $cb, $this->{$this->properties_name}, $this, $additional_params );
 	}
 
 	/**

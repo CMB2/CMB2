@@ -345,6 +345,11 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	public function test_get_cmb() {
+		if ( version_compare( phpversion(), '5.3', '<' ) ) {
+			$this->assertTrue( true );
+			return;
+		}
+
 		$cmb = new_cmb2_box( array(
 			'id'            => 'metabox',
 			'object_types'  => array( 'post' ),
@@ -410,7 +415,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 								</select>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button-secondary cmb-remove-row-button button-disabled" title="Remove Row">Remove</button>
+								<button type="button" class="button-secondary cmb-remove-row-button" title="Remove Row">Remove</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -541,4 +546,38 @@ class Test_CMB2_Field extends Test_CMB2 {
 			$this->assertSame( $unslashed_val, $field->get_data() );
 		}
 	}
+
+	public function test_cmb2_money_field_save_slashed() {
+		$args = $this->field_args;
+		$args['save_field'] = true;
+		$args['type'] = 'text_money';
+
+		$field = $this->new_field( $args );
+
+		$this->cmb2_money_field_save_slashed( $field, '¯\\\_(ツ)_/¯', '0.00' );
+		$this->cmb2_money_field_save_slashed( $field, '5,000.23', '5,000.23' );
+		$this->cmb2_money_field_save_slashed( $field, '444446000.23', '444,446,000.23' );
+
+		global $wp_locale;
+
+		$thousands_sep = $wp_locale->number_format['thousands_sep'];
+		// Replace with the Swiss German thousand separator, which is a `'`.
+		$wp_locale->number_format['thousands_sep'] = "'";
+
+		$this->cmb2_money_field_save_slashed( $field, "2\'180.00", "2'180.00" );
+		$this->cmb2_money_field_save_slashed( $field, "444\'446\'000.23", "444'446'000.23" );
+		$this->cmb2_money_field_save_slashed( $field, "444'446'000.23", "444'446'000.23" );
+		$this->cmb2_money_field_save_slashed( $field, '444446000.23', "444'446'000.23" );
+
+		$wp_locale->number_format['thousands_sep'] = $thousands_sep;
+	}
+
+	protected function cmb2_money_field_save_slashed( $field, $test_val, $expected ) {
+		$field->save_field( $test_val );
+		$this->assertSame( $expected, $field->get_data() );
+
+		$field->save_field( $expected );
+		$this->assertSame( $expected, $field->get_data() );
+	}
+
 }

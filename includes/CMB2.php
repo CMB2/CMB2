@@ -110,6 +110,7 @@ class CMB2 extends CMB2_Base {
 		 */
 
 		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		'message_cb'       => '', // Optionally define the options-save message (via a callback).
 		'option_key'       => '', // The actual option key and admin menu page slug.
 		'parent_slug'      => '', // Used as first param in add_submenu_page().
 		'capability'       => 'manage_options', // Cap required to view options-page.
@@ -119,6 +120,7 @@ class CMB2 extends CMB2_Base {
 		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
 		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
 		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
+		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 	);
 
 	/**
@@ -202,6 +204,12 @@ class CMB2 extends CMB2_Base {
 		 * @param array $cmb This CMB2 object
 		 */
 		do_action( "cmb2_init_{$this->cmb_id}", $this );
+
+		// Hook in the hookup... how meta.
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_hookup', 'maybe_init_and_hookup' ) );
+
+		// Hook in the rest api functionality.
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_REST', 'maybe_init_and_hookup' ) );
 	}
 
 	/**
@@ -421,31 +429,54 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Render a repeatable group.
+	 * Render a group of fields.
 	 *
-	 * @param array $args Array of field arguments for a group field parent.
+	 * @param array|CMB2_Field $args Array of field arguments for a group field parent or the group parent field.
 	 * @return CMB2_Field|null Group field object.
 	 */
 	public function render_group( $args ) {
+		$field_group = false;
 
-		if ( ! isset( $args['id'], $args['fields'] ) || ! is_array( $args['fields'] ) ) {
+		if ( $args instanceof CMB2_Field  ) {
+			$field_group = 'group' === $args->type() ? $args : false;
+		} elseif ( isset( $args['id'], $args['fields'] ) && is_array( $args['fields'] ) ) {
+			$field_group = $this->get_field( $args );
+		}
+
+		if ( ! $field_group ) {
 			return;
 		}
 
-		$field_group = $this->get_field( $args );
+		$field_group->render_context = 'edit';
+		$field_group->peform_param_callback( 'render_row_cb' );
+
+		return $field_group;
+	}
+
+	/**
+	 * The default callback to render a group of fields.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @param  array      $field_args  Array of field arguments for the group field parent.
+	 * @param  CMB2_Field $field_group The CMB2_Field group object.
+	 *
+	 * @return CMB2_Field|null Group field object.
+	 */
+	public function render_group_callback( $field_args, $field_group ) {
 
 		// If field is requesting to be conditionally shown.
 		if ( ! $field_group || ! $field_group->should_show() ) {
 			return;
 		}
 
-		$desc            = $field_group->args( 'description' );
-		$label           = $field_group->args( 'name' );
-		$group_val       = (array) $field_group->value();
-		$remove_disabled = count( $group_val ) <= 1 ? 'disabled="disabled" ' : '';
 		$field_group->index = 0;
 
 		$field_group->peform_param_callback( 'before_group' );
+
+		$desc      = $field_group->args( 'description' );
+		$label     = $field_group->args( 'name' );
+		$group_val = (array) $field_group->value();
 
 		echo '<div class="cmb-row cmb-repeat-group-wrap ', esc_attr( $field_group->row_classes() ), '" data-fieldtype="group"><div class="cmb-td"><div data-groupid="', esc_attr( $field_group->id() ), '" id="', esc_attr( $field_group->id() ), '_repeat" ', $this->group_wrap_attributes( $field_group ), '>';
 
@@ -463,11 +494,11 @@ class CMB2 extends CMB2_Base {
 
 		if ( ! empty( $group_val ) ) {
 			foreach ( $group_val as $group_key => $field_id ) {
-				$this->render_group_row( $field_group, $remove_disabled );
+				$this->render_group_row( $field_group );
 				$field_group->index++;
 			}
 		} else {
-			$this->render_group_row( $field_group, $remove_disabled );
+			$this->render_group_row( $field_group );
 		}
 
 		if ( $field_group->args( 'repeatable' ) ) {
@@ -528,11 +559,10 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  1.0.2
 	 * @param  CMB2_Field $field_group     CMB2_Field group field object.
-	 * @param  string     $remove_disabled Attribute string to disable the remove button.
 	 *
 	 * @return CMB2
 	 */
-	public function render_group_row( $field_group, $remove_disabled ) {
+	public function render_group_row( $field_group ) {
 
 		$field_group->peform_param_callback( 'before_group_row' );
 		$closed_class = $field_group->options( 'closed' ) ? ' closed' : '';
@@ -541,7 +571,7 @@ class CMB2 extends CMB2_Base {
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
+			echo '<button type="button" data-selector="', $field_group->id(), '_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
 			echo '
@@ -568,7 +598,7 @@ class CMB2 extends CMB2_Base {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" ', $remove_disabled, 'data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" data-selector="', $field_group->id(), '_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';
@@ -1162,7 +1192,7 @@ class CMB2 extends CMB2_Base {
 			$values = $this->prop( 'option_key');
 		}
 
-		if ( is_string( $values ) ) {
+		if ( $values ) {
 			$key = $values;
 		}
 
@@ -1265,11 +1295,14 @@ class CMB2 extends CMB2_Base {
 	 * Get a field object
 	 *
 	 * @since  2.0.3
-	 * @param  string|array|CMB2_Field $field       Metabox field id or field config array or CMB2_Field object.
-	 * @param  CMB2_Field|null         $field_group (optional) CMB2_Field object (group parent).
+	 * @param  string|array|CMB2_Field $field        Metabox field id or field config array or CMB2_Field object.
+	 * @param  CMB2_Field|null         $field_group  (optional) CMB2_Field object (group parent).
+	 * @param  bool                    $reset_cached (optional) Reset the internal cache for this field object.
+	 *                                               Use sparingly.
+	 *
 	 * @return CMB2_Field|false                     CMB2_Field object (or false).
 	 */
-	public function get_field( $field, $field_group = null ) {
+	public function get_field( $field, $field_group = null, $reset_cached = false ) {
 		if ( $field instanceof CMB2_Field ) {
 			return $field;
 		}
@@ -1286,7 +1319,8 @@ class CMB2 extends CMB2_Base {
 		list( $field_id, $sub_field_id ) = $ids;
 
 		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
-		if ( array_key_exists( $index, $this->fields ) ) {
+
+		if ( array_key_exists( $index, $this->fields ) && ! $reset_cached ) {
 			return $this->fields[ $index ];
 		}
 
@@ -1405,6 +1439,18 @@ class CMB2 extends CMB2_Base {
 
 				// Initiate oembed Ajax hooks.
 				cmb2_ajax();
+				break;
+
+			case 'group':
+				if ( empty( $field['render_row_cb'] ) ) {
+					$field['render_row_cb'] = array( $this, 'render_group_callback' );
+				}
+				break;
+			case 'colorpicker':
+				// https://github.com/JayWood/CMB2_RGBa_Picker
+				// Dequeue the rgba_colorpicker custom field script if it is used,
+				// since we now enqueue our own more current version.
+				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
 				break;
 		}
 
@@ -1610,11 +1656,12 @@ class CMB2 extends CMB2_Base {
 	 * Handles metabox property callbacks, and passes this $cmb object as property.
 	 *
 	 * @since  2.2.3
-	 * @param  callable $cb The callback method/function/closure.
-	 * @return mixed        Return of the callback function.
+	 * @param  callable $cb                The callback method/function/closure
+	 * @param  mixed    $additional_params Any additoinal parameters which should be passed to the callback.
+	 * @return mixed                       Return of the callback function.
 	 */
-	protected function do_callback( $cb ) {
-		return call_user_func( $cb, $this );
+	public function do_callback( $cb, $additional_params = null ) {
+		return call_user_func( $cb, $this, $additional_params );
 	}
 
 	/**

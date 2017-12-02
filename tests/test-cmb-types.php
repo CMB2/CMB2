@@ -44,7 +44,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
-								<button type="button" class="button-secondary cmb-remove-row-button button-disabled" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
+								<button type="button" class="button-secondary cmb-remove-row-button" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
 							</div>
 						</div>
 						<div class="cmb-row empty-row hidden">
@@ -517,13 +517,170 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_select_field_after_value_update() {
-			update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], 'one' );
+		update_post_meta( $this->post_id, $this->options_test['fields'][0]['id'], 'one' );
 
 		$field = $this->get_field_object( $this->options_test['fields'][0] );
 		$this->assertHTMLstringsAreEqual(
 			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="one" selected=\'selected\'>One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
+	}
+
+	public function test_select_field_after_value_update_with_floats() {
+		$args = array(
+			'name' => 'Name',
+			'desc' => '',
+			'id'   => 'options_test_value_update_with_floats',
+			'type' => 'select',
+			'options' => array(
+				'1.3' => '1.3',
+				'0.8' => 0.8,
+				'0.1' => '0.1',
+				1     => '1',
+				'0.0' => '0.0',
+				0     => '0',
+				''     => 'nothing',
+				'one' => 'one',
+			),
+		);
+
+		$tests = array(
+			array(
+				'0.1',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				0.1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				.1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" selected=\'selected\'>0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				1,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" selected=\'selected\'>1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'1',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" selected=\'selected\'>1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'one',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" selected=\'selected\'>one</option>',
+			),
+			array(
+				'0.0',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" selected=\'selected\'>0.0</option><option value="0" >0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				0,
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" selected=\'selected\'>0</option><option value="" >nothing</option><option value="one" >one</option>',
+			),
+			array(
+				'',
+				'<option value="1.3" >1.3</option><option value="0.8" >0.8</option><option value="0.1" >0.1</option><option value="1" >1</option><option value="0.0" >0.0</option><option value="0" >0</option><option value="" selected=\'selected\'>nothing</option><option value="one" >one</option>',
+			),
+		);
+
+		foreach ( $tests as $index => $test ) {
+
+			update_post_meta( $this->post_id, $args['id'], $test[0] );
+			$field = $this->get_field_object( $args );
+
+			$this->assertHTMLstringsAreEqual(
+				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'">'. $test[1] .'</select>',
+				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) ),
+				"Test index: $index"
+			);
+
+		}
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_select_field_after_value_update_with_leading_zeroes() {
+		$args = array(
+			'name' => 'Name',
+			'desc' => '',
+			'id'   => 'options_test_field2',
+			'type' => 'select',
+			// 'options' => $month_options,
+			'options' => array(
+				'00' => '[No month]',
+				'01' => 'Jan',
+				'02' => 'Feb',
+				'03' => 'Mar',
+				'04' => 'Apr',
+				'05' => 'May',
+				'06' => 'Jun',
+				'07' => 'Jul',
+				'08' => 'Aug',
+				'09' => 'Sep',
+				10   => 'Oct',
+				11   => 'Nov',
+				12   => 'Dec',
+			),
+		);
+
+		$tests = array(
+			0 => array(
+				'00',
+				'<option value="00" selected=\'selected\'>[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			1 => array(
+				'01',
+				'<option value="00" >[No month]</option><option value="01" selected=\'selected\'>Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			2 => array(
+				'09',
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" selected=\'selected\'>Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			3 => array(
+				10,
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" selected=\'selected\'>Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			4 => array(
+				12,
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" selected=\'selected\'>Dec</option>',
+			),
+			5 => array(
+				0,
+				'<option value="00" selected=\'selected\'>[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			6 => array(
+				1,
+				'<option value="00" >[No month]</option><option value="01" selected=\'selected\'>Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			7 => array(
+				0,
+				'<option value="00" selected=\'selected\'>[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			8 => array(
+				'10',
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" selected=\'selected\'>Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+			9 => array(
+				'12',
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" selected=\'selected\'>Dec</option>',
+			),
+			10 => array(
+				'0.1',
+				'<option value="00" >[No month]</option><option value="01" >Jan</option><option value="02" >Feb</option><option value="03" >Mar</option><option value="04" >Apr</option><option value="05" >May</option><option value="06" >Jun</option><option value="07" >Jul</option><option value="08" >Aug</option><option value="09" >Sep</option><option value="10" >Oct</option><option value="11" >Nov</option><option value="12" >Dec</option>',
+			),
+		);
+
+		foreach ( $tests as $index => $test ) {
+
+			update_post_meta( $this->post_id, $args['id'], $test[0] );
+			$field = $this->get_field_object( $args );
+
+			$this->assertHTMLstringsAreEqual(
+				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'">'. $test[1] .'</select>',
+				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) ),
+				"Test index: $index"
+			);
+
+		}
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
@@ -712,16 +869,16 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_file_field_after_value_update() {
-			update_post_meta( $this->post_id, $this->text_type_field['id'], get_permalink( $this->attachment_id ) );
-			update_post_meta( $this->post_id, $this->text_type_field['id'] . '_id', $this->attachment_id );
+		update_post_meta( $this->post_id, $this->text_type_field['id'], get_permalink( $this->attachment_id ) );
+		update_post_meta( $this->post_id, $this->text_type_field['id'] . '_id', $this->attachment_id );
 
-			$field_type = $this->get_field_type_object( array(
-				'type'         => 'file',
-				'preview_size' => array( 199, 199 ),
-			) );
+		$field_type = $this->get_field_type_object( array(
+			'type'         => 'file',
+			'preview_size' => array( 199, 199 ),
+		) );
 
-			$file_url = get_permalink( $this->attachment_id );
-			$file_name = $field_type->get_file_name_from_path( $file_url );
+		$file_url = get_permalink( $this->attachment_id );
+		$file_name = $field_type->get_file_name_from_path( $file_url );
 
 		$this->assertHTMLstringsAreEqual(
 			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
@@ -736,6 +893,30 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] . '_id' );
 	}
 
+	public function test_file_field_id_value_empty_after_input_value_empty() {
+		$field = $this->get_field_object( array(
+			'id' => 'test_value_input_empty',
+			'type' => 'file',
+		) );
+
+		$file_url = get_permalink( $this->attachment_id );
+		$field->save_field_from_data( array(
+			'test_value_input_empty' => $file_url,
+			'test_value_input_empty_id' => $this->attachment_id,
+		) );
+
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty', true ), $file_url );
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty_id', true ), (string) $this->attachment_id );
+
+		$field->save_field_from_data( array(
+			'test_value_input_empty' => '',
+			'test_value_input_empty_id' => $this->attachment_id,
+		) );
+
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty', true ), '' );
+		$this->assertSame( get_post_meta( $this->post_id, 'test_value_input_empty_id', true ), '' );
+	}
+
 	public function test_oembed_field() {
 		$this->assertHTMLstringsAreEqual(
 			sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="" data-objectid=\'%1$d\' data-objecttype=\'post\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap"></div>', $this->post_id ),
@@ -747,24 +928,22 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	 * @group cmb2-ajax-embed
 	 */
 	public function test_oembed_field_after_value_update() {
-		$vid = 'EOfy5LDpEHo';
-		$value = 'https://www.youtube.com/watch?v=' . $vid;
-			update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
-
-			$results = $this->expected_youtube_oembed_results( array(
-				'src'      => 'http://www.youtube.com/embed/' . $vid . '?feature=oembed',
-				'url'      => $value,
-				'field_id' => 'field_test_field',
-			) );
-
-			$expected_field = sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="%1$s" data-objectid=\'%2$d\' data-objecttype=\'post\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap">%3$s</div>', $value, $this->post_id, $results );
-
-			$actual_field = $this->capture_render( array( $this->get_field_type_object( 'oembed' ), 'render' ) );
-
-		$this->assertHTMLstringsAreEqual(
-			preg_replace( '~https?://~', '', $expected_field ), // normalize http differences
-			preg_replace( '~https?://~', '', $actual_field ) // normalize http differences
+		$args = array(
+			'src'       => 'http://www.youtube.com/embed/EOfy5LDpEHo?feature=oembed',
+			'url'       => 'https://www.youtube.com/watch?v=EOfy5LDpEHo',
+			'field_id'  => 'field_test_field',
+			'object_id' => $this->post_id,
 		);
+
+		update_post_meta( $this->post_id, $this->text_type_field['id'], $args['url'] );
+
+		$args['oembed_result'] = array(
+			'<iframe ',
+			sprintf( 'src="%s"', $args['src'] ),
+			'</iframe>',
+		);
+
+		$this->assertOEmbedResult( $args );
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
@@ -990,9 +1169,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			),
 		) );
 
-		add_action( 'cmb2_render_test_custom', function() {
-			echo 'hey macarena!';
-		} );
+		add_action( 'cmb2_render_test_custom', array( __CLASS__, 'hey_macarena' ) );
 
 		$field = cmb2_get_field( 'field_test', 'field_test_field_custom', $this->post_id );
 
@@ -1002,9 +1179,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertSame( 'hey macarena!', $this->capture_render( array( $types, 'render' ) ) );
 
-		add_filter( 'cmb2_render_class_test_custom', function() {
-			return 'CMB2_Type_Title';
-		} );
+		add_filter( 'cmb2_render_class_test_custom', array( __CLASS__, 'return_cmb2_type_title' ) );
 
 		$this->assertInstanceOf( 'CMB2_Type_Title', $types->maybe_custom_field_object( 'test_custom' ) );
 
@@ -1012,4 +1187,13 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
 	}
+
+	public static function hey_macarena() {
+		echo 'hey macarena!';
+	}
+
+	public static function return_cmb2_type_title() {
+		return 'CMB2_Type_Title';
+	}
+
 }

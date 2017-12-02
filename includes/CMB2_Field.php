@@ -655,6 +655,42 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Determine if current type has its own defaults field-arguments method.
+	 *
+	 * @since  2.2.6
+	 * @param  string $type Field type to check
+	 * @return bool         True if has own method.
+	 */
+	public function has_args_method( $type ) {
+
+		// These types have their own arguments parser.
+		$type_methods = array(
+			'group'   => 'set_field_defaults_group',
+			'wysiwyg' => 'set_field_defaults_wysiwyg',
+		);
+
+		if ( isset( $type_methods[ $type ] ) ) {
+			return $type_methods[ $type ];
+		}
+
+		$all_or_nothing_types = array_flip( apply_filters( 'cmb2_all_or_nothing_types', array(
+			'select',
+			'radio',
+			'radio_inline',
+			'taxonomy_select',
+			'taxonomy_radio',
+			'taxonomy_radio_inline',
+			'taxonomy_radio_hierarchical',
+		), $this ) );
+
+		if ( isset( $all_or_nothing_types[ $type ] ) ) {
+			return 'set_field_defaults_all_or_nothing_types';
+		}
+
+		return false;
+	}
+
+	/**
 	 * Escape the value before output. Defaults to 'esc_attr()'
 	 *
 	 * @since  1.0.1
@@ -1100,31 +1136,148 @@ class CMB2_Field extends CMB2_Base {
 	 * @return mixed  Default field value
 	 */
 	public function get_default() {
-		if ( null !== $this->args['default'] ) {
-			return $this->args['default'];
+		$default = $this->args['default'];
+
+		if ( null !== $default ) {
+			return apply_filters( 'cmb2_default_filter', $default, $this );
 		}
 
 		$param = is_callable( $this->args['default_cb'] ) ? 'default_cb' : 'default';
-		$default = $this->get_param_callback_result( $param );
+		$default = $this->args['default'] = $this->get_param_callback_result( $param );
 
-		// Allow a filter override of the default value
-		$this->args['default'] = apply_filters( 'cmb2_default_filter', $default, $this );
-
-		return $this->args['default'];
+		// Allow a filter override of the default value.
+		return apply_filters( 'cmb2_default_filter', $this->args['default'], $this );
 	}
 
 	/**
 	 * Fills in empty field parameters with defaults
 	 *
 	 * @since 1.1.0
-	 * @param array                                   $args Metabox field config array
-	 * @param array       Modified field config array.
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Modified field config array.
 	 */
 	public function _set_field_defaults( $args ) {
 
 		// Set up blank or default values for empty ones
-		$args = wp_parse_args( $args, array(
-			'type'              => '',
+		$args = wp_parse_args( $args, $this->get_default_field_args( $args ) );
+
+		/*
+		 * Deprecated usage:
+		 *
+		 * 'std' -- use 'default' (no longer works)
+		 * 'row_classes' -- use 'class', or 'class_cb'
+		 * 'default' -- as callback (use default_cb)
+		 */
+		$args = $this->convert_deprecated_params( $args );
+
+		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
+		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
+		$args['_id']        = $args['id'];
+		$args['_name']      = $args['id'];
+
+		if ( $method = $this->has_args_method( $args['type'] ) ) {
+			$args = $this->{$method}( $args );
+		}
+
+		if ( $this->group ) {
+			$args = $this->set_group_sub_field_defaults( $args );
+		}
+
+		$args['has_supporting_data'] = in_array(
+			$args['type'],
+			array(
+				// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array()
+				'file',
+				// See CMB2_Sanitize::_save_utc_value()
+				'text_datetime_timestamp_timezone',
+			),
+			true
+		);
+
+		return $args;
+	}
+
+	/**
+	 * Sets default arguments for the group field types.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Modified field config array.
+	 */
+	protected function set_field_defaults_group( $args ) {
+		$args['options'] = wp_parse_args( $args['options'], array(
+			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
+			'remove_button' => esc_html__( 'Remove Group', 'cmb2' ),
+		) );
+
+		return $args;
+	}
+
+	/**
+	 * Sets default arguments for the wysiwyg field types.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Modified field config array.
+	 */
+	protected function set_field_defaults_wysiwyg( $args ) {
+		$args['id'] = strtolower( str_ireplace( '-', '_', $args['id'] ) );
+		$args['options']['textarea_name'] = $args['_name'];
+
+		return $args;
+	}
+
+	/**
+	 * Sets default arguments for the all-or-nothing field types.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Modified field config array.
+	 */
+	protected function set_field_defaults_all_or_nothing_types( $args ) {
+		$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : null;
+		$args['show_option_none'] = true === $args['show_option_none'] ? esc_html__( 'None', 'cmb2' ) : $args['show_option_none'];
+
+		if ( null === $args['show_option_none'] ) {
+			$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
+			$args['show_option_none'] = $off_by_default ? false : esc_html__( 'None', 'cmb2' );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Sets default arguments for group sub-fields.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Modified field config array.
+	 */
+	protected function set_group_sub_field_defaults( $args ) {
+		$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
+		$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
+
+		return $args;
+	}
+
+	/**
+	 * Gets the default arguments for all fields.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param  array  $args Field config array.
+	 * @return array        Field defaults.
+	 */
+	protected function get_default_field_args( $args ) {
+		$type = isset( $args['type'] ) ? $args['type'] : '';
+
+		return array(
+			'type'              => $type,
 			'name'              => '',
 			'desc'              => '',
 			'before'            => '',
@@ -1141,7 +1294,7 @@ class CMB2_Field extends CMB2_Base {
 			'classes_cb'        => '',
 			'select_all_button' => true,
 			'multiple'          => false,
-			'repeatable'        => isset( $args['type'] ) && 'group' == $args['type'],
+			'repeatable'        => 'group' === $type,
 			'inline'            => false,
 			'on_front'          => true,
 			'show_names'        => true,
@@ -1149,71 +1302,14 @@ class CMB2_Field extends CMB2_Base {
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',
-			'preview_size'      => 'file' == $args['type'] ? array( 350, 350 ) : array( 50, 50 ),
+			'preview_size'      => 'file' === $type ? array( 350, 350 ) : array( 50, 50 ),
 			'render_row_cb'     => array( $this, 'render_field_callback' ),
 			'display_cb'        => array( $this, 'display_value_callback' ),
-			'label_cb'          => 'title' != $args['type'] ? array( $this, 'label' ) : '',
+			'label_cb'          => 'title' !== $type ? array( $this, 'label' ) : '',
 			'column'            => false,
 			'js_dependencies'   => array(),
 			'show_in_rest'      => null,
-		) );
-
-		/*
-		 * Deprecated usage:
-		 *
-		 * 'std' -- use 'default' (no longer works)
-		 * 'row_classes' -- use 'class', or 'class_cb'
-		 * 'default' -- as callback (use default_cb)
-		 */
-		$args = $this->convert_deprecated_params( $args );
-
-		$args['repeatable'] = $args['repeatable'] && ! $this->repeatable_exception( $args['type'] );
-		$args['inline']     = $args['inline'] || false !== stripos( $args['type'], '_inline' );
-
-		$args['options']    = 'group' == $args['type'] ? wp_parse_args( $args['options'], array(
-			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Group', 'cmb2' ),
-		) ) : $args['options'];
-
-		$args['_id']        = $args['id'];
-		$args['_name']      = $args['id'];
-
-		if ( $this->group ) {
-
-			$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
-			$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
-		}
-
-		if ( 'wysiwyg' == $args['type'] ) {
-			$args['id'] = strtolower( str_ireplace( '-', '_', $args['id'] ) );
-			$args['options']['textarea_name'] = $args['_name'];
-		}
-
-		$option_types = apply_filters( 'cmb2_all_or_nothing_types', array( 'select', 'radio', 'radio_inline', 'taxonomy_select', 'taxonomy_radio', 'taxonomy_radio_inline', 'taxonomy_radio_hierarchical',  ), $this );
-
-		if ( in_array( $args['type'], $option_types, true ) ) {
-
-			$args['show_option_none'] = isset( $args['show_option_none'] ) ? $args['show_option_none'] : null;
-			$args['show_option_none'] = true === $args['show_option_none'] ? esc_html__( 'None', 'cmb2' ) : $args['show_option_none'];
-
-			if ( null === $args['show_option_none'] ) {
-				$off_by_default = in_array( $args['type'], array( 'select', 'radio', 'radio_inline' ), true );
-				$args['show_option_none'] = $off_by_default ? false : esc_html__( 'None', 'cmb2' );
-			}
-		}
-
-		$args['has_supporting_data'] = in_array(
-			$args['type'],
-			array(
-				// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array()
-				'file',
-				// See CMB2_Sanitize::_save_utc_value()
-				'text_datetime_timestamp_timezone',
-			),
-			true
 		);
-
-		return $args;
 	}
 
 	/**

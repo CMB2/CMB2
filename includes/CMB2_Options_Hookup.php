@@ -106,12 +106,65 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 
-		if ( ! empty( $_GET['updated'] ) ) {
-			if ( 'true' === $_GET['updated'] ) {
-				add_settings_error( "{$this->option_key}-notices", '', __( 'Settings updated.', 'cmb2' ), 'updated' );
-			} else {
-				add_settings_error( "{$this->option_key}-notices", '', __( 'Nothing to update.', 'cmb2' ), 'notice-warning' );
-			}
+		$this->maybe_register_message();
+	}
+
+	/**
+	 * If there is a message callback, let it determine how to register the message,
+	 * else add a settings message if on this settings page.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @return void
+	 */
+	public function maybe_register_message() {
+		$is_options_page = isset( $_GET['page'] ) && $this->option_key === $_GET['page'];
+		$should_notify   = ! $this->cmb->prop( 'disable_settings_errors' ) && isset( $_GET['settings-updated'] ) && $is_options_page;
+		$is_updated      = $should_notify && 'true' === $_GET['settings-updated'];
+		$setting         = "{$this->option_key}-notices";
+		$code            = '';
+		$message         = __( 'Nothing to update.', 'cmb2' );
+		$type            = 'notice-warning';
+
+		if ( $is_updated ) {
+			$message = __( 'Settings updated.', 'cmb2' );
+			$type    = 'updated';
+		}
+
+		// Check if parameter has registered a callback.
+		if ( $cb = $this->cmb->maybe_callback( 'message_cb' ) ) {
+
+			/**
+			 * The 'message_cb' callback will receive the following parameters.
+			 * Unless there are other reasons for notifications, the callback should only
+			 * `add_settings_error()` if `$args['should_notify']` is truthy.
+			 *
+			 * @param CMB2  $cmb The CMB2 object.
+			 * @param array $args {
+			 *     An array of message arguments
+			 *
+			 *     @type bool   $is_options_page Whether current page is this options page.
+			 *     @type bool   $should_notify   Whether options were saved and we should be notified.
+			 *     @type bool   $is_updated      Whether options were updated with save (or stayed the same).
+			 *     @type string $setting         For add_settings_error(), Slug title of the setting to which
+			 *                                   this error applies.
+			 *     @type string $code            For add_settings_error(), Slug-name to identify the error.
+			 *                                   Used as part of 'id' attribute in HTML output.
+			 *     @type string $message         For add_settings_error(), The formatted message text to display
+			 *                                   to the user (will be shown inside styled `<div>` and `<p>` tags).
+			 *                                   Will be 'Settings updated.' if $is_updated is true, else 'Nothing to update.'
+			 *     @type string $type            For add_settings_error(), Message type, controls HTML class.
+			 *                                   Accepts 'error', 'updated', '', 'notice-warning', etc.
+			 *                                   Will be 'updated' if $is_updated is true, else 'notice-warning'.
+			 * }
+			 */
+			$args = compact( 'is_options_page', 'should_notify', 'is_updated', 'setting', 'code', 'message', 'type' );
+
+			$this->cmb->do_callback( $cb, $args );
+
+		} elseif ( $should_notify ) {
+
+			add_settings_error( $setting, $code, $message, $type );
 		}
 	}
 
@@ -121,26 +174,42 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @since  2.2.5
 	 */
 	public function options_page_output() {
-		$object_id = $this->cmb->object_id();
-
-		settings_errors( $object_id . '-notices' );
+		$this->maybe_output_settings_notices();
 
 		$callback = $this->cmb->prop( 'display_cb' );
 		if ( is_callable( $callback ) ) {
 			return $callback( $this );
 		}
+
 		?>
-		<div class="wrap cmb2-options-page option-<?php echo $object_id; ?>">
+		<div class="wrap cmb2-options-page option-<?php echo $this->option_key; ?>">
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>
 			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
-				<input type="hidden" name="action" value="<?php echo esc_attr( $object_id ); ?>">
+				<input type="hidden" name="action" value="<?php echo esc_attr( $this->option_key ); ?>">
 				<?php $this->options_page_metabox(); ?>
 				<?php submit_button( esc_attr( $this->cmb->prop( 'save_button' ) ), 'primary', 'submit-cmb' ); ?>
 			</form>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Outputs the settings notices if a) not a sub-page of 'options-general.php'
+	 * (because settings_errors() already called in wp-admin/options-head.php),
+	 * and b) the 'disable_settings_errors' prop is not set or truthy.
+	 *
+	 * @since  2.2.5
+	 * @return void
+	 */
+	public function maybe_output_settings_notices() {
+		global $parent_file;
+
+		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php
+		if ( 'options-general.php' !== $parent_file ) {
+			settings_errors( "{$this->option_key}-notices" );
+		}
 	}
 
 	/**
@@ -168,14 +237,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$this->can_save( 'options-page' )
 			// check params
 			&& isset( $_POST['submit-cmb'], $_POST['action'] )
-			&& $this->cmb->object_id() === $_POST['action']
+			&& $this->option_key === $_POST['action']
 		) {
 
 			$updated = $this->cmb
-				->save_fields( $this->cmb->object_id(), $this->cmb->object_type(), $_POST )
+				->save_fields( $this->option_key, $this->cmb->object_type(), $_POST )
 				->was_updated(); // Will be false if no values were changed/updated.
 
-			$url = add_query_arg( 'updated', $updated ? 'true' : 'false', $url );
+			$url = add_query_arg( 'settings-updated', $updated ? 'true' : 'false', $url );
 		}
 
 		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
@@ -188,7 +257,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @return mixed Value set for the network option.
 	 */
 	public function network_get_override( $test, $default = false ) {
-		return get_site_option( $this->cmb->object_id(), $default );
+		return get_site_option( $this->option_key, $default );
 	}
 
 	/**
@@ -197,7 +266,24 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @return bool Success/Failure
 	 */
 	public function network_update_override( $test, $option_value ) {
-		return update_site_option( $this->cmb->object_id(), $option_value );
+		return update_site_option( $this->option_key, $option_value );
 	}
 
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @param string $field
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'object_type':
+			case 'option_key':
+			case 'cmb':
+				return $this->{$field};
+			default:
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
+		}
+	}
 }
