@@ -7,21 +7,17 @@ Main Wrap
 
 	input,
 	textarea {
-		font-size: $font-size;
 		max-width: 100%;
-		padding: 5px;
-
 	}
 
 	input[type=text] {
-
 		&.cmb2-oembed {
 			width: 100%;
 		}
 	}
 
 	textarea {
-		width: 500px;
+		width: 650px;
 
 		&.cmb2-textarea-code {
 			font-family: $font-mono;
@@ -30,7 +26,6 @@ Main Wrap
 	}
 
 	input {
-
 		&.cmb2-text-small,
 		&.cmb2-timepicker {
 			width: 100px;
@@ -59,7 +54,7 @@ Main Wrap
 			+ input,
 			+ .button-secondary,
 			+ select {
-				margin-left: 20px;
+				margin-left: 1em;
 			}
 		}
 	}
@@ -74,29 +69,14 @@ Main Wrap
 		margin: 1px 0 5px 0;
 	}
 
-	// .cmb-field-list .cmb-field-list {
-	// 	padding-top:5px;
-	// 	margin: 0;
-	// }
-
-	select {
-		font-size: $font-size;
-		margin-top: 3px;
-	}
-
 	input:focus,
 	textarea:focus {
 		background: $light-yellow;
 	}
 
-	input[type="radio"] {
-		margin: 0 5px 0 0;
-		padding: 0
-	}
-
+	input[type="radio"],
 	input[type="checkbox"] {
 		margin: 0 5px 0 0;
-		padding: 0;
 	}
 
 	button,
@@ -107,11 +87,9 @@ Main Wrap
 	.mceLayout {
 		border: 1px solid $light-gray !important;
 	}
-
 	.mceIframeContainer {
 		background: #fff;
 	}
-
 	.meta_mce {
 		width: 97%;
 
@@ -130,40 +108,11 @@ Main Wrap
 	.wp-picker-container {
 		margin: 0 10px 0 0;
 	}
-
-	.cmb-row {
-		margin: 0;
-
-		&:after {
-			content: '';
-			clear: both;
-			display: block;
-			width: 100%;
-		}
-
-		&.cmb-repeat .cmb2-metabox-description {
-			padding-top: 0;
-			padding-bottom: 1em;
-		}
-	}
-
 }
 
 .cmb2-metabox {
-	clear: both;
 	margin: 0;
-
-	> .cmb-row:first-of-type >,
-	.cmb-field-list > .cmb-row:first-of-type > {
-		.cmb-td,
-		.cmb-th {
-			border: 0;
-		}
-	}
-}
-
-.cmb-add-row {
-	margin: 1.8em 0 0;
+	@include clearfix;
 }
 
 .cmb-nested .cmb-td,
@@ -179,10 +128,11 @@ Main Wrap
 }
 
 .cmb-repeatable-grouping {
+	margin: 0;
 	border: 1px solid $light-gray;
-	padding: 0 1em;
 
 	&.cmb-row {
+		padding: 0 1em;
 		margin: 0 0 0.8em;
 	}
 
@@ -190,32 +140,31 @@ Main Wrap
 	}
 }
 
+// Row and column.
+.cmb-row {
+	@include clearfix;
+}
+
 .cmb-th {
 	color: $dark-gray;
-	float: left;
+	font-size: 13px;
 	font-weight: 600;
-	line-height: 1.3;
-	padding: 20px 10px 20px 0;
-	vertical-align: top;
-	width: 200px;
-
-	@media (max-width: $mobile-break) {
-		@include fullth;
-	}
 }
 
 .cmb-td {
 	line-height: 1.3;
 	max-width: 100%;
-	padding: 15px 10px;
-	vertical-align: middle;
 }
 
-.cmb-type-title {
-
-	.cmb-td {
-		padding: 0;
+// Display on mobile.
+@media screen and (max-width: $mobile-break) {
+	.cmb-field-list > .cmb-row {
+		margin-bottom: 1em;
 	}
+}
+
+.cmb-horizontal-form {
+	@include horizontal-form;
 }
 
 .cmb-th label {
@@ -223,12 +172,12 @@ Main Wrap
 	padding: 5px 0;
 }
 
-.cmb-th + .cmb-td {
-	float: left;
-}
-
 .cmb-td .cmb-td {
 	padding-bottom: 1em;
+}
+
+.cmb-add-row {
+	margin: 1.8em 0 0;
 }
 
 .cmb-remove-row {
@@ -239,7 +188,28 @@ Main Wrap
 	display: none;
 }
 
+// Desc
+p.cmb2-metabox-description {
+	color: $gray;
+	font-style: italic;
+	padding-top: .5em;
+	margin: 0;
+}
+
+span.cmb2-metabox-description {
+	color: $gray;
+	font-style: italic;
+}
+
 // Repeatable fields styles
+.cmb-row.cmb-repeat p.cmb2-metabox-description {
+	color: inherit;
+	font-style: normal;
+
+	padding-top: 0;
+	margin-bottom: 0.5em;
+}
+
 .cmb-repeat-table {
 	background-color: #fafafa;
 	border: 1px solid darken($light-gray, 3%);
@@ -327,6 +297,7 @@ Main Wrap
 
 }
 
+// Group field
 .cmb-repeatable-group {
 
 	.cmb-th {
@@ -356,7 +327,7 @@ Main Wrap
 	}
 
 	.cmb-group-description .cmb-th {
-		@include fullth;
+		// @include fullth;
 	}
 
 	.cmb-shift-rows {
@@ -383,35 +354,40 @@ Main Wrap
 
 }
 
-p.cmb2-metabox-description {
-	color: $gray;
-	font-style: italic;
-	margin: 0;
-	padding-top: .5em;
-}
+// Core fields
+.cmb-type-title {
+	.cmb-td {
+		padding: 0;
+	}
 
-span.cmb2-metabox-description {
-	color: $gray;
-	font-style: italic;
-}
+	.cmb2-metabox-title {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 
-.cmb2-metabox-title {
-	margin: 0 0 5px 0;
-	padding: 5px 0 0 0;
-	font-size: 14px;
-}
-
-.cmb-inline ul {
-	padding: 4px 0 0 0;
-}
-
-.cmb-inline li {
-	display: inline-block;
-	padding-right: 18px;
+	.cmb2-metabox-description {
+		padding-top: 0;
+	}
 }
 
 .cmb-type-textarea-code pre {
 	margin: 0;
+}
+
+// Misc
+.cmb-inline ul {
+	padding: 4px 0 0 0;
+	max-height: none;
+}
+
+.cmb-inline li {
+	padding-right: 1em;
+	display: inline-block;
+}
+
+.cmb-row:not(.cmb-inline) ul {
+	overflow: auto;
+	max-height: 650px;
 }
 
 .cmb2-media-status {
@@ -495,24 +471,6 @@ span.cmb2-metabox-description {
 	}
 }
 
-.cmb2-remove-wrapper {
-	margin: 0;
-}
-
-.child-cmb2 .cmb-th {
-	text-align: left;
-}
-
 .cmb2-indented-hierarchy {
 	padding-left: 1.5em;
-}
-
-@media (max-width: $mobile-break) {
-	.cmb-th,
-	.cmb-td,
-	.cmb-th + .cmb-td {
-		display: block;
-		float: none;
-		width: 100%;
-	}
 }
