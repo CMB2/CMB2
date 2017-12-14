@@ -32,7 +32,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		$this->value = $value ? $value : $this->value;
 	}
 
-	public function render() {
+	public function render( $args = array() ) {
 		$meta_value = $this->value ? $this->value : $this->field->escaped_value();
 
 		$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
@@ -51,11 +51,13 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 
 		wp_enqueue_style( 'wp-color-picker' );
 
-		$args = array(
-			'class'           => 'cmb2-colorpicker cmb2-text-small',
-			'value'           => $meta_value,
-			'js_dependencies' => array( 'wp-color-picker' ),
-		);
+		$args = wp_parse_args( $args, array(
+			'class' => 'cmb2-text-small',
+		) );
+
+		$args['class']           .= ' cmb2-colorpicker';
+		$args['value']           = $meta_value;
+		$args['js_dependencies'] = array( 'wp-color-picker' );
 
 		if ( $this->field->options( 'alpha' ) ) {
 			$args['js_dependencies'][] = 'wp-color-picker-alpha';

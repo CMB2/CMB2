@@ -19,7 +19,7 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 	 * @param  array $args Override arguments
 	 * @return string       Form textarea element
 	 */
-	public function render() {
+	public function render( $args = array() ) {
 		return $this->rendered(
 			sprintf( '<pre>%s', parent::render( array(
 				'class' => 'cmb2-textarea-code',

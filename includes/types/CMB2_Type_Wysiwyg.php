@@ -20,7 +20,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 	 * @since  1.1.0
 	 * @return string Form wysiwyg element
 	 */
-	public function render() {
+	public function render( $args = array() ) {
 		$field = $this->field;
 		$a = $this->parse_args( 'wysiwyg', array(
 			'id'      => $this->_id(),

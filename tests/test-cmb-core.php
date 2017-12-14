@@ -499,7 +499,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<label for="group_field_0_colorpicker">Colorpicker</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
+									<input type="text" class="cmb2-text-small cmb2-colorpicker" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
 								</div>
 							</div>
 							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
