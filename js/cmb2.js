@@ -402,7 +402,6 @@ window.CMB2 = window.CMB2 || {};
 		if ( group ) {
 
 			var $other = $row.find( '[id]' ).not( cmb.repeatUpdate );
-			var $empty = $row.find('.empty-row').find( cmb.repeatUpdate );
 
 			// Remove extra ajaxed rows
 			$row.find('.cmb-repeat-table .cmb-repeat-row:not(:first-child)').remove();
@@ -420,21 +419,6 @@ window.CMB2 = window.CMB2 || {};
 					if ( $buttons.length ) {
 						$buttons.attr( 'data-selector', newID ).data( 'selector', newID );
 					}
-				});
-			}
-
-			// Fix hidden empty rows
-			if ( $empty.length ) {
-				$empty.each(function() {
-					var $emptyField = $( this );
-					var oldIndex    = $emptyField.attr('id').split('_').pop();
-					var NameRegex   = new RegExp( '\\['+oldIndex+'\\]$' );
-					var IdRegex     = new RegExp( '_'+oldIndex+'$' );
-					var newName     = $emptyField.attr('name').replace( NameRegex, '[' + (prevNum + 1) + ']' );
-					var newId       = $emptyField.attr('id').replace( IdRegex, '_' + ( prevNum + 1 ) );
-
-					$emptyField.attr('name', newName);
-					$emptyField.attr('id', newId);
 				});
 			}
 		}
@@ -468,7 +452,8 @@ window.CMB2 = window.CMB2 || {};
 		} else {
 			var oldName = $newInput.attr( 'name' );
 			var newName;
-			oldID       = $newInput.attr( 'id' );
+			oldID = $newInput.attr( 'id' );
+
 			// Handle adding groups vs rows.
 			if ( group ) {
 				// Expect another bracket after group's index closing bracket.
@@ -478,14 +463,13 @@ window.CMB2 = window.CMB2 || {};
 			}
 			else {
 				// Row indexes are at the very end of the string.
-				newName = oldName ? cmb.replaceLast( oldName, '['+ prevNum +']', '['+ cmb.idNumber +']' ) : '';
-				newID   = oldID ? cmb.replaceLast( oldID, '_'+ prevNum, '_'+ cmb.idNumber ) : '';
+				newName = oldName ? cmb.replaceLast( oldName, '[' + prevNum + ']', '[' + cmb.idNumber + ']' ) : '';
+				newID   = oldID ? cmb.replaceLast( oldID, '_' + prevNum, '_' + cmb.idNumber ) : '';
 			}
 
 			attrs = {
 				id: newID,
-				name: newName,
-				'data-iterator': cmb.idNumber,
+				name: newName
 			};
 
 		}
@@ -497,6 +481,10 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( checkable ) {
 			$newInput.removeAttr( 'checked' );
+		}
+
+		if ( ! group && $newInput[0].hasAttribute( 'data-iterator' ) ) {
+			attrs['data-iterator'] = cmb.idNumber;
 		}
 
 		$newInput
