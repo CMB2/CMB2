@@ -97,7 +97,7 @@ class CMB2_Associated_Objects_Search {
 		// $this->query
 		// This is not working until we fix the user query bit.
 		if ( 'user' === $this->query->get_query_type() ) {
-			add_action( 'pre_get_users', array( $this, 'modify_user_query' ) );
+			add_action( 'pre_get_users', array( $this, 'maybe_callback' ) );
 			$this->find( 'user' );
 		} else {
 			add_action( 'pre_get_posts', array( $this, 'modify_post_query' ) );
@@ -115,14 +115,9 @@ class CMB2_Associated_Objects_Search {
 	 *
 	 * @return void
 	 */
-	public function modify_user_query( $query ) {
-		$exclude = $this->get_ids_to_exclude();
-		if ( ! empty( $exclude ) ) {
-			$query->set( 'exclude', $exclude );
-		}
-
-		$this->maybe_callback( $query );
-	}
+	// public function modify_user_query( $query ) {
+	// 	$this->maybe_callback( $query );
+	// }
 
 	/**
 	 * Modify the post search query.
@@ -138,12 +133,6 @@ class CMB2_Associated_Objects_Search {
 		$types = is_array( $types ) ? array_map( 'esc_attr', $types ) : esc_attr( $types );
 
 		$query->set( 'post_type', $types );
-
-		$exclude = $this->get_ids_to_exclude();
-		if ( ! empty( $exclude ) ) {
-			$query->set( 'post__not_in', $exclude );
-		}
-
 		$this->maybe_callback( $query );
 	}
 
