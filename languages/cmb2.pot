@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the CMB2 package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 2.2.6.2\n"
+"Project-Id-Version: CMB2 2.3.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2017-11-27 20:48:19+00:00\n"
 "MIME-Version: 1.0\n"
