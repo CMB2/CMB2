@@ -117,6 +117,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'message_cb'       => '',
 			'option_key'       => '',
 			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+			'tab_group'        => '',
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );

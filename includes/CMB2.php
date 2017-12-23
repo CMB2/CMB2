@@ -121,6 +121,8 @@ class CMB2 extends CMB2_Base {
 		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
 		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
 		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+		'tab_group'        => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
 	);
 
 	/**
