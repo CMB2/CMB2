@@ -71,19 +71,19 @@ class CMB2_Boxes {
 	}
 
 	/**
-	 * Retrieve all CMB2 instances that have the specified property set.
+	 * Retrieve all CMB2 instances as long as they do not include the ignored property.
 	 *
-	 * @since  2.2.3
-	 * @param  string $property Property name.
-	 * @param  mixed  $ignore   The value to ignore.
-	 * @return CMB2[]           Array of matching cmb2 instances.
+	 * @since  2.4.0
+	 * @param  string $property  Property name.
+	 * @param  mixed  $to_ignore The value to ignore.
+	 * @return CMB2[]            Array of matching cmb2 instances.
 	 */
-	public static function get_by_property( $property, $ignore = null ) {
+	public static function filtered_by( $property, $to_ignore = null ) {
 		$boxes = array();
 
 		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
 
-			if ( $ignore === $cmb->prop( $property ) ) {
+			if ( $to_ignore === $cmb->prop( $property ) ) {
 				continue;
 			}
 
@@ -93,4 +93,18 @@ class CMB2_Boxes {
 		return $boxes;
 	}
 
+	/**
+	 * Deprecated and left for back-compatibility. The original `get_by_property`
+	 * method was misnamed and never actually used by CMB2 core.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $property  Property name.
+	 * @param  mixed  $to_ignore The value to ignore.
+	 * @return CMB2[]            Array of matching cmb2 instances.
+	 */
+	public static function get_by_property( $property, $to_ignore = null ) {
+		_deprecated_function( __METHOD__, '2.4.0', 'CMB2_Boxes::filtered_by()' );
+		return self::filtered_by( $property  );
+	}
 }
