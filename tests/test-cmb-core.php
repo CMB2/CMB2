@@ -276,6 +276,12 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
 	}
 
+	public function test_boxes_get_by() {
+		$boxes = CMB2_Boxes::get_by( 'classes', 'custom-class another-class' );
+		$this->assertContainsOnlyInstancesOf( 'CMB2', $boxes );
+		$this->assertSame( 1, count( $boxes ) );
+	}
+
 	public function test_boxes_get() {
 		new Test_CMB2_Object( $this->metabox_array2 );
 

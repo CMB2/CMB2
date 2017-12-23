@@ -71,6 +71,35 @@ class CMB2_Boxes {
 	}
 
 	/**
+	 * Retrieve all CMB2 instances that have the specified property set.
+	 *
+	 * @since  2.4.0
+	 * @param  string $property Property name.
+	 * @param  mixed  $compare  (Optional) The value to compare.
+	 * @return CMB2[]           Array of matching cmb2 instances.
+	 */
+	public static function get_by( $property, $compare = 'nocompare' ) {
+		$boxes = array();
+
+		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
+			$prop = $cmb->prop( $property );
+
+			if ( 'nocompare' === $compare ) {
+				if ( ! empty( $prop ) ) {
+					$boxes[ $cmb_id ] = $cmb;
+				}
+				continue;
+			}
+
+			if ( $compare === $prop ) {
+				$boxes[ $cmb_id ] = $cmb;
+			}
+		}
+
+		return $boxes;
+	}
+
+	/**
 	 * Retrieve all CMB2 instances as long as they do not include the ignored property.
 	 *
 	 * @since  2.4.0
