@@ -107,7 +107,7 @@ class CMB2_Boxes {
 	 * @param  mixed  $to_ignore The value to ignore.
 	 * @return CMB2[]            Array of matching cmb2 instances.
 	 */
-	public static function filtered_by( $property, $to_ignore = null ) {
+	public static function filter_by( $property, $to_ignore = null ) {
 		$boxes = array();
 
 		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
@@ -133,7 +133,7 @@ class CMB2_Boxes {
 	 * @return CMB2[]            Array of matching cmb2 instances.
 	 */
 	public static function get_by_property( $property, $to_ignore = null ) {
-		_deprecated_function( __METHOD__, '2.4.0', 'CMB2_Boxes::filtered_by()' );
-		return self::filtered_by( $property  );
+		_deprecated_function( __METHOD__, '2.4.0', 'CMB2_Boxes::filter_by()' );
+		return self::filter_by( $property  );
 	}
 }
