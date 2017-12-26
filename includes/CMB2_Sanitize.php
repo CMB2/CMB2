@@ -131,7 +131,7 @@ class CMB2_Sanitize {
 			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
 		} else {
 
-			if ( 'options-page' === $this->field->object_type ) {
+			if ( in_array( $this->field->object_type, array( 'options-page', 'term' ), true ) ) {
 				$return_values = true;
 			} else {
 				wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
