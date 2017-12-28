@@ -489,7 +489,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 			'group_title'   => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
 			'add_button'    => esc_html__( 'Add Another Entry', 'cmb2' ),
 			'remove_button' => esc_html__( 'Remove Entry', 'cmb2' ),
-			'sortable'      => true, // beta
+			'sortable'      => true,
 			// 'closed'     => true, // true to have the groups closed by default
 		),
 	) );
