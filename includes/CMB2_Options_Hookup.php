@@ -115,6 +115,13 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		 */
 		do_action( 'cmb2_options_page_hook', $page_hook, $this->cmb );
 
+		/**
+		 * Fires for specific $page_hook value
+		 *
+		 * @param CMB2 $cmb The CMB2 object
+		 */
+		do_action( 'cmb2_options_page_hook_' . $page_hook, $this->cmb );
+		
 		$this->maybe_register_message();
 	}
 
