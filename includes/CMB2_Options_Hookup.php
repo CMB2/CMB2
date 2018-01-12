@@ -106,6 +106,15 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 
+		/**
+		 * For other page/screen specific hooks
+		 * like "load-{page_hook}"
+		 *
+		 * @param string	$page_hook The resulting page's hook_suffix.
+		 * @param CMB2 $cmb The CMB2 object
+		 */
+		do_action( 'cmb2_options_page_hook', $page_hook, $this->cmb );
+
 		$this->maybe_register_message();
 	}
 
