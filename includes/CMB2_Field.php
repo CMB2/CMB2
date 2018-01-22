@@ -476,30 +476,31 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		$sanitizer = new CMB2_Sanitize( $this, $meta_value );
+		$field_type = $this->type();
 
 		/**
 		 * Filter the value before it is saved.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
 		 *
 		 * Passing a non-null value to the filter will short-circuit saving
 		 * the field value, saving the passed value instead.
 		 *
 		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
-		 *                                   Default false to skip it.
+		 *                                   Default: null. false to skip it.
 		 * @param mixed      $value      The value to be saved to this field.
 		 * @param int        $object_id  The ID of the object where the value will be saved
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->type()}", null, $sanitizer->value, $this->object_id, $this->args(), $sanitizer );
+		$override_value = apply_filters( "cmb2_sanitize_{$field_type}", null, $sanitizer->value, $this->object_id, $this->args(), $sanitizer );
 
 		if ( null !== $override_value ) {
 			return $override_value;
 		}
 
 		// Sanitization via 'CMB2_Sanitize'
-		return $sanitizer->{$this->type()}();
+		return $sanitizer->{$field_type}();
 	}
 
 	/**
@@ -712,8 +713,23 @@ class CMB2_Field extends CMB2_Base {
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
 
-		// Or custom escaping filter can be used
-		$esc = apply_filters( "cmb2_types_esc_{$this->type()}", null, $meta_value, $this->args(), $this );
+		$field_type = $this->type();
+
+		/**
+		 * Filter the value for escaping before it is ouput.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * Passing a non-null value to the filter will short-circuit the built-in
+		 * escaping for this field.
+		 *
+		 * @param bool|mixed $override_value Escaping override value to return.
+		 *                                   Default: null. false to skip it.
+		 * @param mixed      $meta_value The value to be output.
+		 * @param array      $field_args The current field's arguments.
+		 * @param object     $field      This `CMB2_Field` object.
+		 */
+		$esc = apply_filters( "cmb2_types_esc_{$field_type}", null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
 		}
@@ -991,11 +1007,12 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		$display = new CMB2_Field_Display( $this );
+		$field_type = $this->type();
 
 		/**
 		 * A filter to bypass the default display.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
 		 *
 		 * Passing a non-null value to the filter will short-circuit the default display.
 		 *
@@ -1003,7 +1020,7 @@ class CMB2_Field extends CMB2_Base {
 		 * @param CMB2_Field         $field      This field object.
 		 * @param CMB2_Field_Display $display    The `CMB2_Field_Display` object.
 		 */
-		$pre_output = apply_filters( "cmb2_pre_field_display_{$this->type()}", null, $this, $display );
+		$pre_output = apply_filters( "cmb2_pre_field_display_{$field_type}", null, $this, $display );
 
 		if ( null !== $pre_output ) {
 			echo $pre_output;
@@ -1012,7 +1029,7 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before_display_wrap' );
 
-		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes( 'display' ), $this->type() );
+		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes( 'display' ), $field_type );
 
 		$this->peform_param_callback( 'before_display' );
 

@@ -791,19 +791,22 @@ class CMB2 extends CMB2_Base {
 	 * @return CMB2
 	 */
 	public function pre_process() {
+		$object_type = $this->object_type();
+
 		/**
 		 * Fires before fields have been processed/saved.
 		 *
-		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
+		 * The dynamic portion of the hook name, $object_type, refers to the
+		 * metabox/form's object type
+		 *    Usually `post` (this applies to all post-types).
+		 *    Could also be `comment`, `user` or `options-page`.
 		 *
-		 * The dynamic portion of the hook name, $object_type, refers to the metabox/form's object type
-		 * 	Usually `post` (this applies to all post-types).
-		 *  	Could also be `comment`, `user` or `options-page`.
+		 * The dynamic portion of the hook name, $this->cmb_id, is the meta_box id.
 		 *
 		 * @param array $cmb       This CMB2 object
 		 * @param int   $object_id The ID of the current object
 		 */
-		do_action( "cmb2_{$this->object_type()}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
+		do_action( "cmb2_{$object_type}_process_fields_{$this->cmb_id}", $this, $this->object_id() );
 
 		return $this;
 	}
