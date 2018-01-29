@@ -1,7 +1,7 @@
 {
     "name": "cmb2/cmb2",
     "description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Justin Sternberg",
