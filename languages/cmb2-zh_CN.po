@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2016-06-27 17:01:22+00:00\n"
-"PO-Revision-Date: 2016-06-27 17:01+0000\n"
+"PO-Revision-Date: 2018-02-11 13:06+0800\n"
 "Last-Translator: Justin Sternberg <me@jtsternberg.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/wp-translations/cmb2/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -15,14 +15,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: grunt-wp-i18n 0.4.9\n"
-"X-Poedit-Basepath: ../\n"
-"X-Poedit-Bookmarks: \n"
-"X-Poedit-Country: United States\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;"
+"esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: example-functions.php:117 tests/test-cmb-field.php:255
 msgid "Test Metabox"
@@ -32,25 +31,14 @@ msgstr "测试内容框"
 msgid "Test Text"
 msgstr "用文本"
 
-#: example-functions.php:131 example-functions.php:144
-#: example-functions.php:157 example-functions.php:165
-#: example-functions.php:173 example-functions.php:182
-#: example-functions.php:190 example-functions.php:205
-#: example-functions.php:213 example-functions.php:221
-#: example-functions.php:238 example-functions.php:247
-#: example-functions.php:260 example-functions.php:267
-#: example-functions.php:274 example-functions.php:288
-#: example-functions.php:301 example-functions.php:314
-#: example-functions.php:326 example-functions.php:335
-#: example-functions.php:343 example-functions.php:352
-#: example-functions.php:359 example-functions.php:373
-#: example-functions.php:437 example-functions.php:528
-#: example-functions.php:536 example-functions.php:543
-#: example-functions.php:550 example-functions.php:557
-#: example-functions.php:564 example-functions.php:571
-#: example-functions.php:598 example-functions.php:606
-#: example-functions.php:613 example-functions.php:650
-#: tests/test-cmb-field.php:267
+#: example-functions.php:131 example-functions.php:144 example-functions.php:157 example-functions.php:165 example-functions.php:173
+#: example-functions.php:182 example-functions.php:190 example-functions.php:205 example-functions.php:213 example-functions.php:221
+#: example-functions.php:238 example-functions.php:247 example-functions.php:260 example-functions.php:267 example-functions.php:274
+#: example-functions.php:288 example-functions.php:301 example-functions.php:314 example-functions.php:326 example-functions.php:335
+#: example-functions.php:343 example-functions.php:352 example-functions.php:359 example-functions.php:373 example-functions.php:437
+#: example-functions.php:528 example-functions.php:536 example-functions.php:543 example-functions.php:550 example-functions.php:557
+#: example-functions.php:564 example-functions.php:571 example-functions.php:598 example-functions.php:606 example-functions.php:613
+#: example-functions.php:650 tests/test-cmb-field.php:267
 msgid "field description (optional)"
 msgstr "字段描述(可选)"
 
@@ -64,7 +52,7 @@ msgstr "测试中文本框"
 
 #: example-functions.php:164
 msgid "Custom Rendered Field"
-msgstr ""
+msgstr "自定义渲染字段"
 
 #: example-functions.php:172
 msgid "Website URL"
@@ -126,18 +114,15 @@ msgstr "测试标题描述"
 msgid "Test Select"
 msgstr "测试选择列表"
 
-#: example-functions.php:293 example-functions.php:306
-#: example-functions.php:318
+#: example-functions.php:293 example-functions.php:306 example-functions.php:318
 msgid "Option One"
 msgstr "选项一"
 
-#: example-functions.php:294 example-functions.php:307
-#: example-functions.php:319
+#: example-functions.php:294 example-functions.php:307 example-functions.php:319
 msgid "Option Two"
 msgstr "选项二"
 
-#: example-functions.php:295 example-functions.php:308
-#: example-functions.php:320
+#: example-functions.php:295 example-functions.php:308 example-functions.php:320
 msgid "Option Three"
 msgstr "选项三"
 
@@ -207,9 +192,11 @@ msgstr "嵌入"
 
 #: example-functions.php:396
 msgid ""
-"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr "输入一个youtube,twitter或者instagram地址，支持的服务列表见<a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+"Enter a youtube, twitter, or instagram URL. Supports services listed at <a href=\"http://codex.wordpress.org/Embeds\">http://codex."
+"wordpress.org/Embeds</a>."
+msgstr ""
+"输入一个youtube,twitter或者instagram地址，支持的服务列表见<a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
+"Embeds</a>."
 
 #: example-functions.php:427
 msgid "About Page Metabox"
@@ -289,15 +276,15 @@ msgstr "用户字段"
 
 #: example-functions.php:590
 msgid "Category Metabox"
-msgstr ""
+msgstr "分类内容框"
 
 #: example-functions.php:605
 msgid "Term Image"
-msgstr ""
+msgstr "分类图像"
 
 #: example-functions.php:612
 msgid "Arbitrary Term Field"
-msgstr ""
+msgstr "任意分类字段"
 
 #: example-functions.php:634
 msgid "Theme Options Metabox"
@@ -335,18 +322,16 @@ msgstr "添加组"
 msgid "Remove Group"
 msgstr "移除组"
 
-#: includes/CMB2_Field.php:1209 includes/CMB2_Field.php:1213
-#: tests/test-cmb-field.php:229
+#: includes/CMB2_Field.php:1209 includes/CMB2_Field.php:1213 tests/test-cmb-field.php:229
 msgid "None"
 msgstr "无"
 
 #: includes/CMB2_Field.php:1269
 msgid "Sorry, this field does not have a cmb_id specified."
-msgstr ""
+msgstr "抱歉，此字段没有指定cmb_id"
 
-#: includes/CMB2_Field_Display.php:408 includes/CMB2_JS.php:139
-#: includes/types/CMB2_Type_File_Base.php:75 tests/test-cmb-types-base.php:143
-#: tests/test-cmb-types.php:701
+#: includes/CMB2_Field_Display.php:408 includes/CMB2_JS.php:139 includes/types/CMB2_Type_File_Base.php:75
+#: tests/test-cmb-types-base.php:143 tests/test-cmb-types.php:701
 msgid "File:"
 msgstr "文件"
 
@@ -368,25 +353,23 @@ msgstr "当前颜色"
 
 #: includes/CMB2_JS.php:110
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr "星期天，星期一，星期二，星期三，星期四，星期五，星期六"
+msgstr "星期天, 星期一, 星期二, 星期三, 星期四, 星期五, 星期六"
 
 #: includes/CMB2_JS.php:111
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr "日，一，二，三，四，五，六"
+msgstr "日, 一, 二, 三, 四, 五, 六"
 
 #: includes/CMB2_JS.php:112
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr "周日，周一，周二，周三，周四，周五，周六"
+msgstr "周日, 周一, 周二, 周三, 周四, 周五, 周六"
 
 #: includes/CMB2_JS.php:113
-msgid ""
-"January, February, March, April, May, June, July, August, September, "
-"October, November, December"
-msgstr "一月，二月，三月，四月，五月，六月，七月，八月，九月，十月，十一月，十二月"
+msgid "January, February, March, April, May, June, July, August, September, October, November, December"
+msgstr "一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月"
 
 #: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr "一月，二月，三月，四月，五月，六月，七月，八月，九月，十月，十一月，十二月"
+msgstr "一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月"
 
 #: includes/CMB2_JS.php:115
 msgid "Next"
@@ -422,11 +405,11 @@ msgstr "分钟"
 
 #: includes/CMB2_JS.php:126
 msgid "Second"
-msgstr ""
+msgstr "秒"
 
 #: includes/CMB2_JS.php:127
 msgid "Now"
-msgstr ""
+msgstr "现在"
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
@@ -434,21 +417,18 @@ msgstr "使用这个文件"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "使用这些文件"
 
 #: includes/CMB2_JS.php:137 includes/types/CMB2_Type_File_Base.php:61
 msgid "Remove Image"
 msgstr "删除图像"
 
-#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:257
-#: includes/types/CMB2_Type_File_Base.php:80 tests/test-cmb-types-base.php:143
-#: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
-#: tests/test-cmb-types.php:701
+#: includes/CMB2_JS.php:138 includes/CMB2_Types.php:257 includes/types/CMB2_Type_File_Base.php:80 tests/test-cmb-types-base.php:143
+#: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55 tests/test-cmb-types.php:701
 msgid "Remove"
 msgstr "移除"
 
-#: includes/CMB2_JS.php:140 includes/types/CMB2_Type_File_Base.php:78
-#: tests/test-cmb-types-base.php:143 tests/test-cmb-types.php:701
+#: includes/CMB2_JS.php:140 includes/types/CMB2_Type_File_Base.php:78 tests/test-cmb-types-base.php:143 tests/test-cmb-types.php:701
 msgid "Download"
 msgstr "下载"
 
@@ -461,14 +441,12 @@ msgid "Add Row"
 msgstr "添加行"
 
 #: includes/CMB2_hookup.php:145
-msgid ""
-"Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress "
-"install."
-msgstr ""
+msgid "Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress install."
+msgstr "分类的元数据需要WordPress 4.4 以上，请升级您的WordPress版本"
 
 #: includes/CMB2_hookup.php:149
 msgid "Term metaboxes configuration requires a 'taxonomies' parameter"
-msgstr ""
+msgstr "分类的内容设置需要“taxonomies”参数"
 
 #: includes/helper-functions.php:93
 msgid "No oEmbed Results Found for %s. View more info at %s"
@@ -478,18 +456,15 @@ msgstr ""
 msgid "Save"
 msgstr "保存"
 
-#: includes/types/CMB2_Type_File.php:36 tests/test-cmb-types.php:683
-#: tests/test-cmb-types.php:701
+#: includes/types/CMB2_Type_File.php:36 tests/test-cmb-types.php:683 tests/test-cmb-types.php:701
 msgid "Add or Upload File"
 msgstr "添加或上传文件"
 
-#: includes/types/CMB2_Type_File_List.php:36 tests/test-cmb-types.php:639
-#: tests/test-cmb-types.php:663
+#: includes/types/CMB2_Type_File_List.php:36 tests/test-cmb-types.php:639 tests/test-cmb-types.php:663
 msgid "Add or Upload Files"
 msgstr "添加或上传文件"
 
-#: includes/types/CMB2_Type_Taxonomy_Multicheck.php:27
-#: includes/types/CMB2_Type_Taxonomy_Radio.php:25
+#: includes/types/CMB2_Type_Taxonomy_Multicheck.php:27 includes/types/CMB2_Type_Taxonomy_Radio.php:25
 msgid "No terms"
 msgstr "没这些项"
 
@@ -502,9 +477,7 @@ msgid "https://github.com/CMB2/CMB2"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid ""
-"CMB2 will create metaboxes and forms with custom fields that will blow your "
-"mind."
+msgid "CMB2 will create metaboxes and forms with custom fields that will blow your mind."
 msgstr "CMB2 能创建超乎想象的带自定义字段的内容框和表单。"
 
 #. Author of the plugin/theme
@@ -521,8 +494,6 @@ msgid "mm/dd/yy"
 msgstr "月/日/年"
 
 #: includes/CMB2_JS.php:129
-msgctxt ""
-"Valid formatting string, as per "
-"http://trentrichardson.com/examples/timepicker/"
+msgctxt "Valid formatting string, as per http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
 msgstr ""
