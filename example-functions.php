@@ -670,6 +670,9 @@ function yourprefix_register_theme_options_metabox() {
 		// 'save_button'     => esc_html__( 'Save Theme Options', 'cmb2' ), // The text for the options-page save button. Defaults to 'Save'.
 		// 'disable_settings_errors' => true, // On settings pages (not options-general.php sub-pages), allows disabling.
 		// 'message_cb'      => 'yourprefix_options_page_message_callback',
+		// 'tab_group'       => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'       => null, // Falls back to 'title' (above).
+		// 'autoload'        => false, // Defaults to true, the options-page option will be autloaded.
 	) );
 
 	/**
