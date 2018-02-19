@@ -123,6 +123,7 @@ class CMB2 extends CMB2_Base {
 		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
 		'tab_group'        => '', // Tab-group identifier, enables options page tab navigation.
 		// 'tab_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		// 'autoload'     => true, // Defaults to true, the options-page option will be autloaded.
 	);
 
 	/**
