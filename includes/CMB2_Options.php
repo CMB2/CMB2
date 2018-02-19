@@ -180,8 +180,20 @@ class CMB2_Option {
 			return $test_save;
 		}
 
+		/**
+		 * Whether to auto-load the option when WordPress starts up.
+		 *
+		 * The dynamic portion of the hook name, $this->key, refers to the option key.
+		 *
+		 * @since 2.X.X
+		 *
+		 * @param bool        $autoload   Whether to load the option when WordPress starts up.
+		 * @param CMB2_Option $cmb_option This object.
+		 */
+		$autoload = apply_filters( "cmb2_should_autoload_{$this->key}", true , $this );
+
 		// If no override, update the option
-		return update_option( $this->key, $this->options );
+		return update_option( $this->key, $this->options, $autoload ? null : false );
 	}
 
 	/**

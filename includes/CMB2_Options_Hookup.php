@@ -45,6 +45,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			return;
 		}
 
+		if ( ! $this->cmb->prop( 'autoload', true ) ) {
+			// Disable option autoload if requested.
+			add_filter( "cmb2_should_autoload_{$this->option_key}", '__return_false' );
+		}
+
 		// Register setting to cmb2 group.
 		register_setting( 'cmb2', $this->option_key );
 
