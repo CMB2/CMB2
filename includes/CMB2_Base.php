@@ -419,11 +419,11 @@ abstract class CMB2_Base {
 			switch ( $message ) {
 
 				case self::DEPRECATED_PARAM:
-					$message = sprintf( __( 'The "%1$s" field parameter has been deprecated in favor of the "%1$s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					$message = sprintf( __( 'The "%1$s" field parameter has been deprecated in favor of the "%2$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
 				case self::DEPRECATED_CB_PARAM:
-					$message = sprintf( __( 'Using the "%1$s" field parameter as a callback has been deprecated in favor of the "%1$s" parameter.', 'cmb2' ), $args[3], $args[4] );
+					$message = sprintf( __( 'Using the "%1$s" field parameter as a callback has been deprecated in favor of the "%2$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
 				default:
