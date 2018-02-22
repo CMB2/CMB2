@@ -177,6 +177,7 @@ class CMB2_Option {
 		$test_save = apply_filters( "cmb2_override_option_save_{$this->key}", 'cmb2_no_override_option_save', $this->options, $this );
 
 		if ( 'cmb2_no_override_option_save' !== $test_save ) {
+			// If override, do not proceed to update the option, just return result.
 			return $test_save;
 		}
 
@@ -190,10 +191,13 @@ class CMB2_Option {
 		 * @param bool        $autoload   Whether to load the option when WordPress starts up.
 		 * @param CMB2_Option $cmb_option This object.
 		 */
-		$autoload = apply_filters( "cmb2_should_autoload_{$this->key}", true , $this );
+		$autoload = apply_filters( "cmb2_should_autoload_{$this->key}", true, $this );
 
-		// If no override, update the option
-		return update_option( $this->key, $this->options, (bool) $autoload );
+		return update_option(
+			$this->key,
+			$this->options,
+			! $autoload || 'no' === $autoload ? false : true
+		);
 	}
 
 	/**
