@@ -193,7 +193,7 @@ class CMB2_Option {
 		$autoload = apply_filters( "cmb2_should_autoload_{$this->key}", true , $this );
 
 		// If no override, update the option
-		return update_option( $this->key, $this->options, $autoload ? null : false );
+		return update_option( $this->key, $this->options, (bool) $autoload );
 	}
 
 	/**
