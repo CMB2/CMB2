@@ -30,6 +30,7 @@ window.CMB2 = window.CMB2 || {};
 			time_picker  : l10n.defaults.time_picker,
 			date_picker  : l10n.defaults.date_picker,
 			color_picker : l10n.defaults.color_picker || {},
+			code_editor  : l10n.defaults.code_editor,
 		},
 		media : {
 			frames : {},
@@ -55,10 +56,11 @@ window.CMB2 = window.CMB2 || {};
 		var $metabox     = cmb.metabox();
 		var $repeatGroup = $metabox.find('.cmb-repeatable-group');
 
-		/**
-		 * Initialize time/date/color pickers
-		 */
+		 // Init time/date/color pickers
 		cmb.initPickers( $metabox.find('input[type="text"].cmb2-timepicker'), $metabox.find('input[type="text"].cmb2-datepicker'), $metabox.find('input[type="text"].cmb2-colorpicker') );
+
+		// Init code editors.
+		cmb.initCodeEditors( $metabox.find( '.cmb2-textarea-code:not(.disable-codemirror)' ) );
 
 		// Insert toggle button into DOM wherever there is multicheck. credit: Genesis Framework
 		$( '<p><span class="button-secondary cmb-multicheck-toggle">' + l10n.strings.check_toggle + '</span></p>' ).insertBefore( '.cmb2-checkbox-list:not(.no-select-all)' );
@@ -863,6 +865,34 @@ window.CMB2 = window.CMB2 || {};
 				$( this ).next().hide();
 			} );
 		}
+	};
+
+	cmb.initCodeEditors = function( $selector ) {
+		if ( ! cmb.defaults.code_editor || ! wp || ! wp.codeEditor || ! $selector.length ) {
+			return;
+		}
+
+
+		$selector.each( function() {
+			wp.codeEditor.initialize(
+				this.id,
+				cmb.codeEditorArgs( $( this ).data( 'codeeditor' ) )
+			);
+		} );
+	};
+
+	cmb.codeEditorArgs = function( overrides ) {
+		var props = [ 'codemirror', 'csslint', 'jshint', 'htmlhint' ];
+		var args = $.extend( {}, cmb.defaults.code_editor );
+		overrides = overrides || {};
+
+		for ( var i = props.length - 1; i >= 0; i-- ) {
+			if ( overrides.hasOwnProperty( props[i] ) ) {
+				args[ props[i] ] = $.extend( {}, args[ props[i] ] || {}, overrides[ props[i] ] );
+			}
+		}
+
+		return args;
 	};
 
 	cmb.makeListSortable = function() {

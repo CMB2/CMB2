@@ -289,6 +289,17 @@ function yourprefix_register_demo_metabox() {
 		'desc' => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'   => $prefix . 'textarea_code',
 		'type' => 'textarea_code',
+		// 'attributes' => array(
+		// 	// Optionally override the code editor defaults.
+		// 	'data-codeeditor' => json_encode( array(
+		// 		'codemirror' => array(
+		// 			'lineNumbers' => false,
+		// 			'mode' => 'css',
+		// 		),
+		// 	) ),
+		// ),
+		// To keep the previous formatting, you can disable codemirror.
+		// 'options' => array( 'disable_codemirror' => true ),
 	) );
 
 	$cmb_demo->add_field( array(

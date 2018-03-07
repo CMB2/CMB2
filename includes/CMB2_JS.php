@@ -167,6 +167,7 @@ class CMB2_JS {
 			'down_arrow_class'  => 'dashicons dashicons-arrow-down-alt2',
 			'user_can_richedit' => user_can_richedit(),
 			'defaults'          => array(
+				'code_editor'  => false,
 				'color_picker' => false,
 				'date_picker'  => array(
 					'changeMonth'     => true,
@@ -206,6 +207,12 @@ class CMB2_JS {
 				'check_toggle' => esc_html__( 'Select / Deselect All', 'cmb2' ),
 			),
 		);
+
+		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
+				'type' => 'text/html',
+			) );
+		}
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
 	}
