@@ -7,6 +7,7 @@ tools:
 filter:
     excluded_paths:
         - 'tests/*'
+        - 'example-functions.php'
 checks:
     php:
         code_rating: true
