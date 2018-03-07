@@ -31,8 +31,12 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 			'desc'  => $this->_desc( true ),
 		), $args );
 
+		if ( ! empty( $a['js_dependencies'] ) ) {
+			$this->field->add_js_dependencies( $a['js_dependencies'] );
+		}
+
 		return $this->rendered(
-			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] )
+			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value', 'js_dependencies' ) ), $a['value'], $a['desc'] )
 		);
 	}
 }
