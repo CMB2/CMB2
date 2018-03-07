@@ -96,7 +96,7 @@ Main Wrap
 }
 /* line 111, sass/partials/_main_wrap.scss */
 .cmb2-wrap .mceIframeContainer {
-  background: #fff;
+  background: #ffffff;
 }
 /* line 115, sass/partials/_main_wrap.scss */
 .cmb2-wrap .meta_mce {
@@ -451,23 +451,27 @@ span.cmb2-metabox-description {
 /* line 432, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
-  background: #ffffff;
-  border: 1px solid #e9e9e9;
+  background: #eee;
+  border: 5px solid #ffffff;
+  outline: 1px solid #e9e9e9;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  background-image: linear-gradient(45deg, #d0d0d0 25%, transparent 25%, transparent 75%, #d0d0d0 75%, #d0d0d0), linear-gradient(45deg, #d0d0d0 25%, transparent 25%, transparent 75%, #d0d0d0 75%, #d0d0d0);
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   margin: 15px 0 0 0;
-  padding: 5px;
 }
-/* line 442, sass/partials/_main_wrap.scss */
+/* line 446, sass/partials/_main_wrap.scss */
 .cmb2-media-status .embed-status {
   float: right;
   max-width: 800px;
 }
-/* line 447, sass/partials/_main_wrap.scss */
+/* line 451, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status, .cmb2-media-status .embed-status {
   position: relative;
 }
-/* line 450, sass/partials/_main_wrap.scss */
+/* line 454, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button, .cmb2-media-status .embed-status .cmb2-remove-file-button {
   background: url(../images/ico-delete.png);
   height: 16px;
@@ -477,16 +481,20 @@ span.cmb2-metabox-description {
   top: -5px;
   width: 16px;
 }
-/* line 464, sass/partials/_main_wrap.scss */
+/* line 468, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button {
   top: 10px;
 }
-/* line 469, sass/partials/_main_wrap.scss */
+/* line 473, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span {
   cursor: pointer;
 }
+/* line 478, sass/partials/_main_wrap.scss */
+.cmb2-media-status.cmb-attach-list .img-status img, .cmb2-media-status.cmb-attach-list .file-status > span {
+  cursor: move;
+}
 
-/* line 475, sass/partials/_main_wrap.scss */
+/* line 485, sass/partials/_main_wrap.scss */
 .cmb-type-file-list .cmb2-media-status .img-status {
   clear: none;
   vertical-align: middle;
@@ -496,7 +504,7 @@ span.cmb2-metabox-description {
   margin-top: 0;
 }
 
-/* line 484, sass/partials/_main_wrap.scss */
+/* line 494, sass/partials/_main_wrap.scss */
 .cmb-attach-list li {
   clear: both;
   display: inline-block;
@@ -504,30 +512,29 @@ span.cmb2-metabox-description {
   margin-top: 5px;
   margin-bottom: 10px;
 }
-/* line 491, sass/partials/_main_wrap.scss */
+/* line 500, sass/partials/_main_wrap.scss */
 .cmb-attach-list li img {
-  cursor: move;
   float: right;
   margin-left: 10px;
 }
 
-/* line 498, sass/partials/_main_wrap.scss */
+/* line 506, sass/partials/_main_wrap.scss */
 .cmb2-remove-wrapper {
   margin: 0;
 }
 
-/* line 502, sass/partials/_main_wrap.scss */
+/* line 510, sass/partials/_main_wrap.scss */
 .child-cmb2 .cmb-th {
   text-align: right;
 }
 
-/* line 506, sass/partials/_main_wrap.scss */
+/* line 514, sass/partials/_main_wrap.scss */
 .cmb2-indented-hierarchy {
   padding-right: 1.5em;
 }
 
 @media (max-width: 450px) {
-  /* line 511, sass/partials/_main_wrap.scss */
+  /* line 519, sass/partials/_main_wrap.scss */
   .cmb-th,
   .cmb-td,
   .cmb-th + .cmb-td {
@@ -980,7 +987,7 @@ Sidebar Placement Adjustments
 
 /* line 2, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .cmbhandle {
-  color: #aaa;
+  color: #aaaaaa;
   float: left;
   width: 27px;
   height: 30px;
