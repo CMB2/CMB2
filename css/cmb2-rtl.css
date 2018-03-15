@@ -979,6 +979,48 @@ Options page
 }
 
 /*--------------------------------------------------------------
+New-Term Page
+--------------------------------------------------------------*/
+
+/* line 5, sass/partials/_new_term.scss */
+
+#addtag .cmb-th {
+	float: none;
+	width: auto;
+	padding: 20px 0 0;
+}
+
+/* line 11, sass/partials/_new_term.scss */
+
+#addtag .cmb-td {
+	padding: 0;
+}
+
+/* line 15, sass/partials/_new_term.scss */
+
+#addtag .cmb-th + .cmb-td {
+	float: none;
+}
+
+/* line 19, sass/partials/_new_term.scss */
+
+#addtag select {
+	max-width: 100%;
+}
+
+/* line 23, sass/partials/_new_term.scss */
+
+#addtag .cmb2-metabox {
+	padding-bottom: 20px;
+}
+
+/* line 27, sass/partials/_new_term.scss */
+
+#addtag .cmb-row li label {
+	display: inline;
+}
+
+/*--------------------------------------------------------------
 Misc.
 --------------------------------------------------------------*/
 
