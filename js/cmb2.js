@@ -104,7 +104,52 @@ window.CMB2 = window.CMB2 || {};
 		// and on window resize
 		$( window ).on( 'resize', cmb.resizeoEmbeds );
 
+		if ( $id( 'addtag' ).length ) {
+			cmb.listenTagAdd();
+		}
+
 		cmb.trigger( 'cmb_init' );
+	};
+
+	cmb.listenTagAdd = function() {
+		$document.ajaxSuccess( function( evt, xhr, settings ) {
+			if ( settings.data && settings.data.length && -1 !== settings.data.indexOf( 'action=add-tag' ) ) {
+				cmb.resetBoxes( $id( 'addtag' ).find( '.cmb2-wrap > .cmb2-metabox' ) );
+			}
+		});
+	};
+
+	cmb.resetBoxes = function( $boxes ) {
+		$.each( $boxes, function() {
+			cmb.resetBox( $( this ) );
+		});
+	};
+
+	cmb.resetBox = function( $box ) {
+		$box.find( '.wp-picker-clear' ).trigger( 'click' );
+		$box.find( '.cmb2-remove-file-button' ).trigger( 'click' );
+		$box.find( '.cmb-row.cmb-repeatable-grouping:not(:first-of-type) .cmb-remove-group-row' ).click();
+		$box.find( '.cmb-repeat-row:not(:first-child)' ).remove();
+
+		$box.find( 'input:not([type="button"]),select,textarea' ).each( function() {
+			var $element = $( this );
+			var tagName = $element.prop('tagName');
+
+			if ( 'INPUT' === tagName ) {
+				var elType = $element.attr( 'type' );
+				if ( 'checkbox' === elType || 'radio' === elType ) {
+					$element.prop( 'checked', false );
+				} else {
+					$element.val( '' );
+				}
+			}
+			if ( 'SELECT' === tagName ) {
+				$( 'option:selected', this ).prop( 'selected', false );
+			}
+			if ( 'TEXTAREA' === tagName ) {
+				$element.html( '' );
+			}
+		});
 	};
 
 	cmb.resetTitlesAndIterator = function( evt ) {
