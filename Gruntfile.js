@@ -310,11 +310,13 @@ module.exports = function(grunt) {
 
 	var asciify = ['asciify'];
 	var styles  = ['sass', 'csscomb', 'cmq', 'cssjanus', 'cssmin'];
+	var hint    = ['jshint'];
 	var js      = ['jshint', 'uglify'];
 	var tests   = ['jshint', 'phpunit'];
 
 	grunt.registerTask( 'styles', asciify.concat( styles ) );
 	grunt.registerTask( 'css', asciify.concat( styles ) );
+	grunt.registerTask( 'hint', asciify.concat( hint ) );
 	grunt.registerTask( 'js', asciify.concat( js ) );
 	grunt.registerTask( 'tests', asciify.concat( tests ) );
 	grunt.registerTask( 'default', asciify.concat( styles, js, tests ) );
