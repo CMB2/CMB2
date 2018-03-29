@@ -1,5 +1,6 @@
 {
   "name": "cmb2",
+  "title": "CMB2",
   "version": "2.3.0",
   "description": "CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.",
   "main": "Gruntfile.js",
@@ -13,12 +14,16 @@
     "type": "git",
     "url": "https://github.com/CMB2/CMB2"
   },
-  "author": "CMB2 team",
+  "author": {
+    "name": "CMB2 team",
+    "email": "hello@cmb2.io",
+    "url": "https://cmb2.io"
+  },
   "license": "GPLv2",
   "bugs": {
     "url": "https://github.com/CMB2/CMB2/issues"
   },
-  "homepage": "https://github.com/CMB2/CMB2",
+  "homepage": "https://cmb2.io",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-asciify": "~0.2.2",
@@ -31,7 +36,7 @@
     "grunt-contrib-uglify": "^0.4.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-csscomb": "~3.0.0-1",
-    "grunt-cssjanus" : "^0.2.2",
+    "grunt-cssjanus": "^0.2.2",
     "grunt-exec": "^0.4.6",
     "grunt-githooks": "~0.3.1",
     "grunt-newer": "^1.1.0",
