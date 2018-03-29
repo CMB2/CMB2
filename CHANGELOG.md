@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 		) ),
 	),
 	```   
+* Improve/add banners in CMB2 css files.
 
 ## [2.3.0 - 2017-12-20](https://github.com/CMB2/CMB2/releases/tag/v2.3.0)
 

@@ -27,6 +27,7 @@
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-asciify": "~0.2.2",
+    "grunt-banner": "^0.6.0",
     "grunt-checktextdomain": "^1.0.0",
     "grunt-combine-media-queries": "~1.0.15",
     "grunt-contrib-compress": "^0.11.0",
