@@ -77,6 +77,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Markdown](https://github.com/Rekenna/cmb2-markdown) by [Rekenna](https://github.com/Rekenna): This plugin adds a new CMB2 field type "CMB2 Markdown" where you can type in markdown and view a live preview of the results or convert to html with a button.
 
 ##### Other Helpful Resources
+* [CMB2 Admin Extension](https://github.com/twoelevenjay/CMB2-Admin-Extension):  adds a user interface for admins to create CMB2 meta boxes from the WordPress admin. Also on [wordpress.org](https://wordpress.org/plugins/cmb2-admin-extension/).
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
 * [CMB2 Example Theme](https://github.com/CMB2/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
