@@ -37,7 +37,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * CMB2 is safe to bundle with any project. It will only load the newest version in the system.
 
 ### Translation
-* Thanks to many in the CMB2 community and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
+If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
 
 ### Documentation
 * CMB2 documentation can be found at [the CMB2 wiki](https://github.com/CMB2/CMB2/wiki) on github. Also, If you're into reading code and inline documentation, we tried to keep all functions and methods fully inline-documented.
