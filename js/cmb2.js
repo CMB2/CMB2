@@ -211,6 +211,10 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.handleFileClick = function( evt ) {
+		if ( $( evt.target ).is( 'a' ) ) {
+			return;
+		}
+
 		evt.preventDefault();
 
 		var $el    = $( this );
