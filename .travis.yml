@@ -57,7 +57,7 @@ before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
       set +e
     fi
   - |
-    if [[ ! -z "$CC_TEST_REPORTER_ID" ]] ; then
+    if [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
       curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       chmod +x ./cc-test-reporter
       ./cc-test-reporter before-build
@@ -71,10 +71,8 @@ after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover clover.xml
   - |
-    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      if [[ ! -z "$CC_TEST_REPORTER_ID" ]] ; then
-        ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT;
-      fi
+    if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
+      ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT;
     fi
 
 branches:
