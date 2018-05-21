@@ -58,6 +58,12 @@ before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
       set +e
     fi
   - phpunit --version
+  - |
+    if [[ ! -z "$CC_TEST_REPORTER_ID" ]] ; then
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      chmod +x ./cc-test-reporter
+      ./cc-test-reporter before-build
+    fi
 
 script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=coverage.clover; else phpunit --exclude-group cmb2-rest-api --coverage-clover=coverage.clover; fi
 
