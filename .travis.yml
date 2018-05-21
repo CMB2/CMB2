@@ -8,13 +8,13 @@ matrix:
       env:
           global:
             - WP_VERSION=latest
-            - CC_TEST_REPORTER_ID=7200f3ac9aab067d6a3c75ddf45f1cadbfb0ee1f9ef902f4e2d005a2511c5745
+            - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
             - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
     - php: 7.1
       env:
           global:
             - WP_VERSION=latest
-            - CC_TEST_REPORTER_ID=7200f3ac9aab067d6a3c75ddf45f1cadbfb0ee1f9ef902f4e2d005a2511c5745
+            - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
             - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
     - php: 5.6
       env: WP_VERSION=latest
