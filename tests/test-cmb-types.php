@@ -358,7 +358,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_textarea_code_field() {
 		$classes = 'cmb2-textarea-code';
-		if ( CMB2_Utils::wp_at_least( '4.9.0' ) ) {
+		if ( ! CMB2_Utils::wp_at_least( '4.9.0' ) ) {
 			$classes .= ' disable-codemirror';
 		}
 
