@@ -67,11 +67,11 @@ before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
       ./cc-test-reporter before-build
     fi
 
-script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=coverage.clover; else phpunit --exclude-group cmb2-rest-api --coverage-clover=coverage.clover; fi
+script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=clover.xml; else phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml; fi
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
   - |
     if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       if [[ ! -z "$CC_TEST_REPORTER_ID" ]] ; then
