@@ -357,8 +357,13 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_textarea_code_field() {
+		$classes = 'cmb2-textarea-code';
+		if ( CMB2_Utils::wp_at_least( '4.9.0' ) ) {
+			$classes .= ' disable-codemirror';
+		}
+
 		$this->assertHTMLstringsAreEqual(
-			'<pre><textarea class="cmb2-textarea-code" name="field_test_field" id="field_test_field" cols="60" rows="10"></textarea></pre><p class="cmb2-metabox-description">This is a description</p>',
+			'<pre><textarea class="' . $classes . '" name="field_test_field" id="field_test_field" cols="60" rows="10"></textarea></pre><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'textarea_code' ), 'render' ) )
 		);
 	}
@@ -949,15 +954,20 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_js_dependencies() {
-		$this->assertEquals( array(
+		$expected = array(
 			'jquery'                   => 'jquery',
 			'jquery-ui-core'           => 'jquery-ui-core',
 			'jquery-ui-datepicker'     => 'jquery-ui-datepicker',
 			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
 			'media-editor'             => 'media-editor',
 			'wp-color-picker'          => 'wp-color-picker',
-			'code-editor'              => 'code-editor',
-		), Test_CMB2_JS::dependencies() );
+		);
+
+		if ( CMB2_Utils::wp_at_least( '4.9.0' ) ) {
+			$expected['code-editor'] = 'code-editor';
+		}
+
+		$this->assertEquals( $expected, Test_CMB2_JS::dependencies() );
 	}
 
 	public function test_save_group() {
