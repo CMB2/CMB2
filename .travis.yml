@@ -48,9 +48,6 @@ cache:
     - $HOME/.phpbrew
 
 before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
-  - echo "WP_VERSION = $WP_VERSION"
-  - echo "CC_TEST_REPORTER_ID = $CC_TEST_REPORTER_ID"
-  - echo "GIT_COMMITTED_AT = $GIT_COMMITTED_AT"
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
@@ -67,11 +64,11 @@ before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
       ./cc-test-reporter before-build
     fi
 
-script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=build/logs/clover.xml; else phpunit --exclude-group cmb2-rest-api --coverage-clover=build/logs/clover.xml; fi
+script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=clover.xml; else phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml; fi
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
   - |
     if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
       if [[ ! -z "$CC_TEST_REPORTER_ID" ]] ; then
