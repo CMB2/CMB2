@@ -49,6 +49,7 @@ cache:
     - $HOME/.phpbrew
 
 before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
+  - echo "WP_VERSION = $WP_VERSION"
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
