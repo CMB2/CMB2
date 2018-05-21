@@ -6,16 +6,15 @@ matrix:
   include:
     - php: nightly
       env:
-          global:
-            - WP_VERSION=latest
-            - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
-            - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+        - WP_VERSION=latest
+        - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
+        - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
     - php: 7.1
       env:
-          global:
-            - WP_VERSION=latest
-            - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
-            - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+        - WP_VERSION=latest
+        - CC_TEST_REPORTER_ID=62ea428024560852130fdce61b1b1f8753028c8c6c6a3ef71a3c8deb77ba887f
+        - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
     - php: 5.6
       env: WP_VERSION=latest
     - php: 5.6
@@ -50,6 +49,8 @@ cache:
 
 before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
   - echo "WP_VERSION = $WP_VERSION"
+  - echo "CC_TEST_REPORTER_ID = $CC_TEST_REPORTER_ID"
+  - echo "GIT_COMMITTED_AT = $GIT_COMMITTED_AT"
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
