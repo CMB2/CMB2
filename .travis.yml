@@ -1,6 +1,8 @@
 language: php
-sudo: false
+sudo: required
 dist: trusty
+services:
+  - docker
 
 matrix:
   include:
@@ -47,32 +49,7 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.phpbrew
 
-before_script: # Make PHP 7 test work. https://github.com/CMB2/CMB2/pull/885
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      set -e
-      bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      source tests/bin/install-php-phpunit.sh
-      set +e
-    fi
-  - |
-    if [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
-      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      chmod +x ./cc-test-reporter
-      ./cc-test-reporter before-build
-    fi
-  - phpunit --version
-
-script: if [[ latest == $WP_VERSION ]]; then phpunit --coverage-clover=clover.xml; else phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml; fi
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
-  - |
-    if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
-      ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT;
-    fi
+script: ./tests/bin/run-wp-unit-tests.sh
 
 branches:
   only:
