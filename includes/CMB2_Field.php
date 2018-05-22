@@ -136,7 +136,7 @@ class CMB2_Field extends CMB2_Base {
 			}
 		}
 
-		$this->args = $this->_set_field_defaults( $args['field_args'], $args );
+		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
 		if ( $this->object_id ) {
 			$this->value = $this->get_data();
@@ -156,7 +156,7 @@ class CMB2_Field extends CMB2_Base {
 			return call_user_func_array( array( $this, 'get_string' ), $arguments );
 		}
 
-		$key = isset( $arguments[0] ) ? $arguments[0] : false;
+		$key = isset( $arguments[0] ) ? $arguments[0] : '';
 		return $this->args( $name, $key );
 	}
 
@@ -1029,7 +1029,7 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before_display_wrap' );
 
-		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes( 'display' ), $field_type );
+		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $field_type );
 
 		$this->peform_param_callback( 'before_display' );
 
@@ -1381,9 +1381,9 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Converts deprecated field parameters to the current/proper parameter, and throws a deprecation notice.
 	 *
-	 * @since 2.2.3
-	 * @param array                                   $args Metabox field config array.
-	 * @param array       Modified field config array.
+	 * @since  2.2.3
+	 * @param  array $args Metabox field config array.
+	 * @return array       Modified field config array.
 	 */
 	protected function convert_deprecated_params( $args ) {
 
