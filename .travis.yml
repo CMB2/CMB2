@@ -50,6 +50,7 @@ cache:
     - $HOME/.phpbrew
 
 script: ./tests/bin/run-wp-unit-tests.sh
+after_script: ./tests/bin/after-run-wp-unit-tests.sh
 
 branches:
   only:

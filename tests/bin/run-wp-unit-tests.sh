@@ -23,10 +23,3 @@ if [[ latest == $WP_VERSION ]]; then
 else
 	phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml || exit 1;
 fi
-
-wget https://scrutinizer-ci.com/ocular.phar
-php ocular.phar code-coverage:upload --format=php-clover clover.xml
-
-if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
-	./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT;
-fi
