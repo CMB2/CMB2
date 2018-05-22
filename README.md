@@ -128,6 +128,41 @@ If including the library in your plugin or theme:
 2. Edit to only include the fields you need and rename the functions (CMB2 directory should be left unedited in order to easily update the library).
 4. Profit.
 
+If including the library on composer:
+in composer.json file:
+
+```
+"require": {
+        "webdevstudios/cmb2": "dev-master"
+    },
+ "extra": {
+        "installer-paths": {
+            "vendor/{$name}/": ["webdevstudios/cmb2"]
+      }
+    }
+
+```
+
+Optional config (for not PSR-4 projects)
+```
+ {
+ "require": {
+    "php": ">=5.3.0",
+    "composer/installers": "v1.0.12",
+    "webdevstudios/cmb2": "dev-master",
+  },
+  "autoload": {
+    "files": ["vendor/cmb2/init.php"]
+  },
+  "extra": {
+    "installer-paths": {
+      "vendor/{$name}/": ["webdevstudios/cmb2"]
+    }
+  } 
+}
+```
+
+
 **[View CHANGELOG](https://github.com/CMB2/CMB2/blob/master/CHANGELOG.md)**
 
 ## Known Issues
