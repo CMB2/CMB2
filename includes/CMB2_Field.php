@@ -1096,7 +1096,7 @@ class CMB2_Field extends CMB2_Base {
 	 *
 	 * @since  2.0.0
 	 * @param  string $key Specific option to retrieve
-	 * @return array        Array of options
+	 * @return array|mixed Array of options or specific option.
 	 */
 	public function options( $key = '' ) {
 		if ( empty( $this->field_options ) ) {

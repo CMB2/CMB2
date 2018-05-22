@@ -595,7 +595,7 @@ class CMB2 extends CMB2_Base {
 				$field_args['show_names'] = $field_group->args( 'show_names' );
 				$field_args['context']    = $field_group->args( 'context' );
 
-				$field = $this->get_field( $field_args, $field_group )->render_field();
+				$this->get_field( $field_args, $field_group )->render_field();
 			}
 		}
 		if ( $field_group->args( 'repeatable' ) ) {
@@ -772,7 +772,6 @@ class CMB2 extends CMB2_Base {
 				break;
 
 			default:
-
 				$field = $this->get_new_field( $field_args );
 
 				if ( $field->save_field_from_data( $this->data_to_save ) ) {
@@ -963,8 +962,8 @@ class CMB2 extends CMB2_Base {
 	 * Get object id from global space if no id is provided
 	 *
 	 * @since  1.0.0
-	 * @param  integer $object_id Object ID.
-	 * @return integer $object_id Object ID.
+	 * @param  integer|string $object_id Object ID.
+	 * @return integer|string $object_id Object ID.
 	 */
 	public function object_id( $object_id = 0 ) {
 		global $pagenow;
@@ -1104,7 +1103,7 @@ class CMB2 extends CMB2_Base {
 	 *
 	 * @since  2.2.5
 	 *
-	 * @return void
+	 * @return array
 	 */
 	protected function deinit_options_mb( $types ) {
 		if ( isset( $this->meta_box['show_on']['key'] ) && 'options-page' === $this->meta_box['show_on']['key'] ) {
@@ -1429,7 +1428,7 @@ class CMB2 extends CMB2_Base {
 	 * @return string|false    Field id or false.
 	 */
 	public function add_field( array $field, $position = 0 ) {
-		if ( ! is_array( $field ) || ! array_key_exists( 'id', $field ) ) {
+		if ( ! array_key_exists( 'id', $field ) ) {
 			return false;
 		}
 
