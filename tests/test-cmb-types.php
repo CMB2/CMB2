@@ -778,6 +778,26 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	public function test_taxonomy_radio_field_after_value_update() {
+
+		$set = wp_set_post_categories( $this->post_id, array( $this->term, 1 ) );
+		$terms = wp_get_post_categories( $this->post_id );
+		$this->assertTrue( in_array( $this->term, $terms ) );
+		$this->assertTrue( ! ! $set );
+		// $this->assertEquals( 0, $this->term );
+		$type = $this->get_field_type_object( array(
+			'type' => 'taxonomy_radio',
+			'taxonomy' => 'category',
+		) );
+		$this->assertHTMLstringsAreEqual(
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized"/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $type, 'render' ) )
+		);
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+
 	public function test_taxonomy_multicheck_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
