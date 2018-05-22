@@ -311,6 +311,7 @@ class CMB2 extends CMB2_Base {
 		 * @since 2.2.4
 		 */
 		if ( $this->is_alternate_context_box() ) {
+			$context = array();
 
 			// Include custom class if requesting no title.
 			if ( ! $this->prop( 'title' ) && ! $this->prop( 'remove_box_wrap' ) ) {
