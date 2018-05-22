@@ -131,7 +131,7 @@ If including the library in your plugin or theme:
 If including the library on composer:
 in composer.json file:
 
-`
+```
 "require": {
         "webdevstudios/cmb2": "dev-master"
     },
@@ -141,10 +141,10 @@ in composer.json file:
       }
     }
 
-`
+```
 
 Optional config (for not PSR-4 projects)
-`
+```
  {
  "require": {
     "php": ">=5.3.0",
@@ -160,7 +160,7 @@ Optional config (for not PSR-4 projects)
     }
   } 
 }
-`
+```
 
 
 **[View CHANGELOG](https://github.com/CMB2/CMB2/blob/master/CHANGELOG.md)**
