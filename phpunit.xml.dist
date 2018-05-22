@@ -18,6 +18,7 @@
 			<file>init.php</file>
 			<exclude>
 				<directory suffix=".php">includes/shim</directory>
+				<directory suffix=".php">example-functions.php</directory>
 			</exclude>
 		</whitelist>
 	</filter>
