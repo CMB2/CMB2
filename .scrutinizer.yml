@@ -1,3 +1,9 @@
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
 tools:
     php_sim: true
     php_pdepend: true
@@ -6,8 +12,10 @@ tools:
         timeout: 600    # Timeout in seconds.
 filter:
     excluded_paths:
-        - 'tests/*'
+        - 'tests/'
+        - 'includes/shim/'
         - 'example-functions.php'
+
 checks:
     php:
         code_rating: true
