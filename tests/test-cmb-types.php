@@ -797,6 +797,23 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 	}
 
+	public function test_taxonomy_radio_hierarchical_field_after_value_update() {
+		$set = wp_set_post_categories( $this->post_id, $this->get_test_hierarchical_terms() );
+		$terms = wp_get_post_categories( $this->post_id );
+		$this->assertTrue( in_array( $this->term, $terms ) );
+		$this->assertTrue( ! ! $set );
+		// $this->assertEquals( 0, $this->term );
+		$type = $this->get_field_type_object( array(
+			'type' => 'taxonomy_radio_hierarchical',
+			'taxonomy' => 'category',
+		) );
+		$this->assertHTMLstringsAreEqual(
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="test_category0"/><label for="field_test_field4">test_category0</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field5" value="test_category00"/><label for="field_test_field5">test_category00</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field6" value="test_category000"/><label for="field_test_field6">test_category000</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field7" value="test_category01"/><label for="field_test_field7">test_category01</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field8" value="test_category010"/><label for="field_test_field8">test_category010</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field9" value="test_category1"/><label for="field_test_field9">test_category1</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field10" value="test_category10"/><label for="field_test_field10">test_category10</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field11" value="test_category100"/><label for="field_test_field11">test_category100</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field12" value="test_category11"/><label for="field_test_field12">test_category11</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field13" value="test_category110"/><label for="field_test_field13">test_category110</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field14" value="test_category2"/><label for="field_test_field14">test_category2</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field15" value="test_category20"/><label for="field_test_field15">test_category20</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field16" value="test_category200"/><label for="field_test_field16">test_category200</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field17" value="test_category21"/><label for="field_test_field17">test_category21</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field18" value="test_category210"/><label for="field_test_field18">test_category210</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field19" value="uncategorized"/><label for="field_test_field19">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			$this->capture_render( array( $type, 'render' ) )
+		);
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
 
 	public function test_taxonomy_multicheck_field() {
 		$this->assertHTMLstringsAreEqual(
@@ -841,34 +858,8 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
-	/**
-	 * @group failing
-	 */
 	public function test_taxonomy_multicheck_hierarchical_field_after_value_update() {
-		$terms = array( $this->term, 1 );
-
-		for ( $i=0; $i < 3; $i++ ) {
-			$terms[] = $term = $this->factory->term->create( array(
-				'taxonomy' => 'category',
-				'name' => 'test_category' . $i,
-			) );
-			for ( $j=0; $j < 2; $j++ ) {
-				$terms[] = $subterm = $this->factory->term->create( array(
-					'taxonomy' => 'category',
-					'name' => 'test_category' . $i . $j,
-					'parent' => $term,
-				) );
-				for ( $y=0; $y < 1; $y++ ) {
-					$terms[] = $this->factory->term->create( array(
-						'taxonomy' => 'category',
-						'name' => 'test_category' . $i . $j . $y,
-						'parent' => $subterm,
-					) );
-				}
-			}
-		}
-
-		$set = wp_set_post_categories( $this->post_id, $terms );
+		$set = wp_set_post_categories( $this->post_id, $this->get_test_hierarchical_terms() );
 		$terms = wp_get_post_categories( $this->post_id );
 		$this->assertTrue( in_array( $this->term, $terms ) );
 		$this->assertTrue( ! ! $set );
@@ -1283,4 +1274,31 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		return 'CMB2_Type_Title';
 	}
 
+	protected function get_test_hierarchical_terms() {
+		$terms = array( $this->term, 1 );
+
+		for ( $i=0; $i < 3; $i++ ) {
+			$terms[] = $term = $this->factory->term->create( array(
+				'taxonomy' => 'category',
+				'name' => 'test_category' . $i,
+			) );
+			for ( $j=0; $j < 2; $j++ ) {
+				$terms[] = $subterm = $this->factory->term->create( array(
+					'taxonomy' => 'category',
+					'name' => 'test_category' . $i . $j,
+					'parent' => $term,
+				) );
+				for ( $y=0; $y < 1; $y++ ) {
+					$terms[] = $this->factory->term->create( array(
+						'taxonomy' => 'category',
+						'name' => 'test_category' . $i . $j . $y,
+						'parent' => $subterm,
+					) );
+				}
+			}
+
+		}
+
+		return $terms;
+	}
 }
