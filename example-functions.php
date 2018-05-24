@@ -351,7 +351,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Radio', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'text_taxonomy_radio',
-		'type'     => 'taxonomy_radio',
+		'type'     => 'taxonomy_radio', // Or `taxonomy_radio_inline`/`taxonomy_radio_hierarchical`
 		'taxonomy' => 'category', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
@@ -368,7 +368,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Multi Checkbox', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'multitaxonomy',
-		'type'     => 'taxonomy_multicheck',
+		'type'     => 'taxonomy_multicheck', // Or `taxonomy_multicheck_inline`/`taxonomy_multicheck_hierarchical`
 		'taxonomy' => 'post_tag', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
