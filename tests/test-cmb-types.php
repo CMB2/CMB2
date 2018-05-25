@@ -41,7 +41,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 					<div class="cmb-tbody cmb-field-list">
 						<div class="cmb-row cmb-repeat-row">
 							<div class="cmb-td">
-								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value=""/>
+								<input type="text" class="regular-text" name="field_test_field[0]" id="field_test_field_0" data-iterator="0" value="" data-hash=\'7pbortq7uk50\'/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
 								<button type="button" class="button-secondary cmb-remove-row-button" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
@@ -49,7 +49,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 						</div>
 						<div class="cmb-row empty-row hidden">
 							<div class="cmb-td">
-								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value=""/>
+								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value="" data-hash=\'7pbortq7uk50\'/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
 								<button type="button" class="button-secondary cmb-remove-row-button" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
@@ -76,7 +76,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		<div class="cmb-row cmb-type-select cmb2-id-options-cb-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_cb_test_field">Name</label></div>
 			<div class="cmb-td">
-				<select class="cmb2_select" name="options_cb_test_field" id="options_cb_test_field">
+				<select class="cmb2_select" name="options_cb_test_field" id="options_cb_test_field" data-hash=\'3r53biqipcgg\'>
 					<option value="one" >One</option>
 					<option value="two" >Two</option>
 					<option value="true" >1</option>
@@ -102,7 +102,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		<div class="cmb-row cmb-type-select cmb2-id-options-test-field" data-fieldtype="select">
 			<div class="cmb-th"><label for="options_test_field">Name</label></div>
 			<div class="cmb-td">
-				<select class="cmb2_select" name="options_test_field" id="options_test_field">
+				<select class="cmb2_select" name="options_test_field" id="options_test_field" data-hash=\'29ds75gri04g\'>
 					<option value="one" >One</option>
 					<option value="two" >Two</option>
 					<option value="true" >1</option>
@@ -138,7 +138,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		<div class="cmb-row cmb-type-text cmb2-id-attributes-test-field table-layout" data-fieldtype="text">
 			<div class="cmb-th"><label for="attributes_test_field">Name</label></div>
 			<div class="cmb-td">
-				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>
+				<input type="number" class="regular-text" name="attributes_test_field" id="arbitrary-id" value="" data-hash=\'1gc4nlm50org\' disabled="disabled" data-test=\'{"one":"One","two":"Two","true":true,"false":false,"array":{"nested_data":true}}\'/>
 				<p class="cmb2-metabox-description">This is a description</p>
 			</div>
 		</div>
@@ -184,7 +184,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_text_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="regular-text" name="field_test_field" id="field_test_field" value=""/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="regular-text" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object(), 'render' ) )
 		);
 	}
@@ -194,7 +194,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		update_post_meta( $this->post_id, $this->text_type_field['id'], 'test value' );
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="regular-text" name="field_test_field" id="field_test_field" value="test value"/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="regular-text" name="field_test_field" id="field_test_field" value="test value" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object(), 'render' ) )
 		);
 
@@ -203,7 +203,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_hidden_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-hidden" name="field_test_field" id="field_test_field" value=""/>',
+			'<input type="hidden" class="cmb2-hidden" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/>',
 			$this->capture_render( array( $this->get_field_type_object( 'hidden' ), 'render' ) )
 		);
 	}
@@ -211,7 +211,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	public function test_text_medium_field() {
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-medium" name="field_test_field" id="field_test_field" value=""/><span class="cmb2-metabox-description">This is a description</span>',
+			'<input type="text" class="cmb2-text-medium" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/><span class="cmb2-metabox-description">This is a description</span>',
 			$this->capture_render( array( $this->get_field_type_object( 'text_medium' ), 'render' ) )
 		);
 	}
@@ -219,7 +219,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	public function test_text_email_field() {
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="email" class="cmb2-text-email cmb2-text-medium" name="field_test_field" id="field_test_field" value=""/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="email" class="cmb2-text-email cmb2-text-medium" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'text_email' ), 'render' ) )
 		);
 	}
@@ -227,7 +227,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	public function test_text_url_field() {
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value=""/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'text_url' ), 'render' ) )
 		);
 	}
@@ -238,7 +238,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
 
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value="' . esc_url_raw( $value ) . '"/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="cmb2-text-url cmb2-text-medium regular-text" name="field_test_field" id="field_test_field" value="' . esc_url_raw( $value ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'text_url' ), 'render' ) )
 		);
 
@@ -258,7 +258,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$value = $field->format_timestamp( strtotime( 'today' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
+			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s" data-hash=\'4lavrjdps2t0\' data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -278,7 +278,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$value = $field->format_timestamp( strtotime( 'today' ), 'time_format' );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-timepicker text-time" name="field_test_field" id="field_test_field" value="%s" data-timepicker=\'{"timeFormat":"hh:mm TT"}\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
+			sprintf( '<input type="text" class="cmb2-timepicker text-time" name="field_test_field" id="field_test_field" value="%s" data-timepicker=\'{"timeFormat":"hh:mm TT"}\' data-hash=\'4lavrjdps2t0\'/><span class="cmb2-metabox-description">This is a description</span>', $value ),
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -287,7 +287,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_text_money_field() {
 
-		$expected_field = '$ <input type="text" class="cmb2-text-money" name="field_test_field" id="field_test_field" value=""/><span class="cmb2-metabox-description">This is a description</span>';
+		$expected_field = '$ <input type="text" class="cmb2-text-money" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/><span class="cmb2-metabox-description">This is a description</span>';
 
 		$this->assertHTMLstringsAreEqual(
 			$expected_field,
@@ -351,7 +351,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_textarea_small_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<textarea class="cmb2-textarea-small" name="field_test_field" id="field_test_field" cols="60" rows="4"></textarea><p class="cmb2-metabox-description">This is a description</p>',
+			'<textarea class="cmb2-textarea-small" name="field_test_field" id="field_test_field" cols="60" rows="4" data-hash=\'4lavrjdps2t0\'></textarea><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'textarea_small' ), 'render' ) )
 		);
 	}
@@ -363,7 +363,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		}
 
 		$this->assertHTMLstringsAreEqual(
-			'<pre><textarea class="' . $classes . '" name="field_test_field" id="field_test_field" cols="60" rows="10"></textarea></pre><p class="cmb2-metabox-description">This is a description</p>',
+			'<pre><textarea class="' . $classes . '" name="field_test_field" id="field_test_field" cols="60" rows="10" data-hash=\'4lavrjdps2t0\'></textarea></pre><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'textarea_code' ), 'render' ) )
 		);
 	}
@@ -412,7 +412,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$formatted_val_to_update = $field->format_timestamp( $val_to_update );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><span class="cmb2-metabox-description">This is a description</span>', $formatted_val_to_update ),
+			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field" id="field_test_field" value="%s" data-hash=\'4lavrjdps2t0\' data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><span class="cmb2-metabox-description">This is a description</span>', $formatted_val_to_update ),
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
@@ -434,7 +434,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$time_val = $field->format_timestamp( $today_stamp, 'time_format' );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="%s" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="%s" data-timepicker=\'{"timeFormat":"hh:mm TT"}\'/><span class="cmb2-metabox-description">This is a description</span>', $date_val, $time_val ),
+			sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="%s" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\' data-hash=\'4lavrjdps2t0\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="%s" data-timepicker=\'{"timeFormat":"hh:mm TT"}\' data-hash=\'4lavrjdps2t0\'/><span class="cmb2-metabox-description">This is a description</span>', $date_val, $time_val ),
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
@@ -465,7 +465,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			$zones = wp_timezone_choice( $tzstring );
 
 			$this->assertHTMLstringsAreEqual(
-				sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="04/12/2016" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="06:00 PM" data-timepicker=\'{"timeFormat":"hh:mm TT"}\'/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone">%s</select><p class="cmb2-metabox-description">This is a description</p>', $zones ),
+				sprintf( '<input type="text" class="cmb2-text-small cmb2-datepicker" name="field_test_field[date]" id="field_test_field_date" value="04/12/2016" data-datepicker=\'{"dateFormat":"mm&#39;\/&#39;dd&#39;\/&#39;yy"}\' data-hash=\'4lavrjdps2t0\'/><input type="text" class="cmb2-timepicker text-time" name="field_test_field[time]" id="field_test_field_time" value="06:00 PM" data-timepicker=\'{"timeFormat":"hh:mm TT"}\' data-hash=\'4lavrjdps2t0\'/><select class="cmb2_select cmb2-select-timezone" name="field_test_field[timezone]" id="field_test_field_timezone" data-hash=\'4lavrjdps2t0\'>%s</select><p class="cmb2-metabox-description">This is a description</p>', $zones ),
 				$this->capture_render( array( $this->get_field_type_object( 'text_datetime_timestamp_timezone' ), 'render' ) )
 			);
 
@@ -479,7 +479,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$zones = wp_timezone_choice( $value_to_save );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<select class="cmb2_select cmb2-select-timezone" name="field_test_field" id="field_test_field">%s</select><span class="cmb2-metabox-description">This is a description</span>', $zones ),
+			sprintf( '<select class="cmb2_select cmb2-select-timezone" name="field_test_field" id="field_test_field" data-hash=\'4lavrjdps2t0\'>%s</select><span class="cmb2-metabox-description">This is a description</span>', $zones ),
 			$this->capture_render( array( $this->get_field_type_object( 'select_timezone' ), 'render' ) )
 		);
 
@@ -488,14 +488,14 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_colorpicker_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-small cmb2-colorpicker" name="field_test_field" id="field_test_field" value="#"/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="cmb2-text-small cmb2-colorpicker" name="field_test_field" id="field_test_field" value="#" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'colorpicker' ), 'render' ) )
 		);
 	}
 
 	public function test_colorpicker_field_default() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-text-small cmb2-colorpicker" name="field_test_field" id="field_test_field" value="#bada55"/><p class="cmb2-metabox-description">This is a description</p>',
+			'<input type="text" class="cmb2-text-small cmb2-colorpicker" name="field_test_field" id="field_test_field" value="#bada55" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'colorpicker',
@@ -508,7 +508,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_title_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<h5 class="cmb2-metabox-title" id="field-test-field">Name</h5><p class="cmb2-metabox-description">This is a description</p>',
+			'<h5 class="cmb2-metabox-title" id="field-test-field" data-hash=\'4lavrjdps2t0\'>Name</h5><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'title' ), 'render' ) )
 		);
 	}
@@ -516,7 +516,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	public function test_select_field() {
 		$field = $this->get_field_object( $this->options_test['fields'][0] );
 		$this->assertHTMLstringsAreEqual(
-			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="one" >One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
+			'<select class="cmb2_select" name="options_test_field" id="options_test_field" data-hash=\'4m4sm12idu40\'><option value="one" >One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -526,7 +526,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$field = $this->get_field_object( $this->options_test['fields'][0] );
 		$this->assertHTMLstringsAreEqual(
-			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="one" selected=\'selected\'>One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
+			'<select class="cmb2_select" name="options_test_field" id="options_test_field" data-hash=\'4m4sm12idu40\'><option value="one" selected=\'selected\'>One</option><option value="two" >Two</option><option value="true" >1</option><option value="false" ></option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -594,7 +594,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			$field = $this->get_field_object( $args );
 
 			$this->assertHTMLstringsAreEqual(
-				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'">'. $test[1] .'</select>',
+				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'" data-hash=\'2o3ljnauqs10\'>'. $test[1] .'</select>',
 				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) ),
 				"Test index: $index"
 			);
@@ -680,7 +680,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			$field = $this->get_field_object( $args );
 
 			$this->assertHTMLstringsAreEqual(
-				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'">'. $test[1] .'</select>',
+				'<select class="cmb2_select" name="' . $args['id'] .'" id="' . $args['id'] .'" data-hash=\'h5f4ba7nvs40\'>'. $test[1] .'</select>',
 				$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) ),
 				"Test index: $index"
 			);
@@ -698,7 +698,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$field = $this->get_field_object( $args );
 
 		$this->assertHTMLstringsAreEqual(
-			'<select class="cmb2_select" name="options_test_field" id="options_test_field"><option value="" >None</option><option value="number_2" >number_2</option><option value="test_category" selected=\'selected\'>test_category</option><option value="uncategorized" >Uncategorized</option></select><p class="cmb2-metabox-description">This is a description</p>',
+			'<select class="cmb2_select" name="options_test_field" id="options_test_field" data-hash=\'4m4sm12idu40\'><option value="" >None</option><option value="number_2" >number_2</option><option value="test_category" selected=\'selected\'>test_category</option><option value="uncategorized" >Uncategorized</option></select><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -708,7 +708,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$args['type'] = 'radio';
 		$field = $this->get_field_object( $args );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field1" value="one"/><label for="options_test_field1">One</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field2" value="two"/><label for="options_test_field2">Two</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field3" value="true"/><label for="options_test_field3">1</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field4" value="false"/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field1" value="one" data-hash=\'4m4sm12idu40\'/><label for="options_test_field1">One</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field2" value="two" data-hash=\'4m4sm12idu40\'/><label for="options_test_field2">Two</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field3" value="true" data-hash=\'4m4sm12idu40\'/><label for="options_test_field3">1</label></li><li><input type="radio" class="cmb2-option" name="options_test_field" id="options_test_field4" value="false" data-hash=\'4m4sm12idu40\'/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -718,7 +718,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$args['type'] = 'multicheck';
 		$field = $this->get_field_object( $args );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field1" value="one"/><label for="options_test_field1">One</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field2" value="two"/><label for="options_test_field2">Two</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field3" value="true"/><label for="options_test_field3">1</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field4" value="false"/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field1" value="one" data-hash=\'4m4sm12idu40\'/><label for="options_test_field1">One</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field2" value="two" data-hash=\'4m4sm12idu40\'/><label for="options_test_field2">Two</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field3" value="true" data-hash=\'4m4sm12idu40\'/><label for="options_test_field3">1</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field4" value="false" data-hash=\'4m4sm12idu40\'/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 	}
@@ -730,7 +730,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$args['type'] = 'multicheck';
 		$field = $this->get_field_object( $args );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field1" value="one" checked="checked"/><label for="options_test_field1">One</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field2" value="two"/><label for="options_test_field2">Two</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field3" value="true"/><label for="options_test_field3">1</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field4" value="false" checked="checked"/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field1" value="one" checked="checked" data-hash=\'4m4sm12idu40\'/><label for="options_test_field1">One</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field2" value="two" data-hash=\'4m4sm12idu40\'/><label for="options_test_field2">Two</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field3" value="true" data-hash=\'4m4sm12idu40\'/><label for="options_test_field3">1</label></li><li><input type="checkbox" class="cmb2-option" name="options_test_field[]" id="options_test_field4" value="false" checked="checked" data-hash=\'4m4sm12idu40\'/><label for="options_test_field4"></label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) )
 		);
 
@@ -768,7 +768,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$field = $this->get_field_object( $args );
 
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized"/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value="" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'taxonomy_radio',
@@ -790,7 +790,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'taxonomy' => 'category',
 		) );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized"/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value="" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="uncategorized" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field4">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -808,7 +808,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'taxonomy' => 'category',
 		) );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value=""/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2"/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked"/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="test_category0"/><label for="field_test_field4">test_category0</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field5" value="test_category00"/><label for="field_test_field5">test_category00</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field6" value="test_category000"/><label for="field_test_field6">test_category000</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field7" value="test_category01"/><label for="field_test_field7">test_category01</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field8" value="test_category010"/><label for="field_test_field8">test_category010</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field9" value="test_category1"/><label for="field_test_field9">test_category1</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field10" value="test_category10"/><label for="field_test_field10">test_category10</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field11" value="test_category100"/><label for="field_test_field11">test_category100</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field12" value="test_category11"/><label for="field_test_field12">test_category11</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field13" value="test_category110"/><label for="field_test_field13">test_category110</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field14" value="test_category2"/><label for="field_test_field14">test_category2</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field15" value="test_category20"/><label for="field_test_field15">test_category20</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field16" value="test_category200"/><label for="field_test_field16">test_category200</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field17" value="test_category21"/><label for="field_test_field17">test_category21</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field18" value="test_category210"/><label for="field_test_field18">test_category210</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field19" value="uncategorized"/><label for="field_test_field19">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field1" value="" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">None</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field2" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">number_2</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field3" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">test_category</label></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field4" value="test_category0" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field4">test_category0</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field5" value="test_category00" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field5">test_category00</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field6" value="test_category000" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field6">test_category000</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field7" value="test_category01" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field7">test_category01</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field8" value="test_category010" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field8">test_category010</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field9" value="test_category1" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field9">test_category1</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field10" value="test_category10" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field10">test_category10</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field11" value="test_category100" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field11">test_category100</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field12" value="test_category11" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field12">test_category11</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field13" value="test_category110" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field13">test_category110</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field14" value="test_category2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field14">test_category2</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field15" value="test_category20" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field15">test_category20</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field16" value="test_category200" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field16">test_category200</label></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field17" value="test_category21" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field17">test_category21</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field18" value="test_category210" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field18">test_category210</label></li></ul></li></ul></li><li><input type="radio" class="cmb2-option" name="field_test_field" id="field_test_field19" value="uncategorized" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field19">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -817,7 +817,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_taxonomy_multicheck_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'taxonomy_multicheck',
@@ -839,7 +839,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'taxonomy' => 'category',
 		) );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized" checked="checked"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -848,7 +848,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_taxonomy_multicheck_hierarchical_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized"/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="uncategorized" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'taxonomy_multicheck_hierarchical',
@@ -869,7 +869,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'taxonomy' => 'category',
 		) );
 		$this->assertHTMLstringsAreEqual(
-			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2"/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked"/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="test_category0" checked="checked"/><label for="field_test_field3">test_category0</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field4" value="test_category00" checked="checked"/><label for="field_test_field4">test_category00</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field5" value="test_category000" checked="checked"/><label for="field_test_field5">test_category000</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field6" value="test_category01" checked="checked"/><label for="field_test_field6">test_category01</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field7" value="test_category010" checked="checked"/><label for="field_test_field7">test_category010</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field8" value="test_category1" checked="checked"/><label for="field_test_field8">test_category1</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field9" value="test_category10" checked="checked"/><label for="field_test_field9">test_category10</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field10" value="test_category100" checked="checked"/><label for="field_test_field10">test_category100</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field11" value="test_category11" checked="checked"/><label for="field_test_field11">test_category11</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field12" value="test_category110" checked="checked"/><label for="field_test_field12">test_category110</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field13" value="test_category2" checked="checked"/><label for="field_test_field13">test_category2</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field14" value="test_category20" checked="checked"/><label for="field_test_field14">test_category20</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field15" value="test_category200" checked="checked"/><label for="field_test_field15">test_category200</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field16" value="test_category21" checked="checked"/><label for="field_test_field16">test_category21</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field17" value="test_category210" checked="checked"/><label for="field_test_field17">test_category210</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field18" value="uncategorized" checked="checked"/><label for="field_test_field18">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
+			'<ul class="cmb2-checkbox-list cmb2-list"><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field1" value="number_2" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field1">number_2</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field2" value="test_category" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field2">test_category</label></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field3" value="test_category0" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field3">test_category0</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field4" value="test_category00" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field4">test_category00</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field5" value="test_category000" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field5">test_category000</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field6" value="test_category01" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field6">test_category01</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field7" value="test_category010" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field7">test_category010</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field8" value="test_category1" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field8">test_category1</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field9" value="test_category10" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field9">test_category10</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field10" value="test_category100" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field10">test_category100</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field11" value="test_category11" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field11">test_category11</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field12" value="test_category110" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field12">test_category110</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field13" value="test_category2" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field13">test_category2</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field14" value="test_category20" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field14">test_category20</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field15" value="test_category200" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field15">test_category200</label></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field16" value="test_category21" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field16">test_category21</label></li><li class="cmb2-indented-hierarchy"><ul><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field17" value="test_category210" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field17">test_category210</label></li></ul></li></ul></li><li><input type="checkbox" class="cmb2-option" name="field_test_field[]" id="field_test_field18" value="uncategorized" checked="checked" data-hash=\'4lavrjdps2t0\'/><label for="field_test_field18">Uncategorized</label></li></ul><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $type, 'render' ) )
 		);
 
@@ -878,7 +878,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_file_list_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-sizename=\'thumbnail\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
+			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-sizename=\'thumbnail\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'file_list',
@@ -909,7 +909,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$sizename = CMB2_Utils::wp_at_least( '4.7' ) ? 'twentyseventeen-thumbnail-avatar' : 'thumbnail';
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '"/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
+			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
 				$this->file_sprintf( array(
 					'file_name'     => $field_type->get_file_name_from_path( $attach_1_url ),
 					'attachment_id' => $this->attachment_id,
@@ -929,7 +929,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field-status" class="cmb2-media-status"></div>',
+			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field-status" class="cmb2-media-status"></div>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'file',
@@ -953,7 +953,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$file_name = $field_type->get_file_name_from_path( $file_url );
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
+			sprintf( '<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="%2$s" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value="%1$d"/><div id="field_test_field-status" class="cmb2-media-status"><div class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%3$s</strong></span>&nbsp;&nbsp; (<a href="%2$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button" rel="field_test_field">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)</div></div>',
 				$this->attachment_id,
 				$file_url,
 				$file_name
@@ -991,7 +991,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_oembed_field() {
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="" data-objectid=\'%1$d\' data-objecttype=\'post\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap"></div>', $this->post_id ),
+			sprintf( '<input type="text" class="cmb2-oembed regular-text" name="field_test_field" id="field_test_field" value="" data-objectid=\'%1$d\' data-objecttype=\'post\' data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><p class="cmb-spinner spinner"></p><div id="field_test_field-status" class="cmb2-media-status ui-helper-clearfix embed_wrap"></div>', $this->post_id ),
 			$this->capture_render( array( $this->get_field_type_object( 'oembed' ), 'render' ) )
 		);
 	}
@@ -1235,7 +1235,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_maybe_custom_field_object() {
-		$cmb   = new CMB2( array(
+		$cmb = new CMB2( array(
 			'id' => 'field_test',
 			'fields' => array(
 				array(
@@ -1261,7 +1261,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertInstanceOf( 'CMB2_Type_Title', $types->maybe_custom_field_object( 'test_custom' ) );
 
-		$expected = '<h5 class="cmb2-metabox-title" id="field-test-field-custom">Name</h5><p class="cmb2-metabox-description">This is a description</p>';
+		$expected = '<h5 class="cmb2-metabox-title" id="field-test-field-custom" data-hash=\'17d97i7k89uo\'>Name</h5><p class="cmb2-metabox-description">This is a description</p>';
 
 		$this->assertHTMLstringsAreEqual( $expected, $this->capture_render( array( $types, 'render' ) ) );
 	}

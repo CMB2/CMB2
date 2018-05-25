@@ -227,7 +227,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertFalse( $field->args( 'show_option_none' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="standard"/><label for="radio_inline1">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="custom"/><label for="radio_inline2">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="none"/><label for="radio_inline3">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
+			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="standard" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline1">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="custom" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline2">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="none" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline3">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
 			$this->render_field( $field )
 		);
 
@@ -237,7 +237,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( esc_html__( 'None', 'cmb2' ), $field->args( 'show_option_none' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="" checked="checked"/><label for="radio_inline1">None</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="standard"/><label for="radio_inline2">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="custom"/><label for="radio_inline3">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline4" value="none"/><label for="radio_inline4">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
+			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="" checked="checked" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline1">None</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="standard" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline2">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="custom" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline3">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline4" value="none" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline4">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
 			$this->render_field( $field )
 		);
 
@@ -247,7 +247,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->assertEquals( 'No Value', $field->args( 'show_option_none' ) );
 
 		$this->assertHTMLstringsAreEqual(
-			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="" checked="checked"/><label for="radio_inline1">No Value</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="standard"/><label for="radio_inline2">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="custom"/><label for="radio_inline3">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline4" value="none"/><label for="radio_inline4">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
+			'<div class="cmb-row cmb-type-radio-inline cmb2-id-radio-inline cmb-inline" data-fieldtype="radio_inline"><div class="cmb-th"><label for="radio_inline">Test Radio inline</label></div><div class="cmb-td"><ul class="cmb2-radio-list cmb2-list"><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline1" value="" checked="checked" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline1">No Value</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline2" value="standard" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline2">Option One</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline3" value="custom" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline3">Option Two</label></li><li><input type="radio" class="cmb2-option" name="radio_inline" id="radio_inline4" value="none" data-hash=\'6p2q27ncjf10\'/><label for="radio_inline4">Option Three</label></li></ul><p class="cmb2-metabox-description">field description (optional)</p></div></div>',
 			$this->render_field( $field )
 		);
 
@@ -408,7 +408,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 					<div class="cmb-tbody cmb-field-list">
 						<div class="cmb-row cmb-repeat-row">
 							<div class="cmb-td">
-								<select class="cmb2_select" name="prouct-case-study[0]" id="prouct-case-study_0" data-iterator="0">	<option value=""  selected=\'selected\'>None</option>
+								<select class="cmb2_select" name="prouct-case-study[0]" id="prouct-case-study_0" data-iterator="0" data-hash=\'6ll8fi7o2du0\'>	<option value=""  selected=\'selected\'>None</option>
 									<option value="1" >Rad Case Study</option>
 									<option value="2" >Wicked Case Study</option>
 									<option value="3" >Cool Case Study</option>
@@ -420,7 +420,7 @@ class Test_CMB2_Field extends Test_CMB2 {
 						</div>
 						<div class="cmb-row empty-row hidden">
 							<div class="cmb-td">
-								<select class="cmb2_select" name="prouct-case-study[1]" id="prouct-case-study_1" data-iterator="1">	<option value=""  selected=\'selected\'>None</option>
+								<select class="cmb2_select" name="prouct-case-study[1]" id="prouct-case-study_1" data-iterator="1" data-hash=\'6ll8fi7o2du0\'>	<option value="" >None</option>
 									<option value="1" >Rad Case Study</option>
 									<option value="2" >Wicked Case Study</option>
 									<option value="3" >Cool Case Study</option>
