@@ -186,7 +186,7 @@ class CMB2_Option {
 		 *
 		 * The dynamic portion of the hook name, $this->key, refers to the option key.
 		 *
-		 * @since 2.X.X
+		 * @since 2.4.0
 		 *
 		 * @param bool        $autoload   Whether to load the option when WordPress starts up.
 		 * @param CMB2_Option $cmb_option This object.
