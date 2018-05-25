@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 ### Bug Fixes
 
+## [2.4.1 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.1)
+
+### Bug Fixes
+
+* Do not set repeated field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138).
+
 ## [2.4.0 - 2018-05-24](https://github.com/CMB2/CMB2/releases/tag/v2.4.0)
 
 ### Enhancements
