@@ -496,7 +496,7 @@ window.CMB2 = window.CMB2 || {};
 		var oldVal    = $newInput.val();
 		var type      = $newInput.prop( 'type' );
 		var defVal    = cmb.getFieldArg( $newInput, 'default' );
-		var newVal    = 'undefined' !== typeof defVal ? defVal : '';
+		var newVal    = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
 		var tagName   = $newInput.prop('tagName');
 		var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
 		var attrs     = {};
@@ -611,7 +611,7 @@ window.CMB2 = window.CMB2 || {};
 		$( cmb.noEmpty, row ).each( function() {
 			var $el = $(this);
 			var defVal = cmb.getFieldArg( $el, 'default' );
-			if ( false !== defVal ) {
+			if ( 'undefined' !== typeof defVal && false !== defVal ) {
 				$el.val( defVal );
 			}
 		});
