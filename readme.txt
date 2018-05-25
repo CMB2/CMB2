@@ -3,8 +3,8 @@ Contributors:      jtsternberg, webdevstudios, zao, tw2113
 Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
-Tested up to:      4.9.1
-Stable tag:        2.3.0
+Tested up to:      4.9.6
+Stable tag:        2.4.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * CMB2 is safe to bundle with any project. It will only load the newest version in the system.
 
 ### Translation
-* Thanks to many in the CMB2 community and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
+If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
 
 ### Documentation
 * CMB2 documentation can be found at [the CMB2 wiki](https://github.com/CMB2/CMB2/wiki) on github. Also, If you're into reading code and inline documentation, we tried to keep all functions and methods fully inline-documented.
@@ -72,8 +72,12 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) by [rubengc](https://github.com/rubengc): Based on [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax), adds the ability to attach posts/users/terms, and the ability to limit the maximum number of attached objects.
 * [CMB2 Field Type: Visual Style Editor](https://github.com/rubengc/cmb2-field-visual-style-editor) by [rubengc](https://github.com/rubengc): Custom field for CMB2 which allows customizing style from a small set of controls.
 * [CMB2 Field Type: CMB2 Roadway Segments](https://github.com/pixelwatt/cmb2-roadway-segments) by [pixelwatt](https://github.com/pixelwatt): This plugin adds a new CMB2 fieldtype for drawing roadway segments onto a map and provides a shortcode for display.
+* [CMB2 Field Type: Font Awesome](https://github.com/serkanalgur/cmb2-field-faiconselect) by [serkanalgur](https://github.com/serkanalgur): This plugin adds a new CMB2 field type for selecting Font Awesome icons.
+* [CMB2 Field Type: Typography](https://github.com/eduplessis/cmb2-typography) by [eduplessis](https://github.com/eduplessis): This plugin adds a new CMB2 field type "Typography" and it use jQuery fontselect for the font-family selection.
+* [CMB2 Field Type: Markdown](https://github.com/Rekenna/cmb2-markdown) by [Rekenna](https://github.com/Rekenna): This plugin adds a new CMB2 field type "CMB2 Markdown" where you can type in markdown and view a live preview of the results or convert to html with a button.
 
 ##### Other Helpful Resources
+* [CMB2 Admin Extension](https://github.com/twoelevenjay/CMB2-Admin-Extension):  adds a user interface for admins to create CMB2 meta boxes from the WordPress admin. Also on [wordpress.org](https://wordpress.org/plugins/cmb2-admin-extension/).
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
 * [CMB2 Example Theme](https://github.com/CMB2/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
@@ -120,6 +124,41 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
+
+### 2.4.0
+
+#### Enhancements
+
+* Enable linking options pages via tabbed-navigation. Will output tabbed navigation for options-pages which share the same `'tab_group'` CMB2 box property. [This snippet](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/options-pages-with-tabs-and-submenus.php) demonstrates how to create a top-level menu options page with multiple submenu pages, each with the tabbed navigation. To specify a different tab title than the options-page title, set the `'tab_title'` CMB2 box property. See [#301](https://github.com/CMB2/CMB2/issues/301), [#627](https://github.com/CMB2/CMB2/issues/627).
+* Complete the `zh-CN` translation. Props [@uicestone](https://github.com/uicestone) ([#1089](https://github.com/CMB2/CMB2/issues/1089)).
+* Update the `nl_NL` translation. Props [@tammohaannl](https://github.com/tammohaannl) ([#1101](https://github.com/CMB2/CMB2/issues/1101)).
+* Better display for white over transparent images (e.g. logos) by using a checkered background for images. ([#1103](https://github.com/CMB2/CMB2/issues/1103))
+* Ability to disable the options [autoload parameter](https://codex.wordpress.org/Function_Reference/add_option#Parameters) via filter (`"cmb2_should_autoload_{$options_key}"`) or via a box parameter for `'options-page'` box registrations (`'autoload' => false,`). ([#1093](https://github.com/CMB2/CMB2/issues/1093))
+* `'textarea_code'` field type now uses CodeMirror that is [used by WordPress](https://make.wordpress.org/core/2017/10/22/code-editing-improvements-in-wordpress-4-9/) ([#1096](https://github.com/CMB2/CMB2/issues/1096)). A field can opt-out to return to the previous behavior by specifying an `'options'` parameter:
+`'options' => array( 'disable_codemirror' => true )`
+	As with the other javascript-enabled fields, the code-editor defaults can be overridden via a `data-codeeditor` attribute. E.g:
+
+	```php
+	'attributes' => array(
+		'data-codeeditor' => json_encode( array(
+			'codemirror' => array(
+				'mode' => 'css',
+			),
+		) ),
+	),
+	```
+* Improve/add comment info banners at top of CMB2 CSS files.
+* Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
+* Improved styles for fiels in the new-term form.
+* New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
+
+#### Bug Fixes
+
+* Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
+* Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
+* Repeated fields now use registered field defaults for values. Fixes [#1137](https://github.com/CMB2/CMB2/issues/1137).
+* Fixed the formatting for deprecated messages in the log.
+* Prevent opening of media modal when clicking the file "Download" link. Fixes [#1130](https://github.com/CMB2/CMB2/issues/1130).
 
 ### 2.3.0
 
@@ -806,13 +845,37 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.3.0
+### 2.4.0
 
 #### Enhancements
 
-* Updated Italian translation. Props [@Mte90](https://github.com/Mte90) ([#1067](https://github.com/CMB2/CMB2/issues/1067)).
-* Starting with this release, we are fully switching to the more communicative and standard [Semantic Versioning](https://semver.org/). ([#1061](https://github.com/CMB2/CMB2/issues/1061)).
+* Enable linking options pages via tabbed-navigation. Will output tabbed navigation for options-pages which share the same `'tab_group'` CMB2 box property. [This snippet](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/options-pages-with-tabs-and-submenus.php) demonstrates how to create a top-level menu options page with multiple submenu pages, each with the tabbed navigation. To specify a different tab title than the options-page title, set the `'tab_title'` CMB2 box property. See [#301](https://github.com/CMB2/CMB2/issues/301), [#627](https://github.com/CMB2/CMB2/issues/627).
+* Complete the `zh-CN` translation. Props [@uicestone](https://github.com/uicestone) ([#1089](https://github.com/CMB2/CMB2/issues/1089)).
+* Update the `nl_NL` translation. Props [@tammohaannl](https://github.com/tammohaannl) ([#1101](https://github.com/CMB2/CMB2/issues/1101)).
+* Better display for white over transparent images (e.g. logos) by using a checkered background for images. ([#1103](https://github.com/CMB2/CMB2/issues/1103))
+* Ability to disable the options [autoload parameter](https://codex.wordpress.org/Function_Reference/add_option#Parameters) via filter (`"cmb2_should_autoload_{$options_key}"`) or via a box parameter for `'options-page'` box registrations (`'autoload' => false,`). ([#1093](https://github.com/CMB2/CMB2/issues/1093))
+* `'textarea_code'` field type now uses CodeMirror that is [used by WordPress](https://make.wordpress.org/core/2017/10/22/code-editing-improvements-in-wordpress-4-9/) ([#1096](https://github.com/CMB2/CMB2/issues/1096)). A field can opt-out to return to the previous behavior by specifying an `'options'` parameter:
+`'options' => array( 'disable_codemirror' => true )`
+	As with the other javascript-enabled fields, the code-editor defaults can be overridden via a `data-codeeditor` attribute. E.g:
+
+	```php
+	'attributes' => array(
+		'data-codeeditor' => json_encode( array(
+			'codemirror' => array(
+				'mode' => 'css',
+			),
+		) ),
+	),
+	```
+* Improve/add comment info banners at top of CMB2 CSS files.
+* Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
+* Improved styles for fiels in the new-term form.
+* New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
 
 #### Bug Fixes
 
-* Update for compatibility with PHP 7.2 (e.g. fixes `Fatal error: Declaration of CMB2_Type_Colorpicker::render() must be compatible with CMB2_Type_Text::render($args = Array)...`). ([#1070](https://github.com/CMB2/CMB2/issues/1070), [#1074](https://github.com/CMB2/CMB2/issues/1074), [#1075](https://github.com/CMB2/CMB2/issues/1075)).
+* Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
+* Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
+* Repeated fields now use registered field defaults for values. Fixes [#1137](https://github.com/CMB2/CMB2/issues/1137).
+* Fixed the formatting for deprecated messages in the log.
+* Prevent opening of media modal when clicking the file "Download" link. Fixes [#1130](https://github.com/CMB2/CMB2/issues/1130).

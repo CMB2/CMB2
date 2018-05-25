@@ -581,6 +581,8 @@ class CMB2_Utils {
 	 */
 	public static function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attr_exclude[] = 'rendered';
+		$attr_exclude[] = 'js_dependencies';
+
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
@@ -650,4 +652,18 @@ class CMB2_Utils {
 
 		return $value;
 	}
+
+	/**
+	 * Generates a 12 character unique hash from a string.
+	 *
+	 * @since  2.4.0
+	 *
+	 * @param  string $string
+	 *
+	 * @return string
+	 */
+	public static function generate_hash( $string ) {
+		return substr( base_convert( md5( $string ), 16, 32 ), 0, 12 );
+	}
+
 }

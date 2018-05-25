@@ -37,6 +37,14 @@ class CMB2_JS {
 	);
 
 	/**
+	 * Array of CMB2 fields model data for JS.
+	 *
+	 * @var   array
+	 * @since 2.4.0
+	 */
+	protected static $fields = array();
+
+	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
 	 *
 	 * @since 2.0.7
@@ -45,6 +53,20 @@ class CMB2_JS {
 	public static function add_dependencies( $dependencies ) {
 		foreach ( (array) $dependencies as $dependency ) {
 			self::$dependencies[ $dependency ] = $dependency;
+		}
+	}
+
+	/**
+	 * Add field model data to the array for JS.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param CMB2_Field $field Field object.
+	 */
+	public static function add_field_data( CMB2_Field $field ) {
+		$hash = $field->hash_id();
+		if ( ! isset( self::$fields[ $hash ] ) ) {
+			self::$fields[ $hash ] = $field->js_data();
 		}
 	}
 
@@ -160,6 +182,7 @@ class CMB2_JS {
 
 		$localized = true;
 		$l10n = array(
+			'fields'            => self::$fields,
 			'ajax_nonce'        => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'           => admin_url( '/admin-ajax.php' ),
 			'script_debug'      => $debug,
@@ -167,6 +190,7 @@ class CMB2_JS {
 			'down_arrow_class'  => 'dashicons dashicons-arrow-down-alt2',
 			'user_can_richedit' => user_can_richedit(),
 			'defaults'          => array(
+				'code_editor'  => false,
 				'color_picker' => false,
 				'date_picker'  => array(
 					'changeMonth'     => true,
@@ -206,6 +230,12 @@ class CMB2_JS {
 				'check_toggle' => esc_html__( 'Select / Deselect All', 'cmb2' ),
 			),
 		);
+
+		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
+				'type' => 'text/html',
+			) );
+		}
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
 	}

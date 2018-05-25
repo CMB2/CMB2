@@ -45,6 +45,11 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			return;
 		}
 
+		if ( ! $this->cmb->prop( 'autoload', true ) ) {
+			// Disable option autoload if requested.
+			add_filter( "cmb2_should_autoload_{$this->option_key}", '__return_false' );
+		}
+
 		// Register setting to cmb2 group.
 		register_setting( 'cmb2', $this->option_key );
 
@@ -118,7 +123,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * @return void
 	 */
 	public function maybe_register_message() {
-		$is_options_page = isset( $_GET['page'] ) && $this->option_key === $_GET['page'];
+		$is_options_page = self::is_page( $this->option_key );
 		$should_notify   = ! $this->cmb->prop( 'disable_settings_errors' ) && isset( $_GET['settings-updated'] ) && $is_options_page;
 		$is_updated      = $should_notify && 'true' === $_GET['settings-updated'];
 		$setting         = "{$this->option_key}-notices";
@@ -181,10 +186,18 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			return $callback( $this );
 		}
 
+		$tabs = $this->get_tab_group_tabs();
 		?>
 		<div class="wrap cmb2-options-page option-<?php echo $this->option_key; ?>">
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
+			<?php endif; ?>
+			<?php if ( ! empty( $tabs ) ) : ?>
+				<h2 class="nav-tab-wrapper">
+					<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
+						<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
+					<?php endforeach; ?>
+				</h2>
 			<?php endif; ?>
 			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $this->option_key ); ?>">
@@ -210,6 +223,35 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		if ( 'options-general.php' !== $parent_file ) {
 			settings_errors( "{$this->option_key}-notices" );
 		}
+	}
+
+	/**
+	 * Gets navigation tabs array for CMB2 options pages which share the
+	 * same tab_group property.
+	 *
+	 * @since 2.4.0
+	 * @return array Array of tab information ($option_key => $tab_title)
+	 */
+	public function get_tab_group_tabs() {
+		$tab_group = $this->cmb->prop( 'tab_group' );
+		$tabs      = array();
+
+		if ( $tab_group ) {
+			$boxes = CMB2_Boxes::get_by( 'tab_group', $tab_group );
+
+			foreach ( $boxes as $cmb_id => $cmb ) {
+				$option_key = $cmb->options_page_keys();
+
+				// Must have an option key, must be an options page box.
+				if ( ! isset( $option_key[0] ) || 'options-page' !== $cmb->mb_object_type() ) {
+					continue;
+				}
+
+				$tabs[ $option_key[0] ] = $cmb->prop( 'tab_title', $cmb->prop( 'title' ) );
+			}
+		}
+
+		return $tabs;
 	}
 
 	/**
@@ -267,6 +309,19 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 */
 	public function network_update_override( $test, $option_value ) {
 		return update_site_option( $this->option_key, $option_value );
+	}
+
+	/**
+	 * Determines if given page slug matches the 'page' GET query variable.
+	 *
+	 * @since  2.4.0
+	 *
+	 * @param  string $page Page slug
+	 *
+	 * @return boolean
+	 */
+	public static function is_page( $page ) {
+		return isset( $_GET['page'] ) && $page === $_GET['page'];
 	}
 
 	/**

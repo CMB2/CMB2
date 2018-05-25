@@ -39,7 +39,7 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 Translations
 ---
-If you are looking to provide language translation files, Please do so via [WP-Translations](http://wp-translations.org/project/cmb2/).
+If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
 
 Additional Resources
 ---

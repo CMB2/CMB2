@@ -115,6 +115,15 @@ class CMB2_Field extends CMB2_Base {
 	);
 
 	/**
+	 * Represents a unique hash representing this field.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @var string
+	 */
+	protected $hash_id = '';
+
+	/**
 	 * Constructs our field object
 	 *
 	 * @since 1.1.0
@@ -136,7 +145,7 @@ class CMB2_Field extends CMB2_Base {
 			}
 		}
 
-		$this->args = $this->_set_field_defaults( $args['field_args'], $args );
+		$this->args = $this->_set_field_defaults( $args['field_args'] );
 
 		if ( $this->object_id ) {
 			$this->value = $this->get_data();
@@ -156,7 +165,7 @@ class CMB2_Field extends CMB2_Base {
 			return call_user_func_array( array( $this, 'get_string' ), $arguments );
 		}
 
-		$key = isset( $arguments[0] ) ? $arguments[0] : false;
+		$key = isset( $arguments[0] ) ? $arguments[0] : '';
 		return $this->args( $name, $key );
 	}
 
@@ -476,30 +485,31 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		$sanitizer = new CMB2_Sanitize( $this, $meta_value );
+		$field_type = $this->type();
 
 		/**
 		 * Filter the value before it is saved.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
 		 *
 		 * Passing a non-null value to the filter will short-circuit saving
 		 * the field value, saving the passed value instead.
 		 *
 		 * @param bool|mixed $override_value Sanitization/Validation override value to return.
-		 *                                   Default false to skip it.
+		 *                                   Default: null. false to skip it.
 		 * @param mixed      $value      The value to be saved to this field.
 		 * @param int        $object_id  The ID of the object where the value will be saved
 		 * @param array      $field_args The current field's arguments
 		 * @param object     $sanitizer  This `CMB2_Sanitize` object
 		 */
-		$override_value = apply_filters( "cmb2_sanitize_{$this->type()}", null, $sanitizer->value, $this->object_id, $this->args(), $sanitizer );
+		$override_value = apply_filters( "cmb2_sanitize_{$field_type}", null, $sanitizer->value, $this->object_id, $this->args(), $sanitizer );
 
 		if ( null !== $override_value ) {
 			return $override_value;
 		}
 
 		// Sanitization via 'CMB2_Sanitize'
-		return $sanitizer->{$this->type()}();
+		return $sanitizer->{$field_type}();
 	}
 
 	/**
@@ -712,8 +722,23 @@ class CMB2_Field extends CMB2_Base {
 			return call_user_func( $cb, $meta_value, $this->args(), $this );
 		}
 
-		// Or custom escaping filter can be used
-		$esc = apply_filters( "cmb2_types_esc_{$this->type()}", null, $meta_value, $this->args(), $this );
+		$field_type = $this->type();
+
+		/**
+		 * Filter the value for escaping before it is ouput.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * Passing a non-null value to the filter will short-circuit the built-in
+		 * escaping for this field.
+		 *
+		 * @param bool|mixed $override_value Escaping override value to return.
+		 *                                   Default: null. false to skip it.
+		 * @param mixed      $meta_value The value to be output.
+		 * @param array      $field_args The current field's arguments.
+		 * @param object     $field      This `CMB2_Field` object.
+		 */
+		$esc = apply_filters( "cmb2_types_esc_{$field_type}", null, $meta_value, $this->args(), $this );
 		if ( null !== $esc ) {
 			return $esc;
 		}
@@ -963,8 +988,6 @@ class CMB2_Field extends CMB2_Base {
 		return apply_filters( 'cmb2_row_classes', implode( ' ', $classes ), $this );
 	}
 
-
-
 	/**
 	 * Get field display callback and render the display value in the column.
 	 *
@@ -991,11 +1014,12 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		$display = new CMB2_Field_Display( $this );
+		$field_type = $this->type();
 
 		/**
 		 * A filter to bypass the default display.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
 		 *
 		 * Passing a non-null value to the filter will short-circuit the default display.
 		 *
@@ -1003,7 +1027,7 @@ class CMB2_Field extends CMB2_Base {
 		 * @param CMB2_Field         $field      This field object.
 		 * @param CMB2_Field_Display $display    The `CMB2_Field_Display` object.
 		 */
-		$pre_output = apply_filters( "cmb2_pre_field_display_{$this->type()}", null, $this, $display );
+		$pre_output = apply_filters( "cmb2_pre_field_display_{$field_type}", null, $this, $display );
 
 		if ( null !== $pre_output ) {
 			echo $pre_output;
@@ -1012,7 +1036,7 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before_display_wrap' );
 
-		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes( 'display' ), $this->type() );
+		printf( "<div class=\"cmb-column %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $field_type );
 
 		$this->peform_param_callback( 'before_display' );
 
@@ -1079,7 +1103,7 @@ class CMB2_Field extends CMB2_Base {
 	 *
 	 * @since  2.0.0
 	 * @param  string $key Specific option to retrieve
-	 * @return array        Array of options
+	 * @return array|mixed Array of options or specific option.
 	 */
 	public function options( $key = '' ) {
 		if ( empty( $this->field_options ) ) {
@@ -1126,6 +1150,67 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		CMB2_JS::add_dependencies( $dependencies );
+	}
+
+	/**
+	 * Send field data to JS.
+	 *
+	 * @since 2.2.0
+	 */
+	public function register_js_data() {
+		if ( $this->group ) {
+			CMB2_JS::add_field_data( $this->group );
+		}
+
+		return CMB2_JS::add_field_data( $this );
+	}
+
+	/**
+	 * Get an array of some of the field data to be used in the Javascript.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return array
+	 */
+	public function js_data() {
+		return array(
+			'label'     => $this->args( 'name' ),
+			'id'        => $this->id( true ),
+			'type'      => $this->type(),
+			'hash'      => $this->hash_id(),
+			'box'       => $this->cmb_id,
+			'id_attr'   => $this->id(),
+			'name_attr' => $this->args( '_name' ),
+			'default'   => $this->get_default(),
+			'group'     => $this->group_id(),
+			'index'     => $this->group ? $this->group->index : null,
+		);
+	}
+
+	/**
+	 * Returns a unique hash representing this field.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string
+	 */
+	public function hash_id() {
+		if ( '' === $this->hash_id ) {
+			$this->hash_id = CMB2_Utils::generate_hash( $this->cmb_id . '||' . $this->id() );
+		}
+
+		return $this->hash_id;
+	}
+
+	/**
+	 * Gets the id of the group field if this field is part of a group.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string
+	 */
+	public function group_id() {
+		return $this->group ? $this->group->id( true ) : '';
 	}
 
 	/**
@@ -1364,9 +1449,9 @@ class CMB2_Field extends CMB2_Base {
 	/**
 	 * Converts deprecated field parameters to the current/proper parameter, and throws a deprecation notice.
 	 *
-	 * @since 2.2.3
-	 * @param array                                   $args Metabox field config array.
-	 * @param array       Modified field config array.
+	 * @since  2.2.3
+	 * @param  array $args Metabox field config array.
+	 * @return array       Modified field config array.
 	 */
 	protected function convert_deprecated_params( $args ) {
 

@@ -62,6 +62,8 @@ abstract class CMB2_Type_Base {
 	 * @return string|CMB2_Type_Base           Rendered output or this object.
 	 */
 	public function rendered( $rendered ) {
+		$this->field->register_js_data();
+
 		if ( $this->args['rendered'] ) {
 			return is_a( $rendered, __CLASS__ ) ? $rendered->rendered : $rendered;
 		}
@@ -85,19 +87,13 @@ abstract class CMB2_Type_Base {
 	 * Handles parsing and filtering attributes while preserving any passed in via field config.
 	 *
 	 * @since  1.1.0
-	 * @param  string $element       Element for filter
-	 * @param  array  $type_defaults Type default arguments
-	 * @param  array  $type_args     Type override arguments
-	 * @return array                 Parsed and filtered arguments
+	 * @param  string $element        Element for filter
+	 * @param  array  $type_defaults  Type default arguments
+	 * @param  array  $type_overrides Type override arguments
+	 * @return array                  Parsed and filtered arguments
 	 */
-	public function parse_args( $element, $type_defaults, $type_args = array() ) {
-		$type_args = empty( $type_args ) ? $this->args : $type_args;
-
-		$field_overrides = $this->field->args( 'attributes' );
-
-		$args = ! empty( $field_overrides )
-			? wp_parse_args( $field_overrides, $type_args )
-			: $type_args;
+	public function parse_args( $element, $type_defaults, $type_overrides = array() ) {
+		$args = $this->parse_args_from_overrides( $type_overrides );
 
 		/**
 		 * Filter attributes for a field type.
@@ -111,7 +107,34 @@ abstract class CMB2_Type_Base {
 		 */
 		$args = apply_filters( "cmb2_{$element}_attributes", $args, $type_defaults, $this->field, $this->types );
 
-		return wp_parse_args( $args, $type_defaults );
+		$args = wp_parse_args( $args, $type_defaults );
+
+		if ( ! empty( $args['js_dependencies'] ) ) {
+			$this->field->add_js_dependencies( $args['js_dependencies'] );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Handles parsing and filtering attributes while preserving any passed in via field config.
+	 *
+	 * @since  2.2.4
+	 * @param  array  $type_overrides Type override arguments
+	 * @return array                  Parsed arguments
+	 */
+	protected function parse_args_from_overrides( $type_overrides = array() ) {
+		$type_overrides = empty( $type_overrides ) ? $this->args : $type_overrides;
+
+		if ( true !== $this->field->args( 'disable_hash_data_attribute' ) ) {
+			$type_overrides['data-hash'] = $this->field->hash_id();
+		}
+
+		$field_overrides = $this->field->args( 'attributes' );
+
+		return ! empty( $field_overrides )
+			? wp_parse_args( $field_overrides, $type_overrides )
+			: $type_overrides;
 	}
 
 	/**
