@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 
 * Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
 * Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
+* Repeated fields now use registered default values. Fixes [#1137](https://github.com/CMB2/CMB2/issues/1137).
 
 ## [2.3.0 - 2017-12-20](https://github.com/CMB2/CMB2/releases/tag/v2.3.0)
 
