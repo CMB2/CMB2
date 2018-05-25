@@ -92,6 +92,7 @@ window.CMB2 = window.CMB2 || {};
 		if ( $repeatGroup.length ) {
 			$repeatGroup
 				.on( 'cmb2_add_row', cmb.emptyValue )
+				.on( 'cmb2_add_row', cmb.setDefaults )
 				.filter('.sortable').each( function() {
 					// Add sorting arrows
 					$( this ).find( '.cmb-remove-group-row-button' ).before( '<a class="button-secondary cmb-shift-rows move-up alignleft" href="#"><span class="'+ l10n.up_arrow_class +'"></span></a> <a class="button-secondary cmb-shift-rows move-down alignleft" href="#"><span class="'+ l10n.down_arrow_class +'"></span></a>' );
@@ -494,8 +495,10 @@ window.CMB2 = window.CMB2 || {};
 		var oldFor    = $newInput.attr( 'for' );
 		var oldVal    = $newInput.val();
 		var type      = $newInput.prop( 'type' );
+		var defVal    = cmb.getFieldArg( $newInput, 'default' );
+		var newVal    = 'undefined' !== typeof defVal ? defVal : '';
+		var tagName   = $newInput.prop('tagName');
 		var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
-		// var $next  = $newInput.next();
 		var attrs     = {};
 		var newID, oldID;
 		if ( oldFor ) {
@@ -526,12 +529,22 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		// Clear out textarea values
-		if ( 'TEXTAREA' === $newInput.prop('tagName') ) {
-			$newInput.html( '' );
+		if ( 'TEXTAREA' === tagName ) {
+			$newInput.html( newVal );
+		}
+
+		if ( 'SELECT' === tagName && undefined !== typeof defVal ) {
+			var $toSelect = $newInput.find( '[value="'+ defVal + '"]' );
+			if ( $toSelect.length ) {
+				$toSelect.attr( 'selected', 'selected' ).prop( 'selected', 'selected' );
+			}
 		}
 
 		if ( checkable ) {
 			$newInput.removeAttr( 'checked' );
+			if ( undefined !== typeof defVal && oldVal === defVal ) {
+				$newInput.attr( 'checked', 'checked' ).prop( 'checked', 'checked' );
+			}
 		}
 
 		if ( ! group && $newInput[0].hasAttribute( 'data-iterator' ) ) {
@@ -540,7 +553,7 @@ window.CMB2 = window.CMB2 || {};
 
 		$newInput
 			.removeClass( 'hasDatepicker' )
-			.attr( attrs ).val( checkable ? checkable : '' );
+			.val( checkable ? checkable : newVal ).attr( attrs );
 
 		return $newInput;
 	};
@@ -592,6 +605,16 @@ window.CMB2 = window.CMB2 || {};
 
 	cmb.emptyValue = function( evt, row ) {
 		$( cmb.noEmpty, row ).val( '' );
+	};
+
+	cmb.setDefaults = function( evt, row ) {
+		$( cmb.noEmpty, row ).each( function() {
+			var $el = $(this);
+			var defVal = cmb.getFieldArg( $el, 'default' );
+			if ( false !== defVal ) {
+				$el.val( defVal );
+			}
+		});
 	};
 
 	cmb.addGroupRow = function( evt ) {
@@ -1124,6 +1147,15 @@ window.CMB2 = window.CMB2 || {};
 		// slice the string in 2, one from the start to the lastIndexOf
 		// and then replace the word in the rest
 		return string.slice( 0, n ) + string.slice( n ).replace( search, replace );
+	};
+
+	cmb.getFieldArg = function( hash, arg ) {
+		return cmb.getField( hash )[ arg ];
+	};
+
+	cmb.getField = function( hash ) {
+		hash = hash instanceof jQuery ? hash.data( 'hash' ) : hash;
+		return hash && l10n.fields[ hash ] ? l10n.fields[ hash ] : {};
 	};
 
 	$( cmb.init );
