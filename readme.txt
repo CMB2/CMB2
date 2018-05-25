@@ -155,7 +155,7 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 	```
 * Improve/add comment info banners at top of CMB2 CSS files.
 * Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
-* Improved styles for fiels in the new-term form.
+* Improved styles for fields in the new-term form.
 * New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
 
 #### Bug Fixes
@@ -881,7 +881,7 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 	```
 * Improve/add comment info banners at top of CMB2 CSS files.
 * Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
-* Improved styles for fiels in the new-term form.
+* Improved styles for fields in the new-term form.
 * New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
 
 #### Bug Fixes
