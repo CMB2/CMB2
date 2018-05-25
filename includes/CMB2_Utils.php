@@ -650,4 +650,18 @@ class CMB2_Utils {
 
 		return $value;
 	}
+
+	/**
+	 * Generates a 12 character unique hash from a string.
+	 *
+	 * @since  2.4.0
+	 *
+	 * @param  string $string
+	 *
+	 * @return string
+	 */
+	public static function generate_hash( $string ) {
+		return substr( base_convert( md5( $string ), 16, 32 ), 0, 12 );
+	}
+
 }

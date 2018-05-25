@@ -37,6 +37,14 @@ class CMB2_JS {
 	);
 
 	/**
+	 * Array of CMB2 fields model data for JS.
+	 *
+	 * @var   array
+	 * @since 2.4.0
+	 */
+	protected static $fields = array();
+
+	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
 	 *
 	 * @since 2.0.7
@@ -45,6 +53,20 @@ class CMB2_JS {
 	public static function add_dependencies( $dependencies ) {
 		foreach ( (array) $dependencies as $dependency ) {
 			self::$dependencies[ $dependency ] = $dependency;
+		}
+	}
+
+	/**
+	 * Add field model data to the array for JS.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param CMB2_Field $field Field object.
+	 */
+	public static function add_field_data( CMB2_Field $field ) {
+		$hash = $field->hash_id();
+		if ( ! isset( self::$fields[ $hash ] ) ) {
+			self::$fields[ $hash ] = $field->js_data();
 		}
 	}
 
@@ -160,6 +182,7 @@ class CMB2_JS {
 
 		$localized = true;
 		$l10n = array(
+			'fields'            => self::$fields,
 			'ajax_nonce'        => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'           => admin_url( '/admin-ajax.php' ),
 			'script_debug'      => $debug,

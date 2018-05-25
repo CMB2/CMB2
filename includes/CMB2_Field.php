@@ -115,6 +115,15 @@ class CMB2_Field extends CMB2_Base {
 	);
 
 	/**
+	 * Represents a unique hash representing this field.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @var string
+	 */
+	protected $hash_id = '';
+
+	/**
 	 * Constructs our field object
 	 *
 	 * @since 1.1.0
@@ -874,7 +883,12 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
+		printf(
+			"<div class=\"cmb-row %s\" data-fieldtype=\"%s\" data-hash=\"%s\">\n",
+			$this->row_classes(),
+			$this->type(),
+			$this->hash_id()
+		);
 
 		if ( ! $this->args( 'show_names' ) ) {
 			echo "\n\t<div class=\"cmb-td\">\n";
@@ -978,8 +992,6 @@ class CMB2_Field extends CMB2_Base {
 		 */
 		return apply_filters( 'cmb2_row_classes', implode( ' ', $classes ), $this );
 	}
-
-
 
 	/**
 	 * Get field display callback and render the display value in the column.
@@ -1143,6 +1155,67 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		CMB2_JS::add_dependencies( $dependencies );
+	}
+
+	/**
+	 * Send field data to JS.
+	 *
+	 * @since 2.2.0
+	 */
+	public function register_js_data() {
+		if ( $this->group ) {
+			CMB2_JS::add_field_data( $this->group );
+		}
+
+		return CMB2_JS::add_field_data( $this );
+	}
+
+	/**
+	 * Get an array of some of the field data to be used in the Javascript.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return array
+	 */
+	public function js_data() {
+		return array(
+			'label'     => $this->args( 'name' ),
+			'id'        => $this->id( true ),
+			'type'      => $this->type(),
+			'hash'      => $this->hash_id(),
+			'box'       => $this->cmb_id,
+			'id_attr'   => $this->id(),
+			'name_attr' => $this->args( '_name' ),
+			'default'   => $this->get_default(),
+			'group'     => $this->group_id(),
+			'index'     => $this->group ? $this->group->index : null,
+		);
+	}
+
+	/**
+	 * Returns a unique hash representing this field.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string
+	 */
+	public function hash_id() {
+		if ( '' === $this->hash_id ) {
+			$this->hash_id = CMB2_Utils::generate_hash( $this->cmb_id . '||' . $this->id() );
+		}
+
+		return $this->hash_id;
+	}
+
+	/**
+	 * Gets the id of the group field if this field is part of a group.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @return string
+	 */
+	public function group_id() {
+		return $this->group ? $this->group->id( true ) : '';
 	}
 
 	/**

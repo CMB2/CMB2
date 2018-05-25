@@ -62,6 +62,8 @@ abstract class CMB2_Type_Base {
 	 * @return string|CMB2_Type_Base           Rendered output or this object.
 	 */
 	public function rendered( $rendered ) {
+		$this->field->register_js_data();
+
 		if ( $this->args['rendered'] ) {
 			return is_a( $rendered, __CLASS__ ) ? $rendered->rendered : $rendered;
 		}
@@ -92,6 +94,10 @@ abstract class CMB2_Type_Base {
 	 */
 	public function parse_args( $element, $type_defaults, $type_args = array() ) {
 		$type_args = empty( $type_args ) ? $this->args : $type_args;
+
+		if ( true !== $this->field->args( 'disable_hash_data_attribute' ) ) {
+			$type_args['data-hash'] = $this->field->hash_id();
+		}
 
 		$field_overrides = $this->field->args( 'attributes' );
 
