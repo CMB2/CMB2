@@ -883,12 +883,7 @@ class CMB2_Field extends CMB2_Base {
 
 		$this->peform_param_callback( 'before_row' );
 
-		printf(
-			"<div class=\"cmb-row %s\" data-fieldtype=\"%s\" data-hash=\"%s\">\n",
-			$this->row_classes(),
-			$this->type(),
-			$this->hash_id()
-		);
+		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
 
 		if ( ! $this->args( 'show_names' ) ) {
 			echo "\n\t<div class=\"cmb-td\">\n";
