@@ -240,7 +240,9 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		$row.find( '.cmb2-wysiwyg-inner-wrap' ).each( function() {
 			$toReplace    = $( this );
 			data          = $toReplace.data();
-			defVal        = window.CMB2.getFieldArg( data.hash, 'default' );
+			defVal        = window.CMB2.getFieldArg( data.hash, 'default', '' );
+			defVal        = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
+
 			data.iterator = $row.data( 'iterator' );
 			data.fieldid  = data.id;
 			data.id       = data.groupid + '_' + data.iterator + '_' + data.fieldid;
