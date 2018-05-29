@@ -77,7 +77,7 @@ class CMB2_JS {
 	 */
 	public static function enqueue() {
 		// Filter required script dependencies
-		$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
+		$dependencies = self::$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
 
 		// Only use minified files if SCRIPT_DEBUG is off
 		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
@@ -231,7 +231,7 @@ class CMB2_JS {
 			),
 		);
 
-		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+		if ( isset( self::$dependencies['code-editor'] ) && function_exists( 'wp_enqueue_code_editor' ) ) {
 			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
 				'type' => 'text/html',
 			) );
