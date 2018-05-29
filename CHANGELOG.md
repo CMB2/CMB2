@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Enhancements
+
+* Update the `sv_SE` translation. Props [@edvind](https://github.com/edvind) ([#370](https://github.com/CMB2/CMB2/issues/370)).
+
 ### Bug Fixes
 
 ## [2.4.2 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.2)
