@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 ### Bug Fixes
 
+## [2.4.2 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.2)
+
+### Bug Fixes
+
+* Do not enqueue/register WordPress code editor JS if there are no `textarea_code` fields registered on the page. Fixes [#1110](https://github.com/CMB2/CMB2/issues/1110).
+
 ## [2.4.1 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.1)
 
 ### Bug Fixes
