@@ -14,12 +14,6 @@
             "email": "contact@webdevstudios.com",
             "homepage": "https://github.com/WebDevStudios",
             "role": "Developer"
-        },
-        {
-            "name": "Zao",
-            "email": "office@zao.com",
-            "homepage": "http://zao.is",
-            "role": "Developer"
         }
     ],
     "keywords": ["wordpress", "plugin", "metabox"],

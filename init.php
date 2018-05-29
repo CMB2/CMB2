@@ -15,7 +15,6 @@
  * Author URI:   https://cmb2.io
  * Contributors: Justin Sternberg (@jtsternberg / dsgnwrks.pro)
  *               WebDevStudios (@webdevstudios / webdevstudios.com)
- *               Zao (zao.is)
  *               Human Made (@humanmadeltd / hmn.md)
  *               Jared Atchison (@jaredatch / jaredatchison.com)
  *               Bill Erickson (@billerickson / billerickson.net)
