@@ -256,6 +256,10 @@
 			border-top: solid 1px $light-gray;
 		}
 
+		&.ui-sortable-helper{
+			border: solid 1px $light-gray !important; // Sometime, we need !important :).
+		}
+
 		&:before {
 			content: counter(el);
 			display: block;
@@ -267,7 +271,7 @@
 			width: 35px;
 			height: 100%;
 			line-height: 35px;
-
+			cursor: move;
 			color: $gray;
 			text-align: center;
 			border-right: solid 1px $light-gray;
