@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.4.2 - 2018-06-01
+ * CMB2 - v2.4.2 - 2018-06-09
  * https://cmb2.io
  * Copyright (c) 2018
  * Licensed GPLv2+
@@ -348,7 +348,11 @@
 .cmb-repeatable-group .cmb-th {
   padding: 5px;
 }
-/* line 340, sass/partials/_main_wrap.scss */
+/* line 341, sass/partials/_main_wrap.scss */
+.cmb-repeatable-group.sortable .cmb-group-title {
+  cursor: move;
+}
+/* line 346, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title {
   background-color: #e9e9e9;
   padding: 8px 12px 8px 2.2em;
@@ -357,7 +361,7 @@
   font-size: 14px;
   line-height: 1.4;
 }
-/* line 348, sass/partials/_main_wrap.scss */
+/* line 354, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title h4 {
   border: 0;
   margin: 0;
@@ -365,12 +369,12 @@
   font-weight: 500;
   padding: 0.5em 0.75em;
 }
-/* line 356, sass/partials/_main_wrap.scss */
+/* line 362, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title .cmb-th {
   display: block;
   width: 100%;
 }
-/* line 362, sass/partials/_main_wrap.scss */
+/* line 368, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-description .cmb-th {
   font-size: 1.2em;
   display: block;
@@ -385,29 +389,29 @@
   margin-top: 0;
   margin-bottom: 0.5em;
 }
-/* line 366, sass/partials/_main_wrap.scss */
+/* line 372, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows {
   font-size: 1em;
   margin-right: 1em;
   text-decoration: none;
 }
-/* line 371, sass/partials/_main_wrap.scss */
+/* line 377, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons {
   font-size: 1.5em;
   height: 1.5em;
   line-height: 1.2em;
   width: 1em;
 }
-/* line 377, sass/partials/_main_wrap.scss */
+/* line 383, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons.dashicons-arrow-down-alt2 {
   line-height: 1.3em;
 }
-/* line 384, sass/partials/_main_wrap.scss */
+/* line 390, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb2-upload-button {
   float: right;
 }
 
-/* line 390, sass/partials/_main_wrap.scss */
+/* line 396, sass/partials/_main_wrap.scss */
 p.cmb2-metabox-description {
   color: #aaaaaa;
   font-style: italic;
@@ -415,36 +419,36 @@ p.cmb2-metabox-description {
   padding-top: .5em;
 }
 
-/* line 397, sass/partials/_main_wrap.scss */
+/* line 403, sass/partials/_main_wrap.scss */
 span.cmb2-metabox-description {
   color: #aaaaaa;
   font-style: italic;
 }
 
-/* line 402, sass/partials/_main_wrap.scss */
+/* line 408, sass/partials/_main_wrap.scss */
 .cmb2-metabox-title {
   margin: 0 0 5px 0;
   padding: 5px 0 0 0;
   font-size: 14px;
 }
 
-/* line 408, sass/partials/_main_wrap.scss */
+/* line 414, sass/partials/_main_wrap.scss */
 .cmb-inline ul {
   padding: 4px 0 0 0;
 }
 
-/* line 412, sass/partials/_main_wrap.scss */
+/* line 418, sass/partials/_main_wrap.scss */
 .cmb-inline li {
   display: inline-block;
   padding-right: 18px;
 }
 
-/* line 417, sass/partials/_main_wrap.scss */
+/* line 423, sass/partials/_main_wrap.scss */
 .cmb-type-textarea-code pre {
   margin: 0;
 }
 
-/* line 423, sass/partials/_main_wrap.scss */
+/* line 429, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status {
   clear: none;
   display: inline-block;
@@ -452,12 +456,12 @@ span.cmb2-metabox-description {
   margin-right: 10px;
   width: auto;
 }
-/* line 430, sass/partials/_main_wrap.scss */
+/* line 436, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img {
   max-width: 350px;
   height: auto;
 }
-/* line 436, sass/partials/_main_wrap.scss */
+/* line 442, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
   background: #eee;
@@ -471,16 +475,16 @@ span.cmb2-metabox-description {
   -moz-border-radius: 2px;
   margin: 15px 0 0 0;
 }
-/* line 450, sass/partials/_main_wrap.scss */
+/* line 456, sass/partials/_main_wrap.scss */
 .cmb2-media-status .embed-status {
   float: left;
   max-width: 800px;
 }
-/* line 455, sass/partials/_main_wrap.scss */
+/* line 461, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status, .cmb2-media-status .embed-status {
   position: relative;
 }
-/* line 458, sass/partials/_main_wrap.scss */
+/* line 464, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button, .cmb2-media-status .embed-status .cmb2-remove-file-button {
   background: url(../images/ico-delete.png);
   height: 16px;
@@ -490,20 +494,20 @@ span.cmb2-metabox-description {
   top: -5px;
   width: 16px;
 }
-/* line 472, sass/partials/_main_wrap.scss */
+/* line 478, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button {
   top: 10px;
 }
-/* line 477, sass/partials/_main_wrap.scss */
+/* line 483, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span {
   cursor: pointer;
 }
-/* line 482, sass/partials/_main_wrap.scss */
+/* line 488, sass/partials/_main_wrap.scss */
 .cmb2-media-status.cmb-attach-list .img-status img, .cmb2-media-status.cmb-attach-list .file-status > span {
   cursor: move;
 }
 
-/* line 489, sass/partials/_main_wrap.scss */
+/* line 495, sass/partials/_main_wrap.scss */
 .cmb-type-file-list .cmb2-media-status .img-status {
   clear: none;
   vertical-align: middle;
@@ -513,7 +517,7 @@ span.cmb2-metabox-description {
   margin-top: 0;
 }
 
-/* line 498, sass/partials/_main_wrap.scss */
+/* line 504, sass/partials/_main_wrap.scss */
 .cmb-attach-list li {
   clear: both;
   display: inline-block;
@@ -521,29 +525,29 @@ span.cmb2-metabox-description {
   margin-top: 5px;
   margin-bottom: 10px;
 }
-/* line 504, sass/partials/_main_wrap.scss */
+/* line 510, sass/partials/_main_wrap.scss */
 .cmb-attach-list li img {
   float: left;
   margin-right: 10px;
 }
 
-/* line 510, sass/partials/_main_wrap.scss */
+/* line 516, sass/partials/_main_wrap.scss */
 .cmb2-remove-wrapper {
   margin: 0;
 }
 
-/* line 514, sass/partials/_main_wrap.scss */
+/* line 520, sass/partials/_main_wrap.scss */
 .child-cmb2 .cmb-th {
   text-align: left;
 }
 
-/* line 518, sass/partials/_main_wrap.scss */
+/* line 524, sass/partials/_main_wrap.scss */
 .cmb2-indented-hierarchy {
   padding-left: 1.5em;
 }
 
 @media (max-width: 450px) {
-  /* line 523, sass/partials/_main_wrap.scss */
+  /* line 529, sass/partials/_main_wrap.scss */
   .cmb-th,
   .cmb-td,
   .cmb-th + .cmb-td {

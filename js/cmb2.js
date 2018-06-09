@@ -730,7 +730,6 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.shiftRows = function( evt ) {
-
 		evt.preventDefault();
 
 		var $this = $( this );
@@ -983,6 +982,24 @@ window.CMB2 = window.CMB2 || {};
 			$repeatables.sortable({
 				items : '.cmb-repeat-row',
 				cursor: 'move'
+			});
+		}
+
+		var $repeatableGroups = cmb.metabox().find( '.cmb-repeatable-group.sortable' );
+		if ( $repeatableGroups.length ) {
+			$repeatableGroups.sortable({
+				items : '.cmb-repeatable-grouping',
+				cursor: 'move',
+				stop: function (ev) {
+					var $group =  $( ev.target ).parent();
+					var iterator = 1;
+					var title = $group.find('.cmb-add-group-row' ).data( 'grouptitle' );
+					$group.find( '.cmb-repeatable-grouping' ).each( function( i, row ){
+						var $row = $( row );
+						$row.find( 'h3.cmb-group-title' ).text( title.replace( '{#}', ( iterator ) ) );
+						iterator++;
+					});
+				}
 			});
 		}
 	};
