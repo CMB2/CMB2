@@ -131,6 +131,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
 		}
 
+		add_action( 'add_meta_boxes', array( $this, 'remove_default_tax_metaboxes' ) );
 		add_action( 'add_attachment', array( $this, 'save_post' ) );
 		add_action( 'edit_attachment', array( $this, 'save_post' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
@@ -508,10 +509,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
 
 		foreach ( $this->cmb->box_types() as $object_type ) {
-			if ( count( $this->cmb->tax_metaboxes_to_remove ) ) {
-				$this->remove_default_tax_metaboxes( $object_type );
-			}
-
 			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $object_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
 		}
 	}
@@ -520,16 +517,20 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * Remove the specified default taxonomy metaboxes for a post-type.
 	 *
 	 * @since 2.2.3
-	 * @param string $post_type Post type to remove the metabox for.
-	 */
-	protected function remove_default_tax_metaboxes( $post_type ) {
-		foreach ( $this->cmb->tax_metaboxes_to_remove as $taxonomy ) {
-			if ( ! taxonomy_exists( $taxonomy ) ) {
-				continue;
-			}
 
-			$mb_id = is_taxonomy_hierarchical( $taxonomy ) ? "{$taxonomy}div" : "tagsdiv-{$taxonomy}";
-			remove_meta_box( $mb_id, $post_type, 'side' );
+	 */
+	protected function remove_default_tax_metaboxes() {
+		foreach ( $this->cmb->box_types() as $post_type ) {
+			if ( count( $this->cmb->tax_metaboxes_to_remove ) ) {
+				foreach ( $this->cmb->tax_metaboxes_to_remove as $taxonomy ) {
+					if ( ! taxonomy_exists( $taxonomy ) ) {
+						continue;
+					}
+
+					$mb_id = is_taxonomy_hierarchical( $taxonomy ) ? "{$taxonomy}div" : "tagsdiv-{$taxonomy}";
+					remove_meta_box( $mb_id, $post_type, 'side' );
+				}
+			}
 		}
 	}
 
