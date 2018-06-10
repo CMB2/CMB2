@@ -67,6 +67,8 @@ window.CMB2 = window.CMB2 || {};
 
 		// Make File List drag/drop sortable:
 		cmb.makeListSortable();
+		// Make Repeatable fields drag/drop sortable:
+		cmb.makeRepeatableSortable();
 
 		$metabox
 			.on( 'change', '.cmb2_upload_file', function() {
@@ -971,6 +973,17 @@ window.CMB2 = window.CMB2 || {};
 		var $filelist = cmb.metabox().find( '.cmb2-media-status.cmb-attach-list' );
 		if ( $filelist.length ) {
 			$filelist.sortable({ cursor: 'move' }).disableSelection();
+		}
+	};
+
+	cmb.makeRepeatableSortable = function() {
+		var $repeatables = cmb.metabox().find( '.cmb-repeat-table .cmb-field-list' );
+
+		if ( $repeatables.length ) {
+			$repeatables.sortable({
+				items : '.cmb-repeat-row',
+				cursor: 'move'
+			});
 		}
 	};
 
