@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.4.2 - 2018-06-01
+ * CMB2 - v2.4.2 - 2018-06-09
  * https://cmb2.io
  * Copyright (c) 2018
  * Licensed GPLv2+
@@ -326,7 +326,7 @@
 /* line 259, sass/partials/_main_wrap.scss */
 
 .cmb-repeat-table .cmb-row.cmb-repeat-row.ui-sortable-helper {
-	border: solid 1px #e9e9e9 !important;
+	outline: dashed 2px #e9e9e9 !important;
 }
 
 /* line 263, sass/partials/_main_wrap.scss */
