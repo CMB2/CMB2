@@ -1003,6 +1003,56 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * The method to fetch the value for this field for the REST API.
+	 *
+	 * @since 2.5.0
+	 */
+	public function get_rest_value() {
+		$field_type = $this->type();
+		$field_id   = $this->id( true );
+
+		if ( $cb = $this->maybe_callback( 'rest_value_cb' ) ) {
+			apply_filters( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
+		}
+
+		$value = $this->get_data();
+
+		/**
+		 * Filter the value before it is sent to the REST request.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param mixed      $value The value from CMB2_Field::get_data()
+		 * @param CMB2_Field $field This field object.
+		 */
+		$value = apply_filters( 'cmb2_get_rest_value', $value, $this );
+
+		/**
+		 * Filter the value before it is sent to the REST request.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param mixed      $value The value from CMB2_Field::get_data()
+		 * @param CMB2_Field $field This field object.
+		 */
+		$value = apply_filters( "cmb2_get_rest_value_{$field_type}", $value, $this );
+
+		/**
+		 * Filter the value before it is sent to the REST request.
+		 *
+		 * The dynamic portion of the hook name, $field_id, refers to the field id.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param mixed      $value The value from CMB2_Field::get_data()
+		 * @param CMB2_Field $field This field object.
+		 */
+		return apply_filters( "cmb2_get_rest_value_for_{$field_id}", $value, $this );
+	}
+
+	/**
 	 * Default callback to outputs field value in a display format.
 	 *
 	 * @since 2.2.2
