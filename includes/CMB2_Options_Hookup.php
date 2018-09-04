@@ -50,6 +50,17 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_filter( "cmb2_should_autoload_{$this->option_key}", '__return_false' );
 		}
 
+		/**
+		 * for WP < 4.7
+		 *
+		 * @see https://core.trac.wordpress.org/ticket/37885
+		 */
+		global $wp_version;
+		if ( version_compare( $wp_version, '4.7', '<' ) ) {
+
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		// Register setting to cmb2 group.
 		register_setting( 'cmb2', $this->option_key );
 
