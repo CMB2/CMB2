@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+* Fix the options page errors when using CMB2 in WordPress prior to 4.7. Props [@manzoorwanijk](https://github.com/manzoorwanijk) ([#1166](https://github.com/CMB2/CMB2/pull/1166)).
+
 ## [2.4.2 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.2)
 
 ### Bug Fixes

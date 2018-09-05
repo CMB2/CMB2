@@ -51,8 +51,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 
 		/**
-		 * for WP < 4.7
-		 * 
+		 * for WP < 4.7. Ensure the register_setting function exists.
 		 */
 		if ( ! CMB2_Utils::wp_at_least( '4.7' ) && ! function_exists( 'register_setting' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -297,7 +296,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$url = add_query_arg( 'settings-updated', $updated ? 'true' : 'false', $url );
 		}
 
-		wp_safe_redirect( esc_url_raw( $url ), 303 );
+		wp_safe_redirect( esc_url_raw( $url ), 303 /* WP_Http::SEE_OTHER */ );
 		exit;
 	}
 
