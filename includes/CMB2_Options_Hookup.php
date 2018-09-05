@@ -50,6 +50,14 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			add_filter( "cmb2_should_autoload_{$this->option_key}", '__return_false' );
 		}
 
+		/**
+		 * for WP < 4.7
+		 * 
+		 */
+		if ( ! CMB2_Utils::wp_at_least( '4.7' ) && ! function_exists( 'register_setting' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		// Register setting to cmb2 group.
 		register_setting( 'cmb2', $this->option_key );
 
@@ -289,7 +297,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 			$url = add_query_arg( 'settings-updated', $updated ? 'true' : 'false', $url );
 		}
 
-		wp_safe_redirect( esc_url_raw( $url ), WP_Http::SEE_OTHER );
+		wp_safe_redirect( esc_url_raw( $url ), 303 );
 		exit;
 	}
 
