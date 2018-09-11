@@ -7,30 +7,31 @@ msgstr ""
 "Project-Id-Version: CMB2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "POT-Creation-Date: 2016-06-27 17:01:22+00:00\n"
-"PO-Revision-Date: 2016-06-27 17:01+0000\n"
+"PO-Revision-Date: 2017-11-05 17:11+0330\n"
 "Last-Translator: Justin Sternberg <me@jtsternberg.com>\n"
-"Language-Team: Persian (Iran) (http://www.transifex.com/wp-translations/cmb2/language/fa_IR/)\n"
+"Language-Team: Persian (Iran) (http://www.transifex.com/wp-translations/"
+"cmb2/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: grunt-wp-i18n 0.4.9\n"
-"X-Poedit-Basepath: ../\n"
-"X-Poedit-Bookmarks: \n"
-"X-Poedit-Country: United States\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
+"_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
+"esc_html_x:1,2c\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: example-functions.php:117 tests/test-cmb-field.php:255
 msgid "Test Metabox"
-msgstr ""
+msgstr " آزمایش متاباکس"
 
 #: example-functions.php:130 example-functions.php:436
 msgid "Test Text"
-msgstr ""
+msgstr "متن آزمایشی"
 
 #: example-functions.php:131 example-functions.php:144
 #: example-functions.php:157 example-functions.php:165
@@ -52,19 +53,19 @@ msgstr ""
 #: example-functions.php:613 example-functions.php:650
 #: tests/test-cmb-field.php:267
 msgid "field description (optional)"
-msgstr ""
+msgstr "توضیحات فیلد (اختیاری)"
 
 #: example-functions.php:143
 msgid "Test Text Small"
-msgstr ""
+msgstr "کادر متن کوچک آزمایشی"
 
 #: example-functions.php:156
 msgid "Test Text Medium"
-msgstr ""
+msgstr "کادر متن متوسط آزمایشی"
 
 #: example-functions.php:164
 msgid "Custom Rendered Field"
-msgstr ""
+msgstr "فیلد شخصی سازی شده"
 
 #: example-functions.php:172
 msgid "Website URL"
@@ -72,11 +73,11 @@ msgstr "آدرس وب سایت"
 
 #: example-functions.php:181
 msgid "Test Text Email"
-msgstr ""
+msgstr "کادر متنی ایمیل"
 
 #: example-functions.php:189
 msgid "Test Time"
-msgstr ""
+msgstr "زمان آزمایشی"
 
 #: example-functions.php:197 example-functions.php:198
 msgid "Time zone"
@@ -84,110 +85,110 @@ msgstr "زمان محلی"
 
 #: example-functions.php:204
 msgid "Test Date Picker"
-msgstr ""
+msgstr "انتخاب کننده تاریخ آزمایشی"
 
 #: example-functions.php:212
 msgid "Test Date Picker (UNIX timestamp)"
-msgstr ""
+msgstr "انتخاب کننده تاریخ آزمایشی (unix timestamp)"
 
 #: example-functions.php:220
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
-msgstr ""
+msgstr "انتخاب کننده تاریخ آزمایشی (unix timestamp)"
 
 #: example-functions.php:237
 msgid "Test Money"
-msgstr ""
+msgstr "پول آزمایشی"
 
 #: example-functions.php:246
 msgid "Test Color Picker"
-msgstr ""
+msgstr "آزمایش انتخاب کننده رنگ"
 
 #: example-functions.php:259
 msgid "Test Text Area"
-msgstr ""
+msgstr "آزمایش Text Area"
 
 #: example-functions.php:266
 msgid "Test Text Area Small"
-msgstr ""
+msgstr "آزمایش Text Area کوچک"
 
 #: example-functions.php:273
 msgid "Test Text Area for Code"
-msgstr ""
+msgstr "آزمایش Text Area برای کد"
 
 #: example-functions.php:280
 msgid "Test Title Weeeee"
-msgstr ""
+msgstr "Test Title Weeeee"
 
 #: example-functions.php:281
 msgid "This is a title description"
-msgstr ""
+msgstr "این یک توضیح برای عنوان است"
 
 #: example-functions.php:287
 msgid "Test Select"
-msgstr ""
+msgstr "آزمایش Select"
 
 #: example-functions.php:293 example-functions.php:306
 #: example-functions.php:318
 msgid "Option One"
-msgstr ""
+msgstr "گزینه اول"
 
 #: example-functions.php:294 example-functions.php:307
 #: example-functions.php:319
 msgid "Option Two"
-msgstr ""
+msgstr "گزینه دوم"
 
 #: example-functions.php:295 example-functions.php:308
 #: example-functions.php:320
 msgid "Option Three"
-msgstr ""
+msgstr "گزینه سوم"
 
 #: example-functions.php:300
 msgid "Test Radio inline"
-msgstr ""
+msgstr "آزمایش Radio درون خطی"
 
 #: example-functions.php:313
 msgid "Test Radio"
-msgstr ""
+msgstr "آزمایش Radio "
 
 #: example-functions.php:325
 msgid "Test Taxonomy Radio"
-msgstr ""
+msgstr "آزمایش Taxonomy radio"
 
 #: example-functions.php:334
 msgid "Test Taxonomy Select"
-msgstr ""
+msgstr "آزمایش Taxonomy Select"
 
 #: example-functions.php:342
 msgid "Test Taxonomy Multi Checkbox"
-msgstr ""
+msgstr "آزمایش Taxonomy Multi Checkbox"
 
 #: example-functions.php:351
 msgid "Test Checkbox"
-msgstr ""
+msgstr "آزمایش Checkbox"
 
 #: example-functions.php:358 tests/test-cmb-field.php:266
 msgid "Test Multi Checkbox"
-msgstr ""
+msgstr "آزمایش Multi Checkbox"
 
 #: example-functions.php:364 tests/test-cmb-field.php:272
 msgid "Check One"
-msgstr ""
+msgstr "گزینه اول"
 
 #: example-functions.php:365 tests/test-cmb-field.php:273
 msgid "Check Two"
-msgstr ""
+msgstr "گزینه دوم"
 
 #: example-functions.php:366 tests/test-cmb-field.php:274
 msgid "Check Three"
-msgstr ""
+msgstr "گزینه سوم"
 
 #: example-functions.php:372
 msgid "Test wysiwyg"
-msgstr ""
+msgstr "آزمایش wysiwyg"
 
 #: example-functions.php:380
 msgid "Test Image"
-msgstr ""
+msgstr "آزمایش Image"
 
 #: example-functions.php:381
 msgid "Upload an image or enter a URL."
@@ -195,49 +196,53 @@ msgstr "فایل آپلود کنید یا URL را وارد کنید."
 
 #: example-functions.php:387
 msgid "Multiple Files"
-msgstr ""
+msgstr "چند فایل"
 
 #: example-functions.php:388
 msgid "Upload or add multiple images/attachments."
-msgstr ""
+msgstr "آپلود فایل ها"
 
 #: example-functions.php:395
 msgid "oEmbed"
-msgstr ""
+msgstr "oEmbed"
 
 #: example-functions.php:396
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
+"Embeds</a>."
 msgstr ""
+"آدرس URL یوتیوب، تویتر یا ایستاگرام را وارد کنید. سرویس های پشتیبانی شده در "
+"<a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
+"Embeds</a> موجود هستند."
 
 #: example-functions.php:427
 msgid "About Page Metabox"
-msgstr ""
+msgstr "درباره متاباکس صفحه"
 
 #: example-functions.php:456
 msgid "Repeating Field Group"
-msgstr ""
+msgstr "Field Group تکرار شونده"
 
 #: example-functions.php:464
 msgid "Generates reusable form entries"
-msgstr ""
+msgstr "آیتم های فرم با قابلیت استفاده مجدد میسازد"
 
 #: example-functions.php:466
 msgid "Entry {#}"
-msgstr ""
+msgstr "آیتم  {#}"
 
 #: example-functions.php:467
 msgid "Add Another Entry"
-msgstr ""
+msgstr "افزودن آیتم دیگر"
 
 #: example-functions.php:468
 msgid "Remove Entry"
-msgstr ""
+msgstr "حذف آیتم"
 
 #: example-functions.php:481
 msgid "Entry Title"
-msgstr ""
+msgstr "عنوان"
 
 #: example-functions.php:488
 msgid "Description"
@@ -245,11 +250,11 @@ msgstr "توضیح"
 
 #: example-functions.php:489
 msgid "Write a short description for this entry"
-msgstr ""
+msgstr "توضیح کوتاهی برای این آیتم بنویسید"
 
 #: example-functions.php:495
 msgid "Entry Image"
-msgstr ""
+msgstr "تصویر آیتم"
 
 #: example-functions.php:501
 msgid "Image Caption"
@@ -257,15 +262,15 @@ msgstr "توضیح تصویر"
 
 #: example-functions.php:520
 msgid "User Profile Metabox"
-msgstr ""
+msgstr "متاباکس پروفایل"
 
 #: example-functions.php:527 example-functions.php:597
 msgid "Extra Info"
-msgstr ""
+msgstr "اطلاعات بیشتر"
 
 #: example-functions.php:535
 msgid "Avatar"
-msgstr "چهرک"
+msgstr "آواتار"
 
 #: example-functions.php:542
 msgid "Facebook URL"
@@ -273,43 +278,43 @@ msgstr "نشانی صفحه فیس بوک"
 
 #: example-functions.php:549
 msgid "Twitter URL"
-msgstr ""
+msgstr "آدرس Twitter"
 
 #: example-functions.php:556
 msgid "Google+ URL"
-msgstr ""
+msgstr "آدرس Google+"
 
 #: example-functions.php:563
 msgid "Linkedin URL"
-msgstr ""
+msgstr "آدرس Linkedin"
 
 #: example-functions.php:570
 msgid "User Field"
-msgstr ""
+msgstr "فیلد کاربر"
 
 #: example-functions.php:590
 msgid "Category Metabox"
-msgstr ""
+msgstr "متاباکس دسته بندی"
 
 #: example-functions.php:605
 msgid "Term Image"
-msgstr ""
+msgstr "Term Image"
 
 #: example-functions.php:612
 msgid "Arbitrary Term Field"
-msgstr ""
+msgstr "زمینه ترتیب دلخواه"
 
 #: example-functions.php:634
 msgid "Theme Options Metabox"
-msgstr ""
+msgstr "گزینه های پوسته متاباکس"
 
 #: example-functions.php:649
 msgid "Site Background Color"
-msgstr ""
+msgstr "پس زمینه سایت"
 
 #: includes/CMB2.php:129
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr ""
+msgstr "تنظیمات متاباکس نیاز به پارامتر ID دارد"
 
 #: includes/CMB2.php:418
 msgid "Click to toggle"
@@ -317,23 +322,23 @@ msgstr "برای جانشینی کلیک کنید"
 
 #: includes/CMB2_Ajax.php:71
 msgid "Please Try Again"
-msgstr ""
+msgstr "لطفا دوباره تلاش کنید"
 
 #: includes/CMB2_Ajax.php:173 tests/cmb-tests-base.php:59
 msgid "Remove Embed"
-msgstr ""
+msgstr "حذف Embed"
 
 #: includes/CMB2_Ajax.php:177 tests/cmb-tests-base.php:64
 msgid "No oEmbed Results Found for %s. View more info at"
-msgstr ""
+msgstr "هیچ نتیجه ای برای %s پیدا نشد. نمایش جزئیات بیشتر در "
 
 #: includes/CMB2_Field.php:1186
 msgid "Add Group"
-msgstr ""
+msgstr "افزودن گروه"
 
 #: includes/CMB2_Field.php:1187
 msgid "Remove Group"
-msgstr ""
+msgstr "حذف گروه"
 
 #: includes/CMB2_Field.php:1209 includes/CMB2_Field.php:1213
 #: tests/test-cmb-field.php:229
@@ -342,13 +347,13 @@ msgstr "هیچ‌یک"
 
 #: includes/CMB2_Field.php:1269
 msgid "Sorry, this field does not have a cmb_id specified."
-msgstr ""
+msgstr "برای این فیلد cmb_id مشخص نشده است"
 
 #: includes/CMB2_Field_Display.php:408 includes/CMB2_JS.php:139
 #: includes/types/CMB2_Type_File_Base.php:75 tests/test-cmb-types-base.php:143
 #: tests/test-cmb-types.php:701
 msgid "File:"
-msgstr ""
+msgstr "فایل:"
 
 #: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"
@@ -368,25 +373,27 @@ msgstr "رنگ فعلی"
 
 #: includes/CMB2_JS.php:110
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
+msgstr "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
 
 #: includes/CMB2_JS.php:111
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "Su, Mo, Tu, We, Th, Fr, Sa"
 
 #: includes/CMB2_JS.php:112
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
 
 #: includes/CMB2_JS.php:113
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
 msgstr ""
+"January, February, March, April, May, June, July, August, September, "
+"October, November, December"
 
 #: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr ""
+msgstr "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
 
 #: includes/CMB2_JS.php:115
 msgid "Next"
@@ -406,7 +413,7 @@ msgstr "انجام شد"
 
 #: includes/CMB2_JS.php:122
 msgid "Choose Time"
-msgstr ""
+msgstr "انتخاب زمان"
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
@@ -422,19 +429,19 @@ msgstr "دقیقه"
 
 #: includes/CMB2_JS.php:126
 msgid "Second"
-msgstr ""
+msgstr "ثانیه"
 
 #: includes/CMB2_JS.php:127
 msgid "Now"
-msgstr ""
+msgstr "حالا"
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
-msgstr ""
+msgstr "استفاده از این فایل"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "استفاده از این فایل ها"
 
 #: includes/CMB2_JS.php:137 includes/types/CMB2_Type_File_Base.php:61
 msgid "Remove Image"
@@ -454,25 +461,27 @@ msgstr "دانلود"
 
 #: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "انتخاب/ لغو انتخاب همه"
 
 #: includes/CMB2_Types.php:194
 msgid "Add Row"
-msgstr ""
+msgstr "افزودن ردیف"
 
 #: includes/CMB2_hookup.php:145
 msgid ""
 "Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress "
 "install."
 msgstr ""
+"Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress "
+"install."
 
 #: includes/CMB2_hookup.php:149
 msgid "Term metaboxes configuration requires a 'taxonomies' parameter"
-msgstr ""
+msgstr "تنظیمات متاباکس نیاز به پارامتر taxonomies دارد"
 
 #: includes/helper-functions.php:93
 msgid "No oEmbed Results Found for %s. View more info at %s"
-msgstr ""
+msgstr "هیچ نتیجه ای برای %s پیدا نشد. نمایش جزئیات بیشتر در %s"
 
 #: includes/helper-functions.php:279
 msgid "Save"
@@ -481,48 +490,48 @@ msgstr "ذخیره"
 #: includes/types/CMB2_Type_File.php:36 tests/test-cmb-types.php:683
 #: tests/test-cmb-types.php:701
 msgid "Add or Upload File"
-msgstr ""
+msgstr "آپلود فایل"
 
 #: includes/types/CMB2_Type_File_List.php:36 tests/test-cmb-types.php:639
 #: tests/test-cmb-types.php:663
 msgid "Add or Upload Files"
-msgstr ""
+msgstr "انتخاب یا آپلود فایل"
 
 #: includes/types/CMB2_Type_Taxonomy_Multicheck.php:27
 #: includes/types/CMB2_Type_Taxonomy_Radio.php:25
 msgid "No terms"
-msgstr ""
+msgstr "بدون کلمه"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2"
-msgstr ""
+msgstr "CMB2"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/CMB2/CMB2"
-msgstr ""
+msgstr "https://github.com/CMB2/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
+msgstr "CMB2 برای شما متاباکس و فرم با فیلدهای سفارشی میسازد"
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
 
 #: includes/CMB2_JS.php:109
 msgctxt "Valid formatDate string for jquery-ui datepicker"
 msgid "mm/dd/yy"
-msgstr ""
+msgstr "mm/dd/yy"
 
 #: includes/CMB2_JS.php:129
 msgctxt ""
-"Valid formatting string, as per "
-"http://trentrichardson.com/examples/timepicker/"
+"Valid formatting string, as per http://trentrichardson.com/examples/"
+"timepicker/"
 msgid "hh:mm TT"
-msgstr ""
+msgstr "hh:mm TT"

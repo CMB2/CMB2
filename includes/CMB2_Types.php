@@ -390,7 +390,7 @@ class CMB2_Types {
 		}
 
 		// Then add an empty row
-		$this->field->escaped_value = '';
+		$this->field->escaped_value = $default;
 		$this->iterator = $this->iterator ? $this->iterator : 1;
 		$this->repeat_row( 'empty-row hidden' );
 	}

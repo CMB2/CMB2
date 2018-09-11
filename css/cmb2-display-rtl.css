@@ -1,9 +1,13 @@
-/**
- * CMB2 Styling
+/*!
+ * CMB2 - v2.4.2 - 2018-06-09
+ * https://cmb2.io
+ * Copyright (c) 2018
+ * Licensed GPLv2+
  */
-/**
- * CMB2 Styling
- */
+
+/*--------------------------------------------------------------
+ * CMB2 Display Styling
+--------------------------------------------------------------*/
 /* line 6, sass/partials/_display.scss */
 .cmb2-colorpicker-swatch span {
   display: inline-block;

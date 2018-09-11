@@ -12,7 +12,7 @@
  */
 class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 
-	public function render() {
+	public function render( $args = array() ) {
 		$field = $this->field;
 
 		$args = wp_parse_args( $this->args, array(

@@ -114,8 +114,10 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'admin_menu_hook'  => 'admin_menu',
 			'display_cb'       => false,
 			'save_button'      => '',
+			'message_cb'       => '',
 			'option_key'       => '',
 			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+			'tab_group'        => '',
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -195,6 +197,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb = cmb2_get_metabox( $this->metabox_array );
 		$this->assertEquals( $this->cmb, $cmb );
 
+		CMB2_Boxes::remove( 'test2' );
 		// Test successful creation of new MB
 		$cmb1 = cmb2_get_metabox( $this->metabox_array2 );
 		$cmb2 = new CMB2( $this->metabox_array2 );
@@ -244,7 +247,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						</div>
 						<div class="cmb-td">
 							testing before
-							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
+							<input type="text" class="regular-text" name="test_test" id="test_test" value="" data-hash=\'7i3hkvqmp7v0\'/>
 							<p class="cmb2-metabox-description">Description</p>
 							function test_after Description test_test
 						</div>
@@ -274,11 +277,25 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
 	}
 
+	public function test_boxes_get_by() {
+		$boxes = CMB2_Boxes::get_by( 'classes', 'custom-class another-class' );
+		$this->assertContainsOnlyInstancesOf( 'CMB2', $boxes );
+		$this->assertSame( 1, count( $boxes ) );
+	}
+
+	public function test_boxes_filter_by() {
+		$all   = CMB2_Boxes::get_all();
+		$with  = CMB2_Boxes::get_by( 'classes', 'custom-class another-class' );
+		$boxes = CMB2_Boxes::filter_by( 'classes', 'custom-class another-class' );
+		$this->assertContainsOnlyInstancesOf( 'CMB2', $boxes );
+		$this->assertSame( count( $all ) - count( $with ), count( $boxes ) );
+	}
+
 	public function test_boxes_get() {
 		new Test_CMB2_Object( $this->metabox_array2 );
 
 		// Retrieve the instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		$after_args_parsed = wp_parse_args( $this->metabox_array2, $cmb->get_metabox_defaults() );
 		foreach ( $after_args_parsed as $key => $value ) {
@@ -297,7 +314,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_update_field_property() {
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
@@ -327,7 +344,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_updated_fields_properties() {
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 		$this->assertInstanceOf( 'CMB2', $cmb );
 
 		$field = cmb2_get_field( $cmb, 'test_test', $this->post_id );
@@ -358,7 +375,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	public function test_add_field() {
 
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		// This should return false because we don't have a 'demo_text2' field
 		$field_id = $cmb->update_field_property( 'demo_text2', 'type', 'text' );
@@ -380,7 +397,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	public function test_added_field() {
 
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		$field_array = array(
 			'test_test' => array(
@@ -413,7 +430,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 	public function test_add_group_field( $do_assertions = null ) {
 
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		// This should return false because we don't have a 'group_field' field
 		$field_id = $cmb->update_field_property( 'group_field', 'type', 'group' );
@@ -453,7 +470,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		}
 
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		$field_id = $cmb->update_field_property( 'group_field', 'before_group', 'before_group output' );
 		$field_id = $cmb->update_field_property( 'group_field', 'options', array(
@@ -466,14 +483,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 		$cmb->update_field_property( 'group_field', 'after_group_row', 'after_group_row output' );
 		$cmb->update_field_property( 'group_field', 'after_group', 'after_group output' );
 
-		$fields = $cmb->prop( 'fields' );
-		$field = $this->invokeMethod( $cmb, 'get_new_field', $fields['group_field'] );
-
 		$sub_field_id = $cmb->add_group_field( $field_id, array(
 			'name' => 'Name',
 			'id'   => 'test_file',
 			'type' => 'file',
 		) ); // Test that the position argument is working
+
+		$all_fields = $cmb->prop( 'fields' );
+		$field = $cmb->get_field( $all_fields['group_field'] );
 
 		$expected_group_render = '
 		before_group output
@@ -497,21 +514,21 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<label for="group_field_0_colorpicker">Colorpicker</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-colorpicker cmb2-text-small" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
+									<input type="text" class="cmb2-text-small cmb2-colorpicker" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#" data-hash=\'2jqpbm4qpv9g\'/>
 								</div>
 							</div>
 							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value=""/></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value="" data-hash=\'6ju7p2ui96b0\'/></div>
 							</div>
 							<div class="cmb-row cmb-type-file cmb2-id-group-field-0-test-file cmb-repeat-group-field" data-fieldtype="file">
 								<div class="cmb-th">
 									<label for="group_field_0_test_file">Name</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\'/>
+									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\' data-hash=\'2fvuslh3crdg\'/>
 									<input class="cmb2-upload-button button-secondary" type="button" value="Add or Upload File" />
 									<input type="hidden" class="cmb2-upload-file-id" name="group_field[0][test_file_id]" id="group_field_0_test_file_id" value=""/>
 									<div id="group_field_0_test_file-status" class="cmb2-media-status">
@@ -540,33 +557,54 @@ class Test_CMB2_Core extends Test_CMB2 {
 		';
 
 		ob_start();
-		$cmb->render_group( $field->args );
-
+		$cmb->render_group( $field );
 		$this->assertHTMLstringsAreEqual( $expected_group_render, ob_get_clean() );
 
 		// Test after modifying the cmb2_group_wrap_attributes filter.
 		add_filter( 'cmb2_group_wrap_attributes', array( __CLASS__, 'modify_group_attributes' ) );
 
-		ob_start();
-		$cmb->render_group( $field->args );
-
-		$this->assertHTMLstringsAreEqual(
-			str_replace(
-				'style="width:100%;"',
-				'style="width:100%;" blah="blah"',
-				$expected_group_render
-			),
-			// $expected_group_render,
-			ob_get_clean()
+		$updated_expected_render = str_replace(
+			'style="width:100%;"',
+			'style="width:100%;" modify_group_attributes="modify_group_attributes"',
+			$expected_group_render
 		);
 
+		ob_start();
+		$cmb->render_group( $field );
+		// The render will not be updated yet...
+		$this->assertNotSame( $updated_expected_render, ob_get_clean() );
+
+		// Because the cache for that callback needs to be dumped.
+		$field->unset_param_callback_cache( 'render_row_cb' );
+
+		ob_start();
+		$cmb->render_group( $field );
+		// Now it should match.
+		$this->assertHTMLstringsAreEqual( $updated_expected_render, ob_get_clean() );
+
 		remove_filter( 'cmb2_group_wrap_attributes', array( __CLASS__, 'modify_group_attributes' ) );
+
+		// Test replacing default group render_row_cb.
+		$cmb->update_field_property( 'group_field', 'render_row_cb', array( __CLASS__, 'echo_field_id' ) );
+
+		ob_start();
+		$cmb->render_group( $cmb->get_field( 'group_field', null, true ) );
+		// Now it should match.
+		$this->assertHTMLstringsAreEqual( 'group_field', ob_get_clean() );
+
+		// Test using a proxy for the default group render callback.
+		$cmb->update_field_property( 'group_field', 'render_row_cb', array( __CLASS__, 'do_default_cmb_group_render_cb' ) );
+
+		ob_start();
+		$cmb->render_group( $cmb->get_field( 'group_field', null, true ) );
+		// Should match the default output.
+		$this->assertHTMLstringsAreEqual( $expected_group_render, ob_get_clean() );
 	}
 
 	public function test_disable_group_repeat() {
 
 		// Retrieve a CMB2 instance
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 
 		$field_id = $cmb->add_field( array(
 			'name' => 'group 2',
@@ -600,7 +638,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 								<div class="cmb-th">
 									<label for="group_field2_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"><input type="text" class="regular-text" name="group_field2[0][first_field]" id="group_field2_0_first_field" value=""/></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field2[0][first_field]" id="group_field2_0_first_field" value="" data-hash=\'4nhr1ugfjlb0\'/></div>
 							</div>
 						</div>
 					</div>
@@ -646,7 +684,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_remove_group_field() {
 
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 		$cmb->remove_field( 'colorpicker', 'group_field' );
 
 		$field = cmb2_get_field( 'test2', 'group_field', $this->post_id );
@@ -668,7 +706,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_remove_field() {
 
-		$cmb = cmb2_get_metabox( 'test2' );
+		$cmb = $this->get_test2_box();
 		$cmb->remove_field( 'group_field' );
 		$cmb->remove_field( 'group_field2' );
 
@@ -959,8 +997,17 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	public static function modify_group_attributes( $atts ) {
-		$atts['blah'] = 'blah';
+		$atts['modify_group_attributes'] = 'modify_group_attributes';
 		return $atts;
+	}
+
+	public static function echo_field_id( $field_args, $field ) {
+		echo $field->id();
+	}
+
+	public static function do_default_cmb_group_render_cb( $field_args, $field ) {
+		$cmb = $field->get_cmb();
+		return $cmb->render_group_callback( $field_args, $field );
 	}
 
 	public static function cmb_before_row( $field_args, $field ) {
@@ -999,6 +1046,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		return $cmb;
 	}
+
+	protected function get_test2_box() {
+		return cmb2_get_metabox( $this->metabox_array2 );
+	}
+
 }
 
 /**

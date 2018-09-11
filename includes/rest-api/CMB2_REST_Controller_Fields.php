@@ -417,7 +417,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		}
 
 		if ( $this->request['object_id'] && $this->request['object_type'] ) {
-			$field_data['value'] = $field->get_data();
+			$field_data['value'] = $field->get_rest_value();
 		}
 
 		return $field_data;

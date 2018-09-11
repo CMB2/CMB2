@@ -1,10 +1,10 @@
 === CMB2 ===
-Contributors:      jtsternberg, webdevstudios, zao, tw2113
+Contributors:      jtsternberg, webdevstudios, tw2113
 Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
-Tested up to:      4.8.1
-Stable tag:        2.2.5.3
+Tested up to:      4.9.6
+Stable tag:        2.4.2
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * CMB2 is safe to bundle with any project. It will only load the newest version in the system.
 
 ### Translation
-* Thanks to many in the CMB2 community and to our friends at [wp-translations.org](http://wp-translations.org/project/cmb2/), we have a good start on several translations for CMB2. Please feel free to [work with wp-translations.org](http://wp-translations.org/project/cmb2/) to provide even more!
+If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
 
 ### Documentation
 * CMB2 documentation can be found at [the CMB2 wiki](https://github.com/CMB2/CMB2/wiki) on github. Also, If you're into reading code and inline documentation, we tried to keep all functions and methods fully inline-documented.
@@ -49,7 +49,6 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax) by [alexis-magina](https://github.com/alexis-magina): `post_search_ajax` Attach posts to each other. Same approach as [CMB2 Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) but with Ajax request, multiple/single option, and different UI.
 * [CMB2 Field Type: CMB2 Post Search field](https://github.com/CMB2/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
 * [CMB2 Field Type: CMB2 User Search field](https://github.com/Mte90/CMB2-User-Search-field) from [Mte90](https://github.com/Mte90): `user_search_text` adds a user-search dialog for searching/attaching other User IDs.
-* [CMB2 Field Type: CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) from [JayWood](https://github.com/JayWood): `rgba_colorpicker ` adds a color picker that supports RGBa, (RGB with transparency (alpha) value).
 * [CMB2 Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
 	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
 
@@ -73,8 +72,13 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) by [rubengc](https://github.com/rubengc): Based on [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax), adds the ability to attach posts/users/terms, and the ability to limit the maximum number of attached objects.
 * [CMB2 Field Type: Visual Style Editor](https://github.com/rubengc/cmb2-field-visual-style-editor) by [rubengc](https://github.com/rubengc): Custom field for CMB2 which allows customizing style from a small set of controls.
 * [CMB2 Field Type: CMB2 Roadway Segments](https://github.com/pixelwatt/cmb2-roadway-segments) by [pixelwatt](https://github.com/pixelwatt): This plugin adds a new CMB2 fieldtype for drawing roadway segments onto a map and provides a shortcode for display.
+* [CMB2 Field Type: Font Awesome](https://github.com/serkanalgur/cmb2-field-faiconselect) by [serkanalgur](https://github.com/serkanalgur): This plugin adds a new CMB2 field type for selecting Font Awesome icons.
+* [CMB2 Field Type: Typography](https://github.com/eduplessis/cmb2-typography) by [eduplessis](https://github.com/eduplessis): This plugin adds a new CMB2 field type "Typography" and it use jQuery fontselect for the font-family selection.
+* [CMB2 Field Type: Markdown](https://github.com/Rekenna/cmb2-markdown) by [Rekenna](https://github.com/Rekenna): This plugin adds a new CMB2 field type "CMB2 Markdown" where you can type in markdown and view a live preview of the results or convert to html with a button.
+* [CMB2 Field Type: Switch Button](https://github.com/themevan/CMB2-Switch-Button) by [themevan](https://github.com/themevan): This plugin adds a Custom Switch Button field type for CMB2.
 
 ##### Other Helpful Resources
+* [CMB2 Admin Extension](https://github.com/twoelevenjay/CMB2-Admin-Extension):  adds a user interface for admins to create CMB2 meta boxes from the WordPress admin. Also on [wordpress.org](https://wordpress.org/plugins/cmb2-admin-extension/).
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
 * [CMB2 Example Theme](https://github.com/CMB2/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
@@ -90,6 +94,7 @@ A complete list of all our awesome contributors found here: [github.com/CMB2/CMB
 * [Project Homepage](http://cmb2.io)
 * [Github project page](https://github.com/CMB2/CMB2)
 * [Documentation (GitHub wiki)](https://github.com/CMB2/CMB2/wiki)
+* [Snippet Library](https://github.com/CMB2/CMB2-Snippet-Library/)
 
 **[View CHANGELOG](https://github.com/CMB2/CMB2/blob/master/CHANGELOG.md)**
 
@@ -121,11 +126,109 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
 
+### 2.4.2
+
+#### Bug Fixes
+
+* Do not enqueue/register WordPress code editor JS if there are no `textarea_code` fields registered on the page. Fixes [#1110](https://github.com/CMB2/CMB2/issues/1110).
+* Do not set repeated `wysiwyg` field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138) (again!).
+
+### 2.4.1
+
+#### Bug Fixes
+
+* Do not set repeated field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138).
+
+### 2.4.0
+
+#### Enhancements
+
+* Enable linking options pages via tabbed-navigation. Will output tabbed navigation for options-pages which share the same `'tab_group'` CMB2 box property. [This snippet](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/options-pages-with-tabs-and-submenus.php) demonstrates how to create a top-level menu options page with multiple submenu pages, each with the tabbed navigation. To specify a different tab title than the options-page title, set the `'tab_title'` CMB2 box property. See [#301](https://github.com/CMB2/CMB2/issues/301), [#627](https://github.com/CMB2/CMB2/issues/627).
+* Complete the `zh-CN` translation. Props [@uicestone](https://github.com/uicestone) ([#1089](https://github.com/CMB2/CMB2/issues/1089)).
+* Update the `nl_NL` translation. Props [@tammohaannl](https://github.com/tammohaannl) ([#1101](https://github.com/CMB2/CMB2/issues/1101)).
+* Better display for white over transparent images (e.g. logos) by using a checkered background for images. ([#1103](https://github.com/CMB2/CMB2/issues/1103))
+* Ability to disable the options [autoload parameter](https://codex.wordpress.org/Function_Reference/add_option#Parameters) via filter (`"cmb2_should_autoload_{$options_key}"`) or via a box parameter for `'options-page'` box registrations (`'autoload' => false,`). ([#1093](https://github.com/CMB2/CMB2/issues/1093))
+* `'textarea_code'` field type now uses CodeMirror that is [used by WordPress](https://make.wordpress.org/core/2017/10/22/code-editing-improvements-in-wordpress-4-9/) ([#1096](https://github.com/CMB2/CMB2/issues/1096)). A field can opt-out to return to the previous behavior by specifying an `'options'` parameter:
+`'options' => array( 'disable_codemirror' => true )`
+	As with the other javascript-enabled fields, the code-editor defaults can be overridden via a `data-codeeditor` attribute. E.g:
+
+	```php
+	'attributes' => array(
+		'data-codeeditor' => json_encode( array(
+			'codemirror' => array(
+				'mode' => 'css',
+			),
+		) ),
+	),
+	```
+* Improve/add comment info banners at top of CMB2 CSS files.
+* Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
+* Improved styles for fields in the new-term form.
+* New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
+
+#### Bug Fixes
+
+* Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
+* Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
+* Repeated fields now use registered field defaults for values. Fixes [#1137](https://github.com/CMB2/CMB2/issues/1137).
+* Fixed the formatting for deprecated messages in the log.
+* Prevent opening of media modal when clicking the file "Download" link. Fixes [#1130](https://github.com/CMB2/CMB2/issues/1130).
+
+### 2.3.0
+
+#### Enhancements
+
+* Updated Italian translation. Props [@Mte90](https://github.com/Mte90) ([#1067](https://github.com/CMB2/CMB2/issues/1067)).
+* Starting with this release, we are fully switching to the more communicative and standard [Semantic Versioning](https://semver.org/). ([#1061](https://github.com/CMB2/CMB2/issues/1061)).
+
+#### Bug Fixes
+
+* Update for compatibility with PHP 7.2 (e.g. fixes `Fatal error: Declaration of CMB2_Type_Colorpicker::render() must be compatible with CMB2_Type_Text::render($args = Array)...`). ([#1070](https://github.com/CMB2/CMB2/issues/1070), [#1074](https://github.com/CMB2/CMB2/issues/1074), [#1075](https://github.com/CMB2/CMB2/issues/1075)).
+
+### 2.2.6.2
+
+#### Bug Fixes
+
+* Fix another issue (introduced in 2.2.6) with repeatable fields not being able to save additional fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#1059](https://github.com/CMB2/CMB2/pull/1059), [#1058](https://github.com/CMB2/CMB2/issues/1058)).
+* Only dequeue `jw-cmb2-rgba-picker-js` script (and enqueue our `wp-color-picker-alpha`) if it is actually found.
+
+### 2.2.6.1
+
+#### Enhancements
+* Merge in the [CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) field type functionality to the CMB2 colopicker field type. Adds the ability to add an alpha (transparency) slider to the colorpicker by adding the `'alpha'` option [to the field options array](https://github.com/CMB2/CMB2/blob/6fce2e7ba8f41345a23bc2064e30433bdb11c16c/example-functions.php#L263-L265). Thank you to [JayWood](https://github.com/JayWood) for his work on his custom field type.
+
+#### Bug Fixes
+
+* Fix issue (introduced in 2.2.6) with complex fields set as repeatable not being able to save additional fields. Fixes [#1054](https://github.com/CMB2/CMB2/issues/1054).
+
+### 2.2.6
+
+#### Enhancements
+
+* Move the fetching of group label and description to _after_ calling `'before_group'` parameter.
+* Allow using the `'render_row_cb'` param for group fields. Fixes [#1041](https://github.com/CMB2/CMB2/issues/1041).
+* Allow resetting cached CMB2 field objects (new 3rd parameter to `CMB2::get_field()`).
+* Allow resetting cached callback results (`CMB2_Base::unset_param_callback_cache()`).
+* Persian translation provided by [@reza-irdev](https://github.com/reza-irdev) ([#1046](https://github.com/CMB2/CMB2/issues/1046)).
+* Added a `'message_cb'` box property, which allows defining a custom callback for adding options-save messages on `options-page` boxes.
+* Updated many the oembed-related unit tests to more reliably test the relevant parts, and not so much the actual success of the WordPress functions.
+* Updated travis config to Install PHP5.2/5.3 on trusty for unit tests. Stolen from [gutenberg/pull/2049](https://github.com/WordPress/gutenberg/pull/2049). Intended to compensate for Travis removing support for PHP 5.2/5.3.
+
+#### Bug Fixes
+
+* Ensure `'file'` field type ID is removed from the database if the `'file'` field type's value is empty ([Support thread](https://wordpress.org/support/topic/bug-field-of-type-file-does-not-delete-postmeta-properly/)).
+* Fix JS errors when `user_can_richedit()` is false ("Disable the visual editor when writing" user option is checked, or various unsupported browsers). See [#1031](https://github.com/CMB2/CMB2/pull/1031).
+* Fix issue where some European date formats (e.g. `F j, Y`) would not properly translate into jQuery UI date formats. [Support thread](https://wordpress.org/support/topic/using-wordpresss-date-time-format-settings)
+* Fix repeating fields within repeating groups having the values/indexes incorrectly associated. Props [@daggerhart](https://github.com/daggerhart) ([#1047](https://github.com/CMB2/CMB2/pull/1047)). Fixes [#1035](https://github.com/CMB2/CMB2/issues/1035), [#348](https://github.com/CMB2/CMB2/issues/348).
+* Fixed multiple update messages on settings pages when CMB2 option pages were registered ([#1049](https://github.com/CMB2/CMB2/issues/1049)).
+* Fix issue where using multiple oembed fields could cause incorrectly cached arguments to be used.
+* Fix bug where `'select_all_button' => false` was not working for `'taxonomy_multicheck'` field type ([#1005](https://github.com/CMB2/CMB2/issues/1005)).
+
 ### 2.2.5.3
 
 #### Enhancements
 
-* Update to instead initate CMB2 hookup via "cmb2_init_hookup_{$cmb_id}" hook. Allows plugins to unhook/rehook/etc.
+* Update to instead initate CMB2 hookup via `"cmb2_init_hookup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 
 #### Bug Fixes
 
@@ -756,76 +859,50 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.2.5.3
+### 2.4.2
+
+#### Bug Fixes
+
+* Do not enqueue/register WordPress code editor JS if there are no `textarea_code` fields registered on the page. Fixes [#1110](https://github.com/CMB2/CMB2/issues/1110).
+* Do not set repeated `wysiwyg` field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138) (again!).
+
+### 2.4.1
+
+#### Bug Fixes
+
+* Do not set repeated field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138).
+
+### 2.4.0
 
 #### Enhancements
 
-* Update to instead initate CMB2 hookup via "cmb2_init_hookup_{$cmb_id}" hook. Allows plugins to unhook/rehook/etc.
+* Enable linking options pages via tabbed-navigation. Will output tabbed navigation for options-pages which share the same `'tab_group'` CMB2 box property. [This snippet](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/options-and-settings-pages/options-pages-with-tabs-and-submenus.php) demonstrates how to create a top-level menu options page with multiple submenu pages, each with the tabbed navigation. To specify a different tab title than the options-page title, set the `'tab_title'` CMB2 box property. See [#301](https://github.com/CMB2/CMB2/issues/301), [#627](https://github.com/CMB2/CMB2/issues/627).
+* Complete the `zh-CN` translation. Props [@uicestone](https://github.com/uicestone) ([#1089](https://github.com/CMB2/CMB2/issues/1089)).
+* Update the `nl_NL` translation. Props [@tammohaannl](https://github.com/tammohaannl) ([#1101](https://github.com/CMB2/CMB2/issues/1101)).
+* Better display for white over transparent images (e.g. logos) by using a checkered background for images. ([#1103](https://github.com/CMB2/CMB2/issues/1103))
+* Ability to disable the options [autoload parameter](https://codex.wordpress.org/Function_Reference/add_option#Parameters) via filter (`"cmb2_should_autoload_{$options_key}"`) or via a box parameter for `'options-page'` box registrations (`'autoload' => false,`). ([#1093](https://github.com/CMB2/CMB2/issues/1093))
+* `'textarea_code'` field type now uses CodeMirror that is [used by WordPress](https://make.wordpress.org/core/2017/10/22/code-editing-improvements-in-wordpress-4-9/) ([#1096](https://github.com/CMB2/CMB2/issues/1096)). A field can opt-out to return to the previous behavior by specifying an `'options'` parameter:
+`'options' => array( 'disable_codemirror' => true )`
+	As with the other javascript-enabled fields, the code-editor defaults can be overridden via a `data-codeeditor` attribute. E.g:
+
+	```php
+	'attributes' => array(
+		'data-codeeditor' => json_encode( array(
+			'codemirror' => array(
+				'mode' => 'css',
+			),
+		) ),
+	),
+	```
+* Improve/add comment info banners at top of CMB2 CSS files.
+* Added `resetBoxes`/`resetBox` Javascript methods for resetting CMB2 box forms.
+* Improved styles for fields in the new-term form.
+* New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
 
 #### Bug Fixes
 
-* Spelling/Grammar fixes. Props [@garrett-eclipse](https://github.com/garrett-eclipse) ([#1012](https://github.com/CMB2/CMB2/pull/1012)).
-* Fix "PHP Strict Standards: Static function should not be abstract" notice.
-* Add `CMB2_Utils::normalize_if_numeric()` to address problems when using floats as select/radio values. Fixes [#869](https://github.com/CMB2/CMB2/issues/869). See [#1013](https://github.com/CMB2/CMB2/pull/1013).
-* Fix issues with apostrophes in money values. (e.g. in Swiss German the thousand separator is an apostrophe). Props [@ocean90](https://github.com/ocean90) ([#1014](https://github.com/CMB2/CMB2/issues/1014), [#1015](https://github.com/CMB2/CMB2/pull/1015)).
-* Provide public access to the `CMB2_Options_Hookup::$option_key` property.
-* Change the updated-settings notice query variable so that WordPress does not auto-add settings notices on top of ours.
-* For settings pages, only output settings errors if WordPress does not do it by default (for sub-pages of `options-general.php`), and if the errors are not disabled via the `'disable_settings_errors'` box property.
-
-### 2.2.5.2
-
-#### Bug Fixes
-
-* Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone.
-* Fix issue in 2.2.5 with options pages not saving when parent_slug was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
-
-### 2.2.5.1
-
-#### Bug Fixes
-
-* Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button.
-
-### 2.2.5 - 2017-08-07
-
-#### Enhancements
-
-* Options pages are now first-class CMB2 citizens, and registering a box to show on an options page will automatically register the menu page and output the form on the page. [See example](https://github.com/CMB2/CMB2/blob/v2.2.5/example-functions.php#L640-L683). (The [snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages) in the snippet library will be updated to reflect this change)
-* Improved Options Page styling. Props [@anhskohbo](https://github.com/anhskohbo) ([#1006](https://github.com/CMB2/CMB2/pull/1006)).
-* Improved cohesive styles for repeatable fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#819](https://github.com/CMB2/CMB2/pull/819)).
-* New field types, `'taxonomy_radio_hierarchical'`, and `'taxonomy_multicheck_hierarchical'`, for displaying taxonomy options in a hierarchical layout. Props to [eriktelepovsky](https://github.com/eriktelepovsky) for the [working code](https://github.com/CMB2/CMB2/issues/640#issuecomment-246938690). ([#640](https://github.com/CMB2/CMB2/issues/640))
-* Removing last repeat item row (and repeat group row) is now somewhat allowed in that the "remove" button simply resets the last item to empty. Fixes [#312](https://github.com/CMB2/CMB2/issues/312).
-* Enable the additional media library modal filters. Fixes [#873](https://github.com/CMB2/CMB2/issues/873).
-* Sanitize the attributes added via the `cmb2_group_wrap_attributes` filter.
-* New field parameter, `'query_args'`, which can be used by the `'taxonomy_*'` fields. Provides ability to override the arguments passed to `get_terms()`.
-* The `cmb2_can_save` filter now passes the CMB2 object as the 2nd parameter. Props [@Arno33](https://github.com/Arno33) ([#994](https://github.com/CMB2/CMB2/pull/994)).
-* Update the file field type to work properly within a custom field context by allowing the passing of override arguments to `CMB2_Types::file()` method.
-* Many WordPress Code Standards improvements/updates. Props [@bradp](https://github.com/bradp)
-* Include absolute paths when including the core php files. Props [@anhskohbo](https://github.com/anhskohbo) ([#998](https://github.com/CMB2/CMB2/pull/998)).
-* Change language throught to reflect CMB2's move to its own organization.
-* Break `CMB2_Field:options()` method apart to allow re-setting options from field params. Related: [reaktivstudios/cmb2-flexible-content/pull/8](https://github.com/reaktivstudios/cmb2-flexible-content/pull/8).
-* New `CMB2:box_types()` method for getting the array of registered `'object_types'` for a box. Ensures the return is an array.
-* Improved inline hooks documentation.
-* Updated several CMB2 methods to return the CMB2 object (for method chaining). Methods include:
-	* `CMB2::show_form()`
-	* `CMB2::render_form_open()`
-	* `CMB2::render_form_close()`
-	* `CMB2::render_group_row()`
-	* `CMB2::render_hidden_fields()`
-	* `CMB2::save_fields()`
-	* `CMB2::process_fields()`
-	* `CMB2::process_field()`
-	* `CMB2::pre_process()`
-	* `CMB2::after_save()`
-	* `CMB2::add_fields()`
-
-#### Bug Fixes
-
-* Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
-* Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
-* Correct the before/after form hooks order. For more details see ([#954](https://github.com/CMB2/CMB2/pull/954)).
-* Fix regression with custom fields not properly repeating. Props [@desrosj](https://github.com/desrosj) ([#969](https://github.com/CMB2/CMB2/pull/969)). Fixes [#901](https://github.com/CMB2/CMB2/issues/901).
-* Fix "Illegal string offset" notices when `CMB2_Option` methods are called when the option value is empty, as well as additional unit tests for the `CMB2_Option` class. Props [@anhskohbo](https://github.com/anhskohbo) ([#993](https://github.com/CMB2/CMB2/pull/993)).
-* Fix bug where select fields or checkbox fields occasionally would retain previous group's value when adding new groups. Fixes [#853](https://github.com/CMB2/CMB2/issues/853).
-* Fix JS to prevent meta keys with `|` or `/` from breaking file fields. Props [@lipemat](https://github.com/lipemat) ([#1003](https://github.com/CMB2/CMB2/pull/1003)).
-* Fix jQuery Migrate's `jQuery.fn.attr('value', val) no longer sets properties` warning.
-* Fix issue with CMB2 being too aggressive with stripping slashes from values. Fixes [#981](https://github.com/CMB2/CMB2/issues/981).
+* Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
+* Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
+* Repeated fields now use registered field defaults for values. Fixes [#1137](https://github.com/CMB2/CMB2/issues/1137).
+* Fixed the formatting for deprecated messages in the log.
+* Prevent opening of media modal when clicking the file "Download" link. Fixes [#1130](https://github.com/CMB2/CMB2/issues/1130).

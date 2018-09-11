@@ -46,20 +46,20 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
-	public function expected_youtube_oembed_results( $args ) {
-		if ( $this->is_connected() ) {
-			$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
-			return $this->expected_oembed_success_results( $args );
-		}
-
-		return $this->no_connection_oembed_result( $args['url'] );
-	}
-
-	public function expected_oembed_success_results( $args ) {
+	protected function oembed_success_result( $args ) {
 		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . esc_html__( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
-	public function no_connection_oembed_result( $url ) {
+	protected function oembed_success_result_verifiers( $args ) {
+		$verifiers             = $args['oembed_result'];
+		$args['oembed_result'] = 'SPLIT';
+		return array_merge(
+			$verifiers,
+			explode( 'SPLIT', $this->oembed_success_result( $args ) )
+		);
+	}
+
+	protected function oembed_no_connection_result( $url ) {
 		global $wp_embed;
 		return sprintf(
 			'<p class="ui-state-error-text">%s</p>',
@@ -72,13 +72,34 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		);
 	}
 
-	public function assertOEmbedResult( $args ) {
-		$possibilities = array(
-			$this->normalize_http_string( $this->expected_oembed_success_results( $args ) ),
-			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
-		);
+	protected function oembed_no_connection_result_verifiers( $url ) {
+		return array( $this->oembed_no_connection_result( $url ) );
+	}
 
+	public function assertOEmbedResult( $args ) {
 		$actual = $this->normalize_http_string( cmb2_ajax()->get_oembed( $args ) );
+
+		if ( isset( $args['result_verifiers'] ) || is_array( $args['oembed_result'] ) ) {
+			if ( empty( $args['result_verifiers']['connected'] ) ) {
+				$args['result_verifiers']['connected'] = $this->oembed_success_result_verifiers( $args );
+			}
+
+			if ( empty( $args['result_verifiers']['no_connection'] ) ) {
+				$args['result_verifiers']['no_connection'] = $this->oembed_no_connection_result_verifiers( $args['url'] );
+			}
+
+			$verifiers = $args['result_verifiers'];
+			$this->assertVerifiersMatch( $verifiers, $actual );
+		} else {
+			$this->assertOEmbedResultString( $args, $actual );
+		}
+	}
+
+	protected function assertOEmbedResultString( $args, $actual ) {
+		$possibilities = array(
+			$this->normalize_http_string( $this->oembed_success_result( $args ) ),
+			$this->normalize_http_string( $this->oembed_no_connection_result( $args['url'] ) ),
+		);
 
 		$results = array();
 		foreach ( $possibilities as $key => $expected ) {
@@ -93,6 +114,49 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			$this->assertEquals( $possibilities[0], $actual );
 		} else {
 			$this->assertEquals( $possibilities[1], $actual );
+		}
+	}
+
+	protected function assertVerifiersMatch( $result_verifiers, $actual ) {
+		$failed = array();
+
+		$possibilities = array(
+			'connected' => array_map( array( $this, 'normalize_http_string' ), $result_verifiers['connected'] ),
+		);
+
+		if ( ! empty( $result_verifiers['no_connection'] ) ) {
+			$possibilities['no_connection'] = array_map( array( $this, 'normalize_http_string' ), $result_verifiers['no_connection'] );
+		}
+
+		$actual = $this->normalize_http_string( $actual );
+
+		foreach ( $possibilities as $key => $verifiers ) {
+			foreach ( $verifiers as $key2 => $expected ) {
+				if ( false === strpos( $actual, $expected ) ) {
+					$failed[ $key ][ $key2 ] = $expected;
+				}
+			}
+		}
+
+		$failed_test = ! empty( $failed['connected'] );
+		if ( ! empty( $result_verifiers['no_connection'] ) ) {
+			$failed_test = $failed_test && ! empty( $failed['no_connection'] );
+		}
+
+		if ( $failed_test ) {
+			$msg = "\nThese verifiers are missing:\n";
+			foreach ( $failed as $key => $fails ) {
+				foreach ( $fails as $key2 => $fail ) {
+					$msg .= "\n$key - $key2:\n$fail\n";
+				}
+			}
+
+			$msg .= "\nin:\n$actual\n\n";
+			$this->assertTrue( false, $msg );
+		} elseif ( empty( $failed['connected'] ) ) {
+			$this->assertTrue( true );
+		} else {
+			$this->assertTrue( empty( $failed['no_connection'] ) );
 		}
 	}
 

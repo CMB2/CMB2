@@ -37,6 +37,14 @@ class CMB2_JS {
 	);
 
 	/**
+	 * Array of CMB2 fields model data for JS.
+	 *
+	 * @var   array
+	 * @since 2.4.0
+	 */
+	protected static $fields = array();
+
+	/**
 	 * Add a dependency to the array of CMB2 JS dependencies
 	 *
 	 * @since 2.0.7
@@ -49,13 +57,27 @@ class CMB2_JS {
 	}
 
 	/**
+	 * Add field model data to the array for JS.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param CMB2_Field $field Field object.
+	 */
+	public static function add_field_data( CMB2_Field $field ) {
+		$hash = $field->hash_id();
+		if ( ! isset( self::$fields[ $hash ] ) ) {
+			self::$fields[ $hash ] = $field->js_data();
+		}
+	}
+
+	/**
 	 * Enqueue the CMB2 JS
 	 *
 	 * @since  2.0.7
 	 */
 	public static function enqueue() {
 		// Filter required script dependencies
-		$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
+		$dependencies = self::$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
 
 		// Only use minified files if SCRIPT_DEBUG is off
 		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
@@ -63,8 +85,14 @@ class CMB2_JS {
 		$min = $debug ? '' : '.min';
 
 		// if colorpicker
-		if ( ! is_admin() && isset( $dependencies['wp-color-picker'] ) ) {
-			self::colorpicker_frontend();
+		if ( isset( $dependencies['wp-color-picker'] ) ) {
+			if ( ! is_admin() ) {
+				self::colorpicker_frontend();
+			}
+
+			if ( isset( $dependencies['wp-color-picker-alpha'] ) ) {
+				self::register_colorpicker_alpha();
+			}
 		}
 
 		// if file/file_list
@@ -75,7 +103,7 @@ class CMB2_JS {
 
 		// if timepicker
 		if ( isset( $dependencies['jquery-ui-datetimepicker'] ) ) {
-			wp_register_script( 'jquery-ui-datetimepicker', CMB2_Utils::url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), CMB2_VERSION );
+			self::register_datetimepicker();
 		}
 
 		// if cmb2-wysiwyg
@@ -93,6 +121,36 @@ class CMB2_JS {
 		self::localize( $debug );
 
 		do_action( 'cmb2_footer_enqueue' );
+	}
+
+	/**
+	 * Register or enqueue the wp-color-picker-alpha script.
+	 *
+	 * @since  2.2.7
+	 *
+	 * @param  boolean $enqueue
+	 *
+	 * @return void
+	 */
+	public static function register_colorpicker_alpha( $enqueue = false ) {
+		// Only use minified files if SCRIPT_DEBUG is off
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
+		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
+	}
+
+	/**
+	 * Register or enqueue the jquery-ui-datetimepicker script.
+	 *
+	 * @since  2.2.7
+	 *
+	 * @param  boolean $enqueue
+	 *
+	 * @return void
+	 */
+	public static function register_datetimepicker( $enqueue = false ) {
+		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
+		$func( 'jquery-ui-datetimepicker', CMB2_Utils::url( 'js/jquery-ui-timepicker-addon.min.js' ), array( 'jquery-ui-slider' ), '1.5.0' );
 	}
 
 	/**
@@ -124,6 +182,7 @@ class CMB2_JS {
 
 		$localized = true;
 		$l10n = array(
+			'fields'            => self::$fields,
 			'ajax_nonce'        => wp_create_nonce( 'ajax_nonce' ),
 			'ajaxurl'           => admin_url( '/admin-ajax.php' ),
 			'script_debug'      => $debug,
@@ -131,6 +190,7 @@ class CMB2_JS {
 			'down_arrow_class'  => 'dashicons dashicons-arrow-down-alt2',
 			'user_can_richedit' => user_can_richedit(),
 			'defaults'          => array(
+				'code_editor'  => false,
 				'color_picker' => false,
 				'date_picker'  => array(
 					'changeMonth'     => true,
@@ -170,6 +230,12 @@ class CMB2_JS {
 				'check_toggle' => esc_html__( 'Select / Deselect All', 'cmb2' ),
 			),
 		);
+
+		if ( isset( self::$dependencies['code-editor'] ) && function_exists( 'wp_enqueue_code_editor' ) ) {
+			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
+				'type' => 'text/html',
+			) );
+		}
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
 	}

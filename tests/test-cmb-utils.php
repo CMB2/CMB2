@@ -285,6 +285,36 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 	}
 
+	/**
+	 * @group failing
+	 *
+	 */
+	public function test_php_to_js_dateformat() {
+		$tests = array(
+			array( 'l F j, Y', 'DD MM d, yy' ),
+			array( 'Y-m-d', 'yy-mm-dd' ),
+			array( 'm-d-Y', 'mm-dd-yy' ),
+			array( 'F', 'MM' ),
+			array( 'l', 'DD' ),
+			array( 'F', 'MM' ),
+			array( 'l jS \of F Y h:i:s A', 'DD dS &#39;o&#39;f MM yy hh:mm:ss TT' ),
+			array( 'm.d.y', 'mm.dd.y' ),
+			array( 'j, n, Y', 'd, m, yy' ),
+			array( 'Ymd', 'yymmdd' ),
+			// @todo Fix these:
+			array( 'j-m-y, \it \is w Day', 'd-mm-y, &#39;i&#39;t &#39;i&#39;ss w Dtty' ),
+			array( '\i\t \i\s \t\h\e jS \d\a\y.', '&#39;it&#39; &#39;is&#39; &#39;the&#39; dS &#39;day&#39;.' ),
+		);
+		foreach ( $tests as $index => $test ) {
+			$this->assertSame(
+				$test[1],
+				CMB2_Utils::php_to_js_dateformat( $test[0] ),
+				"Test index: $index"
+			);
+		}
+
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {

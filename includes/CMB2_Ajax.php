@@ -117,7 +117,7 @@ class CMB2_Ajax {
 
 		$args = wp_parse_args( $args, array(
 			'object_type' => 'post',
-			'oembed_args' => $this->embed_args,
+			'oembed_args' => array(),
 			'field_id'    => false,
 			'wp_error'    => false,
 		) );
