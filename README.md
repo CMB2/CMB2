@@ -91,7 +91,7 @@ If you are looking to provide language translation files, Please do so via [Word
 * [CMB2 Field Type: Markdown](https://github.com/Rekenna/cmb2-markdown) by [Rekenna](https://github.com/Rekenna): This plugin adds a new CMB2 field type "CMB2 Markdown" where you can type in markdown and view a live preview of the results or convert to html with a button.
 * [CMB2 Field Type: Switch Button](https://github.com/themevan/CMB2-Switch-Button) by [themevan](https://github.com/themevan): This plugin adds a Custom Switch Button field type for CMB2.
 
-* [CMB2 Field Type: select_plus](https://github.com/manzoorwanijk/cmb2-select-plus2) from [manzoorwanijk](https://github.com/manzoorwanijk/): Custom select field type which supports `optgroup`
+* [CMB2 Field Type: select_plus](https://github.com/manzoorwanijk/cmb2-select-plus) from [manzoorwanijk](https://github.com/manzoorwanijk/): Custom select field type which supports `optgroup`
 
 	> The field acts much like the default `select` field. However, it adds the support for `optgroup` and saving of values with `multiple` attribute.
 
