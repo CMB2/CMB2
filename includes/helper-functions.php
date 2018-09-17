@@ -41,7 +41,11 @@ function cmb2_autoload_classes( $class_name ) {
 		$path .= '/rest-api';
 	}
 
-	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
+	$path = cmb2_dir( "$path/{$class_name}.php" );
+
+	if ( file_exists( $path ) ) {
+		include_once( $path );
+	}
 }
 
 /**
