@@ -450,9 +450,9 @@ class CMB2_Utils {
 
 	/**
 	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
-	 * It will work with only with the following subset ot date() options:
+	 * It will work only with the following subset of date() options:
 	 *
-	 *  d, l, j, z, m, F, n, y, and Y.
+	 * Formats: d, l, j, z, m, F, n, y, and Y.
 	 *
 	 * A slight effort is made to deal with escaped characters.
 	 *
@@ -460,7 +460,7 @@ class CMB2_Utils {
 	 * bring even more translation troubles.
 	 *
 	 * @since 2.2.0
-	 * @param string $format php date format
+	 * @param string $format PHP date format.
 	 * @return string reformatted string
 	 */
 	public static function php_to_js_dateformat( $format ) {
