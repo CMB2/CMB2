@@ -576,6 +576,11 @@ class CMB2_Types {
 	public function text_time( $args = array() ) {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Time', $args )->render();
 	}
+	
+	public function time( $args = array() ) {
+		$this->type = new CMB2_Type_Time( $this, $args );
+		return $this->type->render();
+	}
 
 	public function text_datetime_timestamp( $args = array() ) {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text_Datetime_Timestamp', $args )->render();

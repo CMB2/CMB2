@@ -1,0 +1,56 @@
+<?php
+/**
+ * CMB time field type
+ *
+ * @since  2.2.3.2
+ *
+ * @category  WordPress_Plugin
+ * @package   CMB2
+ * @author    WebDevStudios
+ * @license   GPL-2.0+
+ * @link      http://webdevstudios.com
+ */
+class CMB2_Type_Text extends CMB2_Type_Base {
+	/**
+	 * The type of field
+	 *
+	 * @var string
+	 */
+	public $type = 'input';
+	/**
+	 * Constructor
+	 *
+	 * @since 2.2.2
+	 *
+	 * @param CMB2_Types $types
+	 * @param array      $args
+	 */
+	public function __construct( CMB2_Types $types, $args = array(), $type = '' ) {
+		parent::__construct( $types, $args );
+		$this->type = $type ? $type : $this->type;
+	}
+	/**
+	 * Handles outputting an 'input' element
+	 * @since  1.1.0
+	 * @param  array  $args Override arguments
+	 * @return string       Form input element
+	 */
+	public function render( $args = array() ) {
+		$args = empty( $args ) ? $this->args : $args;
+		$a = $this->parse_args( $this->type, array(
+			'type'            => 'time',
+			'class'           => 'cmb2_time',
+			'name'            => $this->_name(),
+			'id'              => $this->_id(),
+			'value'           => $this->field->escaped_value(),
+			'desc'            => $this->_desc( true ),
+			'js_dependencies' => array(),
+		), $args );
+		if ( ! empty( $a['js_dependencies'] ) ) {
+			$this->field->add_js_dependencies( $a['js_dependencies'] );
+		}
+		return $this->rendered(
+			sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc', 'js_dependencies' ) ), $a['desc'] )
+		);
+	}
+}

@@ -59,6 +59,9 @@ class CMB2_Field_Display {
 			case 'text_time':
 				$type = new CMB2_Display_Text_Time( $field );
 				break;
+			case 'time':
+				$type = new CMB2_Display_Time( $field );
+				break;
 			case 'text_date':
 			case 'text_date_timestamp':
 			case 'text_datetime_timestamp':
