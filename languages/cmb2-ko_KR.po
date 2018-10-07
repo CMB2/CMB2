@@ -29,7 +29,7 @@ msgstr ""
 
 #: example-functions.php:130 example-functions.php:436
 msgid "Test Text"
-msgstr ""
+msgstr "테스트 텍스트"
 
 #: example-functions.php:131 example-functions.php:144
 #: example-functions.php:157 example-functions.php:165
@@ -51,192 +51,192 @@ msgstr ""
 #: example-functions.php:613 example-functions.php:650
 #: tests/test-cmb-field.php:267
 msgid "field description (optional)"
-msgstr ""
+msgstr "필드 요약(옵션)"
 
 #: example-functions.php:143
 msgid "Test Text Small"
-msgstr ""
+msgstr "테스트 텍스트 작은창"
 
 #: example-functions.php:156
 msgid "Test Text Medium"
-msgstr ""
+msgstr "테스트 텍스트 중간창"
 
 #: example-functions.php:164
 msgid "Custom Rendered Field"
-msgstr ""
+msgstr "커스텀 필드"
 
 #: example-functions.php:172
 msgid "Website URL"
-msgstr ""
+msgstr "웹사이트"
 
 #: example-functions.php:181
 msgid "Test Text Email"
-msgstr ""
+msgstr "테스트 텍스트 이메일"
 
 #: example-functions.php:189
 msgid "Test Time"
-msgstr ""
+msgstr "테스트 시간"
 
 #: example-functions.php:197 example-functions.php:198
 msgid "Time zone"
-msgstr ""
+msgstr "타임존"
 
 #: example-functions.php:204
 msgid "Test Date Picker"
-msgstr ""
+msgstr "테스트 날짜 선택"
 
 #: example-functions.php:212
 msgid "Test Date Picker (UNIX timestamp)"
-msgstr ""
+msgstr "테스트 날짜 선택(유닉스 시간)"
 
 #: example-functions.php:220
 msgid "Test Date/Time Picker Combo (UNIX timestamp)"
-msgstr ""
+msgstr "테스트 날짜/시간 선택 - 콤보(유닉스 시간)"
 
 #: example-functions.php:237
 msgid "Test Money"
-msgstr ""
+msgstr "테스트 돈"
 
 #: example-functions.php:246
 msgid "Test Color Picker"
-msgstr ""
+msgstr "테스트 색상 선택"
 
 #: example-functions.php:259
 msgid "Test Text Area"
-msgstr ""
+msgstr "테스트 텍스트칸 창"
 
 #: example-functions.php:266
 msgid "Test Text Area Small"
-msgstr ""
+msgstr "테스트 텍스트칸 작은창"
 
 #: example-functions.php:273
 msgid "Test Text Area for Code"
-msgstr ""
+msgstr "테스트 텍스트창 코드공간"
 
 #: example-functions.php:280
 msgid "Test Title Weeeee"
-msgstr ""
+msgstr "테스트 제목 워~워~"
 
 #: example-functions.php:281
 msgid "This is a title description"
-msgstr ""
+msgstr "이건 제목 요약"
 
 #: example-functions.php:287
 msgid "Test Select"
-msgstr ""
+msgstr "테스트 선택"
 
 #: example-functions.php:293 example-functions.php:306
 #: example-functions.php:318
 msgid "Option One"
-msgstr ""
+msgstr "옵션 하나"
 
 #: example-functions.php:294 example-functions.php:307
 #: example-functions.php:319
 msgid "Option Two"
-msgstr ""
+msgstr "옵션 둘"
 
 #: example-functions.php:295 example-functions.php:308
 #: example-functions.php:320
 msgid "Option Three"
-msgstr ""
+msgstr "옵션 셋"
 
 #: example-functions.php:300
 msgid "Test Radio inline"
-msgstr ""
+msgstr "테스트 라디오버튼 인라인"
 
 #: example-functions.php:313
 msgid "Test Radio"
-msgstr ""
+msgstr "테스트 라디오"
 
 #: example-functions.php:325
 msgid "Test Taxonomy Radio"
-msgstr ""
+msgstr "테스트 분류 버튼"
 
 #: example-functions.php:334
 msgid "Test Taxonomy Select"
-msgstr ""
+msgstr "테스트 분류 선택"
 
 #: example-functions.php:342
 msgid "Test Taxonomy Multi Checkbox"
-msgstr ""
+msgstr "테스트 분류 멀티체크"
 
 #: example-functions.php:351
 msgid "Test Checkbox"
-msgstr ""
+msgstr "테스트 체크박스"
 
 #: example-functions.php:358 tests/test-cmb-field.php:266
 msgid "Test Multi Checkbox"
-msgstr ""
+msgstr "테스트 멀티 체크박스"
 
 #: example-functions.php:364 tests/test-cmb-field.php:272
 msgid "Check One"
-msgstr ""
+msgstr "체크 하나"
 
 #: example-functions.php:365 tests/test-cmb-field.php:273
 msgid "Check Two"
-msgstr ""
+msgstr "체크 둘"
 
 #: example-functions.php:366 tests/test-cmb-field.php:274
 msgid "Check Three"
-msgstr ""
+msgstr "체크 셋"
 
 #: example-functions.php:372
 msgid "Test wysiwyg"
-msgstr ""
+msgstr "테스트 비쥬얼에디트"
 
 #: example-functions.php:380
 msgid "Test Image"
-msgstr ""
+msgstr "테스트 이미지"
 
 #: example-functions.php:381
 msgid "Upload an image or enter a URL."
-msgstr ""
+msgstr "이미지를 업로드 하거나 이미지의 URL을 넣으세요."
 
 #: example-functions.php:387
 msgid "Multiple Files"
-msgstr ""
+msgstr "멀티파일"
 
 #: example-functions.php:388
 msgid "Upload or add multiple images/attachments."
-msgstr ""
+msgstr "images/attachments에 다수의 이미지를 추가하거나 업로드 하세요."
 
 #: example-functions.php:395
 msgid "oEmbed"
-msgstr ""
+msgstr "oEmbed"
 
 #: example-functions.php:396
 msgid ""
 "Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
 "href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
-msgstr ""
+msgstr "유튜브, 트위터, 인스타그램 URL 등 지원되는 서비스 목록"
 
 #: example-functions.php:427
 msgid "About Page Metabox"
-msgstr ""
+msgstr "메타박스에 대해"
 
 #: example-functions.php:456
 msgid "Repeating Field Group"
-msgstr ""
+msgstr "필드 그룹 반복"
 
 #: example-functions.php:464
 msgid "Generates reusable form entries"
-msgstr ""
+msgstr "엔트리에서 재사용 가능한 아이템을 생성"
 
 #: example-functions.php:466
 msgid "Entry {#}"
-msgstr ""
+msgstr "엔트리 {#}"
 
 #: example-functions.php:467
 msgid "Add Another Entry"
-msgstr ""
+msgstr "다른 엔트리 추가"
 
 #: example-functions.php:468
 msgid "Remove Entry"
-msgstr ""
+msgstr "엔트리 제거"
 
 #: example-functions.php:481
 msgid "Entry Title"
-msgstr ""
+msgstr "엔트리 제목"
 
 #: example-functions.php:488
 msgid "Description"
@@ -244,95 +244,95 @@ msgstr "설명"
 
 #: example-functions.php:489
 msgid "Write a short description for this entry"
-msgstr ""
+msgstr "이 엔트리에 대한 짧은 요약을 쓰세요."
 
 #: example-functions.php:495
 msgid "Entry Image"
-msgstr ""
+msgstr "엔트리 이미지"
 
 #: example-functions.php:501
 msgid "Image Caption"
-msgstr "이미지 캡션"
+msgstr "이미지 설명"
 
 #: example-functions.php:520
 msgid "User Profile Metabox"
-msgstr ""
+msgstr "사용자 정보 메타박스"
 
 #: example-functions.php:527 example-functions.php:597
 msgid "Extra Info"
-msgstr ""
+msgstr "그밖의 정보"
 
 #: example-functions.php:535
 msgid "Avatar"
-msgstr ""
+msgstr "아마타"
 
 #: example-functions.php:542
 msgid "Facebook URL"
-msgstr ""
+msgstr "페이스북 URL"
 
 #: example-functions.php:549
 msgid "Twitter URL"
-msgstr ""
+msgstr "트위터 URL"
 
 #: example-functions.php:556
 msgid "Google+ URL"
-msgstr ""
+msgstr "구글+ URL"
 
 #: example-functions.php:563
 msgid "Linkedin URL"
-msgstr ""
+msgstr "링크드인 URL"
 
 #: example-functions.php:570
 msgid "User Field"
-msgstr ""
+msgstr "사용자 필드"
 
 #: example-functions.php:590
 msgid "Category Metabox"
-msgstr ""
+msgstr "카테고리 메타박스"
 
 #: example-functions.php:605
 msgid "Term Image"
-msgstr ""
+msgstr "단어 이미지"
 
 #: example-functions.php:612
 msgid "Arbitrary Term Field"
-msgstr ""
+msgstr "임의의 단어 필드"
 
 #: example-functions.php:634
 msgid "Theme Options Metabox"
-msgstr ""
+msgstr "테마옵션 메타막스"
 
 #: example-functions.php:649
 msgid "Site Background Color"
-msgstr ""
+msgstr "사이트 바탕색"
 
 #: includes/CMB2.php:129
 msgid "Metabox configuration is required to have an ID parameter"
-msgstr ""
+msgstr "메타박스 설정은 ID 파라미터가 있어야 합니다."
 
 #: includes/CMB2.php:418
 msgid "Click to toggle"
-msgstr "토글하려면 클릭하세요"
+msgstr "토글을 클릭하세요"
 
 #: includes/CMB2_Ajax.php:71
 msgid "Please Try Again"
-msgstr ""
+msgstr "다시해주세요."
 
 #: includes/CMB2_Ajax.php:173 tests/cmb-tests-base.php:59
 msgid "Remove Embed"
-msgstr ""
+msgstr "Embed 제거"
 
 #: includes/CMB2_Ajax.php:177 tests/cmb-tests-base.php:64
 msgid "No oEmbed Results Found for %s. View more info at"
-msgstr ""
+msgstr "%s에서 아무런 oEmbed도 찾지 못했어요. 자세한 내용은 여기서.. "
 
 #: includes/CMB2_Field.php:1186
 msgid "Add Group"
-msgstr ""
+msgstr "그룹 추가"
 
 #: includes/CMB2_Field.php:1187
 msgid "Remove Group"
-msgstr ""
+msgstr "그룹 제거"
 
 #: includes/CMB2_Field.php:1209 includes/CMB2_Field.php:1213
 #: tests/test-cmb-field.php:229
@@ -341,13 +341,13 @@ msgstr "없음"
 
 #: includes/CMB2_Field.php:1269
 msgid "Sorry, this field does not have a cmb_id specified."
-msgstr ""
+msgstr "죄송합니다. 필드에 cmb_id 가 없어요."
 
 #: includes/CMB2_Field_Display.php:408 includes/CMB2_JS.php:139
 #: includes/types/CMB2_Type_File_Base.php:75 tests/test-cmb-types-base.php:143
 #: tests/test-cmb-types.php:701
 msgid "File:"
-msgstr ""
+msgstr "파일:"
 
 #: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"
@@ -367,25 +367,25 @@ msgstr "현재 색상"
 
 #: includes/CMB2_JS.php:110
 msgid "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
-msgstr ""
+msgstr "일요일, 월요일, 화요일, 수요일, 목요일, 금요일, 토요일"
 
 #: includes/CMB2_JS.php:111
 msgid "Su, Mo, Tu, We, Th, Fr, Sa"
-msgstr ""
+msgstr "일, 월, 화, 수, 목, 금, 토"
 
 #: includes/CMB2_JS.php:112
 msgid "Sun, Mon, Tue, Wed, Thu, Fri, Sat"
-msgstr ""
+msgstr "일, 월, 화, 수, 목, 금, 토"
 
 #: includes/CMB2_JS.php:113
 msgid ""
 "January, February, March, April, May, June, July, August, September, "
 "October, November, December"
-msgstr ""
+msgstr "1월, 2월, 3월, 4월, 5월, 6월, 7월, 8월, 9월, 10월, 11월, 12월"
 
 #: includes/CMB2_JS.php:114
 msgid "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"
-msgstr ""
+msgstr "1월, 2월, 3월, 4월, 5월, 6월, 7월, 8월, 9월, 10월, 11월, 12월"
 
 #: includes/CMB2_JS.php:115
 msgid "Next"
@@ -405,11 +405,11 @@ msgstr "완료"
 
 #: includes/CMB2_JS.php:122
 msgid "Choose Time"
-msgstr ""
+msgstr "시간 선택"
 
 #: includes/CMB2_JS.php:123
 msgid "Time"
-msgstr ""
+msgstr "타임"
 
 #: includes/CMB2_JS.php:124
 msgid "Hour"
@@ -421,19 +421,19 @@ msgstr "분"
 
 #: includes/CMB2_JS.php:126
 msgid "Second"
-msgstr ""
+msgstr "초"
 
 #: includes/CMB2_JS.php:127
 msgid "Now"
-msgstr ""
+msgstr "지금"
 
 #: includes/CMB2_JS.php:135
 msgid "Use this file"
-msgstr ""
+msgstr "이 파일 사용"
 
 #: includes/CMB2_JS.php:136
 msgid "Use these files"
-msgstr ""
+msgstr "이 파일들 사용"
 
 #: includes/CMB2_JS.php:137 includes/types/CMB2_Type_File_Base.php:61
 msgid "Remove Image"
@@ -449,29 +449,29 @@ msgstr "삭제"
 #: includes/CMB2_JS.php:140 includes/types/CMB2_Type_File_Base.php:78
 #: tests/test-cmb-types-base.php:143 tests/test-cmb-types.php:701
 msgid "Download"
-msgstr ""
+msgstr "다운로드"
 
 #: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
-msgstr ""
+msgstr "모두선택 / 모두 선택해제"
 
 #: includes/CMB2_Types.php:194
 msgid "Add Row"
-msgstr ""
+msgstr "줄에 추가"
 
 #: includes/CMB2_hookup.php:145
 msgid ""
 "Term Metadata is a WordPress > 4.4 feature. Please upgrade your WordPress "
 "install."
-msgstr ""
+msgstr "단어 메데이터는 워드프레스 4.4 이상에가 가능해요. 워드프레스를 먼저 업그레이드 하세요."
 
 #: includes/CMB2_hookup.php:149
 msgid "Term metaboxes configuration requires a 'taxonomies' parameter"
-msgstr ""
+msgstr "단어 메타박스 설정은 taxonomies' parameter 가 필요합니다."
 
 #: includes/helper-functions.php:93
 msgid "No oEmbed Results Found for %s. View more info at %s"
-msgstr ""
+msgstr "%s에서 아무런 oEmbed도 찾지 못했어요. 자세한 내용은 여기서.. "
 
 #: includes/helper-functions.php:279
 msgid "Save"
@@ -480,48 +480,48 @@ msgstr "저장하기"
 #: includes/types/CMB2_Type_File.php:36 tests/test-cmb-types.php:683
 #: tests/test-cmb-types.php:701
 msgid "Add or Upload File"
-msgstr ""
+msgstr "파일 추가 혹은 업로드"
 
 #: includes/types/CMB2_Type_File_List.php:36 tests/test-cmb-types.php:639
 #: tests/test-cmb-types.php:663
 msgid "Add or Upload Files"
-msgstr ""
+msgstr "파일들 추가 혹은 업로드"
 
 #: includes/types/CMB2_Type_Taxonomy_Multicheck.php:27
 #: includes/types/CMB2_Type_Taxonomy_Radio.php:25
 msgid "No terms"
-msgstr ""
+msgstr "단어 없음"
 
 #. Plugin Name of the plugin/theme
 msgid "CMB2"
-msgstr ""
+msgstr "CMB2"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/CMB2/CMB2"
-msgstr ""
+msgstr "https://github.com/CMB2/CMB2"
 
 #. Description of the plugin/theme
 msgid ""
 "CMB2 will create metaboxes and forms with custom fields that will blow your "
 "mind."
-msgstr ""
+msgstr "CMB2는 당신이 원하는 메타박스와 커스텀필드 폼을 생성할 것입니다. "
 
 #. Author of the plugin/theme
 msgid "WebDevStudios"
-msgstr ""
+msgstr "WebDevStudios"
 
 #. Author URI of the plugin/theme
 msgid "http://webdevstudios.com"
-msgstr ""
+msgstr "http://webdevstudios.com"
 
 #: includes/CMB2_JS.php:109
 msgctxt "Valid formatDate string for jquery-ui datepicker"
 msgid "mm/dd/yy"
-msgstr ""
+msgstr "yyyy/mm/dd"
 
 #: includes/CMB2_JS.php:129
 msgctxt ""
 "Valid formatting string, as per "
 "http://trentrichardson.com/examples/timepicker/"
 msgid "hh:mm TT"
-msgstr ""
+msgstr "hh:mm TT"
