@@ -264,7 +264,7 @@ msgstr "그밖의 정보"
 
 #: example-functions.php:535
 msgid "Avatar"
-msgstr "아마타"
+msgstr "아바타"
 
 #: example-functions.php:542
 msgid "Facebook URL"
