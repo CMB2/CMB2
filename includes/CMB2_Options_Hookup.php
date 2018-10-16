@@ -190,7 +190,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		$callback = $this->cmb->prop( 'display_cb' );
 		if ( is_callable( $callback ) ) {
-			return $callback( $this );
+			return call_user_func( $callback, $this );
 		}
 
 		$tabs = $this->get_tab_group_tabs();
