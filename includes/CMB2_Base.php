@@ -386,7 +386,7 @@ abstract class CMB2_Base {
 	 */
 	public static function maybe_hook( $val, $hook_name, $hook_function ) {
 		if ( is_callable( $val ) ) {
-			$hook_function( $hook_name, $val, 10, 2 );
+			call_user_func( $hook_function, $hook_name, $val, 10, 2 );
 			return null;
 		}
 
