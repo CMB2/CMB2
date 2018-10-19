@@ -33,7 +33,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 * Constructor
 	 *
 	 * @since 2.0.0
-	 * @param CMB2 $cmb The CMB2 object to hookup
+	 * @param CMB2   $cmb        The CMB2 object to hookup.
+	 * @param string $option_key Option key to use.
 	 */
 	public function __construct( CMB2 $cmb, $option_key ) {
 		$this->cmb = $cmb;
@@ -51,7 +52,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 
 		/**
-		 * for WP < 4.7. Ensure the register_setting function exists.
+		 * For WP < 4.7. Ensure the register_setting function exists.
 		 */
 		if ( ! CMB2_Utils::wp_at_least( '4.7' ) && ! function_exists( 'register_setting' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -114,7 +115,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 		}
 
 		if ( $this->cmb->prop( 'cmb_styles' ) ) {
-			// Include CMB CSS in the head to avoid FOUC
+			// Include CMB CSS in the head to avoid FOUC.
 			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 		}
 
@@ -226,7 +227,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	public function maybe_output_settings_notices() {
 		global $parent_file;
 
-		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php
+		// The settings sub-pages will already have settings_errors() called in wp-admin/options-head.php.
 		if ( 'options-general.php' !== $parent_file ) {
 			settings_errors( "{$this->option_key}-notices" );
 		}
@@ -284,7 +285,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		if (
 			$this->can_save( 'options-page' )
-			// check params
+			// check params.
 			&& isset( $_POST['submit-cmb'], $_POST['action'] )
 			&& $this->option_key === $_POST['action']
 		) {
@@ -301,8 +302,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 
 	/**
-	 * Replaces get_option with get_site_option
+	 * Replaces get_option with get_site_option.
+	 *
 	 * @since 2.2.5
+	 *
+	 * @param mixed $test    Not used.
+	 * @param mixed $default Default value to use.
 	 * @return mixed Value set for the network option.
 	 */
 	public function network_get_override( $test, $default = false ) {
@@ -310,8 +315,12 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	}
 
 	/**
-	 * Replaces update_option with update_site_option
+	 * Replaces update_option with update_site_option.
+	 *
 	 * @since 2.2.5
+	 *
+	 * @param mixed $test         Not used.
+	 * @param mixed $option_value Value to use.
 	 * @return bool Success/Failure
 	 */
 	public function network_update_override( $test, $option_value ) {
@@ -323,8 +332,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	 *
 	 * @since  2.4.0
 	 *
-	 * @param  string $page Page slug
-	 *
+	 * @param  string $page Page slug.
 	 * @return boolean
 	 */
 	public static function is_page( $page ) {
@@ -334,7 +342,8 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 	/**
 	 * Magic getter for our object.
 	 *
-	 * @param string $field
+	 * @param string $field Property to retrieve.
+	 *
 	 * @throws Exception Throws an exception if the field is invalid.
 	 * @return mixed
 	 */
