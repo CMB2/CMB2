@@ -3,6 +3,7 @@ Contributors:      jtsternberg, webdevstudios, tw2113
 Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
+Requires PHP:      5.2
 Tested up to:      4.9.6
 Stable tag:        2.4.2
 License:           GPLv2 or later
