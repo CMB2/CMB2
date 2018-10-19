@@ -59,42 +59,42 @@ class CMB2 extends CMB2_Base {
 	 * @since 1.0.1
 	 */
 	protected $mb_defaults = array(
-		'id'               => '',
-		'title'            => '',
+		'id'                      => '',
+		'title'                   => '',
 		// Post type slug, or 'user', 'term', 'comment', or 'options-page'.
-		'object_types'     => array(),
+		'object_types'            => array(),
 
-		 /*
-		  * The context within the screen where the boxes should display. Available contexts vary
-		  * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
-		  *
-		  * For placement in locations outside of a metabox, other options include:
-		  * 'form_top', 'before_permalink', 'after_title', 'after_editor'
-		  *
-		  * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
+		/**
+		 * The context within the screen where the boxes should display. Available contexts vary
+		 * from screen to screen. Post edit screen contexts include 'normal', 'side', and 'advanced'.
+		 *
+		 * For placement in locations outside of a metabox, other options include:
+		 * 'form_top', 'before_permalink', 'after_title', 'after_editor'
+		 *
+		 * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
 		 */
-		'context'          => 'normal',
-		'priority'         => 'high',
-		'show_names'       => true, // Show field names on the left.
-		'show_on_cb'       => null, // Callback to determine if metabox should display.
-		'show_on'          => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'.
-		'cmb_styles'       => true, // Include CMB2 stylesheet.
-		'enqueue_js'       => true, // Include CMB2 JS.
-		'fields'           => array(),
+		'context'                 => 'normal',
+		'priority'                => 'high',
+		'show_names'              => true, // Show field names on the left.
+		'show_on_cb'              => null, // Callback to determine if metabox should display.
+		'show_on'                 => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'.
+		'cmb_styles'              => true, // Include CMB2 stylesheet.
+		'enqueue_js'              => true, // Include CMB2 JS.
+		'fields'                  => array(),
 
-		/*
+		/**
 		 * Handles hooking CMB2 forms/metaboxes into the post/attachement/user/options-page screens
- 		 * and handles hooking in and saving those fields.
+		 * and handles hooking in and saving those fields.
 		 */
-		'hookup'           => true,
-		'save_fields'      => true, // Will not save during hookup if false.
-		'closed'           => false, // Default metabox to being closed.
-		'taxonomies'       => array(),
-		'new_user_section' => 'add-new-user', // or 'add-existing-user'.
-		'new_term_section' => true,
-		'show_in_rest'     => false,
-		'classes'          => null, // Optionally add classes to the CMB2 wrapper
-		'classes_cb'       => '', // Optionally add classes to the CMB2 wrapper (via a callback)
+		'hookup'                  => true,
+		'save_fields'             => true, // Will not save during hookup if false.
+		'closed'                  => false, // Default metabox to being closed.
+		'taxonomies'              => array(),
+		'new_user_section'        => 'add-new-user', // or 'add-existing-user'.
+		'new_term_section'        => true,
+		'show_in_rest'            => false,
+		'classes'                 => null, // Optionally add classes to the CMB2 wrapper.
+		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback).
 
 		/*
 		 * The following parameter is for post alternate-context metaboxes only.
@@ -102,28 +102,28 @@ class CMB2 extends CMB2_Base {
 		 * To output the fields 'naked' (without a postbox wrapper/style), then
 		 * add a `'remove_box_wrap' => true` to your metabox registration array.
 		 */
-		'remove_box_wrap' => false,
+		'remove_box_wrap'         => false,
 
 		/*
 		 * The following parameters are for options-page metaboxes,
 		 * and several are passed along to add_menu_page()/add_submenu_page()
 		 */
 
-		// 'menu_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'message_cb'       => '', // Optionally define the options-save message (via a callback).
-		'option_key'       => '', // The actual option key and admin menu page slug.
-		'parent_slug'      => '', // Used as first param in add_submenu_page().
-		'capability'       => 'manage_options', // Cap required to view options-page.
-		'icon_url'         => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'position'         => null, // Menu position. Only applicable if 'parent_slug' is left empty.
+		// 'menu_title'           => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		'message_cb'              => '', // Optionally define the options-save message (via a callback).
+		'option_key'              => '', // The actual option key and admin menu page slug.
+		'parent_slug'             => '', // Used as first param in add_submenu_page().
+		'capability'              => 'manage_options', // Cap required to view options-page.
+		'icon_url'                => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		'position'                => null, // Menu position. Only applicable if 'parent_slug' is left empty.
 
-		'admin_menu_hook'  => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'display_cb'       => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'      => '', // The text for the options-page save button. Defaults to 'Save'.
+		'admin_menu_hook'         => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
+		'display_cb'              => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		'save_button'             => '', // The text for the options-page save button. Defaults to 'Save'.
 		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
-		'tab_group'        => '', // Tab-group identifier, enables options page tab navigation.
-		// 'tab_title'    => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		// 'autoload'     => true, // Defaults to true, the options-page option will be autloaded.
+		'tab_group'               => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'            => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		// 'autoload'             => true, // Defaults to true, the options-page option will be autloaded.
 	);
 
 	/**
