@@ -25,7 +25,7 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 		if ( empty( $args['value'] ) ) {
 			$args['value'] = $field->escaped_value();
 			// This will be used if there is a select_timezone set for this field
-			$tz_offset = $field->field_timezone_offset();
+			$tz_offset = $field->field_timezone_offset( $args['value'] );
 			if ( ! empty( $tz_offset ) ) {
 				$args['value'] -= $tz_offset;
 			}

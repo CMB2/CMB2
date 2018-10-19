@@ -190,10 +190,11 @@ class CMB2_Utils {
 	 * Utility method that returns time string offset by timezone
 	 *
 	 * @since  1.0.0
-	 * @param  string $tzstring Time string
-	 * @return string           Offset time string
+	 * @param  string $tzstring  Timezone string
+	 * @param  string $base_time Timestamp. Defaults to 'now'.
+	 * @return string            Offset time string
 	 */
-	public static function timezone_offset( $tzstring ) {
+	public static function timezone_offset( $tzstring, $base_time = 'now' ) {
 		$tz_offset = 0;
 
 		if ( ! empty( $tzstring ) && is_string( $tzstring ) ) {
@@ -204,7 +205,7 @@ class CMB2_Utils {
 
 			try {
 				$date_time_zone_selected = new DateTimeZone( $tzstring );
-				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create() );
+				$tz_offset = timezone_offset_get( $date_time_zone_selected, date_create( $base_time ) );
 			} catch ( Exception $e ) {
 				self::log_if_debug( __METHOD__, __LINE__, $e->getMessage() );
 			}

@@ -779,10 +779,11 @@ class CMB2_Field extends CMB2_Base {
 	 * Offset a time value based on timezone
 	 *
 	 * @since  1.0.0
+	 * @param  string $base_time Timestamp. Defaults to 'now'.
 	 * @return string Offset time string
 	 */
-	public function field_timezone_offset() {
-		return CMB2_Utils::timezone_offset( $this->field_timezone() );
+	public function field_timezone_offset( $base_time = 'now' ) {
+		return CMB2_Utils::timezone_offset( $this->field_timezone(), $base_time );
 	}
 
 	/**
