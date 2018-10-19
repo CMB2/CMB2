@@ -134,6 +134,6 @@ class CMB2_Boxes {
 	 */
 	public static function get_by_property( $property, $to_ignore = null ) {
 		_deprecated_function( __METHOD__, '2.4.0', 'CMB2_Boxes::filter_by()' );
-		return self::filter_by( $property  );
+		return self::filter_by( $property );
 	}
 }
