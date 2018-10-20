@@ -32,8 +32,8 @@ class CMB2_Sanitize {
 	 * Setup our class vars
 	 *
 	 * @since 1.1.0
-	 * @param CMB2_Field $field A CMB2 field object
-	 * @param mixed      $value Field value
+	 * @param CMB2_Field $field A CMB2 field object.
+	 * @param mixed      $value Field value.
 	 */
 	public function __construct( CMB2_Field $field, $value ) {
 		$this->field = $field;
@@ -41,11 +41,14 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Catchall method if field's 'sanitization_cb' is NOT defined, or field type does not have a corresponding validation method
+	 * Catchall method if field's 'sanitization_cb' is NOT defined,
+	 * or field type does not have a corresponding validation method.
 	 *
 	 * @since  1.0.0
-	 * @param  string $name      Non-existent method name
-	 * @param  array  $arguments All arguments passed to the method
+	 *
+	 * @param  string $name      Non-existent method name.
+	 * @param  array  $arguments All arguments passed to the method.
+	 * @return mixed
 	 */
 	public function __call( $name, $arguments ) {
 		return $this->default_sanitization();
@@ -115,7 +118,7 @@ class CMB2_Sanitize {
 	 * @return mixed  Sanitized value.
 	 */
 	protected function _default_sanitization() {
-		// Handle repeatable fields array
+		// Handle repeatable fields array.
 		return is_array( $this->value ) ? array_map( 'sanitize_text_field', $this->value ) : sanitize_text_field( $this->value );
 	}
 
@@ -174,14 +177,14 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Validate url in a meta value
+	 * Validate url in a meta value.
 	 *
 	 * @since  1.0.1
 	 * @return string        Empty string or escaped url
 	 */
 	public function text_url() {
 		$protocols = $this->field->args( 'protocols' );
-		// for repeatable
+		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
 				$this->value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->get_default();
@@ -194,7 +197,7 @@ class CMB2_Sanitize {
 	}
 
 	public function colorpicker() {
-		// for repeatable
+		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			$check = $this->value;
 			$this->value = array();
@@ -216,7 +219,7 @@ class CMB2_Sanitize {
 	 * @return string       Empty string or sanitized email
 	 */
 	public function text_email() {
-		// for repeatable
+		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
 				$val = trim( $val );
@@ -247,10 +250,10 @@ class CMB2_Sanitize {
 		$replace = array( '', '.' );
 
 		// Strip slashes. Example: 2\'180.00.
-		// See https://github.com/CMB2/CMB2/issues/1014
+		// See https://github.com/CMB2/CMB2/issues/1014.
 		$this->value = wp_unslash( $this->value );
 
-		// for repeatable
+		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
 				if ( $val ) {
@@ -283,6 +286,8 @@ class CMB2_Sanitize {
 	 * Datetime to timestamp
 	 *
 	 * @since  1.0.1
+	 *
+	 * @param bool $repeat Whether or not to repeat.
 	 * @return string|array Timestring
 	 */
 	public function text_datetime_timestamp( $repeat = false ) {
@@ -314,6 +319,8 @@ class CMB2_Sanitize {
 	 * Datetime to timestamp with timezone
 	 *
 	 * @since  1.0.1
+	 *
+	 * @param bool $repeat Whether or not to repeat.
 	 * @return string       Timestring
 	 */
 	public function text_datetime_timestamp_timezone( $repeat = false ) {
@@ -353,8 +360,8 @@ class CMB2_Sanitize {
 
 		if ( 'UTC' === substr( $tzstring, 0, 3 ) ) {
 			$tzstring = timezone_name_from_abbr( '', $offset, 0 );
-			/*
-			 * timezone_name_from_abbr() returns false if not found based on offset.
+			/**
+			 * The timezone_name_from_abbr() returns false if not found based on offset.
 			 * Since there are currently some invalid timezones in wp_timezone_dropdown(),
 			 * fallback to an offset of 0 (UTC+0)
 			 * https://core.trac.wordpress.org/ticket/29205
@@ -384,7 +391,7 @@ class CMB2_Sanitize {
 					'value'                  => $this->value,
 				);
 			} else {
-				// Save the utc timestamp supporting field
+				// Save the utc timestamp supporting field.
 				if ( $repeat ) {
 					$utc_values[ $utc_key ][] = $utc_stamp;
 				} else {
@@ -413,6 +420,8 @@ class CMB2_Sanitize {
 	 * Sanitize code textareas
 	 *
 	 * @since  1.0.2
+	 *
+	 * @param bool $repeat Whether or not to repeat.
 	 * @return string       Sanitized data
 	 */
 	public function textarea_code( $repeat = false ) {
@@ -434,7 +443,7 @@ class CMB2_Sanitize {
 		$file_id_key = $this->field->_id() . '_id';
 
 		if ( $this->field->group ) {
-			// Return an array with url/id if saving a group field
+			// Return an array with url/id if saving a group field.
 			$this->value = $this->_get_group_file_value_array( $file_id_key );
 		} else {
 			$this->_save_file_id_value( $file_id_key );
@@ -448,13 +457,16 @@ class CMB2_Sanitize {
 	 * Gets the values for the `file` field type from the data being saved.
 	 *
 	 * @since  2.2.0
+	 *
+	 * @param mixed $id_key ID key to use.
+	 * @return array
 	 */
 	public function _get_group_file_value_array( $id_key ) {
 		$alldata = $this->field->group->data_to_save;
 		$base_id = $this->field->group->_id();
 		$i       = $this->field->group->index;
 
-		// Check group $alldata data
+		// Check group $alldata data.
 		$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
 			? absint( $alldata[ $base_id ][ $i ][ $id_key ] )
 			: '';
@@ -475,16 +487,19 @@ class CMB2_Sanitize {
 	 * Peforms saving of `file` attachement's ID
 	 *
 	 * @since  1.1.0
+	 *
+	 * @param mixed $file_id_key ID key to use.
+	 * @return mixed
 	 */
 	public function _save_file_id_value( $file_id_key ) {
 		$id_field = $this->_new_supporting_field( $file_id_key );
 
-		// Check standard data_to_save data
+		// Check standard data_to_save data.
 		$id_val = isset( $this->field->data_to_save[ $file_id_key ] )
 			? $this->field->data_to_save[ $file_id_key ]
 			: null;
 
-		// If there is no ID saved yet, try to get it from the url
+		// If there is no ID saved yet, try to get it from the url.
 		if ( $this->value && ! $id_val ) {
 			$id_val = CMB2_Utils::image_id_from_url( $this->value );
 
@@ -500,6 +515,10 @@ class CMB2_Sanitize {
 	 * Peforms saving of `text_datetime_timestamp_timezone` utc timestamp
 	 *
 	 * @since  2.2.0
+	 *
+	 * @param mixed $utc_key   UTC key.
+	 * @param mixed $utc_stamp UTC timestamp.
+	 * @return mixed
 	 */
 	public function _save_utc_value( $utc_key, $utc_stamp ) {
 		return $this->_new_supporting_field( $utc_key )->save_field( $utc_stamp );
@@ -509,6 +528,9 @@ class CMB2_Sanitize {
 	 * Returns a new, supporting, CMB2_Field object based on a new field id.
 	 *
 	 * @since  2.2.0
+	 *
+	 * @param mixed $new_field_id New field ID.
+	 * @return CMB2_Field
 	 */
 	public function _new_supporting_field( $new_field_id ) {
 		return $this->field->get_field_clone( array(
@@ -521,8 +543,8 @@ class CMB2_Sanitize {
 	 * If repeating, loop through and re-apply sanitization method
 	 *
 	 * @since  1.1.0
-	 * @param  string $method Class method
-	 * @param  bool   $repeat Whether repeating or not
+	 * @param  string $method Class method.
+	 * @param  bool   $repeat Whether repeating or not.
 	 * @return mixed          Sanitized value
 	 */
 	public function _check_repeat( $method, $repeat ) {
@@ -551,8 +573,8 @@ class CMB2_Sanitize {
 	 * Determine if passed value is an empty array
 	 *
 	 * @since  2.0.6
-	 * @param  mixed $to_check Value to check
-	 * @return boolean          Whether value is an array that's empty
+	 * @param  mixed $to_check Value to check.
+	 * @return boolean         Whether value is an array that's empty
 	 */
 	public function _is_empty_array( $to_check ) {
 		if ( is_array( $to_check ) ) {

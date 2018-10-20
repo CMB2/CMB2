@@ -48,7 +48,7 @@ class CMB2_JS {
 	 * Add a dependency to the array of CMB2 JS dependencies
 	 *
 	 * @since 2.0.7
-	 * @param array|string $dependencies Array (or string) of dependencies to add
+	 * @param array|string $dependencies Array (or string) of dependencies to add.
 	 */
 	public static function add_dependencies( $dependencies ) {
 		foreach ( (array) $dependencies as $dependency ) {
@@ -76,15 +76,15 @@ class CMB2_JS {
 	 * @since  2.0.7
 	 */
 	public static function enqueue() {
-		// Filter required script dependencies
+		// Filter required script dependencies.
 		$dependencies = self::$dependencies = apply_filters( 'cmb2_script_dependencies', self::$dependencies );
 
-		// Only use minified files if SCRIPT_DEBUG is off
+		// Only use minified files if SCRIPT_DEBUG is off.
 		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 
 		$min = $debug ? '' : '.min';
 
-		// if colorpicker
+		// if colorpicker.
 		if ( isset( $dependencies['wp-color-picker'] ) ) {
 			if ( ! is_admin() ) {
 				self::colorpicker_frontend();
@@ -95,22 +95,22 @@ class CMB2_JS {
 			}
 		}
 
-		// if file/file_list
+		// if file/file_list.
 		if ( isset( $dependencies['media-editor'] ) ) {
 			wp_enqueue_media();
 			CMB2_Type_File_Base::output_js_underscore_templates();
 		}
 
-		// if timepicker
+		// if timepicker.
 		if ( isset( $dependencies['jquery-ui-datetimepicker'] ) ) {
 			self::register_datetimepicker();
 		}
 
-		// if cmb2-wysiwyg
+		// if cmb2-wysiwyg.
 		$enqueue_wysiwyg = isset( $dependencies['cmb2-wysiwyg'] ) && $debug;
 		unset( $dependencies['cmb2-wysiwyg'] );
 
-		// Enqueue cmb JS
+		// Enqueue cmb JS.
 		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), $dependencies, CMB2_VERSION, true );
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
@@ -128,12 +128,12 @@ class CMB2_JS {
 	 *
 	 * @since  2.2.7
 	 *
-	 * @param  boolean $enqueue
+	 * @param  boolean $enqueue Whether or not to enqueue.
 	 *
 	 * @return void
 	 */
 	public static function register_colorpicker_alpha( $enqueue = false ) {
-		// Only use minified files if SCRIPT_DEBUG is off
+		// Only use minified files if SCRIPT_DEBUG is off.
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
 		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
@@ -144,7 +144,7 @@ class CMB2_JS {
 	 *
 	 * @since  2.2.7
 	 *
-	 * @param  boolean $enqueue
+	 * @param  boolean $enqueue Whether or not to enqueue.
 	 *
 	 * @return void
 	 */
@@ -173,6 +173,8 @@ class CMB2_JS {
 	 * Localize the php variables for CMB2 JS
 	 *
 	 * @since  2.0.7
+	 *
+	 * @param mixed $debug Whether or not we are debugging.
 	 */
 	protected static function localize( $debug ) {
 		static $localized = false;
