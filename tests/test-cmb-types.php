@@ -1034,8 +1034,6 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			$expected['code-editor'] = 'code-editor';
 		}
 
-		$expected['cmb2-wysiwyg-gutenberg-fix'] = 'cmb2-wysiwyg-gutenberg-fix';
-
 		$this->assertEquals( $expected, Test_CMB2_JS::dependencies() );
 	}
 

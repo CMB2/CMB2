@@ -29,8 +29,6 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 			'options' => $field->options(),
 		) );
 
-		$field->add_js_dependencies( 'cmb2-wysiwyg-gutenberg-fix' );
-
 		if ( ! $field->group ) {
 			return $this->rendered( $this->get_wp_editor( $a ) . $a['desc'] );
 		}
