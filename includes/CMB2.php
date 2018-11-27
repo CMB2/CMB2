@@ -105,6 +105,26 @@ class CMB2 extends CMB2_Base {
 		'remove_box_wrap'         => false,
 
 		/*
+		 * The following parameter is any additional arguments passed as $callback_args
+		 * to add_meta_box, if/when applicable.
+		 *
+		 * CMB2 does not use these arguments in the add_meta_box callback, however, these args
+		 * are parsed for certain special properties, like determining Gutenberg/block-editor
+		 * compatibility.
+		 *
+		 * Examples:
+		 *
+		 * - Make sure default editor is used as metabox is not compatible with block editor
+		 *      [ '__block_editor_compatible_meta_box' => false/true ]
+		 *
+		 * - Or declare this box exists for backwards compatibility
+		 *      [ '__back_compat_meta_box' => false ]
+		 *
+		 * More: https://wordpress.org/gutenberg/handbook/extensibility/meta-box/
+		 */
+		'mb_callback_args'        => null,
+
+		/*
 		 * The following parameters are for options-page metaboxes,
 		 * and several are passed along to add_menu_page()/add_submenu_page()
 		 */
