@@ -519,7 +519,15 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				$this->remove_default_tax_metaboxes( $object_type );
 			}
 
-			add_meta_box( $this->cmb->cmb_id, $this->cmb->prop( 'title' ), array( $this, 'metabox_callback' ), $object_type, $this->cmb->prop( 'context' ), $this->cmb->prop( 'priority' ) );
+			add_meta_box(
+				$this->cmb->cmb_id,
+				$this->cmb->prop( 'title' ),
+				array( $this, 'metabox_callback' ),
+				$object_type,
+				$this->cmb->prop( 'context' ),
+				$this->cmb->prop( 'priority' ),
+				$this->cmb->prop( 'mb_callback_args' )
+			);
 		}
 	}
 

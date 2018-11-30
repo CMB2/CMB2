@@ -225,7 +225,7 @@ module.exports = function(grunt) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow']
+				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow', 'QTags', 'quicktags']
 			}
 		},
 

@@ -4,7 +4,7 @@
 window.CMB2 = window.CMB2 || {};
 window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 
-( function(window, document, $, wysiwyg, undefined ) {
+( function(window, document, $, cmb, wysiwyg, undefined ) {
 	'use strict';
 
 	// Private variables
@@ -240,7 +240,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 		$row.find( '.cmb2-wysiwyg-inner-wrap' ).each( function() {
 			$toReplace    = $( this );
 			data          = $toReplace.data();
-			defVal        = window.CMB2.getFieldArg( data.hash, 'default', '' );
+			defVal        = cmb.getFieldArg( data.hash, 'default', '' );
 			defVal        = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
 
 			data.iterator = $row.data( 'iterator' );
@@ -278,7 +278,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 			return false;
 		}
 
-		var mceActive = window.cmb2_l10.user_can_richedit && window.tinyMCE;
+		var mceActive = cmb.canTinyMCE();
 		var qtActive = 'function' === typeof window.quicktags;
 		$.extend( data, getGroupData( data ) );
 
@@ -314,7 +314,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	wysiwyg.destroy = function( id ) {
-		if ( ! window.cmb2_l10.user_can_richedit || ! window.tinyMCE ) {
+		if ( ! cmb.canTinyMCE() ) {
 			// Nothing to see here.
 			return;
 		}
@@ -342,4 +342,4 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	// Hook in our event callbacks.
 	$( document ).on( 'cmb_init', wysiwyg.initAll );
 
-} )( window, document, jQuery, window.CMB2.wysiwyg );
+} )( window, document, jQuery, window.CMB2, window.CMB2.wysiwyg );
