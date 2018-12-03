@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Update the `sv_SE` translation. Props [@edvind](https://github.com/edvind) ([#370](https://github.com/CMB2/CMB2/pull/370)).
 * QA/PHPCS cleanup. Props [@tw2113](https://github.com/tw2113) ([#1179](https://github.com/CMB2/CMB2/pull/1179)).
 * Add optional `'mb_callback_args'` CMB2 box property which allows defining the `$callback_args` passed into `add_meta_box()`. This allows using defining the new [Gutenberg/block-editor compatibility parameters](https://wordpress.org/gutenberg/handbook/extensibility/meta-box/). Fixes [#1191](https://github.com/CMB2/CMB2/issues/1191)
+* Support any type of markup when customizing repeating group row. Props [@lipemat](https://github.com/lipemat) ([#1187](https://github.com/CMB2/CMB2/pull/1187)).
 
 ### Bug Fixes
 
