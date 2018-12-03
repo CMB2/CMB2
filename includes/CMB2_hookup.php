@@ -535,15 +535,15 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 *
 	 */
 	public function remove_default_tax_metaboxes() {
-		foreach ( $this->cmb->box_types() as $post_type ){
-			if( count( $this->cmb->tax_metaboxes_to_remove ) ){
-				foreach( $this->cmb->tax_metaboxes_to_remove as $taxonomy ){
-					if( !taxonomy_exists( $taxonomy ) ){
-						continue;
-					}
-					$mb_id = is_taxonomy_hierarchical( $taxonomy ) ? "{$taxonomy}div" : "tagsdiv-{$taxonomy}";
-					remove_meta_box( $mb_id, $post_type, 'side' );
-				}
+		$to_remove = array_filter( (array) $this->cmb->tax_metaboxes_to_remove, 'taxonomy_exists' );
+		if ( empty( $to_remove ) ) {
+			return;
+		}
+
+		foreach ( $this->cmb->box_types() as $post_type ) {
+			foreach ( $to_remove as $taxonomy ) {
+				$mb_id = is_taxonomy_hierarchical( $taxonomy ) ? "{$taxonomy}div" : "tagsdiv-{$taxonomy}";
+				remove_meta_box( $mb_id, $post_type, 'side' );
 			}
 		}
 	}
