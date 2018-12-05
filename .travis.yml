@@ -55,7 +55,7 @@ after_script: ./tests/bin/after-run-wp-unit-tests.sh
 branches:
   only:
   - master
-  - trunk
+  - develop
 
 notifications:
   slack:
