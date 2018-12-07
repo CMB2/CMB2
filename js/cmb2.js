@@ -852,6 +852,12 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.initPickers = function( $timePickers, $datePickers, $colorPickers ) {
+		cmb.trigger( 'cmb_init_pickers', {
+			time: $timePickers,
+			date: $datePickers,
+			color: $colorPickers
+		} );
+
 		// Initialize jQuery UI timepickers
 		cmb.initDateTimePickers( $timePickers, 'timepicker', 'time_picker' );
 		// Initialize jQuery UI datepickers
@@ -961,10 +967,11 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.initCodeEditors = function( $selector ) {
+		cmb.trigger( 'cmb_init_code_editors', $selector );
+
 		if ( ! cmb.defaults.code_editor || ! wp || ! wp.codeEditor || ! $selector.length ) {
 			return;
 		}
-
 
 		$selector.each( function() {
 			wp.codeEditor.initialize(
