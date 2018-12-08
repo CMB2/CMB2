@@ -107,6 +107,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'classes'          => null,
 			'classes_cb'       => '',
 			'remove_box_wrap'  => false,
+			'mb_callback_args' => null,
 			'parent_slug'      => '',
 			'capability'       => 'manage_options',
 			'icon_url'         => '',
