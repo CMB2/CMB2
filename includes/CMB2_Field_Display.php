@@ -32,7 +32,7 @@ class CMB2_Field_Display {
 	 * Get the corresponding display class for the field type.
 	 *
 	 * @since  2.2.2
-	 * @param  CMB2_Field $field
+	 * @param  CMB2_Field $field Requested field type.
 	 * @return CMB2_Field_Display
 	 */
 	public static function get( CMB2_Field $field ) {
@@ -102,7 +102,7 @@ class CMB2_Field_Display {
 			default:
 				$type = new self( $field );
 				break;
-		}// End switch().
+		}// End switch.
 
 		return $type;
 	}
@@ -111,7 +111,7 @@ class CMB2_Field_Display {
 	 * Setup our class vars
 	 *
 	 * @since 2.2.2
-	 * @param CMB2_Field $field A CMB2 field object
+	 * @param CMB2_Field $field A CMB2 field object.
 	 */
 	public function __construct( CMB2_Field $field ) {
 		$this->field = $field;
@@ -125,10 +125,10 @@ class CMB2_Field_Display {
 	 * @since 2.2.2
 	 */
 	public function display() {
-		// If repeatable
+		// If repeatable.
 		if ( $this->field->args( 'repeatable' ) ) {
 
-			// And has a repeatable value
+			// And has a repeatable value.
 			if ( is_array( $this->field->value ) ) {
 
 				// Then loop and output.
@@ -410,7 +410,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 	}
 
 	protected function file_output( $url_value, $id, CMB2_Type_File_Base $field_type ) {
-		// If there is no ID saved yet, try to get it from the url
+		// If there is no ID saved yet, try to get it from the url.
 		if ( $url_value && ! $id ) {
 			$id = CMB2_Utils::image_id_from_url( esc_url_raw( $url_value ) );
 		}

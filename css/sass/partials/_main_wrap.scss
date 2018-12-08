@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------
-Main Wrap
+ * Main Wrap
 --------------------------------------------------------------*/
 
 .cmb2-wrap {
@@ -109,7 +109,7 @@ Main Wrap
 	}
 
 	.mceIframeContainer {
-		background: #fff;
+		background: $white;
 	}
 
 	.meta_mce {
@@ -241,7 +241,7 @@ Main Wrap
 
 // Repeatable fields styles
 .cmb-repeat-table {
-	background-color: #fafafa;
+	background-color: $almostwhite;
 	border: 1px solid darken($light-gray, 3%);
 
 	.cmb-row.cmb-repeat-row {
@@ -256,6 +256,10 @@ Main Wrap
 			border-top: solid 1px $light-gray;
 		}
 
+		&.ui-sortable-helper {
+			outline: dashed 2px $light-gray !important; // Sometime, we need !important :).
+		}
+
 		&:before {
 			content: counter(el);
 			display: block;
@@ -267,7 +271,7 @@ Main Wrap
 			width: 35px;
 			height: 100%;
 			line-height: 35px;
-
+			cursor: move;
 			color: $gray;
 			text-align: center;
 			border-right: solid 1px $light-gray;
@@ -431,12 +435,16 @@ span.cmb2-metabox-description {
 
 	.img-status img,
 	.embed-status {
-		background: $white;
-		border: 1px solid $light-gray;
+		background: $lightchecker;
+		border: 5px solid $white;
+		outline: 1px solid $light-gray;
+		box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.3 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 );
+		background-image: linear-gradient(45deg, $darkchecker 25%, transparent 25%, transparent 75%, $darkchecker 75%, $darkchecker), linear-gradient(45deg, $darkchecker 25%, transparent 25%, transparent 75%, $darkchecker 75%, $darkchecker);
+		background-position: 0 0, 10px 10px;
+		background-size: 20px 20px;
 		border-radius: 2px;
 		-moz-border-radius: 2px;
  		margin: 15px 0 0 0;
-		padding: 5px;
 	}
 
 	.embed-status {
@@ -470,6 +478,12 @@ span.cmb2-metabox-description {
 		cursor: pointer;
 	}
 
+	&.cmb-attach-list {
+		.img-status img, .file-status > span {
+			cursor: move;
+		}
+	}
+
 }
 
 .cmb-type-file-list .cmb2-media-status .img-status {
@@ -487,9 +501,7 @@ span.cmb2-metabox-description {
 	width: 100%;
 	margin-top: 5px;
 	margin-bottom: 10px;
-
 	img {
-		cursor: move;
 		float: left;
 		margin-right: 10px;
 	}

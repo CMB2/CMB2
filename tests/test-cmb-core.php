@@ -107,6 +107,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'classes'          => null,
 			'classes_cb'       => '',
 			'remove_box_wrap'  => false,
+			'mb_callback_args' => null,
 			'parent_slug'      => '',
 			'capability'       => 'manage_options',
 			'icon_url'         => '',
@@ -117,6 +118,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'message_cb'       => '',
 			'option_key'       => '',
 			'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+			'tab_group'        => '',
 		);
 
 		$this->cmb = new CMB2( $this->metabox_array );
@@ -246,7 +248,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 						</div>
 						<div class="cmb-td">
 							testing before
-							<input type="text" class="regular-text" name="test_test" id="test_test" value=""/>
+							<input type="text" class="regular-text" name="test_test" id="test_test" value="" data-hash=\'7i3hkvqmp7v0\'/>
 							<p class="cmb2-metabox-description">Description</p>
 							function test_after Description test_test
 						</div>
@@ -274,6 +276,20 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 	public function test_boxes_get_all() {
 		$this->assertContainsOnlyInstancesOf( 'CMB2', CMB2_Boxes::get_all() );
+	}
+
+	public function test_boxes_get_by() {
+		$boxes = CMB2_Boxes::get_by( 'classes', 'custom-class another-class' );
+		$this->assertContainsOnlyInstancesOf( 'CMB2', $boxes );
+		$this->assertSame( 1, count( $boxes ) );
+	}
+
+	public function test_boxes_filter_by() {
+		$all   = CMB2_Boxes::get_all();
+		$with  = CMB2_Boxes::get_by( 'classes', 'custom-class another-class' );
+		$boxes = CMB2_Boxes::filter_by( 'classes', 'custom-class another-class' );
+		$this->assertContainsOnlyInstancesOf( 'CMB2', $boxes );
+		$this->assertSame( count( $all ) - count( $with ), count( $boxes ) );
 	}
 
 	public function test_boxes_get() {
@@ -499,21 +515,21 @@ class Test_CMB2_Core extends Test_CMB2 {
 									<label for="group_field_0_colorpicker">Colorpicker</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-text-small cmb2-colorpicker" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#"/>
+									<input type="text" class="cmb2-text-small cmb2-colorpicker" name="group_field[0][colorpicker]" id="group_field_0_colorpicker" value="#" data-hash=\'2jqpbm4qpv9g\'/>
 								</div>
 							</div>
 							<div class="cmb-row cmb-type-text cmb2-id-group-field-0-first-field cmb-repeat-group-field table-layout" data-fieldtype="text">
 								<div class="cmb-th">
 									<label for="group_field_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value=""/></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field[0][first_field]" id="group_field_0_first_field" value="" data-hash=\'6ju7p2ui96b0\'/></div>
 							</div>
 							<div class="cmb-row cmb-type-file cmb2-id-group-field-0-test-file cmb-repeat-group-field" data-fieldtype="file">
 								<div class="cmb-th">
 									<label for="group_field_0_test_file">Name</label>
 								</div>
 								<div class="cmb-td">
-									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\'/>
+									<input type="text" class="cmb2-upload-file regular-text" name="group_field[0][test_file]" id="group_field_0_test_file" value="" size="45" data-previewsize=\'[350,350]\' data-sizename=\'large\' data-queryargs=\'\' data-hash=\'2fvuslh3crdg\'/>
 									<input class="cmb2-upload-button button-secondary" type="button" value="Add or Upload File" />
 									<input type="hidden" class="cmb2-upload-file-id" name="group_field[0][test_file_id]" id="group_field_0_test_file_id" value=""/>
 									<div id="group_field_0_test_file-status" class="cmb2-media-status">
@@ -623,7 +639,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 								<div class="cmb-th">
 									<label for="group_field2_0_first_field">Field 1</label>
 								</div>
-								<div class="cmb-td"><input type="text" class="regular-text" name="group_field2[0][first_field]" id="group_field2_0_first_field" value=""/></div>
+								<div class="cmb-td"><input type="text" class="regular-text" name="group_field2[0][first_field]" id="group_field2_0_first_field" value="" data-hash=\'4nhr1ugfjlb0\'/></div>
 							</div>
 						</div>
 					</div>

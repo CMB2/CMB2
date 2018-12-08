@@ -1,0 +1,31 @@
+/*--------------------------------------------------------------
+ * New-Term Page
+--------------------------------------------------------------*/
+
+#addtag {
+	.cmb-th {
+		float: none;
+		width: auto;
+		padding: 20px 0 0;
+	}
+
+	.cmb-td {
+		padding: 0;
+	}
+
+	.cmb-th + .cmb-td {
+		float: none;
+	}
+
+	select {
+		max-width: 100%;
+	}
+
+	.cmb2-metabox {
+		padding-bottom: 20px;
+	}
+
+	.cmb-row li label {
+		display: inline;
+	}
+}

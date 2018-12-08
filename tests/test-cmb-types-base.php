@@ -140,13 +140,13 @@ abstract class Test_CMB2_Types_Base extends Test_CMB2 {
 	protected function check_box_assertion( $output, $checked = false ) {
 		$checked = $checked ? ' checked="checked"' : '';
 		$this->assertHTMLstringsAreEqual(
-			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"' . $checked . '/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
+			'<input type="checkbox" class="cmb2-option cmb2-list" name="field_test_field" id="field_test_field" value="on"' . $checked . ' data-hash=\'4lavrjdps2t0\'/><label for="field_test_field"><span class="cmb2-metabox-description">This is a description</span></label>',
 			is_string( $output ) ? $output : $this->capture_render( $output )
 		);
 	}
 
 	protected function file_sprintf( $args ) {
-		return sprintf( '<li class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%1$s</strong></span>&nbsp;&nbsp; (<a href="%3$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s" data-id=\'%2$d\'/></li>',
+		return sprintf( '<li class="file-status cmb2-media-item"><span>' . esc_html__( 'File:', 'cmb2' ) . ' <strong>%1$s</strong></span>&nbsp;&nbsp; (<a href="%3$s" target="_blank" rel="external">' . esc_html__( 'Download','cmb2' ) . '</a> / <a href="#" class="cmb2-remove-file-button">' . esc_html__( 'Remove', 'cmb2' ) . '</a>)<input type="hidden" name="field_test_field[%2$d]" id="filelist-%2$d" value="%3$s" data-id=\'%2$d\' data-hash=\'4lavrjdps2t0\'/></li>',
 			$args['file_name'],
 			$args['attachment_id'],
 			$args['url']
