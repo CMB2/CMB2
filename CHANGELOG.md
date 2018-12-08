@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Enhancements
+### Bug Fixes
+
+## [2.5.0 - 2018-12-08](https://github.com/CMB2/CMB2/releases/tag/v2.5.0)
+
+### Enhancements
 
 * Repeatable fields are now drag-sortable. Props [@lipemat](https://github.com/lipemat) ([#1142](https://github.com/CMB2/CMB2/pull/1142)).
 * Update the `sv_SE` translation. Props [@edvind](https://github.com/edvind) ([#370](https://github.com/CMB2/CMB2/pull/370)).
