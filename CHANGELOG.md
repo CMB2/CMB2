@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 * Add optional `'mb_callback_args'` CMB2 box property which allows defining the `$callback_args` passed into `add_meta_box()`. This allows using defining the new [Gutenberg/block-editor compatibility parameters](https://wordpress.org/gutenberg/handbook/extensibility/meta-box/). Fixes [#1191](https://github.com/CMB2/CMB2/issues/1191)
 * Support any type of markup when customizing repeating group row. Props [@lipemat](https://github.com/lipemat) ([#1187](https://github.com/CMB2/CMB2/pull/1187)).
 * Add `cmb_init_pickers` and `cmb_init_code_editors` Javascript events for allowing just-in-time configuration for pickers/editors.
+* Fix field descriptions color contrast ratio for better accessibility. h/t [@rianrietveld](https://github.com/rianrietveld). Fixes [#1193](https://github.com/CMB2/CMB2/issues/1193).
+* Add `CMB2_Field::get_rest_value()` method for sending value through several filters (`'cmb2_get_rest_value'`, `"cmb2_get_rest_value_{$field_type}"`, `"cmb2_get_rest_value_for_{$field_id}"` ) before sending to REST request.
 
 ### Bug Fixes
 
