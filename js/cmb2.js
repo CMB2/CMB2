@@ -122,8 +122,10 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		wp.data.subscribe( function() {
+			var editor = wp.data.hasOwnProperty('select') ? wp.data.select( 'core/editor' ) : null;
+
 			// the post is currently being saved && we have tinymce editors
-			if ( wp.data.select( 'core/editor' ).isSavingPost() && window.tinyMCE.editors.length ) {
+			if ( editor && editor.isSavingPost && editor.isSavingPost() && window.tinyMCE.editors.length ) {
 				for ( var i = 0; i < window.tinyMCE.editors.length; i++ ) {
 					window.tinyMCE.editors[i].save();
 				}
