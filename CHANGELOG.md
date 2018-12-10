@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 ### Bug Fixes
 
+## [2.5.1 - 2018-12-10](https://github.com/CMB2/CMB2/releases/tag/v2.5.1)
+
+### Bug Fixes
+* Fix issue when the `core/editor` object does not exist (is undefined), causing incompatibility issues with Yoast and likely others. Fixes [#1197](https://github.com/CMB2/CMB2/issues/1197)
+
 ## [2.5.0 - 2018-12-08](https://github.com/CMB2/CMB2/releases/tag/v2.5.0)
 
 ### Enhancements

@@ -5,7 +5,7 @@ Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Requires PHP:      5.2
 Tested up to:      5.0.0
-Stable tag:        2.5.0
+Stable tag:        2.5.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,12 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
+
+### 2.5.1
+
+#### Bug Fixes
+
+* Fix issue when the `core/editor` object does not exist (is undefined), causing incompatibility issues with Yoast and likely others. Fixes [#1197](https://github.com/CMB2/CMB2/issues/1197)
 
 ### 2.5.0
 
@@ -883,6 +889,12 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.5.1
+
+#### Bug Fixes
+
+* Fix issue when the `core/editor` object does not exist (is undefined), causing incompatibility issues with Yoast and likely others. Fixes [#1197](https://github.com/CMB2/CMB2/issues/1197)
 
 ### 2.5.0
 
