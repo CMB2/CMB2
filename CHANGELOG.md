@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Enhancements
 ### Bug Fixes
+* Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
 
 ## [2.5.1 - 2018-12-10](https://github.com/CMB2/CMB2/releases/tag/v2.5.1)
 
