@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
 ### Enhancements
+
+* Updated PHPUnit version in composer.json. Props [@slaFFik](https://github.com/slaFFik) ([#1204](https://github.com/CMB2/CMB2/pull/1204)).
+
 ### Bug Fixes
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
 
