@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 * Updated PHPUnit version in composer.json. Props [@slaFFik](https://github.com/slaFFik) ([#1204](https://github.com/CMB2/CMB2/pull/1204)).
+* Package.json: fix the need of global (old) grunt. Props [@slaFFik](https://github.com/slaFFik) ([#1206](https://github.com/CMB2/CMB2/pull/1206)).
 
 ### Bug Fixes
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
