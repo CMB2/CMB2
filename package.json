@@ -9,7 +9,8 @@
   },
   "scripts": {
     "grunt": "node ./node_modules/grunt-cli/bin/grunt",
-    "watch": "node ./node_modules/grunt-cli/bin/grunt watch"
+    "watch": "node ./node_modules/grunt-cli/bin/grunt watch",
+    "phptests": "vendor/bin/phpunit"
   },
   "repository": {
     "type": "git",
