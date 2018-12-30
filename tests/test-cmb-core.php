@@ -506,7 +506,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 					</div>
 					before_group_row output
 					<div class="postbox cmb-row cmb-repeatable-grouping closed" data-iterator="0">
-						<button type="button" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="Remove Group"></button>
+						<button type="button" data-selector="group_field_repeat" data-confirm="no" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="Remove Group"></button>
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
@@ -538,7 +538,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
-									<button type="button" data-selector="group_field_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">Remove Group</button>
+									<button type="button" data-selector="group_field_repeat" data-confirm="no" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">Remove Group</button>
 								</div>
 							</div>
 						</div>
