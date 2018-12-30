@@ -695,10 +695,17 @@ window.CMB2 = window.CMB2 || {};
 	cmb.removeGroupRow = function( evt ) {
 		evt.preventDefault();
 
-		var $this   = $( this );
-		var $table  = $id( $this.data('selector') );
-		var $parent = $this.parents('.cmb-repeatable-grouping');
-		var number  = $table.find('.cmb-repeatable-grouping').length;
+		var $this         = $( this ),
+			isConfirmable = $this.data('confirm') === 'yes';
+
+		// Process further only if deletion confirmation enabled and user agreed.
+		if ( isConfirmable && ! window.confirm( l10n.strings.group_remove_confirm ) ) {
+			return;
+		}
+
+		var $table  = $id( $this.data('selector') ),
+			$parent = $this.parents('.cmb-repeatable-grouping'),
+			number  = $table.find('.cmb-repeatable-grouping').length;
 
 		if ( number < 2 ) {
 			return cmb.resetRow( $parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ), $this );
@@ -706,13 +713,12 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
 
-		// when a group is removed loop through all next groups and update fields names
+		// When a group is removed, loop through all next groups and update fields names.
 		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
 
 		$parent.remove();
 
 		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: true } );
-
 	};
 
 	cmb.removeAjaxRow = function( evt ) {
