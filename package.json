@@ -8,7 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "grunt": "node ./node_modules/grunt-cli/bin/grunt"
+    "grunt": "node ./node_modules/grunt-cli/bin/grunt",
+    "watch": "node ./node_modules/grunt-cli/bin/grunt watch"
   },
   "repository": {
     "type": "git",
