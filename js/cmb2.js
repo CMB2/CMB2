@@ -952,7 +952,7 @@ window.CMB2 = window.CMB2 || {};
 		if ( ! $selector.length ) {
 			return;
 		}
-		if ( 'object' === typeof jQuery.wp && typeof 'function' === jQuery.wp.wpColorPicker ) {
+		if ( 'object' === typeof jQuery.wp && 'function' === typeof jQuery.wp.wpColorPicker ) {
 
 			$selector.each( function() {
 				var $this = $( this );
