@@ -1347,7 +1347,7 @@ class CMB2_Field extends CMB2_Base {
 		$args['options'] = wp_parse_args( $args['options'], array(
 			'add_button'     => esc_html__( 'Add Group', 'cmb2' ),
 			'remove_button'  => esc_html__( 'Remove Group', 'cmb2' ),
-			'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ),
+			'remove_confirm' => '',
 		) );
 
 		return $args;
