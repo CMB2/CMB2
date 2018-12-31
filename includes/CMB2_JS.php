@@ -223,14 +223,13 @@ class CMB2_JS {
 				),
 			),
 			'strings' => array(
-				'upload_file'          => esc_html__( 'Use this file', 'cmb2' ),
-				'upload_files'         => esc_html__( 'Use these files', 'cmb2' ),
-				'remove_image'         => esc_html__( 'Remove Image', 'cmb2' ),
-				'remove_file'          => esc_html__( 'Remove', 'cmb2' ),
-				'file'                 => esc_html__( 'File:', 'cmb2' ),
-				'download'             => esc_html__( 'Download', 'cmb2' ),
-				'check_toggle'         => esc_html__( 'Select / Deselect All', 'cmb2' ),
-				'group_remove_confirm' => esc_html__( 'Are you sure you want to remove it?', 'cmb2' ),
+				'upload_file'  => esc_html__( 'Use this file', 'cmb2' ),
+				'upload_files' => esc_html__( 'Use these files', 'cmb2' ),
+				'remove_image' => esc_html__( 'Remove Image', 'cmb2' ),
+				'remove_file'  => esc_html__( 'Remove', 'cmb2' ),
+				'file'         => esc_html__( 'File:', 'cmb2' ),
+				'download'     => esc_html__( 'Download', 'cmb2' ),
+				'check_toggle' => esc_html__( 'Select / Deselect All', 'cmb2' ),
 			),
 		);
 

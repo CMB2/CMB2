@@ -588,13 +588,14 @@ class CMB2 extends CMB2_Base {
 	public function render_group_row( $field_group ) {
 
 		$field_group->peform_param_callback( 'before_group_row' );
-		$closed_class = $field_group->options( 'closed' ) ? ' closed' : '';
+		$closed_class     = $field_group->options( 'closed' ) ? ' closed' : '';
+		$confirm_deletion = empty( $field_group->options( 'remove_confirm' ) ) ? '' : $field_group->options( 'remove_confirm' );
 
 		echo '
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
 		if ( $field_group->args( 'repeatable' ) ) {
-			echo '<button type="button" data-selector="', $field_group->id(), '_repeat" data-confirm="', (bool) $field_group->options( 'remove_confirm' ) ? 'yes' : 'no', '" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
+			echo '<button type="button" data-selector="', $field_group->id(), '_repeat" data-confirm="', esc_attr( $confirm_deletion ), '" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
 			echo '
@@ -622,7 +623,7 @@ class CMB2 extends CMB2_Base {
 			echo '
 					<div class="cmb-row cmb-remove-field-row">
 						<div class="cmb-remove-row">
-							<button type="button" data-selector="', $field_group->id(), '_repeat" data-confirm="', (bool) $field_group->options( 'remove_confirm' ) ? 'yes' : 'no', '" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
+							<button type="button" data-selector="', $field_group->id(), '_repeat" data-confirm="', esc_attr( $confirm_deletion ), '" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">', $field_group->options( 'remove_button' ), '</button>
 						</div>
 					</div>
 					';

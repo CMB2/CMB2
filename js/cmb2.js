@@ -695,17 +695,17 @@ window.CMB2 = window.CMB2 || {};
 	cmb.removeGroupRow = function( evt ) {
 		evt.preventDefault();
 
-		var $this         = $( this ),
-			isConfirmable = $this.data('confirm') === 'yes';
+		var $this         = $( this );
+		var isConfirmable = typeof $this.data('confirm') !== 'undefined' && $this.data('confirm') !== '';
 
 		// Process further only if deletion confirmation enabled and user agreed.
-		if ( isConfirmable && ! window.confirm( l10n.strings.group_remove_confirm ) ) {
+		if ( isConfirmable && ! window.confirm( $this.data('confirm') ) ) {
 			return;
 		}
 
-		var $table  = $id( $this.data('selector') ),
-			$parent = $this.parents('.cmb-repeatable-grouping'),
-			number  = $table.find('.cmb-repeatable-grouping').length;
+		var $table  = $id( $this.data('selector') );
+		var $parent = $this.parents('.cmb-repeatable-grouping');
+		var number  = $table.find('.cmb-repeatable-grouping').length;
 
 		if ( number < 2 ) {
 			return cmb.resetRow( $parent.parents('.cmb-repeatable-group').find( '.cmb-add-group-row' ), $this );
