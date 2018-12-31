@@ -589,7 +589,8 @@ class CMB2 extends CMB2_Base {
 
 		$field_group->peform_param_callback( 'before_group_row' );
 		$closed_class     = $field_group->options( 'closed' ) ? ' closed' : '';
-		$confirm_deletion = empty( $field_group->options( 'remove_confirm' ) ) ? '' : $field_group->options( 'remove_confirm' );
+		$confirm_deletion = $field_group->options( 'remove_confirm' );
+		$confirm_deletion = ! empty( $confirm_deletion ) ? $confirm_deletion : '';
 
 		echo '
 		<div class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
