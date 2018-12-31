@@ -1345,8 +1345,9 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	protected function set_field_defaults_group( $args ) {
 		$args['options'] = wp_parse_args( $args['options'], array(
-			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Group', 'cmb2' ),
+			'add_button'     => esc_html__( 'Add Group', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Group', 'cmb2' ),
+			'remove_confirm' => '',
 		) );
 
 		return $args;
