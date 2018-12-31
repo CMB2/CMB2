@@ -699,7 +699,7 @@ window.CMB2 = window.CMB2 || {};
 		var confirmation = $this.data('confirm');
 
 		// Process further only if deletion confirmation enabled and user agreed.
-		if ( 'undefined' !== typeof confirmation && confirmation && ! window.confirm( confirmation ) ) {
+		if ( confirmation && ! window.confirm( confirmation ) ) {
 			return;
 		}
 
