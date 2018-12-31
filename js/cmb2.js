@@ -558,7 +558,7 @@ window.CMB2 = window.CMB2 || {};
 			$newInput.html( newVal );
 		}
 
-		if ( 'SELECT' === tagName && undefined !== typeof defVal ) {
+		if ( 'SELECT' === tagName && 'undefined' !== typeof defVal ) {
 			var $toSelect = $newInput.find( '[value="'+ defVal + '"]' );
 			if ( $toSelect.length ) {
 				$toSelect.attr( 'selected', 'selected' ).prop( 'selected', 'selected' );
@@ -567,7 +567,7 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( checkable ) {
 			$newInput.removeAttr( 'checked' );
-			if ( undefined !== typeof defVal && oldVal === defVal ) {
+			if ( 'undefined' !== typeof defVal && oldVal === defVal ) {
 				$newInput.attr( 'checked', 'checked' ).prop( 'checked', 'checked' );
 			}
 		}
@@ -613,7 +613,7 @@ window.CMB2 = window.CMB2 || {};
 		var name  = $this.attr( 'name' ); // get current name
 
 		// If name is defined
-		if ( typeof name !== 'undefined' ) {
+		if ( 'undefined' !== typeof name ) {
 			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ), 10 );
 			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
 
@@ -695,11 +695,11 @@ window.CMB2 = window.CMB2 || {};
 	cmb.removeGroupRow = function( evt ) {
 		evt.preventDefault();
 
-		var $this         = $( this );
-		var isConfirmable = typeof $this.data('confirm') !== 'undefined' && $this.data('confirm') !== '';
+		var $this        = $( this );
+		var confirmation = $this.data('confirm');
 
 		// Process further only if deletion confirmation enabled and user agreed.
-		if ( isConfirmable && ! window.confirm( $this.data('confirm') ) ) {
+		if ( 'undefined' !== typeof confirmation && confirmation && ! window.confirm( confirmation ) ) {
 			return;
 		}
 
@@ -952,7 +952,7 @@ window.CMB2 = window.CMB2 || {};
 		if ( ! $selector.length ) {
 			return;
 		}
-		if ( typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function' ) {
+		if ( 'object' === typeof jQuery.wp && typeof 'function' === jQuery.wp.wpColorPicker ) {
 
 			$selector.each( function() {
 				var $this = $( this );
@@ -1305,7 +1305,7 @@ window.CMB2 = window.CMB2 || {};
 	 * @return {void}
 	 */
 	cmb.log = function() {
-		if ( l10n.script_debug && console && typeof console.log === 'function' ) {
+		if ( l10n.script_debug && console && 'function' === typeof console.log ) {
 			console.log.apply(console, arguments);
 		}
 	};
