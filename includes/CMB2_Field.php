@@ -1014,7 +1014,7 @@ class CMB2_Field extends CMB2_Base {
 		$field_id   = $this->id( true );
 
 		if ( $cb = $this->maybe_callback( 'rest_value_cb' ) ) {
-			apply_filters( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
+			add_filter( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
 		}
 
 		$value = $this->get_data();
