@@ -85,10 +85,6 @@ class CMB2_Types {
 	 */
 	public function render() {
 		if ( $this->field->args( 'repeatable' ) ) {
-
-			// Repeatable fields require jQuery sortable library.
-			$this->field->add_js_dependencies( 'jquery-ui-sortable' );
-
 			$this->render_repeatable_field();
 		} else {
 			$this->_render();
