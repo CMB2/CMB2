@@ -883,27 +883,27 @@ class CMB2_Field extends CMB2_Base {
 			return;
 		}
 
-		/**
-		 * Hook before field row begins
-		 *
-		 * @param array  		$field_args     The current field args.
-		 * @param CMB2_Field    $field   		The current field object.
-		 */
-		do_action( 'cmb2_before_field_row', $this->args(), $this );
+		$field_type = $this->type();
 
 		/**
-		 * Hook before field row begins
+		 * Hook before field row begins.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
-		 *
-		 * @param array  		$field_args     The current field args.
-		 * @param CMB2_Field    $field   		The current field object.
+		 * @param CMB2_Field $field The current field object.
 		 */
-		do_action( "cmb2_before_{$this->type()}_field_row", $this->args(), $this );
+		do_action( 'cmb2_before_field_row', $this );
+
+		/**
+		 * Hook before field row begins.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( "cmb2_before_{$field_type}_field_row", $this );
 
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
+		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $field_type );
 
 		if ( ! $this->args( 'show_names' ) ) {
 			echo "\n\t<div class=\"cmb-td\">\n";
@@ -931,22 +931,20 @@ class CMB2_Field extends CMB2_Base {
 		$this->peform_param_callback( 'after_row' );
 
 		/**
-		 * Hook before field row begins
+		 * Hook after field row ends.
 		 *
-		 * The dynamic portion of the hook name, $this->type(), refers to the field type.
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
 		 *
-		 * @param array  		$field_args     The current field args.
-		 * @param CMB2_Field    $field   		The current field object.
+		 * @param CMB2_Field $field The current field object.
 		 */
-		do_action( "cmb2_after_{$this->type()}_field_row", $this->args(), $this );
+		do_action( "cmb2_after_{$field_type}_field_row", $this );
 
 		/**
-		 * Hook before field row begins
+		 * Hook after field row ends.
 		 *
-		 * @param array  		$field_args     The current field args.
-		 * @param CMB2_Field    $field   		The current field object.
+		 * @param CMB2_Field $field The current field object.
 		 */
-		do_action( 'cmb2_after_field_row', $this->args(), $this );
+		do_action( 'cmb2_after_field_row', $this );
 
 		// For chaining.
 		return $this;
