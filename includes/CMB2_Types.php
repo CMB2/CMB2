@@ -369,7 +369,6 @@ class CMB2_Types {
 
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
-			$count = count( $meta_value );
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
 				$this->repeat_row();
