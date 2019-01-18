@@ -374,13 +374,13 @@ class CMB2_Sanitize {
 
 		try {
 
-			$datetime = date_create_from_format( $full_format, $full_date );
+			$datetime = date_create_from_format( $full_format, $full_date, new DateTimeZone( $tzstring ) );
 
 			if ( ! is_object( $datetime ) ) {
 				$this->value = $utc_stamp = '';
 			} else {
 				$datetime->setTimezone( new DateTimeZone( $tzstring ) );
-				$utc_stamp   = date_timestamp_get( $datetime ) - $offset;
+				$utc_stamp   = $datetime->getTimestamp();
 				$this->value = serialize( $datetime );
 			}
 

@@ -34,6 +34,15 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			$tz       = $datetime->getTimezone();
 			$tzstring = $tz->getName();
 			$value    = $datetime->getTimestamp();
+
+			/**
+			 * Work out the offset of the time here to stop storing incorrect data.
+			 */
+			$formatted_date = date( DateTime::ATOM, $value );
+			$utc_datetime = new DateTime( $formatted_date, timezone_open( 'utc' ) );
+			$offst_tz = timezone_offset_get( $tz, $utc_datetime );
+
+			$value += $offst_tz;
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
