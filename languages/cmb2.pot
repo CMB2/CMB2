@@ -1,14 +1,14 @@
-# Copyright (C) 2018 CMB2 team
+# Copyright (C) 2019 CMB2 team
 # This file is distributed under the same license as the CMB2 package.
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.5.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2018-12-10 15:09:57+00:00\n"
+"POT-Creation-Date: 2019-01-18 18:24:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-12-10 15:9+300\n"
+"PO-Revision-Date: 2019-1-18 18:24+300\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -45,12 +45,12 @@ msgstr ""
 #: example-functions.php:381 example-functions.php:389
 #: example-functions.php:398 example-functions.php:405
 #: example-functions.php:419 example-functions.php:491
-#: example-functions.php:582 example-functions.php:590
-#: example-functions.php:597 example-functions.php:604
-#: example-functions.php:611 example-functions.php:618
-#: example-functions.php:625 example-functions.php:652
-#: example-functions.php:660 example-functions.php:667
-#: example-functions.php:716 tests/test-cmb-field.php:275
+#: example-functions.php:583 example-functions.php:591
+#: example-functions.php:598 example-functions.php:605
+#: example-functions.php:612 example-functions.php:619
+#: example-functions.php:626 example-functions.php:653
+#: example-functions.php:661 example-functions.php:668
+#: example-functions.php:717 tests/test-cmb-field.php:275
 msgid "field description (optional)"
 msgstr ""
 
@@ -242,99 +242,99 @@ msgstr ""
 msgid "Remove Entry"
 msgstr ""
 
-#: example-functions.php:535
+#: example-functions.php:536
 msgid "Entry Title"
 msgstr ""
 
-#: example-functions.php:542
+#: example-functions.php:543
 msgid "Description"
 msgstr ""
 
-#: example-functions.php:543
+#: example-functions.php:544
 msgid "Write a short description for this entry"
 msgstr ""
 
-#: example-functions.php:549
+#: example-functions.php:550
 msgid "Entry Image"
 msgstr ""
 
-#: example-functions.php:555
+#: example-functions.php:556
 msgid "Image Caption"
 msgstr ""
 
-#: example-functions.php:574
+#: example-functions.php:575
 msgid "User Profile Metabox"
 msgstr ""
 
-#: example-functions.php:581 example-functions.php:651
+#: example-functions.php:582 example-functions.php:652
 msgid "Extra Info"
 msgstr ""
 
-#: example-functions.php:589
+#: example-functions.php:590
 msgid "Avatar"
 msgstr ""
 
-#: example-functions.php:596
+#: example-functions.php:597
 msgid "Facebook URL"
 msgstr ""
 
-#: example-functions.php:603
+#: example-functions.php:604
 msgid "Twitter URL"
 msgstr ""
 
-#: example-functions.php:610
+#: example-functions.php:611
 msgid "Google+ URL"
 msgstr ""
 
-#: example-functions.php:617
+#: example-functions.php:618
 msgid "Linkedin URL"
 msgstr ""
 
-#: example-functions.php:624
+#: example-functions.php:625
 msgid "User Field"
 msgstr ""
 
-#: example-functions.php:644
+#: example-functions.php:645
 msgid "Category Metabox"
 msgstr ""
 
-#: example-functions.php:659
+#: example-functions.php:660
 msgid "Term Image"
 msgstr ""
 
-#: example-functions.php:666
+#: example-functions.php:667
 msgid "Arbitrary Term Field"
 msgstr ""
 
-#: example-functions.php:685
+#: example-functions.php:686
 msgid "Theme Options"
 msgstr ""
 
-#: example-functions.php:715
+#: example-functions.php:716
 msgid "Site Background Color"
 msgstr ""
 
-#: example-functions.php:752
+#: example-functions.php:753
 msgid "%s &mdash; Updated!"
 msgstr ""
 
-#: example-functions.php:786
+#: example-functions.php:787
 msgid "REST Test Box"
 msgstr ""
 
-#: example-functions.php:795
+#: example-functions.php:796
 msgid "REST Test Text"
 msgstr ""
 
-#: example-functions.php:796
+#: example-functions.php:797
 msgid "Will show in the REST API for this box and for pages."
 msgstr ""
 
-#: example-functions.php:802
+#: example-functions.php:803
 msgid "REST Editable Test Text"
 msgstr ""
 
-#: example-functions.php:803
+#: example-functions.php:804
 msgid "Will show in REST API \"editable\" contexts only (`POST` requests)."
 msgstr ""
 
@@ -342,7 +342,7 @@ msgstr ""
 msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: includes/CMB2.php:601
+#: includes/CMB2.php:603
 msgid "Click to toggle"
 msgstr ""
 
@@ -393,20 +393,20 @@ msgstr ""
 msgid "Invalid %1$s method: %2$s"
 msgstr ""
 
-#: includes/CMB2_Field.php:1348
+#: includes/CMB2_Field.php:1353
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1349
+#: includes/CMB2_Field.php:1354
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1380 includes/CMB2_Field.php:1384
+#: includes/CMB2_Field.php:1386 includes/CMB2_Field.php:1390
 #: tests/test-cmb-field.php:237
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:1495
+#: includes/CMB2_Field.php:1501
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
@@ -510,7 +510,7 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: includes/CMB2_JS.php:229 includes/CMB2_Types.php:413
+#: includes/CMB2_JS.php:229 includes/CMB2_Types.php:407
 #: includes/types/CMB2_Type_File_Base.php:84 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
 #: tests/test-cmb-types.php:958
@@ -534,15 +534,15 @@ msgstr ""
 msgid "Settings updated."
 msgstr ""
 
-#: includes/CMB2_Types.php:232
+#: includes/CMB2_Types.php:226
 msgid "Custom CMB2 field type classes must extend CMB2_Type_Base."
 msgstr ""
 
-#: includes/CMB2_Types.php:350
+#: includes/CMB2_Types.php:344
 msgid "Add Row"
 msgstr ""
 
-#: includes/CMB2_Types.php:413 tests/test-cmb-types.php:47
+#: includes/CMB2_Types.php:407 tests/test-cmb-types.php:47
 #: tests/test-cmb-types.php:55
 msgid "Remove Row"
 msgstr ""

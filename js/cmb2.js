@@ -651,13 +651,16 @@ window.CMB2 = window.CMB2 || {};
 
 		var $table   = $id( $this.data('selector') );
 		var $oldRow  = $table.find('.cmb-repeatable-grouping').last();
-        var $oldRowId  = $oldRow.attr('id');
 		var prevNum  = parseInt( $oldRow.data('iterator'), 10 );
 		cmb.idNumber = parseInt( prevNum, 10 ) + 1;
 		var $row     = $oldRow.clone();
 		var nodeName = $row.prop('nodeName') || 'div';
-
-        $oldRowId = $oldRowId.substring(0, $oldRowId.length - 1);
+		var getRowId = function( id ) {
+			id = id.split('-');
+			id.splice(id.length - 1, 1);
+			id.push( cmb.idNumber );
+			return id.join('-');
+		};
 
 		// Make sure the next number doesn't exist.
 		while ( $table.find( '.cmb-repeatable-grouping[data-iterator="'+ cmb.idNumber +'"]' ).length > 0 ) {
@@ -667,7 +670,7 @@ window.CMB2 = window.CMB2 || {};
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
 
-		var $newRow = $( '<' + nodeName + ' id="'+ $oldRowId + cmb.idNumber +'" class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
+		var $newRow = $( '<' + nodeName + ' id="'+ getRowId( $oldRow.attr('id') ) +'" class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
