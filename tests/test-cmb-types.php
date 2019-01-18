@@ -1030,6 +1030,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
 			'media-editor'             => 'media-editor',
 			'wp-color-picker'          => 'wp-color-picker',
+			'jquery-ui-sortable'       => 'jquery-ui-sortable'
 		);
 
 		if ( CMB2_Utils::wp_at_least( '4.9.0' ) ) {
