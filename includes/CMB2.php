@@ -928,6 +928,7 @@ class CMB2 extends CMB2_Base {
 
 			$field  = $this->get_new_field( $field_args, $field_group );
 			$sub_id = $field->id( true );
+			$saved[ $field_group->index ] = array();
 
 			foreach ( (array) $group_vals as $field_group->index => $post_vals ) {
 
