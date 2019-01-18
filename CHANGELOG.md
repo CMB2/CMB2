@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Add optional confirmation dialog to group field's Remove button. Example [documented in the example functions file](https://github.com/CMB2/CMB2/blob/12036e2dcdeb5b019e844b814eca154bb0eee791/example-functions.php#L525). Props [@slaFFik](https://github.com/slaFFik) ([#1208](https://github.com/CMB2/CMB2/pull/1208)).
 * Add 'id' attribute on group field `.postbox` divs to ensure compatibility with scripts which expect ids there. Props [@amans2k](https://github.com/amans2k) ([#1108](https://github.com/CMB2/CMB2/pull/1108)).
 * Make `CMB2_Option` properties accessible. ([#1052](https://github.com/CMB2/CMB2/issues/1052))
+* New Before/After row hooks: `'cmb2_before_field_row'`, `"cmb2_before_{$field_type}_field_row"`, `"cmb2_after_{$field_type}_field_row"`, `'cmb2_after_field_row'`. Props [@rubengc](https://github.com/rubengc) ([#953](https://github.com/CMB2/CMB2/pull/953)).
 
 ### Bug Fixes
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
