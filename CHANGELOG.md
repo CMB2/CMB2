@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 * Add 'id' attribute on group field `.postbox` divs to ensure compatibility with scripts which expect ids there. Props [@amans2k](https://github.com/amans2k) ([#1108](https://github.com/CMB2/CMB2/pull/1108)).
 * Make `CMB2_Option` properties accessible. ([#1052](https://github.com/CMB2/CMB2/issues/1052))
 * New Before/After row hooks: `'cmb2_before_field_row'`, `"cmb2_before_{$field_type}_field_row"`, `"cmb2_after_{$field_type}_field_row"`, `'cmb2_after_field_row'`. Props [@rubengc](https://github.com/rubengc) ([#953](https://github.com/CMB2/CMB2/pull/953)).
+* Introduce three new filters to filter field arguments: `'cmb2_field_defaults'`, `'cmb2_field_arguments_raw'`, `'cmb2_field_arguments'`. Props [@jrfnl](https://github.com/jrfnl) ([#588](https://github.com/CMB2/CMB2/pull/588)).
+
 
 ### Bug Fixes
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
