@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 * Do not trigger tinyMCE editor save for the activeEditor. Prevents cursor jump in Gutenberg. Fixes [#1202](https://github.com/CMB2/CMB2/issues/1202)
 * Fix issue where making a field repeatable would generate a Javascript error because of missing sortable library. Props [@slaFFik](https://github.com/slaFFik) ([#1216](https://github.com/CMB2/CMB2/pull/1216)).
 * Ensure value passed to `CMB2_Utils::filter_empty` from `CMB2::save_group_field` is always an array.  ([#1026](https://github.com/CMB2/CMB2/issues/1026))
+* Fix potential issue with test path location. Props [@quasel](https://github.com/quasel) ([#463](https://github.com/CMB2/CMB2/pull/463)).
 
 ## [2.5.1 - 2018-12-10](https://github.com/CMB2/CMB2/releases/tag/v2.5.1)
 
