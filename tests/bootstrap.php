@@ -12,7 +12,7 @@
  */
 
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
-	$GLOBALS['test_root'] = getenv( 'WP_DEVELOP_DIR' );
+	$GLOBALS['test_root'] = getenv( 'WP_DEVELOP_DIR' ). '/tests/phpunit';
 } elseif ( false !== getenv( 'WP_TESTS_DIR' ) ) {
 	$GLOBALS['test_root'] = getenv( 'WP_TESTS_DIR' );
 } elseif ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
