@@ -19,7 +19,7 @@ class CMB2_Type_Multicheck extends CMB2_Type_Radio {
 	 */
 	public $type = 'checkbox';
 
-	public function render() {
+	public function render( $args = array() ) {
 		$classes = false === $this->field->args( 'select_all_button' )
 			? 'cmb2-checkbox-list no-select-all cmb2-list'
 			: 'cmb2-checkbox-list cmb2-list';

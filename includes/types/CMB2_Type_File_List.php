@@ -12,7 +12,7 @@
  */
 class CMB2_Type_File_List extends CMB2_Type_File_Base {
 
-	public function render() {
+	public function render( $args = array() ) {
 		$field      = $this->field;
 		$meta_value = $field->escaped_value();
 		$name       = $this->_name();

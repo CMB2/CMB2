@@ -1,9 +1,10 @@
+/*--------------------------------------------------------------
+ * Collapsible UI
+--------------------------------------------------------------*/
+
 .cmb2-metabox {
-	.cmb-type-group {
-		max-width: 1000px
-	}
 	.cmbhandle {
-		color: #aaa;
+		color: $gray;
 		float: right;
 		width: 27px;
 		height: 30px;

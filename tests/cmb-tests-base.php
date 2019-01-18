@@ -46,20 +46,20 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		return $is_conn;
 	}
 
-	public function expected_youtube_oembed_results( $args ) {
-		if ( $this->is_connected() ) {
-			$args['oembed_result'] = sprintf( '<iframe width="640" height="360" src="%s" frameborder="0" allowfullscreen></iframe>', $args['src'] );
-			return $this->expected_oembed_success_results( $args );
-		}
-
-		return $this->no_connection_oembed_result( $args['url'] );
-	}
-
-	public function expected_oembed_success_results( $args ) {
+	protected function oembed_success_result( $args ) {
 		return sprintf( '<div class="cmb2-oembed embed-status">%s<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="%s">' . esc_html__( 'Remove Embed', 'cmb2' ) . '</a></p></div>', $args['oembed_result'], $args['field_id'] );
 	}
 
-	public function no_connection_oembed_result( $url ) {
+	protected function oembed_success_result_verifiers( $args ) {
+		$verifiers             = $args['oembed_result'];
+		$args['oembed_result'] = 'SPLIT';
+		return array_merge(
+			$verifiers,
+			explode( 'SPLIT', $this->oembed_success_result( $args ) )
+		);
+	}
+
+	protected function oembed_no_connection_result( $url ) {
 		global $wp_embed;
 		return sprintf(
 			'<p class="ui-state-error-text">%s</p>',
@@ -72,17 +72,38 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		);
 	}
 
-	public function assertOEmbedResult( $args ) {
-		$possibilities = array(
-			$this->normalize_http_string( $this->expected_oembed_success_results( $args ) ),
-			$this->normalize_http_string( $this->no_connection_oembed_result( $args['url'] ) ),
-		);
+	protected function oembed_no_connection_result_verifiers( $url ) {
+		return array( $this->oembed_no_connection_result( $url ) );
+	}
 
+	public function assertOEmbedResult( $args ) {
 		$actual = $this->normalize_http_string( cmb2_ajax()->get_oembed( $args ) );
+
+		if ( isset( $args['result_verifiers'] ) || is_array( $args['oembed_result'] ) ) {
+			if ( empty( $args['result_verifiers']['connected'] ) ) {
+				$args['result_verifiers']['connected'] = $this->oembed_success_result_verifiers( $args );
+			}
+
+			if ( empty( $args['result_verifiers']['no_connection'] ) ) {
+				$args['result_verifiers']['no_connection'] = $this->oembed_no_connection_result_verifiers( $args['url'] );
+			}
+
+			$verifiers = $args['result_verifiers'];
+			$this->assertVerifiersMatch( $verifiers, $actual );
+		} else {
+			$this->assertOEmbedResultString( $args, $actual );
+		}
+	}
+
+	protected function assertOEmbedResultString( $args, $actual ) {
+		$possibilities = array(
+			$this->normalize_http_string( $this->oembed_success_result( $args ) ),
+			$this->normalize_http_string( $this->oembed_no_connection_result( $args['url'] ) ),
+		);
 
 		$results = array();
 		foreach ( $possibilities as $key => $expected ) {
-			$results[ $key ] = $this->compareHTMLstrings( $expected, $actual );
+			$results[ $key ] = $this->compare_strings( $expected, $actual );
 		}
 
 		if ( ! empty( $results[0] ) && ! empty( $results[1] ) ) {
@@ -93,6 +114,49 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 			$this->assertEquals( $possibilities[0], $actual );
 		} else {
 			$this->assertEquals( $possibilities[1], $actual );
+		}
+	}
+
+	protected function assertVerifiersMatch( $result_verifiers, $actual ) {
+		$failed = array();
+
+		$possibilities = array(
+			'connected' => array_map( array( $this, 'normalize_http_string' ), $result_verifiers['connected'] ),
+		);
+
+		if ( ! empty( $result_verifiers['no_connection'] ) ) {
+			$possibilities['no_connection'] = array_map( array( $this, 'normalize_http_string' ), $result_verifiers['no_connection'] );
+		}
+
+		$actual = $this->normalize_http_string( $actual );
+
+		foreach ( $possibilities as $key => $verifiers ) {
+			foreach ( $verifiers as $key2 => $expected ) {
+				if ( false === strpos( $actual, $expected ) ) {
+					$failed[ $key ][ $key2 ] = $expected;
+				}
+			}
+		}
+
+		$failed_test = ! empty( $failed['connected'] );
+		if ( ! empty( $result_verifiers['no_connection'] ) ) {
+			$failed_test = $failed_test && ! empty( $failed['no_connection'] );
+		}
+
+		if ( $failed_test ) {
+			$msg = "\nThese verifiers are missing:\n";
+			foreach ( $failed as $key => $fails ) {
+				foreach ( $fails as $key2 => $fail ) {
+					$msg .= "\n$key - $key2:\n$fail\n";
+				}
+			}
+
+			$msg .= "\nin:\n$actual\n\n";
+			$this->assertTrue( false, $msg );
+		} elseif ( empty( $failed['connected'] ) ) {
+			$this->assertTrue( true );
+		} else {
+			$this->assertTrue( empty( $failed['no_connection'] ) );
 		}
 	}
 
@@ -122,22 +186,43 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 		wp_die( $hook . ' die' );
 	}
 
-	protected function compareHTMLstrings( $expected_string, $string_to_test ) {
-		$compare = strcmp( $expected_string, $string_to_test );
+	public static function compare_strings( $orig_string, $new_string, $orig_label = 'Expected', $compare_label = 'Actual' ) {
+		$orig_length = strlen( $orig_string );
+		$new_length  = strlen( $new_string );
+		$compare     = strcmp( $orig_string, $new_string );
 
 		if ( 0 !== $compare ) {
 
-			$compare       = strspn( $expected_string ^ $string_to_test, "\0" );
-			$chars_to_show = 75;
-			$start         = ( $compare - 5 );
-			$pointer       = '|--->>';
-			$sep           = "\n" . str_repeat( '-', 75 );
+			$label_spacer = str_repeat( ' ', abs( strlen( $compare_label ) - strlen( $orig_label ) ) );
+			$compare_spacer = $orig_spacer = '';
+
+			if ( strlen( $compare_label ) > strlen( $orig_label ) ) {
+				$orig_spacer = $label_spacer;
+			} elseif ( strlen( $compare_label ) < strlen( $orig_label ) ) {
+				$compare_spacer = $label_spacer;
+			}
+
+			$compare      = strspn( $orig_string ^ $new_string, "\0" );
+			$chars_before = 15;
+			$chars_after  = 75;
+			$start        = ( $compare - $chars_before );
+			$pointer      = '| ----> |';
+			$ol           = '  ' . $orig_label . ':  ' . $orig_spacer;
+			$cl           = '  ' . $compare_label . ':  ' . $compare_spacer;
+			$sep          = "\n" . str_repeat( '-', $chars_after + $chars_before + strlen( $pointer ) + strlen( $ol ) + 2 );
 
 			$compare = sprintf(
-			    $sep . "\nFirst difference at position %d:\n\n  Expected: \t%s\n  Actual: \t%s\n" . $sep,
-			    $compare,
-			    substr( $expected_string, $start, 5 ) . $pointer . substr( $expected_string, $compare, $chars_to_show ),
-			    substr( $string_to_test, $start, 5 ) . $pointer . substr( $string_to_test, $compare, $chars_to_show )
+				$sep . '%8$s%8$s  First difference at position %1$d.%8$s%8$s  %9$s length: %2$d, %10$s length: %3$d%8$s%8$s%4$s%5$s%8$s%6$s%7$s%8$s' . $sep,
+				$compare,
+				$orig_length,
+				$new_length,
+				$ol,
+				substr( $orig_string, $start, 15 ) . $pointer . substr( $orig_string, $compare, $chars_after ),
+				$cl,
+				substr( $new_string, $start, 15 ) . $pointer . substr( $new_string, $compare, $chars_after ),
+				"\n",
+				$orig_label,
+				$compare_label
 			);
 		}
 
@@ -176,20 +261,24 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @return mixed               Value of property.
 	 */
 	protected function getProperty( $object, $propertyName ) {
-		$reflection = new \ReflectionClass( get_class( $object ) );
+		$reflection = new ReflectionClass( get_class( $object ) );
 		$property = $reflection->getProperty( $propertyName );
 		$property->setAccessible( true );
 
 		return $property->getValue( $object );
 	}
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test ) {
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = null ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
 
-		$compare = $this->compareHTMLstrings( $expected_string, $string_to_test );
+		$compare = $this->compare_strings( $expected_string, $string_to_test );
 
-		return $this->assertEquals( $expected_string, $string_to_test, ! empty( $compare ) ? $compare : null );
+		if ( ! empty( $compare ) ) {
+			$msg .= $compare;
+		}
+
+		return $this->assertEquals( $expected_string, $string_to_test, $msg );
 	}
 
 	public function assertIsDefined( $definition ) {

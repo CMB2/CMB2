@@ -88,6 +88,26 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	protected $rest_edit = false;
 
 	/**
+	 * A functionalized constructor, used for the hookup action callbacks.
+	 *
+	 * @since  2.2.6
+	 *
+	 * @param  CMB2 $cmb The CMB2 object to hookup
+	 *
+	 * @return CMB2_Hookup_Base $hookup The hookup object.
+	 */
+	public static function maybe_init_and_hookup( CMB2 $cmb ) {
+		if ( $cmb->prop( 'show_in_rest' ) && function_exists( 'rest_get_server' ) ) {
+
+			$hookup = new self( $cmb );
+
+			return $hookup->universal_hooks();
+		}
+
+		return false;
+	}
+
+	/**
 	 * Constructor
 	 *
 	 * @since 2.2.3
@@ -122,6 +142,8 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$this->declare_read_edit_fields();
 
 		add_filter( 'is_protected_meta', array( $this, 'is_protected_meta' ), 10, 3 );
+
+		return $this;
 	}
 
 	/**
@@ -152,7 +174,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$alltypes = $taxonomies = array();
 
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
-			$types = array_flip( $rest_box->cmb->box_types() );
+			$types = array_flip( $rest_box->cmb->box_types( array( 'post' ) ) );
 
 			if ( isset( $types['user'] ) ) {
 				unset( $types['user'] );

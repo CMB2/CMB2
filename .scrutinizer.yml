@@ -1,16 +1,4 @@
-tools:
-    php_sim: true
-    php_pdepend: true
-    php_analyzer: true
-    external_code_coverage:
-        timeout: 600    # Timeout in seconds.
-filter:
-    excluded_paths:
-        - 'tests/*'
-checks:
-    php:
-        code_rating: true
-        duplication: true
+# language: php
 
 coding_style:
     php:
@@ -21,6 +9,8 @@ coding_style:
             switch:
                 indent_case: true
         spaces:
+            general:
+                linefeed_character: newline
             before_parentheses:
                 function_declaration: false
                 closure_definition: false
@@ -77,7 +67,7 @@ coding_style:
                 after_condition: true
                 before_alternative: true
                 after_alternative: true
-                in_short_version: true
+                in_short_version: false
             other:
                 before_comma: false
                 after_comma: true
@@ -109,3 +99,36 @@ coding_style:
                 opening: end-of-line
                 catch_on_new_line: false
                 finally_on_new_line: false
+        upper_lower_casing:
+            keywords:
+                general: lower
+            constants:
+                true_false_null: lower
+
+tools:
+    php_sim: true
+    php_pdepend: true
+    php_analyzer: true
+    external_code_coverage:
+        timeout: 600    # Timeout in seconds.
+
+filter:
+    excluded_paths:
+        - 'tests/'
+        - 'includes/shim/'
+        - 'example-functions.php'
+
+checks:
+    php:
+        unreachable_code: true
+        simplify_boolean_return: true
+        return_in_constructor: true
+        code_rating: true
+        duplication: true
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run

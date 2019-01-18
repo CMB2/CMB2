@@ -4,7 +4,7 @@
 window.CMB2 = window.CMB2 || {};
 window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 
-( function(window, document, $, wysiwyg, undefined ) {
+( function(window, document, $, cmb, wysiwyg, undefined ) {
 	'use strict';
 
 	// Private variables
@@ -171,7 +171,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	wysiwyg.addRow = function( evt, $row ) {
-		wysiwyg.initRow( $row );
+		wysiwyg.initRow( $row, evt );
 	};
 
 	/**
@@ -220,7 +220,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 */
 	wysiwyg.shiftComplete = function( evt, $btn, $from, $to ) {
 		$from.add( $to ).each( function() {
-			wysiwyg.initRow( $( this ) );
+			wysiwyg.initRow( $( this ), evt );
 		} );
 	};
 
@@ -230,21 +230,24 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @since  2.2.3
 	 *
 	 * @param  {object} $row A jQuery dom element object for the group row.
+	 * @param  {object} evt  A jQuery-normalized event object.
 	 *
 	 * @return {void}
 	 */
-	wysiwyg.initRow = function( $row ) {
-		var $toReplace, data;
+	wysiwyg.initRow = function( $row, evt ) {
+		var $toReplace, data, defVal;
 
 		$row.find( '.cmb2-wysiwyg-inner-wrap' ).each( function() {
 			$toReplace    = $( this );
 			data          = $toReplace.data();
+			defVal        = cmb.getFieldArg( data.hash, 'default', '' );
+			defVal        = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
 
 			data.iterator = $row.data( 'iterator' );
 			data.fieldid  = data.id;
 			data.id       = data.groupid + '_' + data.iterator + '_' + data.fieldid;
 			data.name     = data.groupid + '[' + data.iterator + '][' + data.fieldid + ']';
-			data.value    = $toReplace.find( '.wp-editor-area' ).length ? $toReplace.find( '.wp-editor-area' ).val() : '';
+			data.value    = 'cmb2_add_row' !== evt.type && $toReplace.find( '.wp-editor-area' ).length ? $toReplace.find( '.wp-editor-area' ).val() : defVal;
 
 			// The destroys might not have happened yet.  Don't init until they have.
 			if ( 0 === toBeDestroyed.length ) {
@@ -275,18 +278,25 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 			return false;
 		}
 
+		var mceActive = cmb.canTinyMCE();
+		var qtActive = 'function' === typeof window.quicktags;
 		$.extend( data, getGroupData( data ) );
 
 		initOptions( data );
 
 		$toReplace.replaceWith( data.template( data ) );
 
-		window.tinyMCE.init( tinyMCEPreInit.mceInit[ data.id ] );
-		if ( 'function' === typeof window.quicktags ) {
+		if ( mceActive ) {
+			window.tinyMCE.init( tinyMCEPreInit.mceInit[ data.id ] );
+		}
+
+		if ( qtActive ) {
 			window.quicktags( tinyMCEPreInit.qtInit[ data.id ] );
 		}
 
-		$( document.getElementById( data.id ) ).parents( '.wp-editor-wrap' ).removeClass( 'html-active' ).addClass( 'tmce-active' );
+		if ( mceActive ) {
+			$( document.getElementById( data.id ) ).parents( '.wp-editor-wrap' ).removeClass( 'html-active' ).addClass( 'tmce-active' );
+		}
 
 		if ( false !== buttonsInit && 'undefined' !== typeof window.QTags ) {
 			window.QTags._buttonsInit();
@@ -304,6 +314,10 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	 * @return {void}
 	 */
 	wysiwyg.destroy = function( id ) {
+		if ( ! cmb.canTinyMCE() ) {
+			// Nothing to see here.
+			return;
+		}
 
 		// The editor might not be initialized yet.  But we need to destroy it once it is.
 		var editor = tinyMCE.get( id );
@@ -328,4 +342,4 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 	// Hook in our event callbacks.
 	$( document ).on( 'cmb_init', wysiwyg.initAll );
 
-} )( window, document, jQuery, window.CMB2.wysiwyg );
+} )( window, document, jQuery, window.CMB2, window.CMB2.wysiwyg );

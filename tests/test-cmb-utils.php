@@ -148,6 +148,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 			);
 
 			add_filter( 'theme_root', array( 'Test_CMB2_Utils_WIN', '_change_to_wamp_theme_root' ) );
+
 			$this->assertEquals(
 				site_url( $located ),
 				Test_CMB2_Utils_WIN::get_url_from_dir( ABSPATH . $located )
@@ -262,12 +263,66 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		), $array );
 	}
 
+	public function test_normalize_if_numeric() {
+		$tests = array(
+			array( '0.1', 0.10000000000000001 ),
+			array( 0.1, 0.1 ),
+			array( .1, .1 ),
+			array( 1, 1 ),
+			array( '1', 1 ),
+			array( 'one', 'one' ),
+			array( '0.0', 0.0 ),
+			array( 0, 0 ),
+			array( '', '' ),
+		);
+		foreach ( $tests as $index => $test ) {
+			$this->assertSame(
+				$test[1],
+				CMB2_Utils::normalize_if_numeric( $test[0] ),
+				"Test index: $index"
+			);
+		}
+
+	}
+
+	/**
+	 * @group failing
+	 *
+	 */
+	public function test_php_to_js_dateformat() {
+		$tests = array(
+			array( 'l F j, Y', 'DD MM d, yy' ),
+			array( 'Y-m-d', 'yy-mm-dd' ),
+			array( 'm-d-Y', 'mm-dd-yy' ),
+			array( 'F', 'MM' ),
+			array( 'l', 'DD' ),
+			array( 'F', 'MM' ),
+			array( 'l jS \of F Y h:i:s A', 'DD dS &#39;o&#39;f MM yy hh:mm:ss TT' ),
+			array( 'm.d.y', 'mm.dd.y' ),
+			array( 'j, n, Y', 'd, m, yy' ),
+			array( 'Ymd', 'yymmdd' ),
+			// @todo Fix these:
+			array( 'j-m-y, \it \is w Day', 'd-mm-y, &#39;i&#39;t &#39;i&#39;ss w Dtty' ),
+			array( '\i\t \i\s \t\h\e jS \d\a\y.', '&#39;it&#39; &#39;is&#39; &#39;the&#39; dS &#39;day&#39;.' ),
+		);
+		foreach ( $tests as $index => $test ) {
+			$this->assertSame(
+				$test[1],
+				CMB2_Utils::php_to_js_dateformat( $test[0] ),
+				"Test index: $index"
+			);
+		}
+
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {
-	public static $ABSPATH = 'C:\xampp\htdocs\the-site-dir';
+	protected static function get_normalized_abspath() {
+		return self::normalize_path( 'C:\xampp\htdocs\the-site-dir' );
+	}
 
 	public static function _change_to_wamp_theme_root() {
-		return self::$ABSPATH . '/wp-content/themes/';
+		return self::get_normalized_abspath() . '/wp-content/themes/';
 	}
 }

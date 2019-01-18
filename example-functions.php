@@ -24,9 +24,9 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 /**
  * Conditionally displays a metabox when used as a callback in the 'show_on_cb' cmb2_box parameter
  *
- * @param  CMB2 object $cmb CMB2 object.
+ * @param  CMB2 $cmb CMB2 object.
  *
- * @return bool             True if metabox should show
+ * @return bool      True if metabox should show
  */
 function yourprefix_show_if_front_page( $cmb ) {
 	// Don't show this metabox if it's not the front page template.
@@ -39,9 +39,9 @@ function yourprefix_show_if_front_page( $cmb ) {
 /**
  * Conditionally displays a field when used as a callback in the 'show_on_cb' field parameter
  *
- * @param  CMB2_Field object $field Field object.
+ * @param  CMB2_Field $field Field object.
  *
- * @return bool                     True if metabox should show
+ * @return bool              True if metabox should show
  */
 function yourprefix_hide_if_no_cats( $field ) {
 	// Don't show this field if not in the cats category.
@@ -91,8 +91,8 @@ function yourprefix_display_text_small_column( $field_args, $field ) {
 /**
  * Conditionally displays a message if the $post_id is 2
  *
- * @param  array             $field_args Array of field parameters.
- * @param  CMB2_Field object $field      Field object.
+ * @param  array      $field_args Array of field parameters.
+ * @param  CMB2_Field $field      Field object.
  */
 function yourprefix_before_row_if_2( $field_args, $field ) {
 	if ( 2 == $field->object_id ) {
@@ -124,6 +124,26 @@ function yourprefix_register_demo_metabox() {
 		// 'closed'     => true, // true to keep the metabox closed by default
 		// 'classes'    => 'extra-class', // Extra cmb2-wrap classes
 		// 'classes_cb' => 'yourprefix_add_some_classes', // Add classes through a callback.
+
+		/*
+		 * The following parameter is any additional arguments passed as $callback_args
+		 * to add_meta_box, if/when applicable.
+		 *
+		 * CMB2 does not use these arguments in the add_meta_box callback, however, these args
+		 * are parsed for certain special properties, like determining Gutenberg/block-editor
+		 * compatibility.
+		 *
+		 * Examples:
+		 *
+		 * - Make sure default editor is used as metabox is not compatible with block editor
+		 *      [ '__block_editor_compatible_meta_box' => false/true ]
+		 *
+		 * - Or declare this box exists for backwards compatibility
+		 *      [ '__back_compat_meta_box' => false ]
+		 *
+		 * More: https://wordpress.org/gutenberg/handbook/extensibility/meta-box/
+		 */
+		// 'mb_callback_args' => array( '__block_editor_compatible_meta_box' => false ),
 	) );
 
 	$cmb_demo->add_field( array(
@@ -260,6 +280,9 @@ function yourprefix_register_demo_metabox() {
 		'id'      => $prefix . 'colorpicker',
 		'type'    => 'colorpicker',
 		'default' => '#ffffff',
+		// 'options' => array(
+		// 	'alpha' => true, // Make this a rgba color picker.
+		// ),
 		// 'attributes' => array(
 		// 	'data-colorpicker' => json_encode( array(
 		// 		'palettes' => array( '#3dd0cc', '#ff834c', '#4fa2c0', '#0bc991', ),
@@ -286,6 +309,17 @@ function yourprefix_register_demo_metabox() {
 		'desc' => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'   => $prefix . 'textarea_code',
 		'type' => 'textarea_code',
+		// 'attributes' => array(
+		// 	// Optionally override the code editor defaults.
+		// 	'data-codeeditor' => json_encode( array(
+		// 		'codemirror' => array(
+		// 			'lineNumbers' => false,
+		// 			'mode' => 'css',
+		// 		),
+		// 	) ),
+		// ),
+		// To keep the previous formatting, you can disable codemirror.
+		// 'options' => array( 'disable_codemirror' => true ),
 	) );
 
 	$cmb_demo->add_field( array(
@@ -337,7 +371,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Radio', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'text_taxonomy_radio',
-		'type'     => 'taxonomy_radio',
+		'type'     => 'taxonomy_radio', // Or `taxonomy_radio_inline`/`taxonomy_radio_hierarchical`
 		'taxonomy' => 'category', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
@@ -354,7 +388,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Multi Checkbox', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'multitaxonomy',
-		'type'     => 'taxonomy_multicheck',
+		'type'     => 'taxonomy_multicheck', // Or `taxonomy_multicheck_inline`/`taxonomy_multicheck_hierarchical`
 		'taxonomy' => 'post_tag', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
@@ -486,7 +520,7 @@ function yourprefix_register_repeatable_group_field_metabox() {
 			'group_title'   => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
 			'add_button'    => esc_html__( 'Add Another Entry', 'cmb2' ),
 			'remove_button' => esc_html__( 'Remove Entry', 'cmb2' ),
-			'sortable'      => true, // beta
+			'sortable'      => true,
 			// 'closed'     => true, // true to have the groups closed by default
 		),
 	) );
@@ -639,30 +673,42 @@ function yourprefix_register_taxonomy_metabox() {
 
 add_action( 'cmb2_admin_init', 'yourprefix_register_theme_options_metabox' );
 /**
- * Hook in and register a metabox to handle a theme options page
+ * Hook in and register a metabox to handle a theme options page and adds a menu item.
  */
 function yourprefix_register_theme_options_metabox() {
 
-	$option_key = 'yourprefix_theme_options';
-
 	/**
-	 * Metabox for an options page. Will not be added automatically, but needs to be called with
-	 * the `cmb2_metabox_form` helper function. See https://github.com/CMB2/CMB2/wiki for more info.
+	 * Registers options page menu item and form.
 	 */
 	$cmb_options = new_cmb2_box( array(
-		'id'      => $option_key . 'page',
-		'title'   => esc_html__( 'Theme Options Metabox', 'cmb2' ),
-		'hookup'  => false, // Do not need the normal user/post hookup.
-		'show_on' => array(
-			// These are important, don't remove.
-			'key'   => 'options-page',
-			'value' => array( $option_key ),
-		),
+		'id'           => 'yourprefix_theme_options_page',
+		'title'        => esc_html__( 'Theme Options', 'cmb2' ),
+		'object_types' => array( 'options-page' ),
+
+		/*
+		 * The following parameters are specific to the options-page box
+		 * Several of these parameters are passed along to add_menu_page()/add_submenu_page().
+		 */
+
+		'option_key'      => 'yourprefix_theme_options', // The option key and admin menu page slug.
+		'icon_url'        => 'dashicons-palmtree', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		// 'menu_title'      => esc_html__( 'Options', 'cmb2' ), // Falls back to 'title' (above).
+		// 'parent_slug'     => 'themes.php', // Make options page a submenu item of the themes menu.
+		// 'capability'      => 'manage_options', // Cap required to view options-page.
+		// 'position'        => 1, // Menu position. Only applicable if 'parent_slug' is left empty.
+		// 'admin_menu_hook' => 'network_admin_menu', // 'network_admin_menu' to add network-level options page.
+		// 'display_cb'      => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		// 'save_button'     => esc_html__( 'Save Theme Options', 'cmb2' ), // The text for the options-page save button. Defaults to 'Save'.
+		// 'disable_settings_errors' => true, // On settings pages (not options-general.php sub-pages), allows disabling.
+		// 'message_cb'      => 'yourprefix_options_page_message_callback',
+		// 'tab_group'       => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'       => null, // Falls back to 'title' (above).
+		// 'autoload'        => false, // Defaults to true, the options-page option will be autloaded.
 	) );
 
 	/**
 	 * Options fields ids only need
-	 * to be unique within this option group.
+	 * to be unique within this box.
 	 * Prefix is not needed.
 	 */
 	$cmb_options->add_field( array(
@@ -673,6 +719,41 @@ function yourprefix_register_theme_options_metabox() {
 		'default' => '#ffffff',
 	) );
 
+}
+
+/**
+ * Callback to define the optionss-saved message.
+ *
+ * @param CMB2  $cmb The CMB2 object.
+ * @param array $args {
+ *     An array of message arguments
+ *
+ *     @type bool   $is_options_page Whether current page is this options page.
+ *     @type bool   $should_notify   Whether options were saved and we should be notified.
+ *     @type bool   $is_updated      Whether options were updated with save (or stayed the same).
+ *     @type string $setting         For add_settings_error(), Slug title of the setting to which
+ *                                   this error applies.
+ *     @type string $code            For add_settings_error(), Slug-name to identify the error.
+ *                                   Used as part of 'id' attribute in HTML output.
+ *     @type string $message         For add_settings_error(), The formatted message text to display
+ *                                   to the user (will be shown inside styled `<div>` and `<p>` tags).
+ *                                   Will be 'Settings updated.' if $is_updated is true, else 'Nothing to update.'
+ *     @type string $type            For add_settings_error(), Message type, controls HTML class.
+ *                                   Accepts 'error', 'updated', '', 'notice-warning', etc.
+ *                                   Will be 'updated' if $is_updated is true, else 'notice-warning'.
+ * }
+ */
+function yourprefix_options_page_message_callback( $cmb, $args ) {
+	if ( ! empty( $args['should_notify'] ) ) {
+
+		if ( $args['is_updated'] ) {
+
+			// Modify the updated message.
+			$args['message'] = sprintf( esc_html__( '%s &mdash; Updated!', 'cmb2' ), $cmb->prop( 'title' ) );
+		}
+
+		add_settings_error( $args['setting'], $args['code'], $args['message'], $args['type'] );
+	}
 }
 
 /**

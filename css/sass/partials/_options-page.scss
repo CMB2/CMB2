@@ -1,0 +1,71 @@
+/*--------------------------------------------------------------
+ * Options page
+--------------------------------------------------------------*/
+
+.cmb2-options-page {
+	max-width: 1200px;
+
+	&.wrap > h2 {
+		margin-bottom: 1em;
+	}
+
+	.cmb2-metabox > .cmb-row {
+		padding: 1em;
+		margin-top: -1px;
+		background: $white;
+		border: 1px solid $light-gray;
+		box-shadow: 0 1px 1px rgba(black, 0.05);
+
+		> .cmb-th {
+			padding: 0;
+			font-weight: initial;
+		}
+
+		> .cmb-th + .cmb-td {
+			float: none;
+			padding: 0 0 0 1em;
+			margin-left: 200px;
+
+			@media (max-width: $mobile-break) {
+				padding: 0;
+				margin-left: 0;
+			}
+		}
+	}
+
+	// Title field style.
+	.cmb2-wrap .cmb-type-title {
+		margin-top: 1em;
+		padding: 0.6em 1em;
+		background-color: $almostwhite;
+
+		.cmb2-metabox-title {
+			font-size: 12px;
+			margin-top: 0;
+			margin-bottom: 0;
+			text-transform: uppercase;
+		}
+
+		.cmb2-metabox-description {
+			padding-top: 0.25em;
+		}
+	}
+
+	.cmb-repeatable-group {
+		.cmb-group-description .cmb-th {
+			padding: 0 0 0.8em 0;
+		}
+
+		.cmb-group-name {
+			font-size: 16px;
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+		.cmb-th > .cmb2-metabox-description {
+			font-weight: 400;
+			padding-bottom: 0 !important;
+		}
+	}
+
+}

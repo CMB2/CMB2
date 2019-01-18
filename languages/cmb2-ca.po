@@ -347,7 +347,7 @@ msgstr ""
 #: includes/types/CMB2_Type_File_Base.php:75 tests/test-cmb-types-base.php:143
 #: tests/test-cmb-types.php:701
 msgid "File:"
-msgstr ""
+msgstr "Arxiu:"
 
 #: includes/CMB2_JS.php:86 includes/CMB2_JS.php:119
 msgid "Clear"
@@ -449,7 +449,7 @@ msgstr "Suprimeix"
 #: includes/CMB2_JS.php:140 includes/types/CMB2_Type_File_Base.php:78
 #: tests/test-cmb-types-base.php:143 tests/test-cmb-types.php:701
 msgid "Download"
-msgstr ""
+msgstr "Descarregar"
 
 #: includes/CMB2_JS.php:141
 msgid "Select / Deselect All"
@@ -457,7 +457,7 @@ msgstr ""
 
 #: includes/CMB2_Types.php:194
 msgid "Add Row"
-msgstr ""
+msgstr "Afegeix fila"
 
 #: includes/CMB2_hookup.php:145
 msgid ""
