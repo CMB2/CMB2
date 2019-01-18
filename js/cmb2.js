@@ -127,7 +127,9 @@ window.CMB2 = window.CMB2 || {};
 			// the post is currently being saved && we have tinymce editors
 			if ( editor && editor.isSavingPost && editor.isSavingPost() && window.tinyMCE.editors.length ) {
 				for ( var i = 0; i < window.tinyMCE.editors.length; i++ ) {
-					window.tinyMCE.editors[i].save();
+					if ( window.tinyMCE.activeEditor !== window.tinyMCE.editors[i] ) {
+						window.tinyMCE.editors[i].save();
+					}
 				}
 			}
 		});
