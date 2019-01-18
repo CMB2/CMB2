@@ -1329,9 +1329,30 @@ class CMB2_Field extends CMB2_Base {
 	 * @return array        Modified field config array.
 	 */
 	public function _set_field_defaults( $args ) {
+		$defaults = $this->get_default_field_args( $args );
+
+		/**
+		 * Filter the CMB2 Field defaults.
+		 *
+		 * @since 2.6.0
+		 * @param array             $defaults Metabox field config array defaults.
+		 * @param string            $id       Field id for the current field to allow for selective filtering.
+		 * @param string            $type     Field type for the current field to allow for selective filtering.
+		 * @param CMB2_Field object $field    This field object.
+		 */
+		$defaults = apply_filters( 'cmb2_field_defaults', $defaults, $args['id'], $args['type'], $this );
 
 		// Set up blank or default values for empty ones.
-		$args = wp_parse_args( $args, $this->get_default_field_args( $args ) );
+		$args = wp_parse_args( $args, $defaults );
+
+		/**
+		 * Filtering the CMB2 Field arguments once merged with the defaults, but before further processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array defaults.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $this );
 
 		/*
 		 * Deprecated usage:
@@ -1371,7 +1392,14 @@ class CMB2_Field extends CMB2_Base {
 			CMB2_JS::add_dependencies( 'jquery-ui-sortable' );
 		}
 
-		return $args;
+		/**
+		 * Filter the CMB2 Field arguments after processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array after processing.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		return apply_filters( 'cmb2_field_arguments', $args, $this );
 	}
 
 	/**
