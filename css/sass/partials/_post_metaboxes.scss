@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------
-Post Metaboxes
+ * Post Metaboxes
 --------------------------------------------------------------*/
+
 #poststuff .cmb-group-title {
 	margin-left: -1em;
 	margin-right: -1em;
@@ -35,6 +36,7 @@ Post Metaboxes
 		.cmbhandle {
 			right: -1em;
 			position: relative;
+			color: $dark-gray;
 		}
 	}
 

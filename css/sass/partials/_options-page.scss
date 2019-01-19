@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------
-Options page
+ * Options page
 --------------------------------------------------------------*/
+
 .cmb2-options-page {
 	max-width: 1200px;
 
@@ -36,7 +37,7 @@ Options page
 	.cmb2-wrap .cmb-type-title {
 		margin-top: 1em;
 		padding: 0.6em 1em;
-		background-color: #fafafa;
+		background-color: $almostwhite;
 
 		.cmb2-metabox-title {
 			font-size: 12px;

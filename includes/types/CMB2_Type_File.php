@@ -142,6 +142,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$args = array(
 			// if we're looking at a file in a group, we need to get the non-prefixed id
 			'id' => ( $this->field->group ? $this->field->args( '_id' ) : $this->args['id'] ) . '_id',
+			'disable_hash_data_attribute' => true,
 		);
 
 		// and get new field object
@@ -157,7 +158,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 
 		// if there is no id saved yet, try to get it from the url
 		if ( $this->args['value'] && ! $id_value ) {
-			$id_value = cmb2_utils::image_id_from_url( esc_url_raw( $this->args['value'] ) );
+			$id_value = CMB2_Utils::image_id_from_url( esc_url_raw( $this->args['value'] ) );
 		}
 
 		$id_field->value = $id_value;

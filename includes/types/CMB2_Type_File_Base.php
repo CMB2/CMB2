@@ -33,11 +33,12 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		 */
 		$is_valid_types = apply_filters( 'cmb2_valid_img_types', $valid_types );
 		$is_valid = $file_ext && in_array( $file_ext, (array) $is_valid_types );
+		$field_id = $this->field->id();
 
 		/**
 		 * Filter for determining if a field value has a valid image file-type extension.
 		 *
-		 * The dynamic portion of the hook name, $this->field->id(), refers to the field id attribute.
+		 * The dynamic portion of the hook name, $field_id, refers to the field id attribute.
 		 *
 		 * @since 2.0.9
 		 *
@@ -45,7 +46,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 		 * @param string $file     File url.
 		 * @param string $file_ext File extension.
 		 */
-		return (bool) apply_filters( "cmb2_{$this->field->id()}_is_valid_img_ext", $is_valid, $file, $file_ext );
+		return (bool) apply_filters( "cmb2_{$field_id}_is_valid_img_ext", $is_valid, $file, $file_ext );
 	}
 
 	/**

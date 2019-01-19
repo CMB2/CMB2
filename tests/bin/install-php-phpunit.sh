@@ -25,6 +25,9 @@ mkdir -p $HOME/phpunit-bin
 if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]]; then
   # use the phpunit in the PHP5.2 installation
   ln -s ${PHP52_PATH}/lib/php/phpunit/phpunit.php $HOME/phpunit-bin/phpunit
+elif [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.6" ]]; then
+  wget -O $HOME/phpunit-bin/phpunit https://phar.phpunit.de/phpunit-6.5.phar
+  chmod +x $HOME/phpunit-bin/phpunit
 elif [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]] || [[ ${SWITCH_TO_PHP:0:2} == "5." ]]; then
   wget -O $HOME/phpunit-bin/phpunit https://phar.phpunit.de/phpunit-4.8.phar
   chmod +x $HOME/phpunit-bin/phpunit
@@ -49,7 +52,7 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
   chmod +x $HOME/php-utils-bin/phpbrew
 
   # needs to be on the path for switching php versions to work
-	export PATH=$HOME/php-utils-bin:$PATH
+  export PATH=$HOME/php-utils-bin:$PATH
 
   travis_fold end installphpbrew
 
@@ -63,19 +66,17 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
     $HOME/php-utils-bin/phpbrew known --old
 
     # build PHP5.2
-    tail -F $HOME/.phpbrew/build/php-5.2.17/build.log &
-    TAIL_PID=$!
+    echo 'Installing PHP 5.2...'
     $HOME/php-utils-bin/phpbrew install --patch ${THIS_DIR}/patches/node.patch --patch ${THIS_DIR}/patches/openssl.patch 5.2 +default +mysql +pdo \
-    +gettext +phar +openssl -- --with-openssl-dir=/usr/include/openssl --enable-spl --with-mysql --with-mysqli=/usr/bin/mysql_config --with-pdo-mysql=/usr
-    kill -TERM $TAIL_PID
+    +gettext +phar +openssl -- --with-openssl-dir=/usr/include/openssl --enable-spl --with-mysql --with-mysqli=/usr/bin/mysql_config --with-pdo-mysql=/usr \
+    > /dev/null
 
     # Remove 5.3 or Travis build becomes too large.
     # build PHP5.3
-    # tail -F $HOME/.phpbrew/build/php-5.3.29/build.log &
-    # TAIL_PID=$!
+    # echo 'Installing PHP 5.3...'
     # $HOME/php-utils-bin/phpbrew install --patch ${THIS_DIR}/patches/node.patch --patch ${THIS_DIR}/patches/openssl.patch 5.3 +default +mysql +pdo \
-    # +gettext +phar +openssl -- --with-openssl-dir=/usr/include/openssl --enable-spl --with-mysql --with-mysqli=/usr/bin/mysql_config --with-pdo-mysql=/usr
-    # kill -TERM $TAIL_PID
+    # +gettext +phar +openssl -- --with-openssl-dir=/usr/include/openssl --enable-spl --with-mysql --with-mysqli=/usr/bin/mysql_config --with-pdo-mysql=/usr \
+    # > /dev/null
 
     # install PHPUnit 3.6. The only install method available is from source, using git branches old
     # enough that they don't rely on any PHP5.3+ features. This clones each needed dependency

@@ -124,6 +124,26 @@ function yourprefix_register_demo_metabox() {
 		// 'closed'     => true, // true to keep the metabox closed by default
 		// 'classes'    => 'extra-class', // Extra cmb2-wrap classes
 		// 'classes_cb' => 'yourprefix_add_some_classes', // Add classes through a callback.
+
+		/*
+		 * The following parameter is any additional arguments passed as $callback_args
+		 * to add_meta_box, if/when applicable.
+		 *
+		 * CMB2 does not use these arguments in the add_meta_box callback, however, these args
+		 * are parsed for certain special properties, like determining Gutenberg/block-editor
+		 * compatibility.
+		 *
+		 * Examples:
+		 *
+		 * - Make sure default editor is used as metabox is not compatible with block editor
+		 *      [ '__block_editor_compatible_meta_box' => false/true ]
+		 *
+		 * - Or declare this box exists for backwards compatibility
+		 *      [ '__back_compat_meta_box' => false ]
+		 *
+		 * More: https://wordpress.org/gutenberg/handbook/extensibility/meta-box/
+		 */
+		// 'mb_callback_args' => array( '__block_editor_compatible_meta_box' => false ),
 	) );
 
 	$cmb_demo->add_field( array(
@@ -289,6 +309,17 @@ function yourprefix_register_demo_metabox() {
 		'desc' => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'   => $prefix . 'textarea_code',
 		'type' => 'textarea_code',
+		// 'attributes' => array(
+		// 	// Optionally override the code editor defaults.
+		// 	'data-codeeditor' => json_encode( array(
+		// 		'codemirror' => array(
+		// 			'lineNumbers' => false,
+		// 			'mode' => 'css',
+		// 		),
+		// 	) ),
+		// ),
+		// To keep the previous formatting, you can disable codemirror.
+		// 'options' => array( 'disable_codemirror' => true ),
 	) );
 
 	$cmb_demo->add_field( array(
@@ -340,7 +371,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Radio', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'text_taxonomy_radio',
-		'type'     => 'taxonomy_radio',
+		'type'     => 'taxonomy_radio', // Or `taxonomy_radio_inline`/`taxonomy_radio_hierarchical`
 		'taxonomy' => 'category', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
@@ -357,7 +388,7 @@ function yourprefix_register_demo_metabox() {
 		'name'     => esc_html__( 'Test Taxonomy Multi Checkbox', 'cmb2' ),
 		'desc'     => esc_html__( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'multitaxonomy',
-		'type'     => 'taxonomy_multicheck',
+		'type'     => 'taxonomy_multicheck', // Or `taxonomy_multicheck_inline`/`taxonomy_multicheck_hierarchical`
 		'taxonomy' => 'post_tag', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
 	) );
@@ -486,11 +517,12 @@ function yourprefix_register_repeatable_group_field_metabox() {
 		'type'        => 'group',
 		'description' => esc_html__( 'Generates reusable form entries', 'cmb2' ),
 		'options'     => array(
-			'group_title'   => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
-			'add_button'    => esc_html__( 'Add Another Entry', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Entry', 'cmb2' ),
-			'sortable'      => true, // beta
-			// 'closed'     => true, // true to have the groups closed by default
+			'group_title'    => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
+			'add_button'     => esc_html__( 'Add Another Entry', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Entry', 'cmb2' ),
+			'sortable'       => true,
+			// 'closed'      => true, // true to have the groups closed by default
+			// 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
 		),
 	) );
 
@@ -670,6 +702,9 @@ function yourprefix_register_theme_options_metabox() {
 		// 'save_button'     => esc_html__( 'Save Theme Options', 'cmb2' ), // The text for the options-page save button. Defaults to 'Save'.
 		// 'disable_settings_errors' => true, // On settings pages (not options-general.php sub-pages), allows disabling.
 		// 'message_cb'      => 'yourprefix_options_page_message_callback',
+		// 'tab_group'       => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'       => null, // Falls back to 'title' (above).
+		// 'autoload'        => false, // Defaults to true, the options-page option will be autloaded.
 	) );
 
 	/**

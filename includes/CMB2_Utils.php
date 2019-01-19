@@ -32,7 +32,7 @@ class CMB2_Utils {
 	 * Utility method that attempts to get an attachment's ID by it's url
 	 *
 	 * @since  1.0.0
-	 * @param  string $img_url Attachment url
+	 * @param  string $img_url Attachment url.
 	 * @return int|false            Attachment ID or false
 	 */
 	public static function image_id_from_url( $img_url ) {
@@ -85,7 +85,7 @@ class CMB2_Utils {
 	 * @global array $_wp_additional_image_sizes
 	 * @return array The image sizes
 	 */
-	static function get_available_image_sizes() {
+	public static function get_available_image_sizes() {
 		global $_wp_additional_image_sizes;
 
 		$default_image_sizes = array( 'thumbnail', 'medium', 'large' );
@@ -114,7 +114,7 @@ class CMB2_Utils {
 	 * Uses get_available_image_sizes() to get all available sizes.
 	 *
 	 * @since  2.2.4
-	 * @param  array|string $size Image size. Accepts an array of width and height (in that order)
+	 * @param  array|string $size Image size. Accepts an array of width and height (in that order).
 	 * @return false|string       Named image size e.g. 'thumbnail'
 	 */
 	public static function get_named_size( $size ) {
@@ -136,7 +136,7 @@ class CMB2_Utils {
 				// If it's not an exact match, consider larger sizes with the same aspect ratio.
 				if ( $data['width'] >= $size[0] && $data['height'] >= $size[1] ) {
 
-					/*
+					/**
 					 * To test for varying crops, we constrain the dimensions of the larger image
 					 * to the dimensions of the smaller image and see if they match.
 					 */
@@ -176,7 +176,7 @@ class CMB2_Utils {
 			}
 		} elseif ( ! empty( $image_sizes[ $size ] ) ) {
 			$data = $size;
-		}// End if().
+		}// End if.
 
 		// If we still don't have a match at this point, return false.
 		if ( empty( $data ) ) {
@@ -190,7 +190,7 @@ class CMB2_Utils {
 	 * Utility method that returns time string offset by timezone
 	 *
 	 * @since  1.0.0
-	 * @param  string $tzstring Time string
+	 * @param  string $tzstring Time string.
 	 * @return string           Offset time string
 	 */
 	public static function timezone_offset( $tzstring ) {
@@ -233,7 +233,7 @@ class CMB2_Utils {
 			$tzstring = '';
 		}
 
-		if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
+		if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists.
 			if ( 0 == $current_offset ) {
 				$tzstring = 'UTC+0';
 			} elseif ( $current_offset < 0 ) {
@@ -250,8 +250,8 @@ class CMB2_Utils {
 	 * Returns a timestamp, first checking if value already is a timestamp.
 	 *
 	 * @since  2.0.0
-	 * @param  string|int $string Possible timestamp string
-	 * @return int   	            Time stamp
+	 * @param  string|int $string Possible timestamp string.
+	 * @return int Time stamp.
 	 */
 	public static function make_valid_time_stamp( $string ) {
 		if ( ! $string ) {
@@ -267,7 +267,7 @@ class CMB2_Utils {
 	 * Determine if a value is a valid timestamp
 	 *
 	 * @since  2.0.0
-	 * @param  mixed $timestamp Value to check
+	 * @param  mixed $timestamp Value to check.
 	 * @return boolean           Whether value is a valid timestamp
 	 */
 	public static function is_valid_time_stamp( $timestamp ) {
@@ -280,7 +280,7 @@ class CMB2_Utils {
 	 * Checks if a value is 'empty'. Still accepts 0.
 	 *
 	 * @since  2.0.0
-	 * @param  mixed $value Value to check
+	 * @param  mixed $value Value to check.
 	 * @return bool         True or false
 	 */
 	public static function isempty( $value ) {
@@ -291,7 +291,7 @@ class CMB2_Utils {
 	 * Checks if a value is not 'empty'. 0 doesn't count as empty.
 	 *
 	 * @since  2.2.2
-	 * @param  mixed $value Value to check
+	 * @param  mixed $value Value to check.
 	 * @return bool         True or false
 	 */
 	public static function notempty( $value ) {
@@ -302,8 +302,8 @@ class CMB2_Utils {
 	 * Filters out empty values (not including 0).
 	 *
 	 * @since  2.2.2
-	 * @param  mixed $value Value to check
-	 * @return bool         True or false
+	 * @param  mixed $value Value to check.
+	 * @return array True or false.
 	 */
 	public static function filter_empty( $value ) {
 		return array_filter( $value, array( __CLASS__, 'notempty' ) );
@@ -313,9 +313,9 @@ class CMB2_Utils {
 	 * Insert a single array item inside another array at a set position
 	 *
 	 * @since  2.0.2
-	 * @param  array &$array   Array to modify. Is passed by reference, and no return is needed.
-	 * @param  array $new      New array to insert
-	 * @param  int   $position Position in the main array to insert the new array
+	 * @param  array $array    Array to modify. Is passed by reference, and no return is needed. Passed by reference.
+	 * @param  array $new      New array to insert.
+	 * @param  int   $position Position in the main array to insert the new array.
 	 */
 	public static function array_insert( &$array, $new, $position ) {
 		$before = array_slice( $array, 0, $position - 1 );
@@ -329,6 +329,8 @@ class CMB2_Utils {
 	 * If resources do not load, please check the wiki for details.
 	 *
 	 * @since  1.0.1
+	 *
+	 * @param string $path URL path.
 	 * @return string URL to CMB2 resources
 	 */
 	public static function url( $path = '' ) {
@@ -339,9 +341,9 @@ class CMB2_Utils {
 		$cmb2_url = self::get_url_from_dir( cmb2_dir() );
 
 		/**
-		 * Filter the CMB location url
+		 * Filter the CMB location url.
 		 *
-		 * @param string $cmb2_url Currently registered url
+		 * @param string $cmb2_url Currently registered url.
 		 */
 		self::$url = trailingslashit( apply_filters( 'cmb2_meta_box_url', $cmb2_url, CMB2_VERSION ) );
 
@@ -383,7 +385,7 @@ class CMB2_Utils {
 			);
 		}
 
-		// Check to see if it's anywhere in the root directory
+		// Check to see if it's anywhere in the root directory.
 		$site_dir = self::get_normalized_abspath();
 		$site_url = trailingslashit( is_multisite() ? network_site_url() : site_url() );
 
@@ -439,8 +441,8 @@ class CMB2_Utils {
 	 * Get timestamp from text date
 	 *
 	 * @since  2.2.0
-	 * @param  string $value       Date value
-	 * @param  string $date_format Expected date format
+	 * @param  string $value       Date value.
+	 * @param  string $date_format Expected date format.
 	 * @return mixed               Unix timestamp representing the date.
 	 */
 	public static function get_timestamp_from_value( $value, $date_format ) {
@@ -450,9 +452,9 @@ class CMB2_Utils {
 
 	/**
 	 * Takes a php date() format string and returns a string formatted to suit for the date/time pickers
-	 * It will work with only with the following subset ot date() options:
+	 * It will work only with the following subset of date() options:
 	 *
-	 *  d, l, j, z, m, F, n, y, and Y.
+	 * Formats: d, l, j, z, m, F, n, y, and Y.
 	 *
 	 * A slight effort is made to deal with escaped characters.
 	 *
@@ -460,44 +462,44 @@ class CMB2_Utils {
 	 * bring even more translation troubles.
 	 *
 	 * @since 2.2.0
-	 * @param string $format php date format
+	 * @param string $format PHP date format.
 	 * @return string reformatted string
 	 */
 	public static function php_to_js_dateformat( $format ) {
 
 		// order is relevant here, since the replacement will be done sequentially.
 		$supported_options = array(
-			'd'    => 'dd',  // Day, leading 0
-			'j'    => 'd',   // Day, no 0
-			'z'    => 'o',   // Day of the year, no leading zeroes,
-			// 'D' => 'D',   // Day name short, not sure how it'll work with translations
-			'l '   => 'DD ',  // Day name full, idem before
-			'l, '  => 'DD, ',  // Day name full, idem before
-			'm'    => 'mm',  // Month of the year, leading 0
-			'n'    => 'm',   // Month of the year, no leading 0
-			// 'M' => 'M',   // Month, Short name
-			'F '   => 'MM ',  // Month, full name,
-			'F, '  => 'MM, ',  // Month, full name,
-			'y'    => 'y',   // Year, two digit
-			'Y'    => 'yy',  // Year, full
-			'H'    => 'HH',  // Hour with leading 0 (24 hour)
-			'G'    => 'H',   // Hour with no leading 0 (24 hour)
-			'h'    => 'hh',  // Hour with leading 0 (12 hour)
-			'g'    => 'h',   // Hour with no leading 0 (12 hour),
-			'i'    => 'mm',  // Minute with leading 0,
-			's'    => 'ss',  // Second with leading 0,
-			'a'    => 'tt',  // am/pm
-			'A'    => 'TT',// AM/PM
+			'd'   => 'dd',  // Day, leading 0.
+			'j'   => 'd',   // Day, no 0.
+			'z'   => 'o',   // Day of the year, no leading zeroes.
+			// 'D' => 'D',   // Day name short, not sure how it'll work with translations.
+			'l '  => 'DD ',  // Day name full, idem before.
+			'l, ' => 'DD, ',  // Day name full, idem before.
+			'm'   => 'mm',  // Month of the year, leading 0.
+			'n'   => 'm',   // Month of the year, no leading 0.
+			// 'M' => 'M',   // Month, Short name.
+			'F '  => 'MM ',  // Month, full name.
+			'F, ' => 'MM, ',  // Month, full name.
+			'y'   => 'y',   // Year, two digit.
+			'Y'   => 'yy',  // Year, full.
+			'H'   => 'HH',  // Hour with leading 0 (24 hour).
+			'G'   => 'H',   // Hour with no leading 0 (24 hour).
+			'h'   => 'hh',  // Hour with leading 0 (12 hour).
+			'g'   => 'h',   // Hour with no leading 0 (12 hour).
+			'i'   => 'mm',  // Minute with leading 0.
+			's'   => 'ss',  // Second with leading 0.
+			'a'   => 'tt',  // am/pm.
+			'A'   => 'TT', // AM/PM.
 		);
 
 		foreach ( $supported_options as $php => $js ) {
-			// replaces every instance of a supported option, but skips escaped characters
+			// replaces every instance of a supported option, but skips escaped characters.
 			$format = preg_replace( "~(?<!\\\\)$php~", $js, $format );
 		}
 
 		$supported_options = array(
-			'l' => 'DD',  // Day name full, idem before
-			'F' => 'MM',  // Month, full name,
+			'l' => 'DD',  // Day name full, idem before.
+			'F' => 'MM',  // Month, full name.
 		);
 
 		if ( isset( $supported_options[ $format ] ) ) {
@@ -513,7 +515,7 @@ class CMB2_Utils {
 	 * Helper function for CMB_Utils::php_to_js_dateformat().
 	 *
 	 * @since  2.2.0
-	 * @param  $value Value to wrap/escape
+	 * @param  string $value Value to wrap/escape.
 	 * @return string Modified value
 	 */
 	public static function wrap_escaped_chars( $value ) {
@@ -525,10 +527,10 @@ class CMB2_Utils {
 	 *
 	 * @since  2.2.0
 	 *
-	 * @param  string $function Function name
-	 * @param  int    $line     Line number
-	 * @param  mixed  $msg      Message to output
-	 * @param  mixed  $debug    Variable to print_r
+	 * @param  string $function Function name.
+	 * @param  int    $line     Line number.
+	 * @param  mixed  $msg      Message to output.
+	 * @param  mixed  $debug    Variable to print_r.
 	 */
 	public static function log_if_debug( $function, $line, $msg, $debug = null ) {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -540,7 +542,7 @@ class CMB2_Utils {
 	 * Determine a file's extension
 	 *
 	 * @since  1.0.0
-	 * @param  string $file File url
+	 * @param  string $file File url.
 	 * @return string|false       File extension or false
 	 */
 	public static function get_file_ext( $file ) {
@@ -552,7 +554,7 @@ class CMB2_Utils {
 	 * Get the file name from a url
 	 *
 	 * @since  2.0.0
-	 * @param  string $value File url or path
+	 * @param  string $value File url or path.
 	 * @return string        File name
 	 */
 	public static function get_file_name_from_path( $value ) {
@@ -565,7 +567,7 @@ class CMB2_Utils {
 	 *
 	 * @since  2.2.2
 	 * @param  string $version WP version string to compare.
-	 * @return bool             Result of comparison check.
+	 * @return bool            Result of comparison check.
 	 */
 	public static function wp_at_least( $version ) {
 		return version_compare( get_bloginfo( 'version' ), $version, '>=' );
@@ -577,17 +579,19 @@ class CMB2_Utils {
 	 * @since  1.1.0
 	 * @param  array $attrs        Attributes to concatenate.
 	 * @param  array $attr_exclude Attributes that should NOT be concatenated.
-	 * @return string               String of attributes for form element.
+	 * @return string              String of attributes for form element.
 	 */
 	public static function concat_attrs( $attrs, $attr_exclude = array() ) {
 		$attr_exclude[] = 'rendered';
+		$attr_exclude[] = 'js_dependencies';
+
 		$attributes = '';
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
-				// if data attribute, use single quote wraps, else double
-				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
+				// if data attribute, use single quote wraps, else double.
+				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
@@ -599,8 +603,7 @@ class CMB2_Utils {
 	 *
 	 * @since  2.2.5
 	 *
-	 * @param  string  $att HTML attribute
-	 *
+	 * @param string $att HTML attribute.
 	 * @return boolean
 	 */
 	public static function is_data_attribute( $att ) {
@@ -639,8 +642,7 @@ class CMB2_Utils {
 	 *
 	 * @since  2.2.6
 	 *
-	 * @param  mixed  $value Value to normalize (if numeric).
-	 *
+	 * @param mixed $value Value to normalize (if numeric).
 	 * @return mixed         Possibly normalized value.
 	 */
 	public static function normalize_if_numeric( $value ) {
@@ -650,4 +652,18 @@ class CMB2_Utils {
 
 		return $value;
 	}
+
+	/**
+	 * Generates a 12 character unique hash from a string.
+	 *
+	 * @since  2.4.0
+	 *
+	 * @param string $string String to create a hash from.
+	 *
+	 * @return string
+	 */
+	public static function generate_hash( $string ) {
+		return substr( base_convert( md5( $string ), 16, 32 ), 0, 12 );
+	}
+
 }

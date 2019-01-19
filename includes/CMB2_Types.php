@@ -9,12 +9,6 @@
  * @author    CMB2 team
  * @license   GPL-2.0+
  * @link      https://cmb2.io
- *
- * @method string _id()
- * @method string _name()
- * @method string _desc()
- * @method string _text()
- * @method string concat_attrs()
  */
 class CMB2_Types {
 
@@ -142,6 +136,7 @@ class CMB2_Types {
 	 * @since  2.2.3
 	 *
 	 * @param string $method  Method attempting to be called on the CMB2_Type_Base object.
+	 * @return bool
 	 */
 	protected function guess_type_object( $method ) {
 		$fieldtype = $this->field->type();
@@ -184,7 +179,7 @@ class CMB2_Types {
 	 * @since  2.2.4
 	 * @param  string $method    The possible method to proxy.
 	 * @param  array  $arguments All arguments passed to the method.
-	 * @return bool|array       False if not proxied, else array with 'value' key being the return of the method.
+	 * @return bool|array        False if not proxied, else array with 'value' key being the return of the method.
 	 */
 	public function maybe_proxy_method( $method, $arguments ) {
 		$exists = false;
@@ -245,7 +240,7 @@ class CMB2_Types {
 	 * @param  string $render_class_name The default field type class to use. Defaults to null.
 	 * @param  array  $args              Optional arguments to pass to type class.
 	 * @param  mixed  $additional        Optional additional argument to pass to type class.
-	 * @return CMB2_Type_Base                    Type object.
+	 * @return CMB2_Type_Base            Type object.
 	 */
 	public function get_new_render_type( $fieldtype, $render_class_name = null, $args = array(), $additional = '' ) {
 		$render_class_name = $this->get_render_type_class( $fieldtype, $render_class_name );
@@ -286,10 +281,10 @@ class CMB2_Types {
 	/**
 	 * Retrieve text parameter from field's options array (if it has one), or use fallback text
 	 *
-	 * @since  2.0.0
-	 * @param  string $text_key Key in field's options array
-	 * @param  string $fallback Fallback text
-	 * @return string            Text
+	 * @since 2.0.0
+	 * @param  string $text_key Key in field's options array.
+	 * @param  string $fallback Fallback text.
+	 * @return string
 	 */
 	public function _text( $text_key, $fallback = '' ) {
 		return $this->field->get_string( $text_key, $fallback );
@@ -300,7 +295,7 @@ class CMB2_Types {
 	 *
 	 * @since  1.0.0
 	 * @param  string $file File url
-	 * @return string|false       File extension or false
+	 * @return string|false File extension or false
 	 */
 	public function get_file_ext( $file ) {
 		return CMB2_Utils::get_file_ext( $file );
@@ -374,7 +369,6 @@ class CMB2_Types {
 
 		// Loop value array and add a row
 		if ( ! empty( $meta_value ) ) {
-			$count = count( $meta_value );
 			foreach ( (array) $meta_value as $val ) {
 				$this->field->escaped_value = $val;
 				$this->repeat_row();
@@ -390,7 +384,7 @@ class CMB2_Types {
 		}
 
 		// Then add an empty row
-		$this->field->escaped_value = '';
+		$this->field->escaped_value = $default;
 		$this->iterator = $this->iterator ? $this->iterator : 1;
 		$this->repeat_row( 'empty-row hidden' );
 	}
@@ -417,12 +411,13 @@ class CMB2_Types {
 	}
 
 	/**
-	 * Generates description markup
+	 * Generates description markup.
 	 *
-	 * @since  1.0.0
-	 * @param  boolean $paragraph Paragraph tag or span
-	 * @param  boolean $echo      Whether to echo description or only return it
-	 * @return string             Field's description markup
+	 * @since 1.0.0
+	 * @param bool $paragraph    Paragraph tag or span.
+	 * @param bool $echo         Whether to echo description or only return it.
+	 * @param bool $repeat_group Whether to repeat the group.
+	 * @return string Field's description markup.
 	 */
 	public function _desc( $paragraph = false, $echo = false, $repeat_group = false ) {
 		// Prevent description from printing multiple times for repeatable fields

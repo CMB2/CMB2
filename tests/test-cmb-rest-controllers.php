@@ -150,7 +150,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertResponseStatuses( $url, array(
 			'GET' => 200,
 			'POST' => array(
-				403 => 'rest_forbidden',
+				self::auth_required_code() => 'rest_forbidden',
 			),
 			'DELETE' => array(
 				400 => 'rest_missing_callback_param',
@@ -171,7 +171,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 				403 => 'cmb2_rest_no_field_by_id_error',
 			),
 			'POST' => array(
-				403 => 'rest_forbidden',
+				self::auth_required_code() => 'rest_forbidden',
 			),
 			'DELETE' => array(
 				400 => 'rest_missing_callback_param',
@@ -184,10 +184,10 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$this->assertResponseStatuses( $url, array(
 			'GET' => array(
-				403 => 'rest_forbidden',
+				self::auth_required_code() => 'rest_forbidden',
 			),
 			'POST' => array(
-				403 => 'rest_forbidden',
+				self::auth_required_code() => 'rest_forbidden',
 			),
 			'DELETE' => array(
 				400 => 'rest_missing_callback_param',
@@ -197,7 +197,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$request = new WP_REST_Request( 'DELETE', $url );
 		$request['object_id'] = $this->post_id;
 		$request['object_type'] = 'post';
-		$this->assertResponseStatus( 403, rest_do_request( $request ), 'rest_forbidden' );
+		$this->assertResponseStatus( self::auth_required_code(), rest_do_request( $request ), 'rest_forbidden' );
 	}
 
 	/**
@@ -232,7 +232,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
 		$response = rest_do_request( new WP_REST_Request( 'POST', $url ) );
-		$this->assertResponseStatus( 403, $response, 'rest_forbidden' );
+		$this->assertResponseStatus( self::auth_required_code(), $response, 'rest_forbidden' );
 	}
 
 	public function test_update_bad_request_for_admin() {
@@ -343,4 +343,9 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertEquals( '', get_post_meta( $this->post_id, 'rest_test', 1 ) );
 		$this->assertEquals( '', $response_data['value'] );
 	}
+
+	protected static function auth_required_code() {
+		return function_exists( 'rest_authorization_required_code' ) ? rest_authorization_required_code() : 403;
+	}
+
 }
