@@ -906,7 +906,10 @@ class CMB2 extends CMB2_Base {
 	 * @return mixed                   Return of CMB2_Field::update_data().
 	 */
 	public function save_group_field( $field_group ) {
+		$base_id = $field_group->id();
+
 		$saved_value = $field_group->get_root_value_from_data( $this->data_to_save );
+
 		if ( is_null( $saved_value ) ) {
 			return;
 		}
@@ -969,7 +972,7 @@ class CMB2 extends CMB2_Base {
 
 				// Compare values and add to `$updated` array.
 				if ( $is_updated || $is_removed ) {
-					$this->updated[] = $field_group->id() . '::' . $field_group->index . '::' . $sub_id;
+					$this->updated[] = $base_id . '::' . $field_group->index . '::' . $sub_id;
 				}
 
 				// Add to `$saved` array.

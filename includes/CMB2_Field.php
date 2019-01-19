@@ -115,6 +115,15 @@ class CMB2_Field extends CMB2_Base {
 	);
 
 	/**
+	 * Represents a unique hash representing this field.
+	 *
+	 * @since  2.2.4
+	 *
+	 * @var string
+	 */
+	protected $hash_id = '';
+
+	/**
 	 * ID Data.
 	 *
 	 * @var   array
