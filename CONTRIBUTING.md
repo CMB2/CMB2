@@ -41,6 +41,14 @@ Translations
 ---
 If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
 
+Creating/Running Tests
+---
+We use PHPUnit and the WordPress test suite for our unit/integration tests.
+
+1. You can install the WordPress test suite [using the installer](https://github.com/CMB2/CMB2/blob/develop/tests/bin/install-wp-tests.sh#L3): `bash tests/bin/install-wp-tests.sh wordpress_test root ''`. (this will install the test suite in the temp folder on your computer, using a test database with those given credentials)
+1. Install PHPUnit via composer, `composer install`.
+1. Once Composer and the WordPress test sutie are installed, you can run phpunit via `./vendor/bin/phpunit` in the CMB2 directory.
+
 Additional Resources
 ---
 

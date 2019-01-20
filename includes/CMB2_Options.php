@@ -229,4 +229,22 @@ class CMB2_Option {
 		return $this->options;
 	}
 
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $field Requested property.
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'options':
+			case 'key':
+				return $this->{$field};
+			default:
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
+		}
+	}
 }

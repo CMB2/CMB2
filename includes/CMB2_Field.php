@@ -883,9 +883,27 @@ class CMB2_Field extends CMB2_Base {
 			return;
 		}
 
+		$field_type = $this->type();
+
+		/**
+		 * Hook before field row begins.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( 'cmb2_before_field_row', $this );
+
+		/**
+		 * Hook before field row begins.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( "cmb2_before_{$field_type}_field_row", $this );
+
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
+		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $field_type );
 
 		if ( ! $this->args( 'show_names' ) ) {
 			echo "\n\t<div class=\"cmb-td\">\n";
@@ -911,6 +929,22 @@ class CMB2_Field extends CMB2_Base {
 		echo "\n\t</div>\n</div>";
 
 		$this->peform_param_callback( 'after_row' );
+
+		/**
+		 * Hook after field row ends.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( "cmb2_after_{$field_type}_field_row", $this );
+
+		/**
+		 * Hook after field row ends.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( 'cmb2_after_field_row', $this );
 
 		// For chaining.
 		return $this;
@@ -1014,7 +1048,7 @@ class CMB2_Field extends CMB2_Base {
 		$field_id   = $this->id( true );
 
 		if ( $cb = $this->maybe_callback( 'rest_value_cb' ) ) {
-			apply_filters( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
+			add_filter( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
 		}
 
 		$value = $this->get_data();
@@ -1295,9 +1329,30 @@ class CMB2_Field extends CMB2_Base {
 	 * @return array        Modified field config array.
 	 */
 	public function _set_field_defaults( $args ) {
+		$defaults = $this->get_default_field_args( $args );
+
+		/**
+		 * Filter the CMB2 Field defaults.
+		 *
+		 * @since 2.6.0
+		 * @param array             $defaults Metabox field config array defaults.
+		 * @param string            $id       Field id for the current field to allow for selective filtering.
+		 * @param string            $type     Field type for the current field to allow for selective filtering.
+		 * @param CMB2_Field object $field    This field object.
+		 */
+		$defaults = apply_filters( 'cmb2_field_defaults', $defaults, $args['id'], $args['type'], $this );
 
 		// Set up blank or default values for empty ones.
-		$args = wp_parse_args( $args, $this->get_default_field_args( $args ) );
+		$args = wp_parse_args( $args, $defaults );
+
+		/**
+		 * Filtering the CMB2 Field arguments once merged with the defaults, but before further processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array defaults.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $this );
 
 		/*
 		 * Deprecated usage:
@@ -1332,7 +1387,19 @@ class CMB2_Field extends CMB2_Base {
 			true
 		);
 
-		return $args;
+		// Repeatable fields require jQuery sortable library.
+		if ( ! empty( $args['repeatable'] ) ) {
+			CMB2_JS::add_dependencies( 'jquery-ui-sortable' );
+		}
+
+		/**
+		 * Filter the CMB2 Field arguments after processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array after processing.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		return apply_filters( 'cmb2_field_arguments', $args, $this );
 	}
 
 	/**
@@ -1345,8 +1412,9 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	protected function set_field_defaults_group( $args ) {
 		$args['options'] = wp_parse_args( $args['options'], array(
-			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Group', 'cmb2' ),
+			'add_button'     => esc_html__( 'Add Group', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Group', 'cmb2' ),
+			'remove_confirm' => '',
 		) );
 
 		return $args;
