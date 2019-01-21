@@ -60,24 +60,37 @@ class CMB2_Associated_Objects_Search {
 			$this->field = $cmb->get_field( $field_id, $group );
 		}
 
-		$object_type    = isset( $args['query_object_type'] ) ? $args['query_object_type'] : array();
-		if ( $object_type ) {
-			if ( is_array( $object_type ) && 1 === count( $object_type ) ) {
-				$object_type = sanitize_text_field( end( $object_type ) );
-			} elseif ( is_string( $object_type ) ) {
-				$object_type = sanitize_text_field( $object_type );
-			}
-		} else {
-			$object_type = 'post';
-		}
-
 		if ( $this->field ) {
 			$this->query = CMB2_Type_Query_Associated_Objects::get_query_object(
-				$object_type,
+				self::get_object_type(),
 				array(),
 				$this->field
 			);
 		}
+	}
+
+	/**
+	 * [get_object_type description]
+	 *
+	 * @since  2.X.X
+	 *
+	 * @param  [type]  $args [description]
+	 *
+	 * @return [type]        [description]
+	 */
+	public static function get_object_type( $args ) {
+		$type = 'post';
+
+		if ( ! empty( $args['query_object_type'] ) ) {
+			$type = $args['query_object_type'];
+			if ( is_array( $type ) && 1 === count( $type ) ) {
+				$type = sanitize_text_field( end( $type ) );
+			} elseif ( is_string( $type ) ) {
+				$type = sanitize_text_field( $type );
+			}
+		}
+
+		return $type;
 	}
 
 	/**
