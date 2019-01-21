@@ -125,7 +125,7 @@ class CMB2_JS {
 
 			unset( $dependencies['cmb2-associated-objects'] );
 
-			$dependencies = $associated_dependencies + $dependencies;
+			$dependencies = array_merge( $dependencies, $associated_dependencies );
 		}
 
         // Enqueue cmb JS.
