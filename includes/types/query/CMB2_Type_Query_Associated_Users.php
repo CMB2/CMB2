@@ -2,7 +2,7 @@
 /**
  * CMB2 Query Associated Users
  *
- * @since  2.2.7
+ * @since  2.X.X
  *
  * @category  WordPress_Plugin
  * @package   CMB2

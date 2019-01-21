@@ -490,7 +490,7 @@ class CMB2_Display_Associated_Objects extends CMB2_Field_Display {
 	/**
 	 * Display oembed value.
 	 *
-	 * @since 2.2.7
+	 * @since 2.X.X
 	 */
 	protected function _display() {
 		$return = '';
@@ -532,7 +532,7 @@ class CMB2_Display_Associated_Objects extends CMB2_Field_Display {
 	 *
 	 * @todo  Make other object types work.
 	 *
-	 * @since 2.2.7
+	 * @since 2.X.X
 	 *
 	 * @param mixed      $val   The field value.
 	 */

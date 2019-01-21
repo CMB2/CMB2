@@ -325,7 +325,7 @@ class CMB2_Ajax {
 	/**
 	 * Handle the associated object search query
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 * @return void
 	 */
 	public function find_associated_objects() {

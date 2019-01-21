@@ -8,7 +8,7 @@
  * @todo Unit tests for field.
  * @todo Add example to example-functions.php. See https://github.com/CMB2/cmb2-attached-posts/blob/master/example-field-setup.php
  *
- * @since  2.2.7
+ * @since  2.X.X
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -174,7 +174,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Get the JSON encoded data for our objects-search button.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @return string
 	 */
@@ -196,7 +196,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Outputs a column list item.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  mixed  $object     Post or User.
 	 * @param  string  $li_class   The list item (zebra) class.
@@ -227,7 +227,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Returns the <li>s in the retrieved (left) column.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  mixed  $objects  Posts or users.
 	 * @param  array  $attached Array of attached objects.
@@ -256,7 +256,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Returns the <li>s in the attached (right) column.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  array  $attached Array of attached objects.
 	 *
@@ -324,7 +324,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	/**
 	 * Fetches the default query for items, and combines with any objects attached.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  array  $attached Array of attached object ids.
 	 *

@@ -3,7 +3,7 @@
  * CMB2 Associated Objects Search
  * (i.e. a lot of work to get oEmbeds to work with non-post objects)
  *
- * @since  2.2.7
+ * @since  2.X.X
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -15,7 +15,7 @@ class CMB2_Associated_Objects_Search {
 	/**
 	 * [$args description]
 	 *
-	 * @since 2.2.7
+	 * @since 2.X.X
 	 *
 	 * @var array
 	 */
@@ -24,7 +24,7 @@ class CMB2_Associated_Objects_Search {
 	/**
 	 * [$field description]
 	 *
-	 * @since 2.2.7
+	 * @since 2.X.X
 	 *
 	 * @var [type]
 	 */
@@ -40,7 +40,7 @@ class CMB2_Associated_Objects_Search {
 	/**
 	 * [__construct description]
 	 *
-	 * @since 2.2.7
+	 * @since 2.X.X
 	 *
 	 * @param array $args [description]
 	 */
@@ -85,7 +85,7 @@ class CMB2_Associated_Objects_Search {
 	 *
 	 * @todo wp_ajax_find_posts() equivalents for non-post objects.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @return void
 	 */
@@ -109,7 +109,7 @@ class CMB2_Associated_Objects_Search {
 	 * Modify the user search query.
 	 * @todo Make this work
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  WP_User_Query  $query WP_User_Query instance during the pre_get_posts hook.
 	 *
@@ -122,7 +122,7 @@ class CMB2_Associated_Objects_Search {
 	/**
 	 * Modify the post search query.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  WP_Query  $query WP_Query instance during the pre_get_posts hook.
 	 *
@@ -139,7 +139,7 @@ class CMB2_Associated_Objects_Search {
 	/**
 	 * If field has a 'search_query_cb' param, run the callback.
 	 *
-	 * @since  2.2.7
+	 * @since  2.X.X
 	 *
 	 * @param  mixed $query     The query instance during the pre_get_* hook.
 	 *

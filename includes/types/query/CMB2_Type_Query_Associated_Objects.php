@@ -2,7 +2,7 @@
 /**
  * CMB2 Query Associated Objects
  *
- * @since  2.2.7
+ * @since  2.X.X
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -100,7 +100,7 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	/**
 	 * [get_query_args description]
 	 *
-	 * @since  [since]
+	 * @since  2.X.X
 	 *
 	 * @return [type]  [description]
 	 */
