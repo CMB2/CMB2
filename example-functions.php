@@ -517,11 +517,12 @@ function yourprefix_register_repeatable_group_field_metabox() {
 		'type'        => 'group',
 		'description' => esc_html__( 'Generates reusable form entries', 'cmb2' ),
 		'options'     => array(
-			'group_title'   => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
-			'add_button'    => esc_html__( 'Add Another Entry', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Entry', 'cmb2' ),
-			'sortable'      => true,
-			// 'closed'     => true, // true to have the groups closed by default
+			'group_title'    => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
+			'add_button'     => esc_html__( 'Add Another Entry', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Entry', 'cmb2' ),
+			'sortable'       => true,
+			// 'closed'      => true, // true to have the groups closed by default
+			// 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
 		),
 	) );
 

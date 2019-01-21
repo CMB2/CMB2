@@ -591,7 +591,7 @@ class CMB2_Utils {
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double.
-				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
+				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
