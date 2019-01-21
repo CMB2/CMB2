@@ -61,9 +61,17 @@ class CMB2_Associated_Objects_Search {
 		}
 
 		if ( $this->field ) {
+			$object_type = self::get_object_type( $args );
+
+			// Unset args which we don't want to pass to the query object.
+			unset( $args['group_id'] );
+			unset( $args['field_id'] );
+			unset( $args['cmb_id'] );
+			unset( $args['query_object_type'] );
+
 			$this->query = CMB2_Type_Query_Associated_Objects::get_query_object(
-				self::get_object_type(),
-				array(),
+				$object_type,
+				$args,
 				$this->field
 			);
 		}
