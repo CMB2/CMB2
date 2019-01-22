@@ -27,10 +27,6 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 	 * @return mixed
 	 */
 	public function fetch() {
-		// error_log( __FUNCTION__ . ':' . __LINE__ .') $this->query_args: '. print_r( $this->query_args, true ) );
-		$posts = get_posts( $this->query_args );
-		// error_log( __FUNCTION__ . ':' . __LINE__ .') $posts: '. print_r( count( $posts ), true ) );
-		return $posts;
 		return get_posts( $this->query_args );
 	}
 
