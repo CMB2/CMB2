@@ -92,9 +92,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			// @todo Replace with our own markup.
 			add_action( 'admin_footer', 'find_posts_div' );
 		} else {
-			// Will need custom styling!
-			// @todo add styles for front-end
-			require_once( ABSPATH . 'wp-admin/includes/template.php' );
 			do_action( 'cmb2_type_associated_objects_add_find_posts_div' );
 		}
 
@@ -367,6 +364,10 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * Add the find posts div via a hook so we can relocate it manually
 	 */
 	public static function hook_find_posts_div() {
+
+		// Will need custom styling!
+		// @todo add styles for front-end
+		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		add_action( 'wp_footer', 'find_posts_div' );
 	}
 
