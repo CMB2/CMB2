@@ -299,7 +299,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 */
 	function get_attached() {
 		$attached = $this->field->escaped_value();
-		$attached = array_filter( $attached );
+		$attached = array_filter( (array) $attached );
 		$ids = array();
 
 		if ( empty( $attached ) ) {
