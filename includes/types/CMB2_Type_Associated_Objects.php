@@ -70,10 +70,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return CMB2_Type_Base|string
 	 */
 	public function render( $args = array() ) {
-		$this->query = $this->get_query(
-			$this->field->options( 'query_object_type' ),
-			$this->field->options( 'query_args' )
-		);
+		$this->query = $this->get_query();
 
 		// Check to see if we have any meta values saved yet
 		$attached = $this->get_attached();
@@ -170,6 +167,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 	/**
 	 * Get the JSON encoded data for our objects-search button.
+	 * TODO: make work for non-posts.
 	 *
 	 * @since  2.X.X
 	 *
@@ -342,20 +340,15 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 				}
 			}
 		}
-
 		return $objects;
 	}
 
 	/**
-	 * @param string $query_object_type
-	 * @param array $args
 	 *
 	 * @return CMB2_Type_Query_Associated_Objects
 	 */
-	public function get_query( $query_object_type, $args ) {
+	public function get_query() {
 		return CMB2_Type_Query_Associated_Objects::get_query_object(
-			$query_object_type,
-			$args,
 			$this->field
 		);
 	}

@@ -19,21 +19,34 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	/**
 	 * The query source object type.
 	 *
+	 * @since 2.X.X
 	 * @var string
 	 */
 	protected $source_type = '';
 
 	/**
+	 * [$field description]
+	 *
+	 * @since 2.X.X
+	 *
+	 * @var [type]
+	 */
+	protected $field;
+
+	/**
+	 * @since 2.X.X
 	 * @var array
 	 */
 	protected $original_args = array();
 
 	/**
+	 * @since 2.X.X
 	 * @var array
 	 */
 	protected $query_args = array();
 
 	/**
+	 * @since 2.X.X
 	 * @var array
 	 */
 	public $objects = array();
@@ -41,20 +54,34 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	/**
 	 * CMB2_Type_Query_Associated_Objects constructor.
 	 *
+	 * @since 2.X.X
+	 *
+	 * @param CMB2_field $field
 	 * @param $args
 	 */
-	public function __construct( $args ) {
-		$this->original_args = $args;
+	public function __construct( CMB2_field $field, $args ) {
+		$this->field = $field;
+		$this->original_args = (array) $args;
 		$this->set_query_args( $args );
 	}
 
 	/**
-	 * @param string $query_object_type
+	 * @since 2.X.X
+	 *
+	 * @param CMB2_field $field
 	 * @param array $args
+	 * @param string $source_object_type
 	 *
 	 * @return CMB2_Type_Query_Associated_Objects
 	 */
-	public static function get_query_object( $query_object_type, $args, $field ) {
+	public static function get_query_object( CMB2_field $field, $args = array(), $source_object_type = null ) {
+		if ( empty( $source_object_type ) ) {
+			$source_object_type = $field->options( 'source_object_type' );
+		}
+
+		if ( empty( $args ) ) {
+			$args = (array) $field->options( 'query_args' );
+		}
 
 		/**
 		 * A filter to bypass fetching the default CMB2_Type_Query_Associated_Objects object.
@@ -62,26 +89,25 @@ abstract class CMB2_Type_Query_Associated_Objects {
 		 * Passing a CMB2_Type_Query_Associated_Objects object will short-circuit the method.
 		 *
 		 * @param null|CMB2_Type_Query_Associated_Objects $query Default null value.
-		 * @param string $source_object_type The object type being requested.
-		 * @param array $args Array of arguments for the CMB2_Type_Query_Associated_Objects object.
 		 * @param array $field The CMB2_Field object.
+		 * @param array $args Array of arguments for the CMB2_Type_Query_Associated_Objects object.
+		 * @param string $source_object_type The object type being requested.
 		 */
-		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $source_object_type, $args, $field );
+		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $field, $args, $source_object_type );
 
-		if ( $query instanceof CMB2_Type_Query_Associated_Objects ) {
-			return $query;
-		}
-
-		switch ( $source_object_type ) {
-			case 'user';
-				$query = new CMB2_Type_Query_Associated_Users( $args );
-				break;
-			case 'term':
-				$query = new CMB2_Type_Query_Associated_Terms( $args );
-				break;
-			case 'post':
-			default:
-				$query = new CMB2_Type_Query_Associated_Posts( $args );
+		if ( ! ( $query instanceof CMB2_Type_Query_Associated_Objects ) ) {
+			switch ( $source_object_type ) {
+				case 'user';
+					$query = new CMB2_Type_Query_Associated_Users( $field, $args );
+					break;
+				case 'term':
+					$query = new CMB2_Type_Query_Associated_Terms( $field, $args );
+					break;
+				case 'post':
+				default:
+					$query = new CMB2_Type_Query_Associated_Posts( $field, $args );
+					break;
+			}
 		}
 
 		return $query;

@@ -70,9 +70,9 @@ class CMB2_Associated_Objects_Search {
 			unset( $args['source_object_type'] );
 
 			$this->query = CMB2_Type_Query_Associated_Objects::get_query_object(
-				$object_type,
+				$this->field,
 				$args,
-				$this->field
+				$object_type
 			);
 		}
 	}
