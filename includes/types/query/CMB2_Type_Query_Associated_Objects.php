@@ -165,6 +165,15 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 */
 	public function execute_query() {
 		$this->objects = array();
+
+		/**
+		 * A filter to override the default query arguments just before fetching/querying.
+		 *
+		 * @param array $query_args The query arguments.
+		 * @param CMB2_Type_Query_Associated_Objects $query The associated objects query object.
+		 */
+		$this->query_args = apply_filters( 'cmb2_associated_objects_query_args', $this->query_args, $this );
+
 		$objects = $this->fetch();
 
 		foreach ( $objects as $object ) {
