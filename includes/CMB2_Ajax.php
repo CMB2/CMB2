@@ -329,9 +329,13 @@ class CMB2_Ajax {
 	 * @return void
 	 */
 	public function associated_objects_search() {
-		error_log( __FUNCTION__ . ':' . __LINE__ .') $_POST: '. print_r( $_POST, true ) );
-		if ( ! isset( $_POST['field_id'], $_POST['cmb_id'], $_POST['retrieved'], $_POST['action'] ) ) {
+		if ( ! isset( $_POST['field_id'], $_POST['cmb_id'], $_POST['retrieved'], $_POST['action'], $_POST['nonce'] ) ) {
 			return;
+		}
+
+		// Verify our nonce.
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'cmb2-find-posts' ) ) {
+			die();
 		}
 
 		$search = new CMB2_Associated_Objects_Search( $_POST );

@@ -4,7 +4,7 @@
  *
  * @todo Make field type for all object types, to and from.
  * @todo Maybe remove dependence on super-globals?
- * @todo Replace WP core `find_posts_div()` markup and ajax completely.
+ * @todo Replace WP core ajax completely.
  * @todo Unit tests for field.
  * @todo Add example to example-functions.php. See https://github.com/CMB2/cmb2-attached-posts/blob/master/example-field-setup.php
  *
@@ -57,11 +57,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 */
 	public function __construct( CMB2_Types $types, $args = array() ) {
 		parent::__construct( $types, $args );
-
-		if ( ! self::$hooked ) {
-			add_action( 'cmb2_type_associated_objects_add_find_posts_div', array( __CLASS__, 'hook_find_posts_div' ) );
-			self::$hooked = true;
-		}
 	}
 
 	/**
@@ -84,14 +79,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			return;
 		}
 
-		if ( is_admin() ) {
-			// markup needed for modal
-			// @todo Replace with our own markup.
-			add_action( 'admin_footer', 'find_posts_div' );
-		} else {
-			do_action( 'cmb2_type_associated_objects_add_find_posts_div' );
-		}
-
 		$this->field->add_js_dependencies( 'cmb2-associated-objects' );
 
 		// Set .has_thumbnail
@@ -105,7 +92,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		// Check 'filter' setting
 		if ( $this->field->options( 'filter_boxes' ) ) {
-			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb' ), $combined_label ) . '" class="regular-text search" name="%s" /></div>';
+			$filter_boxes = '<div class="search-wrap"><input type="text" placeholder="' . sprintf( __( 'Filter %s', 'cmb2' ), $combined_label ) . '" class="regular-text search" name="%s" /></div>';
 		}
 
 		// Wrap our lists
@@ -113,7 +100,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		// Open our retrieved, or found objects, list
 		$rendered .= '<div class="retrieved-wrap column-wrap">';
-		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb' ), $combined_label ) . '</h4>';
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Available %s', 'cmb2' ), $combined_label ) . '</h4>';
 
 		if ( $filter_boxes ) {
 			$rendered .= sprintf( $filter_boxes, 'available-search' );
@@ -135,7 +122,7 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 
 		// Open our attached objects list
 		$rendered .= '<div class="attached-wrap column-wrap">';
-		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb' ), $combined_label ) . '</h4>';
+		$rendered .= '<h4 class="associated-objects-section">' . sprintf( __( 'Attached %s', 'cmb2' ), $combined_label ) . '</h4>';
 
 		if ( $filter_boxes ) {
 			$rendered .= sprintf( $filter_boxes, 'attached-search' );
@@ -179,9 +166,11 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			'types'      => (array) $this->query->get_query_arg( 'post_type' ),
 			'cmbId'      => $this->field->cmb_id,
 			'errortxt'   => esc_attr( $this->_text( 'error_text', __( 'An error has occurred. Please reload the page and try again.' ) ) ),
-			'findtxt'    => esc_attr( $this->_text( 'find_text', __( 'Find Posts or Pages' ) ) ),
+			'findtxt'    => esc_attr( $this->_text( 'search_modal_title', __( 'Search for content...', 'cmb2' ) ) ),
 			'groupId'    => $this->field->group ? $this->field->group->id() : false,
 			'fieldId'    => $this->field->_id( '', false ),
+			'objectId'   => $this->field->object_id(),
+			'objectType' => $this->field->object_type(),
 			'exclude'    => $this->query->get_query_arg( 'post__not_in', array() ),
 			'linkTmpl'   => str_replace( $this->field->object_id(), 'REPLACEME', get_edit_post_link( $this->field->object_id() ) ),
 		);
@@ -326,8 +315,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return array            Array of attached object ids.
 	 */
 	public function get_all_objects( $attached = array() ) {
-		$this->maybe_exclude_self();
-
 		$objects = $this->query->execute_query();
 
 		if ( ! empty( $attached ) ) {
@@ -346,20 +333,6 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	}
 
 	/**
-	 * If the soruce object type matches the current object type, let's remove
-	 * the current object from the query.
-	 *
-	 * @return CMB2_Type_Associated_Objects
-	 */
-	protected function maybe_exclude_self() {
-		if ( $this->field->object_type() === $this->query->get_source_type() ) {
-			$this->query->set_exclude( $this->field->object_id() );
-		}
-
-		return $this;
-	}
-
-	/**
 	 *
 	 * @return CMB2_Type_Query_Associated_Objects
 	 */
@@ -370,14 +343,87 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	}
 
 	/**
-	 * Add the find posts div via a hook so we can relocate it manually
+	 * Outputs the modal window used for attaching associated content in the media-listing screen.
+	 *
+	 * @since 2.X.X
 	 */
-	public static function hook_find_posts_div() {
-
-		// Will need custom styling!
-		// @todo add styles for front-end
-		require_once( ABSPATH . 'wp-admin/includes/template.php' );
-		add_action( 'wp_footer', 'find_posts_div' );
+	public static function output_js_underscore_templates() {
+		?>
+		<div id="cmb2-find-posts" class="find-box cmb2-find-box" style="display: none;">
+			<div id="cmb2-find-posts-head" class="find-box-head">
+				<span id="cmb2-find-posts-head-title"><?php _e( 'Attach to existing content', 'cmb2' ); ?></span>
+				<button type="button" id="cmb2-find-posts-close"><span class="screen-reader-text"><?php _e( 'Close search panel', 'cmb2' ); ?></span></button>
+			</div>
+			<div class="find-box-inside">
+				<div class="find-box-search">
+					<?php wp_nonce_field( 'cmb2-find-posts', 'cmb2-find-posts-nonce', false ); ?>
+					<label class="screen-reader-text" for="cmb2-find-posts-input"><?php _e( 'Search', 'cmb2' ); ?></label>
+					<input type="text" id="cmb2-find-posts-input" name="ps" value="" />
+					<span class="spinner"></span>
+					<input type="button" id="cmb2-find-posts-search" value="<?php esc_attr_e( 'Search' , 'cmb2' ); ?>" class="button" />
+					<div class="clear"></div>
+				</div>
+				<div id="cmb2-find-posts-response"></div>
+			</div>
+			<div class="find-box-buttons">
+				<?php submit_button( __( 'Select' ), 'primary alignright', 'cmb2-find-posts-submit', false ); ?>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<script type="text/html" id="tmpl-cmb2-associated-search-table">
+			<table class="widefat cmb-type-associated-{{ data.objectType }}">
+				<thead>
+					<tr>
+						<th class="found-radio">
+							<br />
+						</th>
+						<th>{{ data.columnOneLabel }}</th>
+						<# if ( data.columnTwoLabel ) { #>
+							<th class="no-break">{{ data.columnTwoLabel }}</th>
+						<# } #>
+						<# if ( data.columnThreeLabel ) { #>
+							<th class="no-break">{{ data.columnThreeLabel }}</th>
+						<# } #>
+						<# if ( data.columnFourLabel ) { #>
+							<th class="no-break">{{ data.columnFourLabel }}</th>
+						<# } #>
+					</tr>
+				</thead>
+				<tbody>{{{ data.results }}}</tbody>
+			</table>
+		</script>
+		<script type="text/html" id="tmpl-cmb2-associated-search-table-row">
+			<tr class="found-posts {{ data.alt }}">
+				<td class="found-radio">
+					<input type="checkbox" id="found-{{ data.postId }}" name="found_post_id" value="{{ data.postId }}">
+				</td>
+				<td>
+					<label for="found-{{ data.postId }}">{{ data.columnOne }}</label>
+				</td>
+				<# if ( data.columnTwo ) { #>
+					<td class="no-break">{{ data.columnTwo }}</td>
+				<# } #>
+				<# if ( data.columnThree ) { #>
+					<td class="no-break">{{ data.columnThree }}</td>
+				<# } #>
+				<# if ( data.columnFour ) { #>
+					<td class="no-break">{{ data.columnFour }}</td>
+				<# } #>
+			</tr>
+		</script>
+		<script type="text/html" id="tmpl-cmb2-associated-results-item">
+			<li
+				data-id="{{ data.id }}"
+				class="{{ data.class }} ui-draggable ui-draggable-handle"
+			>
+				<a
+					title="{{ data.editTitle }}"
+					href="{{ data.link }}"
+					target="_blank"
+				>{{ data.title }}</a>{{ data.type }}<span class="dashicons dashicons-plus add-remove"></span>
+			</li>
+		</script>
+		<?php
 	}
 
 	/**

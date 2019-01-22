@@ -190,11 +190,6 @@ window.CMB2.associated = window.CMB2.associated || {};
 		} );
 	};
 
-	app.rowTmpl = function( row ) {
-		row.type = app.doType ? ' &mdash; <span class="object-label">'+ row.type +'</span>' : '';
-		return '<li data-id="'+ row.id +'" class="'+ row.class +' ui-draggable ui-draggable-handle"><a title="'+ app.editTitle +'" href="'+ row.linkTmpl.replace( 'REPLACEME', row.id ) +'" target="_blank">'+ row.title +'</a>'+ row.type +'<span class="dashicons dashicons-plus add-remove"></span></li>';
-	};
-
 	app.$retrievedPosts = function() {
 		return app.$.retrievedPosts.find( 'li' );
 	};
@@ -210,23 +205,28 @@ window.CMB2.associated = window.CMB2.associated || {};
 	};
 
 	app.SearchView = window.Backbone.View.extend({
-		el         : '#find-posts',
+		el         : '#cmb2-find-posts',
 		overlaySet : false,
 		$overlay   : false,
 		$button    : false,
+		templates  : {
+			table : wp.template( 'cmb2-associated-search-table' ),
+			row   : wp.template( 'cmb2-associated-search-table-row' ),
+			item  : wp.template( 'cmb2-associated-results-item' ),
+		},
 
 		events : {
 			'keypress .find-box-search:input' : 'maybeStartSearch',
-			'keyup #find-posts-input'  : 'escClose',
-			'click #find-posts-submit' : 'selectPost',
-			'click #find-posts-search' : 'send',
-			'click #find-posts-close'  : 'close',
+			'keyup #cmb2-find-posts-input'  : 'escClose',
+			'click #cmb2-find-posts-submit' : 'selectPost',
+			'click #cmb2-find-posts-search' : 'send',
+			'click #cmb2-find-posts-close'  : 'close',
 		},
 
 		initialize: function() {
 			this.$spinner  = this.$el.find( '.find-box-search .spinner' );
-			this.$input    = this.$el.find( '#find-posts-input' );
-			this.$response = this.$el.find( '#find-posts-response' );
+			this.$input    = this.$el.find( '#cmb2-find-posts-input' );
+			this.$response = this.$el.find( '#cmb2-find-posts-response' );
 			this.$overlay  = $( '.ui-find-overlay' );
 
 			this.listenTo( this, 'open', this.open );
@@ -247,8 +247,7 @@ window.CMB2.associated = window.CMB2.associated || {};
 		open: function() {
 			this.$response.html('');
 
-			// WP, why you so dumb? (why isn't text in its own dom node?)
-			this.$el.show().find( '#find-posts-head' ).html( this.findtxt + '<div id="find-posts-close"></div>' );
+			this.$el.show().find( '#cmb2-find-posts-head-title' ).html( this.findtxt );
 
 			this.$input.focus();
 
@@ -287,9 +286,11 @@ window.CMB2.associated = window.CMB2.associated || {};
 				cmb_id             : this.cmbId,
 				group_id           : this.groupId,
 				field_id           : this.fieldId,
+				object_id          : this.objectId,
+				object_type        : this.objectType,
 				exclude            : this.exclude,
 				retrieved          : retrieved,
-				_ajax_nonce        : $( '#find-posts #_ajax_nonce' ).val(),
+				nonce              : $( '#cmb2-find-posts-nonce' ).val(),
 			};
 
 			$.post( l10n.ajaxurl, data )
@@ -307,9 +308,19 @@ window.CMB2.associated = window.CMB2.associated || {};
 				this.$response.text( this.errortxt );
 			}
 
-			var data = response.data.replace( /type="radio"/gi, 'type="checkbox"' );
+			var rowTmpl = this.templates.row;
+			var alt     = '';
+			var html    = '';
 
-			this.$response.html( data );
+			_.each( response.data.results, function( row ) {
+				alt = 'alternate' === alt ? '' : 'alternate';
+				row.alt = alt;
+				html += rowTmpl( row );
+			});
+
+			response.data.results = html;
+
+			this.$response.html( this.templates.table( response.data ) );
 		},
 
 		ajaxFail: function() {
@@ -331,19 +342,24 @@ window.CMB2.associated = window.CMB2.associated || {};
 			var $lastRow  = app.$lastRow();
 			var nextClass = $lastRow.hasClass( 'even' ) ? 'odd' : 'even';
 			var linkTmpl  = this.linkTmpl;
+			var itemTmpl  = this.templates.item;
 			var ids       = [];
 
 			$checked.each( function() {
-				ids.push( this.value );
+				var id = this.value;
+				ids.push( id );
 
 				var $row = $( this ).parents( '.found-posts' );
-				html += app.rowTmpl( {
-					title    : $row.find( 'label' ).html(),
-					type     : $row.find( '> td' ).eq( 2 ).text(),
-					id       : this.value,
-					linkTmpl : linkTmpl,
-					class    : nextClass
-				} );
+				var row = {
+					title     : $row.find( 'label' ).html(),
+					type      : app.doType ? ' &mdash; <span class="object-label">' + $row.find( '> td' ).eq( 2 ).text() + '</span>' : '',
+					id        : id,
+					link      : linkTmpl.replace( 'REPLACEME', id ),
+					class     : nextClass,
+					editTitle : app.editTitle,
+				};
+
+				html += itemTmpl( row );
 
 				nextClass = 'even' === nextClass ? 'odd' : 'even';
 			} );
@@ -359,15 +375,10 @@ window.CMB2.associated = window.CMB2.associated || {};
 		},
 
 		moveInserted: function( ids ) {
-			// This delay is only for dramatic effect,
-			// as otherwise it appears nothing happened.
-			window.setTimeout( function() {
-				for ( var i = 0; i <= ids.length; i++ ) {
-					app.moveRowToAttached( app.$retrievedPosts().filter( '[data-id="'+ ids[i] +'"]' ) );
-				}
-			}, 500 );
+			for ( var i = 0; i <= ids.length; i++ ) {
+				app.moveRowToAttached( app.$retrievedPosts().filter( '[data-id="'+ ids[i] +'"]' ) );
+			}
 		},
-
 
 	});
 

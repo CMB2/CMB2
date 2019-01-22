@@ -164,7 +164,23 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 * @return array
 	 */
 	public function execute_query() {
+		$this->setup_query();
+
 		$this->objects = array();
+		foreach ( (array) $this->fetch() as $object ) {
+			$this->objects[ $this->get_id( $object ) ] = $object;
+		}
+
+		return $this->objects;
+	}
+
+	/**
+	 * Setup the query.
+	 *
+	 * @return CMB2_Type_Associated_Objects
+	 */
+	public function setup_query() {
+		$this->maybe_exclude_self();
 
 		/**
 		 * A filter to override the default query arguments just before fetching/querying.
@@ -174,13 +190,21 @@ abstract class CMB2_Type_Query_Associated_Objects {
 		 */
 		$this->query_args = apply_filters( 'cmb2_associated_objects_query_args', $this->query_args, $this );
 
-		$objects = $this->fetch();
+		return $this;
+	}
 
-		foreach ( $objects as $object ) {
-			$this->objects[ $this->get_id( $object ) ] = $object;
+	/**
+	 * If the soruce object type matches the current object type, let's remove
+	 * the current object from the query.
+	 *
+	 * @return CMB2_Type_Associated_Objects
+	 */
+	protected function maybe_exclude_self() {
+		if ( $this->field->object_id() && $this->field->object_type() === $this->get_source_type() ) {
+			$this->set_exclude( $this->field->object_id() );
 		}
 
-		return $this->objects;
+		return $this;
 	}
 
 	/**
@@ -266,7 +290,8 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 * @return void
 	 */
 	public function set_exclude( $ids ) {
-		$this->query_args['exclude'] = $ids;
+		$this->query_args['exclude'] = array_merge( $this->query_args['exclude'], (array) $ids );
+		$this->query_args['exclude'] = array_unique( $this->query_args['exclude'] );
 	}
 
 	/**

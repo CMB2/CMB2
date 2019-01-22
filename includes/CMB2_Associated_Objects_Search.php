@@ -49,7 +49,11 @@ class CMB2_Associated_Objects_Search {
 
 		$group    = isset( $args['group_id'] ) ? $args['group_id'] : '';
 		$field_id = isset( $args['field_id'] ) ? $args['field_id'] : '';
-		$cmb      = cmb2_get_metabox( isset( $args['cmb_id'] ) ? $args['cmb_id'] : '' );
+		$cmb      = cmb2_get_metabox(
+			isset( $args['cmb_id'] ) ? $args['cmb_id'] : '',
+			isset( $args['object_id'] ) ? $args['object_id'] : 0,
+			isset( $args['object_type'] ) ? $args['object_type'] : '0'
+		);
 
 		if ( $cmb && $group ) {
 			$group = $cmb->get_field( $group );
@@ -115,14 +119,18 @@ class CMB2_Associated_Objects_Search {
 			return;
 		}
 
-		// $this->query
-		// This is not working until we fix the user query bit.
-		if ( 'user' === $this->query->get_source_type() ) {
-			add_action( 'pre_get_users', array( $this, 'maybe_callback' ) );
-			$this->find( 'user' );
-		} else {
-			add_action( 'pre_get_posts', array( $this, 'modify_post_query' ) );
-			wp_ajax_find_posts();
+		switch ( $this->query->get_source_type() ) {
+			case 'user':
+				// This is not working until we fix the user query bit.
+				// add_action( 'pre_get_users', array( $this, 'maybe_callback' ) );
+				$this->find( 'user' );
+				break;
+
+			default:
+				// add_action( 'pre_get_posts', array( $this, 'modify_post_query' ) );
+				// wp_ajax_find_posts();
+				$this->find( 'post' );
+				break;
 		}
 	}
 
@@ -149,13 +157,29 @@ class CMB2_Associated_Objects_Search {
 	 *
 	 * @return void
 	 */
-	public function modify_post_query( $query ) {
-		$types = $this->get_arg( 'search_types', array() );
-		$types = is_array( $types ) ? array_map( 'esc_attr', $types ) : esc_attr( $types );
+	// public function modify_post_query( $query ) {
+	// 	if ( $this->query ) {
+	// 		$this->query->setup_query();
+	// 		// ps                 : this.$input.val(),
+	// 		// action             : 'cmb2_associated_objects_search',
+	// 		// source_object_type : this.sourceType,
+	// 		// search_types       : this.types,
+	// 		// cmb_id             : this.cmbId,
+	// 		// group_id           : this.groupId,
+	// 		// field_id           : this.fieldId,
+	// 		// object_id          : this.objectId,
+	// 		// object_type        : this.objectType,
+	// 		// exclude            : this.exclude,
+	// 		// retrieved          : retrieved,
+	// 		// _ajax_nonce        : $( '#find-posts #_ajax_nonce' ).val(),
 
-		$query->set( 'post_type', $types );
-		$this->maybe_callback( $query );
-	}
+	// 	}
+	// 	$types = $this->get_arg( 'search_types', array() );
+	// 	$types = is_array( $types ) ? array_map( 'esc_attr', $types ) : esc_attr( $types );
+
+	// 	$query->set( 'post_type', $types );
+	// 	$this->maybe_callback( $query );
+	// }
 
 	/**
 	 * If field has a 'search_query_cb' param, run the callback.
@@ -166,26 +190,23 @@ class CMB2_Associated_Objects_Search {
 	 *
 	 * @return void
 	 */
-	public function maybe_callback( $query ) {
-		if ( $this->field ) {
-			$cb = $this->field->maybe_callback( 'search_query_cb' );
-			if ( $cb ) {
-				call_user_func( $cb, $query, $this->field, $this );
-			}
-		}
-	}
+	// public function maybe_callback( $query ) {
+	// 	if ( $this->field ) {
+	// 		$cb = $this->field->maybe_callback( 'search_query_cb' );
+	// 		if ( $cb ) {
+	// 			call_user_func( $cb, $query, $this->field, $this );
+	// 		}
+	// 	}
+	// }
 
 	public function get_ids_to_exclude() {
-		$ids = $this->get_and_absint_array( 'retrieved' );
+		$ids     = (array) $this->get_and_absint_array( 'retrieved' );
+		$exclude = $this->get_and_absint_array( 'exclude' );
 
-		if ( ! empty( $ids ) ) {
-			$exclude = $this->get_and_absint_array( 'exclude' );
+		if ( ! empty( $exclude ) ) {
 
-			if ( ! empty( $exclude ) ) {
-
-				// Exclude objects already existing.
-				$ids = array_merge( $ids, $exclude );
-			}
+			// Exclude objects already existing.
+			$ids = array_merge( $ids, $exclude );
 		}
 
 		return $ids;
@@ -208,61 +229,65 @@ class CMB2_Associated_Objects_Search {
 	}
 
 	public function find( $object_type ) {
-		check_ajax_referer( 'find-posts' );
+		check_ajax_referer( 'cmb2-find-posts', 'nonce' );
 
 		$s = wp_unslash( $this->get_arg( 'ps' ) );
+
 		if ( '' !== $s ) {
 			$this->query->set_search( sanitize_text_field( $s ) );
 			$this->query->set_search( sanitize_text_field( $s ) );
 		}
 
+		$args = $this->query->get_query_args();
+
+		unset( $args['ps'] );
+		unset( $args['action'] );
+		unset( $args['search_types'] );
+		unset( $args['object_id'] );
+		unset( $args['object_type'] );
+		unset( $args['exclude'] );
+		unset( $args['retrieved'] );
+		unset( $args['nonce'] );
+
+		$types = $this->get_arg( 'search_types', array() );
+		$types = is_array( $types ) ? array_map( 'esc_attr', $types ) : esc_attr( $types );
+
+		$args['post_type'] = $types;;
+
+		$this->query->set_query_args( $args );
+		$this->query->set_exclude( (array) (array) $this->get_ids_to_exclude() );
 		$objects = $this->query->execute_query();
 
 		if ( ! $objects ) {
 			wp_send_json_error( __( 'No items found.' ) );
 		}
 
-		$html = '';
-		$html .= '<table class="widefat cmb-type-associated-' . $object_type . '">';
-		$html .= '<thead><tr><th class="found-radio"><br /></th>';
-		$html .= '<th>' . $this->query->get_search_column_one_label() . '</th>';
-		if ( $label = $this->query->get_search_column_two_label() ) {
-			$html .= '<th class="no-break">' . $label . '</th>';
-		}
-		if ( $label = $this->query->get_search_column_three_label() ) {
-			$html .= '<th class="no-break">' . $label . '</th>';
-		}
-		if ( $label = $this->query->get_search_column_four_label() ) {
-			$html .= '<th class="no-break">' . $label . '</th>';
-		}
-		$html .= '</tr></thead><tbody>';
+		$data = array(
+			'objectType'       => $object_type,
+			'columnOneLabel'   => $this->query->get_search_column_one_label(),
+			'columnTwoLabel'   => $this->query->get_search_column_two_label(),
+			'columnThreeLabel' => $this->query->get_search_column_three_label(),
+			'columnFourLabel'  => $this->query->get_search_column_four_label(),
+			'results'          => array(),
+		);
 
-		$alt = '';
 		foreach ( $objects as $object ) {
-			$title = $this->query->get_title( $object );
-			$title = trim( $title ) ? $title : __( '(no title)' );
-			$alt = ( 'alternate' == $alt ) ? '' : 'alternate';
-			$id = $this->query->get_id( $object );
-
-			$html .= '<tr class="' . trim( 'found-posts ' . $alt ) . '"><td class="found-radio"><input type="radio" id="found-' . $id . '" name="found_post_id" value="' . esc_attr( $id ) . '"></td>';
-			$html .= '<td><label for="found-' . $id . '">' . $this->query->get_search_column_one( $object ) . '</label></td>';
-
-			if ( $this->query->get_search_column_two_label() ) {
-				$html .= '<td class="no-break">' . $this->query->get_search_column_two( $object ) . '</td>';
-			}
-			if ( $this->query->get_search_column_three_label() ) {
-				$html .= '<td class="no-break">' . $this->query->get_search_column_three( $object ) . '</td>';
-			}
-			if ( $this->query->get_search_column_four_label() ) {
-				$html .= '<td class="no-break">' . $this->query->get_search_column_four( $object ) . ' </td>';
-			}
-
-			$html .= '</tr>' . "\n\n";
+			$data['results'][] = array(
+				'postId' => $this->query->get_id( $object ),
+				'columnOne' => $this->query->get_search_column_one( $object ),
+				'columnTwo' => ! empty( $data['columnTwoLabel'] )
+					? $this->query->get_search_column_two( $object )
+					: '',
+				'columnThree' => ! empty( $data['columnThreeLabel'] )
+					? $this->query->get_search_column_three( $object )
+					: '',
+				'columnFour' => ! empty( $data['columnFourLabel'] )
+					? $this->query->get_search_column_four( $object )
+					: '',
+			);
 		}
 
-		$html .= '</tbody></table>';
-
-		wp_send_json_success( $html );
+		wp_send_json_success( $data );
 	}
 
 }

@@ -99,8 +99,8 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 	 * @return mixed
 	 */
 	public function get_search_column_one( $object ) {
-		$title = $this->get_title( $object );
-		return trim( $title ) ? $title : __( '(no title)' );
+		$title = trim( $this->get_title( $object ) );
+		return $title ? $title : __( '(no title)' );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 
 		return isset( $obj->labels->singular_name )
 			? $obj->labels->singular_name
-			: parent::get_search_column_one( $object );
+			: parent::get_search_column_two( $object );
 	}
 
 	/**
@@ -175,7 +175,8 @@ class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Object
 	 * @return void
 	 */
 	public function set_exclude( $ids ) {
-		$this->query_args['post__not_in'] = (array) $ids;
+		$this->query_args['post__not_in'] = array_merge( $this->query_args['post__not_in'], (array) $ids );
+		$this->query_args['post__not_in'] = array_unique( $this->query_args['post__not_in'] );
 	}
 
 	/**

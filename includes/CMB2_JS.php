@@ -98,7 +98,8 @@ class CMB2_JS {
 		// if file/file_list.
 		if ( isset( $dependencies['media-editor'] ) ) {
 			wp_enqueue_media();
-			CMB2_Type_File_Base::output_js_underscore_templates();
+
+			add_action( current_filter(), 'CMB2_Type_File_Base::output_js_underscore_templates', 999 );
 		}
 
 		// if timepicker.
@@ -111,8 +112,10 @@ class CMB2_JS {
 		unset( $dependencies['cmb2-wysiwyg'] );
 
 		// if cmb2-associated-objects
-		$enqueue_associated = isset( $dependencies['cmb2-associated-objects'] ) && $debug;
+		$enqueue_associated = isset( $dependencies['cmb2-associated-objects'] );
 		if ( $enqueue_associated ) {
+			add_action( current_filter(), 'CMB2_Type_Associated_Objects::output_js_underscore_templates', 999 );
+
 			$associated_dependencies = array(
 				'jquery-ui-core',
 				'jquery-ui-widget',
@@ -137,7 +140,7 @@ class CMB2_JS {
 		}
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
-		if ( $enqueue_associated ) {
+		if ( $enqueue_associated && $debug ) {
 			wp_enqueue_script( 'cmb2-associated-objects', CMB2_Utils::url( 'js/cmb2-associated-objects.js' ), $associated_dependencies, CMB2_VERSION, true );
 		}
 
