@@ -67,7 +67,7 @@ class CMB2_Associated_Objects_Search {
 			unset( $args['group_id'] );
 			unset( $args['field_id'] );
 			unset( $args['cmb_id'] );
-			unset( $args['query_object_type'] );
+			unset( $args['source_object_type'] );
 
 			$this->query = CMB2_Type_Query_Associated_Objects::get_query_object(
 				$object_type,
@@ -89,8 +89,8 @@ class CMB2_Associated_Objects_Search {
 	public static function get_object_type( $args ) {
 		$type = 'post';
 
-		if ( ! empty( $args['query_object_type'] ) ) {
-			$type = $args['query_object_type'];
+		if ( ! empty( $args['source_object_type'] ) ) {
+			$type = $args['source_object_type'];
 			if ( is_array( $type ) && 1 === count( $type ) ) {
 				$type = sanitize_text_field( end( $type ) );
 			} elseif ( is_string( $type ) ) {
@@ -117,7 +117,7 @@ class CMB2_Associated_Objects_Search {
 
 		// $this->query
 		// This is not working until we fix the user query bit.
-		if ( 'user' === $this->query->get_query_type() ) {
+		if ( 'user' === $this->query->get_source_type() ) {
 			add_action( 'pre_get_users', array( $this, 'maybe_callback' ) );
 			$this->find( 'user' );
 		} else {

@@ -17,11 +17,11 @@
 class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * The query object type.
+	 * The query source object type.
 	 *
 	 * @var string
 	 */
-	protected $query_type = 'term';
+	protected $source_type = 'term';
 
 	/**
 	 * @var mixed string|array

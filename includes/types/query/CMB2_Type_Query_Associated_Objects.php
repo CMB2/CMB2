@@ -17,11 +17,11 @@
 abstract class CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * The query object type.
+	 * The query source object type.
 	 *
 	 * @var string
 	 */
-	protected $query_type = '';
+	protected $source_type = '';
 
 	/**
 	 * @var array
@@ -62,17 +62,17 @@ abstract class CMB2_Type_Query_Associated_Objects {
 		 * Passing a CMB2_Type_Query_Associated_Objects object will short-circuit the method.
 		 *
 		 * @param null|CMB2_Type_Query_Associated_Objects $query Default null value.
-		 * @param string $query_object_type The object type being requested.
+		 * @param string $source_object_type The object type being requested.
 		 * @param array $args Array of arguments for the CMB2_Type_Query_Associated_Objects object.
 		 * @param array $field The CMB2_Field object.
 		 */
-		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $query_object_type, $args, $field );
+		$query = apply_filters( 'cmb2_pre_type_associated_objects_query', null, $source_object_type, $args, $field );
 
 		if ( $query instanceof CMB2_Type_Query_Associated_Objects ) {
 			return $query;
 		}
 
-		switch ( $query_object_type ) {
+		switch ( $source_object_type ) {
 			case 'user';
 				$query = new CMB2_Type_Query_Associated_Users( $args );
 				break;
@@ -128,8 +128,8 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	 *
 	 * @return string
 	 */
-	public function get_query_type() {
-		return $this->query_type;
+	public function get_source_type() {
+		return $this->source_type;
 	}
 
 	/**

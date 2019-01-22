@@ -17,11 +17,11 @@
 class CMB2_Type_Query_Associated_Users extends CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * The query object type.
+	 * The query source object type.
 	 *
 	 * @var string
 	 */
-	protected $query_type = 'user';
+	protected $source_type = 'user';
 
 	/**
 	 * @return mixed
