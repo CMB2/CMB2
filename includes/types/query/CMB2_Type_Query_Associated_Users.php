@@ -31,9 +31,10 @@ class CMB2_Type_Query_Associated_Users extends CMB2_Type_Query_Associated_Object
 	}
 
 	/**
+	 * @param $args
 	 * @return array
 	 */
-	public function default_query_args() {
+	public function default_query_args( $args = array() ) {
 		return array(
 			'number'  => 100,
 			'exclude' => array(),

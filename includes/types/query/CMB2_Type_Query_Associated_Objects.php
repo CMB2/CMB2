@@ -120,7 +120,7 @@ abstract class CMB2_Type_Query_Associated_Objects {
 		if ( ! is_array( $args ) ) {
 			$args = array();
 		}
-		$this->query_args = wp_parse_args( $args, $this->default_query_args() );
+		$this->query_args = wp_parse_args( $args, $this->default_query_args( $args ) );
 	}
 
 	/**
@@ -180,9 +180,10 @@ abstract class CMB2_Type_Query_Associated_Objects {
 	abstract public function fetch();
 
 	/**
+	 * @param $args
 	 * @return array
 	 */
-	abstract public function default_query_args();
+	abstract public function default_query_args( $args = array() );
 
 	/**
 	 * @param object $object

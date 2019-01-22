@@ -17,31 +17,41 @@
 class CMB2_Type_Query_Associated_Posts extends CMB2_Type_Query_Associated_Objects {
 
 	/**
-	 * The query object type.
+	 * The query source object type.
 	 *
 	 * @var string
 	 */
-	protected $query_type = 'post';
+	protected $source_type = 'post';
 
 	/**
 	 * @return mixed
 	 */
 	public function fetch() {
+		// error_log( __FUNCTION__ . ':' . __LINE__ .') $this->query_args: '. print_r( $this->query_args, true ) );
+		$posts = get_posts( $this->query_args );
+		// error_log( __FUNCTION__ . ':' . __LINE__ .') $posts: '. print_r( count( $posts ), true ) );
+		return $posts;
 		return get_posts( $this->query_args );
 	}
 
 	/**
+	 * @param $args
 	 * @return array
 	 */
-	public function default_query_args() {
-		return array(
-			'post_type'           => 'post',
+	public function default_query_args( $args = array() ) {
+		$defaults = array(
+			'post_type'           => isset( $args['post_type'] ) ? $args['post_type'] : 'post',
 			'posts_per_page'      => 100,
-			'orderby'             => 'name',
-			'order'               => 'ASC',
 			'ignore_sticky_posts' => true,
 			'post__not_in'        => array(),
 		);
+
+		if ( is_post_type_hierarchical( $defaults['post_type'] ) ) {
+			$defaults['orderby'] = 'name';
+			$defaults['order']   = 'ASC';
+		}
+
+		return $defaults;
 	}
 
 	/**

@@ -49,9 +49,10 @@ class CMB2_Type_Query_Associated_Terms extends CMB2_Type_Query_Associated_Object
 	}
 
 	/**
+	 * @param $args
 	 * @return array
 	 */
-	public function default_query_args() {
+	public function default_query_args( $args = array() ) {
 		return array(
 			'taxonomy' => $this->taxonomies,
 			'hide_empty' => false,
