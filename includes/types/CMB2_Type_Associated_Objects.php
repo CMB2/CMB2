@@ -326,6 +326,8 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 	 * @return array            Array of attached object ids.
 	 */
 	public function get_all_objects( $attached = array() ) {
+		$this->maybe_exclude_self();
+
 		$objects = $this->query->execute_query();
 
 		if ( ! empty( $attached ) ) {
@@ -341,6 +343,20 @@ class CMB2_Type_Associated_Objects extends CMB2_Type_Text {
 			}
 		}
 		return $objects;
+	}
+
+	/**
+	 * If the soruce object type matches the current object type, let's remove
+	 * the current object from the query.
+	 *
+	 * @return CMB2_Type_Associated_Objects
+	 */
+	protected function maybe_exclude_self() {
+		if ( $this->field->object_type() === $this->query->get_source_type() ) {
+			$this->query->set_exclude( $this->field->object_id() );
+		}
+
+		return $this;
 	}
 
 	/**
