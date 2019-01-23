@@ -32,7 +32,7 @@
     "require-dev": {
         "apigen/apigen": "4.1.2",
         "nette/utils": "2.5.3",
-        "phpunit/phpunit": "6.5.13"
+        "phpunit/phpunit": "4.8.*|5.7.*|6.5.*"
     },
     "scripts": {
       "test": [
