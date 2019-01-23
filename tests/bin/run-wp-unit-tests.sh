@@ -8,6 +8,7 @@ echo -en "travis_fold:start:install_wp_tests\r"
 bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 echo -en "travis_fold:end:install_wp_tests\r"
 
+rm composer.lock # see https://github.com/sebastianbergmann/phpunit/issues/2823
 composer install --prefer-dist --no-suggest
 
 if [[ ! -z "$CC_TEST_REPORTER_ID" ]] && [[ ! -z $(php -i | grep xdebug) ]]; then
