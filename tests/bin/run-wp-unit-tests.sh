@@ -26,5 +26,5 @@ phpunit --version
 if [[ latest == $WP_VERSION ]]; then
 	phpunit --coverage-clover=clover.xml || exit 1;
 else
-	phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml || exit 1;
+	phpunit --exclude-group cmb2-rest-api --coverage-clover=clover.xml;
 fi
