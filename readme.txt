@@ -4,8 +4,8 @@ Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Requires PHP:      5.2
-Tested up to:      5.0.0
-Stable tag:        2.5.1
+Tested up to:      5.0.3
+Stable tag:        2.6.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,26 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
+
+### 2.6.0
+
+#### Bug Fixes
+* Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
+* Fix `rest_value_cb` registering of filter. Props [@lipemat](https://github.com/lipemat) ([#1212](https://github.com/CMB2/CMB2/pull/1212)).
+* Do not trigger tinyMCE editor save for the activeEditor. Prevents cursor jump in Gutenberg. Fixes [#1202](https://github.com/CMB2/CMB2/issues/1202)
+* Fix issue where making a field repeatable would generate a Javascript error because of missing sortable library. Props [@slaFFik](https://github.com/slaFFik) ([#1216](https://github.com/CMB2/CMB2/pull/1216)).
+* Ensure value passed to `CMB2_Utils::filter_empty` from `CMB2::save_group_field` is always an array. ([#1026](https://github.com/CMB2/CMB2/issues/1026))
+* Fix potential issue with test path location. Props [@quasel](https://github.com/quasel) ([#463](https://github.com/CMB2/CMB2/pull/463)).
+
+#### Enhancements
+
+* Updated PHPUnit version in composer.json. Props [@slaFFik](https://github.com/slaFFik) ([#1204](https://github.com/CMB2/CMB2/pull/1204)).
+* Package.json: fix the need of global (old) grunt. Props [@slaFFik](https://github.com/slaFFik) ([#1206](https://github.com/CMB2/CMB2/pull/1206)).
+* Add optional confirmation dialog to group field's Remove button. Example [documented in the example functions file](https://github.com/CMB2/CMB2/blob/12036e2dcdeb5b019e844b814eca154bb0eee791/example-functions.php#L525). Props [@slaFFik](https://github.com/slaFFik) ([#1208](https://github.com/CMB2/CMB2/pull/1208)).
+* Add 'id' attribute on group field `.postbox` divs to ensure compatibility with scripts which expect ids there. Props [@amans2k](https://github.com/amans2k) ([#1108](https://github.com/CMB2/CMB2/pull/1108)).
+* Make `CMB2_Option` properties accessible. ([#1052](https://github.com/CMB2/CMB2/issues/1052))
+* New Before/After row hooks: `'cmb2_before_field_row'`, `"cmb2_before_{$field_type}_field_row"`, `"cmb2_after_{$field_type}_field_row"`, `'cmb2_after_field_row'`. Props [@rubengc](https://github.com/rubengc) ([#953](https://github.com/CMB2/CMB2/pull/953)).
+* Introduce three new filters to filter field arguments: `'cmb2_field_defaults'`, `'cmb2_field_arguments_raw'`, `'cmb2_field_arguments'`. Props [@jrfnl](https://github.com/jrfnl) ([#588](https://github.com/CMB2/CMB2/pull/588)).
 
 ### 2.5.1
 
@@ -890,28 +910,22 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
-### 2.5.1
+### 2.6.0
 
 #### Bug Fixes
-
-* Fix issue when the `core/editor` object does not exist (is undefined), causing incompatibility issues with Yoast and likely others. Fixes [#1197](https://github.com/CMB2/CMB2/issues/1197)
-
-### 2.5.0
+* Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
+* Fix `rest_value_cb` registering of filter. Props [@lipemat](https://github.com/lipemat) ([#1212](https://github.com/CMB2/CMB2/pull/1212)).
+* Do not trigger tinyMCE editor save for the activeEditor. Prevents cursor jump in Gutenberg. Fixes [#1202](https://github.com/CMB2/CMB2/issues/1202)
+* Fix issue where making a field repeatable would generate a Javascript error because of missing sortable library. Props [@slaFFik](https://github.com/slaFFik) ([#1216](https://github.com/CMB2/CMB2/pull/1216)).
+* Ensure value passed to `CMB2_Utils::filter_empty` from `CMB2::save_group_field` is always an array. ([#1026](https://github.com/CMB2/CMB2/issues/1026))
+* Fix potential issue with test path location. Props [@quasel](https://github.com/quasel) ([#463](https://github.com/CMB2/CMB2/pull/463)).
 
 #### Enhancements
 
-* Repeatable fields are now drag-sortable. Props [@lipemat](https://github.com/lipemat) ([#1142](https://github.com/CMB2/CMB2/pull/1142)).
-* Update the `sv_SE` translation. Props [@edvind](https://github.com/edvind) ([#370](https://github.com/CMB2/CMB2/pull/370)).
-* QA/PHPCS cleanup. Props [@tw2113](https://github.com/tw2113) ([#1179](https://github.com/CMB2/CMB2/pull/1179)).
-* Add optional `'mb_callback_args'` CMB2 box property which allows defining the `$callback_args` passed into `add_meta_box()`. This allows using defining the new [Gutenberg/block-editor compatibility parameters](https://wordpress.org/gutenberg/handbook/extensibility/meta-box/). Fixes [#1191](https://github.com/CMB2/CMB2/issues/1191)
-* Support any type of markup when customizing repeating group row. Props [@lipemat](https://github.com/lipemat) ([#1187](https://github.com/CMB2/CMB2/pull/1187)).
-* Add `cmb_init_pickers` and `cmb_init_code_editors` Javascript events for allowing just-in-time configuration for pickers/editors.
-* Fix field descriptions color contrast ratio for better accessibility. h/t [@rianrietveld](https://github.com/rianrietveld). Fixes [#1193](https://github.com/CMB2/CMB2/issues/1193).
-* Add `CMB2_Field::get_rest_value()` method for sending value through several filters (`'cmb2_get_rest_value'`, `"cmb2_get_rest_value_{$field_type}"`, `"cmb2_get_rest_value_for_{$field_id}"` ) before sending to REST request.
-
-#### Bug Fixes
-
-* Fix the options page errors when using CMB2 in WordPress prior to 4.7. Props [@manzoorwanijk](https://github.com/manzoorwanijk) ([#1166](https://github.com/CMB2/CMB2/pull/1166)).
-* Fix occasonal fatal errors that can occur by using callback functions directly vs `call_user_func`. Props [@manzoorwanijk](https://github.com/manzoorwanijk) ([#1177](https://github.com/CMB2/CMB2/pull/1177)).
-* Fix issue where `wysiwyg` fields' visual tab wouldn't save content on Gutenberg/block-editor posts. Props [@staurand](https://github.com/staurand) ([#1190](https://github.com/CMB2/CMB2/pull/1190) fixes [#1156](https://github.com/CMB2/CMB2/issues/1156)).
-* Fix issue when `remove_default` wouldn't actually remove the default taxonomy metabox when box registration used an alternate box context. Props [@lipemat](https://github.com/lipemat) ([#1147](https://github.com/CMB2/CMB2/pull/1147)).
+* Updated PHPUnit version in composer.json. Props [@slaFFik](https://github.com/slaFFik) ([#1204](https://github.com/CMB2/CMB2/pull/1204)).
+* Package.json: fix the need of global (old) grunt. Props [@slaFFik](https://github.com/slaFFik) ([#1206](https://github.com/CMB2/CMB2/pull/1206)).
+* Add optional confirmation dialog to group field's Remove button. Example [documented in the example functions file](https://github.com/CMB2/CMB2/blob/12036e2dcdeb5b019e844b814eca154bb0eee791/example-functions.php#L525). Props [@slaFFik](https://github.com/slaFFik) ([#1208](https://github.com/CMB2/CMB2/pull/1208)).
+* Add 'id' attribute on group field `.postbox` divs to ensure compatibility with scripts which expect ids there. Props [@amans2k](https://github.com/amans2k) ([#1108](https://github.com/CMB2/CMB2/pull/1108)).
+* Make `CMB2_Option` properties accessible. ([#1052](https://github.com/CMB2/CMB2/issues/1052))
+* New Before/After row hooks: `'cmb2_before_field_row'`, `"cmb2_before_{$field_type}_field_row"`, `"cmb2_after_{$field_type}_field_row"`, `'cmb2_after_field_row'`. Props [@rubengc](https://github.com/rubengc) ([#953](https://github.com/CMB2/CMB2/pull/953)).
+* Introduce three new filters to filter field arguments: `'cmb2_field_defaults'`, `'cmb2_field_arguments_raw'`, `'cmb2_field_arguments'`. Props [@jrfnl](https://github.com/jrfnl) ([#588](https://github.com/CMB2/CMB2/pull/588)).

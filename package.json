@@ -1,7 +1,7 @@
 {
   "name": "cmb2",
   "title": "CMB2",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.",
   "main": "Gruntfile.js",
   "directories": {

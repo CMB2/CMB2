@@ -1,0 +1,75 @@
+# source:
+#   - bootstrap.php
+#   - example-functions.php
+#   - init.php
+#   - includes
+#   - tests
+source: ./
+
+destination: ../../../../wpengine/api
+# list of scanned file extensions (e.g. php5, phpt...)
+extensions: [php]
+
+# directories and files matching this file mask will not be parsed
+exclude:
+    - node_modules/
+    - tmp/
+    - apigen/
+    - css/
+    - images/
+    - js/
+    - languages/
+    - vendor/
+
+# # similar to above, but this files will be included in class tree
+# skipDocPath:
+#     - *Component\Console
+
+# character set of source files; if you use only one across your files, we recommend you name it
+charset: [UTF-8]
+
+# title of generated documentation
+main: CMB2
+
+# title of generated documentation
+title: CMB2 Documentation
+
+# base url used for sitemap (useful for public doc)
+baseUrl: https://cmb2.io/api
+
+# custom search engine id, will be used by search box
+googleCseId: 001227520415713999821:rbrooe8zpyi
+
+# Google Analytics tracking code
+googleAnalytics: UA-61730501-1
+
+# choose ApiGen template theme
+templateTheme: bootstrap # or: default
+templateConfig: apigen/theme-bootstrap/src/config.neon
+
+# the way elements are grouped in menu
+groups: packages # also: namespace, packages, none; auto will detect namespace first, than packages
+
+# access levels of included method and properties
+accessLevels: [public, protected, private] # also [private]
+
+# include elements marked as @internal/{@internal}
+internal: true
+
+# generate documentation for PHP internal classes
+php: false
+
+# generate highlighted source code for elements
+sourceCode: true
+
+# generate tree view of classes, interfaces, traits and exceptions
+tree: true
+
+# generate documentation for deprecated elements
+deprecated: true
+
+# generate list of tasks with @todo annotation
+todo: true
+
+# add link to ZIP archive of documentation
+download: true
