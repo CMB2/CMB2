@@ -9,7 +9,7 @@ Before reporting a bug
 ---
 1. Please review the [documentation](https://github.com/CMB2/CMB2/wiki). Most questions revolve around the [field types](https://github.com/CMB2/CMB2/wiki/Field-Types), [field parameters](https://github.com/CMB2/CMB2/wiki/Field-Parameters), or are addressed in the [troubleshooting](https://github.com/CMB2/CMB2/wiki/Troubleshooting) section.
 2. Search [issues](https://github.com/CMB2/CMB2/issues) to see if the issue has been previously reported.
-3. Install the trunk version of CMB2 and test there.
+3. Install the [`develop`](https://github.com/CMB2/CMB2/tree/develop) version of CMB2 and test there.
 
 
 How to report a bug
@@ -26,8 +26,8 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 1. Make sure you have a GitHub account.
 2. Fork the repository on GitHub.
-3. **Check out the trunk version of CMB2.** If you submit to the master branch, the PR will be closed with a link back to this document.
-4. **Verify your issue still exists in the trunk branch.**
+3. **Check out the [`develop`](https://github.com/CMB2/CMB2/tree/develop) version of CMB2.** If you submit to the master branch, the PR will be closed with a link back to this document.
+4. **Verify your issue still exists in the [`develop`](https://github.com/CMB2/CMB2/tree/develop) branch.**
 5. Make changes to your clone of the repository.
 	1. Please follow the [WordPress code standards](https://make.wordpress.org/core/handbook/coding-standards).
 	2. If possible, and if applicable, please also add/update unit tests for your changes.
@@ -39,7 +39,15 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 Translations
 ---
-If you are looking to provide language translation files, Please do so via [WP-Translations](http://wp-translations.org/project/cmb2/).
+If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
+
+Creating/Running Tests
+---
+We use PHPUnit and the WordPress test suite for our unit/integration tests.
+
+1. You can install the WordPress test suite [using the installer](https://github.com/CMB2/CMB2/blob/develop/tests/bin/install-wp-tests.sh#L3): `bash tests/bin/install-wp-tests.sh wordpress_test root ''`. (this will install the test suite in the temp folder on your computer, using a test database with those given credentials)
+1. Install PHPUnit via composer, `composer install`.
+1. Once Composer and the WordPress test sutie are installed, you can run phpunit via `./vendor/bin/phpunit` in the CMB2 directory.
 
 Additional Resources
 ---

@@ -64,6 +64,8 @@ ocular.phar
 # PHPunit config
 phpunit.xml
 
+# Composer
+vendor
+
 # General
 NOTES.md
-apigen/

@@ -1,0 +1,146 @@
+/*--------------------------------------------------------------
+ * Sidebar Placement Adjustments
+--------------------------------------------------------------*/
+
+.inner-sidebar,
+#side-sortables {
+
+	.cmb2-wrap {
+
+		> .cmb-field-list > .cmb-row {
+			padding: 1.4em 0;
+		}
+
+		input {
+
+			&[type=text]:not( .wp-color-picker ) {
+				width: 100%;
+			}
+
+			+ input:not( .wp-picker-clear ), + select {
+				margin-left: 0;
+				margin-top: 1em;
+				display: block;
+			}
+
+			&.cmb2-text-money {
+				max-width: 70%;
+				+ .cmb2-metabox-description {
+					display: block;
+				}
+			}
+		}
+
+		label {
+			display: block;
+			font-weight: 700;
+			padding: 0 0 5px;
+		}
+
+	}
+
+	textarea {
+		max-width: 99%;
+	}
+
+	.cmb-repeatable-group {
+		border-bottom: 1px solid $light-gray;
+	}
+
+	.cmb-type-group > .cmb-td > .cmb-repeatable-group {
+		border-bottom: 0;
+		margin-bottom: -1.4em;
+	}
+
+	.cmb-th,
+	.cmb-td:not(.cmb-remove-row),
+	.cmb-th + .cmb-td {
+		width: 100%;
+		display: block;
+		float: none;
+	}
+
+	.closed .inside {
+		display: none;
+	}
+
+	.cmb-th {
+		@include fullth_side;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.cmb-group-description {
+		.cmb-th {
+			padding-top: 0;
+		}
+		.cmb2-metabox-description {
+			padding: 0;
+		}
+	}
+
+	.cmb-group-title {
+		// padding-bottom: 0;
+		.cmb-th {
+			padding: 0;
+		}
+	}
+
+	.cmb-repeatable-grouping {
+		+ .cmb-repeatable-grouping {
+			margin-top: 1em;
+		}
+	}
+	.cmb2-media-status {
+
+		.img-status,
+		.embed-status {
+
+			img {
+				max-width: 90%;
+				// width: auto;
+				height: auto;
+			}
+		}
+	}
+
+	.cmb2-list label {
+		display: inline;
+		font-weight: normal;
+	}
+
+	.cmb2-metabox-description {
+		display: block;
+		padding: 7px 0 0;
+	}
+
+	.cmb-type-checkbox {
+
+		.cmb-td label,
+		.cmb2-metabox-description {
+			font-weight: normal;
+			display: inline;
+		}
+	}
+
+	.cmb-row .cmb2-metabox-description {
+		padding-bottom: 1.8em;
+	}
+
+	.cmb2-metabox-title {
+		font-size: 1.2em;
+		font-style: italic;
+	}
+
+	.cmb-remove-row {
+		clear: both;
+		padding-top: 12px;
+		padding-bottom: 0;
+	}
+
+	.cmb2-upload-button {
+		clear: both;
+		margin-top: 12px;
+	}
+
+}

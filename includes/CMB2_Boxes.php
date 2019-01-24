@@ -73,17 +73,46 @@ class CMB2_Boxes {
 	/**
 	 * Retrieve all CMB2 instances that have the specified property set.
 	 *
-	 * @since  2.2.3
+	 * @since  2.4.0
 	 * @param  string $property Property name.
-	 * @param  mixed  $ignore   The value to ignore.
+	 * @param  mixed  $compare  (Optional) The value to compare.
 	 * @return CMB2[]           Array of matching cmb2 instances.
 	 */
-	public static function get_by_property( $property, $ignore = null ) {
+	public static function get_by( $property, $compare = 'nocompare' ) {
+		$boxes = array();
+
+		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
+			$prop = $cmb->prop( $property );
+
+			if ( 'nocompare' === $compare ) {
+				if ( ! empty( $prop ) ) {
+					$boxes[ $cmb_id ] = $cmb;
+				}
+				continue;
+			}
+
+			if ( $compare === $prop ) {
+				$boxes[ $cmb_id ] = $cmb;
+			}
+		}
+
+		return $boxes;
+	}
+
+	/**
+	 * Retrieve all CMB2 instances as long as they do not include the ignored property.
+	 *
+	 * @since  2.4.0
+	 * @param  string $property  Property name.
+	 * @param  mixed  $to_ignore The value to ignore.
+	 * @return CMB2[]            Array of matching cmb2 instances.
+	 */
+	public static function filter_by( $property, $to_ignore = null ) {
 		$boxes = array();
 
 		foreach ( self::$cmb2_instances as $cmb_id => $cmb ) {
 
-			if ( $ignore === $cmb->prop( $property ) ) {
+			if ( $to_ignore === $cmb->prop( $property ) ) {
 				continue;
 			}
 
@@ -93,4 +122,18 @@ class CMB2_Boxes {
 		return $boxes;
 	}
 
+	/**
+	 * Deprecated and left for back-compatibility. The original `get_by_property`
+	 * method was misnamed and never actually used by CMB2 core.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  string $property  Property name.
+	 * @param  mixed  $to_ignore The value to ignore.
+	 * @return CMB2[]            Array of matching cmb2 instances.
+	 */
+	public static function get_by_property( $property, $to_ignore = null ) {
+		_deprecated_function( __METHOD__, '2.4.0', 'CMB2_Boxes::filter_by()' );
+		return self::filter_by( $property );
+	}
 }

@@ -72,7 +72,7 @@ class CMB2_Option {
 	 * Delete the option from the db
 	 *
 	 * @since  2.0.0
-	 * @return bool  Delete success or failure
+	 * @return mixed Delete success or failure
 	 */
 	public function delete_option() {
 		$deleted = $this->key ? delete_option( $this->key ) : true;
@@ -84,7 +84,8 @@ class CMB2_Option {
 	 * Removes an option from an option array
 	 *
 	 * @since  1.0.1
-	 * @param  string $field_id Option array field key
+	 * @param string $field_id Option array field key.
+	 * @param bool   $resave Whether or not to resave.
 	 * @return array             Modified options
 	 */
 	public function remove( $field_id, $resave = false ) {
@@ -106,8 +107,8 @@ class CMB2_Option {
 	 * Retrieves an option from an option array
 	 *
 	 * @since  1.0.1
-	 * @param  string $field_id Option array field key
-	 * @param  mixed  $default  Fallback value for the option
+	 * @param string $field_id Option array field key.
+	 * @param mixed  $default  Fallback value for the option.
 	 * @return array             Requested field or default
 	 */
 	public function get( $field_id, $default = false ) {
@@ -126,11 +127,11 @@ class CMB2_Option {
 	 * Updates Option data
 	 *
 	 * @since  1.0.1
-	 * @param  string $field_id   Option array field key
-	 * @param  mixed  $value      Value to update data with
-	 * @param  bool   $resave     Whether to re-save the data
-	 * @param  bool   $single     Whether data should not be an array
-	 * @return boolean             Return status of update
+	 * @param string $field_id Option array field key.
+	 * @param mixed  $value    Value to update data with.
+	 * @param bool   $resave   Whether to re-save the data.
+	 * @param bool   $single   Whether data should not be an array.
+	 * @return boolean Return status of update.
 	 */
 	public function update( $field_id, $value = '', $resave = false, $single = true ) {
 		$this->get_options();
@@ -138,7 +139,7 @@ class CMB2_Option {
 		if ( true !== $field_id ) {
 
 			if ( ! $single ) {
-				// If multiple, add to array
+				// If multiple, add to array.
 				$this->options[ $field_id ][] = $value;
 			} else {
 				$this->options[ $field_id ] = $value;
@@ -160,7 +161,7 @@ class CMB2_Option {
 	 * to allow overwriting the option value to be stored.
 	 *
 	 * @since  1.0.1
-	 * @param  array $options Optional options to override
+	 * @param  array $options Optional options to override.
 	 * @return bool           Success/Failure
 	 */
 	public function set( $options = array() ) {
@@ -168,7 +169,7 @@ class CMB2_Option {
 			$this->options = $options;
 		}
 
-		$this->options = wp_unslash( $this->options ); // get rid of those evil magic quotes
+		$this->options = wp_unslash( $this->options ); // get rid of those evil magic quotes.
 
 		if ( empty( $this->key ) ) {
 			return false;
@@ -177,18 +178,34 @@ class CMB2_Option {
 		$test_save = apply_filters( "cmb2_override_option_save_{$this->key}", 'cmb2_no_override_option_save', $this->options, $this );
 
 		if ( 'cmb2_no_override_option_save' !== $test_save ) {
+			// If override, do not proceed to update the option, just return result.
 			return $test_save;
 		}
 
-		// If no override, update the option
-		return update_option( $this->key, $this->options );
+		/**
+		 * Whether to auto-load the option when WordPress starts up.
+		 *
+		 * The dynamic portion of the hook name, $this->key, refers to the option key.
+		 *
+		 * @since 2.4.0
+		 *
+		 * @param bool        $autoload   Whether to load the option when WordPress starts up.
+		 * @param CMB2_Option $cmb_option This object.
+		 */
+		$autoload = apply_filters( "cmb2_should_autoload_{$this->key}", true, $this );
+
+		return update_option(
+			$this->key,
+			$this->options,
+			! $autoload || 'no' === $autoload ? false : true
+		);
 	}
 
 	/**
 	 * Retrieve option value based on name of option.
 	 *
 	 * @uses apply_filters() Calls 'cmb2_override_option_get_{$this->key}' hook to allow
-	 * 	overwriting the option value to be retrieved.
+	 * overwriting the option value to be retrieved.
 	 *
 	 * @since  1.0.1
 	 * @param  mixed $default Optional. Default value to return if the option does not exist.
@@ -202,7 +219,7 @@ class CMB2_Option {
 			if ( 'cmb2_no_override_option_get' !== $test_get ) {
 				$this->options = $test_get;
 			} else {
-				// If no override, get the option
+				// If no override, get the option.
 				$this->options = get_option( $this->key, $default );
 			}
 		}
@@ -212,4 +229,22 @@ class CMB2_Option {
 		return $this->options;
 	}
 
+	/**
+	 * Magic getter for our object.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @param string $field Requested property.
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @return mixed
+	 */
+	public function __get( $field ) {
+		switch ( $field ) {
+			case 'options':
+			case 'key':
+				return $this->{$field};
+			default:
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
+		}
+	}
 }

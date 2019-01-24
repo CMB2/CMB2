@@ -1,0 +1,84 @@
+/*--------------------------------------------------------------
+ * Post Metaboxes
+--------------------------------------------------------------*/
+
+#poststuff .cmb-group-title {
+	margin-left: -1em;
+	margin-right: -1em;
+	min-height: 1.5em;
+}
+
+#poststuff .repeatable .cmb-group-title {
+	padding-left: 2.2em;
+}
+
+.cmb2-postbox, .cmb-type-group {
+
+	.cmb2-wrap {
+		margin: 0;
+
+		> .cmb-field-list > .cmb-row {
+			padding: 1.8em 0;
+		}
+
+		input[type=text] {
+
+			&.cmb2-oembed {
+				width: 100%;
+			}
+		}
+	}
+
+	.cmb-row {
+		padding: 0 0 1.8em;
+		margin: 0 0 0.8em;
+
+		.cmbhandle {
+			right: -1em;
+			position: relative;
+			color: $dark-gray;
+		}
+	}
+
+	.cmb-repeatable-grouping {
+		padding: 0 1em;
+		max-width: 100%;
+		min-width: 1px !important;
+	}
+
+	.cmb-repeatable-group > .cmb-row {
+		padding-bottom: 0;
+	}
+
+	.cmb-th {
+		width: 18%;
+		padding: 0 2% 0 0;
+		// text-align: right;
+	}
+
+	.cmb-td {
+		margin-bottom: 0;
+		padding: 0;
+		line-height: 1.3;
+	}
+
+	.cmb-th + .cmb-td {
+		width: 80%;
+		float: right;
+	}
+
+	.cmb-row:not(:last-of-type),
+	.cmb-repeatable-group:not(:last-of-type) {
+		border-bottom: 1px solid $light-gray;
+
+		@media (max-width: $mobile-break) {
+			border-bottom: 0;
+		}
+	}
+
+	.cmb-repeat-group-field,
+	.cmb-remove-field-row {
+		padding-top: 1.8em;
+	}
+
+}

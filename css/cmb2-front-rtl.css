@@ -1,9 +1,13 @@
-@charset "UTF-8";
-/**
- * CMB2 Styling
+/*!
+ * CMB2 - v2.6.0 - 2019-01-18
+ * https://cmb2.io
+ * Copyright (c) 2019
+ * Licensed GPLv2+
  */
+
+@charset "UTF-8";
 /*--------------------------------------------------------------
-Main Wrap
+ * Main Wrap
 --------------------------------------------------------------*/
 /* line 5, sass/partials/_main_wrap.scss */
 .cmb2-wrap {
@@ -96,7 +100,7 @@ Main Wrap
 }
 /* line 111, sass/partials/_main_wrap.scss */
 .cmb2-wrap .mceIframeContainer {
-  background: #fff;
+  background: #ffffff;
 }
 /* line 115, sass/partials/_main_wrap.scss */
 .cmb2-wrap .meta_mce {
@@ -260,6 +264,10 @@ Main Wrap
   border-top: solid 1px #e9e9e9;
 }
 /* line 259, sass/partials/_main_wrap.scss */
+.cmb-repeat-table .cmb-row.cmb-repeat-row.ui-sortable-helper {
+  outline: dashed 2px #e9e9e9 !important;
+}
+/* line 263, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row:before {
   content: counter(el);
   display: block;
@@ -269,20 +277,21 @@ Main Wrap
   width: 35px;
   height: 100%;
   line-height: 35px;
-  color: #aaaaaa;
+  cursor: move;
+  color: #757575;
   text-align: center;
   border-left: solid 1px #e9e9e9;
 }
-/* line 276, sass/partials/_main_wrap.scss */
+/* line 280, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row .cmb-td {
   margin: 0;
   padding: 0;
 }
-/* line 283, sass/partials/_main_wrap.scss */
+/* line 287, sass/partials/_main_wrap.scss */
 .cmb-repeat-table + .cmb-add-row {
   margin: 0;
 }
-/* line 286, sass/partials/_main_wrap.scss */
+/* line 290, sass/partials/_main_wrap.scss */
 .cmb-repeat-table + .cmb-add-row:before {
   content: '';
   width: 1px;
@@ -291,7 +300,7 @@ Main Wrap
   margin-right: 17px;
   background-color: gainsboro;
 }
-/* line 296, sass/partials/_main_wrap.scss */
+/* line 300, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row {
   top: 7px;
   left: 7px;
@@ -301,7 +310,7 @@ Main Wrap
   padding: 0 !important;
   display: none;
 }
-/* line 307, sass/partials/_main_wrap.scss */
+/* line 311, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button {
   font-size: 20px;
   text-indent: -1000px;
@@ -311,7 +320,7 @@ Main Wrap
   line-height: 1;
   padding: 0 10px 0;
 }
-/* line 318, sass/partials/_main_wrap.scss */
+/* line 322, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button:before {
   content: "";
   font-family: 'Dashicons';
@@ -330,16 +339,16 @@ Main Wrap
   height: 100%;
   text-align: center;
 }
-/* line 324, sass/partials/_main_wrap.scss */
+/* line 328, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-repeat-row:hover .cmb-remove-row {
   display: block;
 }
 
-/* line 332, sass/partials/_main_wrap.scss */
+/* line 336, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-th {
   padding: 5px;
 }
-/* line 336, sass/partials/_main_wrap.scss */
+/* line 340, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title {
   background-color: #e9e9e9;
   padding: 8px 2.2em 8px 12px;
@@ -348,7 +357,7 @@ Main Wrap
   font-size: 14px;
   line-height: 1.4;
 }
-/* line 344, sass/partials/_main_wrap.scss */
+/* line 348, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title h4 {
   border: 0;
   margin: 0;
@@ -356,12 +365,12 @@ Main Wrap
   font-weight: 500;
   padding: 0.5em 0.75em;
 }
-/* line 352, sass/partials/_main_wrap.scss */
+/* line 356, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title .cmb-th {
   display: block;
   width: 100%;
 }
-/* line 358, sass/partials/_main_wrap.scss */
+/* line 362, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-description .cmb-th {
   font-size: 1.2em;
   display: block;
@@ -376,66 +385,66 @@ Main Wrap
   margin-top: 0;
   margin-bottom: 0.5em;
 }
-/* line 362, sass/partials/_main_wrap.scss */
+/* line 366, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows {
   font-size: 1em;
   margin-left: 1em;
   text-decoration: none;
 }
-/* line 367, sass/partials/_main_wrap.scss */
+/* line 371, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons {
   font-size: 1.5em;
   height: 1.5em;
   line-height: 1.2em;
   width: 1em;
 }
-/* line 373, sass/partials/_main_wrap.scss */
+/* line 377, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons.dashicons-arrow-down-alt2 {
   line-height: 1.3em;
 }
-/* line 380, sass/partials/_main_wrap.scss */
+/* line 384, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb2-upload-button {
   float: left;
 }
 
-/* line 386, sass/partials/_main_wrap.scss */
+/* line 390, sass/partials/_main_wrap.scss */
 p.cmb2-metabox-description {
-  color: #aaaaaa;
+  color: #757575;
   font-style: italic;
   margin: 0;
   padding-top: .5em;
 }
 
-/* line 393, sass/partials/_main_wrap.scss */
+/* line 397, sass/partials/_main_wrap.scss */
 span.cmb2-metabox-description {
-  color: #aaaaaa;
+  color: #757575;
   font-style: italic;
 }
 
-/* line 398, sass/partials/_main_wrap.scss */
+/* line 402, sass/partials/_main_wrap.scss */
 .cmb2-metabox-title {
   margin: 0 0 5px 0;
   padding: 5px 0 0 0;
   font-size: 14px;
 }
 
-/* line 404, sass/partials/_main_wrap.scss */
+/* line 408, sass/partials/_main_wrap.scss */
 .cmb-inline ul {
   padding: 4px 0 0 0;
 }
 
-/* line 408, sass/partials/_main_wrap.scss */
+/* line 412, sass/partials/_main_wrap.scss */
 .cmb-inline li {
   display: inline-block;
   padding-left: 18px;
 }
 
-/* line 413, sass/partials/_main_wrap.scss */
+/* line 417, sass/partials/_main_wrap.scss */
 .cmb-type-textarea-code pre {
   margin: 0;
 }
 
-/* line 419, sass/partials/_main_wrap.scss */
+/* line 423, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status {
   clear: none;
   display: inline-block;
@@ -443,31 +452,35 @@ span.cmb2-metabox-description {
   margin-left: 10px;
   width: auto;
 }
-/* line 426, sass/partials/_main_wrap.scss */
+/* line 430, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img {
   max-width: 350px;
   height: auto;
 }
-/* line 432, sass/partials/_main_wrap.scss */
+/* line 436, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
-  background: #ffffff;
-  border: 1px solid #e9e9e9;
+  background: #eee;
+  border: 5px solid #ffffff;
+  outline: 1px solid #e9e9e9;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  background-image: linear-gradient(45deg, #d0d0d0 25%, transparent 25%, transparent 75%, #d0d0d0 75%, #d0d0d0), linear-gradient(45deg, #d0d0d0 25%, transparent 25%, transparent 75%, #d0d0d0 75%, #d0d0d0);
+  background-position: 0 0, 10px 10px;
+  background-size: 20px 20px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   margin: 15px 0 0 0;
-  padding: 5px;
 }
-/* line 442, sass/partials/_main_wrap.scss */
+/* line 450, sass/partials/_main_wrap.scss */
 .cmb2-media-status .embed-status {
   float: right;
   max-width: 800px;
 }
-/* line 447, sass/partials/_main_wrap.scss */
+/* line 455, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status, .cmb2-media-status .embed-status {
   position: relative;
 }
-/* line 450, sass/partials/_main_wrap.scss */
+/* line 458, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button, .cmb2-media-status .embed-status .cmb2-remove-file-button {
   background: url(../images/ico-delete.png);
   height: 16px;
@@ -477,16 +490,20 @@ span.cmb2-metabox-description {
   top: -5px;
   width: 16px;
 }
-/* line 464, sass/partials/_main_wrap.scss */
+/* line 472, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button {
   top: 10px;
 }
-/* line 469, sass/partials/_main_wrap.scss */
+/* line 477, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span {
   cursor: pointer;
 }
+/* line 482, sass/partials/_main_wrap.scss */
+.cmb2-media-status.cmb-attach-list .img-status img, .cmb2-media-status.cmb-attach-list .file-status > span {
+  cursor: move;
+}
 
-/* line 475, sass/partials/_main_wrap.scss */
+/* line 489, sass/partials/_main_wrap.scss */
 .cmb-type-file-list .cmb2-media-status .img-status {
   clear: none;
   vertical-align: middle;
@@ -496,7 +513,7 @@ span.cmb2-metabox-description {
   margin-top: 0;
 }
 
-/* line 484, sass/partials/_main_wrap.scss */
+/* line 498, sass/partials/_main_wrap.scss */
 .cmb-attach-list li {
   clear: both;
   display: inline-block;
@@ -504,30 +521,29 @@ span.cmb2-metabox-description {
   margin-top: 5px;
   margin-bottom: 10px;
 }
-/* line 491, sass/partials/_main_wrap.scss */
+/* line 504, sass/partials/_main_wrap.scss */
 .cmb-attach-list li img {
-  cursor: move;
   float: right;
   margin-left: 10px;
 }
 
-/* line 498, sass/partials/_main_wrap.scss */
+/* line 510, sass/partials/_main_wrap.scss */
 .cmb2-remove-wrapper {
   margin: 0;
 }
 
-/* line 502, sass/partials/_main_wrap.scss */
+/* line 514, sass/partials/_main_wrap.scss */
 .child-cmb2 .cmb-th {
   text-align: right;
 }
 
-/* line 506, sass/partials/_main_wrap.scss */
+/* line 518, sass/partials/_main_wrap.scss */
 .cmb2-indented-hierarchy {
   padding-right: 1.5em;
 }
 
 @media (max-width: 450px) {
-  /* line 511, sass/partials/_main_wrap.scss */
+  /* line 523, sass/partials/_main_wrap.scss */
   .cmb-th,
   .cmb-td,
   .cmb-th + .cmb-td {
@@ -537,83 +553,84 @@ span.cmb2-metabox-description {
   }
 }
 /*--------------------------------------------------------------
-Post Metaboxes
+ * Post Metaboxes
 --------------------------------------------------------------*/
-/* line 4, sass/partials/_post_metaboxes.scss */
+/* line 5, sass/partials/_post_metaboxes.scss */
 #poststuff .cmb-group-title {
   margin-right: -1em;
   margin-left: -1em;
   min-height: 1.5em;
 }
 
-/* line 10, sass/partials/_post_metaboxes.scss */
+/* line 11, sass/partials/_post_metaboxes.scss */
 #poststuff .repeatable .cmb-group-title {
   padding-right: 2.2em;
 }
 
-/* line 16, sass/partials/_post_metaboxes.scss */
+/* line 17, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap, .cmb-type-group .cmb2-wrap {
   margin: 0;
 }
-/* line 19, sass/partials/_post_metaboxes.scss */
+/* line 20, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap > .cmb-field-list > .cmb-row, .cmb-type-group .cmb2-wrap > .cmb-field-list > .cmb-row {
   padding: 1.8em 0;
 }
-/* line 25, sass/partials/_post_metaboxes.scss */
+/* line 26, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap input[type=text].cmb2-oembed, .cmb-type-group .cmb2-wrap input[type=text].cmb2-oembed {
   width: 100%;
 }
-/* line 31, sass/partials/_post_metaboxes.scss */
+/* line 32, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row, .cmb-type-group .cmb-row {
   padding: 0 0 1.8em;
   margin: 0 0 0.8em;
 }
-/* line 35, sass/partials/_post_metaboxes.scss */
+/* line 36, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row .cmbhandle, .cmb-type-group .cmb-row .cmbhandle {
   left: -1em;
   position: relative;
+  color: #222222;
 }
-/* line 41, sass/partials/_post_metaboxes.scss */
+/* line 43, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeatable-grouping, .cmb-type-group .cmb-repeatable-grouping {
   padding: 0 1em;
   max-width: 100%;
   min-width: 1px !important;
 }
-/* line 47, sass/partials/_post_metaboxes.scss */
+/* line 49, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeatable-group > .cmb-row, .cmb-type-group .cmb-repeatable-group > .cmb-row {
   padding-bottom: 0;
 }
-/* line 51, sass/partials/_post_metaboxes.scss */
+/* line 53, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-th, .cmb-type-group .cmb-th {
   width: 18%;
   padding: 0 0 0 2%;
 }
-/* line 57, sass/partials/_post_metaboxes.scss */
+/* line 59, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-td, .cmb-type-group .cmb-td {
   margin-bottom: 0;
   padding: 0;
   line-height: 1.3;
 }
-/* line 63, sass/partials/_post_metaboxes.scss */
+/* line 65, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-th + .cmb-td, .cmb-type-group .cmb-th + .cmb-td {
   width: 80%;
   float: left;
 }
-/* line 68, sass/partials/_post_metaboxes.scss */
+/* line 70, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row:not(:last-of-type),
 .cmb2-postbox .cmb-repeatable-group:not(:last-of-type), .cmb-type-group .cmb-row:not(:last-of-type),
 .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
   border-bottom: 1px solid #e9e9e9;
 }
 @media (max-width: 450px) {
-  /* line 68, sass/partials/_post_metaboxes.scss */
+  /* line 70, sass/partials/_post_metaboxes.scss */
   .cmb2-postbox .cmb-row:not(:last-of-type),
   .cmb2-postbox .cmb-repeatable-group:not(:last-of-type), .cmb-type-group .cmb-row:not(:last-of-type),
   .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
     border-bottom: 0;
   }
 }
-/* line 77, sass/partials/_post_metaboxes.scss */
+/* line 79, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeat-group-field,
 .cmb2-postbox .cmb-remove-field-row, .cmb-type-group .cmb-repeat-group-field,
 .cmb-type-group .cmb-remove-field-row {
@@ -621,7 +638,7 @@ Post Metaboxes
 }
 
 /*--------------------------------------------------------------
-Context Metaboxes
+ * Context Metaboxes
 --------------------------------------------------------------*/
 /* Metabox collapse arrow indicators */
 /* line 9, sass/partials/_context_metaboxes.scss */
@@ -712,77 +729,7 @@ Context Metaboxes
   }
 }
 /*--------------------------------------------------------------
-Options page
---------------------------------------------------------------*/
-/* line 4, sass/partials/_options-page.scss */
-.cmb2-options-page {
-  max-width: 1200px;
-}
-/* line 7, sass/partials/_options-page.scss */
-.cmb2-options-page.wrap > h2 {
-  margin-bottom: 1em;
-}
-/* line 11, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-metabox > .cmb-row {
-  padding: 1em;
-  margin-top: -1px;
-  background: #ffffff;
-  border: 1px solid #e9e9e9;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-/* line 18, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th {
-  padding: 0;
-  font-weight: initial;
-}
-/* line 23, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th + .cmb-td {
-  float: none;
-  padding: 0 1em 0 0;
-  margin-right: 200px;
-}
-@media (max-width: 450px) {
-  /* line 23, sass/partials/_options-page.scss */
-  .cmb2-options-page .cmb2-metabox > .cmb-row > .cmb-th + .cmb-td {
-    padding: 0;
-    margin-right: 0;
-  }
-}
-/* line 36, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-wrap .cmb-type-title {
-  margin-top: 1em;
-  padding: 0.6em 1em;
-  background-color: #fafafa;
-}
-/* line 41, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-wrap .cmb-type-title .cmb2-metabox-title {
-  font-size: 12px;
-  margin-top: 0;
-  margin-bottom: 0;
-  text-transform: uppercase;
-}
-/* line 48, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb2-wrap .cmb-type-title .cmb2-metabox-description {
-  padding-top: 0.25em;
-}
-/* line 54, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb-repeatable-group .cmb-group-description .cmb-th {
-  padding: 0 0 0.8em 0;
-}
-/* line 58, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb-repeatable-group .cmb-group-name {
-  font-size: 16px;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-/* line 64, sass/partials/_options-page.scss */
-.cmb2-options-page .cmb-repeatable-group .cmb-th > .cmb2-metabox-description {
-  font-weight: 400;
-  padding-bottom: 0 !important;
-}
-
-/*--------------------------------------------------------------
-Misc.
+ * Misc.
 --------------------------------------------------------------*/
 /* line 5, sass/partials/_misc.scss */
 #poststuff .cmb-repeatable-group h2 {
@@ -812,175 +759,11 @@ Misc.
 }
 
 /*--------------------------------------------------------------
-Sidebar Placement Adjustments
+ * Collapsible UI
 --------------------------------------------------------------*/
-/* line 10, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap > .cmb-field-list > .cmb-row,
-#side-sortables .cmb2-wrap > .cmb-field-list > .cmb-row {
-  padding: 1.4em 0;
-}
-/* line 16, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap input[type=text]:not(.wp-color-picker),
-#side-sortables .cmb2-wrap input[type=text]:not(.wp-color-picker) {
-  width: 100%;
-}
-/* line 20, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap input + input:not(.wp-picker-clear), .inner-sidebar .cmb2-wrap input + select,
-#side-sortables .cmb2-wrap input + input:not(.wp-picker-clear),
-#side-sortables .cmb2-wrap input + select {
-  margin-right: 0;
-  margin-top: 1em;
-  display: block;
-}
-/* line 26, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap input.cmb2-text-money,
-#side-sortables .cmb2-wrap input.cmb2-text-money {
-  max-width: 70%;
-}
-/* line 28, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap input.cmb2-text-money + .cmb2-metabox-description,
-#side-sortables .cmb2-wrap input.cmb2-text-money + .cmb2-metabox-description {
-  display: block;
-}
-/* line 34, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-wrap label,
-#side-sortables .cmb2-wrap label {
-  display: block;
-  font-weight: 700;
-  padding: 0 0 5px;
-}
-/* line 42, sass/partials/_sidebar_placements.scss */
-.inner-sidebar textarea,
-#side-sortables textarea {
-  max-width: 99%;
-}
-/* line 46, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-repeatable-group,
-#side-sortables .cmb-repeatable-group {
-  border-bottom: 1px solid #e9e9e9;
-}
-/* line 50, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-type-group > .cmb-td > .cmb-repeatable-group,
-#side-sortables .cmb-type-group > .cmb-td > .cmb-repeatable-group {
-  border-bottom: 0;
-  margin-bottom: -1.4em;
-}
-/* line 55, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-th,
-.inner-sidebar .cmb-td:not(.cmb-remove-row),
-.inner-sidebar .cmb-th + .cmb-td,
-#side-sortables .cmb-th,
-#side-sortables .cmb-td:not(.cmb-remove-row),
-#side-sortables .cmb-th + .cmb-td {
-  width: 100%;
-  display: block;
-  float: none;
-}
-/* line 63, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .closed .inside,
-#side-sortables .closed .inside {
-  display: none;
-}
-/* line 67, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-th,
-#side-sortables .cmb-th {
-  display: block;
-  float: none;
-  padding-bottom: 1em;
-  text-align: right;
-  width: 100%;
-  padding-right: 0;
-  padding-left: 0;
-}
-/* line 27, sass/partials/_mixins.scss */
-.inner-sidebar .cmb-th label,
-#side-sortables .cmb-th label {
-  display: block;
-  margin-top: 0;
-  margin-bottom: 0.5em;
-}
-/* line 14, sass/partials/_mixins.scss */
-.inner-sidebar .cmb-th label,
-#side-sortables .cmb-th label {
-  font-size: 14px;
-  line-height: 1.4em;
-}
-/* line 74, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-group-description .cmb-th,
-#side-sortables .cmb-group-description .cmb-th {
-  padding-top: 0;
-}
-/* line 77, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-group-description .cmb2-metabox-description,
-#side-sortables .cmb-group-description .cmb2-metabox-description {
-  padding: 0;
-}
-/* line 84, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-group-title .cmb-th,
-#side-sortables .cmb-group-title .cmb-th {
-  padding: 0;
-}
-/* line 90, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-repeatable-grouping + .cmb-repeatable-grouping,
-#side-sortables .cmb-repeatable-grouping + .cmb-repeatable-grouping {
-  margin-top: 1em;
-}
-/* line 99, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-media-status .img-status img,
-.inner-sidebar .cmb2-media-status .embed-status img,
-#side-sortables .cmb2-media-status .img-status img,
-#side-sortables .cmb2-media-status .embed-status img {
-  max-width: 90%;
-  height: auto;
-}
-/* line 107, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-list label,
-#side-sortables .cmb2-list label {
-  display: inline;
-  font-weight: normal;
-}
-/* line 112, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-metabox-description,
-#side-sortables .cmb2-metabox-description {
-  display: block;
-  padding: 7px 0 0;
-}
-/* line 119, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-type-checkbox .cmb-td label,
-.inner-sidebar .cmb-type-checkbox .cmb2-metabox-description,
-#side-sortables .cmb-type-checkbox .cmb-td label,
-#side-sortables .cmb-type-checkbox .cmb2-metabox-description {
-  font-weight: normal;
-  display: inline;
-}
-/* line 126, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-row .cmb2-metabox-description,
-#side-sortables .cmb-row .cmb2-metabox-description {
-  padding-bottom: 1.8em;
-}
-/* line 130, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-metabox-title,
-#side-sortables .cmb2-metabox-title {
-  font-size: 1.2em;
-  font-style: italic;
-}
-/* line 135, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb-remove-row,
-#side-sortables .cmb-remove-row {
-  clear: both;
-  padding-top: 12px;
-  padding-bottom: 0;
-}
-/* line 141, sass/partials/_sidebar_placements.scss */
-.inner-sidebar .cmb2-upload-button,
-#side-sortables .cmb2-upload-button {
-  clear: both;
-  margin-top: 12px;
-}
-
-/* line 2, sass/partials/_collapsible_ui.scss */
+/* line 6, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .cmbhandle {
-  color: #aaa;
+  color: #757575;
   float: left;
   width: 27px;
   height: 30px;
@@ -988,7 +771,7 @@ Sidebar Placement Adjustments
   left: -1em;
   position: relative;
 }
-/* line 10, sass/partials/_collapsible_ui.scss */
+/* line 14, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .cmbhandle:before {
   content: '\f142';
   left: 12px;
@@ -1002,11 +785,11 @@ Sidebar Placement Adjustments
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none !important;
 }
-/* line 27, sass/partials/_collapsible_ui.scss */
+/* line 31, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .postbox.closed .cmbhandle:before {
   content: '\f140';
 }
-/* line 33, sass/partials/_collapsible_ui.scss */
+/* line 37, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
   -webkit-appearance: none !important;
   background: none !important;
@@ -1018,13 +801,13 @@ Sidebar Placement Adjustments
   padding: 2px 6px 3px;
   opacity: .5;
 }
-/* line 43, sass/partials/_collapsible_ui.scss */
+/* line 47, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
   cursor: pointer;
   color: #a00;
   opacity: 1;
 }
-/* line 47, sass/partials/_collapsible_ui.scss */
+/* line 51, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
   color: #f00;
 }
@@ -1489,22 +1272,25 @@ Sidebar Placement Adjustments
 /**
  * CMB2 Frontend
  */
-/* line 1, sass/partials/_front.scss */
+/*--------------------------------------------------------------
+ * CMB2 Frontend
+--------------------------------------------------------------*/
+/* line 5, sass/partials/_front.scss */
 .closed .inside {
   display: none;
 }
 
-/* line 5, sass/partials/_front.scss */
+/* line 9, sass/partials/_front.scss */
 .cmb-repeatable-grouping {
   position: relative;
 }
-/* line 8, sass/partials/_front.scss */
+/* line 12, sass/partials/_front.scss */
 .cmb-repeatable-grouping .cmb-group-title {
   margin-right: -1em;
   margin-left: -1em;
   min-height: 1.5em;
 }
-/* line 14, sass/partials/_front.scss */
+/* line 18, sass/partials/_front.scss */
 .cmb-repeatable-grouping h3 {
   font-size: 14px;
   padding: 8px 12px;
@@ -1512,22 +1298,22 @@ Sidebar Placement Adjustments
   line-height: 1.4;
 }
 
-/* line 25, sass/partials/_front.scss */
+/* line 29, sass/partials/_front.scss */
 .cmb-repeatable-group.repeatable .cmb-group-title {
   padding-right: 2.2em;
 }
-/* line 29, sass/partials/_front.scss */
+/* line 33, sass/partials/_front.scss */
 .cmb-repeatable-group.non-repeatable .cmb-group-title {
   padding-right: 12px;
 }
 
-/* line 35, sass/partials/_front.scss */
+/* line 39, sass/partials/_front.scss */
 .cmb-type-group .cmb-row .cmbhandle {
   left: 0;
   position: absolute;
 }
 
-/* line 40, sass/partials/_front.scss */
+/* line 44, sass/partials/_front.scss */
 .cmb-spinner {
   background: url(/wp-admin/images/spinner.gif) no-repeat;
   -webkit-background-size: 20px 20px;
