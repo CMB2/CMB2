@@ -682,22 +682,21 @@ window.CMB2 = window.CMB2 || {};
 	cmb.addAjaxRow = function( evt ) {
 		evt.preventDefault();
 
-		var $this         = $( this );
-		var $table        = $id( $this.data('selector') );
-		var $emptyrow     = $table.find('.empty-row');
-		var prevNum       = parseInt( $emptyrow.find('[data-iterator]').data('iterator'), 10 );
-		cmb.idNumber      = parseInt( prevNum, 10 ) + 1;
-		var $row          = $emptyrow.clone();
+		var $this     = $( this );
+		var $table    = $id( $this.data('selector') );
+		var $row      = $table.find('.empty-row');
+		var prevNum   = parseInt( $row.find('[data-iterator]').data('iterator'), 10 );
+		cmb.idNumber  = parseInt( prevNum, 10 ) + 1;
+		var $emptyrow = $row.clone();
 
-		cmb.newRowHousekeeping( $row ).cleanRow( $row, prevNum );
+		cmb.newRowHousekeeping( $emptyrow ).cleanRow( $emptyrow, prevNum );
 
-		$emptyrow.removeClass('empty-row hidden').addClass('cmb-repeat-row');
-		$emptyrow.after( $row );
+		$row.removeClass('empty-row hidden').addClass('cmb-repeat-row');
+		$row.after( $emptyrow );
 
-		cmb.afterRowInsert( $row );
+		cmb.afterRowInsert( $emptyrow );
 
-		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: false }, $row );
-
+		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: false }, $emptyrow, $row );
 	};
 
 	cmb.removeGroupRow = function( evt ) {
