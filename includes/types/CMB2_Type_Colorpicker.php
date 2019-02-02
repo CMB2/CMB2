@@ -24,20 +24,30 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param CMB2_Types $types
-	 * @param array      $args
+	 * @param CMB2_Types $types Object for the field type.
+	 * @param array      $args  Array of arguments for the type.
+	 * @param string     $value Value that the field type is currently set to, or default value.
 	 */
 	public function __construct( CMB2_Types $types, $args = array(), $value = '' ) {
 		parent::__construct( $types, $args );
 		$this->value = $value ? $value : $this->value;
 	}
 
+	/**
+	 * Render the field for the field type.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @param array $args Array of arguments for the rendering.
+	 *
+	 * @return CMB2_Type_Base|string
+	 */
 	public function render( $args = array() ) {
 		$meta_value = $this->value ? $this->value : $this->field->escaped_value();
 
 		$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
 		if ( preg_match( '/^' . $hex_color . '/i', $meta_value ) ) {
-			// Value is just 123abc, so prepend #
+			// Value is just 123abc, so prepend #.
 			$meta_value = '#' . $meta_value;
 		} elseif (
 			// If value doesn't match #123abc...
@@ -55,13 +65,13 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 			'class' => 'cmb2-text-small',
 		) );
 
-		$args['class']           .= ' cmb2-colorpicker';
+		$args['class']          .= ' cmb2-colorpicker';
 		$args['value']           = $meta_value;
 		$args['js_dependencies'] = array( 'wp-color-picker' );
 
 		if ( $this->field->options( 'alpha' ) ) {
 			$args['js_dependencies'][] = 'wp-color-picker-alpha';
-			$args['data-alpha'] = 'true';
+			$args['data-alpha']        = 'true';
 		}
 
 		$args = wp_parse_args( $this->args, $args );
@@ -69,6 +79,11 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		return parent::render( $args );
 	}
 
+	/**
+	 * Provide the option to use a rgba colorpicker.
+	 *
+	 * @since 2.2.6.2
+	 */
 	public static function dequeue_rgba_colorpicker_script() {
 		if ( wp_script_is( 'jw-cmb2-rgba-picker-js', 'enqueued' ) ) {
 			wp_dequeue_script( 'jw-cmb2-rgba-picker-js' );
