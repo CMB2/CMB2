@@ -91,9 +91,12 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	 * @return mixed Array of terms on success
 	 */
 	public function get_terms() {
+		$maybe_hide_empty = $this->field->args( 'taxonomy_hide_empty' );
+		$hide_empty = ( CMB2_Utils::notempty( $this->field->args( 'taxonomy_hide_empty' ) ) ) ? (bool) $maybe_hide_empty : false;
+
 		$args = array(
 			'taxonomy'   => $this->field->args( 'taxonomy' ),
-			'hide_empty' => false,
+			'hide_empty' => $hide_empty,
 		);
 
 		if ( null !== $this->parent ) {
