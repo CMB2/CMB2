@@ -374,6 +374,11 @@ function yourprefix_register_demo_metabox() {
 		'type'     => 'taxonomy_radio', // Or `taxonomy_radio_inline`/`taxonomy_radio_hierarchical`
 		'taxonomy' => 'category', // Taxonomy Slug
 		// 'inline'  => true, // Toggles display to inline
+		// Optionally override the args sent to the WordPress get_terms function.
+		'query_args' => array(
+			// 'orderby' => 'slug',
+			// 'hide_empty' => true,
+		),
 	) );
 
 	$cmb_demo->add_field( array(
