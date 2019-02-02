@@ -50,13 +50,13 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$output = '';
 
 		$output .= parent::render( array(
-			'type'  => $a['type'],
-			'class' => $a['class'],
-			'value' => $a['value'],
-			'id'    => $a['id'],
-			'name'  => $a['name'],
-			'size'  => $a['size'],
-			'desc'  => '',
+			'type'             => $a['type'],
+			'class'            => $a['class'],
+			'value'            => $a['value'],
+			'id'               => $a['id'],
+			'name'             => $a['name'],
+			'size'             => $a['size'],
+			'desc'             => '',
 			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
 			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $a['query_args'] ) ? json_encode( $a['query_args'] ) : '',
@@ -67,8 +67,8 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// (Possible if being used within a custom field)
 		// This is not elegant, but compensates for CMB2_Types::_id
 		// automagically & inelegantly adding the data-iterator attribute.
-		// Single responsibility principle? pffft
-		$parts = explode( '"', $this->args['id'] );
+		// Single responsibility principle? pffft.
+		$parts            = explode( '"', $this->args['id'] );
 		$this->args['id'] = $parts[0];
 
 		$output .= sprintf(
@@ -85,7 +85,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		}
 		$output .= '</div>';
 
- 		return $this->rendered( $output );
+		return $this->rendered( $output );
 	}
 
 	/**

@@ -41,9 +41,9 @@ abstract class CMB2_Type_Base {
 	 * @param array      $args  Array of arguments for the type.
 	 */
 	public function __construct( CMB2_Types $types, $args = array() ) {
-		$this->types = $types;
+		$this->types      = $types;
 		$args['rendered'] = isset( $args['rendered'] ) ? (bool) $args['rendered'] : true;
-		$this->args = $args;
+		$this->args       = $args;
 	}
 
 	/**

@@ -65,13 +65,13 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 			'class' => 'cmb2-text-small',
 		) );
 
-		$args['class']           .= ' cmb2-colorpicker';
+		$args['class']          .= ' cmb2-colorpicker';
 		$args['value']           = $meta_value;
 		$args['js_dependencies'] = array( 'wp-color-picker' );
 
 		if ( $this->field->options( 'alpha' ) ) {
 			$args['js_dependencies'][] = 'wp-color-picker-alpha';
-			$args['data-alpha'] = 'true';
+			$args['data-alpha']        = 'true';
 		}
 
 		$args = wp_parse_args( $this->args, $args );
