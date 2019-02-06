@@ -11,6 +11,7 @@ node_modules       export-ignore
 package.json       export-ignore
 phpunit.xml        export-ignore
 tests              export-ignore
+composer.lock      export-ignore
 readme.md          export-ignore
 README.md          export-ignore
 .idea              export-ignore
