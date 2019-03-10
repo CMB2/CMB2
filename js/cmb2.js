@@ -96,6 +96,17 @@ window.CMB2 = window.CMB2 || {};
 
 		// on pageload
 		setTimeout( cmb.resizeoEmbeds, 500);
+    
+    //if a closed cmb postbox has a required field, force it open for the HTML5 validation
+    document.getElementById('publish').addEventListener("click", function(){
+      var x = document.getElementsByClassName("postbox");
+      var x_length = x.length;
+      for (var i = 0; i < x_length; i++)
+      {
+        if( x[i].className.includes("cmb") && x[i].querySelectorAll("input[required]").length ) x[i].classList.remove("closed");
+      }
+    });
+    
 		// and on window resize
 		$( window ).on( 'resize', cmb.resizeoEmbeds );
 
