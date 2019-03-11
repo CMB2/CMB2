@@ -29,6 +29,11 @@
     "suggest": {
         "composer/installers": "~1.0"
     },
+    "autoload": {
+        "files": [
+            "init.php"
+        ]
+    },
     "require-dev": {
         "apigen/apigen": "4.1.2",
         "nette/utils": "2.5.3",
