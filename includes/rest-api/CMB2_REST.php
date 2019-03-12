@@ -124,8 +124,9 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 		self::$boxes[ $cmb->cmb_id ] = $this;
-		if( !empty( $this->cmb->prop( 'rest_group_values' ) ) ) {
-            		self::$rest_slug = $this->cmb->prop( 'rest_group_values' );
+		self::$rest_slug = 'cmb2';
+		if( !empty( $this->cmb->prop( 'rest_slug_group' ) ) ) {
+            		self::$rest_slug = $this->cmb->prop( 'rest_slug_group' );
 		}
 
 		$show_value = $this->cmb->prop( 'show_in_rest' );
