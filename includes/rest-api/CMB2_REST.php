@@ -72,7 +72,14 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @since 2.2.3
 	 */
 	protected $edit_fields = array();
-
+	
+	/**
+	 * The CMB2 object rest slug.
+	 *
+	 * @var boolean
+	 */
+	protected static $rest_slug = 'cmb2';
+	
 	/**
 	 * Whether CMB2 object is readable via the rest api.
 	 *
@@ -117,6 +124,9 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	public function __construct( CMB2 $cmb ) {
 		$this->cmb = $cmb;
 		self::$boxes[ $cmb->cmb_id ] = $this;
+		if( !empty( $this->cmb->prop( 'rest_group_values' ) ) ) {
+            		self::$rest_slug = $this->cmb->prop( 'rest_group_values' );
+		}
 
 		$show_value = $this->cmb->prop( 'show_in_rest' );
 
@@ -234,7 +244,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return void
 	 */
 	protected static function register_rest_field( $object_types, $object_type ) {
-		register_rest_field( $object_types, 'cmb2', array(
+		register_rest_field( $object_types, self::$rest_slug, array(
 			'get_callback'    => array( __CLASS__, "get_{$object_type}_rest_values" ),
 			'update_callback' => array( __CLASS__, "update_{$object_type}_rest_values" ),
 			'schema'          => null, // @todo add schema
@@ -319,7 +329,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return mixed
 	 */
 	public static function get_post_rest_values( $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::get_rest_values( $object, $request, $object_type, 'post' );
 		}
 	}
@@ -337,7 +347,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return mixed
 	 */
 	public static function get_user_rest_values( $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::get_rest_values( $object, $request, $object_type, 'user' );
 		}
 	}
@@ -355,7 +365,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return mixed
 	 */
 	public static function get_comment_rest_values( $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::get_rest_values( $object, $request, $object_type, 'comment' );
 		}
 	}
@@ -373,7 +383,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return mixed
 	 */
 	public static function get_term_rest_values( $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::get_rest_values( $object, $request, $object_type, 'term' );
 		}
 	}
@@ -432,7 +442,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool|int
 	 */
 	public static function update_post_rest_values( $values, $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::update_rest_values( $values, $object, $request, $object_type, 'post' );
 		}
 	}
@@ -451,7 +461,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool|int
 	 */
 	public static function update_user_rest_values( $values, $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::update_rest_values( $values, $object, $request, $object_type, 'user' );
 		}
 	}
@@ -470,7 +480,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool|int
 	 */
 	public static function update_comment_rest_values( $values, $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::update_rest_values( $values, $object, $request, $object_type, 'comment' );
 		}
 	}
@@ -489,7 +499,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool|int
 	 */
 	public static function update_term_rest_values( $values, $object, $field_name, $request, $object_type ) {
-		if ( 'cmb2' === $field_name ) {
+		if ( self::$rest_slug === $field_name ) {
 			return self::update_rest_values( $values, $object, $request, $object_type, 'term' );
 		}
 	}
