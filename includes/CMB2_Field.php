@@ -830,8 +830,11 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function get_timestamp_format( $format = 'date_format', $meta_value = 0 ) {
 		$meta_value = $meta_value ? $meta_value : $this->escaped_value();
-		$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
+		if ( empty( $meta_value ) ) {
+			$meta_value = $this->get_default();
+		}
 
+		$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
 		if ( empty( $meta_value ) ) {
 			return '';
 		}
