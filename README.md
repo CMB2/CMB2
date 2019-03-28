@@ -113,6 +113,7 @@ If you are looking to provide language translation files, Please do so via [Word
 * [Yoast CMB2 Field Analysis WP Plugin](https://github.com/alexis-magina/yoast-cmb2-field-analysis) by [alexis-magina](https://github.com/alexis-magina): This plugin adds in a js based method of recalculating Yoast SEO's content scores when updating page content, specifically custom meta fields added via the CMB2 library.
 * [Skeleton](https://github.com/awethemes/skeleton) by [awethemes](https://github.com/awethemes): A complete framework for WordPress, uses CMB2 engine.
 * [WP Simple Iconfonts](https://wordpress.org/plugins/wp-simple-iconfonts/) by [awethemes](https://github.com/awethemes): An icon fonts manager and provides a font icon picker for CMB2.
+* [CMB2 Nav Menus](https://github.com/nsrosenqvist/cmb2-nav-menus) by [nsrosenqvist](https://github.com/nsrosenqvist): Lets you use CMB2 in nav menu entries..
 
 ## Links
 * [Project Homepage](https://cmb2.io)
