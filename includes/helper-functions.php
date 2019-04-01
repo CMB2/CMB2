@@ -340,11 +340,11 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$format_parts = explode( '%3$s', $form_format );
 
 	// Show cmb form.
-	printf( $format_parts[0], $cmb->cmb_id, $object_id );
+	printf( $format_parts[0], esc_attr( $cmb->cmb_id ), esc_attr( $object_id ) );
 	$cmb->show_form();
 
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
-		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
+		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), esc_attr( $args['save_button'] ) );
 	}
 
 }
