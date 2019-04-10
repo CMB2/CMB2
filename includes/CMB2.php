@@ -592,6 +592,21 @@ class CMB2 extends CMB2_Base {
 		$confirm_deletion = $field_group->options( 'remove_confirm' );
 		$confirm_deletion = ! empty( $confirm_deletion ) ? $confirm_deletion : '';
 
+        // for replacing {my_field_id} with the corresponding field value in repeaters
+        $replace_with_meta = function($heading) use ($field_group) {
+            if(isset($field_group->value[$field_group->index])) {
+                $values = $field_group->value[$field_group->index];
+                $fields = $field_group->args('fields');
+                foreach($fields as $id => $properties) {
+                    if(strpos($heading, '{'.$id.'}') !== false) {
+                        $replace = (is_scalar($values[$id])) ? strval($values[$id]) : '';
+                        $heading = str_replace('{'.$id.'}',$replace,$heading);
+                    }
+                }
+            }
+            return $heading;
+        };
+
 		echo '
 		<div id="cmb-group-', $field_group->id(), '-', $field_group->index, '" class="postbox cmb-row cmb-repeatable-grouping', $closed_class, '" data-iterator="', $field_group->index, '">';
 
@@ -601,7 +616,7 @@ class CMB2 extends CMB2_Base {
 
 			echo '
 			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
-			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
+			<h3 class="cmb-group-title cmbhandle-title"><span>', $replace_with_meta($field_group->replace_hash( $field_group->options( 'group_title' ) ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
 				// Loop and render repeatable group fields.
