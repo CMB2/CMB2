@@ -655,9 +655,11 @@ window.CMB2 = window.CMB2 || {};
 		cmb.idNumber = parseInt( prevNum, 10 ) + 1;
 		var $row     = $oldRow.clone();
 		var nodeName = $row.prop('nodeName') || 'div';
-		var getRowId = function( id ) {
-			id = id.split('-');
-			id.splice(id.length - 1, 1);
+		var getRowId = function() {
+			var id = $oldRow.attr('id').split('-');
+			if ( ! isNaN( id[ id.length-1 ] ) ) {
+				id.splice( id.length - 1, 1 );
+			}
 			id.push( cmb.idNumber );
 			return id.join('-');
 		};
@@ -670,7 +672,11 @@ window.CMB2 = window.CMB2 || {};
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
 
-		var $newRow = $( '<' + nodeName + ' id="'+ getRowId( $oldRow.attr('id') ) +'" class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
+		var $newRow = $( '<' + nodeName + ' class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
+		if ( $oldRow.attr( 'id' ) !== undefined ) {
+			$newRow.attr( 'id', getRowId() );
+		}
+
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
