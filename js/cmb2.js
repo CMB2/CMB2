@@ -672,7 +672,7 @@ window.CMB2 = window.CMB2 || {};
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
 
-		var $newRow = $( '<' + nodeName + ' class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
+		var $newRow = $( '<' + nodeName + ' class="' + $oldRow.attr('class') + '" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
 		if ( $oldRow.attr( 'id' ) !== undefined ) {
 			$newRow.attr( 'id', getRowId() );
 		}
