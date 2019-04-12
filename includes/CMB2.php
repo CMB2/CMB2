@@ -571,7 +571,7 @@ class CMB2 extends CMB2_Base {
 				$att_value = htmlspecialchars( $att_value );
 			}
 
-			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( strip_tags( $att_value ) );
+			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( $att_value );
 		}
 
 		return CMB2_Utils::concat_attrs( $atts );
