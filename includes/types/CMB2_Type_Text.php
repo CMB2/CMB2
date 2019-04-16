@@ -51,8 +51,18 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 			'js_dependencies' => array(),
 		), $args );
 
+		// Add character counter?
+		$char_counter_markup = '';
+		if ( ! empty( $this->field->args['char_counter'] ) ) :
+
+			$char_counter_markup = $this->char_counter_markup();
+			$this->field->add_js_dependencies( 'cmb2-char-counter' );
+			$a['class'] .= ' cmb2-count-chars';
+
+		endif;
+
 		return $this->rendered(
-			sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] )
+			sprintf( '<input%s/>%s%s', $this->concat_attrs( $a, array( 'desc' ) ), $char_counter_markup, $a['desc'] )
 		);
 	}
 }
