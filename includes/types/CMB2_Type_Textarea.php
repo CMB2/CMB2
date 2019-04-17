@@ -39,6 +39,11 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 			$a['class'] .= ' cmb2-count-chars';
 		endif;
 
+		// Enforce max chars?
+		if ( ! empty( $this->field->args['char_max_enforce'] ) && ! empty( $this->field->args['char_max'] ) ) :
+			$a['maxlength'] = (int) $this->field->args['char_max'];
+		endif;
+
 		return $this->rendered(
 			sprintf( '<textarea%s>%s</textarea>%s%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $char_counter_markup, $a['desc'] )
 		);

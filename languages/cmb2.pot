@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.6.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2019-04-17 07:10:30+00:00\n"
+"POT-Creation-Date: 2019-04-17 09:50:14+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-4-17 7:10+-60\n"
+"PO-Revision-Date: 2019-4-17 9:50+-60\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -411,7 +411,7 @@ msgstr ""
 msgid "Your text may be truncated."
 msgstr ""
 
-#: includes/CMB2_Field.php:1566
+#: includes/CMB2_Field.php:1567
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
