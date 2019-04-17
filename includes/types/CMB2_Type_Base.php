@@ -174,4 +174,51 @@ abstract class CMB2_Type_Base {
 		}
 	}
 
+	/**
+	 * Return character counter markup for this field.
+	 *
+	 * @return string
+	 */
+	public function char_counter_markup() {
+
+		// Init
+		$args        = $this->field->args;
+		$field_id    = $args[ 'id' ];
+		$counter_id  = 'char-counter-' . $field_id;
+		$max         = ! empty( $args['char_max'] ) ? (int) $args['char_max'] : null;
+		$max_msg     = ( $max && ! empty( $args['char_max_msg'] ) ) ? '<span class="cmb2-char-max-msg">' . esc_html( $args['char_max_msg'] ) . '</span>' : '';
+		$max_attr    = $max ? 'data-max="' . $max . '"' : '';
+		$value       = 0; // This is initialised by JS
+		switch ( $args[ 'char_counter' ] ) :
+			case 'words':
+				$type  = 'words';
+				$label = $max ? __( 'Words left', 'cmb2' ) : __( 'Words', 'cmb2' );
+				break;
+			default:
+				$type  = 'characters';
+				$label = $max ? __( 'Characters left', 'cmb2' ) : __( 'Characters', 'cmb2' );
+				break;
+		endswitch;
+
+		// Counter
+		$markup = sprintf(
+			'<label for="%s">%s:</label> <input name="%s" id="%s" data-field-id="%s" data-counter-type="%s" %s class="cmb2-char-counter" type="text" value="%s" readonly>%s',
+			esc_attr( $counter_id ),
+			$label,
+			esc_attr( $counter_id ),
+			esc_attr( $counter_id ),
+			esc_attr( $field_id ),
+			$type,
+			$max_attr,
+			esc_attr( $value ),
+			$max_msg
+		);
+
+		// Wrap before returning
+		$markup = '<p class="cmb2-char-counter-wrap">' . $markup . '</p>';
+
+		return $markup;
+
+	}
+
 }

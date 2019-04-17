@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.6.0 - 2019-01-18
+ * CMB2 - v2.6.0 - 2019-04-16
  * https://cmb2.io
  * Copyright (c) 2019
  * Licensed GPLv2+
@@ -2033,6 +2033,44 @@ span.cmb2-metabox-description {
 .admin-color-bbp-mint .cmb2-element .ui-datepicker td .ui-state-hover {
 	background: #5fb37c;
 	color: #fff;
+}
+
+/*--------------------------------------------------------------
+ * Character counter
+--------------------------------------------------------------*/
+
+/* line 5, sass/partials/_char_counter.scss */
+
+.cmb2-char-counter-wrap {
+	margin: .5em 0 1em;
+}
+
+/* line 9, sass/partials/_char_counter.scss */
+
+.cmb2-char-counter-wrap input[type="text"] {
+	font-size: 12px;
+	width: 6em;
+}
+
+/* line 18, sass/partials/_char_counter.scss */
+
+.cmb2-char-counter-wrap.cmb2-max-exceeded input[type="text"] {
+	border-color: #a00 !important;
+}
+
+/* line 24, sass/partials/_char_counter.scss */
+
+.cmb2-char-counter-wrap.cmb2-max-exceeded .cmb2-char-max-msg {
+	display: inline-block;
+}
+
+/* line 34, sass/partials/_char_counter.scss */
+
+.cmb2-char-max-msg {
+	color: #a00;
+	display: none;
+	font-style: italic;
+	margin-right: 1em;
 }
 
 /*# sourceMappingURL=cmb2.css.map */

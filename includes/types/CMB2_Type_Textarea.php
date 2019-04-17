@@ -31,8 +31,16 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 			'desc'  => $this->_desc( true ),
 		), $args );
 
+		// Add character counter?
+		$char_counter_markup = '';
+		if ( ! empty( $this->field->args['char_counter'] ) ) :
+			$char_counter_markup = $this->char_counter_markup();
+			$this->field->add_js_dependencies( 'cmb2-char-counter' );
+			$a['class'] .= ' cmb2-count-chars';
+		endif;
+
 		return $this->rendered(
-			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] )
+			sprintf( '<textarea%s>%s</textarea>%s%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $char_counter_markup, $a['desc'] )
 		);
 	}
 }
