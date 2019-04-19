@@ -129,7 +129,7 @@ class CMB2_Field_Display {
 			if ( is_array( $this->field->value ) ) {
 
 				// Then loop and output.
-				echo '<ul class="cmb2-' . str_replace( '_', '-', $this->field->type() ) . '">';
+				echo '<ul class="cmb2-' . esc_attr( sanitize_html_class( str_replace( '_', '-', $this->field->type() ) ) ) . '">';
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
@@ -376,7 +376,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
-			echo '<div class="cmb2-taxonomy-terms-', esc_attr( $taxonomy ), '">';
+			echo '<div class="cmb2-taxonomy-terms-', esc_attr( sanitize_html_class( $taxonomy ) ), '">';
 			echo implode( ', ', $links );
 			echo '</div>';
 		}

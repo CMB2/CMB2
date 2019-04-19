@@ -398,7 +398,7 @@ class CMB2_Types {
 	protected function repeat_row( $class = 'cmb-repeat-row' ) {
 		?>
 
-		<div class="cmb-row <?php echo $class; ?>">
+		<div class="cmb-row <?php echo esc_attr( sanitize_html_class( $class ) ); ?>">
 			<div class="cmb-td">
 				<?php $this->_render(); ?>
 			</div>
