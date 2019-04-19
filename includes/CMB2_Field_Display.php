@@ -429,7 +429,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		} else {
 
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
-				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
+				esc_html( $field_type->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
 				esc_url( $url_value ),
 				CMB2_Utils::get_file_name_from_path( esc_url( $url_value ) )
 			);
