@@ -421,7 +421,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 				) );
 			} else {
 				$size = is_array( $img_size ) ? $img_size[0] : 200;
-				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $url_value . '" alt="" />';
+				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . esc_url( $url_value ) . '" alt="" />';
 			}
 
 			echo $image;
@@ -429,9 +429,9 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		} else {
 
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
-				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
-				$url_value,
-				CMB2_Utils::get_file_name_from_path( $url_value )
+				esc_html( $field_type->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
+				esc_url( $url_value ),
+				esc_html( CMB2_Utils::get_file_name_from_path( $url_value ) )
 			);
 
 		}
