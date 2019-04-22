@@ -196,7 +196,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		$tabs = $this->get_tab_group_tabs();
 		?>
-		<div class="wrap cmb2-options-page option-<?php echo $this->option_key; ?>">
+		<div class="wrap cmb2-options-page option-<?php echo esc_attr( sanitize_html_class( $this->option_key ) ); ?>">
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>
