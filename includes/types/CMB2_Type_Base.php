@@ -182,13 +182,17 @@ abstract class CMB2_Type_Base {
 	public function char_counter_markup() {
 
 		// Init
-		$args        = $this->field->args;
-		$field_id    = $args[ 'id' ];
-		$counter_id  = 'char-counter-' . $field_id;
-		$max         = ! empty( $args['char_max'] ) ? (int) $args['char_max'] : null;
-		$max_msg     = ( $max && ! empty( $args['char_max_msg'] ) ) ? '<span class="cmb2-char-max-msg">' . esc_html( $args['char_max_msg'] ) . '</span>' : '';
-		$max_attr    = $max ? 'data-max="' . $max . '"' : '';
-		$value       = 0; // This is initialised by JS
+		$args     = $this->field->args;
+		$field_id = $args[ 'id' ];
+		if ( ! empty( $args[ 'repeatable' ] ) ) :
+			// Add iterator to field ID for repeatable fields
+			$field_id .= '_' . $this->types->iterator;
+		endif;
+		$counter_id = 'char-counter-' . $field_id;
+		$max        = ! empty( $args[ 'char_max' ] ) ? (int) $args[ 'char_max' ] : null;
+		$max_msg    = ( $max && ! empty( $args[ 'char_max_msg' ] ) ) ? '<span class="cmb2-char-max-msg">' . esc_html( $args[ 'char_max_msg' ] ) . '</span>' : '';
+		$max_attr   = $max ? 'data-max="' . $max . '"' : '';
+		$value      = 0; // This is initialised by JS
 		switch ( $args[ 'char_counter' ] ) :
 			case 'words':
 				$type  = 'words';
