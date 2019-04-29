@@ -34,14 +34,16 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 		// Add character counter?
 		$char_counter_markup = '';
 		if ( ! empty( $this->field->args['char_counter'] ) ) :
+
 			$char_counter_markup = $this->char_counter_markup();
 			$this->field->add_js_dependencies( 'cmb2-char-counter' );
 			$a['class'] .= ' cmb2-count-chars';
-		endif;
 
-		// Enforce max chars?
-		if ( ! empty( $this->field->args['char_max_enforce'] ) && ! empty( $this->field->args['char_max'] ) ) :
-			$a['maxlength'] = (int) $this->field->args['char_max'];
+			// Enforce max chars?
+			if ( ! empty( $this->field->args['char_max'] ) && $this->field->args['char_counter'] === 'characters' ) :
+				$a['maxlength'] = (int) $this->field->args['char_max'];
+			endif;
+
 		endif;
 
 		return $this->rendered(

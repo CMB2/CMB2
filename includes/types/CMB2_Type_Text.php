@@ -59,6 +59,11 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 			$this->field->add_js_dependencies( 'cmb2-char-counter' );
 			$a['class'] .= ' cmb2-count-chars';
 
+			// Enforce max chars?
+			if ( ! empty( $this->field->args['char_max'] ) && $this->field->args['char_counter'] === 'characters' ) :
+				$a['maxlength'] = (int) $this->field->args['char_max'];
+			endif;
+
 		endif;
 
 		return $this->rendered(
