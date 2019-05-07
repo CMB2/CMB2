@@ -4,7 +4,7 @@
 window.CMB2 = window.CMB2 || {};
 window.CMB2.charcounter = window.CMB2.charcounter || {};
 
-( function(window, document, $, cmb, charcounter, undefined ) {
+( function(window, document, $, cmb, charcounter, wp_word_counter ) {
 	'use strict';
 
 
@@ -20,53 +20,77 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 	 *
 	 * @since  ????
 	 *
-	 * @param {object} field_id
+	 * @param {object|string} field_id (In the case of WYSIWYG nodechange, this will be an event)
 	 * @return {int}
 	 */
 	function updateCounter( field_id ) {
 
-		var field   = $( '#' + field_id );
-		var val     = field.val().trim();
-		var counter = counters[ field_id ];
-		var count   = 0;
-		var update  = true;
-
-		// Do the count
-		switch ( counter.type ) {
-
-			case 'words': {
-				count = val ? val.split( /\W+/ ).length : 0;
-				break;
+		// WYSIWYG?
+		var wysiwyg_evt = null;
+		if ( typeof field_id === 'object' ) {
+			wysiwyg_evt = field_id;
+			if ( wysiwyg_evt.hasOwnProperty( 'element' ) ) {
+				// Init event
+				field_id = $( wysiwyg_evt.element ).data( 'id' );
+			} else if ( wysiwyg_evt.hasOwnProperty( 'currentTarget' ) ) {
+				// Nodechange event
+				field_id = $( wysiwyg_evt.currentTarget ).data( 'id' );
 			}
-
-			default: {
-				count = val.length;
-				break;
-			}
-
 		}
 
-		// Over maximum?
-		if ( typeof counter.max !== 'undefined' && count > counter.max ) {
+		// Got counter?
+		if ( counters.hasOwnProperty( field_id ) ) {
 
-			// Add max exceeded class to wrap
-			counter.el.parents( '.cmb2-char-counter-wrap' ).addClass( 'cmb2-max-exceeded' );
+			var counter = counters[ field_id ];
+			var count   = null;
+			var update  = true;
+			var val     = null;
 
-		} else {
-
-			// Remove max exceeded class
-			counter.el.parents( '.cmb2-char-counter-wrap' ).removeClass( 'cmb2-max-exceeded' );
-
-		}
-
-		// Update counter
-		if ( update ) {
-
-			// Number remaining when max is defined
-			if ( typeof counter.max !== 'undefined' ) {
-				counter.el.val( ( counter.max - count ) );
+			// Are we dealing with WYSIWYG visual editor, or textarea / WYSIWYG textarea?
+			if ( ! counter.editor || counter.editor.isHidden() ) {
+				val = $( '#' + field_id ).val().trim();
 			} else {
-				counter.el.val( count );
+				val = counter.editor.getContent( { format: 'raw' } );
+			}
+
+			// Do the count
+			switch ( counter.type ) {
+
+				case 'words': {
+					count = wp_word_counter.count( val, 'words' );
+					break;
+				}
+
+				default: {
+					count = wp_word_counter.count( val, 'characters_including_spaces' );
+					break;
+				}
+
+			}
+
+			// Over maximum?
+			if ( typeof counter.max !== 'undefined' && count > counter.max ) {
+
+				// Add max exceeded class to wrap
+				counter.el.parents( '.cmb2-char-counter-wrap' ).addClass( 'cmb2-max-exceeded' );
+
+			} else {
+
+				// Remove max exceeded class
+				counter.el.parents( '.cmb2-char-counter-wrap' ).removeClass( 'cmb2-max-exceeded' );
+
+			}
+
+			// Update counter
+			if ( update ) {
+
+				// Number remaining when max is defined
+				if ( typeof counter.max !== 'undefined' ) {
+					counter.el.val( ( counter.max - count ) );
+				} else {
+					counter.el.val( count );
+				}
+
 			}
 
 		}
@@ -74,6 +98,7 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 		return count;
 
 	}
+
 
 	/**
 	 * Clean the counters array
@@ -147,15 +172,42 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 
 		});
 
-		// Event to update counter on first init
 		if ( init ) {
 
 			$( 'body' ).on( 'keyup', '.cmb2-count-chars', function() {
 
+				// Bind update to keyup on text fields
 				var $this = $( this );
 				updateCounter( $this.attr( 'id' ) );
 
 			});
+
+		}
+
+	};
+
+
+	/**
+	 * Initializes WYSIWYG editors. Hooked to tinymce-editor-init
+	 *
+	 * @since  ????
+	 *
+	 * @param {object} evt
+	 * @param {object} editor
+	 *
+	 * @return {void}
+	 */
+	charcounter.initWYSIWYG = function( evt, editor ) {
+
+		// Check if it's one of our WYSIWYGs
+		// Should have already been registered in counters via hidden textarea
+		if ( editor.id in counters ) {
+
+			// Add editor to counter
+			counters[ editor.id ].editor = editor;
+
+			// Add nodechange event
+			editor.on( 'nodechange keyup', _.debounce( updateCounter, 1000 ) );
 
 		}
 
@@ -208,8 +260,9 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 	// Hook in our event callbacks.
 	$( document )
 		.on( 'cmb_init', charcounter.initAll )
+		.on( 'tinymce-editor-init', charcounter.initWYSIWYG )
 		.on( 'cmb2_add_row', charcounter.addRow )
 		.on( 'cmb2_remove_row', charcounter.removeRow );
 
 
-} )( window, document, jQuery, window.CMB2, window.CMB2.charcounter );
+} )( window, document, jQuery, window.CMB2, window.CMB2.charcounter, new wp.utils.WordCounter() );

@@ -29,8 +29,18 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 			'options' => $field->options(),
 		) );
 
+		// Add character counter?
+		$char_counter_markup = '';
+		if ( ! empty( $this->field->args['char_counter'] ) ) :
+
+			$char_counter_markup = $this->char_counter_markup();
+			$this->field->add_js_dependencies( 'cmb2-char-counter' );
+			$a['options']['editor_class'] = empty( $a['options']['editor_class'] ) ? 'cmb2-count-chars' : $a['options']['editor_class'] . ' cmb2-count-chars';
+
+		endif;
+
 		if ( ! $field->group ) {
-			return $this->rendered( $this->get_wp_editor( $a ) . $a['desc'] );
+			return $this->rendered( $this->get_wp_editor( $a ) . $char_counter_markup . $a['desc'] );
 		}
 
 		// wysiwyg fields in a group need some special handling.
@@ -47,7 +57,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 				'data-groupid'  => $field->group->id(),
 				'data-iterator' => $field->group->index,
 				'data-fieldid'  => $field->id( true ),
-				'desc'          => '</div>' . $this->_desc( true ),
+				'desc'          => '</div>' . $char_counter_markup . $this->_desc( true ),
 			) ) )
 		);
 	}
