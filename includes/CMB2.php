@@ -367,8 +367,11 @@ class CMB2 extends CMB2_Base {
 		// Remove any duplicates.
 		$classes = array_unique( $classes );
 
-		// Make it a string and sanitize the class.
-		return sanitize_html_class( implode( ' ', $classes ) );
+		// Sanitize
+		$classes = array_map( 'sanitize_html_class', $classes );
+
+		// Make it a string.
+		return implode( ' ', $classes );
 	}
 
 	/**
