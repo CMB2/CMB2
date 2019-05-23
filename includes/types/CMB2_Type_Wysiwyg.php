@@ -34,6 +34,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		if ( ! empty( $this->field->args['char_counter'] ) ) :
 
 			$char_counter_markup = $this->char_counter_markup();
+			$this->field->add_js_dependencies( 'word-count' );
 			$this->field->add_js_dependencies( 'cmb2-char-counter' );
 			$a['options']['editor_class'] = empty( $a['options']['editor_class'] ) ? 'cmb2-count-chars' : $a['options']['editor_class'] . ' cmb2-count-chars';
 

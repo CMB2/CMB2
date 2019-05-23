@@ -36,6 +36,7 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 		if ( ! empty( $this->field->args['char_counter'] ) ) :
 
 			$char_counter_markup = $this->char_counter_markup();
+			$this->field->add_js_dependencies( 'word-count' );
 			$this->field->add_js_dependencies( 'cmb2-char-counter' );
 			$a['class'] .= ' cmb2-count-chars';
 
