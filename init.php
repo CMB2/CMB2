@@ -123,6 +123,11 @@ if ( ! class_exists( 'CMB2_Bootstrap_260_Develop', false ) ) {
 				define( 'CMB2_LOADED', self::PRIORITY );
 			}
 
+			if ( ! function_exists( 'add_action' ) ) {
+				// We are running outside of the context of WordPress.
+				return;
+			}
+
 			add_action( 'init', array( $this, 'include_cmb' ), self::PRIORITY );
 		}
 
