@@ -285,10 +285,6 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 	}
 
-	/**
-	 * @group failing
-	 *
-	 */
 	public function test_php_to_js_dateformat() {
 		$tests = array(
 			array( 'l F j, Y', 'DD MM d, yy' ),
