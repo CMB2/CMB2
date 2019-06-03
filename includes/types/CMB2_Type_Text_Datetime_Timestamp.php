@@ -16,7 +16,7 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 		$field = $this->field;
 
 		$value = $field->escaped_value();
-		if ( empty( $meta_value ) ) {
+		if ( empty( $value ) ) {
 			$value = $field->get_default();
 		}
 
