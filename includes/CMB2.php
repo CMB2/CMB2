@@ -361,14 +361,17 @@ class CMB2 extends CMB2_Base {
 		 */
 		$classes = apply_filters( 'cmb2_wrap_classes', $classes, $this );
 
-		// Clean up.
-		$classes = array_map( 'strip_tags', array_filter( $classes ) );
+		$split = array();
+		foreach ( array_filter( $classes ) as $class ) {
+			foreach ( explode( ' ', $class ) as $_class ) {
+				// Clean up & sanitize.
+				$split[] = sanitize_html_class( strip_tags( $_class ) );
+			}
+		}
+		$classes = $split;
 
 		// Remove any duplicates.
 		$classes = array_unique( $classes );
-
-		// Sanitize
-		$classes = array_map( 'sanitize_html_class', $classes );
 
 		// Make it a string.
 		return implode( ' ', $classes );
