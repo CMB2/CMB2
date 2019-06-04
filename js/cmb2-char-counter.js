@@ -265,4 +265,4 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 		.on( 'cmb2_remove_row', charcounter.removeRow );
 
 
-} )( window, document, jQuery, window.CMB2, window.CMB2.charcounter, new wp.utils.WordCounter() );
+} )( window, document, jQuery, window.CMB2, window.CMB2.charcounter, ( wp.utils ? new wp.utils.WordCounter() : {} ) );
