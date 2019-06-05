@@ -29,19 +29,23 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 			'options' => $field->options(),
 		) );
 
-		// Add character counter?
-		$char_counter_markup = '';
-		if ( ! empty( $this->field->args['char_counter'] ) ) :
-
-			$char_counter_markup = $this->char_counter_markup();
-			$this->field->add_js_dependencies( 'word-count' );
-			$this->field->add_js_dependencies( 'cmb2-char-counter' );
-			$a['options']['editor_class'] = empty( $a['options']['editor_class'] ) ? 'cmb2-count-chars' : $a['options']['editor_class'] . ' cmb2-count-chars';
-
-		endif;
-
 		if ( ! $field->group ) {
+
+			// Add character counter?
+			// Not currently working for grouped WYSIWYG
+			// Add here for non-grouped - and avoid adding in CMB2_Type_Textarea when that's called below for grouped
+			$char_counter_markup = '';
+			if ( ! empty( $field->args['char_counter'] ) ) :
+
+				$char_counter_markup = $this->char_counter_markup();
+				$field->add_js_dependencies( 'word-count' );
+				$field->add_js_dependencies( 'cmb2-char-counter' );
+				$a['options']['editor_class'] = empty( $a['options']['editor_class'] ) ? 'cmb2-count-chars' : $a['options']['editor_class'] . ' cmb2-count-chars';
+
+			endif;
+
 			return $this->rendered( $this->get_wp_editor( $a ) . $char_counter_markup . $a['desc'] );
+
 		}
 
 		// wysiwyg fields in a group need some special handling.
@@ -58,7 +62,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 				'data-groupid'  => $field->group->id(),
 				'data-iterator' => $field->group->index,
 				'data-fieldid'  => $field->id( true ),
-				'desc'          => '</div>' . $char_counter_markup . $this->_desc( true ),
+				'desc'          => '</div>' . $this->_desc( true ),
 			) ) )
 		);
 	}

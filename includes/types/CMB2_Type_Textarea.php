@@ -32,8 +32,9 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 		), $args );
 
 		// Add character counter?
+		// Avoid adding when called for grouped WYSIWYGs
 		$char_counter_markup = '';
-		if ( ! empty( $this->field->args['char_counter'] ) ) :
+		if ( ! empty( $this->field->args['char_counter'] ) && ( $this->field->args['type'] !== 'wysiwyg' && empty( $this->field->group ) ) ) :
 
 			$char_counter_markup = $this->char_counter_markup();
 			$this->field->add_js_dependencies( 'word-count' );
