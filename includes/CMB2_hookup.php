@@ -425,14 +425,14 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				continue;
 			}
 			
-			if( $field['id'] == $orderby ) {
+			if ( $field['id'] == $orderby ) {
 				$query->set( 'meta_key', $field['id'] );
 
-				if( $field['attributes']['type'] === 'number' ){
+				if ( $field['attributes']['type'] === 'number' ){
 					$query->set( 'orderby', 'meta_value_num' );
-				} elseif( $field['type'] === 'text_time' ) {
+				} elseif ( $field['type'] === 'text_time' ) {
 					$query->set( 'orderby', 'meta_value_time' );
-				} elseif( $field['type'] === 'text_date' ) {
+				} elseif ( $field['type'] === 'text_date' ) {
 					$query->set( 'orderby', 'meta_value_date' );
 				} else {
 					$query->set( 'orderby', 'meta_value' );
