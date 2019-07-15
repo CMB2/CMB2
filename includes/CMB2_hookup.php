@@ -140,6 +140,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			foreach ( $this->cmb->box_types() as $post_type ) {
 				add_filter( "manage_{$post_type}_posts_columns", array( $this, 'register_column_headers' ) );
 				add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'column_display' ), 10, 2 );
+				add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'columns_sortable' ) );
+				add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -153,6 +155,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		if ( $this->cmb->has_columns ) {
 			add_filter( 'manage_edit-comments_columns', array( $this, 'register_column_headers' ) );
 			add_action( 'manage_comments_custom_column', array( $this, 'column_display' ), 10, 3 );
+			add_filter( "manage_edit-comments_sortable_columns", array( $this, 'columns_sortable' ) );
+			add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -172,6 +176,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		if ( $this->cmb->has_columns ) {
 			add_filter( 'manage_users_columns', array( $this, 'register_column_headers' ) );
 			add_filter( 'manage_users_custom_column', array( $this, 'return_column_display' ), 10, 3 );
+			add_filter( "manage_users_sortable_columns", array( $this, 'columns_sortable' ) );
+			add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -216,6 +222,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			if ( $this->cmb->has_columns ) {
 				add_filter( "manage_edit-{$taxonomy}_columns", array( $this, 'register_column_headers' ) );
 				add_filter( "manage_{$taxonomy}_custom_column", array( $this, 'return_column_display' ), 10, 3 );
+				add_filter( "manage_edit-{$taxonomy}_sortable_columns", array( $this, 'columns_sortable' ) );
+				add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -369,17 +377,80 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function column_display( $column_name, $object_id ) {
 		if ( isset( $this->columns[ $column_name ] ) ) {
-				$field = new CMB2_Field( array(
-					'field_args'  => $this->columns[ $column_name ]['field'],
-					'object_type' => $this->object_type,
-					'object_id'   => $this->cmb->object_id( $object_id ),
-					'cmb_id'      => $this->cmb->cmb_id,
-				) );
+			$field = new CMB2_Field( array(
+				'field_args'  => $this->columns[ $column_name ]['field'],
+				'object_type' => $this->object_type,
+				'object_id'   => $this->cmb->object_id( $object_id ),
+				'cmb_id'      => $this->cmb->cmb_id,
+			) );
 
-				$this->cmb->get_field( $field )->render_column();
+			$this->cmb->get_field( $field )->render_column();
 		}
 	}
 
+	/**
+	 * Returns the columns sortable array.
+	 *
+	 * @since 2.6.1
+	 */
+	public function columns_sortable( $columns ) {
+		$fields = $this->cmb->prop( 'fields' );
+
+		foreach ( $fields as $key => $field ) {
+			if ( ! isset( $field['column'] ) ) {
+				continue;
+			}
+
+			$columns[ $field['id'] ] = $field['id'];
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Return the order by on custom columns
+	 *
+	 * @since 2.6.1
+	 */
+	public function columns_sortable_orderby( $query ) {
+		if( ! is_admin() )
+			return;
+	
+		$orderby = $query->get( 'orderby');
+		
+		$fields = $this->cmb->prop( 'fields' );
+
+		foreach ( $fields as $key => $field ) {
+			if ( ! isset( $field['column'] ) ) {
+				continue;
+			}
+			
+			if( $field['id'] == $orderby ) {
+
+				$query->set('meta_key', $field['id']);
+
+				if($field['attributes']['type'] == 'number'){
+
+					$query->set('orderby', 'meta_value_num');
+
+				} else if($field['type'] == 'text_time') {
+
+					$query->set('orderby', 'meta_value_time');
+
+				} else if($field['type'] == 'text_date') {
+
+					$query->set('orderby', 'meta_value_date');
+
+				} else {
+
+					$query->set('orderby', 'meta_value');
+
+				}
+
+			}
+		}
+	}
+	
 	/**
 	 * Returns the column display.
 	 *
