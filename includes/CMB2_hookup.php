@@ -350,11 +350,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			$column = $field['column'];
 
 			if ( false === $column['position'] ) {
-
 				$columns[ $field['id'] ] = $column['name'];
-
 			} else {
-
 				$before = array_slice( $columns, 0, absint( $column['position'] ) );
 				$before[ $field['id'] ] = $column['name'];
 				$columns = $before + $columns;
@@ -392,6 +389,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * Returns the columns sortable array.
 	 *
 	 * @since 2.6.1
+	 *
+	 * @param array  $columns An array of sortable columns.
 	 */
 	public function columns_sortable( $columns ) {
 		$fields = $this->cmb->prop( 'fields' );
@@ -400,7 +399,6 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			if ( ! isset( $field['column'] ) ) {
 				continue;
 			}
-
 			$columns[ $field['id'] ] = $field['id'];
 		}
 
@@ -411,13 +409,15 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * Return the order by on custom columns
 	 *
 	 * @since 2.6.1
+	 * 
+	 * @param array  $columns An array of sortable columns.
 	 */
 	public function columns_sortable_orderby( $query ) {
-		if( ! is_admin() )
+		if( ! is_admin() ){
 			return;
+		}
 	
-		$orderby = $query->get( 'orderby');
-		
+		$orderby = $query->get( 'orderby' );
 		$fields = $this->cmb->prop( 'fields' );
 
 		foreach ( $fields as $key => $field ) {
@@ -426,27 +426,17 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			}
 			
 			if( $field['id'] == $orderby ) {
+				$query->set( 'meta_key', $field['id'] );
 
-				$query->set('meta_key', $field['id']);
-
-				if($field['attributes']['type'] == 'number'){
-
-					$query->set('orderby', 'meta_value_num');
-
-				} else if($field['type'] == 'text_time') {
-
-					$query->set('orderby', 'meta_value_time');
-
-				} else if($field['type'] == 'text_date') {
-
-					$query->set('orderby', 'meta_value_date');
-
+				if( $field['attributes']['type'] === 'number' ){
+					$query->set( 'orderby', 'meta_value_num' );
+				} elseif( $field['type'] === 'text_time' ) {
+					$query->set( 'orderby', 'meta_value_time' );
+				} elseif( $field['type'] === 'text_date' ) {
+					$query->set( 'orderby', 'meta_value_date' );
 				} else {
-
-					$query->set('orderby', 'meta_value');
-
+					$query->set( 'orderby', 'meta_value' );
 				}
-
 			}
 		}
 	}
