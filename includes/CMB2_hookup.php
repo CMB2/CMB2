@@ -394,7 +394,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function columns_sortable( $columns ) {
 		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
-			if ( ! empty( $field['column'] ) ) {
+			if ( ! empty( $field['column'] ) && empty( $field['column']['disable_sortable'] ) ) {
 				$columns[ $field['id'] ] = $field['id'];
 			}
 		}
@@ -419,22 +419,47 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$orderby = $query->get( 'orderby' );
 
 		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
-			if ( empty( $field['column'] ) ) {
+			if (
+				empty( $field['column'] )
+				|| ! empty( $field['column']['disable_sortable'] )
+				|| $field['id'] !== $orderby
+			) {
 				continue;
 			}
-			
-			if ( $field['id'] == $orderby ) {
-				$query->set( 'meta_key', $field['id'] );
 
-				if ( ! empty( $field['attributes']['type'] ) && 'number' === $field['attributes']['type'] ) {
-					$query->set( 'orderby', 'meta_value_num' );
-				} elseif ( $field['type'] === 'text_time' ) {
-					$query->set( 'orderby', 'meta_value_time' );
-				} elseif ( $field['type'] === 'text_date' ) {
-					$query->set( 'orderby', 'meta_value_date' );
-				} else {
-					$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', $field['id'] );
+
+			$type = $field['type'];
+
+			if ( ! empty( $field['attributes']['type'] ) ) {
+				switch ( $field['attributes']['type'] ) {
+					case 'number':
+					case 'date':
+						$type = $field['attributes']['type'];
+						break;
+					case 'range':
+						$type = 'number';
+						break;
 				}
+			}
+
+			switch ( $type ) {
+				case 'number':
+				case 'text_date_timestamp':
+				case 'text_datetime_timestamp':
+				case 'text_money':
+					$query->set( 'orderby', 'meta_value_num' );
+					break;
+				case 'text_time':
+					$query->set( 'orderby', 'meta_value_time' );
+					break;
+				case 'text_date':
+					$query->set( 'orderby', 'meta_value_date' );
+					break;
+
+				default:
+					$query->set( 'orderby', 'meta_value' );
+					break;
 			}
 		}
 	}
