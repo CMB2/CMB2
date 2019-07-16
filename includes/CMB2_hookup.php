@@ -390,7 +390,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 *
 	 * @since 2.6.1
 	 *
-	 * @param array  $columns An array of sortable columns.
+	 * @param array $columns An array of sortable columns.
+	 * 
+	 * @return array $columns An array of sortable columns with CMB2 columns.
 	 */
 	public function columns_sortable( $columns ) {
 		$fields = $this->cmb->prop( 'fields' );
@@ -406,14 +408,16 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	}
 
 	/**
-	 * Return the order by on custom columns
+	 * Return the query object to order by custom columns if selected
 	 *
 	 * @since 2.6.1
 	 * 
-	 * @param array  $columns An array of sortable columns.
+	 * @param object $query Object query from WordPress
+	 * 
+	 * @return object $query Object query from WordPress with orderby CMB2 columns if selected
 	 */
 	public function columns_sortable_orderby( $query ) {
-		if( ! is_admin() ){
+		if ( ! is_admin() ) {
 			return;
 		}
 	
@@ -428,7 +432,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			if ( $field['id'] == $orderby ) {
 				$query->set( 'meta_key', $field['id'] );
 
-				if ( $field['attributes']['type'] === 'number' ){
+				if ( ! empty( $field['attributes']['type'] ) && 'number' === $field['attributes']['type'] ) {
 					$query->set( 'orderby', 'meta_value_num' );
 				} elseif ( $field['type'] === 'text_time' ) {
 					$query->set( 'orderby', 'meta_value_time' );
