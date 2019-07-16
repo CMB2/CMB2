@@ -141,7 +141,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_filter( "manage_{$post_type}_posts_columns", array( $this, 'register_column_headers' ) );
 				add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'column_display' ), 10, 2 );
 				add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'columns_sortable' ) );
-				add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
+				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -156,7 +156,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_filter( 'manage_edit-comments_columns', array( $this, 'register_column_headers' ) );
 			add_action( 'manage_comments_custom_column', array( $this, 'column_display' ), 10, 3 );
 			add_filter( "manage_edit-comments_sortable_columns", array( $this, 'columns_sortable' ) );
-			add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
+			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -177,7 +177,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_filter( 'manage_users_columns', array( $this, 'register_column_headers' ) );
 			add_filter( 'manage_users_custom_column', array( $this, 'return_column_display' ), 10, 3 );
 			add_filter( "manage_users_sortable_columns", array( $this, 'columns_sortable' ) );
-			add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
+			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -223,7 +223,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_filter( "manage_edit-{$taxonomy}_columns", array( $this, 'register_column_headers' ) );
 				add_filter( "manage_{$taxonomy}_custom_column", array( $this, 'return_column_display' ), 10, 3 );
 				add_filter( "manage_edit-{$taxonomy}_sortable_columns", array( $this, 'columns_sortable' ) );
-				add_action( "pre_get_posts", array( $this, 'columns_sortable_orderby' ) );
+				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -340,10 +340,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param array $columns Array of columns available for the admin page.
 	 */
 	public function register_column_headers( $columns ) {
-		$fields = $this->cmb->prop( 'fields' );
-
-		foreach ( $fields as $key => $field ) {
-			if ( ! isset( $field['column'] ) ) {
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if ( empty( $field['column'] ) ) {
 				continue;
 			}
 
@@ -391,17 +389,14 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since 2.6.1
 	 *
 	 * @param array $columns An array of sortable columns.
-	 * 
+	 *
 	 * @return array $columns An array of sortable columns with CMB2 columns.
 	 */
 	public function columns_sortable( $columns ) {
-		$fields = $this->cmb->prop( 'fields' );
-
-		foreach ( $fields as $key => $field ) {
-			if ( ! isset( $field['column'] ) ) {
-				continue;
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if ( ! empty( $field['column'] ) ) {
+				$columns[ $field['id'] ] = $field['id'];
 			}
-			$columns[ $field['id'] ] = $field['id'];
 		}
 
 		return $columns;
@@ -411,21 +406,20 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * Return the query object to order by custom columns if selected
 	 *
 	 * @since 2.6.1
-	 * 
+	 *
 	 * @param object $query Object query from WordPress
-	 * 
-	 * @return object $query Object query from WordPress with orderby CMB2 columns if selected
+	 *
+	 * @return void
 	 */
 	public function columns_sortable_orderby( $query ) {
 		if ( ! is_admin() ) {
 			return;
 		}
-	
-		$orderby = $query->get( 'orderby' );
-		$fields = $this->cmb->prop( 'fields' );
 
-		foreach ( $fields as $key => $field ) {
-			if ( ! isset( $field['column'] ) ) {
+		$orderby = $query->get( 'orderby' );
+
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if ( empty( $field['column'] ) ) {
 				continue;
 			}
 			
@@ -444,7 +438,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the column display.
 	 *
@@ -666,7 +660,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since  1.0.0
 	 */
 	public function metabox_callback() {
-		$object_id = 'comment' == $this->object_type ? get_comment_ID() : get_the_ID();
+		$object_id = 'comment' === $this->object_type ? get_comment_ID() : get_the_ID();
 		$this->cmb->show_form( $object_id, $this->object_type );
 	}
 
@@ -678,7 +672,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param mixed $section User section metabox.
 	 */
 	public function user_new_metabox( $section ) {
-		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
+		if ( $section === $this->cmb->prop( 'new_user_section' ) ) {
 			$object_id = $this->cmb->object_id();
 			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
 			$this->user_metabox();
@@ -797,7 +791,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$do_not_pass_go = (
 			! $this->can_save( $post_type )
 			// Check user editing permissions.
-			|| ( 'page' == $post_type && ! current_user_can( 'edit_page', $post_id ) )
+			|| ( 'page' === $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 		);
 
