@@ -143,6 +143,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'columns_sortable' ) );
 				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 			}
+			add_filter( 'posts_join', array( $this, 'columns_search_join' ) );
+			add_filter( 'posts_where', array( $this, 'columns_search_where' ) );
+			add_filter( 'posts_distinct', array( $this, 'columns_search_distinct' ) );
 		}
 
 		return $this;
@@ -157,6 +160,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_action( 'manage_comments_custom_column', array( $this, 'column_display' ), 10, 3 );
 			add_filter( "manage_edit-comments_sortable_columns", array( $this, 'columns_sortable' ) );
 			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
+			add_filter( 'posts_join', array( $this, 'columns_search_join' ) );
+			add_filter( 'posts_where', array( $this, 'columns_search_where' ) );
+			add_filter( 'posts_distinct', array( $this, 'columns_search_distinct' ) );
 		}
 
 		return $this;
@@ -178,6 +184,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			add_filter( 'manage_users_custom_column', array( $this, 'return_column_display' ), 10, 3 );
 			add_filter( "manage_users_sortable_columns", array( $this, 'columns_sortable' ) );
 			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
+			add_filter( 'posts_join', array( $this, 'columns_search_join' ) );
+			add_filter( 'posts_where', array( $this, 'columns_search_where' ) );
+			add_filter( 'posts_distinct', array( $this, 'columns_search_distinct' ) );
 		}
 
 		return $this;
@@ -224,6 +233,9 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 				add_filter( "manage_{$taxonomy}_custom_column", array( $this, 'return_column_display' ), 10, 3 );
 				add_filter( "manage_edit-{$taxonomy}_sortable_columns", array( $this, 'columns_sortable' ) );
 				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
+				add_filter( 'posts_join', array( $this, 'columns_search_join' ) );
+				add_filter( 'posts_where', array( $this, 'columns_search_where' ) );
+				add_filter( 'posts_distinct', array( $this, 'columns_search_distinct' ) );
 			}
 		}
 
@@ -462,6 +474,77 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 					break;
 			}
 		}
+	}
+
+	/**
+	 * Return the query string with postmeta joins
+	 *
+	 * @since 2.6.1
+	 *
+	 * @param string $join Query string for join from WordPress
+	 *
+	 * @return string $join Query string for join from WordPress
+	 */
+	public function columns_search_join( $join ) {
+		global $pagenow, $wpdb;
+
+		if ( is_admin() && $pagenow === 'edit.php' && ! empty( $_GET['post_type'] ) && ! empty( $_GET['s'] ) ) {
+			foreach ( $this->cmb->box_types() as $post_type ) {
+				if( $_GET['post_type'] == $post_type ) {
+					$join = 'LEFT JOIN ' . $wpdb->postmeta . ' ON ' . $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
+				}
+			}
+		}
+
+		return $join;
+	}
+
+	/**
+	 * Return the query string with postmeta where
+	 *
+	 * @since 2.6.1
+	 *
+	 * @param string $where Query string for where from WordPress
+	 *
+	 * @return string $where Query string for where from WordPress
+	 */
+	public function columns_search_where( $where ) {
+		global $pagenow, $wpdb;
+
+		if ( is_admin() && $pagenow == 'edit.php' && ! empty( $_GET['post_type'] ) && ! empty( $_GET['s'] ) ) {
+			foreach ( $this->cmb->box_types() as $post_type ) {
+				if( $_GET['post_type'] == $post_type ) {
+					$where = preg_replace(
+						"/\(\s*" . $wpdb->posts . ".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
+						"(" . $wpdb->posts . ".post_title LIKE $1) OR (" . $wpdb->postmeta . ".meta_value LIKE $1)", $where );
+				}
+			}
+		}
+
+    	return $where;
+	}
+
+	/**
+	 * Return the query string with distinct values
+	 *
+	 * @since 2.6.1
+	 *
+	 * @param string $where Query string for distinct values from WordPress
+	 *
+	 * @return string $where Query string for distinct values from WordPress
+	 */
+	public function columns_search_distinct( $where ) {
+		global $pagenow;
+
+		if ( is_admin() && $pagenow === 'edit.php' && ! empty( $_GET['post_type'] ) && ! empty( $_GET['s'] ) ) {
+			foreach ( $this->cmb->box_types() as $post_type ) {
+				if( $_GET['post_type'] == $post_type ) {
+					return "DISTINCT";
+				}
+			}	
+		}
+
+    	return $where;
 	}
 
 	/**
