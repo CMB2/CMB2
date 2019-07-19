@@ -1020,7 +1020,11 @@ window.CMB2 = window.CMB2 || {};
 			$repeatableGroups.sortable({
 				items : '.cmb-repeatable-grouping',
 				cursor: 'move',
-				stop: function (ev) {
+				beforeStop: function( ev, ui ) {
+					cmb.triggerElement( ui.item, 'cmb2_shift_rows_start', ui.item, ui.item, ui.item );
+				},
+				stop: function (ev, ui) {
+					cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', ui.item, ui.item, ui.item );
 					var $group =  $( ev.target ).parent();
 					var iterator = 1;
 					var title = $group.find('.cmb-add-group-row' ).data( 'grouptitle' );
