@@ -140,20 +140,21 @@ abstract class CMB2_Type_Base {
 	/**
 	 * Fall back to CMB2_Types methods
 	 *
-	 * @param string $field
+	 * @param  string $method
+	 * @param  array  $arguments
 	 * @throws Exception Throws an exception if the field is invalid.
 	 * @return mixed
 	 */
-	public function __call( $name, $arguments ) {
-		switch ( $name ) {
+	public function __call( $method, $arguments ) {
+		switch ( $method ) {
 			case '_id':
 			case '_name':
 			case '_desc':
 			case '_text':
 			case 'concat_attrs':
-				return call_user_func_array( array( $this->types, $name ), $arguments );
+				return call_user_func_array( array( $this->types, $method ), $arguments );
 			default:
-				throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), __CLASS__, $name ) );
+				throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), __CLASS__, $method ) );
 		}
 	}
 

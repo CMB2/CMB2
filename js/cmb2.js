@@ -111,7 +111,36 @@ window.CMB2 = window.CMB2 || {};
 			cmb.listenTagAdd();
 		}
 
+		$( document ).on( 'cmb_init', cmb.mceEnsureSave );
+
 		cmb.trigger( 'cmb_init' );
+	};
+
+	// Handles updating tiny mce instances when saving a gutenberg post.
+	// https://github.com/CMB2/CMB2/issues/1156
+	cmb.mceEnsureSave = function() {
+		// If no wp.data, do not proceed (no gutenberg)
+		if ( ! wp.data || ! wp.data.hasOwnProperty('subscribe') ) {
+			return;
+		}
+
+		// If the current user cannot richedit, or MCE is not available, bail.
+		if ( ! cmb.canTinyMCE() ) {
+			return;
+		}
+
+		wp.data.subscribe( function() {
+			// the post is currently being saved && we have tinymce editors
+			if ( wp.data.select( 'core/editor' ).isSavingPost() && window.tinyMCE.editors.length ) {
+				for ( var i = 0; i < window.tinyMCE.editors.length; i++ ) {
+					window.tinyMCE.editors[i].save();
+				}
+			}
+		});
+	};
+
+	cmb.canTinyMCE = function() {
+		return l10n.user_can_richedit && window.tinyMCE;
 	};
 
 	cmb.listenTagAdd = function() {
@@ -632,6 +661,7 @@ window.CMB2 = window.CMB2 || {};
 		var prevNum  = parseInt( $oldRow.data('iterator'), 10 );
 		cmb.idNumber = parseInt( prevNum, 10 ) + 1;
 		var $row     = $oldRow.clone();
+		var nodeName = $row.prop('nodeName') || 'div';
 
 		// Make sure the next number doesn't exist.
 		while ( $table.find( '.cmb-repeatable-grouping[data-iterator="'+ cmb.idNumber +'"]' ).length > 0 ) {
@@ -641,7 +671,7 @@ window.CMB2 = window.CMB2 || {};
 		cmb.newRowHousekeeping( $row.data( 'title', $this.data( 'grouptitle' ) ) ).cleanRow( $row, prevNum, true );
 		$row.find( '.cmb-add-row-button' ).prop( 'disabled', false );
 
-		var $newRow = $( '<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</div>' );
+		var $newRow = $( '<' + nodeName + ' class="postbox cmb-row cmb-repeatable-grouping" data-iterator="'+ cmb.idNumber +'">'+ $row.html() +'</' + nodeName + '>' );
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );

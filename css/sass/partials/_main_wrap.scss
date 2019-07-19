@@ -256,8 +256,8 @@
 			border-top: solid 1px $light-gray;
 		}
 
-		&.ui-sortable-helper{
-			border: solid 1px $light-gray !important; // Sometime, we need !important :).
+		&.ui-sortable-helper {
+			outline: dashed 2px $light-gray !important; // Sometime, we need !important :).
 		}
 
 		&:before {
