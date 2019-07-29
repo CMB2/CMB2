@@ -602,6 +602,10 @@ class CMB2_Types {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Select', $args )->render();
 	}
 
+	public function taxonomy_select_hierarchical( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Select_Hierarchical', $args )->render();
+	}
+
 	public function radio( $args = array(), $type = __FUNCTION__ ) {
 		return $this->get_new_render_type( $type, 'CMB2_Type_Radio', $args, $type )->render();
 	}

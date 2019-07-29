@@ -162,12 +162,28 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 		$options = '';
 
 		if ( ! empty( $terms ) && is_array( $terms ) ) {
-			$options = '<li class="cmb2-indented-hierarchy"><ul>';
-			$options .= $this->loop_terms( $terms, $saved );
-			$options .= '</ul></li>';
+			$options .= $this->child_option_output( $terms, $saved );
 		}
 
 		return $options;
+	}
+
+	/**
+	 * Build child terms output.
+	 *
+	 * @since  2.6.1
+	 *
+	 * @param  array        $terms Array of child terms.
+	 * @param  array|string $saved Array of terms set to the object, or single term slug.
+	 *
+	 * @return string              Child option output.
+	 */
+	public function child_option_output( $terms, $saved ) {
+		$output = '<li class="cmb2-indented-hierarchy"><ul>';
+		$output .= $this->loop_terms( $terms, $saved );
+		$output .= '</ul></li>';
+
+		return $output;
 	}
 
 }
