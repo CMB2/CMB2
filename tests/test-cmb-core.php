@@ -960,7 +960,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$clean_json = str_replace(
 			'<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>',
-			'xssClick to Download',
+			'Click to Download',
 			$this->json
 		);
 

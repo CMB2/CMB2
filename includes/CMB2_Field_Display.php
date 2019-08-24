@@ -132,7 +132,7 @@ class CMB2_Field_Display {
 			if ( is_array( $this->field->value ) ) {
 
 				// Then loop and output.
-				echo '<ul class="cmb2-' . str_replace( '_', '-', $this->field->type() ) . '">';
+				echo '<ul class="cmb2-' . esc_attr( sanitize_html_class( str_replace( '_', '-', $this->field->type() ) ) ) . '">';
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
@@ -379,7 +379,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
-			echo '<div class="cmb2-taxonomy-terms-', esc_attr( $taxonomy ), '">';
+			echo '<div class="cmb2-taxonomy-terms-', esc_attr( sanitize_html_class( $taxonomy ) ), '">';
 			echo implode( ', ', $links );
 			echo '</div>';
 		}
@@ -424,7 +424,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 				) );
 			} else {
 				$size = is_array( $img_size ) ? $img_size[0] : 200;
-				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $url_value . '" alt="" />';
+				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . esc_url( $url_value ) . '" alt="" />';
 			}
 
 			echo $image;
@@ -432,9 +432,9 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		} else {
 
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
-				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
-				$url_value,
-				CMB2_Utils::get_file_name_from_path( $url_value )
+				esc_html( $field_type->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
+				esc_url( $url_value ),
+				esc_html( CMB2_Utils::get_file_name_from_path( $url_value ) )
 			);
 
 		}

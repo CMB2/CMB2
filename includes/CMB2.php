@@ -361,13 +361,19 @@ class CMB2 extends CMB2_Base {
 		 */
 		$classes = apply_filters( 'cmb2_wrap_classes', $classes, $this );
 
-		// Clean up.
-		$classes = array_map( 'strip_tags', array_filter( $classes ) );
+		$split = array();
+		foreach ( array_filter( $classes ) as $class ) {
+			foreach ( explode( ' ', $class ) as $_class ) {
+				// Clean up & sanitize.
+				$split[] = sanitize_html_class( strip_tags( $_class ) );
+			}
+		}
+		$classes = $split;
 
 		// Remove any duplicates.
 		$classes = array_unique( $classes );
 
-		// Make a string.
+		// Make it a string.
 		return implode( ' ', $classes );
 	}
 
@@ -571,7 +577,7 @@ class CMB2 extends CMB2_Base {
 				$att_value = htmlspecialchars( $att_value );
 			}
 
-			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( strip_tags( $att_value ) );
+			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( $att_value );
 		}
 
 		return CMB2_Utils::concat_attrs( $atts );
@@ -1008,17 +1014,17 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? wp_unslash( $_REQUEST['user_id'] ) : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['user_id'] ) ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? wp_unslash( $_REQUEST['c'] ) : $object_id;
+				$object_id = isset( $_REQUEST['c'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['c'] ) ) : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			case 'term':
-				$object_id = isset( $_REQUEST['tag_ID'] ) ? wp_unslash( $_REQUEST['tag_ID'] ) : $object_id;
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tag_ID'] ) ) : $object_id;
 				break;
 
 			case 'options-page':
@@ -1030,7 +1036,7 @@ class CMB2 extends CMB2_Base {
 
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? wp_unslash( $_REQUEST['post'] ) : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post'] ) ) : $object_id;
 				break;
 		}
 

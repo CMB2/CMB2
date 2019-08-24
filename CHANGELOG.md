@@ -3,9 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Enhancements
+* Added support for sortable columns by default, with ability to disable with `'column' => array( 'disable_sortable' => true )`. Props [@RubenMartins](https://github.com/RubenMartins) ([#1281](https://github.com/CMB2/CMB2/pull/1281)).
+* New field type, `'taxonomy_select_hierarchical'`. Fixes [#751](https://github.com/CMB2/CMB2/issues/751)
 
 ### Bug Fixes
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
+* Use `CMB2_Field::get_rest_value()` to get values for fields in the post REST API endpoints ([#1284](https://github.com/CMB2/CMB2/issues/1284)).
 
 ## [2.6.0 - 2019-01-18](https://github.com/CMB2/CMB2/releases/tag/v2.6.0)
 

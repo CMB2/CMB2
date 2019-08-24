@@ -110,7 +110,7 @@ function cmb2_get_oembed( $args = array() ) {
 		/* translators: 1: results for. 2: link to codex.wordpress.org/Embeds */
 		esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ),
 		$oembed['fallback'],
-		'<a href="https://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>'
+		'<a href="https://wordpress.org/support/article/embeds/" target="_blank">codex.wordpress.org/Embeds</a>'
 	);
 
 	if ( isset( $args['wp_error'] ) && $args['wp_error'] ) {
@@ -344,11 +344,11 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	$format_parts = explode( '%3$s', $form_format );
 
 	// Show cmb form.
-	printf( $format_parts[0], $cmb->cmb_id, $object_id );
+	printf( $format_parts[0], esc_attr( $cmb->cmb_id ), esc_attr( $object_id ) );
 	$cmb->show_form();
 
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
-		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), $args['save_button'] );
+		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), esc_attr( $args['save_button'] ) );
 	}
 
 }

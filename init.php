@@ -123,6 +123,11 @@ if ( ! class_exists( 'CMB2_Bootstrap_260_Develop', false ) ) {
 				define( 'CMB2_LOADED', self::PRIORITY );
 			}
 
+			if ( ! function_exists( 'add_action' ) ) {
+				// We are running outside of the context of WordPress.
+				return;
+			}
+
 			add_action( 'init', array( $this, 'include_cmb' ), self::PRIORITY );
 		}
 
@@ -178,7 +183,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_260_Develop', false ) ) {
 			}
 
 			if ( ! $loaded ) {
-				$locale = apply_filters( 'plugin_locale', get_locale(), 'cmb2' );
+				$locale = apply_filters( 'plugin_locale', function_exists( 'determine_locale' ) ? determine_locale() : get_locale(), 'cmb2' );
 				$mofile = dirname( __FILE__ ) . '/languages/cmb2-' . $locale . '.mo';
 				load_textdomain( 'cmb2', $mofile );
 			}

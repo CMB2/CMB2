@@ -12,7 +12,7 @@
 **Homepage:**          [https://cmb2.io](https://cmb2.io)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
-**Tested up to:**      5.0.3  
+**Tested up to:**      5.2.2  
 **Stable tag:**        2.6.0  
 **License:**           GPLv2 or later  
 **License URI:**       [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)  
@@ -104,7 +104,7 @@ If you are looking to provide language translation files, Please do so via [Word
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
 * [CMB2 Example Theme](https://github.com/CMB2/CMB2-Example-Theme): Demonstrate how to include CMB2 in your theme, as well as some cool tips and tricks.
-* [facetwp-cmb2](https://github.com/FacetWP/facetwp-cmb2): FacetWP integration with CMB2.
+* [facetwp-cmb2](https://github.com//WebDevStudios/facetwp-cmb2): FacetWP integration with CMB2.
 * [CMB2-grid](https://github.com/origgami/CMB2-grid) from [origgami](https://github.com/origgami/): A grid system for WordPress CMB2 library that allows the creation of columns for a better layout in the admin.
 * [CMB2 Metatabs Options](https://github.com/rogerlos/cmb2-metatabs-options) from [rogerlos](https://github.com/rogerlos/): CMO makes it easy to create options pages with multiple metaboxes--and optional WordPress admin tabs.
 * [CMB2 Conditionals](https://github.com/jcchavezs/cmb2-conditionals) from [jcchavezs](https://github.com/jcchavezs/): Allows developers to relate fields so the display of one is conditional on the value of another.
@@ -113,6 +113,7 @@ If you are looking to provide language translation files, Please do so via [Word
 * [Yoast CMB2 Field Analysis WP Plugin](https://github.com/alexis-magina/yoast-cmb2-field-analysis) by [alexis-magina](https://github.com/alexis-magina): This plugin adds in a js based method of recalculating Yoast SEO's content scores when updating page content, specifically custom meta fields added via the CMB2 library.
 * [Skeleton](https://github.com/awethemes/skeleton) by [awethemes](https://github.com/awethemes): A complete framework for WordPress, uses CMB2 engine.
 * [WP Simple Iconfonts](https://wordpress.org/plugins/wp-simple-iconfonts/) by [awethemes](https://github.com/awethemes): An icon fonts manager and provides a font icon picker for CMB2.
+* [CMB2 Nav Menus](https://github.com/nsrosenqvist/cmb2-nav-menus) by [nsrosenqvist](https://github.com/nsrosenqvist): Lets you use CMB2 in nav menu entries..
 
 ## Links
 * [Project Homepage](https://cmb2.io)

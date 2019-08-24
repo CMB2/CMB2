@@ -393,12 +393,14 @@ class CMB2_Types {
 	 * Generates a repeatable row's markup
 	 *
 	 * @since 1.1.0
-	 * @param string $class Repeatable table row's class
+	 * @param string $classes Repeatable table row's class
 	 */
-	protected function repeat_row( $class = 'cmb-repeat-row' ) {
+	protected function repeat_row( $classes = 'cmb-repeat-row' ) {
+		$classes = explode( ' ', $classes );
+		$classes = array_map( 'sanitize_html_class', $classes );
 		?>
 
-		<div class="cmb-row <?php echo $class; ?>">
+		<div class="cmb-row <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 			<div class="cmb-td">
 				<?php $this->_render(); ?>
 			</div>
@@ -605,6 +607,10 @@ class CMB2_Types {
 
 	public function taxonomy_select( $args = array() ) {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Select', $args )->render();
+	}
+
+	public function taxonomy_select_hierarchical( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Taxonomy_Select_Hierarchical', $args )->render();
 	}
 
 	public function radio( $args = array(), $type = __FUNCTION__ ) {
