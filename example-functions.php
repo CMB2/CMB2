@@ -447,7 +447,7 @@ function yourprefix_register_demo_metabox() {
 		'desc' => sprintf(
 			/* translators: %s: link to codex.wordpress.org/Embeds */
 			esc_html__( 'Enter a youtube, twitter, or instagram URL. Supports services listed at %s.', 'cmb2' ),
-			'<a href="https://codex.wordpress.org/Embeds">codex.wordpress.org/Embeds</a>'
+			'<a href="https://wordpress.org/support/article/embeds/">codex.wordpress.org/Embeds</a>'
 		),
 		'id'   => 'yourprefix_demo_embed',
 		'type' => 'oembed',
