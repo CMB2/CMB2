@@ -106,7 +106,7 @@ function cmb2_get_oembed( $args = array() ) {
 		/* translators: 1: results for. 2: link to codex.wordpress.org/Embeds */
 		esc_html__( 'No oEmbed Results Found for %1$s. View more info at %2$s.', 'cmb2' ),
 		$oembed['fallback'],
-		'<a href="https://codex.wordpress.org/Embeds" target="_blank">codex.wordpress.org/Embeds</a>'
+		'<a href="https://wordpress.org/support/article/embeds/" target="_blank">codex.wordpress.org/Embeds</a>'
 	);
 
 	if ( isset( $args['wp_error'] ) && $args['wp_error'] ) {
