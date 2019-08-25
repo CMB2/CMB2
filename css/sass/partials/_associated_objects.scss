@@ -1,0 +1,126 @@
+.cmb-type-associated-objects {
+	.cmb-type-custom_attached_posts {
+		padding-top: 0;
+	}
+
+	.associated-objects-wrap {
+		display: inline-block;
+		width: 100%;
+	}
+
+	.column-wrap {
+		float: left;
+		width: 45%;
+	}
+
+	.retrieved-wrap {
+		margin-right: 10%;
+	}
+
+	.associated-objects-section {
+		margin-bottom: 5px;
+	}
+
+	.search-wrap .regular-text {
+		width: 100%;
+		margin: 0 0 7px 0;
+	}
+
+	.connected {
+		background: $almost-gray;
+		cursor: pointer;
+		height: 300px;
+		overflow-y: scroll;
+		padding: 0;
+		width: 100%;
+	}
+
+	.has-thumbnails.connected {
+		height: 30em;
+	}
+
+	.has-thumbnails li {
+		clear: both;
+	}
+	.has-thumbnails li::after {
+		content: ' ';
+		display: block;
+		clear: both;
+	}
+
+	.has-thumbnails li img {
+		margin-right: 10px;
+		vertical-align: middle;
+		float: left;
+	}
+
+	.has-thumbnails li a {
+		text-indent: 55px;
+	}
+
+	.connected {
+		li {
+			margin: 0;
+			padding: 10px 40px 10px 10px;
+			position: relative;
+
+			.add-remove {
+				display: block;
+				height: 17px;
+				margin-top: -8px;
+				position: absolute;
+				right: 10px;
+				top: 50%;
+				width: 22px;
+			}
+		}
+
+		li.odd {
+			background-color: $almost-white;
+		}
+
+		li:hover {
+			background: $light-gray;
+		}
+
+	}
+
+	.postbox-container & {
+		.cmb-th + .cmb-td {
+			width: 100%;
+		}
+	}
+
+	ul.hide-selected li.added {
+	    display: none;
+	}
+}
+
+.associated-objects-wrap {
+
+	.attached {
+		float: right;
+	}
+
+	.retrieved {
+
+		li.added {
+			opacity: .5;
+
+			&:hover {
+				background: $white;
+				cursor: initial;
+			}
+
+			&:hover .add-remove {
+				background-position: 0 -22px;
+			}
+		}
+
+	}
+}
+
+.cmb2-associated-objects-search-button span {
+	color: $gray;
+	margin: .2em -.2em 0 1px;
+}

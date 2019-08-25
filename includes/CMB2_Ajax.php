@@ -50,6 +50,8 @@ class CMB2_Ajax {
 	protected function __construct() {
 		add_action( 'wp_ajax_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
 		add_action( 'wp_ajax_nopriv_cmb2_oembed_handler', array( $this, 'oembed_handler' ) );
+		add_action( 'wp_ajax_cmb2_associated_objects_search', array( $this, 'associated_objects_search' ) );
+		add_action( 'wp_ajax_nopriv_cmb2_associated_objects_search', array( $this, 'associated_objects_search' ) );
 		// Need to occasionally clean stale oembed cache data from the option value.
 		add_action( 'cmb2_save_options-page_fields', array( __CLASS__, 'clean_stale_options_page_oembeds' ) );
 	}
@@ -318,6 +320,26 @@ class CMB2_Ajax {
 		if ( $modified ) {
 			$updated = cmb2_options( $option_key )->set( $options );
 		}
+	}
+
+	/**
+	 * Handle the associated object search query
+	 *
+	 * @since  2.X.X
+	 * @return void
+	 */
+	public function associated_objects_search() {
+		if ( ! isset( $_POST['field_id'], $_POST['cmb_id'], $_POST['retrieved'], $_POST['action'], $_POST['nonce'] ) ) {
+			return;
+		}
+
+		// Verify our nonce.
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'cmb2-find-posts' ) ) {
+			die();
+		}
+
+		$search = new CMB2_Associated_Objects_Search( $_POST );
+		$search->do_search();
 	}
 
 }

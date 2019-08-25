@@ -35,6 +35,10 @@ function cmb2_autoload_classes( $class_name ) {
 
 	if ( 'CMB2_Type' === $class_name || 0 === strpos( $class_name, 'CMB2_Type_' ) ) {
 		$path .= '/types';
+
+		if ( 0 === strpos( $class_name, 'CMB2_Type_Query_' ) ) {
+			$path .= '/query';
+		}
 	}
 
 	if ( 'CMB2_REST' === $class_name || 0 === strpos( $class_name, 'CMB2_REST_' ) ) {

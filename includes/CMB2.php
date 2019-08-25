@@ -1476,6 +1476,8 @@ class CMB2 extends CMB2_Base {
 				break;
 
 			case 'oembed':
+			case 'associated_objects':
+
 				// Initiate oembed Ajax hooks.
 				cmb2_ajax();
 				break;

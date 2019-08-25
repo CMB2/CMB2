@@ -672,4 +672,8 @@ class CMB2_Types {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_File', $args )->render();
 	}
 
+	public function associated_objects( $args = array() ) {
+		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Associated_Objects', $args )->render();
+	}
+
 }

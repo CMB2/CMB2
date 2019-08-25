@@ -98,7 +98,8 @@ class CMB2_JS {
 		// if file/file_list.
 		if ( isset( $dependencies['media-editor'] ) ) {
 			wp_enqueue_media();
-			CMB2_Type_File_Base::output_js_underscore_templates();
+
+			add_action( current_filter(), 'CMB2_Type_File_Base::output_js_underscore_templates', 999 );
 		}
 
 		// if timepicker.
@@ -114,7 +115,27 @@ class CMB2_JS {
 		$enqueue_char_counter = isset( $dependencies['cmb2-char-counter'] ) && $debug;
 		unset( $dependencies['cmb2-char-counter'] );
 
-		// Enqueue cmb JS.
+        // if cmb2-associated-objects
+        $enqueue_associated = isset( $dependencies['cmb2-associated-objects'] );
+        if ( $enqueue_associated ) {
+            add_action( current_filter(), 'CMB2_Type_Associated_Objects::output_js_underscore_templates', 999 );
+            
+            $associated_dependencies = array(
+				'jquery-ui-core',
+				'jquery-ui-widget',
+				'jquery-ui-mouse',
+				'jquery-ui-draggable',
+				'jquery-ui-droppable',
+				'jquery-ui-sortable',
+				'wp-backbone',
+            );
+            
+            unset( $dependencies['cmb2-associated-objects'] );
+            
+            $dependencies = array_merge( $dependencies, $associated_dependencies );
+        }
+
+        // Enqueue cmb JS.
 		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), array_values( $dependencies ), CMB2_VERSION, true );
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
@@ -123,6 +144,10 @@ class CMB2_JS {
 		}
 		if ( $enqueue_char_counter ) {
 			wp_enqueue_script( 'cmb2-char-counter', CMB2_Utils::url( 'js/cmb2-char-counter.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
+		}
+
+		if ( $enqueue_associated && $debug ) {
+			wp_enqueue_script( 'cmb2-associated-objects', CMB2_Utils::url( 'js/cmb2-associated-objects.js' ), $associated_dependencies, CMB2_VERSION, true );
 		}
 
 		self::localize( $debug );
