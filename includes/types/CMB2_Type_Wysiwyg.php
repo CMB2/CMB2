@@ -31,27 +31,22 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 
 		if ( ! $field->group ) {
 
-			// Add character counter?
-			// Not currently working for grouped WYSIWYG
-			// Add here for non-grouped - and avoid adding in CMB2_Type_Textarea when that's called below for grouped
-			$char_counter_markup = '';
-			if ( ! empty( $field->args['char_counter'] ) ) :
+			$a = $this->maybe_update_attributes_for_char_counter( $a );
 
-				$char_counter_markup = $this->char_counter_markup();
-				$field->add_js_dependencies( 'word-count' );
-				$field->add_js_dependencies( 'cmb2-char-counter' );
-				$a['options']['editor_class'] = empty( $a['options']['editor_class'] ) ? 'cmb2-count-chars' : $a['options']['editor_class'] . ' cmb2-count-chars';
+			if ( $this->has_counter ) {
+				$a['options']['editor_class'] = ! empty( $a['options']['editor_class'] )
+					? $a['options']['editor_class'] . ' cmb2-count-chars'
+					: 'cmb2-count-chars';
+			}
 
-			endif;
-
-			return $this->rendered( $this->get_wp_editor( $a ) . $char_counter_markup . $a['desc'] );
-
+			return $this->rendered( $this->get_wp_editor( $a ) . $a['desc'] );
 		}
 
-		// wysiwyg fields in a group need some special handling.
+		// Character counter not currently working for grouped WYSIWYG
+		$this->field->args['char_counter'] = false;
 
-		$field->add_js_dependencies( 'wp-util' );
-		$field->add_js_dependencies( 'cmb2-wysiwyg' );
+		// wysiwyg fields in a group need some special handling.
+		$field->add_js_dependencies( 'wp-util', 'cmb2-wysiwyg' );
 
 		// Hook in our template-output to the footer.
 		add_action( is_admin() ? 'admin_footer' : 'wp_footer', array( $this, 'add_wysiwyg_template_for_group' ) );

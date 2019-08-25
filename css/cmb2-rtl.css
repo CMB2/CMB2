@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.6.0 - 2019-08-09
+ * CMB2 - v2.6.0 - 2019-08-24
  * https://cmb2.io
  * Copyright (c) 2019
  * Licensed GPLv2+
@@ -2045,26 +2045,26 @@ span.cmb2-metabox-description {
 	margin: .5em 0 1em;
 }
 
-/* line 9, sass/partials/_char_counter.scss */
+/* line 8, sass/partials/_char_counter.scss */
 
 .cmb2-char-counter-wrap input[type="text"] {
 	font-size: 12px;
-	width: 6em;
+	width: 25px;
 }
 
-/* line 18, sass/partials/_char_counter.scss */
+/* line 14, sass/partials/_char_counter.scss */
 
 .cmb2-char-counter-wrap.cmb2-max-exceeded input[type="text"] {
 	border-color: #a00 !important;
 }
 
-/* line 24, sass/partials/_char_counter.scss */
+/* line 17, sass/partials/_char_counter.scss */
 
 .cmb2-char-counter-wrap.cmb2-max-exceeded .cmb2-char-max-msg {
 	display: inline-block;
 }
 
-/* line 34, sass/partials/_char_counter.scss */
+/* line 23, sass/partials/_char_counter.scss */
 
 .cmb2-char-max-msg {
 	color: #a00;

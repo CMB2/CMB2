@@ -10,7 +10,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Type_Textarea extends CMB2_Type_Base {
+class CMB2_Type_Textarea extends CMB2_Type_Counter_Base {
 
 	/**
 	 * Handles outputting an 'textarea' element
@@ -32,24 +32,10 @@ class CMB2_Type_Textarea extends CMB2_Type_Base {
 		), $args );
 
 		// Add character counter?
-		// Avoid adding when called for grouped WYSIWYGs
-		$char_counter_markup = '';
-		if ( ! empty( $this->field->args['char_counter'] ) && ( $this->field->args['type'] !== 'wysiwyg' && empty( $this->field->group ) ) ) :
-
-			$char_counter_markup = $this->char_counter_markup();
-			$this->field->add_js_dependencies( 'word-count' );
-			$this->field->add_js_dependencies( 'cmb2-char-counter' );
-			$a['class'] .= ' cmb2-count-chars';
-
-			// Enforce max chars?
-			if ( ! empty( $this->field->args['char_max_enforce'] ) && ! empty( $this->field->args['char_max'] ) && $this->field->args['char_counter'] === 'characters' ) :
-				$a['maxlength'] = (int) $this->field->args['char_max'];
-			endif;
-
-		endif;
+		$a = $this->maybe_update_attributes_for_char_counter( $a );
 
 		return $this->rendered(
-			sprintf( '<textarea%s>%s</textarea>%s%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $char_counter_markup, $a['desc'] )
+			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] )
 		);
 	}
 }

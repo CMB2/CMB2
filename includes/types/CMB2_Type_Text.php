@@ -10,7 +10,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Type_Text extends CMB2_Type_Base {
+class CMB2_Type_Text extends CMB2_Type_Counter_Base {
 
 	/**
 	 * The type of field
@@ -52,22 +52,10 @@ class CMB2_Type_Text extends CMB2_Type_Base {
 		), $args );
 
 		// Add character counter?
-		$char_counter_markup = '';
-		if ( ! empty( $this->field->args['char_counter'] ) ) :
-
-			$char_counter_markup = $this->char_counter_markup();
-			$this->field->add_js_dependencies( 'cmb2-char-counter' );
-			$a['class'] .= ' cmb2-count-chars';
-
-			// Enforce max chars?
-			if ( ! empty( $this->field->args['char_max_enforce'] ) && ! empty( $this->field->args['char_max'] ) && $this->field->args['char_counter'] === 'characters' ) :
-				$a['maxlength'] = (int) $this->field->args['char_max'];
-			endif;
-
-		endif;
+		$a = $this->maybe_update_attributes_for_char_counter( $a );
 
 		return $this->rendered(
-			sprintf( '<input%s/>%s%s', $this->concat_attrs( $a, array( 'desc' ) ), $char_counter_markup, $a['desc'] )
+			sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] )
 		);
 	}
 }
