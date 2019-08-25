@@ -65,7 +65,7 @@ class CMB2_Type_Checkbox extends CMB2_Type_Text {
 			sprintf(
 				'%s <label for="%s">%s</label>',
 				parent::render( $args ),
-				$this->_id(),
+				$this->_id( '', false ),
 				$this->_desc()
 			)
 		);
