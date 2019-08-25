@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.6.0 - 2019-01-18
+ * CMB2 - v2.6.0 - 2019-08-24
  * https://cmb2.io
  * Copyright (c) 2019
  * Licensed GPLv2+
@@ -1269,6 +1269,35 @@ span.cmb2-metabox-description {
   color: #fff;
 }
 
+/*--------------------------------------------------------------
+ * Character counter
+--------------------------------------------------------------*/
+/* line 5, sass/partials/_char_counter.scss */
+.cmb2-char-counter-wrap {
+  margin: .5em 0 1em;
+}
+/* line 8, sass/partials/_char_counter.scss */
+.cmb2-char-counter-wrap input[type="text"] {
+  font-size: 12px;
+  width: 25px;
+}
+/* line 14, sass/partials/_char_counter.scss */
+.cmb2-char-counter-wrap.cmb2-max-exceeded input[type="text"] {
+  border-color: #a00 !important;
+}
+/* line 17, sass/partials/_char_counter.scss */
+.cmb2-char-counter-wrap.cmb2-max-exceeded .cmb2-char-max-msg {
+  display: inline-block;
+}
+
+/* line 23, sass/partials/_char_counter.scss */
+.cmb2-char-max-msg {
+  color: #a00;
+  display: none;
+  font-style: italic;
+  margin-left: 1em;
+}
+
 /**
  * CMB2 Frontend
  */
@@ -1326,6 +1355,11 @@ span.cmb2-metabox-description {
   width: 20px;
   height: 20px;
   margin: 4px 10px 0;
+}
+
+/* line 58, sass/partials/_front.scss */
+.cmb2-char-max-msg {
+  display: none;
 }
 
 /*# sourceMappingURL=cmb2-front.css.map */

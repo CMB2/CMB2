@@ -207,7 +207,8 @@ module.exports = function(grunt) {
 		jshint: {
 			all: [
 				'js/cmb2.js',
-				'js/cmb2-wysiwyg.js'
+				'js/cmb2-wysiwyg.js',
+				'js/cmb2-char-counter.js'
 			],
 			options: {
 				curly   : true,
@@ -225,7 +226,7 @@ module.exports = function(grunt) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow', 'QTags', 'quicktags']
+				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow', 'QTags', 'quicktags', '_']
 			}
 		},
 
@@ -242,7 +243,7 @@ module.exports = function(grunt) {
 		uglify: {
 			all: {
 				files: {
-					'js/cmb2.min.js': ['js/cmb2.js', 'js/cmb2-wysiwyg.js']
+					'js/cmb2.min.js': ['js/cmb2.js', 'js/cmb2-wysiwyg.js', 'js/cmb2-char-counter.js']
 				},
 				options: {
 					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -266,7 +267,7 @@ module.exports = function(grunt) {
 			},
 
 			scripts: {
-				files: ['js/cmb2.js', 'js/cmb2-wysiwyg.js'],
+				files: ['js/cmb2.js', 'js/cmb2-wysiwyg.js', 'js/cmb2-char-counter.js'],
 				tasks: ['js'],
 				options: {
 					debounceDelay: 500
