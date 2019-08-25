@@ -1517,6 +1517,9 @@ class CMB2_Field extends CMB2_Base {
 			'column'            => false,
 			'js_dependencies'   => array(),
 			'show_in_rest'      => null,
+			'char_counter'      => false,
+			'char_max'          => false,
+			'char_max_enforce'  => false,
 		);
 	}
 

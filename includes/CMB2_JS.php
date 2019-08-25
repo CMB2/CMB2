@@ -111,12 +111,16 @@ class CMB2_JS {
 		$enqueue_wysiwyg = isset( $dependencies['cmb2-wysiwyg'] ) && $debug;
 		unset( $dependencies['cmb2-wysiwyg'] );
 
-		// if cmb2-associated-objects
-		$enqueue_associated = isset( $dependencies['cmb2-associated-objects'] );
-		if ( $enqueue_associated ) {
-			add_action( current_filter(), 'CMB2_Type_Associated_Objects::output_js_underscore_templates', 999 );
+		// if cmb2-char-counter.
+		$enqueue_char_counter = isset( $dependencies['cmb2-char-counter'] ) && $debug;
+		unset( $dependencies['cmb2-char-counter'] );
 
-			$associated_dependencies = array(
+        // if cmb2-associated-objects
+        $enqueue_associated = isset( $dependencies['cmb2-associated-objects'] );
+        if ( $enqueue_associated ) {
+            add_action( current_filter(), 'CMB2_Type_Associated_Objects::output_js_underscore_templates', 999 );
+            
+            $associated_dependencies = array(
 				'jquery-ui-core',
 				'jquery-ui-widget',
 				'jquery-ui-mouse',
@@ -124,12 +128,12 @@ class CMB2_JS {
 				'jquery-ui-droppable',
 				'jquery-ui-sortable',
 				'wp-backbone',
-			);
-
-			unset( $dependencies['cmb2-associated-objects'] );
-
-			$dependencies = array_merge( $dependencies, $associated_dependencies );
-		}
+            );
+            
+            unset( $dependencies['cmb2-associated-objects'] );
+            
+            $dependencies = array_merge( $dependencies, $associated_dependencies );
+        }
 
         // Enqueue cmb JS.
 		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), array_values( $dependencies ), CMB2_VERSION, true );
@@ -138,8 +142,10 @@ class CMB2_JS {
 		if ( $enqueue_wysiwyg ) {
 			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
 		}
+		if ( $enqueue_char_counter ) {
+			wp_enqueue_script( 'cmb2-char-counter', CMB2_Utils::url( 'js/cmb2-char-counter.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
+		}
 
-		// if SCRIPT_DEBUG, we need to enqueue separately.
 		if ( $enqueue_associated && $debug ) {
 			wp_enqueue_script( 'cmb2-associated-objects', CMB2_Utils::url( 'js/cmb2-associated-objects.js' ), $associated_dependencies, CMB2_VERSION, true );
 		}
