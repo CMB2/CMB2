@@ -115,14 +115,14 @@ class CMB2_JS {
 		unset( $dependencies['cmb2-char-counter'] );
 
 		// Enqueue cmb JS.
-		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), $dependencies, CMB2_VERSION, true );
+		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), array_values( $dependencies ), CMB2_VERSION, true );
 
 		// if SCRIPT_DEBUG, we need to enqueue separately.
 		if ( $enqueue_wysiwyg ) {
 			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
 		}
 		if ( $enqueue_char_counter ) {
-			wp_enqueue_script( 'cmb2-char-counter', CMB2_Utils::url( 'js/cmb2-char-counter.js' ), array( 'jquery' ), CMB2_VERSION );
+			wp_enqueue_script( 'cmb2-char-counter', CMB2_Utils::url( 'js/cmb2-char-counter.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
 		}
 
 		self::localize( $debug );
