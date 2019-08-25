@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 * Added support for sortable columns by default, with ability to disable with `'column' => array( 'disable_sortable' => true )`. Props [@RubenMartins](https://github.com/RubenMartins) ([#1281](https://github.com/CMB2/CMB2/pull/1281)).
 * New field type, `'taxonomy_select_hierarchical'`. Fixes [#751](https://github.com/CMB2/CMB2/issues/751)
+* New `text`, `textarea` and `wysiwyg` character counter options. For now, this feature is not available to `wysiwyg` field types within repeatable groups. Props [@gyrus](https://github.com/gyrus) ([#1276](https://github.com/CMB2/CMB2/pull/1276)).
+	- The new parameters:
+		- `'char_counter'` - Defaults to false, no counter. Set to true, or `words` to count words instead of characters.
+		- `'char_max'` - integer. When defined, counter shows remaining characters/words.
+		- `'char_max_enforce'` - boolean, default: false. Currently only applied (as maxlength attribute) to `text` and `textarea` fields which use `'characters'` for counter.
+	- You can also [override the default text strings](https://github.com/CMB2/CMB2/wiki/Field-Parameters#text) associated with these parameters:
+		- `'words_left_text'` - Default: "Words left"
+		- `'words_text'` - Default: "Words"
+		- `'characters_left_text'` - Default: "Characters left"
+		- `'characters_text'` - Default: "Characters"
+		- `'characters_truncated_text'` - Default: "Your text may be truncated."
+
 
 ### Bug Fixes
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
