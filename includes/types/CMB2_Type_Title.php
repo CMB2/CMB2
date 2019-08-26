@@ -29,17 +29,15 @@ class CMB2_Type_Title extends CMB2_Type_Base {
 			'tag'   => $tag,
 			'class' => empty( $name ) ? 'cmb2-metabox-title-anchor' : 'cmb2-metabox-title',
 			'name'  => $name,
-			'desc'  => $this->_desc( true ),
 			'id'    => str_replace( '_', '-', sanitize_html_class( $this->field->id() ) ),
 		) );
 
 		return $this->rendered(
 			sprintf(
-				'<%1$s %2$s>%3$s</%1$s>%4$s',
+				'<%1$s %2$s>%3$s</%1$s>',
 				$a['tag'],
-				$this->concat_attrs( $a, array( 'tag', 'name', 'desc' ) ),
-				$a['name'],
-				$a['desc']
+				$this->concat_attrs( $a, array( 'tag', 'name' ) ),
+				$a['name']
 			)
 		);
 	}

@@ -47,7 +47,6 @@ class CMB2_Type_Text extends CMB2_Type_Counter_Base {
 			'name'            => $this->_name(),
 			'id'              => $this->_id(),
 			'value'           => $this->field->escaped_value(),
-			'desc'            => $this->_desc( true ),
 			'js_dependencies' => array(),
 		), $args );
 
@@ -55,7 +54,7 @@ class CMB2_Type_Text extends CMB2_Type_Counter_Base {
 		$a = $this->maybe_update_attributes_for_char_counter( $a );
 
 		return $this->rendered(
-			sprintf( '<input%s/>%s', $this->concat_attrs( $a, array( 'desc' ) ), $a['desc'] )
+			sprintf( '<input%s/>', $this->concat_attrs( $a ) )
 		);
 	}
 }

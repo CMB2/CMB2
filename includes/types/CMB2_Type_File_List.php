@@ -27,7 +27,6 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 			'type'  => 'hidden',
 			'class' => 'cmb2-upload-file cmb2-upload-list',
 			'size'  => 45,
-			'desc'  => '',
 			'value'  => '',
 			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
 			'data-sizename'    => $img_size_data['name'],
@@ -54,7 +53,6 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 					'name'    => $name . '[' . $id . ']',
 					'id'      => 'filelist-' . $id,
 					'data-id' => $id,
-					'desc'    => '',
 					'class'   => false,
 				) );
 
