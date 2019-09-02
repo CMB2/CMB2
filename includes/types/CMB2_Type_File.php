@@ -79,7 +79,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$output .= $a['desc'];
 		$output .= $this->get_id_field_output();
 
-		$output .= '<div id="' . $field->id() . '-status" class="cmb2-media-status">';
+		$output .= '<div id="' . esc_attr( $field->id() ) . '-status" class="cmb2-media-status">';
 		if ( ! empty( $a['value'] ) ) {
 			$output .= $this->get_file_preview_output();
 		}
@@ -110,7 +110,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 				'class' => 'cmb-file-field-image',
 			) );
 		} else {
-			$image = '<img style="max-width: ' . absint( $this->args['img_size_data']['width'] ) . 'px; width: 100%;" src="' . $this->args['value'] . '" class="cmb-file-field-image" alt="" />';
+			$image = '<img style="max-width: ' . absint( $this->args['img_size_data']['width'] ) . 'px; width: 100%;" src="' . esc_url( $this->args['value'] ) . '" class="cmb-file-field-image" alt="" />';
 		}
 
 		return $this->img_status_output( array(
