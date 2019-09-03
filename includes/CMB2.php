@@ -1467,40 +1467,6 @@ class CMB2 extends CMB2_Base {
 			return false;
 		}
 
-		// Perform some field-type-specific initiation actions.
-		switch ( $field['type'] ) {
-			case 'file':
-			case 'file_list':
-				// Initiate attachment JS hooks.
-				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
-				break;
-
-			case 'oembed':
-				// Initiate oembed Ajax hooks.
-				cmb2_ajax();
-				break;
-
-			case 'group':
-				if ( empty( $field['render_row_cb'] ) ) {
-					$field['render_row_cb'] = array( $this, 'render_group_callback' );
-				}
-				break;
-			case 'colorpicker':
-				// https://github.com/JayWood/CMB2_RGBa_Picker
-				// Dequeue the rgba_colorpicker custom field script if it is used,
-				// since we now enqueue our own more current version.
-				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
-				break;
-		}
-
-		if ( isset( $field['column'] ) && false !== $field['column'] ) {
-			$field = $this->define_field_column( $field );
-		}
-
-		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
-			$this->tax_metaboxes_to_remove[ $field['taxonomy'] ] = $field['taxonomy'];
-		}
-
 		$this->_add_field_to_array(
 			$field,
 			$this->meta_box['fields'],
@@ -1508,26 +1474,6 @@ class CMB2 extends CMB2_Base {
 		);
 
 		return $field['id'];
-	}
-
-	/**
-	 * Defines a field's column if requesting to be show in admin columns.
-	 *
-	 * @since  2.2.3
-	 * @param  array $field Metabox field config array.
-	 * @return array         Modified metabox field config array.
-	 */
-	protected function define_field_column( array $field ) {
-		$this->has_columns = true;
-
-		$column = is_array( $field['column'] ) ? $field['column'] : array();
-
-		$field['column'] = wp_parse_args( $column, array(
-			'name'     => isset( $field['name'] ) ? $field['name'] : '',
-			'position' => false,
-		) );
-
-		return $field;
 	}
 
 	/**
@@ -1564,6 +1510,70 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Perform some field-type-specific initiation actions.
+	 *
+	 * @since  2.7.0
+	 * @param  array $field Metabox field config array.
+	 * @return void
+	 */
+	protected function field_actions( $field ) {
+		switch ( $field['type'] ) {
+			case 'file':
+			case 'file_list':
+
+				// Initiate attachment JS hooks.
+				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
+				break;
+
+			case 'oembed':
+				// Initiate oembed Ajax hooks.
+				cmb2_ajax();
+				break;
+
+			case 'group':
+				if ( empty( $field['render_row_cb'] ) ) {
+					$field['render_row_cb'] = array( $this, 'render_group_callback' );
+				}
+				break;
+			case 'colorpicker':
+
+				// https://github.com/JayWood/CMB2_RGBa_Picker
+				// Dequeue the rgba_colorpicker custom field script if it is used,
+				// since we now enqueue our own more current version.
+				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
+				break;
+		}
+
+		if ( isset( $field['column'] ) && false !== $field['column'] ) {
+			$field = $this->define_field_column( $field );
+		}
+
+		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
+			$this->tax_metaboxes_to_remove[ $field['taxonomy'] ] = $field['taxonomy'];
+		}
+	}
+
+	/**
+	 * Defines a field's column if requesting to be show in admin columns.
+	 *
+	 * @since  2.2.3
+	 * @param  array $field Metabox field config array.
+	 * @return array         Modified metabox field config array.
+	 */
+	protected function define_field_column( array $field ) {
+		$this->has_columns = true;
+
+		$column = is_array( $field['column'] ) ? $field['column'] : array();
+
+		$field['column'] = wp_parse_args( $column, array(
+			'name'     => isset( $field['name'] ) ? $field['name'] : '',
+			'position' => false,
+		) );
+
+		return $field;
+	}
+
+	/**
 	 * Add a field array to a fields array in desired position
 	 *
 	 * @since 2.0.2
@@ -1572,6 +1582,8 @@ class CMB2 extends CMB2_Base {
 	 * @param integer $position Optionally specify a position in the array to be inserted.
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
+		$this->field_actions( $field );
+
 		if ( $position ) {
 			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
 		} else {
