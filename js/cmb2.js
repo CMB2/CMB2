@@ -1024,7 +1024,8 @@ window.CMB2 = window.CMB2 || {};
 		if ( $repeatables.length ) {
 			$repeatables.sortable({
 				items : '.cmb-repeat-row',
-				cursor: 'move'
+				cursor: 'move',
+				cancel: 'input,textarea,button,select,option,.CodeMirror'
 			});
 		}
 	};
