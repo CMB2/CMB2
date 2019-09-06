@@ -1025,6 +1025,9 @@ window.CMB2 = window.CMB2 || {};
 			$repeatables.sortable({
 				items : '.cmb-repeat-row',
 				cursor: 'move',
+				// The default "cancel" attributes are: "input,textarea,button,select,option".
+				// We are appending .CodeMirror.
+				// See https://api.jqueryui.com/sortable/#option-cancel
 				cancel: 'input,textarea,button,select,option,.CodeMirror'
 			});
 		}
