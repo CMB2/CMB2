@@ -1092,6 +1092,25 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Get a field object for a supporting field. (e.g. file field)
+	 *
+	 * @since  2.7.0
+	 *
+	 * @return CMB2_Field|bool Supporting field object, if supported.
+	 */
+	public function get_supporting_field() {
+		$suffix = $this->args( 'has_supporting_data' );
+		if ( empty( $suffix ) ) {
+			return false;
+		}
+
+		return $this->get_field_clone( array(
+			'id' => $this->_id( '', false ) . $suffix,
+			'sanitization_cb' => false,
+		) );
+	}
+
+	/**
 	 * Default callback to outputs field value in a display format.
 	 *
 	 * @since 2.2.2
@@ -1379,16 +1398,16 @@ class CMB2_Field extends CMB2_Base {
 			$args = $this->set_group_sub_field_defaults( $args );
 		}
 
-		$args['has_supporting_data'] = in_array(
-			$args['type'],
-			array(
-				// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array().
-				'file',
-				// See CMB2_Sanitize::_save_utc_value().
-				'text_datetime_timestamp_timezone',
-			),
-			true
+		$with_supporting = array(
+			// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array().
+			'file' => '_id',
+			// See CMB2_Sanitize::_save_utc_value().
+			'text_datetime_timestamp_timezone' => '_utc',
 		);
+
+		$args['has_supporting_data'] = isset( $with_supporting[ $args['type'] ] )
+			? $with_supporting[ $args['type'] ]
+			: false;
 
 		// Repeatable fields require jQuery sortable library.
 		if ( ! empty( $args['repeatable'] ) ) {

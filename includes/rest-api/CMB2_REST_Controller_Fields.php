@@ -416,8 +416,40 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			}
 		}
 
+		if ( $field->args( 'has_supporting_data' ) ) {
+			$field_data = $this->get_supporting_data( $field_data, $field );
+		}
+
 		if ( $this->request['object_id'] && $this->request['object_type'] ) {
 			$field_data['value'] = $field->get_rest_value();
+		}
+
+		return $field_data;
+	}
+
+	/**
+	 * Gets field supporting data (field id and value).
+	 *
+	 * @since  2.7.0
+	 *
+	 * @param  CMB2_Field $field      Field object.
+	 * @param  array      $field_data Array of field data.
+	 *
+	 * @return array                  Array of field data.
+	 */
+	public function get_supporting_data( $field_data, $field ) {
+
+		// Reset placement of this property.
+		unset( $field_data['has_supporting_data'] );
+		$field_data['has_supporting_data'] = true;
+
+		$field = $field->get_supporting_field();
+		$field_data['supporting_data'] = array(
+			'id' => $field->_id( '', false ),
+		);
+
+		if ( $this->request['object_id'] && $this->request['object_type'] ) {
+			$field_data['supporting_data']['value'] = $field->get_rest_value();
 		}
 
 		return $field_data;

@@ -411,6 +411,11 @@ class CMB2_REST extends CMB2_Hookup_Base {
 					$field->object_type( $main_object_type );
 
 					$values[ $cmb_id ][ $field->id( true ) ] = $field->get_rest_value();
+
+					if ( $field->args( 'has_supporting_data' ) ) {
+						$field = $field->get_supporting_field();
+						$values[ $cmb_id ][ $field->id( true ) ] = $field->get_rest_value();
+					}
 				}
 			}
 		}
