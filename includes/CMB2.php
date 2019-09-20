@@ -1551,6 +1551,8 @@ class CMB2 extends CMB2_Base {
 		if ( isset( $field['taxonomy'] ) && ! empty( $field['remove_default'] ) ) {
 			$this->tax_metaboxes_to_remove[ $field['taxonomy'] ] = $field['taxonomy'];
 		}
+
+		return $field;
 	}
 
 	/**
@@ -1582,7 +1584,7 @@ class CMB2 extends CMB2_Base {
 	 * @param integer $position Optionally specify a position in the array to be inserted.
 	 */
 	protected function _add_field_to_array( $field, &$fields, $position = 0 ) {
-		$this->field_actions( $field );
+		$field = $this->field_actions( $field );
 
 		if ( $position ) {
 			CMB2_Utils::array_insert( $fields, array( $field['id'] => $field ), $position );
