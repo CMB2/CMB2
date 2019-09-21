@@ -288,9 +288,19 @@ class CMB2_Field extends CMB2_Base {
 
 		// If no override, get value normally.
 		if ( 'cmb2_field_no_override_val' === $data ) {
-			$data = 'options-page' === $a['type']
-				? cmb2_options( $a['id'] )->get( $a['field_id'] )
-				: get_metadata( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
+
+			if ( 'options-page' === $a['type'] ) {
+
+				$data = cmb2_options( $a['id'] )->get( $a['field_id'] );
+			} else {
+
+				$non_post_types = array( 'user', 'term', 'comment' );
+
+				// Make sure to use "post" for CPTs.
+				$type = in_array( $a['type'], $non_post_types, true ) ? $a['type'] : 'post';
+
+				$data = get_metadata( $type, $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
+			}
 		}
 
 		if ( $this->group ) {
