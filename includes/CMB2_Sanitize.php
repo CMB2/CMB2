@@ -86,6 +86,7 @@ class CMB2_Sanitize {
 				$sanitized_value = $this->textarea();
 				break;
 			case 'taxonomy_select':
+			case 'taxonomy_select_hierarchical':
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_radio_hierarchical':
