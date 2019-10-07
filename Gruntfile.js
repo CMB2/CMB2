@@ -14,12 +14,6 @@ module.exports = function(grunt) {
 			}
 		},
 
-		githooks: {
-			all: {
-				'pre-commit': 'tests'
-			}
-		},
-
 		dirs: {
 			lang: 'languages'
 		},
@@ -136,17 +130,6 @@ module.exports = function(grunt) {
 				  'css/cmb2.css': 'css/sass/cmb2.scss',
 				  'css/cmb2-front.css': 'css/sass/cmb2-front.scss',
 				  'css/cmb2-display.css': 'css/sass/cmb2-display.scss'
-				}
-			}
-		},
-
-		cmq: {
-			options: {
-				log: false
-			},
-			dist: {
-				files: {
-					'css/cmb2.css': 'css/cmb2.css'
 				}
 			}
 		},
@@ -281,31 +264,6 @@ module.exports = function(grunt) {
 
 		},
 
-		// make a zipfile
-		compress: {
-			main: {
-				options: {
-					mode: 'zip',
-					archive: 'cmb2.zip'
-				},
-				files: [ {
-						expand: true,
-						// cwd: '/',
-						src: [
-							'**',
-							'!node_modules/**',
-							'!css/sass/**',
-							'!**.zip',
-							'!Gruntfile.js',
-							'!package.json',
-							'!phpunit.xml',
-							'!tests/**'
-						],
-						dest: '/'
-				} ]
-			}
-		},
-
 		cssjanus: {
 			i18n: {
 				options: {
@@ -320,12 +278,6 @@ module.exports = function(grunt) {
 		},
 
 		exec: {
-			txpull: { // Pull Transifex translation - grunt exec:txpull
-				cmd: 'tx pull -a  -f' // Change the percentage with --minimum-perc=yourvalue
-			},
-			txpush_s: { // Push pot to Transifex - grunt exec:txpush_s
-				cmd: 'tx push -s'
-			},
 			apigen: {
 				cmd: [
 					'rm -r ~/Sites/wpengine/api',
@@ -340,7 +292,7 @@ module.exports = function(grunt) {
 	});
 
 	var asciify = ['asciify'];
-	var styles  = ['sass', 'csscomb', 'cmq', 'cssjanus', 'cssmin', 'usebanner'];
+	var styles  = ['sass', 'csscomb', 'cssjanus', 'cssmin', 'usebanner'];
 	var hint    = ['jshint'];
 	var js      = ['jshint', 'uglify'];
 	var tests   = ['jshint', 'phpunit'];
@@ -357,10 +309,4 @@ module.exports = function(grunt) {
 
 	// Checktextdomain and makepot task(s)
 	grunt.registerTask( 'build:i18n', asciify.concat( ['checktextdomain', 'makepot', 'newer:potomo'] ) );
-
-	// Makepot and push it on Transifex task(s).
-	grunt.registerTask( 'tx-push', asciify.concat( ['makepot', 'exec:txpush_s'] ) );
-
-	// Pull from Transifex and create .mo task(s).
-	grunt.registerTask( 'tx-pull', asciify.concat( ['exec:txpull', 'newer:potomo'] ) );
 };
