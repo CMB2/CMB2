@@ -2,36 +2,18 @@
 // Mixins
 //--------------------------------------------------------------
 
-@mixin fullth() {
-	font-size: 1.2em;
-	@include _fullth;
-}
+@mixin clearfix {
+	&:before, &:after {
+		content: "";
+		display: table;
+	}
 
-@mixin fullth_side() {
-
-	@include _fullth;
-
-	label {
-		font-size: $font-size;
-		line-height: 1.4em;
+	&:after {
+		clear: both;
 	}
 }
 
-@mixin _fullth() {
-	display: block;
-	float: none;
-	padding-bottom: 1em;
-	text-align: left;
-	width: 100%;
-
-	label {
-		display: block;
-		margin-top: 0;
-		margin-bottom: 0.5em;
-	}
-}
-
-@mixin pseudo-dashicons( $glyph: "\f333" ) {
+@mixin pseudo-dashicons($glyph: "\f333") {
 	content: $glyph;
 	font-family: 'Dashicons';
 	speak: none;
@@ -48,4 +30,28 @@
 	width: 100%;
 	height: 100%;
 	text-align: center;
+}
+
+@mixin horizontal-form($width: 210px) {
+	// Calculate by min-width breakpoint.
+	$breakpoint: $mobile-break + 1;
+
+	@media screen and (min-width: $breakpoint) {
+		.cmb-row {
+			margin: 0;
+			padding-top: 1em;
+			padding-bottom: 1em;
+		}
+
+		.cmb-row > .cmb-th {
+			float: left;
+			width: $width;
+		}
+
+		.cmb-row > .cmb-th + .cmb-td {
+			margin-left: $width;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	}
 }

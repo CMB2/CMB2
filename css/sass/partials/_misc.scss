@@ -2,19 +2,92 @@
  * Misc.
 --------------------------------------------------------------*/
 
-#poststuff .cmb-repeatable-group h2 {
-	margin: 0;
-}
+// Main post.php
+#postbox-container-2 {
+	@extend .cmb-horizontal-form;
 
-.edit-tags-php,
-.profile-php,
-.user-edit-php {
-	.cmb2-metabox-title {
-		font-size: 1.4em;
+	.cmb-row {
+		padding-top: 1em;
+		padding-bottom: 1em;
+		border-bottom: solid 1px $light-gray;
+	}
+
+	.cmb-type-title {
+		background: #f9f9f9;
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+
+		.cmb2-metabox-title {
+			margin-top: 0;
+			margin-bottom: 0;
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+
+		.cmb2-metabox-description {
+			padding-top: 2px;
+		}
 	}
 }
 
-.cmb2-postbox, .cmb2-no-box-wrap {
+// term.php
+.term-php {
+	@extend .cmb-horizontal-form;
+}
+
+// edit-tags.php
+.edit-tags-php {
+	.cmb-row {
+		margin: 1em 0;
+
+		input + label {
+			display: inline-block;
+		}
+	}
+
+	.cmb-th {
+		font-size: 12px;
+		font-weight: inherit;
+	}
+
+	p.cmb2-metabox-description,
+	span.cmb2-metabox-description {
+		color: #666;
+		font-size: 13px;
+		display: block;
+		padding: 0;
+		margin: 5px 0 0;
+	}
+
+	.cmb2-metabox-title {
+		font-size: 1.1em;
+
+		+ p.cmb2-metabox-description {
+			padding-top: 0;
+		}
+	}
+
+}
+
+// User and profile page.
+.profile-php,
+.user-new-php,
+.user-edit-php {
+	@extend .cmb-horizontal-form;
+
+	.cmb-th {
+		font-size: 14px;
+	}
+
+	.cmb2-metabox-title {
+		margin: 0;
+		padding-top: 0;
+		font-size: 1.3em;
+	}
+}
+
+.cmb2-postbox,
+.cmb2-no-box-wrap {
 	.cmb-spinner {
 		float: left;
 		display: none;
@@ -23,6 +96,7 @@
 
 .cmb-spinner {
 	display: none;
+
 	&.is-active {
 		display: block;
 	}

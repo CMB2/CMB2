@@ -4,6 +4,7 @@
 
 .cmb2-options-page {
 	max-width: 1200px;
+	@extend .cmb-horizontal-form;
 
 	&.wrap > h2 {
 		margin-bottom: 1em;
