@@ -593,8 +593,14 @@ class CMB2 extends CMB2_Base {
 	 */
 	public function render_group_row( $field_group ) {
 
+		if ( is_callable( $field_group->args( 'closed_cb' ) ) ) {
+			$show = (bool) call_user_func( $field_group->args( 'closed_cb' ), $this, $field_group );
+			$closed_class = $show ? ' closed' : '';
+		} else {
+			$closed_class     = $field_group->options( 'closed' ) ? ' closed' : '';
+		}
+
 		$field_group->peform_param_callback( 'before_group_row' );
-		$closed_class     = $field_group->options( 'closed' ) ? ' closed' : '';
 		$confirm_deletion = $field_group->options( 'remove_confirm' );
 		$confirm_deletion = ! empty( $confirm_deletion ) ? $confirm_deletion : '';
 
