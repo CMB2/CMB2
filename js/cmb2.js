@@ -620,6 +620,7 @@ window.CMB2 = window.CMB2 || {};
 		var $this = $( this );
 		var name  = $this.attr( 'name' ); // get current name
 		var label = $this.parent().find('label');
+		var row = $this.parents( '.cmb-repeat-group-field' );
 
 		// If name is defined
 		if ( typeof name !== 'undefined' ) {
@@ -629,11 +630,13 @@ window.CMB2 = window.CMB2 || {};
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
 			var $newId = $this.attr('id').replace( '_' + prevNum + '_', '_' + newNum + '_');
+			var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + newNum + '-' );
 
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
 			$this.attr( 'id', $newId );
 			label.attr( 'for', $newId );
+			row.attr( 'class', $newClass );
 		}
 
 	};
@@ -1035,14 +1038,19 @@ window.CMB2 = window.CMB2 || {};
 							group.find( cmb.repeatEls ).each( function() {
 								var input = $( this );
 								var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
-								var $newId = input.attr('id').replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+								var $newId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
 								input.attr( 'name', $newName );
 								input.attr( 'id', $newId );
 							} );
 							group.find( 'label' ).each( function() {
 								var label = $( this );
-								var newFor = label.attr('for' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+								var newFor = label.attr( 'for' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
 								label.attr( 'for', newFor );
+							} );
+							group.find( '.cmb-repeat-group-field' ).each( function() {
+								var row = $( this );
+								var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + rowindex + '-' );
+								row.attr( 'class', $newClass );
 							} );
 						} );
 					} );
