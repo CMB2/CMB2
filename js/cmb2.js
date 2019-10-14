@@ -1017,24 +1017,35 @@ window.CMB2 = window.CMB2 || {};
 
 		var $repeatableGroups = cmb.metabox().find( '.cmb-repeatable-group.sortable' );
 		if ( $repeatableGroups.length ) {
-			$repeatableGroups.sortable({
-				items : '.cmb-repeatable-grouping',
+			$repeatableGroups.sortable( {
+				items: '.cmb-repeatable-grouping',
 				cursor: 'move',
 				beforeStop: function( ev, ui ) {
 					cmb.triggerElement( ui.item, 'cmb2_shift_rows_start', ui.item, ui.item, ui.item );
 				},
 				stop: function (ev, ui) {
+					$( '.cmb-repeatable-group.repeatable' ).each( function() {
+						$( this ).find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
+							var group = $( this );
+							var prevNum = group.data( 'iterator' );
+							group.find( cmb.repeatEls ).each( function() {
+								var input = $( this );
+								var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
+								var $newId = input.attr('id').replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+								input.attr( 'name', $newName );
+								input.attr( 'id', $newId );
+							} );
+							group.find( 'label' ).each( function() {
+								var label = $( this );
+								var newFor = label.attr('for' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+								label.attr( 'for', newFor );
+							} );
+						} );
+					} );
+					cmb.resetTitlesAndIterator( {group: true} );
 					cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', ui.item, ui.item, ui.item );
-					var $group =  $( ev.target ).parent();
-					var iterator = 1;
-					var title = $group.find('.cmb-add-group-row' ).data( 'grouptitle' );
-					$group.find( '.cmb-repeatable-grouping' ).each( function( i, row ){
-						var $row = $( row );
-						$row.find( 'h3.cmb-group-title' ).text( title.replace( '{#}', ( iterator ) ) );
-						iterator++;
-					});
 				}
-			});
+			} );
 		}
 	};
 
