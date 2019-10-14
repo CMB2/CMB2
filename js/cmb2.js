@@ -619,6 +619,7 @@ window.CMB2 = window.CMB2 || {};
 
 		var $this = $( this );
 		var name  = $this.attr( 'name' ); // get current name
+		var label = $this.parent().find('label');
 
 		// If name is defined
 		if ( typeof name !== 'undefined' ) {
@@ -627,9 +628,12 @@ window.CMB2 = window.CMB2 || {};
 
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
+			var $newId = $this.attr('id').replace( '_' + prevNum + '_', '_' + newNum + '_');
 
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
+			$this.attr( 'id', $newId );
+			label.attr( 'for', $newId );
 		}
 
 	};
