@@ -1016,10 +1016,10 @@ window.CMB2 = window.CMB2 || {};
 		var $repeatables = cmb.metabox().find( '.cmb-repeat-table .cmb-field-list' );
 
 		if ( $repeatables.length ) {
-			$repeatables.sortable({
-				items : '.cmb-repeat-row',
+			$repeatables.sortable( {
+				items: '.cmb-repeat-row',
 				cursor: 'move'
-			});
+			} );
 		}
 
 		var $repeatableGroups = cmb.metabox().find( '.cmb-repeatable-group.sortable' );
@@ -1028,34 +1028,35 @@ window.CMB2 = window.CMB2 || {};
 				items: '.cmb-repeatable-grouping',
 				cursor: 'move',
 				beforeStop: function( ev, ui ) {
-					cmb.triggerElement( ui.item, 'cmb2_shift_rows_start', ui.item, ui.item, ui.item );
+					$( ui.item ).parent().find( '.cmb-repeatable-grouping' ).each( function() {
+						var row = $( this );
+						cmb.triggerElement( ui.item, 'cmb2_shift_rows_start', row, row, row );
+					} );
 				},
-				stop: function (ev, ui) {
-					$( '.cmb-repeatable-group.repeatable' ).each( function() {
-						$( this ).find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
-							var group = $( this );
-							var prevNum = group.data( 'iterator' );
-							group.find( cmb.repeatEls ).each( function() {
-								var input = $( this );
-								var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
-								var $newId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
-								input.attr( 'name', $newName );
-								input.attr( 'id', $newId );
-							} );
-							group.find( 'label' ).each( function() {
-								var label = $( this );
-								var newFor = label.attr( 'for' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
-								label.attr( 'for', newFor );
-							} );
-							group.find( '.cmb-repeat-group-field' ).each( function() {
-								var row = $( this );
-								var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + rowindex + '-' );
-								row.attr( 'class', $newClass );
-							} );
+				stop: function( ev, ui ) {
+					var rows = $( ui.item ).parent().find( '.cmb-repeatable-grouping' );
+					rows.each( function( rowindex ) {
+						var row = $( this );
+						var prevNum = row.data( 'iterator' );
+						row.find( cmb.repeatEls ).each( function() {
+							var input = $( this );
+							var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
+							var $newId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+							input.attr( 'name', $newName );
+							input.attr( 'id', $newId );
+						} );
+						row.find( 'label' ).attr( 'for', $newId );
+						row.find( '.cmb-repeat-group-field' ).each( function() {
+							var row = $( this );
+							var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + rowindex + '-' );
+							row.attr( 'class', $newClass );
 						} );
 					} );
 					cmb.resetTitlesAndIterator( {group: true} );
-					cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', ui.item, ui.item, ui.item );
+					rows.each( function() {
+						var row = $( this );
+						cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', row, row, row );
+					} );
 				}
 			} );
 		}
