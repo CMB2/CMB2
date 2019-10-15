@@ -79,6 +79,7 @@ class CMB2_Field_Display {
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_select':
+			case 'taxonomy_select_hierarchical':
 			case 'taxonomy_radio_hierarchical':
 				$type = new CMB2_Display_Taxonomy_Radio( $field );
 				break;

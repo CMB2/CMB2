@@ -645,10 +645,10 @@ class CMB2_Field extends CMB2_Base {
 			'taxonomy_radio_inline'            => 1,
 			'taxonomy_radio_hierarchical'      => 1,
 			'taxonomy_select'                  => 1,
+			'taxonomy_select_hierarchical'     => 1,
 			'taxonomy_multicheck'              => 1,
 			'taxonomy_multicheck_inline'       => 1,
 			'taxonomy_multicheck_hierarchical' => 1,
-
 		);
 
 		/**
@@ -690,6 +690,7 @@ class CMB2_Field extends CMB2_Base {
 			'radio',
 			'radio_inline',
 			'taxonomy_select',
+			'taxonomy_select_hierarchical',
 			'taxonomy_radio',
 			'taxonomy_radio_inline',
 			'taxonomy_radio_hierarchical',
