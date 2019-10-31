@@ -136,12 +136,12 @@
 }
 
 /* line 152, sass/partials/_main_wrap.scss */
-body.block-editor-page .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
+body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
   margin: .1875rem;
 }
 @media screen and (max-width: 782px) {
   /* line 152, sass/partials/_main_wrap.scss */
-  body.block-editor-page .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
+  body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
     margin: .4375rem;
   }
 }
