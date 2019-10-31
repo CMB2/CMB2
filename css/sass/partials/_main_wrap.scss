@@ -91,15 +91,6 @@
 		padding: 0;
 	}
 
-	// Over-specific selector to override WordPress's over-specific selector without !important
-	.cmb-row .cmb2-radio-list input[type="radio"].cmb2-option::before {
-		margin: .1875rem;
-
-		@media screen and (max-width: 782px) {
-			margin: .4375rem;
-		}
-	}
-
 	input[type="checkbox"] {
 		margin: 0 5px 0 0;
 		padding: 0;
@@ -154,6 +145,16 @@
 		}
 	}
 
+}
+
+// Fixes bug created by block editor specific styling
+// Over-specific selector to override WordPress's over-specific selector without !important
+body.block-editor-page .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
+	margin: .1875rem;
+
+	@media screen and (max-width: 782px) {
+		margin: .4375rem;
+	}
 }
 
 .cmb2-metabox {
