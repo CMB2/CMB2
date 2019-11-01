@@ -200,9 +200,9 @@
 
 						self.toggler.find( 'span.color-alpha' ).css( {
 							'width'                     : '30px',
-							'height'                    : '24px',
 							'position'                  : 'absolute',
 							'top'                       : 0,
+							'bottom'                    : 0,
 							'left'                      : 0,
 							'border-top-left-radius'    : '2px',
 							'border-bottom-left-radius' : '2px',
