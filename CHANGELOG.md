@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 		- `'characters_left_text'` - Default: "Characters left"
 		- `'characters_text'` - Default: "Characters"
 		- `'characters_truncated_text'` - Default: "Your text may be truncated."
-
+* Update styling to be more compatible with WordPress 5.3. Props [@galengidman](https://github.com/galengidman) ([#1314](https://github.com/CMB2/CMB2/pull/1314))
 
 ### Bug Fixes
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
