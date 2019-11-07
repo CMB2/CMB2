@@ -1,6 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [999.0 - 2019-11-07](https://github.com/nerdwallet/wp-plugin-cmb2/releases/tag/v999.0)
+
 ## Unreleased
 ### Enhancements
 * Added support for sortable columns by default, with ability to disable with `'column' => array( 'disable_sortable' => true )`. Props [@RubenMartins](https://github.com/RubenMartins) ([#1281](https://github.com/CMB2/CMB2/pull/1281)).
