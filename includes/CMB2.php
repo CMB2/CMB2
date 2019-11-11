@@ -1106,6 +1106,21 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Check if given object_type(s) matches any of the registered object types for this box.
+	 *
+	 * @since  2.7.0
+	 * @param  string|array $object_types The object type(s) to check.
+	 * @param  array        $fallback     Fallback object_types value.
+	 *
+	 * @return bool Whether given object type(s) are registered to this box.
+	 */
+	public function is_box_type( $object_types = array(), $fallback = array() ) {
+		$found = array_intersect( (array) $object_types, $this->box_types() );
+
+		return ! empty( $found );
+	}
+
+	/**
 	 * Initates the object types and option key for an options page metabox.
 	 *
 	 * @since  2.2.5
