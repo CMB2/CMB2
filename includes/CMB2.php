@@ -1115,7 +1115,7 @@ class CMB2 extends CMB2_Base {
 	 * @return bool Whether given object type(s) are registered to this box.
 	 */
 	public function is_box_type( $object_types = array(), $fallback = array() ) {
-		$found = array_intersect( (array) $object_types, $this->box_types() );
+		$found = array_intersect( (array) $object_types, $this->box_types( $fallback ) );
 
 		return ! empty( $found );
 	}
