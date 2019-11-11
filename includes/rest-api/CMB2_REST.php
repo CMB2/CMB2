@@ -401,6 +401,10 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			foreach ( self::$type_boxes[ $main_object_type ] as $cmb_id ) {
 				$rest_box = self::$boxes[ $cmb_id ];
 
+				if ( ! $rest_box->cmb->is_box_type( $object_type ) ) {
+					continue;
+				}
+
 				foreach ( $rest_box->read_fields as $field_id ) {
 					$rest_box->cmb->object_id( $object['id'] );
 					$rest_box->cmb->object_type( $main_object_type );
