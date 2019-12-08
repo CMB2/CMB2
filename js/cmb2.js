@@ -619,6 +619,8 @@ window.CMB2 = window.CMB2 || {};
 
 		var $this = $( this );
 		var name  = $this.attr( 'name' ); // get current name
+		var label = $this.parent().find('label');
+		var row = $this.parents( '.cmb-repeat-group-field' );
 
 		// If name is defined
 		if ( typeof name !== 'undefined' ) {
@@ -627,9 +629,14 @@ window.CMB2 = window.CMB2 || {};
 
 			// Update field name attributes so data is not orphaned when a row is removed and post is saved
 			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
+			var $newId = $this.attr('id').replace( '_' + prevNum + '_', '_' + newNum + '_');
+			var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + newNum + '-' );
 
 			// New name with replaced iterator
 			$this.attr( 'name', $newName );
+			$this.attr( 'id', $newId );
+			label.attr( 'for', $newId );
+			row.attr( 'class', $newClass );
 		}
 
 	};
@@ -760,7 +767,6 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.shiftRows = function( evt ) {
-
 		evt.preventDefault();
 
 		var $this = $( this );
@@ -1010,10 +1016,52 @@ window.CMB2 = window.CMB2 || {};
 		var $repeatables = cmb.metabox().find( '.cmb-repeat-table .cmb-field-list' );
 
 		if ( $repeatables.length ) {
-			$repeatables.sortable({
-				items : '.cmb-repeat-row',
+			$repeatables.sortable( {
+				items: '.cmb-repeat-row',
 				cursor: 'move'
-			});
+			} );
+		}
+
+		var $repeatableGroups = cmb.metabox().find( '.cmb-repeatable-group.sortable' );
+		if ( $repeatableGroups.length ) {
+			$repeatableGroups.sortable( {
+				items: '.cmb-repeatable-grouping',
+				cursor: 'move',
+				beforeStop: function( ev, ui ) {
+					$( ui.item ).parent().find( '.cmb-repeatable-grouping' ).each( function() {
+						var row = $( this );
+						cmb.triggerElement( ui.item, 'cmb2_shift_rows_start', row, row, row );
+					} );
+				},
+				stop: function( ev, ui ) {
+					var rows = $( ui.item ).parent().find( '.cmb-repeatable-grouping' );
+					rows.each( function( rowindex ) {
+						var row = $( this );
+						var prevNum = row.data( 'iterator' );
+						var $newRowId = row.attr( 'id' ).replace( '-' + prevNum, '-' + rowindex );
+						row.attr( 'id', $newRowId );
+						row.find( 'label' ).attr( 'for', $newRowId );
+						row.find( cmb.repeatEls ).each( function() {
+							var input = $( this );
+							var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
+							var $newFieldId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+							input.attr( 'name', $newName );
+							input.attr( 'id', $newFieldId );
+						} );
+
+						row.find( '.cmb-repeat-group-field' ).each( function() {
+							var row = $( this );
+							var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + rowindex + '-' );
+							row.attr( 'class', $newClass );
+						} );
+					} );
+					cmb.resetTitlesAndIterator( {group: true} );
+					rows.each( function() {
+						var row = $( this );
+						cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', row, row, row );
+					} );
+				}
+			} );
 		}
 	};
 

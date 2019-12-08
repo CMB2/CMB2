@@ -337,6 +337,12 @@
 		padding: 5px;
 	}
 
+	&.sortable{
+		.cmb-group-title {
+			cursor: move;
+		}
+	}
+
 	.cmb-group-title {
 		background-color: $light-gray;
 		padding: 8px 12px 8px 2.2em;

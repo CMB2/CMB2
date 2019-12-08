@@ -137,7 +137,7 @@ window.CMB2.wysiwyg = window.CMB2.wysiwyg || {};
 
 			if ( data.groupid ) {
 
-				data.id    = $this.attr( 'id' );
+				data.id    = $this.attr( 'id' ) + '-' + data.iterator;
 				data.name  = $this.attr( 'name' );
 				data.value = $this.val();
 

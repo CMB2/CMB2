@@ -1,7 +1,7 @@
 /*!
- * CMB2 - v2.4.2 - 2018-12-03
+ * CMB2 - v2.4.2 - 2019-07-19
  * https://cmb2.io
- * Copyright (c) 2018
+ * Copyright (c) 2019
  * Licensed GPLv2+
  */
 
@@ -9,140 +9,111 @@
 /*--------------------------------------------------------------
  * Main Wrap
 --------------------------------------------------------------*/
-/* line 5, sass/partials/_main_wrap.scss */
 .cmb2-wrap {
   margin: 0;
 }
-/* line 8, sass/partials/_main_wrap.scss */
 .cmb2-wrap input,
 .cmb2-wrap textarea {
   font-size: 14px;
   max-width: 100%;
   padding: 5px;
 }
-/* line 18, sass/partials/_main_wrap.scss */
 .cmb2-wrap input[type=text].cmb2-oembed {
   width: 100%;
 }
-/* line 23, sass/partials/_main_wrap.scss */
 .cmb2-wrap textarea {
   width: 500px;
 }
-/* line 26, sass/partials/_main_wrap.scss */
 .cmb2-wrap textarea.cmb2-textarea-code {
   font-family: "Courier 10 Pitch", Courier, monospace;
   line-height: 16px;
 }
-/* line 34, sass/partials/_main_wrap.scss */
 .cmb2-wrap input.cmb2-text-small, .cmb2-wrap input.cmb2-timepicker {
   width: 100px;
 }
-/* line 40, sass/partials/_main_wrap.scss */
 .cmb2-wrap input.cmb2-text-money {
   width: 90px;
 }
-/* line 45, sass/partials/_main_wrap.scss */
 .cmb2-wrap input.cmb2-text-medium {
   width: 230px;
 }
-/* line 50, sass/partials/_main_wrap.scss */
 .cmb2-wrap input.cmb2-upload-file {
   width: 65%;
 }
-/* line 54, sass/partials/_main_wrap.scss */
 .cmb2-wrap input.ed_button {
   padding: 2px 4px;
 }
-/* line 59, sass/partials/_main_wrap.scss */
-.cmb2-wrap input:not([type="hidden"]) + input,
-.cmb2-wrap input:not([type="hidden"]) + .button-secondary,
-.cmb2-wrap input:not([type="hidden"]) + select {
+.cmb2-wrap input:not([type=hidden]) + input,
+.cmb2-wrap input:not([type=hidden]) + .button-secondary,
+.cmb2-wrap input:not([type=hidden]) + select {
   margin-left: 20px;
 }
-/* line 67, sass/partials/_main_wrap.scss */
 .cmb2-wrap ul {
   margin: 0;
 }
-/* line 71, sass/partials/_main_wrap.scss */
 .cmb2-wrap li {
   font-size: 14px;
   line-height: 16px;
   margin: 1px 0 5px 0;
 }
-/* line 82, sass/partials/_main_wrap.scss */
 .cmb2-wrap select {
   font-size: 14px;
   margin-top: 3px;
 }
-/* line 87, sass/partials/_main_wrap.scss */
 .cmb2-wrap input:focus,
 .cmb2-wrap textarea:focus {
   background: #fffff8;
 }
-/* line 92, sass/partials/_main_wrap.scss */
-.cmb2-wrap input[type="radio"] {
+.cmb2-wrap input[type=radio] {
   margin: 0 5px 0 0;
   padding: 0;
 }
-/* line 97, sass/partials/_main_wrap.scss */
-.cmb2-wrap input[type="checkbox"] {
+.cmb2-wrap input[type=checkbox] {
   margin: 0 5px 0 0;
   padding: 0;
 }
-/* line 102, sass/partials/_main_wrap.scss */
 .cmb2-wrap button,
 .cmb2-wrap .button-secondary {
   white-space: nowrap;
 }
-/* line 107, sass/partials/_main_wrap.scss */
 .cmb2-wrap .mceLayout {
   border: 1px solid #e9e9e9 !important;
 }
-/* line 111, sass/partials/_main_wrap.scss */
 .cmb2-wrap .mceIframeContainer {
   background: #ffffff;
 }
-/* line 115, sass/partials/_main_wrap.scss */
 .cmb2-wrap .meta_mce {
   width: 97%;
 }
-/* line 118, sass/partials/_main_wrap.scss */
 .cmb2-wrap .meta_mce textarea {
   width: 100%;
 }
-/* line 124, sass/partials/_main_wrap.scss */
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-input-wrap {
   vertical-align: middle;
 }
-/* line 129, sass/partials/_main_wrap.scss */
 .cmb2-wrap .wp-color-result,
 .cmb2-wrap .wp-picker-container {
   margin: 0 10px 0 0;
 }
-/* line 134, sass/partials/_main_wrap.scss */
 .cmb2-wrap .cmb-row {
   margin: 0;
 }
-/* line 137, sass/partials/_main_wrap.scss */
 .cmb2-wrap .cmb-row:after {
-  content: '';
+  content: "";
   clear: both;
   display: block;
   width: 100%;
 }
-/* line 144, sass/partials/_main_wrap.scss */
 .cmb2-wrap .cmb-row.cmb-repeat .cmb2-metabox-description {
   padding-top: 0;
   padding-bottom: 1em;
 }
 
-/* line 152, sass/partials/_main_wrap.scss */
 .cmb2-metabox {
   clear: both;
   margin: 0;
 }
-/* line 158, sass/partials/_main_wrap.scss */
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-td,
 .cmb2-metabox > .cmb-row:first-of-type > .cmb-th,
 .cmb2-metabox .cmb-field-list > .cmb-row:first-of-type > .cmb-td,
@@ -150,36 +121,29 @@
   border: 0;
 }
 
-/* line 165, sass/partials/_main_wrap.scss */
 .cmb-add-row {
   margin: 1.8em 0 0;
 }
 
-/* line 169, sass/partials/_main_wrap.scss */
 .cmb-nested .cmb-td,
 .cmb-repeatable-group .cmb-th,
 .cmb-repeatable-group:first-of-type {
   border: 0;
 }
 
-/* line 175, sass/partials/_main_wrap.scss */
 .cmb-row:last-of-type,
 .cmb2-wrap .cmb-row:last-of-type,
 .cmb-repeatable-group:last-of-type {
   border-bottom: 0;
 }
 
-/* line 181, sass/partials/_main_wrap.scss */
 .cmb-repeatable-grouping {
   border: 1px solid #e9e9e9;
   padding: 0 1em;
 }
-/* line 185, sass/partials/_main_wrap.scss */
 .cmb-repeatable-grouping.cmb-row {
   margin: 0 0 0.8em;
 }
-
-/* line 193, sass/partials/_main_wrap.scss */
 .cmb-th {
   color: #222222;
   float: left;
@@ -190,7 +154,6 @@
   width: 200px;
 }
 @media (max-width: 450px) {
-  /* line 193, sass/partials/_main_wrap.scss */
   .cmb-th {
     font-size: 1.2em;
     display: block;
@@ -199,7 +162,6 @@
     text-align: left;
     width: 100%;
   }
-  /* line 27, sass/partials/_mixins.scss */
   .cmb-th label {
     display: block;
     margin-top: 0;
@@ -207,7 +169,6 @@
   }
 }
 
-/* line 207, sass/partials/_main_wrap.scss */
 .cmb-td {
   line-height: 1.3;
   max-width: 100%;
@@ -215,43 +176,35 @@
   vertical-align: middle;
 }
 
-/* line 216, sass/partials/_main_wrap.scss */
 .cmb-type-title .cmb-td {
   padding: 0;
 }
 
-/* line 221, sass/partials/_main_wrap.scss */
 .cmb-th label {
   display: block;
   padding: 5px 0;
 }
 
-/* line 226, sass/partials/_main_wrap.scss */
 .cmb-th + .cmb-td {
   float: left;
 }
 
-/* line 230, sass/partials/_main_wrap.scss */
 .cmb-td .cmb-td {
   padding-bottom: 1em;
 }
 
-/* line 234, sass/partials/_main_wrap.scss */
 .cmb-remove-row {
   text-align: right;
 }
 
-/* line 238, sass/partials/_main_wrap.scss */
 .empty-row.hidden {
   display: none;
 }
 
-/* line 243, sass/partials/_main_wrap.scss */
 .cmb-repeat-table {
   background-color: #fafafa;
   border: 1px solid #e1e1e1;
 }
-/* line 247, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row {
   position: relative;
   counter-increment: el;
@@ -259,15 +212,12 @@
   padding: 10px 10px 10px 50px;
   border-bottom: none !important;
 }
-/* line 255, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row + .cmb-repeat-row {
   border-top: solid 1px #e9e9e9;
 }
-/* line 259, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row.ui-sortable-helper {
   outline: dashed 2px #e9e9e9 !important;
 }
-/* line 263, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row:before {
   content: counter(el);
   display: block;
@@ -282,25 +232,21 @@
   text-align: center;
   border-right: solid 1px #e9e9e9;
 }
-/* line 280, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-row.cmb-repeat-row .cmb-td {
   margin: 0;
   padding: 0;
 }
-/* line 287, sass/partials/_main_wrap.scss */
 .cmb-repeat-table + .cmb-add-row {
   margin: 0;
 }
-/* line 290, sass/partials/_main_wrap.scss */
 .cmb-repeat-table + .cmb-add-row:before {
-  content: '';
+  content: "";
   width: 1px;
   height: 1.6em;
   display: block;
   margin-left: 17px;
   background-color: gainsboro;
 }
-/* line 300, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row {
   top: 7px;
   right: 7px;
@@ -310,7 +256,6 @@
   padding: 0 !important;
   display: none;
 }
-/* line 311, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button {
   font-size: 20px;
   text-indent: -1000px;
@@ -320,10 +265,9 @@
   line-height: 1;
   padding: 0 10px 0;
 }
-/* line 322, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-remove-row > .cmb-remove-row-button:before {
   content: "";
-  font-family: 'Dashicons';
+  font-family: "Dashicons";
   speak: none;
   font-weight: normal;
   font-variant: normal;
@@ -339,16 +283,16 @@
   height: 100%;
   text-align: center;
 }
-/* line 328, sass/partials/_main_wrap.scss */
 .cmb-repeat-table .cmb-repeat-row:hover .cmb-remove-row {
   display: block;
 }
 
-/* line 336, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-th {
   padding: 5px;
 }
-/* line 340, sass/partials/_main_wrap.scss */
+.cmb-repeatable-group.sortable .cmb-group-title {
+  cursor: move;
+}
 .cmb-repeatable-group .cmb-group-title {
   background-color: #e9e9e9;
   padding: 8px 12px 8px 2.2em;
@@ -357,7 +301,6 @@
   font-size: 14px;
   line-height: 1.4;
 }
-/* line 348, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title h4 {
   border: 0;
   margin: 0;
@@ -365,12 +308,10 @@
   font-weight: 500;
   padding: 0.5em 0.75em;
 }
-/* line 356, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-title .cmb-th {
   display: block;
   width: 100%;
 }
-/* line 362, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-group-description .cmb-th {
   font-size: 1.2em;
   display: block;
@@ -379,72 +320,60 @@
   text-align: left;
   width: 100%;
 }
-/* line 27, sass/partials/_mixins.scss */
 .cmb-repeatable-group .cmb-group-description .cmb-th label {
   display: block;
   margin-top: 0;
   margin-bottom: 0.5em;
 }
-/* line 366, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows {
   font-size: 1em;
   margin-right: 1em;
   text-decoration: none;
 }
-/* line 371, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons {
   font-size: 1.5em;
   height: 1.5em;
   line-height: 1.2em;
   width: 1em;
 }
-/* line 377, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb-shift-rows .dashicons.dashicons-arrow-down-alt2 {
   line-height: 1.3em;
 }
-/* line 384, sass/partials/_main_wrap.scss */
 .cmb-repeatable-group .cmb2-upload-button {
   float: right;
 }
 
-/* line 390, sass/partials/_main_wrap.scss */
 p.cmb2-metabox-description {
   color: #757575;
   font-style: italic;
   margin: 0;
-  padding-top: .5em;
+  padding-top: 0.5em;
 }
 
-/* line 397, sass/partials/_main_wrap.scss */
 span.cmb2-metabox-description {
   color: #757575;
   font-style: italic;
 }
 
-/* line 402, sass/partials/_main_wrap.scss */
 .cmb2-metabox-title {
   margin: 0 0 5px 0;
   padding: 5px 0 0 0;
   font-size: 14px;
 }
 
-/* line 408, sass/partials/_main_wrap.scss */
 .cmb-inline ul {
   padding: 4px 0 0 0;
 }
 
-/* line 412, sass/partials/_main_wrap.scss */
 .cmb-inline li {
   display: inline-block;
   padding-right: 18px;
 }
 
-/* line 417, sass/partials/_main_wrap.scss */
 .cmb-type-textarea-code pre {
   margin: 0;
 }
 
-/* line 423, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status {
   clear: none;
   display: inline-block;
@@ -452,12 +381,10 @@ span.cmb2-metabox-description {
   margin-right: 10px;
   width: auto;
 }
-/* line 430, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img {
   max-width: 350px;
   height: auto;
 }
-/* line 436, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img,
 .cmb2-media-status .embed-status {
   background: #eee;
@@ -471,16 +398,13 @@ span.cmb2-metabox-description {
   -moz-border-radius: 2px;
   margin: 15px 0 0 0;
 }
-/* line 450, sass/partials/_main_wrap.scss */
 .cmb2-media-status .embed-status {
   float: left;
   max-width: 800px;
 }
-/* line 455, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status, .cmb2-media-status .embed-status {
   position: relative;
 }
-/* line 458, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button, .cmb2-media-status .embed-status .cmb2-remove-file-button {
   background: url(../images/ico-delete.png);
   height: 16px;
@@ -490,20 +414,16 @@ span.cmb2-metabox-description {
   top: -5px;
   width: 16px;
 }
-/* line 472, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status .cmb2-remove-file-button {
   top: 10px;
 }
-/* line 477, sass/partials/_main_wrap.scss */
 .cmb2-media-status .img-status img, .cmb2-media-status .file-status > span {
   cursor: pointer;
 }
-/* line 482, sass/partials/_main_wrap.scss */
 .cmb2-media-status.cmb-attach-list .img-status img, .cmb2-media-status.cmb-attach-list .file-status > span {
   cursor: move;
 }
 
-/* line 489, sass/partials/_main_wrap.scss */
 .cmb-type-file-list .cmb2-media-status .img-status {
   clear: none;
   vertical-align: middle;
@@ -513,7 +433,6 @@ span.cmb2-metabox-description {
   margin-top: 0;
 }
 
-/* line 498, sass/partials/_main_wrap.scss */
 .cmb-attach-list li {
   clear: both;
   display: inline-block;
@@ -521,32 +440,27 @@ span.cmb2-metabox-description {
   margin-top: 5px;
   margin-bottom: 10px;
 }
-/* line 504, sass/partials/_main_wrap.scss */
 .cmb-attach-list li img {
   float: left;
   margin-right: 10px;
 }
 
-/* line 510, sass/partials/_main_wrap.scss */
 .cmb2-remove-wrapper {
   margin: 0;
 }
 
-/* line 514, sass/partials/_main_wrap.scss */
 .child-cmb2 .cmb-th {
   text-align: left;
 }
 
-/* line 518, sass/partials/_main_wrap.scss */
 .cmb2-indented-hierarchy {
   padding-left: 1.5em;
 }
 
 @media (max-width: 450px) {
-  /* line 523, sass/partials/_main_wrap.scss */
   .cmb-th,
-  .cmb-td,
-  .cmb-th + .cmb-td {
+.cmb-td,
+.cmb-th + .cmb-td {
     display: block;
     float: none;
     width: 100%;
@@ -555,82 +469,67 @@ span.cmb2-metabox-description {
 /*--------------------------------------------------------------
  * Post Metaboxes
 --------------------------------------------------------------*/
-/* line 5, sass/partials/_post_metaboxes.scss */
 #poststuff .cmb-group-title {
   margin-left: -1em;
   margin-right: -1em;
   min-height: 1.5em;
 }
 
-/* line 11, sass/partials/_post_metaboxes.scss */
 #poststuff .repeatable .cmb-group-title {
   padding-left: 2.2em;
 }
 
-/* line 17, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap, .cmb-type-group .cmb2-wrap {
   margin: 0;
 }
-/* line 20, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap > .cmb-field-list > .cmb-row, .cmb-type-group .cmb2-wrap > .cmb-field-list > .cmb-row {
   padding: 1.8em 0;
 }
-/* line 26, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb2-wrap input[type=text].cmb2-oembed, .cmb-type-group .cmb2-wrap input[type=text].cmb2-oembed {
   width: 100%;
 }
-/* line 32, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row, .cmb-type-group .cmb-row {
   padding: 0 0 1.8em;
   margin: 0 0 0.8em;
 }
-/* line 36, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row .cmbhandle, .cmb-type-group .cmb-row .cmbhandle {
   right: -1em;
   position: relative;
   color: #222222;
 }
-/* line 43, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeatable-grouping, .cmb-type-group .cmb-repeatable-grouping {
   padding: 0 1em;
   max-width: 100%;
   min-width: 1px !important;
 }
-/* line 49, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeatable-group > .cmb-row, .cmb-type-group .cmb-repeatable-group > .cmb-row {
   padding-bottom: 0;
 }
-/* line 53, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-th, .cmb-type-group .cmb-th {
   width: 18%;
   padding: 0 2% 0 0;
 }
-/* line 59, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-td, .cmb-type-group .cmb-td {
   margin-bottom: 0;
   padding: 0;
   line-height: 1.3;
 }
-/* line 65, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-th + .cmb-td, .cmb-type-group .cmb-th + .cmb-td {
   width: 80%;
   float: right;
 }
-/* line 70, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-row:not(:last-of-type),
 .cmb2-postbox .cmb-repeatable-group:not(:last-of-type), .cmb-type-group .cmb-row:not(:last-of-type),
 .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
   border-bottom: 1px solid #e9e9e9;
 }
 @media (max-width: 450px) {
-  /* line 70, sass/partials/_post_metaboxes.scss */
   .cmb2-postbox .cmb-row:not(:last-of-type),
-  .cmb2-postbox .cmb-repeatable-group:not(:last-of-type), .cmb-type-group .cmb-row:not(:last-of-type),
-  .cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
+.cmb2-postbox .cmb-repeatable-group:not(:last-of-type), .cmb-type-group .cmb-row:not(:last-of-type),
+.cmb-type-group .cmb-repeatable-group:not(:last-of-type) {
     border-bottom: 0;
   }
 }
-/* line 79, sass/partials/_post_metaboxes.scss */
 .cmb2-postbox .cmb-repeat-group-field,
 .cmb2-postbox .cmb-remove-field-row, .cmb-type-group .cmb-repeat-group-field,
 .cmb-type-group .cmb-remove-field-row {
@@ -641,9 +540,8 @@ span.cmb2-metabox-description {
  * Context Metaboxes
 --------------------------------------------------------------*/
 /* Metabox collapse arrow indicators */
-/* line 9, sass/partials/_context_metaboxes.scss */
 .js .cmb2-postbox.context-box .toggle-indicator:before {
-  content: "\f142";
+  content: "";
   display: inline-block;
   font: normal 20px/1 dashicons;
   speak: none;
@@ -651,79 +549,63 @@ span.cmb2-metabox-description {
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none !important;
 }
-/* line 22, sass/partials/_context_metaboxes.scss */
 .js .cmb2-postbox.context-box.closed .toggle-indicator:before {
-  content: "\f140";
+  content: "";
 }
 
-/* line 30, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box {
   margin-bottom: 10px;
 }
-/* line 34, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-before_permalink-box {
   margin-top: 10px;
 }
-/* line 38, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-after_title-box {
   margin-top: 10px;
 }
-/* line 42, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-after_editor-box {
   margin-top: 20px;
   margin-bottom: 0;
 }
-/* line 47, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-form_top-box {
   margin-top: 10px;
 }
-/* line 51, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-form_top-box .hndle {
   font-size: 14px;
   padding: 8px 12px;
   margin: 0;
   line-height: 1.4;
 }
-/* line 59, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box .hndle {
   cursor: auto;
 }
 
-/* line 64, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap {
   margin-top: 10px;
 }
-/* line 68, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap.cmb2-context-wrap-form_top {
   margin-right: 300px;
   width: auto;
 }
-/* line 75, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap.cmb2-context-wrap-no-title .cmb2-metabox {
   padding: 10px;
 }
-/* line 80, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-th {
   padding: 0 2% 0 0;
   width: 18%;
 }
-/* line 85, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-td {
   width: 80%;
   padding: 0;
 }
-/* line 90, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row {
   margin-bottom: 10px;
 }
-/* line 93, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row:last-of-type {
   margin-bottom: 0;
 }
 
 /* one column on the post write/edit screen */
 @media only screen and (max-width: 850px) {
-  /* line 103, sass/partials/_context_metaboxes.scss */
   .cmb2-context-wrap.cmb2-context-wrap-form_top {
     margin-right: 0;
   }
@@ -731,29 +613,24 @@ span.cmb2-metabox-description {
 /*--------------------------------------------------------------
  * Misc.
 --------------------------------------------------------------*/
-/* line 5, sass/partials/_misc.scss */
 #poststuff .cmb-repeatable-group h2 {
   margin: 0;
 }
 
-/* line 12, sass/partials/_misc.scss */
 .edit-tags-php .cmb2-metabox-title,
 .profile-php .cmb2-metabox-title,
 .user-edit-php .cmb2-metabox-title {
   font-size: 1.4em;
 }
 
-/* line 18, sass/partials/_misc.scss */
 .cmb2-postbox .cmb-spinner, .cmb2-no-box-wrap .cmb-spinner {
   float: left;
   display: none;
 }
 
-/* line 24, sass/partials/_misc.scss */
 .cmb-spinner {
   display: none;
 }
-/* line 26, sass/partials/_misc.scss */
 .cmb-spinner.is-active {
   display: block;
 }
@@ -761,7 +638,6 @@ span.cmb2-metabox-description {
 /*--------------------------------------------------------------
  * Collapsible UI
 --------------------------------------------------------------*/
-/* line 6, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .cmbhandle {
   color: #757575;
   float: right;
@@ -771,11 +647,10 @@ span.cmb2-metabox-description {
   right: -1em;
   position: relative;
 }
-/* line 14, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .cmbhandle:before {
-  content: '\f142';
+  content: "";
   right: 12px;
-  font: normal 20px/1 'dashicons';
+  font: normal 20px/1 "dashicons";
   speak: none;
   display: inline-block;
   padding: 8px 10px;
@@ -785,29 +660,25 @@ span.cmb2-metabox-description {
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none !important;
 }
-/* line 31, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox .postbox.closed .cmbhandle:before {
-  content: '\f140';
+  content: "";
 }
-/* line 37, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row {
   -webkit-appearance: none !important;
   background: none !important;
   border: none !important;
   position: absolute;
   left: 0;
-  top: .5em;
+  top: 0.5em;
   line-height: 1em;
   padding: 2px 6px 3px;
-  opacity: .5;
+  opacity: 0.5;
 }
-/* line 47, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]) {
   cursor: pointer;
   color: #a00;
   opacity: 1;
 }
-/* line 51, sass/partials/_collapsible_ui.scss */
 .cmb2-metabox button.dashicons-before.dashicons-no-alt.cmb-remove-group-row:not([disabled]):hover {
   color: #f00;
 }
@@ -825,12 +696,10 @@ span.cmb2-metabox-description {
  * https://github.com/stuttter/wp-datepicker-styling
  *
  */
-/* line 15, sass/partials/_jquery_ui.scss */
 * html .cmb2-element.ui-helper-clearfix {
   height: 1%;
 }
 
-/* line 24, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker, .cmb2-element .ui-datepicker {
   padding: 0;
   margin: 0;
@@ -846,7 +715,6 @@ span.cmb2-metabox-description {
   width: auto;
   /* Default Color Scheme */
 }
-/* line 38, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker *, .cmb2-element .ui-datepicker * {
   padding: 0;
   font-family: "Open Sans", sans-serif;
@@ -854,14 +722,12 @@ span.cmb2-metabox-description {
   -moz-border-radius: 0;
   border-radius: 0;
 }
-/* line 46, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker table, .cmb2-element .ui-datepicker table {
   font-size: 13px;
   margin: 0;
   border: none;
   border-collapse: collapse;
 }
-/* line 53, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-widget-header,
 .cmb2-element.ui-datepicker .ui-datepicker-header, .cmb2-element .ui-datepicker .ui-widget-header,
 .cmb2-element .ui-datepicker .ui-datepicker-header {
@@ -870,13 +736,11 @@ span.cmb2-metabox-description {
   color: #fff;
   font-weight: normal;
 }
-/* line 61, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-header .ui-state-hover, .cmb2-element .ui-datepicker .ui-datepicker-header .ui-state-hover {
   background: transparent;
   border-color: transparent;
   cursor: pointer;
 }
-/* line 67, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-title, .cmb2-element .ui-datepicker .ui-datepicker-title {
   margin: 0;
   padding: 10px 0;
@@ -885,12 +749,10 @@ span.cmb2-metabox-description {
   line-height: 14px;
   text-align: center;
 }
-/* line 75, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-title select, .cmb2-element .ui-datepicker .ui-datepicker-title select {
   margin-top: -8px;
   margin-bottom: -8px;
 }
-/* line 81, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-datepicker-next, .cmb2-element .ui-datepicker .ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-datepicker-next {
@@ -899,43 +761,36 @@ span.cmb2-metabox-description {
   height: 34px;
   width: 34px;
 }
-/* line 89, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-state-hover.ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-state-hover.ui-datepicker-next, .cmb2-element .ui-datepicker .ui-state-hover.ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-state-hover.ui-datepicker-next {
   border: none;
 }
-/* line 94, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev,
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover, .cmb2-element .ui-datepicker .ui-datepicker-prev,
 .cmb2-element .ui-datepicker .ui-datepicker-prev-hover {
   left: 0;
 }
-/* line 99, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next,
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover, .cmb2-element .ui-datepicker .ui-datepicker-next,
 .cmb2-element .ui-datepicker .ui-datepicker-next-hover {
   right: 0;
 }
-/* line 104, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next span,
 .cmb2-element.ui-datepicker .ui-datepicker-prev span, .cmb2-element .ui-datepicker .ui-datepicker-next span,
 .cmb2-element .ui-datepicker .ui-datepicker-prev span {
   display: none;
 }
-/* line 109, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev, .cmb2-element .ui-datepicker .ui-datepicker-prev {
   float: left;
 }
-/* line 113, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next, .cmb2-element .ui-datepicker .ui-datepicker-next {
   float: right;
 }
-/* line 117, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev:before,
 .cmb2-element.ui-datepicker .ui-datepicker-next:before, .cmb2-element .ui-datepicker .ui-datepicker-prev:before,
 .cmb2-element .ui-datepicker .ui-datepicker-next:before {
-  font: normal 20px/34px 'dashicons';
+  font: normal 20px/34px "dashicons";
   padding-left: 7px;
   color: #fff;
   speak: none;
@@ -944,21 +799,17 @@ span.cmb2-metabox-description {
   width: 34px;
   height: 34px;
 }
-/* line 129, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev:before, .cmb2-element .ui-datepicker .ui-datepicker-prev:before {
-  content: '\f341';
+  content: "";
 }
-/* line 133, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-next:before, .cmb2-element .ui-datepicker .ui-datepicker-next:before {
-  content: '\f345';
+  content: "";
 }
-/* line 137, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-datepicker-prev-hover:before,
 .cmb2-element.ui-datepicker .ui-datepicker-next-hover:before, .cmb2-element .ui-datepicker .ui-datepicker-prev-hover:before,
 .cmb2-element .ui-datepicker .ui-datepicker-next-hover:before {
   opacity: 0.7;
 }
-/* line 142, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker select.ui-datepicker-month,
 .cmb2-element.ui-datepicker select.ui-datepicker-year, .cmb2-element .ui-datepicker select.ui-datepicker-month,
 .cmb2-element .ui-datepicker select.ui-datepicker-year {
@@ -968,54 +819,43 @@ span.cmb2-metabox-description {
   box-shadow: none;
   color: #fff;
 }
-/* line 149, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker select.ui-datepicker-month option,
 .cmb2-element.ui-datepicker select.ui-datepicker-year option, .cmb2-element .ui-datepicker select.ui-datepicker-month option,
 .cmb2-element .ui-datepicker select.ui-datepicker-year option {
   color: #333;
 }
-/* line 154, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead, .cmb2-element .ui-datepicker thead {
   color: #fff;
   font-weight: 600;
 }
-/* line 157, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead th, .cmb2-element .ui-datepicker thead th {
   font-weight: normal;
 }
-/* line 162, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker th, .cmb2-element .ui-datepicker th {
   padding: 10px;
 }
-/* line 166, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td, .cmb2-element .ui-datepicker td {
   padding: 0;
   border: 1px solid #f4f4f4;
 }
-/* line 171, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-other-month, .cmb2-element .ui-datepicker td.ui-datepicker-other-month {
   border: transparent;
 }
-/* line 175, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end, .cmb2-element .ui-datepicker td.ui-datepicker-week-end {
   background-color: #f4f4f4;
   border: 1px solid #f4f4f4;
 }
-/* line 178, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today, .cmb2-element .ui-datepicker td.ui-datepicker-week-end.ui-datepicker-today {
   -webkit-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 185, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-today, .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background-color: #f0f0c0;
 }
-/* line 189, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-datepicker-current-day, .cmb2-element .ui-datepicker td.ui-datepicker-current-day {
   background: #bbdd88;
 }
-/* line 193, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td .ui-state-default, .cmb2-element .ui-datepicker td .ui-state-default {
   background: transparent;
   border: none;
@@ -1027,163 +867,132 @@ span.cmb2-metabox-description {
   font-weight: normal;
   color: #444;
 }
-/* line 205, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td.ui-state-disabled .ui-state-default, .cmb2-element .ui-datepicker td.ui-state-disabled .ui-state-default {
   opacity: 0.5;
 }
-/* line 210, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-widget-header,
 .cmb2-element.ui-datepicker .ui-datepicker-header, .cmb2-element .ui-datepicker .ui-widget-header,
 .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #00a0d2;
 }
-/* line 215, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker thead, .cmb2-element .ui-datepicker thead {
   background: #32373c;
 }
-/* line 219, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker td .ui-state-hover, .cmb2-element.ui-datepicker td .ui-state-active, .cmb2-element .ui-datepicker td .ui-state-hover, .cmb2-element .ui-datepicker td .ui-state-active {
   background: #0073aa;
   color: #fff;
 }
-/* line 224, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div, .cmb2-element .ui-datepicker .ui-timepicker-div {
   font-size: 14px;
 }
-/* line 226, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div dl, .cmb2-element .ui-datepicker .ui-timepicker-div dl {
   text-align: left;
-  padding: 0 .6em;
+  padding: 0 0.6em;
 }
-/* line 229, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dt, .cmb2-element .ui-datepicker .ui-timepicker-div dl dt {
   float: left;
   clear: left;
   padding: 0 0 0 5px;
 }
-/* line 234, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dd, .cmb2-element .ui-datepicker .ui-timepicker-div dl dd {
   margin: 0 10px 10px 40%;
 }
-/* line 236, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div dl dd select, .cmb2-element .ui-datepicker .ui-timepicker-div dl dd select {
   width: 100%;
 }
-/* line 242, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane {
-  padding: .6em;
+  padding: 0.6em;
   text-align: left;
 }
-/* line 246, sass/partials/_jquery_ui.scss */
 .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-primary, .cmb2-element.ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-secondary, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-primary, .cmb2-element .ui-datepicker .ui-timepicker-div + .ui-datepicker-buttonpane .button-secondary {
   padding: 0 10px 1px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  margin: 0 .6em .4em .4em;
+  margin: 0 0.6em 0.4em 0.4em;
 }
 
-/* line 260, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-fresh .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-fresh .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-fresh .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #00a0d2;
 }
-/* line 265, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker thead, .admin-color-fresh .cmb2-element .ui-datepicker thead {
   background: #32373c;
 }
-/* line 269, sass/partials/_jquery_ui.scss */
 .admin-color-fresh .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-fresh .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #0073aa;
   color: #fff;
 }
 
-/* line 277, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-blue .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-blue .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-blue .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #52accc;
 }
-/* line 282, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker thead, .admin-color-blue .cmb2-element .ui-datepicker thead {
   background: #4796b3;
 }
-/* line 291, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-blue .cmb2-element.ui-datepicker td .ui-state-active, .admin-color-blue .cmb2-element .ui-datepicker td .ui-state-hover, .admin-color-blue .cmb2-element .ui-datepicker td .ui-state-active {
   background: #096484;
   color: #fff;
 }
-/* line 296, sass/partials/_jquery_ui.scss */
 .admin-color-blue .cmb2-element.ui-datepicker td.ui-datepicker-today, .admin-color-blue .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background: #eee;
 }
 
-/* line 305, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-coffee .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-coffee .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-coffee .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #59524c;
 }
-/* line 310, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker thead, .admin-color-coffee .cmb2-element .ui-datepicker thead {
   background: #46403c;
 }
-/* line 314, sass/partials/_jquery_ui.scss */
 .admin-color-coffee .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-coffee .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #c7a589;
   color: #fff;
 }
 
-/* line 322, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ectoplasm .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-ectoplasm .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-ectoplasm .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #523f6d;
 }
-/* line 327, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker thead, .admin-color-ectoplasm .cmb2-element .ui-datepicker thead {
   background: #413256;
 }
-/* line 331, sass/partials/_jquery_ui.scss */
 .admin-color-ectoplasm .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-ectoplasm .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #a3b745;
   color: #fff;
 }
 
-/* line 339, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-midnight .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-midnight .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-midnight .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #363b3f;
 }
-/* line 344, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker thead, .admin-color-midnight .cmb2-element .ui-datepicker thead {
   background: #26292c;
 }
-/* line 348, sass/partials/_jquery_ui.scss */
 .admin-color-midnight .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-midnight .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #e14d43;
   color: #fff;
 }
 
-/* line 356, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-ocean .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-ocean .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-ocean .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #738e96;
 }
-/* line 361, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker thead, .admin-color-ocean .cmb2-element .ui-datepicker thead {
   background: #627c83;
 }
-/* line 365, sass/partials/_jquery_ui.scss */
 .admin-color-ocean .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-ocean .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #9ebaa0;
   color: #fff;
 }
 
-/* line 373, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-datepicker-header,
 .admin-color-sunrise .cmb2-element.ui-datepicker .ui-datepicker-header .ui-state-hover, .admin-color-sunrise .cmb2-element .ui-datepicker .ui-widget-header,
@@ -1191,34 +1000,28 @@ span.cmb2-metabox-description {
 .admin-color-sunrise .cmb2-element .ui-datepicker .ui-datepicker-header .ui-state-hover {
   background: #cf4944;
 }
-/* line 379, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker th, .admin-color-sunrise .cmb2-element .ui-datepicker th {
   border-color: #be3631;
   background: #be3631;
 }
-/* line 384, sass/partials/_jquery_ui.scss */
 .admin-color-sunrise .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-sunrise .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #dd823b;
   color: #fff;
 }
 
-/* line 392, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-light .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-light .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #e5e5e5;
 }
-/* line 397, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-month,
 .admin-color-light .cmb2-element.ui-datepicker select.ui-datepicker-year, .admin-color-light .cmb2-element .ui-datepicker select.ui-datepicker-month,
 .admin-color-light .cmb2-element .ui-datepicker select.ui-datepicker-year {
   color: #555;
 }
-/* line 402, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker thead, .admin-color-light .cmb2-element .ui-datepicker thead {
   background: #888;
 }
-/* line 406, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-title,
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-default,
 .admin-color-light .cmb2-element.ui-datepicker .ui-datepicker-prev:before,
@@ -1228,42 +1031,34 @@ span.cmb2-metabox-description {
 .admin-color-light .cmb2-element .ui-datepicker .ui-datepicker-next:before {
   color: #555;
 }
-/* line 414, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-light .cmb2-element.ui-datepicker td .ui-state-active, .admin-color-light .cmb2-element .ui-datepicker td .ui-state-hover, .admin-color-light .cmb2-element .ui-datepicker td .ui-state-active {
   background: #ccc;
 }
-/* line 418, sass/partials/_jquery_ui.scss */
 .admin-color-light .cmb2-element.ui-datepicker td.ui-datepicker-today, .admin-color-light .cmb2-element .ui-datepicker td.ui-datepicker-today {
   background: #eee;
 }
 
-/* line 426, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #56b274;
 }
-/* line 431, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker thead, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker thead {
   background: #36533f;
 }
-/* line 435, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-evergreen .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-bbp-evergreen .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #446950;
   color: #fff;
 }
 
-/* line 443, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-widget-header,
 .admin-color-bbp-mint .cmb2-element.ui-datepicker .ui-datepicker-header, .admin-color-bbp-mint .cmb2-element .ui-datepicker .ui-widget-header,
 .admin-color-bbp-mint .cmb2-element .ui-datepicker .ui-datepicker-header {
   background: #4ca26a;
 }
-/* line 448, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker thead, .admin-color-bbp-mint .cmb2-element .ui-datepicker thead {
   background: #4f6d59;
 }
-/* line 452, sass/partials/_jquery_ui.scss */
 .admin-color-bbp-mint .cmb2-element.ui-datepicker td .ui-state-hover, .admin-color-bbp-mint .cmb2-element .ui-datepicker td .ui-state-hover {
   background: #5fb37c;
   color: #fff;
@@ -1275,22 +1070,18 @@ span.cmb2-metabox-description {
 /*--------------------------------------------------------------
  * CMB2 Frontend
 --------------------------------------------------------------*/
-/* line 5, sass/partials/_front.scss */
 .closed .inside {
   display: none;
 }
 
-/* line 9, sass/partials/_front.scss */
 .cmb-repeatable-grouping {
   position: relative;
 }
-/* line 12, sass/partials/_front.scss */
 .cmb-repeatable-grouping .cmb-group-title {
   margin-left: -1em;
   margin-right: -1em;
   min-height: 1.5em;
 }
-/* line 18, sass/partials/_front.scss */
 .cmb-repeatable-grouping h3 {
   font-size: 14px;
   padding: 8px 12px;
@@ -1298,22 +1089,18 @@ span.cmb2-metabox-description {
   line-height: 1.4;
 }
 
-/* line 29, sass/partials/_front.scss */
 .cmb-repeatable-group.repeatable .cmb-group-title {
   padding-left: 2.2em;
 }
-/* line 33, sass/partials/_front.scss */
 .cmb-repeatable-group.non-repeatable .cmb-group-title {
   padding-left: 12px;
 }
 
-/* line 39, sass/partials/_front.scss */
 .cmb-type-group .cmb-row .cmbhandle {
   right: 0;
   position: absolute;
 }
 
-/* line 44, sass/partials/_front.scss */
 .cmb-spinner {
   background: url(/wp-admin/images/spinner.gif) no-repeat;
   -webkit-background-size: 20px 20px;

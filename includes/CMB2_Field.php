@@ -1332,6 +1332,10 @@ class CMB2_Field extends CMB2_Base {
 			true
 		);
 
+		if ( ! empty( $args['repeatable'] ) ) {
+			CMB2_JS::add_dependencies( 'jquery-ui-sortable' );
+		}
+
 		return $args;
 	}
 
