@@ -1038,14 +1038,17 @@ window.CMB2 = window.CMB2 || {};
 					rows.each( function( rowindex ) {
 						var row = $( this );
 						var prevNum = row.data( 'iterator' );
+						var $newRowId = row.attr( 'id' ).replace( '-' + prevNum, '-' + rowindex );
+						row.attr( 'id', $newRowId );
+						row.find( 'label' ).attr( 'for', $newRowId );
 						row.find( cmb.repeatEls ).each( function() {
 							var input = $( this );
 							var $newName = input.attr( 'name' ).replace( '[' + prevNum + ']', '[' + rowindex + ']' );
-							var $newId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
+							var $newFieldId = input.attr( 'id' ).replace( '_' + prevNum + '_', '_' + rowindex + '_' );
 							input.attr( 'name', $newName );
-							input.attr( 'id', $newId );
+							input.attr( 'id', $newFieldId );
 						} );
-						row.find( 'label' ).attr( 'for', $newId );
+
 						row.find( '.cmb-repeat-group-field' ).each( function() {
 							var row = $( this );
 							var $newClass = row.attr( 'class' ).replace( '-' + prevNum + '-', '-' + rowindex + '-' );
