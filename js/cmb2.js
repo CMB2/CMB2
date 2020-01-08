@@ -990,10 +990,19 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		$selector.each( function() {
-			wp.codeEditor.initialize(
+			var instance = wp.codeEditor.initialize(
 				this.id,
 				cmb.codeEditorArgs( $( this ).data( 'codeeditor' ) )
 			);
+
+			// Update the textarea before Gutenberg saves the meta box.
+			if ( wp && wp.data && wp.data.subscribe ) {
+				wp.data.subscribe( function() {
+					if ( wp.data.select('core/edit-post').isSavingMetaBoxes() ) {
+						instance.codemirror.save();
+					}
+				})
+			}
 		} );
 	};
 
