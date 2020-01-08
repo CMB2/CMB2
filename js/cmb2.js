@@ -797,6 +797,9 @@ window.CMB2 = window.CMB2 || {};
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
+			} else if ( $element.hasClass('cmb2-textarea-code') ) {
+				// Special case for codemirror.
+				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
 			} else if ( 'checkbox' === elType || 'radio' === elType ) {
 				val = $element.is(':checked');
 			} else if ( 'select' === $element.prop('tagName') ) {
@@ -833,7 +836,12 @@ window.CMB2 = window.CMB2 || {};
 					name = name.replace('['+fromRowId+']', '['+toRowId+']');
 					$( this ).attr('name', name);
 				});
-
+			}
+			// Handle codemirror swapping.
+			else if ( $element.hasClass('cmb2-textarea-code') ) {
+				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
+				cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.setValue(  cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.getValue() );
+				cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.setValue( val );
 			}
 			// handle checkbox swapping
 			else if ( 'checkbox' === elType  ) {
@@ -987,6 +995,8 @@ window.CMB2 = window.CMB2 || {};
 		}
 	};
 
+	cmb.codeMirrorInstances = {};
+
 	cmb.initCodeEditors = function( $selector ) {
 		cmb.trigger( 'cmb_init_code_editors', $selector );
 
@@ -999,6 +1009,7 @@ window.CMB2 = window.CMB2 || {};
 				this.id,
 				cmb.codeEditorArgs( $( this ).data( 'codeeditor' ) )
 			);
+			cmb.codeMirrorInstances[ this.id ] = instance;
 
 			// Update the textarea before Gutenberg saves the meta box.
 			if ( wp && wp.data && wp.data.subscribe ) {
