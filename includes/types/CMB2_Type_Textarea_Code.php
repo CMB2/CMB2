@@ -23,6 +23,7 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-textarea-code',
 			'desc'  => '</pre>' . $this->_desc( true ),
+			'id'    => str_replace( '/', '__', $this->_id() )
 		) );
 
 		if ( true !== $this->field->options( 'disable_codemirror' )
