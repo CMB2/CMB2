@@ -508,6 +508,8 @@ window.CMB2 = window.CMB2 || {};
 		$elements.filter( ':selected' ).removeAttr( 'selected' );
 		$elements.find( ':selected' ).removeAttr( 'selected', false );
 
+		$row.find('.CodeMirror-wrap').remove();
+
 		if ( $row.find('h3.cmb-group-title').length ) {
 			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
@@ -609,6 +611,9 @@ window.CMB2 = window.CMB2 || {};
 	cmb.afterRowInsert = function( $row ) {
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
+
+		// Init code editor for new row
+		cmb.initCodeEditors( $row.find('.cmb2-textarea-code:not(.disable-codemirror)') );
 	};
 
 	cmb.updateNameAttr = function () {
