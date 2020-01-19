@@ -6,6 +6,9 @@ services:
 
 matrix:
   include:
+    - php: 7.1
+      script: composer validate --strict
+      after_script: ls -l composer.*
     - php: nightly
       env:
         - WP_VERSION=latest
