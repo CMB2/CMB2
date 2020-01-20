@@ -328,11 +328,11 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
 	// Enqueue JS/CSS.
 	if ( $args['cmb_styles'] ) {
-		CMB2_hookup::enqueue_cmb_css();
+		CMB2_Hookup::enqueue_cmb_css();
 	}
 
 	if ( $args['enqueue_js'] ) {
-		CMB2_hookup::enqueue_cmb_js();
+		CMB2_Hookup::enqueue_cmb_js();
 	}
 
 	$form_format = apply_filters( 'cmb2_get_metabox_form_format', $args['form_format'], $object_id, $cmb );

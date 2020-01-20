@@ -229,7 +229,7 @@ class CMB2 extends CMB2_Base {
 		do_action( "cmb2_init_{$this->cmb_id}", $this );
 
 		// Hook in the hookup... how meta.
-		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_hookup', 'maybe_init_and_hookup' ) );
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_Hookup', 'maybe_init_and_hookup' ) );
 
 		// Hook in the rest api functionality.
 		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_REST', 'maybe_init_and_hookup' ) );

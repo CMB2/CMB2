@@ -11,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Options_Hookup extends CMB2_hookup {
+class CMB2_Options_Hookup extends CMB2_Hookup {
 
 	/**
 	 * The object type we are performing the hookup for
@@ -116,7 +116,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		if ( $this->cmb->prop( 'cmb_styles' ) ) {
 			// Include CMB CSS in the head to avoid FOUC.
-			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
+			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_Hookup', 'enqueue_cmb_css' ) );
 		}
 
 		$this->maybe_register_message();
