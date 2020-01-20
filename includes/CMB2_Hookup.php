@@ -11,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_hookup extends CMB2_Hookup_Base {
+class CMB2_Hookup extends CMB2_Hookup_Base {
 
 	/**
 	 * Only allow JS registration once
