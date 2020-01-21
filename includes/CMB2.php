@@ -1106,7 +1106,8 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
-	 * Check if given object_type(s) matches any of the registered object types for this box.
+	 * Check if given object_type(s) matches any of the registered object types or
+	 * taxonomies for this box.
 	 *
 	 * @since  2.7.0
 	 * @param  string|array $object_types The object type(s) to check.
@@ -1115,7 +1116,15 @@ class CMB2 extends CMB2_Base {
 	 * @return bool Whether given object type(s) are registered to this box.
 	 */
 	public function is_box_type( $object_types = array(), $fallback = array() ) {
-		$found = array_intersect( (array) $object_types, $this->box_types( $fallback ) );
+		$object_types = (array) $object_types;
+		$box_types    = $this->box_types( $fallback );
+
+		if ( in_array( 'term', $box_types, true ) ) {
+			$taxonomies = CMB2_Utils::ensure_array( $this->prop( 'taxonomies' ) );
+			$box_types = array_merge( $box_types, $taxonomies );
+		}
+
+		$found = array_intersect( $object_types, $box_types );
 
 		return ! empty( $found );
 	}
