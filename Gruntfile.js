@@ -10,6 +10,7 @@ module.exports = function(grunt) {
 		phpunit: {
 			classes: {},
 			options: {
+				bin: 'vendor/bin/phpunit',
 				excludeGroup: 'cmb2-ajax-embed',
 			}
 		},

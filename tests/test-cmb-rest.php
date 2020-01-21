@@ -25,9 +25,10 @@ class Test_CMB2_REST extends Test_CMB2_Rest_Base {
 	 */
 	public function setUp() {
 		$this->set_up_and_init( array(
-			'id' => strtolower( __CLASS__ ),
+			'id'           => strtolower( __CLASS__ ),
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
-			'fields' => array(
+			'object_types' => 'post',
+			'fields'       => array(
 				'rest_test' => array(
 					'name'        => 'Name',
 					'id'          => 'rest_test',

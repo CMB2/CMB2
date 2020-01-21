@@ -381,11 +381,12 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		) );
 		$type = $this->get_field_type_object( $field );
 
+		$type_attr = function_exists( 'current_theme_supports' ) && current_theme_supports( 'html5', 'style' ) ? "type='text/css' " : '';
 		$this->assertHTMLstringsAreEqual(
 			'
 			<div id="wp-field_test_field-wrap" class="wp-core-ui wp-editor-wrap html-active">
-				<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'' . includes_url( "css/dashicons$suffix.css?$version" ) . '\' type=\'text/css\' media=\'all\' />
-				<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'' . includes_url( "css/editor$suffix.css?$version" ) . '\' type=\'text/css\' media=\'all\' />
+				<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'' . includes_url( "css/dashicons$suffix.css?$version" ) . '\' media=\'all\' />
+				<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'' . includes_url( "css/editor$suffix.css?$version" ) . '\' ' . $type_attr . 'media=\'all\' />
 				<div id="wp-field_test_field-editor-container" class="wp-editor-container">
 					<textarea class="wp-editor-area" rows="20" cols="40" name="field_test_field" id="field_test_field">
 					</textarea>
