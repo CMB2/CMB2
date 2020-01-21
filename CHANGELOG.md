@@ -18,9 +18,21 @@ All notable changes to this project will be documented in this file.
 		- `'characters_truncated_text'` - Default: "Your text may be truncated."
 * Update styling to be more compatible with WordPress 5.3. Props [@galengidman](https://github.com/galengidman) ([#1314](https://github.com/CMB2/CMB2/pull/1314))
 * Add a new box parameter, `register_rest_field_cb`, which when used allows overriding the way CMB2 handles the `register_rest_field` callbacks, and defining your own REST prefix for your fields. See [this PR comment](https://github.com/CMB2/CMB2/pull/1240#issuecomment-552548488) for more context.
+* Cleanup by renaming `CMB2_hookup` to `CMB2_Hookup`. Classes are case-insensitive, so this is a backwards-compatible change. Props [@szepeviktor](https://github.com/szepeviktor) ([#1330](https://github.com/CMB2/CMB2/pull/1330), [#1328](https://github.com/CMB2/CMB2/issues/1328)).
+* Validate composer.json for Travis CI. Props [@szepeviktor](https://github.com/szepeviktor) ([#1326](https://github.com/CMB2/CMB2/pull/1326)).
+* Added [LICENSE](https://github.com/CMB2/CMB2/blob/develop/LICENSE) file to meet GitHub Community standards. Props [@RubenMartins](https://github.com/RubenMartins) ([#1316](https://github.com/CMB2/CMB2/pull/1316)).
+* Add new `"cmb2_display_class_{$fieldtype}"` filter and `'display_class'` field parameter to allow specifying the class to use to display the field (in admin columns, etc).
+* Update `CMB2_Types::_id()` to allow not appending the iterator attribute if a repeatable field.
+* Added `CMB2_Utils::concat_attrs()` test for nested arrays as data attributes.
+* Various updates per [VIP feedback](https://github.com/CMB2/CMB2/issues/1260). Props [@kevinlangleyjr](https://github.com/kevinlangleyjr), [@mikeselander](https://github.com/mikeselander) ([#1255](https://github.com/CMB2/CMB2/pull/1255), [#1257](https://github.com/CMB2/CMB2/pull/1257), [#1259](https://github.com/CMB2/CMB2/pull/1259),  [#1261](https://github.com/CMB2/CMB2/pull/1261) [#1262](https://github.com/CMB2/CMB2/pull/1262), and various direct commits. See [#1260](https://github.com/CMB2/CMB2/issues/1260)).
+
 
 ### Bug Fixes
+* Fix some issues with Travis. Props [@anhskohbo](https://github.com/anhskohbo) ([#1220](https://github.com/CMB2/CMB2/pull/1220)).
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
+* Various code-formatting and code documentation improvements. Props [@tw2113](https://github.com/tw2113).
+* Don't exclude composer.json from the distribution. Props [@johnbillion](https://github.com/johnbillion) ([#1225](https://github.com/CMB2/CMB2/pull/1225)).
+* Ignore some more directories in the distribution package. Props [@johnbillion](https://github.com/johnbillion) ([#1226](https://github.com/CMB2/CMB2/pull/1226)).
 * Use `CMB2_Field::get_rest_value()` to get values for fields in the post REST API endpoints ([#1284](https://github.com/CMB2/CMB2/issues/1284)).
 * Fix issue where oEmbed fields' live-preview would not work if the field was added within a group, along with some other similarly related issues. Fixes [#1157](https://github.com/CMB2/CMB2/issues/1157).
 * Fix issue when using REST API for `file` and `text_datetime_timestamp_timezone` field types, the supporting field data was not provided (e.g. the file id for `file` field, and the `utc` value for the `text_datetime_timestamp_timezone` field). Fixes [https://wordpress.org/support/topic/cmb2-rest-api-image-file-field-as-an-object/](https://wordpress.org/support/topic/cmb2-rest-api-image-file-field-as-an-object/).
@@ -28,6 +40,14 @@ All notable changes to this project will be documented in this file.
 * Fix issue where repeatable CodeMirror textareas could not be clicked/draggged to highlight text. Props [@JPry](https://github.com/JPry) ([#1300](https://github.com/CMB2/CMB2/pull/1300)).
 * `taxonomy_select_hierarchical` now saves to the correct location, the term relationships table. Props [@latheva](https://github.com/latheva) ([#1307](https://github.com/CMB2/CMB2/pull/1307)).
 * Fix issue ([#1158](https://github.com/CMB2/CMB2/issues/1158)) where default REST API endpoints (e.g. `/wp/v2/{post_type}`) would show all boxes for all custom post types even though not registered to the post-type. Props [@Mte90](https://github.com/Mte90) ([#1238](https://github.com/CMB2/CMB2/pull/1238)).
+* Update and cull npm dependencis. Fixes [#1308](https://github.com/CMB2/CMB2/issues/1308).
+* Fix some jshint issues.
+* Updated the WordPress embeds URL references.
+* Updates to account for WordPress 5.2 oEmbed changes.
+* Fix to ensure date picker fields can have a default value. Fixes [#1245](https://github.com/CMB2/CMB2/issues/1245).
+* Added `function_exists( 'add_action' )` check to bootstrap file to ensure compatibility with composer usage. Props [@salcode](https://github.com/salcode) ([#1271](https://github.com/CMB2/CMB2/pull/1271), [#1270](https://github.com/CMB2/CMB2/issues/1270))
+* Corrected link to facetwp-cmb2 in README.md. Props [@marcelreschke](https://github.com/marcelreschke) ([#1248](https://github.com/CMB2/CMB2/pull/1248)).
+* Use `get_user_locale()` in admin area instead of `get_locale()`. Fixes [#1267](https://github.com/CMB2/CMB2/issues/1267).
 
 
 ## [2.6.0 - 2019-01-18](https://github.com/CMB2/CMB2/releases/tag/v2.6.0)
