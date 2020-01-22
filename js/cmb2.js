@@ -797,7 +797,7 @@ window.CMB2 = window.CMB2 || {};
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
-			} else if ( $element.hasClass('cmb2-textarea-code') ) {
+			} else if ( $element.hasClass( 'cmb2-textarea-code' ) && ! $element.hasClass( 'disable-codemirror' ) ) {
 				// Special case for codemirror.
 				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
 			} else if ( 'checkbox' === elType || 'radio' === elType ) {
@@ -838,7 +838,7 @@ window.CMB2 = window.CMB2 || {};
 				});
 			}
 			// Handle codemirror swapping.
-			else if ( $element.hasClass('cmb2-textarea-code') ) {
+			else if ( $element.hasClass( 'cmb2-textarea-code' ) && ! $element.hasClass( 'disable-codemirror' ) ) {
 				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
 				cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.setValue(  cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.getValue() );
 				cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.setValue( val );
