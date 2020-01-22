@@ -241,12 +241,12 @@ class CMB2_JS {
 		);
 
 		if ( isset( self::$dependencies['code-editor'] ) && function_exists( 'wp_enqueue_code_editor' ) ) {
-			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( [
+			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
 				'type'       => 'php',
 				'codemirror' => [
 					'autoRefresh' => true,
 				],
-			] );
+			) );
 		}
 
 		wp_localize_script( self::$handle, self::$js_variable, apply_filters( 'cmb2_localized_data', $l10n ) );
