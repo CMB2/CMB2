@@ -36,14 +36,14 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		$meta_value = $this->value ? $this->value : $this->field->escaped_value();
 
 		$hex_color = '(([a-fA-F0-9]){3}){1,2}$';
-		if ( preg_match( '/^' . $hex_color . '/i', $meta_value ) ) {
+		if ( @preg_match( '/^' . $hex_color . '/i', $meta_value ) ) {
 			// Value is just 123abc, so prepend #
 			$meta_value = '#' . $meta_value;
 		} elseif (
 			// If value doesn't match #123abc...
-			! preg_match( '/^#' . $hex_color . '/i', $meta_value )
+			! @preg_match( '/^#' . $hex_color . '/i', $meta_value )
 			// And value doesn't match rgba()...
-			&& 0 !== strpos( trim( $meta_value ), 'rgba' )
+			&& 0 !== strpos( @trim( $meta_value ), 'rgba' )
 		) {
 			// Then sanitize to just #.
 			$meta_value = '#';
