@@ -35,7 +35,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 	public function render( $args = array() ) {
 		$meta_value = $this->value ? $this->value : $this->field->escaped_value();
 
-		$meta_value = $this::sanitize_color( $meta_value );
+		$meta_value = self::sanitize_color( $meta_value );
 
 		wp_enqueue_style( 'wp-color-picker' );
 
