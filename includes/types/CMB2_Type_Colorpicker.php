@@ -93,7 +93,6 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 		}
 
 		return $color;
-
 	}
 
 	public static function dequeue_rgba_colorpicker_script() {
