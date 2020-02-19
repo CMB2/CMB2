@@ -589,6 +589,7 @@ class CMB2_Utils {
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
 			$empty    = false === $val && 'value' !== $attr;
+			$val 	  = is_array( $val ) ? implode( ',', $val ) : $val;
 			if ( ! $excluded && ! $empty ) {
 				// if data attribute, use single quote wraps, else double.
 				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
