@@ -58,7 +58,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 	}
 
 	/**
-	 * Sanitizes the color give, supports an array of colors (mainly to support repeatable fields)
+	 * Sanitizes the given color, or array of colors.
 	 *
 	 * @since 2.7.1
 	 *
