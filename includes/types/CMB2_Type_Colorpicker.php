@@ -64,7 +64,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 	 *
 	 * @param string|array $color The color or array of colors to sanitize.
 	 *
-	 * @return string|array 		The color or array of colors sanitized
+	 * @return string|array The color or array of colors, sanitized.
 	 **/
 	public static function sanitize_color( $color ) {
 
