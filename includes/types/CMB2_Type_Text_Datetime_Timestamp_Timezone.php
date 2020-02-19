@@ -22,7 +22,6 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 
 		$args = wp_parse_args( $this->args, array(
 			'value'                   => $value,
-			'desc'                    => $this->_desc( true ),
 			'text_datetime_timestamp' => array(),
 			'select_timezone'         => array(),
 		) );
@@ -42,7 +41,6 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 		}
 
 		$timestamp_args = wp_parse_args( $args['text_datetime_timestamp'], array(
-			'desc'     => '',
 			'value'    => $value,
 			'rendered' => true,
 		) );
@@ -53,7 +51,6 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			'name'     => $this->_name( '[timezone]' ),
 			'id'       => $this->_id( '_timezone' ),
 			'options'  => wp_timezone_choice( $tzstring ),
-			'desc'     => $args['desc'],
 			'rendered' => true,
 		) );
 		$select = $this->types->select( $timezone_select_args );

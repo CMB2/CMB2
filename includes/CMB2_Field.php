@@ -100,6 +100,7 @@ class CMB2_Field extends CMB2_Base {
 		'options_cb',
 		'text_cb',
 		'label_cb',
+		'description_cb',
 		'render_row_cb',
 		'display_cb',
 		'before_group',
@@ -927,6 +928,7 @@ class CMB2_Field extends CMB2_Base {
 
 		$types = new CMB2_Types( $this );
 		$types->render();
+		$this->peform_param_callback( 'description_cb' );
 
 		$this->peform_param_callback( 'after' );
 
@@ -968,6 +970,40 @@ class CMB2_Field extends CMB2_Base {
 		$style = ! $this->args( 'show_names' ) ? ' style="display:none;"' : '';
 
 		return sprintf( "\n" . '<label%1$s for="%2$s">%3$s</label>' . "\n", $style, $this->id(), $this->args( 'name' ) );
+	}
+
+
+	/**
+	 * The default description_cb callback
+	 *
+	 * @since  x.x.x
+	 * @return string Description html markup.
+	 */
+	public function description_callback() {
+		if ( ! $this->args( 'description' ) ) {
+			return '';
+		}
+
+		$paragraph_types = array(
+			'wysiwyg',
+			'title',
+			'textarea_code',
+			'textarea',
+			'datetime_timestamp_timezone',
+			'text',
+			'select',
+			'radio',
+			'multicheck',
+			'file',
+		);
+
+		$types = new CMB2_Types( $this );
+
+		if ( in_array( $this->args('type'), $paragraph_types) ){
+			return $types->_desc(true);
+		}else{
+			return $types->_desc();
+		}
 	}
 
 	/**
@@ -1534,6 +1570,7 @@ class CMB2_Field extends CMB2_Base {
 			'render_row_cb'     => array( $this, 'render_field_callback' ),
 			'display_cb'        => array( $this, 'display_value_callback' ),
 			'label_cb'          => 'title' !== $type ? array( $this, 'label' ) : '',
+			'description_cb'    =>  array( $this, 'description_callback' ),
 			'column'            => false,
 			'js_dependencies'   => array(),
 			'show_in_rest'      => null,

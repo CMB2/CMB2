@@ -16,7 +16,6 @@ class CMB2_Type_Text_Date extends CMB2_Type_Picker_Base {
 		$args = $this->parse_args( 'text_date', array(
 			'class'           => 'cmb2-text-small cmb2-datepicker',
 			'value'           => $this->field->get_timestamp_format(),
-			'desc'            => $this->_desc(),
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker' ),
 		) );
 

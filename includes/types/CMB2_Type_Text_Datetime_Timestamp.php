@@ -22,7 +22,6 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 
 		$args = wp_parse_args( $this->args, array(
 			'value'      => $value,
-			'desc'       => $this->_desc(),
 			'datepicker' => array(),
 			'timepicker' => array(),
 		) );
@@ -50,7 +49,6 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 			'name'  => $this->_name( '[date]' ),
 			'id'    => $this->_id( '_date' ),
 			'value' => $has_good_value ? $this->field->get_timestamp_format( 'date_format', $args['value'] ) : '',
-			'desc'  => '',
 		) );
 
 		$date_args['rendered'] = true;
@@ -65,7 +63,6 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 			'name'  => $this->_name( '[time]' ),
 			'id'    => $this->_id( '_time' ),
 			'value' => $has_good_value ? $this->field->get_timestamp_format( 'time_format', $args['value'] ) : '',
-			'desc'  => $args['desc'],
 			'js_dependencies' => array( 'jquery-ui-core', 'jquery-ui-datepicker', 'jquery-ui-datetimepicker' ),
 		) );
 

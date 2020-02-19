@@ -112,7 +112,6 @@ abstract class CMB2_Type_Counter_Base extends CMB2_Type_Base {
 			if ( $max ) {
 				$attributes['maxlength'] = $max;
 			}
-			$attributes['desc'] = $char_counter . $attributes['desc'];
 		}
 
 		return $attributes;

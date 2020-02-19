@@ -28,14 +28,13 @@ class CMB2_Type_Textarea extends CMB2_Type_Counter_Base {
 			'cols'  => 60,
 			'rows'  => 10,
 			'value' => $this->field->escaped_value( 'esc_textarea' ),
-			'desc'  => $this->_desc( true ),
 		), $args );
 
 		// Add character counter?
 		$a = $this->maybe_update_attributes_for_char_counter( $a );
 
 		return $this->rendered(
-			sprintf( '<textarea%s>%s</textarea>%s', $this->concat_attrs( $a, array( 'desc', 'value' ) ), $a['value'], $a['desc'] )
+			sprintf( '<textarea%s>%s</textarea>', $this->concat_attrs( $a, array( 'value' ) ), $a['value'] )
 		);
 	}
 }

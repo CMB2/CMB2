@@ -22,7 +22,6 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 	public function render( $args = array() ) {
 		$args = wp_parse_args( $args, array(
 			'class' => 'cmb2-textarea-code',
-			'desc'  => '</pre>' . $this->_desc( true ),
 		) );
 
 		if ( true !== $this->field->options( 'disable_codemirror' )
@@ -33,7 +32,7 @@ class CMB2_Type_Textarea_Code extends CMB2_Type_Textarea {
 		}
 
 		return $this->rendered(
-			sprintf( '<pre>%s', parent::render( $args ) )
+			sprintf( '<pre>%s</pre>', parent::render( $args ) )
 		);
 	}
 }

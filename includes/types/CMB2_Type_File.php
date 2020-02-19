@@ -29,7 +29,6 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'name'            => $this->_name(),
 			'value'           => $field->escaped_value(),
 			'id_value'        => null,
-			'desc'            => $this->_desc( true ),
 			'size'            => 45,
 			'js_dependencies' => 'media-editor',
 			'preview_size'    => $field->args( 'preview_size' ),
@@ -56,7 +55,6 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'id'               => $a['id'],
 			'name'             => $a['name'],
 			'size'             => $a['size'],
-			'desc'             => '',
 			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
 			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $a['query_args'] ) ? json_encode( $a['query_args'] ) : '',
@@ -76,7 +74,6 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			esc_attr( $this->_text( 'add_upload_file_text', esc_html__( 'Add or Upload File', 'cmb2' ) ) )
 		);
 
-		$output .= $a['desc'];
 		$output .= $this->get_id_field_output();
 
 		$output .= '<div id="' . esc_attr( $field->id() ) . '-status" class="cmb2-media-status">';
@@ -140,7 +137,6 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'type'  => 'hidden',
 			'class' => 'cmb2-upload-file-id',
 			'value' => $this->types->field->value,
-			'desc'  => '',
 		) );
 
 		// We need to put the original field object back

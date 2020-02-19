@@ -11,7 +11,6 @@
  * @link      https://cmb2.io
  *
  * @method string _id()
- * @method string _desc()
  */
 class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 
@@ -25,7 +24,6 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		$a = $this->parse_args( 'wysiwyg', array(
 			'id'      => $this->_id( '', false ),
 			'value'   => $field->escaped_value( 'stripslashes' ),
-			'desc'    => $this->_desc( true ),
 			'options' => $field->options(),
 		) );
 
@@ -39,7 +37,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 					: 'cmb2-count-chars';
 			}
 
-			return $this->rendered( $this->get_wp_editor( $a ) . $a['desc'] );
+			return $this->rendered( $this->get_wp_editor( $a ) );
 		}
 
 		// Character counter not currently working for grouped WYSIWYG
@@ -52,13 +50,17 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		add_action( is_admin() ? 'admin_footer' : 'wp_footer', array( $this, 'add_wysiwyg_template_for_group' ) );
 
 		return $this->rendered(
-			sprintf( '<div class="cmb2-wysiwyg-wrap">%s', parent::render( array(
-				'class'         => 'cmb2_textarea cmb2-wysiwyg-placeholder',
-				'data-groupid'  => $field->group->id(),
-				'data-iterator' => $field->group->index,
-				'data-fieldid'  => $field->id( true ),
-				'desc'          => '</div>' . $this->_desc( true ),
-			) ) )
+			sprintf(
+				'<div class="cmb2-wysiwyg-wrap">%s</div>',
+				parent::render(
+					array(
+						'class'         => 'cmb2_textarea cmb2-wysiwyg-placeholder',
+						'data-groupid'  => $field->group->id(),
+						'data-iterator' => $field->group->index,
+						'data-fieldid'  => $field->id( true ),
+					)
+				)
+			)
 		);
 	}
 

@@ -520,14 +520,12 @@ class CMB2_Types {
 	public function text_small() {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-small',
-			'desc'  => $this->_desc(),
 		), 'input' )->render();
 	}
 
 	public function text_medium() {
 		return $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-medium',
-			'desc'  => $this->_desc(),
 		), 'input' )->render();
 	}
 
@@ -548,7 +546,6 @@ class CMB2_Types {
 	public function text_money() {
 		$input = $this->get_new_render_type( __FUNCTION__, 'CMB2_Type_Text', array(
 			'class' => 'cmb2-text-money',
-			'desc'  => $this->_desc(),
 		), 'input' )->render();
 		return ( ! $this->field->get_param_callback_result( 'before_field' ) ? '$ ' : ' ' ) . $input;
 	}

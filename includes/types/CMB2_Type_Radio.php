@@ -39,14 +39,13 @@ class CMB2_Type_Radio extends CMB2_Type_Multi_Base {
 				'label'  => 'test',
 				'method' => 'list_input',
 			) ),
-			'desc' => $this->_desc( true ),
 		) );
 
 		return $this->rendered( $this->ul( $args ) );
 	}
 
 	protected function ul( $a ) {
-		return sprintf( '<ul class="%s">%s</ul>%s', $a['class'], $a['options'], $a['desc'] );
+		return sprintf( '<ul class="%s">%s</ul>', $a['class'], $a['options'] );
 	}
 
 }
