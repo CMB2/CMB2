@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Bug Fixes
+* Fix empty name/id attributes on `'file_list'` buttons. Props [@pgroot91](https://github.com/pgroot91) ([#1347](https://github.com/CMB2/CMB2/pull/1347)).
+
 ## [2.7.0 - 2020-01-21](https://github.com/CMB2/CMB2/releases/tag/v2.7.0)
 
 ### Enhancements
