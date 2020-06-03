@@ -111,7 +111,9 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
     export PHPBREW_RC_ENABLE=1
     source $HOME/.phpbrew/bashrc
     phpbrew use 5.2.17
+    php -m
     phpbrew ext install yaml
+    php -m
     # pecl channel-update pecl.php.net
     # printf "\n" | pecl install yaml-1.2.0
     # echo "extension=yaml.so" > ${PHP52_PATH}/conf.d/ext-yaml.ini
