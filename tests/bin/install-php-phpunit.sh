@@ -96,7 +96,8 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
     git clone --depth=1 --branch=1.0.0 git://github.com/sebastianbergmann/phpunit-story.git
 
     # and the version of phpunit that we expect to run with php 5.2
-    git clone --depth=1 --branch=3.6   git://github.com/sebastianbergmann/phpunit.git
+    wget https://github.com/sebastianbergmann/phpunit/archive/3.6.12.tar.gz
+    tar zxf 3.6.12.tar.gz && mv phpunit-3.6.12 phpunit
 
     # fix up the version number of phpunit
     sed -i 's/@package_version@/3.6-git/g' phpunit/PHPUnit/Runner/Version.php
@@ -110,8 +111,7 @@ if [[ ${SWITCH_TO_PHP:0:3} == "5.2" ]] || [[ ${SWITCH_TO_PHP:0:3} == "5.3" ]]; t
     export PHPBREW_RC_ENABLE=1
     source $HOME/.phpbrew/bashrc
     phpbrew use 5.2.17
-    pear channel-discover pear.symfony-project.com
-    pear install pear.symfony-project.com/YAML-1.0.2
+    pecl install yaml-1.2.0 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
 
     # manually go back to the system php, we can't use `phpbrew switch-off`
     # because we're running a version of php that phpbrew doesn't work with at this point
