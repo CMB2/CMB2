@@ -381,7 +381,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		) );
 		$type = $this->get_field_type_object( $field );
 
-		$type_attr = function_exists( 'current_theme_supports' ) && current_theme_supports( 'html5', 'style' ) ? "type='text/css' " : '';
+		$type_attr = version_compare( $version, '5.3', '<' ) ? "type='text/css' " : '';
 		$this->assertHTMLstringsAreEqual(
 			'
 			<div id="wp-field_test_field-wrap" class="wp-core-ui wp-editor-wrap html-active">
