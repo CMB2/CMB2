@@ -46,7 +46,7 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		$this->field->args['char_counter'] = false;
 
 		// wysiwyg fields in a group need some special handling.
-		$field->add_js_dependencies( 'wp-util', 'cmb2-wysiwyg' );
+		$field->add_js_dependencies( array( 'wp-util', 'cmb2-wysiwyg' ) );
 
 		// Hook in our template-output to the footer.
 		add_action( is_admin() ? 'admin_footer' : 'wp_footer', array( $this, 'add_wysiwyg_template_for_group' ) );
