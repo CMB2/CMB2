@@ -165,10 +165,10 @@ function cmb2_update_option( $option_key, $field_id, $value, $single = true ) {
  * Get a CMB2 field object.
  *
  * @since  1.1.0
- * @param  array  $meta_box    Metabox ID or Metabox config array.
- * @param  array  $field_id    Field ID or all field arguments.
- * @param  int    $object_id   Object ID.
- * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
+ * @param  array      $meta_box    Metabox ID or Metabox config array.
+ * @param  array      $field_id    Field ID or all field arguments.
+ * @param  int|string $object_id   Object ID (string for options-page).
+ * @param  string     $object_type Type of object being saved. (e.g., post, user, term, comment, or options-page).
  *                             Defaults to metabox object type.
  * @return CMB2_Field|null     CMB2_Field object unless metabox config cannot be found
  */
@@ -190,10 +190,10 @@ function cmb2_get_field( $meta_box, $field_id, $object_id = 0, $object_type = ''
  * Get a field's value.
  *
  * @since  1.1.0
- * @param  array  $meta_box    Metabox ID or Metabox config array.
- * @param  array  $field_id    Field ID or all field arguments.
- * @param  int    $object_id   Object ID.
- * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
+ * @param  array      $meta_box    Metabox ID or Metabox config array.
+ * @param  array      $field_id    Field ID or all field arguments.
+ * @param  int|string $object_id   Object ID (string for options-page).
+ * @param  string     $object_type Type of object being saved. (e.g., post, user, term, comment, or options-page).
  *                             Defaults to metabox object type.
  * @return mixed               Maybe escaped value
  */
@@ -217,10 +217,11 @@ function new_cmb2_box( array $meta_box_config ) {
  * Retrieve a CMB2 instance by the metabox ID
  *
  * @since  2.0.0
- * @param  mixed  $meta_box    Metabox ID or Metabox config array.
- * @param  int    $object_id   Object ID.
- * @param  string $object_type Type of object being saved. (e.g., post, user, comment, or options-page).
- *                             Defaults to metabox object type.
+ * @param  mixed      $meta_box    Metabox ID or Metabox config array.
+ * @param  int|string $object_id   Object ID (string for options-page).
+ * @param  string     $object_type Type of object being saved.
+ *                                 (e.g., post, user, term, comment, or options-page).
+ *                                 Defaults to metabox object type.
  * @return CMB2 object
  */
 function cmb2_get_metabox( $meta_box, $object_id = 0, $object_type = '' ) {
@@ -266,9 +267,9 @@ function cmb2_get_metabox_sanitized_values( $meta_box, array $data_to_sanitize )
  * Retrieve a metabox form
  *
  * @since  2.0.0
- * @param  mixed $meta_box  Metabox config array or Metabox ID.
- * @param  int   $object_id Object ID.
- * @param  array $args      Optional arguments array.
+ * @param  mixed      $meta_box  Metabox config array or Metabox ID.
+ * @param  int|string $object_id Object ID (string for options-page).
+ * @param  array $args           Optional arguments array.
  * @return string             CMB2 html form markup
  */
 function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
@@ -288,9 +289,9 @@ function cmb2_get_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
  * Display a metabox form & save it on submission
  *
  * @since  1.0.0
- * @param  mixed $meta_box  Metabox config array or Metabox ID.
- * @param  int   $object_id Object ID.
- * @param  array $args      Optional arguments array.
+ * @param  mixed      $meta_box  Metabox config array or Metabox ID.
+ * @param  int|string $object_id Object ID (string for options-page).
+ * @param  array $args           Optional arguments array.
  */
 function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 
@@ -353,9 +354,9 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
  * Display a metabox form (or optionally return it) & save it on submission.
  *
  * @since  1.0.0
- * @param  mixed $meta_box  Metabox config array or Metabox ID.
- * @param  int   $object_id Object ID.
- * @param  array $args      Optional arguments array.
+ * @param  mixed      $meta_box  Metabox config array or Metabox ID.
+ * @param  int|string $object_id Object ID (string for options-page).
+ * @param  array      $args      Optional arguments array.
  * @return string
  */
 function cmb2_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
