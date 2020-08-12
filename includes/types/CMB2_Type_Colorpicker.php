@@ -70,7 +70,7 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 
 		if ( is_array( $color ) ) {
 
-			$color = array_map( 'CMB2_Type_Colorpicker::sanitize_color', $color );
+			$color = array_map( array( 'CMB2_Type_Colorpicker', 'sanitize_color' ), $color );
 
 		} else {
 
