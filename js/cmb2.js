@@ -501,6 +501,15 @@ window.CMB2 = window.CMB2 || {};
 					}
 				});
 			}
+
+			// Update all atribuites class in group field
+			var $groupFields = $row.find( '.cmb-repeat-group-field' );
+			$groupFields.each(function() {
+				var $_this    = $( this );
+				var className = $_this.attr( 'class' );
+				className = className.replace( '-' + prevNum, '-' + cmb.idNumber );
+				$_this.attr( 'class', className );
+			});
 		}
 
 		$elements.filter( ':checked' ).removeAttr( 'checked' );
@@ -520,14 +529,16 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.elReplacements = function( $newInput, prevNum, group ) {
-		var oldFor    = $newInput.attr( 'for' );
-		var oldVal    = $newInput.val();
-		var type      = $newInput.prop( 'type' );
-		var defVal    = cmb.getFieldArg( $newInput, 'default' );
-		var newVal    = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
-		var tagName   = $newInput.prop('tagName');
-		var checkable = 'radio' === type || 'checkbox' === type ? oldVal : false;
-		var attrs     = {};
+		var oldFor     = $newInput.attr( 'for' );
+		var oldVal     = $newInput.val();
+		var type       = $newInput.prop( 'type' );
+		var defVal     = cmb.getFieldArg( $newInput, 'default' );
+		var newVal     = 'undefined' !== typeof defVal && false !== defVal ? defVal : '';
+		var tagName    = $newInput.prop('tagName');
+		var checkable  = 'radio' === type || 'checkbox' === type ? oldVal : false;
+		var oldRowNum  = $newInput.attr( 'data-iterator' );
+		var isEmptyRow = group && 1 < oldRowNum;
+		var attrs      = {};
 		var newID, oldID;
 		if ( oldFor ) {
 			attrs = { 'for' : oldFor.replace( '_'+ prevNum, '_'+ cmb.idNumber ) };
@@ -542,6 +553,12 @@ window.CMB2 = window.CMB2 || {};
 				newName = oldName ? oldName.replace( '['+ prevNum +'][', '['+ cmb.idNumber +'][' ) : '';
 				// Expect another underscore after group's index trailing underscore.
 				newID   = oldID ? oldID.replace( '_' + prevNum + '_', '_' + cmb.idNumber + '_' ) : '';
+
+				// Replace indexes and id attributes in copied hidden empty-row
+				if ( isEmptyRow ) {
+					newName = cmb.replaceLast( newName, oldRowNum + ']', '1]' );
+					newID = cmb.replaceLast( newID, '_' + oldRowNum, '_1' );
+				}
 			}
 			else {
 				// Row indexes are at the very end of the string.
@@ -553,7 +570,6 @@ window.CMB2 = window.CMB2 || {};
 				id: newID,
 				name: newName
 			};
-
 		}
 
 		// Clear out textarea values
@@ -577,6 +593,10 @@ window.CMB2 = window.CMB2 || {};
 
 		if ( ! group && $newInput[0].hasAttribute( 'data-iterator' ) ) {
 			attrs['data-iterator'] = cmb.idNumber;
+		}
+		// Set iterator in copied hidden empty-row
+		if ( isEmptyRow ) {
+			attrs['data-iterator'] = 1;
 		}
 
 		$newInput
@@ -609,23 +629,6 @@ window.CMB2 = window.CMB2 || {};
 	cmb.afterRowInsert = function( $row ) {
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
-	};
-
-	cmb.updateNameAttr = function () {
-		var $this = $( this );
-		var name  = $this.attr( 'name' ); // get current name
-
-		// If name is defined
-		if ( 'undefined' !== typeof name ) {
-			var prevNum = parseInt( $this.parents( '.cmb-repeatable-grouping' ).data( 'iterator' ), 10 );
-			var newNum  = prevNum - 1; // Subtract 1 to get new iterator number
-
-			// Update field name attributes so data is not orphaned when a row is removed and post is saved
-			var $newName = name.replace( '[' + prevNum + ']', '[' + newNum + ']' );
-
-			// New name with replaced iterator
-			$this.attr( 'name', $newName );
-		}
 	};
 
 	cmb.emptyValue = function( evt, row ) {
@@ -677,14 +680,13 @@ window.CMB2 = window.CMB2 || {};
 		cmb.afterRowInsert( $newRow );
 
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
-
 	};
 
 	cmb.addAjaxRow = function( evt ) {
 		evt.preventDefault();
 
 		var $this     = $( this );
-		var $table    = $id( $this.data('selector') );
+		var $table    = $id( $this.attr('data-selector') );
 		var $row      = $table.find('.empty-row');
 		var prevNum   = parseInt( $row.find('[data-iterator]').data('iterator'), 10 );
 		cmb.idNumber  = parseInt( prevNum, 10 ) + 1;
@@ -721,8 +723,29 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.triggerElement( $table, 'cmb2_remove_group_row_start', $this );
 
-		// When a group is removed, loop through all next groups and update fields names.
-		$parent.nextAll( '.cmb-repeatable-grouping' ).find( cmb.repeatEls ).each( cmb.updateNameAttr );
+		// When a group is removed, loop through all next groups and update iterator in attributes.
+		var $nextParents = $parent.nextAll( '.cmb-repeatable-grouping' );
+		$nextParents.each(function() {
+			var $parent = $( this );
+			var nextNum = parseInt( $parent.attr( 'data-iterator' ), 10 );
+			var newNum  = nextNum - 1;
+			$parent.attr({
+				id: $parent.attr( 'id' ).replace( '-' + nextNum, '-' + newNum ),
+				'data-iterator': newNum
+			});
+
+			var $children = $parent.find( '*' );
+			$children.each(function() {
+				var $child = $( this );
+				var attrs  = [ 'name', 'for', 'rel', 'class', 'id', 'data-selector' ];
+				attrs.forEach(function( attr ) {
+					var value = $child.attr( attr );
+					var re = new RegExp( '(?<=[-_[])' + nextNum );
+					value = value ? value.replace( re, newNum ) : value;
+					$child.attr( attr, value );
+				});
+			});
+		});
 
 		$parent.remove();
 
@@ -751,8 +774,20 @@ window.CMB2 = window.CMB2 || {};
 			$parent.prev().addClass( 'empty-row' ).removeClass('cmb-repeat-row');
 		}
 
-		$this.parents('.cmb-repeat-table .cmb-row').remove();
+		// When a row is removed, loop through all next rows and update iterators, fields names and ids.
+		var $nextInputs = $parent.filter( '.cmb-repeat-row' ).nextAll( '.cmb-row' ).find( '[data-iterator]' );
+		$nextInputs.each(function() {
+			var $input  = $( this );
+			var nextNum = parseInt( $input.attr( 'data-iterator' ), 10 );
+			var newNum  = nextNum - 1;
+			$input.attr({
+				id: cmb.replaceLast( $input.attr( 'id' ), '_' + nextNum, '_' + newNum ),
+				name: cmb.replaceLast( $input.attr( 'name' ), nextNum + ']', newNum + ']' ),
+				'data-iterator': newNum
+			});
+		});
 
+		$this.parents('.cmb-repeat-table .cmb-row').remove();
 
 		cmb.triggerElement( $table, { type: 'cmb2_remove_row', group: false } );
 	};
