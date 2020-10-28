@@ -645,10 +645,10 @@ class CMB2_Field extends CMB2_Base {
 			'taxonomy_radio_inline'            => 1,
 			'taxonomy_radio_hierarchical'      => 1,
 			'taxonomy_select'                  => 1,
+			'taxonomy_select_hierarchical'     => 1,
 			'taxonomy_multicheck'              => 1,
 			'taxonomy_multicheck_inline'       => 1,
 			'taxonomy_multicheck_hierarchical' => 1,
-
 		);
 
 		/**
@@ -690,6 +690,7 @@ class CMB2_Field extends CMB2_Base {
 			'radio',
 			'radio_inline',
 			'taxonomy_select',
+			'taxonomy_select_hierarchical',
 			'taxonomy_radio',
 			'taxonomy_radio_inline',
 			'taxonomy_radio_hierarchical',
@@ -830,8 +831,11 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	public function get_timestamp_format( $format = 'date_format', $meta_value = 0 ) {
 		$meta_value = $meta_value ? $meta_value : $this->escaped_value();
-		$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
+		if ( empty( $meta_value ) ) {
+			$meta_value = $this->get_default();
+		}
 
+		$meta_value = CMB2_Utils::make_valid_time_stamp( $meta_value );
 		if ( empty( $meta_value ) ) {
 			return '';
 		}
@@ -883,9 +887,27 @@ class CMB2_Field extends CMB2_Base {
 			return;
 		}
 
+		$field_type = $this->type();
+
+		/**
+		 * Hook before field row begins.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( 'cmb2_before_field_row', $this );
+
+		/**
+		 * Hook before field row begins.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( "cmb2_before_{$field_type}_field_row", $this );
+
 		$this->peform_param_callback( 'before_row' );
 
-		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $this->type() );
+		printf( "<div class=\"cmb-row %s\" data-fieldtype=\"%s\">\n", $this->row_classes(), $field_type );
 
 		if ( ! $this->args( 'show_names' ) ) {
 			echo "\n\t<div class=\"cmb-td\">\n";
@@ -911,6 +933,22 @@ class CMB2_Field extends CMB2_Base {
 		echo "\n\t</div>\n</div>";
 
 		$this->peform_param_callback( 'after_row' );
+
+		/**
+		 * Hook after field row ends.
+		 *
+		 * The dynamic portion of the hook name, $field_type, refers to the field type.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( "cmb2_after_{$field_type}_field_row", $this );
+
+		/**
+		 * Hook after field row ends.
+		 *
+		 * @param CMB2_Field $field The current field object.
+		 */
+		do_action( 'cmb2_after_field_row', $this );
 
 		// For chaining.
 		return $this;
@@ -1014,7 +1052,7 @@ class CMB2_Field extends CMB2_Base {
 		$field_id   = $this->id( true );
 
 		if ( $cb = $this->maybe_callback( 'rest_value_cb' ) ) {
-			apply_filters( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
+			add_filter( "cmb2_get_rest_value_for_{$field_id}", $cb, 99 );
 		}
 
 		$value = $this->get_data();
@@ -1052,6 +1090,25 @@ class CMB2_Field extends CMB2_Base {
 		 * @param CMB2_Field $field This field object.
 		 */
 		return apply_filters( "cmb2_get_rest_value_for_{$field_id}", $value, $this );
+	}
+
+	/**
+	 * Get a field object for a supporting field. (e.g. file field)
+	 *
+	 * @since  2.7.0
+	 *
+	 * @return CMB2_Field|bool Supporting field object, if supported.
+	 */
+	public function get_supporting_field() {
+		$suffix = $this->args( 'has_supporting_data' );
+		if ( empty( $suffix ) ) {
+			return false;
+		}
+
+		return $this->get_field_clone( array(
+			'id' => $this->_id( '', false ) . $suffix,
+			'sanitization_cb' => false,
+		) );
 	}
 
 	/**
@@ -1295,9 +1352,30 @@ class CMB2_Field extends CMB2_Base {
 	 * @return array        Modified field config array.
 	 */
 	public function _set_field_defaults( $args ) {
+		$defaults = $this->get_default_field_args( $args );
+
+		/**
+		 * Filter the CMB2 Field defaults.
+		 *
+		 * @since 2.6.0
+		 * @param array             $defaults Metabox field config array defaults.
+		 * @param string            $id       Field id for the current field to allow for selective filtering.
+		 * @param string            $type     Field type for the current field to allow for selective filtering.
+		 * @param CMB2_Field object $field    This field object.
+		 */
+		$defaults = apply_filters( 'cmb2_field_defaults', $defaults, $args['id'], $args['type'], $this );
 
 		// Set up blank or default values for empty ones.
-		$args = wp_parse_args( $args, $this->get_default_field_args( $args ) );
+		$args = wp_parse_args( $args, $defaults );
+
+		/**
+		 * Filtering the CMB2 Field arguments once merged with the defaults, but before further processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array defaults.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		$args = apply_filters( 'cmb2_field_arguments_raw', $args, $this );
 
 		/*
 		 * Deprecated usage:
@@ -1321,18 +1399,30 @@ class CMB2_Field extends CMB2_Base {
 			$args = $this->set_group_sub_field_defaults( $args );
 		}
 
-		$args['has_supporting_data'] = in_array(
-			$args['type'],
-			array(
-				// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array().
-				'file',
-				// See CMB2_Sanitize::_save_utc_value().
-				'text_datetime_timestamp_timezone',
-			),
-			true
+		$with_supporting = array(
+			// CMB2_Sanitize::_save_file_id_value()/CMB2_Sanitize::_get_group_file_value_array().
+			'file' => '_id',
+			// See CMB2_Sanitize::_save_utc_value().
+			'text_datetime_timestamp_timezone' => '_utc',
 		);
 
-		return $args;
+		$args['has_supporting_data'] = isset( $with_supporting[ $args['type'] ] )
+			? $with_supporting[ $args['type'] ]
+			: false;
+
+		// Repeatable fields require jQuery sortable library.
+		if ( ! empty( $args['repeatable'] ) ) {
+			CMB2_JS::add_dependencies( 'jquery-ui-sortable' );
+		}
+
+		/**
+		 * Filter the CMB2 Field arguments after processing.
+		 *
+		 * @since 2.6.0
+		 * @param array             $args  Metabox field config array after processing.
+		 * @param CMB2_Field object $field This field object.
+		 */
+		return apply_filters( 'cmb2_field_arguments', $args, $this );
 	}
 
 	/**
@@ -1345,8 +1435,9 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	protected function set_field_defaults_group( $args ) {
 		$args['options'] = wp_parse_args( $args['options'], array(
-			'add_button'    => esc_html__( 'Add Group', 'cmb2' ),
-			'remove_button' => esc_html__( 'Remove Group', 'cmb2' ),
+			'add_button'     => esc_html__( 'Add Group', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Group', 'cmb2' ),
+			'remove_confirm' => '',
 		) );
 
 		return $args;
@@ -1446,6 +1537,9 @@ class CMB2_Field extends CMB2_Base {
 			'column'            => false,
 			'js_dependencies'   => array(),
 			'show_in_rest'      => null,
+			'char_counter'      => false,
+			'char_max'          => false,
+			'char_max_enforce'  => false,
 		);
 	}
 

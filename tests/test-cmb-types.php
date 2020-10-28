@@ -381,11 +381,12 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		) );
 		$type = $this->get_field_type_object( $field );
 
+		$type_attr = function_exists( 'current_theme_supports' ) && current_theme_supports( 'html5', 'style' ) ? "type='text/css' " : '';
 		$this->assertHTMLstringsAreEqual(
 			'
 			<div id="wp-field_test_field-wrap" class="wp-core-ui wp-editor-wrap html-active">
-				<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'' . includes_url( "css/dashicons$suffix.css?$version" ) . '\' type=\'text/css\' media=\'all\' />
-				<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'' . includes_url( "css/editor$suffix.css?$version" ) . '\' type=\'text/css\' media=\'all\' />
+				<link rel=\'stylesheet\' id=\'dashicons-css\' href=\'' . includes_url( "css/dashicons$suffix.css?$version" ) . '\' media=\'all\' />
+				<link rel=\'stylesheet\' id=\'editor-buttons-css\' href=\'' . includes_url( "css/editor$suffix.css?$version" ) . '\' ' . $type_attr . 'media=\'all\' />
 				<div id="wp-field_test_field-editor-container" class="wp-editor-container">
 					<textarea class="wp-editor-area" rows="20" cols="40" name="field_test_field" id="field_test_field">
 					</textarea>
@@ -878,7 +879,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	public function test_file_list_field() {
 		$this->assertHTMLstringsAreEqual(
-			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-sizename=\'thumbnail\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
+			'<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[120,120]\' data-sizename=\'thumbnail\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list"></ul>',
 			$this->capture_render( array(
 				$this->get_field_type_object( array(
 					'type' => 'file_list',
@@ -906,10 +907,12 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$field_type = $this->get_field_type_object( 'file_list' );
 
-		$sizename = CMB2_Utils::wp_at_least( '4.7' ) ? 'twentyseventeen-thumbnail-avatar' : 'thumbnail';
+		$sizename = CMB2_Utils::wp_at_least( '4.7' ) && version_compare( get_bloginfo( 'version' ), '5.0', '<' )
+			? 'twentyseventeen-thumbnail-avatar'
+			: 'thumbnail';
 
 		$this->assertHTMLstringsAreEqual(
-			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" name="" id="" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
+			sprintf( '<input type="hidden" class="cmb2-upload-file cmb2-upload-list" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[50,50]\' data-sizename=\'' . $sizename . '\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input type="button" class="cmb2-upload-button button-secondary cmb2-upload-list" value="' . esc_attr__( 'Add or Upload Files', 'cmb2' ) . '" data-hash=\'4lavrjdps2t0\'/><p class="cmb2-metabox-description">This is a description</p><ul id="field_test_field-status" class="cmb2-media-status cmb-attach-list">%1$s%2$s</ul>',
 				$this->file_sprintf( array(
 					'file_name'     => $field_type->get_file_name_from_path( $attach_1_url ),
 					'attachment_id' => $this->attachment_id,
@@ -1028,6 +1031,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'jquery-ui-datetimepicker' => 'jquery-ui-datetimepicker',
 			'media-editor'             => 'media-editor',
 			'wp-color-picker'          => 'wp-color-picker',
+			'jquery-ui-sortable'       => 'jquery-ui-sortable'
 		);
 
 		if ( CMB2_Utils::wp_at_least( '4.9.0' ) ) {

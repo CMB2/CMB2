@@ -593,7 +593,7 @@ class CMB2_Utils {
 				$val = is_array( $val ) ? implode( ',', $val ) : $val;
 
 				// if data attribute, use single quote wraps, else double.
-				$quotes = self::is_data_attribute( $attr, 'data-' ) ? "'" : '"';
+				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}

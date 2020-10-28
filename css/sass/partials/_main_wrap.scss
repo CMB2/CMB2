@@ -7,13 +7,10 @@
 
 	input,
 	textarea {
-		font-size: $font-size;
 		max-width: 100%;
-		padding: 5px;
-
 	}
 
-	input[type=text] {
+	input[type="text"] {
 
 		&.cmb2-oembed {
 			width: 100%;
@@ -22,6 +19,7 @@
 
 	textarea {
 		width: 500px;
+		padding: 8px;
 
 		&.cmb2-textarea-code {
 			font-family: $font-mono;
@@ -75,8 +73,8 @@
 	}
 
 	// .cmb-field-list .cmb-field-list {
-	// 	padding-top:5px;
-	// 	margin: 0;
+	//  padding-top:5px;
+	//  margin: 0;
 	// }
 
 	select {
@@ -91,7 +89,7 @@
 
 	input[type="radio"] {
 		margin: 0 5px 0 0;
-		padding: 0
+		padding: 0;
 	}
 
 	input[type="checkbox"] {
@@ -120,15 +118,16 @@
 		}
 	}
 
-	// Color picker
-	.wp-color-result,
-	.wp-picker-input-wrap {
-		vertical-align: middle;
+	// Multicheck toggle
+	.cmb-multicheck-toggle {
+		margin-top: -1em;
 	}
 
-	.wp-color-result,
-	.wp-picker-container {
-		margin: 0 10px 0 0;
+	// Color picker
+	.wp-picker-clear.button,
+	.wp-picker-default.button {
+		margin-left: 6px;
+		padding: 2px 8px;
 	}
 
 	.cmb-row {
@@ -147,6 +146,17 @@
 		}
 	}
 
+}
+
+// Fixes bug created by 5.3+ block editor-specific styling
+// Over-specific selector to override WordPress's over-specific selector without !important
+// @todo - Remove when `body.branch-5-3` targeting 5.3+ is widely used
+body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[type="radio"]::before {
+	margin: .1875rem;
+
+	@media screen and (max-width: 782px) {
+		margin: .4375rem;
+	}
 }
 
 .cmb2-metabox {
@@ -194,7 +204,6 @@
 	color: $dark-gray;
 	float: left;
 	font-weight: 600;
-	line-height: 1.3;
 	padding: 20px 10px 20px 0;
 	vertical-align: top;
 	width: 200px;
@@ -364,20 +373,14 @@
 	}
 
 	.cmb-shift-rows {
-		font-size: 1em;
 		margin-right: 1em;
-		text-decoration: none;
 
-		.dashicons {
-			font-size: 1.5em;
-			height: 1.5em;
-			line-height: 1.2em;
-			width: 1em;
+		.dashicons-arrow-up-alt2 {
+			margin-top: .15em;
+		}
 
-			&.dashicons-arrow-down-alt2 {
-				line-height: 1.3em;
-
-			}
+		.dashicons-arrow-down-alt2 {
+			margin-top: .2em;
 		}
 	}
 
@@ -444,7 +447,7 @@ span.cmb2-metabox-description {
 		background-size: 20px 20px;
 		border-radius: 2px;
 		-moz-border-radius: 2px;
- 		margin: 15px 0 0 0;
+		margin: 15px 0 0 0;
 	}
 
 	.embed-status {

@@ -36,72 +36,93 @@ class CMB2_Field_Display {
 	 * @return CMB2_Field_Display
 	 */
 	public static function get( CMB2_Field $field ) {
-		switch ( $field->type() ) {
-			case 'text_url':
-				$type = new CMB2_Display_Text_Url( $field );
-				break;
-			case 'text_money':
-				$type = new CMB2_Display_Text_Money( $field );
-				break;
-			case 'colorpicker':
-				$type = new CMB2_Display_Colorpicker( $field );
-				break;
-			case 'checkbox':
-				$type = new CMB2_Display_Checkbox( $field );
-				break;
-			case 'wysiwyg':
-			case 'textarea_small':
-				$type = new CMB2_Display_Textarea( $field );
-				break;
-			case 'textarea_code':
-				$type = new CMB2_Display_Textarea_Code( $field );
-				break;
-			case 'text_time':
-				$type = new CMB2_Display_Text_Time( $field );
-				break;
-			case 'text_date':
-			case 'text_date_timestamp':
-			case 'text_datetime_timestamp':
-				$type = new CMB2_Display_Text_Date( $field );
-				break;
-			case 'text_datetime_timestamp_timezone':
-				$type = new CMB2_Display_Text_Date_Timezone( $field );
-				break;
-			case 'select':
-			case 'radio':
-			case 'radio_inline':
-				$type = new CMB2_Display_Select( $field );
-				break;
-			case 'multicheck':
-			case 'multicheck_inline':
-				$type = new CMB2_Display_Multicheck( $field );
-				break;
-			case 'taxonomy_radio':
-			case 'taxonomy_radio_inline':
-			case 'taxonomy_select':
-			case 'taxonomy_radio_hierarchical':
-				$type = new CMB2_Display_Taxonomy_Radio( $field );
-				break;
-			case 'taxonomy_multicheck':
-			case 'taxonomy_multicheck_inline':
-			case 'taxonomy_multicheck_hierarchical':
-				$type = new CMB2_Display_Taxonomy_Multicheck( $field );
-				break;
-			case 'file':
-				$type = new CMB2_Display_File( $field );
-				break;
-			case 'file_list':
-				$type = new CMB2_Display_File_List( $field );
-				break;
-			case 'oembed':
-				$type = new CMB2_Display_oEmbed( $field );
-				break;
-			default:
-				$type = new self( $field );
-				break;
-		}// End switch.
+		$fieldtype          = $field->type();
+		$display_class_name = $field->args( 'display_class' );
 
-		return $type;
+		if ( empty( $display_class_name ) ) {
+			switch ( $fieldtype ) {
+				case 'text_url':
+					$display_class_name = 'CMB2_Display_Text_Url';
+					break;
+				case 'text_money':
+					$display_class_name = 'CMB2_Display_Text_Money';
+					break;
+				case 'colorpicker':
+					$display_class_name = 'CMB2_Display_Colorpicker';
+					break;
+				case 'checkbox':
+					$display_class_name = 'CMB2_Display_Checkbox';
+					break;
+				case 'wysiwyg':
+				case 'textarea_small':
+					$display_class_name = 'CMB2_Display_Textarea';
+					break;
+				case 'textarea_code':
+					$display_class_name = 'CMB2_Display_Textarea_Code';
+					break;
+				case 'text_time':
+					$display_class_name = 'CMB2_Display_Text_Time';
+					break;
+				case 'text_date':
+				case 'text_date_timestamp':
+				case 'text_datetime_timestamp':
+					$display_class_name = 'CMB2_Display_Text_Date';
+					break;
+				case 'text_datetime_timestamp_timezone':
+					$display_class_name = 'CMB2_Display_Text_Date_Timezone';
+					break;
+				case 'select':
+				case 'radio':
+				case 'radio_inline':
+					$display_class_name = 'CMB2_Display_Select';
+					break;
+				case 'multicheck':
+				case 'multicheck_inline':
+					$display_class_name = 'CMB2_Display_Multicheck';
+					break;
+				case 'taxonomy_radio':
+				case 'taxonomy_radio_inline':
+				case 'taxonomy_select':
+				case 'taxonomy_select_hierarchical':
+				case 'taxonomy_radio_hierarchical':
+					$display_class_name = 'CMB2_Display_Taxonomy_Radio';
+					break;
+				case 'taxonomy_multicheck':
+				case 'taxonomy_multicheck_inline':
+				case 'taxonomy_multicheck_hierarchical':
+					$display_class_name = 'CMB2_Display_Taxonomy_Multicheck';
+					break;
+				case 'file':
+					$display_class_name = 'CMB2_Display_File';
+					break;
+				case 'file_list':
+					$display_class_name = 'CMB2_Display_File_List';
+					break;
+				case 'oembed':
+					$display_class_name = 'CMB2_Display_oEmbed';
+					break;
+				default:
+					$display_class_name = __CLASS__;
+					break;
+			}// End switch.
+		}
+
+		if ( has_action( "cmb2_display_class_{$fieldtype}" ) ) {
+
+			/**
+			 * Filters the custom field display class used for displaying the field. Class is required to extend CMB2_Type_Base.
+			 *
+			 * The dynamic portion of the hook name, $fieldtype, refers to the (custom) field type.
+			 *
+			 * @since 2.2.4
+			 *
+			 * @param string $display_class_name The custom field display class to use.
+			 * @param object $field              The `CMB2_Field` object.
+			 */
+			$display_class_name = apply_filters( "cmb2_display_class_{$fieldtype}", $display_class_name, $field );
+		}
+
+		return new $display_class_name( $field );
 	}
 
 	/**
@@ -129,7 +150,7 @@ class CMB2_Field_Display {
 			if ( is_array( $this->field->value ) ) {
 
 				// Then loop and output.
-				echo '<ul class="cmb2-' . str_replace( '_', '-', $this->field->type() ) . '">';
+				echo '<ul class="cmb2-' . esc_attr( sanitize_html_class( str_replace( '_', '-', $this->field->type() ) ) ) . '">';
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
@@ -376,7 +397,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
-			echo '<div class="cmb2-taxonomy-terms-', esc_attr( $taxonomy ), '">';
+			echo '<div class="cmb2-taxonomy-terms-', esc_attr( sanitize_html_class( $taxonomy ) ), '">';
 			echo implode( ', ', $links );
 			echo '</div>';
 		}
@@ -400,7 +421,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		$id = $this->field->get_field_clone( array(
-			'id' => $this->field->_id() . '_id',
+			'id' => $this->field->_id( '', false ) . '_id',
 		) )->escaped_value( 'absint' );
 
 		$this->file_output( $this->value, $id, $type );
@@ -421,7 +442,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 				) );
 			} else {
 				$size = is_array( $img_size ) ? $img_size[0] : 200;
-				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . $url_value . '" alt="" />';
+				$image = '<img class="cmb-image-display" style="max-width: ' . absint( $size ) . 'px; width: 100%; height: auto;" src="' . esc_url( $url_value ) . '" alt="" />';
 			}
 
 			echo $image;
@@ -429,9 +450,9 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		} else {
 
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
-				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
-				$url_value,
-				CMB2_Utils::get_file_name_from_path( $url_value )
+				esc_html( $field_type->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
+				esc_url( $url_value ),
+				esc_html( CMB2_Utils::get_file_name_from_path( $url_value ) )
 			);
 
 		}

@@ -10,13 +10,8 @@ module.exports = function(grunt) {
 		phpunit: {
 			classes: {},
 			options: {
+				bin: 'vendor/bin/phpunit',
 				excludeGroup: 'cmb2-ajax-embed',
-			}
-		},
-
-		githooks: {
-			all: {
-				'pre-commit': 'tests'
 			}
 		},
 
@@ -140,17 +135,6 @@ module.exports = function(grunt) {
 			}
 		},
 
-		cmq: {
-			options: {
-				log: false
-			},
-			dist: {
-				files: {
-					'css/cmb2.css': 'css/cmb2.css'
-				}
-			}
-		},
-
 		usebanner: {
 			taskName: {
 				options: {
@@ -207,7 +191,8 @@ module.exports = function(grunt) {
 		jshint: {
 			all: [
 				'js/cmb2.js',
-				'js/cmb2-wysiwyg.js'
+				'js/cmb2-wysiwyg.js',
+				'js/cmb2-char-counter.js'
 			],
 			options: {
 				curly   : true,
@@ -225,7 +210,7 @@ module.exports = function(grunt) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow', 'QTags', 'quicktags']
+				predef  :['document','window','jQuery','cmb2_l10','wp','tinyMCEPreInit','tinyMCE','console','postboxes','pagenow', 'QTags', 'quicktags', '_']
 			}
 		},
 
@@ -242,7 +227,7 @@ module.exports = function(grunt) {
 		uglify: {
 			all: {
 				files: {
-					'js/cmb2.min.js': ['js/cmb2.js', 'js/cmb2-wysiwyg.js']
+					'js/cmb2.min.js': ['js/cmb2.js', 'js/cmb2-wysiwyg.js', 'js/cmb2-char-counter.js']
 				},
 				options: {
 					// banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -266,7 +251,7 @@ module.exports = function(grunt) {
 			},
 
 			scripts: {
-				files: ['js/cmb2.js', 'js/cmb2-wysiwyg.js'],
+				files: ['js/cmb2.js', 'js/cmb2-wysiwyg.js', 'js/cmb2-char-counter.js'],
 				tasks: ['js'],
 				options: {
 					debounceDelay: 500
@@ -278,31 +263,6 @@ module.exports = function(grunt) {
 				tasks: [ 'makepot' ]
 			}
 
-		},
-
-		// make a zipfile
-		compress: {
-			main: {
-				options: {
-					mode: 'zip',
-					archive: 'cmb2.zip'
-				},
-				files: [ {
-						expand: true,
-						// cwd: '/',
-						src: [
-							'**',
-							'!node_modules/**',
-							'!css/sass/**',
-							'!**.zip',
-							'!Gruntfile.js',
-							'!package.json',
-							'!phpunit.xml',
-							'!tests/**'
-						],
-						dest: '/'
-				} ]
-			}
 		},
 
 		cssjanus: {
@@ -319,12 +279,6 @@ module.exports = function(grunt) {
 		},
 
 		exec: {
-			txpull: { // Pull Transifex translation - grunt exec:txpull
-				cmd: 'tx pull -a  -f' // Change the percentage with --minimum-perc=yourvalue
-			},
-			txpush_s: { // Push pot to Transifex - grunt exec:txpush_s
-				cmd: 'tx push -s'
-			},
 			apigen: {
 				cmd: [
 					'rm -r ~/Sites/wpengine/api',
@@ -339,7 +293,7 @@ module.exports = function(grunt) {
 	});
 
 	var asciify = ['asciify'];
-	var styles  = ['sass', 'csscomb', 'cmq', 'cssjanus', 'cssmin', 'usebanner'];
+	var styles  = ['sass', 'csscomb', 'cssjanus', 'cssmin', 'usebanner'];
 	var hint    = ['jshint'];
 	var js      = ['jshint', 'uglify'];
 	var tests   = ['jshint', 'phpunit'];
@@ -356,10 +310,4 @@ module.exports = function(grunt) {
 
 	// Checktextdomain and makepot task(s)
 	grunt.registerTask( 'build:i18n', asciify.concat( ['checktextdomain', 'makepot', 'newer:potomo'] ) );
-
-	// Makepot and push it on Transifex task(s).
-	grunt.registerTask( 'tx-push', asciify.concat( ['makepot', 'exec:txpush_s'] ) );
-
-	// Pull from Transifex and create .mo task(s).
-	grunt.registerTask( 'tx-pull', asciify.concat( ['exec:txpull', 'newer:potomo'] ) );
 };

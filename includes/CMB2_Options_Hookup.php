@@ -11,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_Options_Hookup extends CMB2_hookup {
+class CMB2_Options_Hookup extends CMB2_Hookup {
 
 	/**
 	 * The object type we are performing the hookup for
@@ -116,7 +116,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		if ( $this->cmb->prop( 'cmb_styles' ) ) {
 			// Include CMB CSS in the head to avoid FOUC.
-			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
+			add_action( "admin_print_styles-{$page_hook}", array( 'CMB2_Hookup', 'enqueue_cmb_css' ) );
 		}
 
 		$this->maybe_register_message();
@@ -196,7 +196,7 @@ class CMB2_Options_Hookup extends CMB2_hookup {
 
 		$tabs = $this->get_tab_group_tabs();
 		?>
-		<div class="wrap cmb2-options-page option-<?php echo $this->option_key; ?>">
+		<div class="wrap cmb2-options-page option-<?php echo esc_attr( sanitize_html_class( $this->option_key ) ); ?>">
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>

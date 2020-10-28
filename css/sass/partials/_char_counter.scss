@@ -1,0 +1,28 @@
+/*--------------------------------------------------------------
+ * Character counter
+--------------------------------------------------------------*/
+
+.cmb2-char-counter-wrap {
+	margin: .5em 0 1em;
+
+	input[type="text"] {
+		font-size: 12px;
+		width: 25px;
+	}
+
+	&.cmb2-max-exceeded {
+		input[type="text"] {
+			border-color: $dark-red !important;
+		}
+		.cmb2-char-max-msg {
+			display: inline-block;
+		}
+	}
+}
+
+.cmb2-char-max-msg {
+	color: $dark-red;
+	display: none;
+	font-style: italic;
+	margin-left: 1em;
+}

@@ -11,7 +11,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-class CMB2_hookup extends CMB2_Hookup_Base {
+class CMB2_Hookup extends CMB2_Hookup_Base {
 
 	/**
 	 * Only allow JS registration once
@@ -140,6 +140,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			foreach ( $this->cmb->box_types() as $post_type ) {
 				add_filter( "manage_{$post_type}_posts_columns", array( $this, 'register_column_headers' ) );
 				add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'column_display' ), 10, 2 );
+				add_filter( "manage_edit-{$post_type}_sortable_columns", array( $this, 'columns_sortable' ) );
+				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -153,6 +155,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		if ( $this->cmb->has_columns ) {
 			add_filter( 'manage_edit-comments_columns', array( $this, 'register_column_headers' ) );
 			add_action( 'manage_comments_custom_column', array( $this, 'column_display' ), 10, 3 );
+			add_filter( "manage_edit-comments_sortable_columns", array( $this, 'columns_sortable' ) );
+			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -172,6 +176,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		if ( $this->cmb->has_columns ) {
 			add_filter( 'manage_users_columns', array( $this, 'register_column_headers' ) );
 			add_filter( 'manage_users_custom_column', array( $this, 'return_column_display' ), 10, 3 );
+			add_filter( "manage_users_sortable_columns", array( $this, 'columns_sortable' ) );
+			add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 		}
 
 		return $this;
@@ -216,6 +222,8 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 			if ( $this->cmb->has_columns ) {
 				add_filter( "manage_edit-{$taxonomy}_columns", array( $this, 'register_column_headers' ) );
 				add_filter( "manage_{$taxonomy}_custom_column", array( $this, 'return_column_display' ), 10, 3 );
+				add_filter( "manage_edit-{$taxonomy}_sortable_columns", array( $this, 'columns_sortable' ) );
+				add_action( 'pre_get_posts', array( $this, 'columns_sortable_orderby' ) );
 			}
 		}
 
@@ -332,21 +340,16 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param array $columns Array of columns available for the admin page.
 	 */
 	public function register_column_headers( $columns ) {
-		$fields = $this->cmb->prop( 'fields' );
-
-		foreach ( $fields as $key => $field ) {
-			if ( ! isset( $field['column'] ) ) {
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if ( empty( $field['column'] ) ) {
 				continue;
 			}
 
 			$column = $field['column'];
 
 			if ( false === $column['position'] ) {
-
 				$columns[ $field['id'] ] = $column['name'];
-
 			} else {
-
 				$before = array_slice( $columns, 0, absint( $column['position'] ) );
 				$before[ $field['id'] ] = $column['name'];
 				$columns = $before + $columns;
@@ -369,14 +372,95 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function column_display( $column_name, $object_id ) {
 		if ( isset( $this->columns[ $column_name ] ) ) {
-				$field = new CMB2_Field( array(
-					'field_args'  => $this->columns[ $column_name ]['field'],
-					'object_type' => $this->object_type,
-					'object_id'   => $this->cmb->object_id( $object_id ),
-					'cmb_id'      => $this->cmb->cmb_id,
-				) );
+			$field = new CMB2_Field( array(
+				'field_args'  => $this->columns[ $column_name ]['field'],
+				'object_type' => $this->object_type,
+				'object_id'   => $this->cmb->object_id( $object_id ),
+				'cmb_id'      => $this->cmb->cmb_id,
+			) );
 
-				$this->cmb->get_field( $field )->render_column();
+			$this->cmb->get_field( $field )->render_column();
+		}
+	}
+
+	/**
+	 * Returns the columns sortable array.
+	 *
+	 * @since 2.6.1
+	 *
+	 * @param array $columns An array of sortable columns.
+	 *
+	 * @return array $columns An array of sortable columns with CMB2 columns.
+	 */
+	public function columns_sortable( $columns ) {
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if ( ! empty( $field['column'] ) && empty( $field['column']['disable_sortable'] ) ) {
+				$columns[ $field['id'] ] = $field['id'];
+			}
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Return the query object to order by custom columns if selected
+	 *
+	 * @since 2.6.1
+	 *
+	 * @param object $query Object query from WordPress
+	 *
+	 * @return void
+	 */
+	public function columns_sortable_orderby( $query ) {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$orderby = $query->get( 'orderby' );
+
+		foreach ( $this->cmb->prop( 'fields' ) as $key => $field ) {
+			if (
+				empty( $field['column'] )
+				|| ! empty( $field['column']['disable_sortable'] )
+				|| $field['id'] !== $orderby
+			) {
+				continue;
+			}
+
+			$query->set( 'meta_key', $field['id'] );
+
+			$type = $field['type'];
+
+			if ( ! empty( $field['attributes']['type'] ) ) {
+				switch ( $field['attributes']['type'] ) {
+					case 'number':
+					case 'date':
+						$type = $field['attributes']['type'];
+						break;
+					case 'range':
+						$type = 'number';
+						break;
+				}
+			}
+
+			switch ( $type ) {
+				case 'number':
+				case 'text_date_timestamp':
+				case 'text_datetime_timestamp':
+				case 'text_money':
+					$query->set( 'orderby', 'meta_value_num' );
+					break;
+				case 'text_time':
+					$query->set( 'orderby', 'meta_value_time' );
+					break;
+				case 'text_date':
+					$query->set( 'orderby', 'meta_value_date' );
+					break;
+
+				default:
+					$query->set( 'orderby', 'meta_value' );
+					break;
+			}
 		}
 	}
 
@@ -453,21 +537,48 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param bool $add_handle Whether to add the metabox handle and opening div for .inside.
 	 */
 	public function context_box_title_markup_open( $add_handle = true ) {
-		$title = $this->cmb->prop( 'title' );
+		$cmb_id = $this->cmb->cmb_id;
+		$title  = $this->cmb->prop( 'title' );
+		$screen = get_current_screen();
+		$page   = $screen->id;
+		$is_55  = CMB2_Utils::wp_at_least( '5.5' );
 
-		$page = get_current_screen()->id;
-		add_filter( "postbox_classes_{$page}_{$this->cmb->cmb_id}", array( $this, 'postbox_classes' ) );
+		add_filter( "postbox_classes_{$page}_{$cmb_id}", array( $this, 'postbox_classes' ) );
 
-		echo '<div id="' . $this->cmb->cmb_id . '" class="' . postbox_classes( $this->cmb->cmb_id, $page ) . '">' . "\n";
+		$hidden_class = '';
+
+		if ( $is_55 ) {
+
+			// get_hidden_meta_boxes() doesn't apply in the block editor.
+			$is_hidden = ! $screen->is_block_editor() && in_array( $cmb_id, get_hidden_meta_boxes( $screen ), true );
+
+			$hidden_class = $is_hidden
+				? ' hide-if-js'
+				: '';
+		}
+
+		$toggle_button = '<button type="button" class="handlediv button-link" aria-expanded="true"><span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s' ), $title ) . '</span><span class="toggle-indicator" aria-hidden="true"></span></button>';
+		$title_tag = '<h2 class="hndle"><span>' . esc_attr( $title ) . '</span></h2>' . "\n";
+
+		echo '<div id="' . $cmb_id . '" class="' . postbox_classes( $cmb_id, $page ) . $hidden_class . '">' . "\n";
 
 		if ( $add_handle ) {
 
-			echo '<button type="button" class="handlediv button-link" aria-expanded="true">';
-				echo '<span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s' ), $title ) . '</span>';
-				echo '<span class="toggle-indicator" aria-hidden="true"></span>';
-			echo '</button>';
+			if ( $is_55 ) {
+				echo '<div class="postbox-header">';
+				echo $title_tag;
 
-			echo '<h2 class="hndle"><span>' . esc_attr( $title ) . '</span></h2>' . "\n";
+				echo '<div class="handle-actions hide-if-no-js">';
+				echo $toggle_button;
+				echo '</div>';
+
+				echo '</div>' . "\n";
+
+			} else {
+				echo $toggle_button;;
+				echo $title_tag;
+			}
+
 			echo '<div class="inside">' . "\n";
 		}
 	}
@@ -601,7 +712,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @since  1.0.0
 	 */
 	public function metabox_callback() {
-		$object_id = 'comment' == $this->object_type ? get_comment_ID() : get_the_ID();
+		$object_id = 'comment' === $this->object_type ? get_comment_ID() : get_the_ID();
 		$this->cmb->show_form( $object_id, $this->object_type );
 	}
 
@@ -613,7 +724,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 * @param mixed $section User section metabox.
 	 */
 	public function user_new_metabox( $section ) {
-		if ( $section == $this->cmb->prop( 'new_user_section' ) ) {
+		if ( $section === $this->cmb->prop( 'new_user_section' ) ) {
 			$object_id = $this->cmb->object_id();
 			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
 			$this->user_metabox();
@@ -732,7 +843,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		$do_not_pass_go = (
 			! $this->can_save( $post_type )
 			// Check user editing permissions.
-			|| ( 'page' == $post_type && ! current_user_can( 'edit_page', $post_id ) )
+			|| ( 'page' === $post_type && ! current_user_can( 'edit_page', $post_id ) )
 			|| ! current_user_can( 'edit_post', $post_id )
 		);
 

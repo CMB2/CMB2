@@ -107,6 +107,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 			'classes'          => null,
 			'classes_cb'       => '',
 			'remove_box_wrap'  => false,
+			'mb_callback_args' => null,
 			'parent_slug'      => '',
 			'capability'       => 'manage_options',
 			'icon_url'         => '',
@@ -504,8 +505,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 						</div>
 					</div>
 					before_group_row output
-					<div class="postbox cmb-row cmb-repeatable-grouping closed" data-iterator="0">
-						<button type="button" data-selector="group_field_repeat" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="Remove Group"></button>
+					<div id="cmb-group-group_field-0" class="postbox cmb-row cmb-repeatable-grouping closed" data-iterator="0">
+						<button type="button" data-selector="group_field_repeat" data-confirm="" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="Remove Group"></button>
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
@@ -537,7 +538,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 							</div>
 							<div class="cmb-row cmb-remove-field-row">
 								<div class="cmb-remove-row">
-									<button type="button" data-selector="group_field_repeat" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">Remove Group</button>
+									<button type="button" data-selector="group_field_repeat" data-confirm="" class="cmb-remove-group-row cmb-remove-group-row-button alignright button-secondary">Remove Group</button>
 								</div>
 							</div>
 						</div>
@@ -630,7 +631,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 							<h2 class="cmb-group-name">group 2</h2>
 						</div>
 					</div>
-					<div class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
+					<div id="cmb-group-group_field2-0" class="postbox cmb-row cmb-repeatable-grouping" data-iterator="0">
 						<div class="cmbhandle" title="Click to toggle"><br></div>
 						<h3 class="cmb-group-title cmbhandle-title"><span></span></h3>
 						<div class="inside cmb-td cmb-nested cmb-field-list">
@@ -959,7 +960,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 
 		$clean_json = str_replace(
 			'<script>xss</script><a href="http://xssattackexamples.com/">Click to Download</a>',
-			'xssClick to Download',
+			'Click to Download',
 			$this->json
 		);
 

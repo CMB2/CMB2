@@ -77,6 +77,11 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			sprintf( '<iframe width="640" height="360" src="%s"', $args['src'] ),
 			'></iframe>',
 		);
+
+		if ( CMB2_Utils::wp_at_least( '5.2.0' ) ) {
+			$args['oembed_result'][0] = str_replace( 'iframe ', 'iframe title="Hello - Adele" ', $args['oembed_result'][0] );
+		}
+
 		$this->assertOEmbedResult( $args );
 
 		// Test another oembed URL

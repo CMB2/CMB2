@@ -6,6 +6,9 @@ services:
 
 matrix:
   include:
+    - php: 7.1
+      script: composer validate --strict
+      after_script: ls -l composer.*
     - php: nightly
       env:
         - WP_VERSION=latest
@@ -55,7 +58,7 @@ after_script: ./tests/bin/after-run-wp-unit-tests.sh
 branches:
   only:
   - master
-  - trunk
+  - develop
 
 notifications:
   slack:

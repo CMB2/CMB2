@@ -86,6 +86,7 @@ class CMB2_Sanitize {
 				$sanitized_value = $this->textarea();
 				break;
 			case 'taxonomy_select':
+			case 'taxonomy_select_hierarchical':
 			case 'taxonomy_radio':
 			case 'taxonomy_radio_inline':
 			case 'taxonomy_radio_hierarchical':
@@ -132,7 +133,7 @@ class CMB2_Sanitize {
 		$sanitized_value = '';
 
 		if ( ! $this->field->args( 'taxonomy' ) ) {
-			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id()} is missing the 'taxonomy' parameter." );
+			CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$this->field->_id( '', false )} is missing the 'taxonomy' parameter." );
 		} else {
 
 			if ( in_array( $this->field->object_type, array( 'options-page', 'term' ), true ) ) {
@@ -334,7 +335,7 @@ class CMB2_Sanitize {
 		// date_create_from_format if there is a slash in the value.
 		$this->value = wp_unslash( $this->value );
 
-		$utc_key = $this->field->_id() . '_utc';
+		$utc_key = $this->field->_id( '', false ) . '_utc';
 
 		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
 		if ( false !== $repeat_value ) {
@@ -440,7 +441,7 @@ class CMB2_Sanitize {
 	 * @return string        Sanitized url
 	 */
 	public function file() {
-		$file_id_key = $this->field->_id() . '_id';
+		$file_id_key = $this->field->_id( '', false ) . '_id';
 
 		if ( $this->field->group ) {
 			// Return an array with url/id if saving a group field.
@@ -463,7 +464,7 @@ class CMB2_Sanitize {
 	 */
 	public function _get_group_file_value_array( $id_key ) {
 		$alldata = $this->field->group->data_to_save;
-		$base_id = $this->field->group->_id();
+		$base_id = $this->field->group->_id( '', false );
 		$i       = $this->field->group->index;
 
 		// Check group $alldata data.

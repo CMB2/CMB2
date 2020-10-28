@@ -15,15 +15,20 @@ class CMB2_Type_Text_Datetime_Timestamp extends CMB2_Type_Picker_Base {
 	public function render( $args = array() ) {
 		$field = $this->field;
 
+		$value = $field->escaped_value();
+		if ( empty( $value ) ) {
+			$value = $field->get_default();
+		}
+
 		$args = wp_parse_args( $this->args, array(
-			'value'      => $field->escaped_value(),
+			'value'      => $value,
 			'desc'       => $this->_desc(),
 			'datepicker' => array(),
 			'timepicker' => array(),
 		) );
 
 		if ( empty( $args['value'] ) ) {
-			$args['value'] = $field->escaped_value();
+			$args['value'] = $value;
 			// This will be used if there is a select_timezone set for this field
 			$tz_offset = $field->field_timezone_offset();
 			if ( ! empty( $tz_offset ) ) {

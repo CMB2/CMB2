@@ -174,6 +174,14 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$alltypes = $taxonomies = array();
 
 		foreach ( self::$boxes as $cmb_id => $rest_box ) {
+
+			// Hook box specific filter callbacks.
+			$callback = $rest_box->cmb->prop( 'register_rest_field_cb' );
+			if ( is_callable( $callback ) ) {
+				call_user_func( $callback, $rest_box );
+				continue;
+			}
+
 			$types = array_flip( $rest_box->cmb->box_types( array( 'post' ) ) );
 
 			if ( isset( $types['user'] ) ) {
@@ -401,17 +409,52 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			foreach ( self::$type_boxes[ $main_object_type ] as $cmb_id ) {
 				$rest_box = self::$boxes[ $cmb_id ];
 
-				foreach ( $rest_box->read_fields as $field_id ) {
-					$rest_box->cmb->object_id( $object['id'] );
-					$rest_box->cmb->object_type( $main_object_type );
-
-					$field = $rest_box->cmb->get_field( $field_id );
-
-					$field->object_id( $object['id'] );
-					$field->object_type( $main_object_type );
-
-					$values[ $cmb_id ][ $field->id( true ) ] = $field->get_data();
+				if ( ! $rest_box->cmb->is_box_type( $object_type ) ) {
+					continue;
 				}
+
+				$result = self::get_box_rest_values( $rest_box, $object['id'], $main_object_type );
+				if ( ! empty( $result ) ) {
+					if ( empty( $values[ $cmb_id ] ) ) {
+						$values[ $cmb_id ] = $result;
+					} else {
+						$values[ $cmb_id ] = array_merge( $values[ $cmb_id ], $result );
+					}
+				}
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Get box rest values.
+	 *
+	 * @since  2.7.0
+	 *
+	 * @param  CMB2_REST $rest_box         The CMB2_REST object.
+	 * @param  integer   $object_id        The object ID.
+	 * @param  string    $main_object_type The object type (post, user, term, etc)
+	 *
+	 * @return array                       Array of box rest values.
+	 */
+	public static function get_box_rest_values( $rest_box, $object_id = 0, $main_object_type = 'post' ) {
+
+		$rest_box->cmb->object_id( $object_id );
+		$rest_box->cmb->object_type( $main_object_type );
+
+		$values = array();
+
+		foreach ( $rest_box->read_fields as $field_id ) {
+			$field = $rest_box->cmb->get_field( $field_id );
+			$field->object_id( $object_id );
+			$field->object_type( $main_object_type );
+
+			$values[ $field->id( true ) ] = $field->get_rest_value();
+
+			if ( $field->args( 'has_supporting_data' ) ) {
+				$field = $field->get_supporting_field();
+				$values[ $field->id( true ) ] = $field->get_rest_value();
 			}
 		}
 
@@ -522,20 +565,38 @@ class CMB2_REST extends CMB2_Hookup_Base {
 
 		if ( ! empty( self::$type_boxes[ $main_object_type ] ) ) {
 			foreach ( self::$type_boxes[ $main_object_type ] as $cmb_id ) {
-				$rest_box = self::$boxes[ $cmb_id ];
-
-				if ( ! array_key_exists( $cmb_id, $values ) ) {
-					continue;
+				$result = self::santize_box_rest_values( $values, self::$boxes[ $cmb_id ], $object_id, $main_object_type );
+				if ( ! empty( $result ) ) {
+					$updated[ $cmb_id ] = $result;
 				}
-
-				$rest_box->cmb->object_id( $object_id );
-				$rest_box->cmb->object_type( $main_object_type );
-
-				$updated[ $cmb_id ] = $rest_box->sanitize_box_values( $values );
 			}
 		}
 
 		return $updated;
+	}
+
+	/**
+	 * Updates box rest values.
+	 *
+	 * @since  2.7.0
+	 *
+	 * @param  array     $values           Array of values.
+	 * @param  CMB2_REST $rest_box         The CMB2_REST object.
+	 * @param  integer   $object_id        The object ID.
+	 * @param  string    $main_object_type The object type (post, user, term, etc)
+	 *
+	 * @return mixed|bool                  Array of updated statuses if successful.
+	 */
+	public static function santize_box_rest_values( $values, $rest_box, $object_id = 0, $main_object_type = 'post' ) {
+
+		if ( ! array_key_exists( $rest_box->cmb->cmb_id, $values ) ) {
+			return false;
+		}
+
+		$rest_box->cmb->object_id( $object_id );
+		$rest_box->cmb->object_type( $main_object_type );
+
+		return $rest_box->sanitize_box_values( $values );
 	}
 
 	/**
@@ -607,7 +668,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return;
 		}
 
-		$this->cmb->data_to_save[ $field->_id() ] = $values[ $this->cmb->cmb_id ][ $field->_id() ];
+		$this->cmb->data_to_save[ $field->_id( '', false ) ] = $values[ $this->cmb->cmb_id ][ $field->_id( '', false ) ];
 
 		return $this->cmb->save_group_field( $field );
 	}
@@ -629,7 +690,17 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		return $protected;
 	}
 
-	protected static function get_object_id( $object, $object_type = 'post' ) {
+	/**
+	 * Get the object ID for the given object/type.
+	 *
+	 * @since  2.2.3
+	 *
+	 * @param  mixed  $object      The object to get the ID for.
+	 * @param  string $object_type The object type we are looking for.
+	 *
+	 * @return int                 The object ID if found.
+	 */
+	public static function get_object_id( $object, $object_type = 'post' ) {
 		switch ( $object_type ) {
 			case 'user':
 			case 'post':

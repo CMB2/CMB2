@@ -15,7 +15,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 	/**
 	 * Handles outputting an 'file' field
 	 *
-	 * @param  array $args Override arguments
+	 * @param  array $args Override arguments.
 	 * @return string      Form input element
 	 */
 	public function render( $args = array() ) {
@@ -35,13 +35,13 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			'preview_size'    => $field->args( 'preview_size' ),
 			'query_args'      => $field->args( 'query_args' ),
 
-			// if options array and 'url' => false, then hide the url field
+			// if options array and 'url' => false, then hide the url field.
 			'type'            => array_key_exists( 'url', $options ) && false === $options['url']
 				? 'hidden'
 				: 'text',
 		), $args );
 
-		// get an array of image size meta data, fallback to 'large'
+		// get an array of image size meta data, fallback to 'large'.
 		$this->args['img_size_data'] = $img_size_data = parent::get_image_size_data(
 			$a['preview_size'],
 			'large'
@@ -50,13 +50,13 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$output = '';
 
 		$output .= parent::render( array(
-			'type'  => $a['type'],
-			'class' => $a['class'],
-			'value' => $a['value'],
-			'id'    => $a['id'],
-			'name'  => $a['name'],
-			'size'  => $a['size'],
-			'desc'  => '',
+			'type'             => $a['type'],
+			'class'            => $a['class'],
+			'value'            => $a['value'],
+			'id'               => $a['id'],
+			'name'             => $a['name'],
+			'size'             => $a['size'],
+			'desc'             => '',
 			'data-previewsize' => sprintf( '[%d,%d]', $img_size_data['width'], $img_size_data['height'] ),
 			'data-sizename'    => $img_size_data['name'],
 			'data-queryargs'   => ! empty( $a['query_args'] ) ? json_encode( $a['query_args'] ) : '',
@@ -67,8 +67,8 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		// (Possible if being used within a custom field)
 		// This is not elegant, but compensates for CMB2_Types::_id
 		// automagically & inelegantly adding the data-iterator attribute.
-		// Single responsibility principle? pffft
-		$parts = explode( '"', $this->args['id'] );
+		// Single responsibility principle? pffft.
+		$parts            = explode( '"', $this->args['id'] );
 		$this->args['id'] = $parts[0];
 
 		$output .= sprintf(
@@ -79,15 +79,22 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		$output .= $a['desc'];
 		$output .= $this->get_id_field_output();
 
-		$output .= '<div id="' . $field->id() . '-status" class="cmb2-media-status">';
+		$output .= '<div id="' . esc_attr( $field->id() ) . '-status" class="cmb2-media-status">';
 		if ( ! empty( $a['value'] ) ) {
 			$output .= $this->get_file_preview_output();
 		}
 		$output .= '</div>';
 
- 		return $this->rendered( $output );
+		return $this->rendered( $output );
 	}
 
+	/**
+	 * Return attempted file preview output for a provided file.
+	 *
+	 * @since 2.2.5
+	 *
+	 * @return string
+	 */
 	public function get_file_preview_output() {
 		if ( ! $this->is_valid_img_ext( $this->args['value'] ) ) {
 
@@ -103,7 +110,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 				'class' => 'cmb-file-field-image',
 			) );
 		} else {
-			$image = '<img style="max-width: ' . absint( $this->args['img_size_data']['width'] ) . 'px; width: 100%;" src="' . $this->args['value'] . '" class="cmb-file-field-image" alt="" />';
+			$image = '<img style="max-width: ' . absint( $this->args['img_size_data']['width'] ) . 'px; width: 100%;" src="' . esc_url( $this->args['value'] ) . '" class="cmb-file-field-image" alt="" />';
 		}
 
 		return $this->img_status_output( array(
@@ -113,6 +120,13 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		) );
 	}
 
+	/**
+	 * Return field ID output as a hidden field.
+	 *
+	 * @since 2.2.5
+	 *
+	 * @return string
+	 */
 	public function get_id_field_output() {
 		$field = $this->field;
 
@@ -136,17 +150,24 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 		return $output;
 	}
 
+	/**
+	 * Return field ID data.
+	 *
+	 * @since 2.2.5
+	 *
+	 * @return mixed
+	 */
 	public function get_id_field() {
 
-		// reset field args for attachment id
+		// reset field args for attachment id.
 		$args = array(
-			// if we're looking at a file in a group, we need to get the non-prefixed id
+			// if we're looking at a file in a group, we need to get the non-prefixed id.
 			'id' => ( $this->field->group ? $this->field->args( '_id' ) : $this->args['id'] ) . '_id',
 			'disable_hash_data_attribute' => true,
 		);
 
 		// and get new field object
-		// (need to set it to the types field property)
+		// (need to set it to the types field property).
 		$id_field = $this->field->get_field_clone( $args );
 
 		$id_value = absint( null !== $this->args['id_value'] ? $this->args['id_value'] : $id_field->escaped_value() );
@@ -156,7 +177,7 @@ class CMB2_Type_File extends CMB2_Type_File_Base {
 			$id_value = '';
 		}
 
-		// if there is no id saved yet, try to get it from the url
+		// if there is no id saved yet, try to get it from the url.
 		if ( $this->args['value'] && ! $id_value ) {
 			$id_value = CMB2_Utils::image_id_from_url( esc_url_raw( $this->args['value'] ) );
 		}

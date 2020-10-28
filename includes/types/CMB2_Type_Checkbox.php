@@ -24,14 +24,23 @@ class CMB2_Type_Checkbox extends CMB2_Type_Text {
 	 *
 	 * @since 2.2.2
 	 *
-	 * @param CMB2_Types $types
-	 * @param array      $args
+	 * @param CMB2_Types $types      Object for the field type.
+	 * @param array      $args       Array of arguments for the type.
+	 * @param mixed      $is_checked Whether or not the field is checked, or default value.
 	 */
 	public function __construct( CMB2_Types $types, $args = array(), $is_checked = null ) {
 		parent::__construct( $types, $args );
 		$this->is_checked = $is_checked;
 	}
 
+	/**
+	 * Render the field for the field type.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @param array $args Array of arguments for the rendering.
+	 * @return CMB2_Type_Base|string
+	 */
 	public function render( $args = array() ) {
 		$defaults = array(
 			'type'  => 'checkbox',
@@ -56,7 +65,7 @@ class CMB2_Type_Checkbox extends CMB2_Type_Text {
 			sprintf(
 				'%s <label for="%s">%s</label>',
 				parent::render( $args ),
-				$this->_id(),
+				$this->_id( '', false ),
 				$this->_desc()
 			)
 		);

@@ -50,7 +50,7 @@ function cmb2_bootstrap() {
 	do_action( 'cmb2_init_before_hookup' );
 
 	/**
-	 * Get all created metaboxes, and instantiate CMB2_hookup
+	 * Get all created metaboxes, and instantiate CMB2_Hookup
 	 * on metaboxes which require it.
 	 *
 	 * @since  2.0.2
