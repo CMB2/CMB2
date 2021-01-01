@@ -67,8 +67,24 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		// Optionally network_admin_menu.
 		$hook = $this->cmb->prop( 'admin_menu_hook' );
 
-		// Hook in to add our menu.
-		add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+		$parent_slug = $this->cmb->prop( 'parent_slug' );
+		$position    = $this->cmb->prop( 'position' );
+
+		if ( $parent_slug ) { 				
+			// Hook in to add our sub_menu.
+			if ( $position > 0 ){
+				// Hook in to add our sub_menu setting position
+				add_action( $hook, array( $this, 'options_page_menu_hooks' ), 100 * $position );
+			}
+			else { 				
+				// Hook in to add our sub_menu in a very last position
+				add_action( $hook, array( $this, 'options_page_menu_hooks' ), 2000 );
+			}
+		}
+		else{
+			// Hook in to add our menu.
+			add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+		}
 
 		// If in the network admin, need to use get/update_site_option.
 		if ( 'network_admin_menu' === $hook ) {
