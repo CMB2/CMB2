@@ -66,7 +66,25 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 
 		// Optionally network_admin_menu.
 		$hook     = $this->cmb->prop( 'admin_menu_hook' );
-		$priority = $this->cmb->prop( 'admin_menu_hook_priority', 10 );
+		$priority = $this->cmb->prop( 'priority', 10 );
+
+		switch ( $priority ) {
+			case 'high':
+				$priority = 5;
+				break;
+			case 'core':
+				$priority = 10;
+				break;
+			case 'default':
+				$priority = 10;
+				break;
+			case 'low':
+				$priority = 99;
+				break;
+			default:
+				$priority = (int) $priority;
+				break;
+		}
 
 		// Hook in to add our menu.
 		add_action( $hook, array( $this, 'options_page_menu_hooks' ), $priority );
