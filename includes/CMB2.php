@@ -129,21 +129,22 @@ class CMB2 extends CMB2_Base {
 		 * and several are passed along to add_menu_page()/add_submenu_page()
 		 */
 
-		// 'menu_title'           => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		'message_cb'              => '', // Optionally define the options-save message (via a callback).
-		'option_key'              => '', // The actual option key and admin menu page slug.
-		'parent_slug'             => '', // Used as first param in add_submenu_page().
-		'capability'              => 'manage_options', // Cap required to view options-page.
-		'icon_url'                => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
-		'position'                => null, // Menu position. Only applicable if 'parent_slug' is left empty.
+		// 'menu_title'            => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		'message_cb'               => '', // Optionally define the options-save message (via a callback).
+		'option_key'               => '', // The actual option key and admin menu page slug.
+		'parent_slug'              => '', // Used as first param in add_submenu_page().
+		'capability'               => 'manage_options', // Cap required to view options-page.
+		'icon_url'                 => '', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		'position'                 => null, // Menu position. Only applicable if 'parent_slug' is left empty.
 
-		'admin_menu_hook'         => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
-		'display_cb'              => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-		'save_button'             => '', // The text for the options-page save button. Defaults to 'Save'.
-		'disable_settings_errors' => false, // On settings pages (not options-general.php sub-pages), allows disabling.
-		'tab_group'               => '', // Tab-group identifier, enables options page tab navigation.
-		// 'tab_title'            => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
-		// 'autoload'             => true, // Defaults to true, the options-page option will be autloaded.
+		'admin_menu_hook'          => 'admin_menu', // Alternately 'network_admin_menu' to add network-level options page.
+		'admin_menu_hook_priority' => 10, // The page-registration admin menu hook priority.
+		'display_cb'               => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
+		'save_button'              => '', // The text for the options-page save button. Defaults to 'Save'.
+		'disable_settings_errors'  => false, // On settings pages (not options-general.php sub-pages), allows disabling.
+		'tab_group'                => '', // Tab-group identifier, enables options page tab navigation.
+		// 'tab_title'             => null, // Falls back to 'title' (above). Do not define here so we can set a fallback.
+		// 'autoload'              => true, // Defaults to true, the options-page option will be autloaded.
 	);
 
 	/**
