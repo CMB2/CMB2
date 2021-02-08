@@ -5,6 +5,10 @@
 /* Metabox collapse arrow indicators */
 .js .cmb2-postbox.context-box {
 
+	.handlediv {
+		text-align: center;
+	}
+
 	.toggle-indicator {
 		&:before {
 			content: "\f142";

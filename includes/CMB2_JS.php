@@ -90,6 +90,11 @@ class CMB2_JS {
 				self::colorpicker_frontend();
 			}
 
+			// Enqueue colorpicker
+			if ( ! wp_script_is( 'wp-color-picker', 'enqueued' ) ) {
+				wp_enqueue_script( 'wp-color-picker' );
+			}
+
 			if ( isset( $dependencies['wp-color-picker-alpha'] ) ) {
 				self::register_colorpicker_alpha();
 			}

@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.7.0 - 2020-01-21
+ * CMB2 - v2.7.0 - 2020-10-28
  * https://cmb2.io
  * Copyright (c) 2020
  * Licensed GPLv2+
@@ -645,7 +645,11 @@ span.cmb2-metabox-description {
  * Context Metaboxes
 --------------------------------------------------------------*/
 /* Metabox collapse arrow indicators */
-/* line 9, sass/partials/_context_metaboxes.scss */
+/* line 8, sass/partials/_context_metaboxes.scss */
+.js .cmb2-postbox.context-box .handlediv {
+  text-align: center;
+}
+/* line 13, sass/partials/_context_metaboxes.scss */
 .js .cmb2-postbox.context-box .toggle-indicator:before {
   content: "\f142";
   display: inline-block;
@@ -655,79 +659,79 @@ span.cmb2-metabox-description {
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none !important;
 }
-/* line 22, sass/partials/_context_metaboxes.scss */
+/* line 26, sass/partials/_context_metaboxes.scss */
 .js .cmb2-postbox.context-box.closed .toggle-indicator:before {
   content: "\f140";
 }
 
-/* line 30, sass/partials/_context_metaboxes.scss */
+/* line 34, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box {
   margin-bottom: 10px;
 }
-/* line 34, sass/partials/_context_metaboxes.scss */
+/* line 38, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-before_permalink-box {
   margin-top: 10px;
 }
-/* line 38, sass/partials/_context_metaboxes.scss */
+/* line 42, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-after_title-box {
   margin-top: 10px;
 }
-/* line 42, sass/partials/_context_metaboxes.scss */
+/* line 46, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-after_editor-box {
   margin-top: 20px;
   margin-bottom: 0;
 }
-/* line 47, sass/partials/_context_metaboxes.scss */
+/* line 51, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-form_top-box {
   margin-top: 10px;
 }
-/* line 51, sass/partials/_context_metaboxes.scss */
+/* line 55, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box.context-form_top-box .hndle {
   font-size: 14px;
   padding: 8px 12px;
   margin: 0;
   line-height: 1.4;
 }
-/* line 59, sass/partials/_context_metaboxes.scss */
+/* line 63, sass/partials/_context_metaboxes.scss */
 .cmb2-postbox.context-box .hndle {
   cursor: auto;
 }
 
-/* line 64, sass/partials/_context_metaboxes.scss */
+/* line 68, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap {
   margin-top: 10px;
 }
-/* line 68, sass/partials/_context_metaboxes.scss */
+/* line 72, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap.cmb2-context-wrap-form_top {
   margin-left: 300px;
   width: auto;
 }
-/* line 75, sass/partials/_context_metaboxes.scss */
+/* line 79, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap.cmb2-context-wrap-no-title .cmb2-metabox {
   padding: 10px;
 }
-/* line 80, sass/partials/_context_metaboxes.scss */
+/* line 84, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-th {
   padding: 0 0 0 2%;
   width: 18%;
 }
-/* line 85, sass/partials/_context_metaboxes.scss */
+/* line 89, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-td {
   width: 80%;
   padding: 0;
 }
-/* line 90, sass/partials/_context_metaboxes.scss */
+/* line 94, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row {
   margin-bottom: 10px;
 }
-/* line 93, sass/partials/_context_metaboxes.scss */
+/* line 97, sass/partials/_context_metaboxes.scss */
 .cmb2-context-wrap .cmb-row:last-of-type {
   margin-bottom: 0;
 }
 
 /* one column on the post write/edit screen */
 @media only screen and (max-width: 850px) {
-  /* line 103, sass/partials/_context_metaboxes.scss */
+  /* line 107, sass/partials/_context_metaboxes.scss */
   .cmb2-context-wrap.cmb2-context-wrap-form_top {
     margin-left: 0;
   }

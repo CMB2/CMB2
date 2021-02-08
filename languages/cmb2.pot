@@ -1,28 +1,28 @@
-# Copyright (C) 2019 CMB2 team
+# Copyright (C) 2020 CMB2 team
 # This file is distributed under the same license as the CMB2 package.
 msgid ""
 msgstr ""
 "Project-Id-Version: CMB2 2.7.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2019-08-25 02:58:51+00:00\n"
+"POT-Creation-Date: 2020-10-28 12:59:11+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-8-24 2:58+240\n"
+"PO-Revision-Date: 2020-10-28 12:59+240\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
-"X-Generator: grunt-wp-i18n 0.4.9\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: United States\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: example-functions.php:115 tests/test-cmb-field.php:263
 msgid "Test Metabox"
@@ -394,27 +394,41 @@ msgstr ""
 msgid "Invalid %1$s method: %2$s"
 msgstr ""
 
-#: includes/CMB2_Field.php:1418
+#: includes/CMB2_Field.php:1438
 msgid "Add Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1419
+#: includes/CMB2_Field.php:1439
 msgid "Remove Group"
 msgstr ""
 
-#: includes/CMB2_Field.php:1451 includes/CMB2_Field.php:1455
+#: includes/CMB2_Field.php:1471 includes/CMB2_Field.php:1475
 #: tests/test-cmb-field.php:237
 msgid "None"
 msgstr ""
 
-#: includes/CMB2_Field.php:1569
+#: includes/CMB2_Field.php:1589
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: includes/CMB2_Field_Display.php:432 includes/CMB2_JS.php:237
+#: includes/CMB2_Field_Display.php:453 includes/CMB2_JS.php:237
 #: includes/types/CMB2_Type_File_Base.php:79 tests/test-cmb-types-base.php:149
-#: tests/test-cmb-types.php:958
+#: tests/test-cmb-types.php:959
 msgid "File:"
+msgstr ""
+
+#: includes/CMB2_Hookup.php:188
+msgid ""
+"Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
+"install."
+msgstr ""
+
+#: includes/CMB2_Hookup.php:192
+msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
+msgstr ""
+
+#: includes/CMB2_Hookup.php:560
+msgid "Toggle panel: %s"
 msgstr ""
 
 #: includes/CMB2_Hookup_Base.php:44
@@ -514,12 +528,12 @@ msgstr ""
 #: includes/CMB2_JS.php:236 includes/CMB2_Types.php:408
 #: includes/types/CMB2_Type_File_Base.php:84 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:47 tests/test-cmb-types.php:55
-#: tests/test-cmb-types.php:958
+#: tests/test-cmb-types.php:959
 msgid "Remove"
 msgstr ""
 
 #: includes/CMB2_JS.php:238 includes/types/CMB2_Type_File_Base.php:82
-#: tests/test-cmb-types-base.php:149 tests/test-cmb-types.php:958
+#: tests/test-cmb-types-base.php:149 tests/test-cmb-types.php:959
 msgid "Download"
 msgstr ""
 
@@ -548,21 +562,7 @@ msgstr ""
 msgid "Remove Row"
 msgstr ""
 
-#: includes/CMB2_hookup.php:188
-msgid ""
-"Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
-"install."
-msgstr ""
-
-#: includes/CMB2_hookup.php:192
-msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
-msgstr ""
-
-#: includes/CMB2_hookup.php:550
-msgid "Toggle panel: %s"
-msgstr ""
-
-#: includes/helper-functions.php:307
+#: includes/helper-functions.php:308
 msgid "Save"
 msgstr ""
 
@@ -705,13 +705,13 @@ msgstr ""
 msgid "Your text may be truncated."
 msgstr ""
 
-#: includes/types/CMB2_Type_File.php:76 tests/test-cmb-types.php:934
-#: tests/test-cmb-types.php:958
+#: includes/types/CMB2_Type_File.php:76 tests/test-cmb-types.php:935
+#: tests/test-cmb-types.php:959
 msgid "Add or Upload File"
 msgstr ""
 
-#: includes/types/CMB2_Type_File_List.php:41 tests/test-cmb-types.php:881
-#: tests/test-cmb-types.php:914
+#: includes/types/CMB2_Type_File_List.php:41 tests/test-cmb-types.php:882
+#: tests/test-cmb-types.php:915
 msgid "Add or Upload Files"
 msgstr ""
 
