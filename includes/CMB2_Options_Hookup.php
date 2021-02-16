@@ -259,7 +259,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 			}
 		}
 
-		return $tabs;
+		return apply_filters( 'cmb2_tab_group_tabs', $tabs, $tab_group );
 	}
 
 	/**
