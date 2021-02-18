@@ -22,7 +22,18 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	public function is_valid_img_ext( $file, $blah = false ) {
 		$file_ext = CMB2_Utils::get_file_ext( $file );
 
-		$valid_types = array( 'jpg', 'jpeg', 'png', 'gif', 'ico', 'icon' );
+		$valid_types = array( 'jpg', 'jpeg', 'jpe', 'png', 'gif', 'ico', 'icon' );
+
+		$allowed = get_allowed_mime_types();
+		if ( ! empty( $allowed ) ) {
+			foreach ( (array) $allowed as $type => $mime) {
+				if ( 0 === strpos( $mime, 'image/' ) ) {
+					$types = explode( '|', $type );
+					$valid_types = array_merge( $valid_types, $types );
+				}
+			}
+			$valid_types = array_unique( $valid_types );
+		}
 
 		/**
 		 * Which image types are considered valid image file extensions.
