@@ -1383,7 +1383,7 @@ class CMB2 extends CMB2_Base {
 
 		list( $field_id, $sub_field_id ) = $ids;
 
-		$index = implode( '', $ids ) . ( $field_group ? $field_group->index : '' );
+		$index = implode( '|', $ids ) . ( $field_group ? '|' . $field_group->index : '' );
 
 		if ( array_key_exists( $index, $this->fields ) && ! $reset_cached ) {
 			return $this->fields[ $index ];
