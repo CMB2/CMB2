@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 * Fixes PHP warnings on repeatable ColorPicker with an array as default. Props [@rubengc](https://github.com/rubengc) ([#1340](https://github.com/CMB2/CMB2/pull/1340)).
 
+### Bug Fixes
+* Fix issue with options-pages being changed to register on a hook priority of `5` instead of the default `10`, causing some back-compatibility issues. Fixes [#1410](https://github.com/CMB2/CMB2/issues/1410).
+
 ## [2.8.0 - 2020-01-21](https://github.com/CMB2/CMB2/releases/tag/v2.7.0)
 
 ### Enhancements

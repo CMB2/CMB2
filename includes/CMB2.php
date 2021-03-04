@@ -74,7 +74,7 @@ class CMB2 extends CMB2_Base {
 		 * Comments screen contexts include 'normal' and 'side'. Default is 'normal'.
 		 */
 		'context'                 => 'normal',
-		'priority'                => 'high',
+		'priority'                => 'high', // Or 10 for options pages.
 		'show_names'              => true, // Show field names on the left.
 		'show_on_cb'              => null, // Callback to determine if metabox should display.
 		'show_on'                 => array(), // Post IDs or page templates to display this metabox. overrides 'show_on_cb'.
@@ -208,6 +208,15 @@ class CMB2 extends CMB2_Base {
 		$this->object_id( $object_id );
 
 		if ( $this->is_options_page_mb() ) {
+
+			// Check initial priority.
+			if ( empty( $config['priority'] ) ) {
+
+				// If not explicitly defined, Reset the priority to 10
+				// Fixes https://github.com/CMB2/CMB2/issues/1410.
+				$this->meta_box['priority'] = 10;
+			}
+
 			$this->init_options_mb();
 		}
 
