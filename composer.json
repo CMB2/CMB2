@@ -1,46 +1,53 @@
 {
-    "name": "cmb2/cmb2",
-    "description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Justin Sternberg",
-            "email": "justin@dsgnwrks.pro",
-            "homepage": "https://dsgnwrks.pro",
-            "role": "Developer"
-        },
-        {
-            "name": "WebDevStudios",
-            "email": "contact@webdevstudios.com",
-            "homepage": "https://github.com/WebDevStudios",
-            "role": "Developer"
-        }
-    ],
-    "keywords": ["wordpress", "plugin", "metabox"],
-    "homepage": "https://github.com/CMB2/CMB2",
-    "type": "wordpress-plugin",
-    "support": {
-        "issues": "https://github.com/CMB2/CMB2/issues",
-        "source": "http://wordpress.org/support/plugin/cmb2"
-    },
-    "require": {
-        "php": ">5.2.4"
-    },
-    "suggest": {
-        "composer/installers": "~1.0"
-    },
-    "require-dev": {
-        "apigen/apigen": "4.1.2",
-        "nette/utils": "2.5.3",
-        "phpunit/phpunit": "6.5.13"
-    },
-    "scripts": {
-      "test": [
-        "vendor/bin/phpunit"
-      ],
-      "docs": [
-        "vendor/bin/apigen generate --config apigen/apigen.neon",
-        "php apigen/hook-docs.php"
-      ]
-    }
+	"name": "cmb2/cmb2",
+	"description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Justin Sternberg",
+			"email": "justin@dsgnwrks.pro",
+			"homepage": "https://dsgnwrks.pro",
+			"role": "Developer"
+		},
+		{
+			"name": "WebDevStudios",
+			"email": "contact@webdevstudios.com",
+			"homepage": "https://github.com/WebDevStudios",
+			"role": "Developer"
+		}
+	],
+	"keywords": ["wordpress", "plugin", "metabox"],
+	"homepage": "https://github.com/CMB2/CMB2",
+	"type": "wordpress-plugin",
+	"support": {
+		"issues": "https://github.com/CMB2/CMB2/issues",
+		"source": "http://wordpress.org/support/plugin/cmb2"
+	},
+	"require": {
+		"php": ">5.2.4"
+	},
+	"suggest": {
+		"composer/installers": "~1.0"
+	},
+	"require-dev": {
+		"apigen/apigen": "4.1.2",
+		"nette/utils": "2.5.3",
+		"phpunit/phpunit": "6.5.13",
+		"awesomemotive/am-cli-tools": ">=1.3.1"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/awesomemotive/am-cli-tools"
+		}
+	],
+	"scripts": {
+	  "test": [
+		"vendor/bin/phpunit"
+	  ],
+	  "docs": [
+		"vendor/bin/apigen generate --config apigen/apigen.neon",
+		"php apigen/hook-docs.php"
+	  ]
+	}
 }
