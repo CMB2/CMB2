@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Enhancements
+* Sanitize URLs, defaulting to `https`. Props [@paulschreiber](https://github.com/paulschreiber) ([#1413](https://github.com/CMB2/CMB2/pull/1413)).
+
 ## [2.9.0 - 2020-03-21](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
 
 ### Enhancements

@@ -178,30 +178,6 @@ class CMB2_Sanitize {
 	}
 
 	/**
-	 * Sanitize a URL. Make the default scheme HTTPS.
-	 *
-	 * @since  X.X.X
-	 * @param  string  $value     Unescaped URL.
-	 * @param  array   $protocols Allowed protocols for URL
-	 * @param  string  $default   Default value if no URL found.
-	 * @return string             escaped URL
-	 */
-	public function sanitize_and_secure_url( $url, $protocols, $default ) {
-		if ( ! $url ) {
-			return $default;
-		}
-
-		$safe_url = esc_url_raw( $url, $protocols );
-
-		// If we are adding a HTTP protocol, make it HTTPS instead.
-		if ( NULL === parse_url( $url, PHP_URL_SCHEME ) ) {
-			$safe_url = set_url_scheme( $safe_url, 'https' );
-		}
-
-		return $safe_url;
-	}
-
-	/**
 	 * Validate url in a meta value.
 	 *
 	 * @since  1.0.1
@@ -210,6 +186,7 @@ class CMB2_Sanitize {
 	public function text_url() {
 		$protocols = $this->field->args( 'protocols' );
 		$default   = $this->field->get_default();
+
 		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
@@ -608,6 +585,33 @@ class CMB2_Sanitize {
 			return empty( $cleaned_up );
 		}
 		return false;
+	}
+
+	/**
+	 * Sanitize a URL. Make the default scheme HTTPS.
+	 *
+	 * @since  2.10.0
+	 * @param  string  $value     Unescaped URL.
+	 * @param  array   $protocols Allowed protocols for URL.
+	 * @param  string  $default   Default value if no URL found.
+	 * @return string             escaped URL.
+	 */
+	public static function sanitize_and_secure_url( $url, $protocols = null, $default = null ) {
+		if ( empty( $url ) ) {
+			return $default;
+		}
+
+		$orig_scheme = parse_url( $url, PHP_URL_SCHEME );
+		$url         = esc_url_raw( $url, $protocols );
+
+		// If original url has no scheme...
+		if ( null === $orig_scheme ) {
+
+			// Let's make sure the added scheme is https.
+			$url = set_url_scheme( $url, 'https' );
+		}
+
+		return $url;
 	}
 
 }
