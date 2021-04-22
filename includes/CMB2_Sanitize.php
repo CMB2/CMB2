@@ -297,9 +297,11 @@ class CMB2_Sanitize {
 		// date_create_from_format if there is a slash in the value.
 		$this->value = wp_unslash( $this->value );
 
-		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
-		if ( empty( $test ) ) {
-			return '';
+		if ( is_array( $this->value ) ) {
+			$test = array_filter( $this->value );
+			if ( empty( $test ) ) {
+				return '';
+			}
 		}
 
 		$repeat_value = $this->_check_repeat( __FUNCTION__, $repeat );
@@ -307,7 +309,12 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		if ( isset( $this->value['date'], $this->value['time'] ) ) {
+		// Account for timestamp values passed through REST API.
+		if ( is_scalar( $this->value ) && CMB2_Utils::is_valid_date( $this->value ) ) {
+
+			$this->value = CMB2_Utils::make_valid_time_stamp( $this->value );
+
+		} elseif ( isset( $this->value['date'], $this->value['time'] ) ) {
 			$this->value = $this->field->get_timestamp_from_value( $this->value['date'] . ' ' . $this->value['time'] );
 		}
 
