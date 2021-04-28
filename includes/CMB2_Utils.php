@@ -247,7 +247,7 @@ class CMB2_Utils {
 	}
 
 	/**
-	 * Returns a timestamp, first checking if value already is a timestamp.
+	 * Returns a unix timestamp, first checking if value already is a timestamp.
 	 *
 	 * @since  2.0.0
 	 * @param  string|int $string Possible timestamp string.
@@ -258,9 +258,41 @@ class CMB2_Utils {
 			return 0;
 		}
 
-		return self::is_valid_time_stamp( $string )
-			? (int) $string :
-			strtotime( (string) $string );
+		$timestamp = @strtotime( (string) $string );
+		if ( ! empty( $timestamp ) ) {
+
+			// We got a timestamp, first try!
+			return $timestamp;
+		}
+
+		$valid = self::is_valid_time_stamp( $string );
+		if ( $valid ) {
+			$timestamp  = (int) $string;
+			$length     = strlen( (string) $timestamp );
+			$unixlength = strlen( (string) time() );
+			$diff       = $length - $unixlength;
+
+			// If value is larger than a unix timestamp, we need to round to the
+			// nearest unix timestamp (in seconds).
+			if ( $diff > 0 ) {
+				$divider   = (int) '1' . str_repeat( '0', $diff );
+				$timestamp = round( $timestamp / $divider );
+			}
+		}
+
+		return $timestamp;
+	}
+
+	/**
+	 * Determine if a value is a valid date.
+	 *
+	 * @since  2.9.1
+	 * @param  mixed $date Value to check.
+	 * @return boolean     Whether value is a valid date
+	 */
+	public static function is_valid_date( $date ) {
+		return ( is_string( $date ) && @strtotime( $date ) )
+			|| self::is_valid_time_stamp( $date );
 	}
 
 	/**
@@ -590,6 +622,8 @@ class CMB2_Utils {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
 			$empty    = false === $val && 'value' !== $attr;
 			if ( ! $excluded && ! $empty ) {
+				$val = is_array( $val ) ? implode( ',', $val ) : $val;
+
 				// if data attribute, use single quote wraps, else double.
 				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );

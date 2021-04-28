@@ -68,7 +68,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		$hook = $this->cmb->prop( 'admin_menu_hook' );
 
 		// Hook in to add our menu.
-		add_action( $hook, array( $this, 'options_page_menu_hooks' ) );
+		add_action( $hook, array( $this, 'options_page_menu_hooks' ), $this->get_priority() );
 
 		// If in the network admin, need to use get/update_site_option.
 		if ( 'network_admin_menu' === $hook ) {
@@ -194,25 +194,37 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 			return call_user_func( $callback, $this );
 		}
 
-		$tabs = $this->get_tab_group_tabs();
 		?>
 		<div class="wrap cmb2-options-page option-<?php echo esc_attr( sanitize_html_class( $this->option_key ) ); ?>">
 			<?php if ( $this->cmb->prop( 'title' ) ) : ?>
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>
-			<?php if ( ! empty( $tabs ) ) : ?>
-				<h2 class="nav-tab-wrapper">
-					<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
-						<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
-					<?php endforeach; ?>
-				</h2>
-			<?php endif; ?>
+			<?php $this->options_page_tab_nav_output(); ?>
 			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $this->option_key ); ?>">
 				<?php $this->options_page_metabox(); ?>
 				<?php submit_button( esc_attr( $this->cmb->prop( 'save_button' ) ), 'primary', 'submit-cmb' ); ?>
 			</form>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Display options-page Tab Navigation output.
+	 *
+	 * @since 2.9.0
+	 */
+	public function options_page_tab_nav_output() {
+		$tabs = $this->get_tab_group_tabs();
+		if ( empty( $tabs ) ) {
+			return;
+		}
+		?>
+		<h2 class="nav-tab-wrapper">
+			<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
+				<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
+			<?php endforeach; ?>
+		</h2>
 		<?php
 	}
 
@@ -259,7 +271,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 			}
 		}
 
-		return $tabs;
+		return apply_filters( 'cmb2_tab_group_tabs', $tabs, $tab_group );
 	}
 
 	/**

@@ -1,7 +1,7 @@
 /*!
- * CMB2 - v2.7.0 - 2020-10-28
+ * CMB2 - v2.9.0 - 2021-03-03
  * https://cmb2.io
- * Copyright (c) 2020
+ * Copyright (c) 2021
  * Licensed GPLv2+
  */
 
@@ -413,16 +413,16 @@ body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[typ
 
 /* line 393, sass/partials/_main_wrap.scss */
 p.cmb2-metabox-description {
-  color: #757575;
-  font-style: italic;
+  color: #666;
+  letter-spacing: 0.01em;
   margin: 0;
   padding-top: .5em;
 }
 
 /* line 400, sass/partials/_main_wrap.scss */
 span.cmb2-metabox-description {
-  color: #757575;
-  font-style: italic;
+  color: #666;
+  letter-spacing: 0.01em;
 }
 
 /* line 405, sass/partials/_main_wrap.scss */
@@ -1302,7 +1302,7 @@ span.cmb2-metabox-description {
 .cmb2-char-max-msg {
   color: #a00;
   display: none;
-  font-style: italic;
+  font-weight: 600;
   margin-left: 1em;
 }
 

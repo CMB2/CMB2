@@ -185,13 +185,15 @@ class CMB2_Sanitize {
 	 */
 	public function text_url() {
 		$protocols = $this->field->args( 'protocols' );
+		$default   = $this->field->get_default();
+
 		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				$this->value[ $key ] = $val ? esc_url_raw( $val, $protocols ) : $this->field->get_default();
+				$this->value[ $key ] = self::sanitize_and_secure_url( $val, $protocols, $default );
 			}
 		} else {
-			$this->value = $this->value ? esc_url_raw( $this->value, $protocols ) : $this->field->get_default();
+			$this->value = self::sanitize_and_secure_url( $this->value, $protocols, $default );
 		}
 
 		return $this->value;
@@ -295,8 +297,7 @@ class CMB2_Sanitize {
 		// date_create_from_format if there is a slash in the value.
 		$this->value = wp_unslash( $this->value );
 
-		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
-		if ( empty( $test ) ) {
+		if ( $this->is_empty_value() ) {
 			return '';
 		}
 
@@ -305,7 +306,12 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		if ( isset( $this->value['date'], $this->value['time'] ) ) {
+		// Account for timestamp values passed through REST API.
+		if ( $this->is_valid_date_value() ) {
+
+			$this->value = CMB2_Utils::make_valid_time_stamp( $this->value );
+
+		} elseif ( isset( $this->value['date'], $this->value['time'] ) ) {
 			$this->value = $this->field->get_timestamp_from_value( $this->value['date'] . ' ' . $this->value['time'] );
 		}
 
@@ -327,8 +333,7 @@ class CMB2_Sanitize {
 	public function text_datetime_timestamp_timezone( $repeat = false ) {
 		static $utc_values = array();
 
-		$test = is_array( $this->value ) ? array_filter( $this->value ) : '';
-		if ( empty( $test ) ) {
+		if ( $this->is_empty_value() ) {
 			return '';
 		}
 
@@ -371,11 +376,23 @@ class CMB2_Sanitize {
 		}
 
 		$full_format = $this->field->args['date_format'] . ' ' . $this->field->args['time_format'];
-		$full_date   = $this->value['date'] . ' ' . $this->value['time'];
 
 		try {
+			$datetime = null;
 
-			$datetime = date_create_from_format( $full_format, $full_date );
+			if ( is_array( $this->value ) ) {
+
+				$full_date = $this->value['date'] . ' ' . $this->value['time'];
+				$datetime = date_create_from_format( $full_format, $full_date );
+
+			} elseif ( $this->is_valid_date_value() ) {
+
+				$timestamp = CMB2_Utils::make_valid_time_stamp( $this->value );
+				if ( $timestamp ) {
+					$datetime = new DateTime();
+					$datetime->setTimestamp( $timestamp );
+				}
+			}
 
 			if ( ! is_object( $datetime ) ) {
 				$this->value = $utc_stamp = '';
@@ -583,6 +600,66 @@ class CMB2_Sanitize {
 			return empty( $cleaned_up );
 		}
 		return false;
+	}
+
+	/**
+	 * Sanitize a URL. Make the default scheme HTTPS.
+	 *
+	 * @since  2.10.0
+	 * @param  string  $value     Unescaped URL.
+	 * @param  array   $protocols Allowed protocols for URL.
+	 * @param  string  $default   Default value if no URL found.
+	 * @return string             escaped URL.
+	 */
+	public static function sanitize_and_secure_url( $url, $protocols = null, $default = null ) {
+		if ( empty( $url ) ) {
+			return $default;
+		}
+
+		$orig_scheme = parse_url( $url, PHP_URL_SCHEME );
+		$url         = esc_url_raw( $url, $protocols );
+
+		// If original url has no scheme...
+		if ( null === $orig_scheme ) {
+
+			// Let's make sure the added scheme is https.
+			$url = set_url_scheme( $url, 'https' );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Check if the current field's value is empty.
+	 *
+	 * @since  2.9.1
+	 *
+	 * @return boolean Wether value is empty.
+	 */
+	public function is_empty_value() {
+		if ( empty( $this->value ) ) {
+			return true;
+		}
+
+		if ( is_array( $this->value ) ) {
+			$test = array_filter( $this->value );
+			if ( empty( $test ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the current field's value is a valid date value.
+	 *
+	 * @since  2.9.1
+	 *
+	 * @return boolean Wether value is a valid date value.
+	 */
+	public function is_valid_date_value() {
+		return is_scalar( $this->value ) && CMB2_Utils::is_valid_date( $this->value );
 	}
 
 }

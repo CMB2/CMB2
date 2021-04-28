@@ -236,10 +236,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( 'test' ) );
 		$this->assertEquals( array( 'test' ), CMB2_Utils::ensure_array( array( 'test' ) ) );
 
-		$this->assertEquals( array(
-			'errors' => array(),
-			'error_data' => array(),
-		), CMB2_Utils::ensure_array( new WP_Error ) );
+		$this->assertEquals( array(), CMB2_Utils::ensure_array( new CMB2_Utils ) );
 	}
 
 	public function test_url_set() {
