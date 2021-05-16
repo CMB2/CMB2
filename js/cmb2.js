@@ -80,8 +80,8 @@ window.CMB2 = window.CMB2 || {};
 			.on( 'click', '.cmb-remove-row-button', cmb.removeAjaxRow )
 			// Ajax oEmbed display
 			.on( 'keyup paste focusout', '.cmb2-oembed', cmb.maybeOembed )
-			// Reset titles when removing a row
-			.on( 'cmb2_remove_row', '.cmb-repeatable-group', cmb.resetTitlesAndIterator )
+			// Reset titles when adding, removing, and shifting rows
+			.on( 'cmb2_add_row cmb2_remove_row cmb2_shift_rows_complete', cmb.updateGroupRowTitles )
 			.on( 'click', '.cmbhandle, .cmbhandle + .cmbhandle-title', cmb.toggleHandle );
 
 		if ( $repeatGroup.length ) {
@@ -181,29 +181,38 @@ window.CMB2 = window.CMB2 || {};
 		});
 	};
 
-	cmb.resetTitlesAndIterator = function( evt ) {
-		if ( ! evt.group ) {
-			return;
-		}
+	/**
+	 * Update all group row titles with token replacements.
+	 */
+	cmb.updateGroupRowTitles = function() {
+		var $metabox = cmb.metabox()
 
 		// Loop repeatable group tables
-		$( '.cmb-repeatable-group.repeatable' ).each( function() {
+		$metabox.find( '.cmb-repeatable-group.repeatable' ).each( function() {
 			var $table = $( this );
-			var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
 
 			// Loop repeatable group table rows
 			$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
+				var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
 				var $row = $( this );
 				var $rowTitle = $row.find( 'h3.cmb-group-title' );
 				// Reset rows iterator
 				$row.data( 'iterator', rowindex );
 				// Reset rows title
 				if ( $rowTitle.length ) {
-					$rowTitle.text( groupTitle.replace( '{#}', ( rowindex + 1 ) ) );
+					groupTitle = groupTitle.replace( '{#}', ( rowindex + 1 ) )
+					$row.find( 'input,select' ).each( function() {
+						var $element = $( this );
+						var fieldIdRaw = $element.attr( 'name' ).replace( /]/g, '' ).split( '[' ).pop();
+						if ( fieldIdRaw ) {
+							groupTitle = groupTitle.replace( '{#' + fieldIdRaw + '}', $element.val() )
+						}
+					} );
+					$rowTitle.text( groupTitle );
 				}
 			});
 		});
-	};
+	}
 
 	cmb.toggleHandle = function( evt ) {
 		evt.preventDefault();

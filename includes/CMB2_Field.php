@@ -1170,12 +1170,18 @@ class CMB2_Field extends CMB2_Base {
 	 * Replaces a hash key - {#} - with the repeatable index
 	 *
 	 * @since  1.2.0
-	 * @param  string $value Value to update.
+	 * @param string $value       Value to update.
+	 * @param array $replacements Replacement key value pairs.
+	 *
 	 * @return string        Updated value
 	 */
-	public function replace_hash( $value ) {
+	public function replace_hash( $value, $replacements = [] ) {
 		// Replace hash with 1 based count.
-		return str_replace( '{#}', ( $this->index + 1 ), $value );
+		$result = str_replace( '{#}', ( $this->index + 1 ), $value );
+		foreach ( $replacements as $search => $replace ) {
+			$result = str_replace( "{#$search}", $replace, $result );
+		}
+		return $result;
 	}
 
 	/**
