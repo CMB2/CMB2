@@ -675,9 +675,9 @@ window.CMB2 = window.CMB2 || {};
 		$oldRow.after( $newRow );
 
 		cmb.afterRowInsert( $newRow );
+		cmb.makeRepeatableSortable( $newRow );
 
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
-
 	};
 
 	cmb.addAjaxRow = function( evt ) {
@@ -1018,8 +1018,8 @@ window.CMB2 = window.CMB2 || {};
 		}
 	};
 
-	cmb.makeRepeatableSortable = function() {
-		var $repeatables = cmb.metabox().find( '.cmb-repeat-table .cmb-field-list' );
+	cmb.makeRepeatableSortable = function( $row ) {
+		var $repeatables = ($row || cmb.metabox()).find( '.cmb-repeat-table .cmb-field-list' );
 
 		if ( $repeatables.length ) {
 			$repeatables.sortable({
