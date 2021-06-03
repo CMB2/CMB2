@@ -707,7 +707,7 @@ window.CMB2 = window.CMB2 || {};
 		var confirmation = $this.data('confirm');
 
 		// Process further only if deletion confirmation enabled and user agreed.
-		if ( confirmation && ! window.confirm( confirmation ) ) {
+		if ( ! cmb.resetRow.resetting && confirmation && ! window.confirm( confirmation ) ) {
 			return;
 		}
 
@@ -758,10 +758,12 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.resetRow = function( $addNewBtn, $removeBtn ) {
+		cmb.resetRow.resetting = true;
 		// Click the "add new" button followed by the "remove this" button
 		// in order to reset the repeat row to empty values.
 		$addNewBtn.trigger( 'click' );
 		$removeBtn.trigger( 'click' );
+		cmb.resetRow.resetting = false;
 	};
 
 	cmb.shiftRows = function( evt ) {
