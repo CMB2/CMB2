@@ -186,20 +186,17 @@ window.CMB2 = window.CMB2 || {};
 			return;
 		}
 
-		// Loop repeatable group tables
-		$( '.cmb-repeatable-group.repeatable' ).each( function() {
-			var $table = $( this );
-			var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
+		var $table = $( evt.target );
+		var groupTitle = $table.find( '.cmb-add-group-row' ).data( 'grouptitle' );
 
-			// Loop repeatable group table rows
-			$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
-				var $row = $( this );
+		// Loop repeatable group table rows
+		$table.find( '.cmb-repeatable-grouping' ).each( function( rowindex ) {
+			var $row = $( this );
 
-				// Reset rows iterator
-				$row.data( 'iterator', rowindex );
+			// Reset rows iterator
+			$row.attr( 'data-iterator', rowindex ).data( 'iterator', rowindex );
 
-				cmb.resetGroupTitles( $row, rowindex, groupTitle );
-			});
+			cmb.resetGroupTitles( $row, rowindex, groupTitle );
 		});
 	};
 
