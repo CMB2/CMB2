@@ -38,12 +38,12 @@ Cypress.Commands.add('logIn', () => {
 	})
 })
 
-Cypress.Commands.add('wpCli', (command) => {
+Cypress.Commands.add('wpCli', (command, options = {}) => {
 	// There once was an Cypress command
 	// That made a wp-env demand
 	// Docker was run, and before all was done
 	// WP-CLI was in hand
-	cy.exec(`npm run env run tests-cli wp ${command}`)
+	cy.exec(`npm run env run tests-cli wp ${command}`, options)
 })
 
 // Set default typing delay to 0.
