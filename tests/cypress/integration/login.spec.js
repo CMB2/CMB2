@@ -20,6 +20,5 @@ describe('WordPress User', () => {
 		cy.get('#wp-admin-bar-logout > a').click({ force: true })
 		cy.location('pathname').should('contain', '/wp-login.php')
 		cy.location('search').should('contain', 'loggedout=true')
-		cy.screenshot()
 	})
 })
