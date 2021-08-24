@@ -1,0 +1,10 @@
+{
+	"env": {
+		"tests": {
+			"plugins": [
+				".",
+				"./tests/cypress/support/test-fields.php"
+			]
+		}
+	}
+}

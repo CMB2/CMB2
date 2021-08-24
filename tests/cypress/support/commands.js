@@ -36,6 +36,17 @@ Cypress.Commands.add('logIn', () => {
 			testcookie: 1,
 		}
 	})
+	window.localStorage.setItem('WP_DATA_USER_1',
+		JSON.stringify({
+			"core/edit-post": {
+				"preferences": {
+					"features": {
+						"welcomeGuide": false,
+					},
+				},
+			},
+		})
+	)
 })
 
 Cypress.Commands.add('wpCli', (command, options = {}) => {
