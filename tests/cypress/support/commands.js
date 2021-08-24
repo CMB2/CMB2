@@ -35,8 +35,16 @@ Cypress.Commands.add('logIn', () => {
 			rememberme: 'forever',
 			testcookie: 1,
 		}
-	});
-});
+	})
+})
+
+Cypress.Commands.add('wpCli', (command) => {
+	// There once was an Cypress command
+	// That made a wp-env demand
+	// Docker was run, and before all was done
+	// WP-CLI was in hand
+	cy.exec(`npm run env run tests-cli wp ${command}`)
+})
 
 // Set default typing delay to 0.
 Cypress.Commands.overwrite(
@@ -46,40 +54,34 @@ Cypress.Commands.overwrite(
 		string,
 		Object.assign({ delay: 0 }, options)
 	)
-);
+)
 
 Cypress.Commands.add('setValue', { prevSubject: true }, (subject, value) => {
-	subject[0].setAttribute('value', value);
-	return subject;
-});
+	subject[0].setAttribute('value', value)
+	return subject
+})
 
 Cypress.Commands.add('saveDraft', () => {
-	cy.window().then(w => w.stillOnCurrentPage = true);
-	cy.get('#save-post').should('not.have.class', 'disabled').click();
-});
+	cy.window().then(w => w.stillOnCurrentPage = true)
+	cy.get('#save-post').should('not.have.class', 'disabled').click()
+})
 
 Cypress.Commands.add('publishPost', () => {
-	cy.window().then(w => w.stillOnCurrentPage = true);
-	cy.get('#publish').should('not.have.class', 'disabled').click();
-});
+	cy.window().then(w => w.stillOnCurrentPage = true)
+	cy.get('#publish').should('not.have.class', 'disabled').click()
+})
 
 Cypress.Commands.add('waitForPageLoad', () => {
-	cy.window().its('stillOnCurrentPage').should('be.undefined');
-	cy.get('#message .notice-dismiss').click();
-});
-
-Cypress.Commands.add('blockJetpack', () => {
-	cy.intercept('/wp-json/jetpack/**', {
-		statusCode: 400,
-	}).as('jetpackScan');
-});
+	cy.window().its('stillOnCurrentPage').should('be.undefined')
+	cy.get('#message .notice-dismiss').click()
+})
 
 Cypress.Commands.add('blockAutosaves', () => {
 	cy.intercept('/wp-admin/admin-ajax.php', req => {
 		if (req.body.includes('wp_autosave')) {
 			req.reply({
 				status: 400,
-			});
+			})
 		}
-	}).as('adminAjax');
-});
+	}).as('adminAjax')
+})

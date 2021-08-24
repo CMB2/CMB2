@@ -8,8 +8,10 @@
     "test": "tests"
   },
   "scripts": {
+    "env": "wp-env",
     "grunt": "node ./node_modules/grunt-cli/bin/grunt",
     "watch": "node ./node_modules/grunt-cli/bin/grunt watch",
+		"cypress": "npm run env start && npx cypress run",
     "phptests": "vendor/bin/phpunit"
   },
   "repository": {
@@ -27,6 +29,7 @@
   },
   "homepage": "https://cmb2.io",
   "devDependencies": {
+    "@wordpress/env": "^4.1.0",
     "cypress": "^8.3.0",
     "grunt": "^1.0.4",
     "grunt-asciify": "~0.2.2",

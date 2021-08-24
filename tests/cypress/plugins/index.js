@@ -19,4 +19,10 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+	if (!config.env.wp_username) {
+		config.env.wp_username = 'admin';
+		config.env.wp_password = 'password';
+	}
+
+	return config;
 }

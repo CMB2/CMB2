@@ -1,5 +1,5 @@
 {
-	"baseUrl": "http://cmb2.test",
+	"baseUrl": "http://localhost:8889",
 	"fileServerFolder": "tests/cypress",
 	"fixturesFolder": "tests/cypress/fixtures",
 	"integrationFolder": "tests/cypress/integration",
