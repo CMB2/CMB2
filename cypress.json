@@ -1,0 +1,10 @@
+{
+	"baseUrl": "http://cmb2.test",
+	"fileServerFolder": "tests/cypress",
+	"fixturesFolder": "tests/cypress/fixtures",
+	"integrationFolder": "tests/cypress/integration",
+	"pluginsFile": "tests/cypress/plugins/index.js",
+	"screenshotsFolder": "tests/cypress/screenshots",
+	"supportFile": "tests/cypress/support/index.js",
+	"videosFolder": "tests/cypress/videos"
+}
