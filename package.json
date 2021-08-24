@@ -11,7 +11,7 @@
     "env": "wp-env",
     "grunt": "node ./node_modules/grunt-cli/bin/grunt",
     "watch": "node ./node_modules/grunt-cli/bin/grunt watch",
-		"cypress": "npm run env start && npx cypress run -- --config video=false",
+		"cypress": "npm run env start && npm run env clean tests && npx cypress run -- --config video=false",
     "phptests": "vendor/bin/phpunit"
   },
   "repository": {
