@@ -247,7 +247,10 @@ class CMB2_JS {
 
 		if ( isset( self::$dependencies['code-editor'] ) && function_exists( 'wp_enqueue_code_editor' ) ) {
 			$l10n['defaults']['code_editor'] = wp_enqueue_code_editor( array(
-				'type' => 'text/html',
+				'type'       => 'php',
+				'codemirror' => [
+					'autoRefresh' => true,
+				],
 			) );
 		}
 

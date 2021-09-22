@@ -508,6 +508,8 @@ window.CMB2 = window.CMB2 || {};
 		$elements.filter( ':selected' ).removeAttr( 'selected' );
 		$elements.find( ':selected' ).removeAttr( 'selected', false );
 
+		$row.find('.CodeMirror-wrap').remove();
+
 		if ( $row.find('h3.cmb-group-title').length ) {
 			$row.find( 'h3.cmb-group-title' ).text( $row.data( 'title' ).replace( '{#}', ( cmb.idNumber + 1 ) ) );
 		}
@@ -609,6 +611,9 @@ window.CMB2 = window.CMB2 || {};
 	cmb.afterRowInsert = function( $row ) {
 		// Init pickers from new row
 		cmb.initPickers( $row.find('input[type="text"].cmb2-timepicker'), $row.find('input[type="text"].cmb2-datepicker'), $row.find('input[type="text"].cmb2-colorpicker') );
+
+		// Init code editor for new row
+		cmb.initCodeEditors( $row.find('.cmb2-textarea-code:not(.disable-codemirror)') );
 	};
 
 	cmb.updateNameAttr = function () {
@@ -794,6 +799,9 @@ window.CMB2 = window.CMB2 || {};
 			if ( $element.hasClass('cmb2-media-status') ) {
 				// special case for image previews
 				val = $element.html();
+			} else if ( $element.hasClass( 'cmb2-textarea-code' ) && ! $element.hasClass( 'disable-codemirror' ) ) {
+				// Special case for codemirror.
+				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
 			} else if ( 'checkbox' === elType || 'radio' === elType ) {
 				val = $element.is(':checked');
 			} else if ( 'select' === $element.prop('tagName') ) {
@@ -830,7 +838,12 @@ window.CMB2 = window.CMB2 || {};
 					name = name.replace('['+fromRowId+']', '['+toRowId+']');
 					$( this ).attr('name', name);
 				});
-
+			}
+			// Handle codemirror swapping.
+			else if ( $element.hasClass( 'cmb2-textarea-code' ) && ! $element.hasClass( 'disable-codemirror' ) ) {
+				val = cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.getValue();
+				cmb.codeMirrorInstances[ $element.attr('id') ].codemirror.setValue(  cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.getValue() );
+				cmb.codeMirrorInstances[ inputVals[ index ].$.attr('id') ].codemirror.setValue( val );
 			}
 			// handle checkbox swapping
 			else if ( 'checkbox' === elType  ) {
@@ -984,6 +997,8 @@ window.CMB2 = window.CMB2 || {};
 		}
 	};
 
+	cmb.codeMirrorInstances = {};
+
 	cmb.initCodeEditors = function( $selector ) {
 		cmb.trigger( 'cmb_init_code_editors', $selector );
 
@@ -992,10 +1007,20 @@ window.CMB2 = window.CMB2 || {};
 		}
 
 		$selector.each( function() {
-			wp.codeEditor.initialize(
+			var instance = wp.codeEditor.initialize(
 				this.id,
 				cmb.codeEditorArgs( $( this ).data( 'codeeditor' ) )
 			);
+			cmb.codeMirrorInstances[ this.id ] = instance;
+
+			// Update the textarea before Gutenberg saves the meta box.
+			if ( wp && wp.data && wp.data.subscribe ) {
+				wp.data.subscribe( function() {
+					if ( wp.data.select('core/edit-post').isSavingMetaBoxes() ) {
+						instance.codemirror.save();
+					}
+				})
+			}
 		} );
 	};
 
