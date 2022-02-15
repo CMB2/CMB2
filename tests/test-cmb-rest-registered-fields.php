@@ -23,7 +23,7 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
+	public function set_up() {
 		$metabox_array = array(
 			'id' => strtolower( __CLASS__ ) . '_post',
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
@@ -70,11 +70,11 @@ class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 		) );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		wp_delete_comment( $this->comment_id, true );
 		wp_delete_term( $this->term_id, 'category' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_rest_posts_controller_exists() {

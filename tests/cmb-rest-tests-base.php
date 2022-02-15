@@ -15,10 +15,10 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
+	public function set_up() {
 		$this->reset_instances();
 
-		parent::setUp();
+		parent::set_up();
 		update_option( 'permalink_structure', '/%postname%/' );
 
 		if ( ! did_action( 'rest_api_init' ) ) {
@@ -34,7 +34,7 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 		$this->cmb_id = $metabox_array['id'];
 		$this->rest_box = new Test_CMB2_REST_Object( new CMB2( $this->metabox_array ) );
 
-		self::setUp();
+		self::set_up();
 
 		$this->subscriber = $this->factory->user->create( array(
 			'role' => 'subscriber',
@@ -51,8 +51,8 @@ abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
 		CMB2_REST::register_cmb2_fields();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		if ( ! empty( $this->metabox_array['fields'] ) ) {
 			foreach ( $this->metabox_array['fields'] as $field ) {
 				delete_post_meta( $this->post_id, $field['id'] );

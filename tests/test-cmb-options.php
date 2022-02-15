@@ -18,8 +18,8 @@ class Test_CMB2_Options extends Test_CMB2 {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->option_metabox_array = array(
 			'id'            => 'options_page',

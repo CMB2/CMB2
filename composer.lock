@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ee226fe68c84de3dfe5e27771dcdcc",
+    "content-hash": "048ba568d9e335c4b19b43e0597750b4",
     "packages": [],
     "packages-dev": [
         {
@@ -126,7 +126,7 @@
                     "homepage": "https://github.com/kukulich"
                 },
                 {
-                    "name": "Tomáš Votruba",
+                    "name": "Tomas Votruba",
                     "email": "tomas.vot@gmail.com"
                 },
                 {
@@ -517,12 +517,12 @@
             "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kherge-abandoned/php-phar-update.git",
+                "url": "https://github.com/kherge-archive/php-phar-update.git",
                 "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge-abandoned/php-phar-update/zipball/15643c90d3d43620a4f45c910e6afb7a0ad4b488",
+                "url": "https://api.github.com/repos/kherge-archive/php-phar-update/zipball/15643c90d3d43620a4f45c910e6afb7a0ad4b488",
                 "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488",
                 "shasum": ""
             },
@@ -575,12 +575,12 @@
             "version": "1.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kherge-abandoned/php-version.git",
+                "url": "https://github.com/kherge-archive/php-version.git",
                 "reference": "d39d9642b92a04d8b8a28b871b797a35a2545e85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge-abandoned/php-version/zipball/d39d9642b92a04d8b8a28b871b797a35a2545e85",
+                "url": "https://api.github.com/repos/kherge-archive/php-version/zipball/d39d9642b92a04d8b8a28b871b797a35a2545e85",
                 "reference": "d39d9642b92a04d8b8a28b871b797a35a2545e85",
                 "shasum": ""
             },
@@ -809,6 +809,7 @@
                 "library",
                 "syntax"
             ],
+            "abandoned": true,
             "time": "2012-09-08T19:00:07+00:00"
         },
         {
@@ -1111,7 +1112,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Bootstrap: the simple way to configure and bootstrap your Nette application.",
+            "description": "🅱 Nette Bootstrap: the simple way to configure and bootstrap your Nette application.",
             "homepage": "https://nette.org",
             "keywords": [
                 "bootstrapping",
@@ -1306,7 +1307,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Dependency Injection Container: Flexible, compiled and full-featured DIC with perfectly usable autowiring and support for all new PHP 7.1 features.",
+            "description": "💎 Nette Dependency Injection Container: Flexible, compiled and full-featured DIC with perfectly usable autowiring and support for all new PHP 7.1 features.",
             "homepage": "https://nette.org",
             "keywords": [
                 "compiled",
@@ -1511,7 +1512,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Mail: handy email creation and transfer library for PHP with both text and MIME-compliant support.",
+            "description": "📧 Nette Mail: handy email creation and transfer library for PHP with both text and MIME-compliant support.",
             "homepage": "https://nette.org",
             "keywords": [
                 "mail",
@@ -1572,7 +1573,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette NEON: encodes and decodes NEON file format.",
+            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -1635,7 +1636,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette PHP Generator: generates neat PHP code for you. Supports new PHP 7.2 features.",
+            "description": "🐘 Nette PHP Generator: generates neat PHP code for you. Supports new PHP 7.2 features.",
             "homepage": "https://nette.org",
             "keywords": [
                 "code",
@@ -1765,7 +1766,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
+            "description": "🍀 Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
             "homepage": "https://nette.org",
             "keywords": [
                 "autoload",
@@ -1899,7 +1900,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
+            "description": "🛠 Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
             "homepage": "https://nette.org",
             "keywords": [
                 "array",
@@ -2648,16 +2649,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.13",
+            "version": "6.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0973426fb012359b2f18d3bd1e90ef1172839693"
+                "reference": "bac23fe7ff13dbdb461481f706f0e9fe746334b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0973426fb012359b2f18d3bd1e90ef1172839693",
-                "reference": "0973426fb012359b2f18d3bd1e90ef1172839693",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bac23fe7ff13dbdb461481f706f0e9fe746334b7",
+                "reference": "bac23fe7ff13dbdb461481f706f0e9fe746334b7",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2729,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-09-08T15:10:43+00:00"
+            "time": "2019-02-01T05:22:47+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3762,7 +3763,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -3979,7 +3980,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
+            "description": "😎 Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
             "homepage": "https://tracy.nette.org",
             "keywords": [
                 "Xdebug",
@@ -4086,6 +4087,63 @@
                 "wordpress"
             ],
             "time": "2020-05-13T23:57:56+00:00"
+        },
+        {
+            "name": "yoast/phpunit-polyfills",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Yoast/PHPUnit-Polyfills.git",
+                "reference": "5ea3536428944955f969bc764bbe09738e151ada"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/5ea3536428944955f969bc764bbe09738e151ada",
+                "reference": "5ea3536428944955f969bc764bbe09738e151ada",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "require-dev": {
+                "yoast/yoastcs": "^2.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev",
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "phpunitpolyfills-autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Team Yoast",
+                    "email": "support@yoast.com",
+                    "homepage": "https://yoast.com"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/Yoast/PHPUnit-Polyfills/graphs/contributors"
+                }
+            ],
+            "description": "Set of polyfills for changed PHPUnit functionality to allow for creating PHPUnit cross-version compatible tests",
+            "homepage": "https://github.com/Yoast/PHPUnit-Polyfills",
+            "keywords": [
+                "phpunit",
+                "polyfill",
+                "testing"
+            ],
+            "time": "2021-11-23T01:37:03+00:00"
         }
     ],
     "aliases": [],

@@ -18,8 +18,8 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->cmb = cmb2_get_metabox( array(
 			'id'      => 'metabox_id',
@@ -53,9 +53,9 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		delete_option( $this->oembed_args['object_id'] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_cmb2_ajax_instance() {
@@ -124,12 +124,11 @@ class Test_CMB2_Ajax extends Test_CMB2 {
 			$opt_values = array_values( $options );
 
 			$_expected = $this->is_connected() ? array(
-				$expected['_oembed_887df34cb3e109936f1e848042f873a3'],
-				'time_1',
+				array( '{{unknown}}' ),
 				array(
 					'<blockquote class="twitter-tweet"',
-					'That time we did Adele’s “Hello” at <a href="https://twitter.com/generationschch',
-					'>@generationschch</a>…<a href="https://t.co/aq89T5VM5x">https://t.co/aq89T5VM5x</a></p>&mdash; Justin Sternberg (@Jtsternberg) <a href="https://twitter.com/Jtsternberg/status/703434891518726144',
+					'That time we did Adele’s',
+					'href="https://twitter.com/Jtsternberg/status/703434891518726144',
 					'February 27, 2016</a></blockquote><script async src="',
 					'platform.twitter.com/widgets.js" charset="utf-8"></script>',
 				),

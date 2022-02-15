@@ -11,6 +11,8 @@
  * @package CMB2
  */
 
+define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
+
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$GLOBALS['test_root'] = getenv( 'WP_DEVELOP_DIR' ). '/tests/phpunit';
 } elseif ( false !== getenv( 'WP_TESTS_DIR' ) ) {
@@ -21,6 +23,11 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$GLOBALS['test_root'] = '/tmp/wordpress-tests-lib';
 }
 
+$plugin = dirname( dirname( __FILE__ ) );
+define( 'CMB2_TEST_PLUGIN', $plugin );
+define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );
+
+require_once $plugin . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 require_once $GLOBALS['test_root'] . '/includes/functions.php';
 
 /**
@@ -34,10 +41,6 @@ function _tests_cmb2_manually_load_plugin() {
 	if ( ! defined( 'WP_ADMIN' ) ) {
 		define( 'WP_ADMIN', true );
 	}
-
-	$plugin = dirname( dirname( __FILE__ ) );
-
-	define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );
 
 	if (
 		( $rest_api = '/tmp/wordpress/wp-content/plugins/rest-api/plugin.php' )
@@ -56,7 +59,7 @@ function _tests_cmb2_manually_load_plugin() {
 		require_once $rest_api;
 	}
 
-	require_once $plugin . '/init.php';
+	require_once CMB2_TEST_PLUGIN . '/init.php';
 }
 tests_add_filter( 'muplugins_loaded', '_tests_cmb2_manually_load_plugin' );
 

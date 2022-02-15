@@ -25,7 +25,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
+	public function set_up() {
 		$this->set_up_and_init( array(
 			'id' => 'test',
 			'show_in_rest' => WP_REST_Server::ALLMETHODS,
@@ -45,8 +45,8 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		) );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_get_schema() {

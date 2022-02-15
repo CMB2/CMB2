@@ -14,12 +14,12 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function normalize_string( $string ) {
@@ -260,13 +260,13 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 *
 	 * @return mixed               Value of property.
 	 */
-	protected function getProperty( $object, $propertyName ) {
-		$reflection = new ReflectionClass( get_class( $object ) );
-		$property = $reflection->getProperty( $propertyName );
-		$property->setAccessible( true );
+	// protected function getProperty( $object, $propertyName ) {
+	// 	$reflection = new ReflectionClass( get_class( $object ) );
+	// 	$property = $reflection->getProperty( $propertyName );
+	// 	$property->setAccessible( true );
 
-		return $property->getValue( $object );
-	}
+	// 	return $property->getValue( $object );
+	// }
 
 	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = null ) {
 		$expected_string = $this->normalize_string( $expected_string );

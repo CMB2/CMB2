@@ -18,8 +18,8 @@ class Test_CMB2_Field extends Test_CMB2 {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->post_id = $this->factory->post->create();
 
@@ -53,8 +53,8 @@ class Test_CMB2_Field extends Test_CMB2 {
 		$this->field = $this->new_field( $this->field_args );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_cmb2_field_instance() {

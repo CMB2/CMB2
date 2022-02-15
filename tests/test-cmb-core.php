@@ -18,8 +18,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->cmb_id = 'test';
 		$this->metabox_array = array(
@@ -131,8 +131,8 @@ class Test_CMB2_Core extends Test_CMB2 {
 		) );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_cmb2_definitions() {
