@@ -54,6 +54,9 @@ node_modules
 # PHPStorm
 .idea
 
+# Zip Files
+*.zip
+
 # Sass Cache
 *.sass-cache
 
