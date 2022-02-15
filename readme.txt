@@ -4,8 +4,8 @@ Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Requires PHP:      5.2
-Tested up to:      5.6.2
-Stable tag:        2.9.0
+Tested up to:      5.9
+Stable tag:        2.10.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,18 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
+
+### 2.10.0
+
+#### Enhancements
+* Sanitize URLs, defaulting to `https`. Props [@paulschreiber](https://github.com/paulschreiber) ([#1413](https://github.com/CMB2/CMB2/pull/1413)).
+* Establish Cypress E2E Testing. Props [@markjaquith](https://github.com/markjaquith) ([#1437](https://github.com/CMB2/CMB2/pull/1437)).
+* Updated the JS `shiftRows` functionality to be simpler, and fix issues with JS initialization. Fixes [#1426](https://github.com/CMB2/CMB2/issues/1426) and [#1431](https://github.com/CMB2/CMB2/issues/1431).
+* Updated various NPM dependencies for security issues.
+
+#### Bug Fixes
+* Update to prevent deprecation notice:`Required parameter $i follows optional parameter $args...`. Props [@carloswph](https://github.com/carloswph) ([#1417](https://github.com/CMB2/CMB2/pull/1417)).
+* Make each date field more resilient to various date/timestamp values passed in (from REST API).
 
 ### 2.9.0
 
@@ -994,6 +1006,18 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Think we have a release that is mostly working. We'll say the initial release :)
 
 == Upgrade Notice ==
+
+### 2.10.0
+
+#### Enhancements
+* Sanitize URLs, defaulting to `https`. Props [@paulschreiber](https://github.com/paulschreiber) ([#1413](https://github.com/CMB2/CMB2/pull/1413)).
+* Establish Cypress E2E Testing. Props [@markjaquith](https://github.com/markjaquith) ([#1437](https://github.com/CMB2/CMB2/pull/1437)).
+* Updated the JS `shiftRows` functionality to be simpler, and fix issues with JS initialization. Fixes [#1426](https://github.com/CMB2/CMB2/issues/1426) and [#1431](https://github.com/CMB2/CMB2/issues/1431).
+* Updated various NPM dependencies for security issues.
+
+#### Bug Fixes
+* Update to prevent deprecation notice:`Required parameter $i follows optional parameter $args...`. Props [@carloswph](https://github.com/carloswph) ([#1417](https://github.com/CMB2/CMB2/pull/1417)).
+* Make each date field more resilient to various date/timestamp values passed in (from REST API).
 
 ### 2.9.0
 
