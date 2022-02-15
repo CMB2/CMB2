@@ -614,25 +614,31 @@ class CMB2 extends CMB2_Base {
 			echo '<button type="button" data-selector="', $field_group->id(), '_repeat" data-confirm="', esc_attr( $confirm_deletion ), '" class="dashicons-before dashicons-no-alt cmb-remove-group-row" title="', esc_attr( $field_group->options( 'remove_button' ) ), '"></button>';
 		}
 
-			echo '
-			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
-			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
-
-			<div class="inside cmb-td cmb-nested cmb-field-list">';
-				// Loop and render repeatable group fields.
+		// Gather field values for group_title replacements.
+		$fields       = [];
+		$field_values = [];
 		foreach ( array_values( $field_group->args( 'fields' ) ) as $field_args ) {
 			if ( 'hidden' === $field_args['type'] ) {
-
 				// Save rendering for after the metabox.
 				$this->add_hidden_field( $field_args, $field_group );
-
 			} else {
-
 				$field_args['show_names'] = $field_group->args( 'show_names' );
 				$field_args['context']    = $field_group->args( 'context' );
-
-				$this->get_field( $field_args, $field_group )->render_field();
+				$field = $this->get_field( $field_args, $field_group );
+				$field_values[ $field->id( true ) ] = $field->value();
+				$fields[ $field->id() ] = $field;
 			}
+		}
+
+		$group_title = $field_group->replace_hash( $field_group->options( 'group_title' ), $field_values );
+			echo '
+			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
+			<h3 class="cmb-group-title cmbhandle-title"><span>', $group_title, '</span></h3>
+
+			<div class="inside cmb-td cmb-nested cmb-field-list">';
+		// Loop and render repeatable group fields.
+		foreach ( $fields as $field ) {
+			$field->render_field();
 		}
 
 		if ( $field_group->args( 'repeatable' ) ) {
