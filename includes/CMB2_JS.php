@@ -149,6 +149,14 @@ class CMB2_JS {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
 		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
+        wp_localize_script( 'wp-color-picker-alpha', 'wpColorPickerL10n', array(
+            'clear'            => __( 'Clear', 'cmb2'  ),
+            'clearAriaLabel'   => __( 'Clear color', 'cmb2'  ),
+            'defaultString'    => __( 'Default', 'cmb2'  ),
+            'defaultAriaLabel' => __( 'Select default color', 'cmb2'  ),
+            'pick'             => __( 'Select Color', 'cmb2'  ),
+            'defaultLabel'     => __( 'Color value', 'cmb2'  ),
+        ) );
 	}
 
 	/**
