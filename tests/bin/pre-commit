@@ -1,0 +1,89 @@
+#!/usr/bin/php
+<?php
+exec( 'git diff --cached --name-only', $files );
+
+if ( has_file_type( '.js', $files ) ) {
+	exec( 'grunt hint', $output, $return_code );
+	if ( 0 !== $return_code ) {
+		printf( "%s \n\n", implode( "\n", $output ) );
+		color_msg( "ABORTING COMMIT!\n", 'red' );
+		exit( 1 );
+	}
+}
+
+if ( has_file_type( '.php', $files ) ) {
+	exec( 'phpunit', $output, $return_code );
+
+	if ( 0 !== $return_code ) {
+		$last[] = array_pop( $output );
+		$last[] = array_pop( $output );
+
+		printf( "%s \n\n", implode( "\n", $output ) );
+
+		$rows = array_map( 'get_red_msg', array_reverse( $last ) );
+		$rows = implode( '', $rows );
+		color_msg( $rows, 'red' );
+		color_msg( "ABORTING COMMIT!\n", 'red' );
+		exit( 1 );
+
+	} else {
+		color_msg( "\nTEST SUITE Results: ", 'green', false );
+
+		$output = array_filter( $output );
+		$last[] = array_pop( $output );
+		$last[] = array_pop( $output );
+
+		$rows = array_map( 'get_green_msg', $last );
+		$rows = implode( "\n------> ", $rows );
+		color_msg( $rows, 'green' );
+		echo "\n";
+	}
+}
+
+
+exit( 0 );
+
+
+function has_file_type( $ext, $files ) {
+	$rev_ext = strrev( $ext );
+	$has_type = false;
+	if ( ! empty( $files ) ) {
+		foreach ( $files as $file ) {
+			if ( 0 === strpos( strrev( $file ), $rev_ext ) ) {
+				$has_type = true;
+				break;
+			}
+		}
+	}
+
+	return $has_type;
+}
+
+function color( $color ) {
+	$colors = array(
+		'red_bg' => "\e[1;37;41m",
+		'black' => "\033[30m",
+		'blue' => "\033[34m",
+		'green' => "\033[32m",
+		'cyan' => "\033[36m",
+		'red' => "\033[31m",
+		'purple' => "\033[35m",
+		'yellow' => "\033[33m",
+		'none' => "\033[0m",
+	);
+
+	return $colors[ $color ];
+}
+
+function get_red_msg( $text ) {
+	return get_color_msg( $text, 'red' );
+}
+function get_green_msg( $text ) {
+	return get_color_msg( $text, 'green', false );
+}
+function get_color_msg( $text, $color, $line_break = true ) {
+	return color( $color ) . $text . color( 'none' ) . ( $line_break ? PHP_EOL : '' );
+}
+function color_msg( $text, $color, $line_break = true ) {
+	echo get_color_msg( $text, $color, $line_break );
+}
