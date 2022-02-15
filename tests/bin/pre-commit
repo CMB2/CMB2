@@ -12,7 +12,7 @@ if ( has_file_type( '.js', $files ) ) {
 }
 
 if ( has_file_type( '.php', $files ) ) {
-	exec( 'phpunit', $output, $return_code );
+	exec( 'vendor/bin/phpunit', $output, $return_code );
 
 	if ( 0 !== $return_code ) {
 		$last[] = array_pop( $output );
