@@ -318,6 +318,31 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 	}
 
+	public function test_make_valid_time_stamp() {
+		date_default_timezone_set( 'America/New_York' );
+
+		$this->assertSame(
+			1658548800,
+			CMB2_Utils::make_valid_time_stamp( '07/23/2022' )
+		);
+
+		$this->assertSame(
+			1658548800,
+			CMB2_Utils::make_valid_time_stamp( '1658548800' )
+		);
+
+		$this->assertSame(
+			1658548800,
+			CMB2_Utils::make_valid_time_stamp( 1658548800 )
+		);
+
+		$this->assertSame(
+			22,
+			CMB2_Utils::make_valid_time_stamp( 22 )
+		);
+
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {

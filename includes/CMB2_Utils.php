@@ -258,13 +258,6 @@ class CMB2_Utils {
 			return 0;
 		}
 
-		$timestamp = @strtotime( (string) $string );
-		if ( ! empty( $timestamp ) ) {
-
-			// We got a timestamp, first try!
-			return $timestamp;
-		}
-
 		$valid = self::is_valid_time_stamp( $string );
 		if ( $valid ) {
 			$timestamp  = (int) $string;
@@ -278,6 +271,8 @@ class CMB2_Utils {
 				$divider   = (int) '1' . str_repeat( '0', $diff );
 				$timestamp = round( $timestamp / $divider );
 			}
+		} else {
+			$timestamp = @strtotime( (string) $string );
 		}
 
 		return $timestamp;
