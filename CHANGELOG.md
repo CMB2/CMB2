@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 * 
 
+## [2.10.1 - 2022-02-22](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
+
+### Bug Fixes
+* Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
+
 ## [2.10.0 - 2022-02-15](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
 
 ### Enhancements
