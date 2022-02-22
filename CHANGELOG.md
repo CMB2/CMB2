@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 * 
 
-## [2.10.1 - 2022-02-22](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
+## [2.10.1 - 2022-02-22](https://github.com/CMB2/CMB2/releases/tag/2.10.1)
 
 ### Bug Fixes
 * Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
 
-## [2.10.0 - 2022-02-15](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
+## [2.10.0 - 2022-02-15](https://github.com/CMB2/CMB2/releases/tag/2.10.0)
 
 ### Enhancements
 * Sanitize URLs, defaulting to `https`. Props [@paulschreiber](https://github.com/paulschreiber) ([#1413](https://github.com/CMB2/CMB2/pull/1413)).
@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 * Update to prevent deprecation notice:`Required parameter $i follows optional parameter $args...`. Props [@carloswph](https://github.com/carloswph) ([#1417](https://github.com/CMB2/CMB2/pull/1417)).
 * Make each date field more resilient to various date/timestamp values passed in (from REST API).
 
-## [2.9.0 - 2021-03-21](https://github.com/CMB2/CMB2/releases/tag/v2.9.0)
+## [2.9.0 - 2021-03-21](https://github.com/CMB2/CMB2/releases/tag/2.9.0)
 
 ### Enhancements
 * Added `cmb2_tab_group_tabs` filter for adding arbitrary menu page urls to the cmb2 tabs, and move tab markup output to separate method, `CMB2_Options_Hookup::options_page_tab_nav_output()`. Fixes [#1407](https://github.com/CMB2/CMB2/issues/1407).
