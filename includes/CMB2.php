@@ -23,10 +23,15 @@ class CMB2 extends CMB2_Base {
 	/**
 	 * The object properties name.
 	 *
+	 *
+	 *
 	 * @var   string
 	 * @since 2.2.3
 	 */
 	protected $properties_name = 'meta_box';
+
+
+	// Array Declearation File
 
 	/**
 	 * Metabox Config array
