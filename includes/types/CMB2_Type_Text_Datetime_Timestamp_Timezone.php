@@ -19,7 +19,6 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 		if ( empty( $value ) ) {
 			$value = $field->get_default();
 		}
-		
 
 		$args = wp_parse_args( $this->args, array(
 			'value'                   => $value,
@@ -52,7 +51,6 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			'value'    => $value,
 			'rendered' => true,
 		) );
-
 		$datetime_timestamp = $this->types->text_datetime_timestamp( $timestamp_args );
 
 		$timezone_select_args = wp_parse_args( $args['select_timezone'], array(
