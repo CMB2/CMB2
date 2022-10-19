@@ -385,6 +385,8 @@ class CMB2_Sanitize {
 				$full_date = $this->value['date'] . ' ' . $this->value['time'];
 				$datetime = date_create_from_format( $full_format, $full_date );
 
+				$datetime->modify("-{$offset} seconds");
+
 			} elseif ( $this->is_valid_date_value() ) {
 
 				$timestamp = CMB2_Utils::make_valid_time_stamp( $this->value );
@@ -398,7 +400,7 @@ class CMB2_Sanitize {
 				$this->value = $utc_stamp = '';
 			} else {
 				$datetime->setTimezone( new DateTimeZone( $tzstring ) );
-				$utc_stamp   = date_timestamp_get( $datetime ) - $offset;
+				$utc_stamp   = date_timestamp_get( $datetime );
 				$this->value = serialize( $datetime );
 			}
 
