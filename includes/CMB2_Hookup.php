@@ -319,6 +319,7 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 			'user-new.php',
 			'profile.php',
 			'user-edit.php',
+			'woocommerce_page_wc-orders',
 		);
 		// only pre-enqueue our scripts/styles on the proper pages
 		// show_form_for_type will have us covered if we miss something here.
