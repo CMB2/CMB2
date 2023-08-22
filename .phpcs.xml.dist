@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="CMB2 Coding Standards for PHP" namespace="CMB2\CMB2\PHPCS\Standard">
+	<description>The coding standard for CMB2.</description>
+
+	<rule ref="PHPCompatibility" />
+	<config name="testVersion" value="7.3-" />
+
+	<file>.</file>
+
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>themes/omappv4/src/View/*</exclude-pattern>
+
+	<rule ref="WordPress-Core">
+		<!-- Allow with or without semicolons. -->
+		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
+
+		<!-- Exclude other conflicting rules. -->
+		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned" />
+		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_trigger_error" />
+		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
+
+		<exclude name="WordPress.Security.EscapeOutput" />
+
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
+		<exclude name="WordPress.PHP.StrictComparisons.LooseComparison" />
+		<exclude name="WordPress.Arrays.CommaAfterArrayItem.NoComma" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName" />
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+	</rule>
+
+	<!-- Prefer alignment over line length. -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="maxColumn" value="1000" />
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.DB.SlowDBQuery" />
+
+	<!-- Allow . in hook names. -->
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="." />
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Security.PluginMenuSlug" />
+	<rule ref="WordPress.Security.PluginMenuSlug.Using__FILE__">
+		<type>error</type>
+	</rule>
+
+	<!-- Disallow functions where WordPress has an alternative. -->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<!-- ...but, allow some back in. -->
+		<properties>
+			<property name="exclude" type="array">
+				<element value="file_get_contents" />
+				<element value="file_system_read" />
+				<element value="json_encode" />
+				<element value="json_decode" />
+
+				<!-- wp_parse_url() only exists for inconsistency in PHP <5.4 -->
+				<element value="parse_url" />
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.CronInterval" />
+	<rule ref="WordPress.WP.CronInterval.CronSchedulesInterval">
+		<type>error</type>
+		<message>Scheduling crons at %s sec ( less than %s minutes ) is prohibited.</message>
+	</rule>
+
+	<rule ref="WordPress.WP.PostsPerPage" />
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_numberposts">
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page">
+		<type>error</type>
+	</rule>
+
+	<!-- Disallow changing PHP's timezone. -->
+	<rule ref="WordPress.DateTime.RestrictedFunctions">
+		<properties>
+			<!-- Allow other datetime functions, just not timezone. -->
+			<property name="exclude" type="array">
+				<element value="date" />
+			</property>
+		</properties>
+	</rule>
+
+	<!--
+		Restore the ability to have multiple arguments per line
+		WPCS disallowed this behavior in 1.1.0, but we'd like to keep it until
+		there is a reason to disallow multiple arguments.
+		Ref: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/commit/bb8a48671e213a5588a6439ea52411eeefab4b0f
+	-->
+	<rule ref="PEAR.Functions.FunctionCallSignature">
+		<properties>
+			<property name="allowMultipleArguments" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine">
+		<severity>0</severity>
+	</rule>
+
+	<!--
+	HM Rules / HM RULEZZZZ
+	https://engineering.hmn.md/how-we-work/style/php/
+	-->
+
+	<!-- Disallow long array syntax. fig-r/psr2r-sniffer -->
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax" />
+
+	<!-- Single statement on same line. fig-r/psr2r-sniffer -->
+	<rule ref="Generic.Formatting.DisallowMultipleStatements" />
+
+	<!-- Namespacing required for classes. fig-r/psr2r-sniffer -->
+	<rule ref="PSR1.Classes.ClassDeclaration" />
+
+	<!-- Declare symbols or run code, but not both. fig-r/psr2r-sniffer -->
+	<rule ref="PSR1.Files.SideEffects" />
+
+	<!-- Namespacing required for functions. fig-r/psr2r-sniffer -->
+	<rule ref="PSR2.Namespaces.NamespaceDeclaration" />
+
+	<!-- Namespacing of `use` statements. fig-r/psr2r-sniffer -->
+	<rule ref="PSR2.Namespaces.UseDeclaration">
+		<exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations" />
+	</rule>
+
+	<!--- fig-r/psr2r-sniffer -->
+	<rule ref="PSR2R.Namespaces.UnusedUseStatement" />
+	<rule ref="PSR2R.Namespaces.UseInAlphabeticalOrder" />
+
+	<!-- Ban inline assignment in control structures (see note on Yoda Conditions above). fig-r/psr2r-sniffer -->
+	<rule ref="PSR2R.ControlStructures.NoInlineAssignment" />
+
+	<!--
+		Disregard WP's class file name rules which says:
+		"Class file names should be based on the class name with class-
+		prepended and the underscores in the class name replaced with hyphens."
+	-->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false" />
+		</properties>
+	</rule>
+
+	<!--
+		Forces a new line at the end of file rule (and others).
+	-->
+	<rule ref="Generic.Files">
+		<exclude name="Generic.Files.EndFileNoNewline" />
+		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+		<exclude name="Generic.Files.InlineHTML.Found" />
+	</rule>
+
+	<!--
+		Warn about lines longer than 200 chars,
+		and error for lines longer than 200 chars.
+	-->
+	<rule ref="Generic.Files.LineLength">
+		<properties>
+			<property name="lineLimit" value="200" />
+			<property name="absoluteLineLimit" value="200" />
+		</properties>
+	</rule>
+
+	<rule ref="PSR1.Classes.ClassDeclaration">
+		<exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+	</rule>
+
+	<rule ref="VariableAnalysis"/>
+</ruleset>
