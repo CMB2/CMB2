@@ -927,7 +927,7 @@ class CMB2 extends CMB2_Base {
 			return;
 		}
 
-		$old        = $field_group->get_data();
+		$old = $field_group->get_data();
 		// Check if group field has sanitization_cb.
 		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved      = array();
@@ -1049,8 +1049,18 @@ class CMB2 extends CMB2_Base {
 				break;
 		}
 
+		/**
+		 * Filter the object id.
+		 *
+		 * @since  {{next}}
+		 *
+		 * @param  integer|string $object_id Object ID.
+		 * @param  CMB2           $cmb       This CMB2 object.
+		 */
+		$object_id = apply_filters( 'cmb2_set_object_id', $object_id, $this );
+
 		// reset to id or 0.
-		$this->object_id = $object_id ? $object_id : 0;
+		$this->object_id = ! empty( $object_id ) ? $object_id : 0;
 
 		return $this->object_id;
 	}
@@ -1066,38 +1076,43 @@ class CMB2 extends CMB2_Base {
 			return $this->mb_object_type;
 		}
 
+		$found_type = '';
+
 		if ( $this->is_options_page_mb() ) {
-			$this->mb_object_type = 'options-page';
-			return $this->mb_object_type;
-		}
+			$found_type = 'options-page';
+		} else {
+			$registered_types = $this->box_types();
 
-		$registered_types = $this->box_types();
-
-		$type = '';
-
-		// if it's an array of one, extract it.
-		if ( 1 === count( $registered_types ) ) {
-			$last = end( $registered_types );
-			if ( is_string( $last ) ) {
-				$type = $last;
+			// if it's an array of one, extract it.
+			if ( 1 === count( $registered_types ) ) {
+				$last = end( $registered_types );
+				if ( is_string( $last ) ) {
+					$found_type = $last;
+				}
+			} else {
+				$current_object_type = $this->current_object_type();
+				if ( in_array( $current_object_type, $registered_types, true ) ) {
+					$found_type = $current_object_type;
+				}
 			}
-		} elseif ( ( $curr_type = $this->current_object_type() ) && in_array( $curr_type, $registered_types, true ) ) {
-			$type = $curr_type;
 		}
 
 		// Get our object type.
-		switch ( $type ) {
+		$supported_types = array( 'post', 'user', 'comment', 'term', 'options-page' );
+		$mb_object_type = in_array( $found_type, $supported_types, true )
+			? $found_type
+			: 'post';
 
-			case 'user':
-			case 'comment':
-			case 'term':
-				$this->mb_object_type = $type;
-				break;
-
-			default:
-				$this->mb_object_type = 'post';
-				break;
-		}
+		/**
+		 * Filter the metabox object type.
+		 *
+		 * @since {{next}}
+		 *
+		 * @param string $mb_object_type The metabox object type.
+		 * @param string $found_type     The found object type.
+		 * @param CMB2   $cmb            This CMB2 object.
+		 */
+		$this->mb_object_type = apply_filters( 'cmb2_set_box_object_type', $mb_object_type, $found_type, $this );
 
 		return $this->mb_object_type;
 	}
@@ -1553,7 +1568,6 @@ class CMB2 extends CMB2_Base {
 		switch ( $field['type'] ) {
 			case 'file':
 			case 'file_list':
-
 				// Initiate attachment JS hooks.
 				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
 				break;
@@ -1569,7 +1583,6 @@ class CMB2 extends CMB2_Base {
 				}
 				break;
 			case 'colorpicker':
-
 				// https://github.com/JayWood/CMB2_RGBa_Picker
 				// Dequeue the rgba_colorpicker custom field script if it is used,
 				// since we now enqueue our own more current version.

@@ -308,7 +308,7 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 	 * @param string $hook Current hook for the admin page.
 	 */
 	public function do_scripts( $hook ) {
-		$hooks = array(
+		$should_pre_enqueue = in_array( $hook, array(
 			'post.php',
 			'post-new.php',
 			'page-new.php',
@@ -319,11 +319,23 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 			'user-new.php',
 			'profile.php',
 			'user-edit.php',
-			'woocommerce_page_wc-orders',
-		);
+		), true );
+
+		/**
+		 * Filter to determine if CMB2 should be pre-enqueued on the current page.
+		 *
+		 * `show_form_for_type` will have us covered if we miss something here, but may be a
+		 * flash of unstyled content.
+		 *
+		 * @param bool   $should_pre_enqueue Whether CMB2 should be pre-enqueued on the current page.
+		 * @param string $hook               The current hook for the admin page.
+		 * @param object $cmb                The CMB2 object.
+		 */
+		$should_pre_enqueue = apply_filters( 'cmb2_should_pre_enqueue', $should_pre_enqueue, $hook, $this );
+
 		// only pre-enqueue our scripts/styles on the proper pages
 		// show_form_for_type will have us covered if we miss something here.
-		if ( in_array( $hook, $hooks, true ) ) {
+		if ( $should_pre_enqueue ) {
 			if ( $this->cmb->prop( 'cmb_styles' ) ) {
 				self::enqueue_cmb_css();
 			}
