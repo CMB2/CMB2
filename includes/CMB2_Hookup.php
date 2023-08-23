@@ -97,8 +97,11 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 					return $this->term_hooks();
 				case 'options-page':
 					return $this->options_page_hooks();
+
 			}
 		}
+
+		do_action( 'cmb2_init_hooks', $this );
 
 		return $this;
 	}
