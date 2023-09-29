@@ -8,8 +8,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Check PHP Compatibility
+      - name: Check PHP 8.2
         uses: pantheon-systems/phpcompatibility-action@v1
         with:
-          test-versions: 8.2-
+          test-versions: 8.2
           paths: '**/*.php'
+      - name: Check PHP 8.1
+        uses: pantheon-systems/phpcompatibility-action@v1
+        with:
+          test-versions: 8.1
+          paths: '**/*.php'
+      - name: Check PHP 8.0 and below
+        uses: pantheon-systems/phpcompatibility-action@v1
+        with:
+          test-versions: 8.0-
+          paths: '**/*.php'                    
