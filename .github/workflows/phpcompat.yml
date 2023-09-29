@@ -11,5 +11,5 @@ jobs:
       - name: Check PHP Compatibility
         uses: pantheon-systems/phpcompatibility-action@v1
         with:
-          test-versions: 8.0+
+          test-versions: 8.2-
           paths: ${{ github.workspace }}
