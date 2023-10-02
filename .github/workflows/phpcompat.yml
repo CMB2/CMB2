@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check PHP Compatibility
-        uses: pantheon-systems/phpcompatibility-action@v1
+        uses: pantheon-systems/phpcompatibility-action@dev
         with:
           test-versions: '8.2-'
           paths: '**/*.php'
