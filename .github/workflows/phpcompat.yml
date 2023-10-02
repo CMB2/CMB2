@@ -2,10 +2,8 @@ name: PHP Compatibility
 on: [push]
 jobs:
   phpcompat:
+    name: PHP 8.x Compatibility Check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php_version: [ '8.0', '8.1', '8.2' ]
 
     steps:
       - name: Checkout
@@ -14,5 +12,5 @@ jobs:
       - name: Check PHP Compatibility
         uses: pantheon-systems/phpcompatibility-action@dev
         with:
-          test-versions: '${{ matrix.php_version }}-'
+          test-versions: '8.0-'
           paths: '${{ github.workspace }}/**/*.php'
