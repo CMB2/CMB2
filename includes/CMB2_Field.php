@@ -1626,7 +1626,8 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		// default param can be passed a callback as well.
-		if ( is_callable( $args['default'] ) ) {
+		// but by making the default_cb value false, you can avoid checking the default value as callback!
+		if ( $args['default_cb'] !== false && is_callable( $args['default'] ) ) {
 
 			$this->deprecated_param( __CLASS__ . '::__construct()', '2.2.3', self::DEPRECATED_CB_PARAM, 'default', 'default_cb' );
 
