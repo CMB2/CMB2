@@ -237,17 +237,9 @@ window.CMB2 = window.CMB2 || {};
 		var $this = $( this );
 		var $multicheck = $this.closest( '.cmb-td' ).find( 'input[type=checkbox]:not([disabled])' );
 
-		// If the button has already been clicked once...
-		if ( $this.data( 'checked' ) ) {
-			// clear the checkboxes and remove the flag
-			$multicheck.prop( 'checked', false );
-			$this.data( 'checked', false );
-		}
-		// Otherwise mark the checkboxes and add a flag
-		else {
-			$multicheck.prop( 'checked', true );
-			$this.data( 'checked', true );
-		}
+		var $toggled = ! $this.data( 'checked' );
+		$multicheck.prop( 'checked', $toggled ).trigger( 'change' );
+		$this.data( 'checked', $toggled );
 	};
 
 	cmb.handleMedia = function( evt ) {
