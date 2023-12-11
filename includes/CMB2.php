@@ -583,7 +583,7 @@ class CMB2 extends CMB2_Base {
 		$atts = array();
 		foreach ( $group_wrap_attributes as $att => $att_value ) {
 			if ( ! CMB2_Utils::is_data_attribute( $att ) ) {
-				$att_value = htmlspecialchars( $att_value );
+				$att_value = htmlspecialchars( $att_value, ENT_COMPAT );
 			}
 
 			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( $att_value );

@@ -390,6 +390,7 @@ if ( ! function_exists( 'date_create_from_format' ) ) {
 		 * %Y, %m and %d correspond to date()'s Y m and d.
 		 * %I corresponds to H, %M to i and %p to a
 		 */
+		// phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.strptimeDeprecated
 		$parsed_time = strptime( $date_value, $schedule_format );
 
 		$ymd = sprintf(
