@@ -38,6 +38,11 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 		if ( $datetime && $datetime instanceof DateTime ) {
 			$tz       = $datetime->getTimezone();
 			$tzstring = $tz->getName();
+
+			// Add offset
+			$offset = CMB2_Utils::timezone_offset( $tzstring );
+			$datetime->modify("+{$offset} seconds");
+
 			$value    = $datetime->getTimestamp();
 		}
 
