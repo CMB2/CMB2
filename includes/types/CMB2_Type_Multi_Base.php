@@ -93,11 +93,12 @@ abstract class CMB2_Type_Multi_Base extends CMB2_Type_Base {
 			// Clone args & modify for just this item
 			$a = $args;
 
-			$a['value'] = $opt_value;
-			$a['label'] = $opt_label;
+			// If flat_options_list is true, use the label as both value and label.
+			$field_value = isset( $args['flat_options_list'] ) && $args['flat_options_list'] ? $opt_label : $opt_value;
+			$a['label']  = $opt_label;
 
 			// Check if this option is the value of the input
-			if ( $value === CMB2_Utils::normalize_if_numeric( $opt_value ) ) {
+			if ( $value === CMB2_Utils::normalize_if_numeric( field_value ) ) {
 				$a['checked'] = 'checked';
 			}
 
