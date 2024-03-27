@@ -32,7 +32,11 @@ class CMB2_Type_Text_Datetime_Timestamp_Timezone extends CMB2_Type_Base {
 			$args['value'] = '';
 		}
 
-		$datetime = maybe_unserialize( $args['value'] );
+		// Don't attempt to unserialize data that wasn't serialized going in.
+		$datetime = is_serialized( $args['value'] )
+			? @unserialize( trim( $args['value'] ), array( 'allowed_classes' => array( 'DateTime' ) ) )
+			: $args['value'];
+
 		$value = $tzstring = '';
 
 		if ( $datetime && $datetime instanceof DateTime ) {
