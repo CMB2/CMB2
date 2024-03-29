@@ -1124,7 +1124,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 					$date_values[] = '';
 				} else {
 					$timestamp = $datetime->setTimezone( new DateTimeZone( $tzstring ) )->getTimestamp();
-					$date_values[] = serialize( $datetime );
+					$date_values[] = json_encode( $datetime );
 				}
 			}
 		}
