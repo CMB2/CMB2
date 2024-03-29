@@ -1572,30 +1572,7 @@ class CMB2 extends CMB2_Base {
 	 * @return void
 	 */
 	protected function field_actions( $field ) {
-		switch ( $field['type'] ) {
-			case 'file':
-			case 'file_list':
-				// Initiate attachment JS hooks.
-				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
-				break;
-
-			case 'oembed':
-				// Initiate oembed Ajax hooks.
-				cmb2_ajax();
-				break;
-
-			case 'group':
-				if ( empty( $field['render_row_cb'] ) ) {
-					$field['render_row_cb'] = array( $this, 'render_group_callback' );
-				}
-				break;
-			case 'colorpicker':
-				// https://github.com/JayWood/CMB2_RGBa_Picker
-				// Dequeue the rgba_colorpicker custom field script if it is used,
-				// since we now enqueue our own more current version.
-				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
-				break;
-		}
+		$field = CMB2_Hookup_Field::init( $field, $this );
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
 			$field = $this->define_field_column( $field );
