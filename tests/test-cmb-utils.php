@@ -370,6 +370,7 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 		$this->assertEquals( $datetime, CMB2_Utils::json_to_datetime( $json ) );
 		$this->assertNull( CMB2_Utils::json_to_datetime( $evil_eval ) );
+		$this->assertNull( CMB2_Utils::json_to_datetime( [ $json ] ) );
 	}
 
 }

@@ -583,6 +583,10 @@ class CMB2_Utils {
 	 * @return DateTime|null
 	 */
 	public static function json_to_datetime( $json_string ) {
+		if ( ! is_string( $json_string ) ) {
+			return null;
+		}
+
 		$json = json_decode( $json_string );
 
 		// Check if json decode was successful
