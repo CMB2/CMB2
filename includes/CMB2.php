@@ -21,6 +21,14 @@
 class CMB2 extends CMB2_Base {
 
 	/**
+	 * Supported CMB2 object types
+	 *
+	 * @var array
+	 * @since 2.11.0
+	 */
+	protected $core_object_types = array( 'post', 'user', 'comment', 'term', 'options-page' );
+
+	/**
 	 * The object properties name.
 	 *
 	 * @var   string
@@ -1098,8 +1106,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 		// Get our object type.
-		$supported_types = array( 'post', 'user', 'comment', 'term', 'options-page' );
-		$mb_object_type = in_array( $found_type, $supported_types, true )
+		$mb_object_type = $this->is_supported_core_object_type( $found_type )
 			? $found_type
 			: 'post';
 
@@ -1810,6 +1817,16 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Whether given object type is one of the core supported object types.
+	 *
+	 * @since  2.11.0
+	 * @return bool
+	 */
+	public function is_supported_core_object_type( $object_type ) {
+		return in_array( $object_type, $this->core_object_types, true );
+	}
+
+	/**
 	 * Magic getter for our object.
 	 *
 	 * @param  string $property Object property.
@@ -1821,6 +1838,7 @@ class CMB2 extends CMB2_Base {
 			case 'updated':
 			case 'has_columns':
 			case 'tax_metaboxes_to_remove':
+			case 'core_object_types':
 				return $this->{$property};
 			default:
 				return parent::__get( $property );
