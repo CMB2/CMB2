@@ -78,22 +78,29 @@ class CMB2_Hookup_Field {
 						continue;
 					}
 
-					if ( 'options-page' === $object_type ) {
-						// TODO: Hook in via options hooks
-					} else {
+					if ( empty( $field['field_hookup_instance'][ $object_type ] ) ) {
+						$instance = new self( $field, $object_type, $cmb );
+						$method   = 'options-page' === $object_type
+							? 'text_datetime_timestamp_timezone_option_back_compat'
+							: 'text_datetime_timestamp_timezone_back_compat';
 
-						if ( empty( $field['field_hookup_instance'][ $object_type ] ) ) {
-							$instance = new self( $field, $object_type, $cmb );
-							$field['field_hookup_instance'][ $object_type ] = array( $instance, 'text_datetime_timestamp_timezone_back_compat' );
-						}
+						$field['field_hookup_instance'][ $object_type ] = array( $instance, $method );
+					}
 
+					if ( false === $field['field_hookup_instance'][ $object_type ] ) {
 						// If set to false, no need to filter.
 						// This can be set if you have updated your use of the field type value to
 						// assume the JSON value.
-						if ( false !== $field['field_hookup_instance'][ $object_type ] ) {
-							add_filter( "get_{$object_type}_metadata", $field['field_hookup_instance'][ $object_type ], 10, 5 );
-						}
+						continue;
 					}
+
+					if ( 'options-page' === $object_type ) {
+						$option_name = $cmb->object_id();
+						add_filter( "pre_option_{$option_name}", $field['field_hookup_instance'][ $object_type ], 10, 3 );
+						continue;
+					}
+
+					add_filter( "get_{$object_type}_metadata", $field['field_hookup_instance'][ $object_type ], 10, 5 );
 				}
 				break;
 		}
@@ -120,20 +127,53 @@ class CMB2_Hookup_Field {
 	 *
 	 * @since  2.11.0
 	 *
-	 * @param  mixed  $value    The value of the metadata.
+	 * @param  mixed  $value     The value of the metadata.
 	 * @param  int    $object_id ID of the object metadata is for.
 	 * @param  string $meta_key  Meta key.
 	 * @param  bool   $single    Whether to return a single value.
 	 * @param  string $meta_type Type of object metadata is for.
-	 * @return mixed            Maybe unserialized value.
+	 * @return mixed             Maybe reserialized value.
 	 */
 	public function text_datetime_timestamp_timezone_back_compat( $value, $object_id, $meta_key, $single, $meta_type ) {
 		if ( $meta_key === $this->field_id ) {
 			remove_filter( "get_{$meta_type}_metadata", [ $this, __FUNCTION__ ], 10, 5 );
-			$actual_value = get_metadata( $meta_type, $object_id, $meta_key, $single );
+			$value = get_metadata( $meta_type, $object_id, $meta_key, $single );
 			add_filter( "get_{$meta_type}_metadata", [ $this, __FUNCTION__ ], 10, 5 );
 
-			$value = $this->reserialize_safe_value( $actual_value );
+			$value = $this->reserialize_safe_value( $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Adds a back-compat shim for text_datetime_timestamp_timezone field type values on options pages.
+	 *
+	 * Handles old serialized DateTime values, as well as the new JSON formatted values.
+	 *
+	 * @since  2.11.0
+	 *
+	 * @param  mixed  $value         The value of the option.
+	 * @param  string $option        Option name.
+	 * @param  mixed  $default_value Default value.
+	 * @return mixed                 The updated value.
+	 */
+	public function text_datetime_timestamp_timezone_option_back_compat( $value, $option, $default_value ) {
+		remove_filter( "pre_option_{$option}", [ $this, __FUNCTION__ ], 10, 3 );
+		$value = get_option( $option, $default_value );
+		add_filter( "pre_option_{$option}", [ $this, __FUNCTION__ ], 10, 3 );
+
+		if ( ! empty( $value ) && is_array( $value ) ) {
+
+			// Loop fields and update values for all text_datetime_timestamp_timezone fields.
+			foreach ( CMB2_Boxes::get( $this->cmb_id )->prop( 'fields' ) as $field ) {
+				if (
+					'text_datetime_timestamp_timezone' === $field['type']
+					&& ! empty( $value[ $field['id'] ] )
+				) {
+					$value[ $field['id'] ] = $this->reserialize_safe_value( $value[ $field['id'] ] );
+				}
+			}
 		}
 
 		return $value;
