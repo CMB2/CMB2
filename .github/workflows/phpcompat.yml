@@ -1,0 +1,16 @@
+name: PHP Compatibility
+on: [push]
+jobs:
+  phpcompat:
+    name: PHP 8.x Compatibility Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check PHP Compatibility
+        uses: pantheon-systems/phpcompatibility-action@dev
+        with:
+          test-versions: '8.0-'
+          paths: '${{ github.workspace }}/**/*.php'

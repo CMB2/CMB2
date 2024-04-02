@@ -101,23 +101,33 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 			return;
 		}
 
-		$time = time();
+		$test_value = new DateTime();
+		$tz = new DateTimeZone( 'America/New_York' );
+		$test_value->setTimezone( $tz );
+		$test_value->setTime( $test_value->format( 'H' ), $test_value->format( 'i' ), '00' );
 
-		$sanitizer = new CMB2_Sanitize( $this->get_field_object( 'text_datetime_timestamp_timezone' ), array(
+		$time = $test_value->getTimestamp();
+		$expected = json_encode( $test_value );
+
+		$object = $this->get_field_object( 'text_datetime_timestamp_timezone' );
+		$sanitizer_args = array(
 			'date' => date( 'm/d/Y', $time ),
 			'time' => date( 'h:i A', $time ),
-			'timezone' => date( 'e', $time ),
-		) );
+			'timezone' => $tz->getName(),
+		);
+
+		$sanitizer = new CMB2_Sanitize( $object, $sanitizer_args );
 
 		$saved_value = $sanitizer->text_datetime_timestamp_timezone();
 
-		$datetime = unserialize( $saved_value );
-		$tz       = $datetime->getTimezone();
-		$tzstring = $tz->getName();
+		$this->assertSame( $expected, $saved_value );
 
-		$expected = date( 'm/d/Y h:i A', $time ) . ', ' . $tzstring;
-
-		$this->assertDisplayFieldMatches( 'text_datetime_timestamp_timezone', $saved_value, $expected );
+		$expected = $test_value->format( 'm/d/Y h:i A' ) . ', ' . $tz->getName();
+		$this->assertDisplayFieldMatches(
+			'text_datetime_timestamp_timezone',
+			$saved_value,
+			$expected
+		);
 	}
 
 	public function test_select_timezone() {

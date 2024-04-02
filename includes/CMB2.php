@@ -21,6 +21,14 @@
 class CMB2 extends CMB2_Base {
 
 	/**
+	 * Supported CMB2 object types
+	 *
+	 * @var array
+	 * @since 2.11.0
+	 */
+	protected $core_object_types = array( 'post', 'user', 'comment', 'term', 'options-page' );
+
+	/**
 	 * The object properties name.
 	 *
 	 * @var   string
@@ -583,7 +591,7 @@ class CMB2 extends CMB2_Base {
 		$atts = array();
 		foreach ( $group_wrap_attributes as $att => $att_value ) {
 			if ( ! CMB2_Utils::is_data_attribute( $att ) ) {
-				$att_value = htmlspecialchars( $att_value );
+				$att_value = htmlspecialchars( $att_value, ENT_COMPAT );
 			}
 
 			$atts[ sanitize_html_class( $att ) ] = sanitize_text_field( $att_value );
@@ -927,7 +935,7 @@ class CMB2 extends CMB2_Base {
 			return;
 		}
 
-		$old        = $field_group->get_data();
+		$old = $field_group->get_data();
 		// Check if group field has sanitization_cb.
 		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
 		$saved      = array();
@@ -1049,8 +1057,18 @@ class CMB2 extends CMB2_Base {
 				break;
 		}
 
+		/**
+		 * Filter the object id.
+		 *
+		 * @since  {{next}}
+		 *
+		 * @param  integer|string $object_id Object ID.
+		 * @param  CMB2           $cmb       This CMB2 object.
+		 */
+		$object_id = apply_filters( 'cmb2_set_object_id', $object_id, $this );
+
 		// reset to id or 0.
-		$this->object_id = $object_id ? $object_id : 0;
+		$this->object_id = ! empty( $object_id ) ? $object_id : 0;
 
 		return $this->object_id;
 	}
@@ -1066,38 +1084,42 @@ class CMB2 extends CMB2_Base {
 			return $this->mb_object_type;
 		}
 
+		$found_type = '';
+
 		if ( $this->is_options_page_mb() ) {
-			$this->mb_object_type = 'options-page';
-			return $this->mb_object_type;
-		}
+			$found_type = 'options-page';
+		} else {
+			$registered_types = $this->box_types();
 
-		$registered_types = $this->box_types();
-
-		$type = '';
-
-		// if it's an array of one, extract it.
-		if ( 1 === count( $registered_types ) ) {
-			$last = end( $registered_types );
-			if ( is_string( $last ) ) {
-				$type = $last;
+			// if it's an array of one, extract it.
+			if ( 1 === count( $registered_types ) ) {
+				$last = end( $registered_types );
+				if ( is_string( $last ) ) {
+					$found_type = $last;
+				}
+			} else {
+				$current_object_type = $this->current_object_type();
+				if ( in_array( $current_object_type, $registered_types, true ) ) {
+					$found_type = $current_object_type;
+				}
 			}
-		} elseif ( ( $curr_type = $this->current_object_type() ) && in_array( $curr_type, $registered_types, true ) ) {
-			$type = $curr_type;
 		}
 
 		// Get our object type.
-		switch ( $type ) {
+		$mb_object_type = $this->is_supported_core_object_type( $found_type )
+			? $found_type
+			: 'post';
 
-			case 'user':
-			case 'comment':
-			case 'term':
-				$this->mb_object_type = $type;
-				break;
-
-			default:
-				$this->mb_object_type = 'post';
-				break;
-		}
+		/**
+		 * Filter the metabox object type.
+		 *
+		 * @since {{next}}
+		 *
+		 * @param string $mb_object_type The metabox object type.
+		 * @param string $found_type     The found object type.
+		 * @param CMB2   $cmb            This CMB2 object.
+		 */
+		$this->mb_object_type = apply_filters( 'cmb2_set_box_object_type', $mb_object_type, $found_type, $this );
 
 		return $this->mb_object_type;
 	}
@@ -1550,32 +1572,7 @@ class CMB2 extends CMB2_Base {
 	 * @return void
 	 */
 	protected function field_actions( $field ) {
-		switch ( $field['type'] ) {
-			case 'file':
-			case 'file_list':
-
-				// Initiate attachment JS hooks.
-				add_filter( 'wp_prepare_attachment_for_js', array( 'CMB2_Type_File_Base', 'prepare_image_sizes_for_js' ), 10, 3 );
-				break;
-
-			case 'oembed':
-				// Initiate oembed Ajax hooks.
-				cmb2_ajax();
-				break;
-
-			case 'group':
-				if ( empty( $field['render_row_cb'] ) ) {
-					$field['render_row_cb'] = array( $this, 'render_group_callback' );
-				}
-				break;
-			case 'colorpicker':
-
-				// https://github.com/JayWood/CMB2_RGBa_Picker
-				// Dequeue the rgba_colorpicker custom field script if it is used,
-				// since we now enqueue our own more current version.
-				add_action( 'admin_enqueue_scripts', array( 'CMB2_Type_Colorpicker', 'dequeue_rgba_colorpicker_script' ), 99 );
-				break;
-		}
+		$field = CMB2_Hookup_Field::init( $field, $this );
 
 		if ( isset( $field['column'] ) && false !== $field['column'] ) {
 			$field = $this->define_field_column( $field );
@@ -1797,6 +1794,16 @@ class CMB2 extends CMB2_Base {
 	}
 
 	/**
+	 * Whether given object type is one of the core supported object types.
+	 *
+	 * @since  2.11.0
+	 * @return bool
+	 */
+	public function is_supported_core_object_type( $object_type ) {
+		return in_array( $object_type, $this->core_object_types, true );
+	}
+
+	/**
 	 * Magic getter for our object.
 	 *
 	 * @param  string $property Object property.
@@ -1808,6 +1815,7 @@ class CMB2 extends CMB2_Base {
 			case 'updated':
 			case 'has_columns':
 			case 'tax_metaboxes_to_remove':
+			case 'core_object_types':
 				return $this->{$property};
 			default:
 				return parent::__get( $property );

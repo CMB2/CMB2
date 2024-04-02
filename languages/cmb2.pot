@@ -1,14 +1,14 @@
-# Copyright (C) 2021 CMB2 team
+# Copyright (C) 2024 CMB2 team
 # This file is distributed under the same license as the CMB2 package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMB2 2.10.1\n"
+"Project-Id-Version: CMB2 2.11.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
-"POT-Creation-Date: 2021-06-04 13:30:34+00:00\n"
+"POT-Creation-Date: 2024-04-02 18:48:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-6-4 13:30+240\n"
+"PO-Revision-Date: 2024-4-2 18:48+240\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "Language: en_US\n"
@@ -338,11 +338,11 @@ msgstr ""
 msgid "Will show in REST API \"editable\" contexts only (`POST` requests)."
 msgstr ""
 
-#: includes/CMB2.php:199
+#: includes/CMB2.php:207
 msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: includes/CMB2.php:618
+#: includes/CMB2.php:626
 msgid "Click to toggle"
 msgstr ""
 
@@ -350,12 +350,12 @@ msgstr ""
 msgid "Please Try Again"
 msgstr ""
 
-#: includes/CMB2_Ajax.php:181 tests/cmb-tests-base.php:50
+#: includes/CMB2_Ajax.php:181 tests/cmb-tests-base.php:53
 msgid "Remove Embed"
 msgstr ""
 
 #: includes/CMB2_Ajax.php:189 includes/helper-functions.php:107
-#: tests/cmb-tests-base.php:68 tests/test-cmb-types-display.php:208
+#: tests/cmb-tests-base.php:71 tests/test-cmb-types-display.php:218
 #. translators: 1: results for. 2: link to codex.wordpress.org/Embeds
 msgid "No oEmbed Results Found for %1$s. View more info at %2$s."
 msgstr ""
@@ -411,23 +411,24 @@ msgstr ""
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: includes/CMB2_Field_Display.php:453 includes/CMB2_JS.php:242
+#: includes/CMB2_Field_Display.php:454 includes/CMB2_JS.php:242
 #: includes/types/CMB2_Type_File_Base.php:90 tests/test-cmb-types-base.php:149
 #: tests/test-cmb-types.php:959
 msgid "File:"
 msgstr ""
 
-#: includes/CMB2_Hookup.php:188
+#: includes/CMB2_Hookup.php:191
 msgid ""
 "Term Metadata is a WordPress 4.4+ feature. Please upgrade your WordPress "
 "install."
 msgstr ""
 
-#: includes/CMB2_Hookup.php:192
+#: includes/CMB2_Hookup.php:195
 msgid "Term metaboxes configuration requires a \"taxonomies\" parameter."
 msgstr ""
 
-#: includes/CMB2_Hookup.php:560
+#: includes/CMB2_Hookup.php:579
+#. translators: %s: name of CMB2 box (panel)
 msgid "Toggle panel: %s"
 msgstr ""
 

@@ -3,9 +3,9 @@ Contributors:      jtsternberg, webdevstudios, tw2113
 Donate link:       https://cmb2.io
 Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
-Requires PHP:      5.2
-Tested up to:      5.9
-Stable tag:        2.10.1
+Requires PHP:      7.4
+Tested up to:      6.4
+Stable tag:        2.11.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,7 +48,7 @@ If you are looking to provide language translation files, Please do so via [Word
 ##### Custom Field Types
 * [CMB2 Field Type: CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): `custom_attached_posts`, for attaching posts to a page.
 * [CMB2 Field Type: Post Search Ajax](https://github.com/alexis-magina/cmb2-field-post-search-ajax) by [alexis-magina](https://github.com/alexis-magina): `post_search_ajax` Attach posts to each other. Same approach as [CMB2 Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) but with Ajax request, multiple/single option, and different UI.
-* [CMB2 Field Type: CMB2 Post Search field](https://github.com/CMB2/CMB2-Post-Search-field): `post_search_text` adds a post-search dialog for searching/attaching other post IDs.
+* [CMB2 Field Type: Ajax Search](https://github.com/rubengc/cmb2-field-ajax-search) from [rubengc](https://github.com/rubengc): 3 different fields with the same UI in AJAX to search (with query parameters) to users, post type and taxonomy terms.
 * [CMB2 Field Type: CMB2 User Search field](https://github.com/Mte90/CMB2-User-Search-field) from [Mte90](https://github.com/Mte90): `user_search_text` adds a user-search dialog for searching/attaching other User IDs.
 * [CMB2 Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
 	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
@@ -87,6 +87,7 @@ If you are looking to provide language translation files, Please do so via [Word
 * [CMB2 Field Type: Widget Selector](https://github.com/scottsawyer/cmb2-field-widget-selector) by [scottsawyer](https://github.com/scottsawyer): Need a field that lets you ( or your editor ) select / display an existing widget instance? Then this is the plugin for you.
 
 ##### Other Helpful Resources
+* [CMB2 WooCommerce HPOS Orders](https://github.com/CMB2/cmb2-woocommerce-hpos-orders): Adds the ability to add custom fields to the new WooCommerce HPOS orders page.
 * [CMB2 Admin Extension](https://github.com/twoelevenjay/CMB2-Admin-Extension): Adds a UI to create CMB2 meta boxes from the WordPress admin. Also on [wordpress.org](https://wordpress.org/plugins/cmb2-admin-extension/).
 * [WordPress Shortcode Button](https://github.com/jtsternberg/Shortcode_Button): Uses CMB2 fields to generate fields for shortcode input modals.
 * [WDS-Simple-Page-Builder](https://github.com/WebDevStudios/WDS-Simple-Page-Builder): Uses existing template parts in the currently-active theme to build a customized page with rearrangeable elements. Built with CMB2.
@@ -138,9 +139,27 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
 
+### 2.11.0
+
+#### Enhancements
+* Package updates.
+* Update WordPress Tested up to tag 6.1. Props [@RubenMartins](https://github.com/RubenMartins) ([#1477](https://github.com/CMB2/CMB2/pull/1477)).
+* Add filters for setting `object_id` and `mb_object_type` and in `do_scripts` - Allows overriding by plugins/libs. (Added to support the new [CMB2 WooCommerce HPOS Orders](https://github.com/CMB2/cmb2-woocommerce-hpos-orders) extension)
+* Added a `cmb2_init_hooks` hook when hookup is called.
+* Addressed some security concerns with the unserialization process for the stored serialized `DateTime` field values (`text_datetime_timestamp_timezone` field type only). ([#1510](https://github.com/CMB2/CMB2/pull/1510))
+* [Development] Some build script improvements.
+* [Development] Added some PHPCS/WPCS config.
+* [Development] Added a phpcompatibility action. Props [@jazzsequence](https://github.com/jazzsequence) ([#1499](https://github.com/CMB2/CMB2/pull/1499), [#1500](https://github.com/CMB2/CMB2/pull/1500)).
+
+#### Bug Fixes
+* Fix some line-height issues with dashicon buttons. Fixes [#1443](
+* Fix issue where image can be attached to wrong group after removing previous group. ([#1473](https://github.com/CMB2/CMB2/pull/1473))
+* Fixes issue where Select/Deselect all does not trigger change JS DOM events. Fixes [#1504](https://github.com/CMB2/CMB2/issues/1504).
+
 ### 2.10.1
 
 #### Bug Fixes
+
 * Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
 
 ### 2.10.0
@@ -1012,9 +1031,27 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 
 == Upgrade Notice ==
 
+### 2.11.0
+
+#### Enhancements
+* Package updates.
+* Update WordPress Tested up to tag 6.1. Props [@RubenMartins](https://github.com/RubenMartins) ([#1477](https://github.com/CMB2/CMB2/pull/1477)).
+* Add filters for setting `object_id` and `mb_object_type` and in `do_scripts` - Allows overriding by plugins/libs. (Added to support the new [CMB2 WooCommerce HPOS Orders](https://github.com/CMB2/cmb2-woocommerce-hpos-orders) extension)
+* Added a `cmb2_init_hooks` hook when hookup is called.
+* Addressed some security concerns with the unserialization process for the stored serialized `DateTime` field values (`text_datetime_timestamp_timezone` field type only). ([#1510](https://github.com/CMB2/CMB2/pull/1510))
+* [Development] Some build script improvements.
+* [Development] Added some PHPCS/WPCS config.
+* [Development] Added a phpcompatibility action. Props [@jazzsequence](https://github.com/jazzsequence) ([#1499](https://github.com/CMB2/CMB2/pull/1499), [#1500](https://github.com/CMB2/CMB2/pull/1500)).
+
+#### Bug Fixes
+* Fix some line-height issues with dashicon buttons. Fixes [#1443](
+* Fix issue where image can be attached to wrong group after removing previous group. ([#1473](https://github.com/CMB2/CMB2/pull/1473))
+* Fixes issue where Select/Deselect all does not trigger change JS DOM events. Fixes [#1504](https://github.com/CMB2/CMB2/issues/1504).
+
 ### 2.10.1
 
 #### Bug Fixes
+
 * Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
 
 ### 2.10.0

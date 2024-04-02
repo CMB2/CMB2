@@ -399,7 +399,7 @@ class CMB2_Sanitize {
 			} else {
 				$datetime->setTimezone( new DateTimeZone( $tzstring ) );
 				$utc_stamp   = date_timestamp_get( $datetime ) - $offset;
-				$this->value = serialize( $datetime );
+				$this->value = json_encode( $datetime );
 			}
 
 			if ( $this->field->group ) {
@@ -448,7 +448,7 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		return htmlspecialchars_decode( stripslashes( $this->value ) );
+		return htmlspecialchars_decode( stripslashes( $this->value ), ENT_COMPAT );
 	}
 
 	/**
@@ -485,7 +485,7 @@ class CMB2_Sanitize {
 		$i       = $this->field->group->index;
 
 		// Check group $alldata data.
-		$id_val  = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
+		$id_val = isset( $alldata[ $base_id ][ $i ][ $id_key ] )
 			? absint( $alldata[ $base_id ][ $i ][ $id_key ] )
 			: '';
 
@@ -521,7 +521,7 @@ class CMB2_Sanitize {
 		if ( $this->value && ! $id_val ) {
 			$id_val = CMB2_Utils::image_id_from_url( $this->value );
 
-		// If there is an ID but user emptied the input value, remove the ID.
+			// If there is an ID but user emptied the input value, remove the ID.
 		} elseif ( ! $this->value && $id_val ) {
 			$id_val = null;
 		}

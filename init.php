@@ -20,7 +20,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.10.1
+ * Version:      2.11.0
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -53,7 +53,7 @@
  * ***********************************************************************
  */
 
-if ( ! class_exists( 'CMB2_Bootstrap_2101', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_2110', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -66,7 +66,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_2101', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      https://cmb2.io
 	 */
-	class CMB2_Bootstrap_2101 {
+	class CMB2_Bootstrap_2110 {
 
 		/**
 		 * Current version number
@@ -74,7 +74,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_2101', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.10.1';
+		const VERSION = '2.11.0';
 
 		/**
 		 * Current version hook priority.
@@ -86,17 +86,17 @@ if ( ! class_exists( 'CMB2_Bootstrap_2101', false ) ) {
 		const PRIORITY = 9957;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_2101 object
+		 * Single instance of the CMB2_Bootstrap_2110 object
 		 *
-		 * @var CMB2_Bootstrap_2101
+		 * @var CMB2_Bootstrap_2110
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_2101 object
+		 * Creates/returns the single instance CMB2_Bootstrap_2110 object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_2101 Single instance object
+		 * @return CMB2_Bootstrap_2110 Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -193,6 +193,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_2101', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_2101::initiate();
+	CMB2_Bootstrap_2110::initiate();
 
 }// End if().

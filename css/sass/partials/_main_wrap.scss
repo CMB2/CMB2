@@ -330,6 +330,7 @@ body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[typ
 
 			&:before {
 				@include pseudo-dashicons("\f335");
+				line-height: 1.3;
 			}
 		}
 	}

@@ -81,4 +81,19 @@
 		padding-top: 1.8em;
 	}
 
+	.button-secondary {
+		.dashicons {
+			line-height: 1.3;
+		}
+		&.move-up, &.move-down {
+			.dashicons {
+				line-height: 1.1;
+			}
+		}
+		&.cmb-add-group-row {
+			.dashicons {
+				line-height: 1.5;
+			}
+		}
+	}
 }
