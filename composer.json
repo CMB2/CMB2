@@ -24,7 +24,7 @@
 		"source": "http://wordpress.org/support/plugin/cmb2"
 	},
 	"require": {
-		"php": ">5.2.4"
+		"php": ">7.4"
 	},
 	"suggest": {
 		"composer/installers": "~1.0"

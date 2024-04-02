@@ -318,25 +318,26 @@ class CMB2_Display_Text_Date_Timezone extends CMB2_Field_Display {
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		$field = $this->field;
-
 		if ( empty( $this->value ) ) {
 			return;
 		}
 
-		$datetime = maybe_unserialize( $this->value );
-		$this->value = $tzstring = '';
-
-		if ( $datetime && $datetime instanceof DateTime ) {
-			$tz       = $datetime->getTimezone();
-			$tzstring = $tz->getName();
-			$this->value    = $datetime->getTimestamp();
+		$datetime = CMB2_Utils::get_datetime_from_value( $this->value );
+		if ( ! $datetime || ! $datetime instanceof DateTime ) {
+			return;
 		}
 
-		$date = $this->field->get_timestamp_format( 'date_format', $this->value );
-		$time = $this->field->get_timestamp_format( 'time_format', $this->value );
+		$date     = $datetime->format( stripslashes( $this->field->args( 'date_format' ) ) );
+		$time     = $datetime->format( stripslashes( $this->field->args( 'time_format' ) ) );
+		$timezone = $datetime->getTimezone()->getName();
 
-		echo $date, ( $time ? ' ' . $time : '' ), ( $tzstring ? ', ' . $tzstring : '' );
+		echo $date;
+		if ( $time ) {
+			echo ' ' . $time;
+		}
+		if ( $timezone ) {
+			echo ', ' . $timezone;
+		}
 	}
 }
 

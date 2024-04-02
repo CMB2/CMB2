@@ -343,6 +343,36 @@ class Test_CMB2_Utils extends Test_CMB2 {
 
 	}
 
+	public function test_get_datetime_from_value() {
+		$datetime = new DateTime( '2020-04-22 19:18:00.000000', new DateTimeZone( 'Asia/Baghdad' ) );
+		$serialized = 'O:8:"DateTime":3:{s:4:"date";s:26:"2020-04-22 19:18:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:12:"Asia/Baghdad";}';
+		$json = '{"date":"2020-04-22 19:18:00.000000","timezone_type":3,"timezone":"Asia/Baghdad"}';
+		$evil_eval = 'O:4:"Evil":2:{s:4:"hack";N;s:2:"me";R:2;}';
+
+		$this->assertEquals( $datetime, CMB2_Utils::get_datetime_from_value( $serialized ) );
+		$this->assertEquals( $datetime, CMB2_Utils::get_datetime_from_value( $json ) );
+		$this->assertNull( CMB2_Utils::get_datetime_from_value( $evil_eval ) );
+	}
+
+	public function test_unserialize_datetime() {
+		$datetime = new DateTime( '2020-04-22 19:18:00.000000', new DateTimeZone( 'Asia/Baghdad' ) );
+		$serialized = 'O:8:"DateTime":3:{s:4:"date";s:26:"2020-04-22 19:18:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:12:"Asia/Baghdad";}';
+		$evil_eval = 'O:4:"Evil":2:{s:4:"hack";N;s:2:"me";R:2;}';
+
+		$this->assertEquals( $datetime, CMB2_Utils::unserialize_datetime( $serialized ) );
+		$this->assertNull( CMB2_Utils::unserialize_datetime( $evil_eval ) );
+	}
+
+	public function test_json_to_datetime() {
+		$datetime = new DateTime( '2020-04-22 19:18:00.000000', new DateTimeZone( 'Asia/Baghdad' ) );
+		$json = '{"date":"2020-04-22 19:18:00.000000","timezone_type":3,"timezone":"Asia/Baghdad"}';
+		$evil_eval = 'O:4:"Evil":2:{s:4:"hack";N;s:2:"me";R:2;}';
+
+		$this->assertEquals( $datetime, CMB2_Utils::json_to_datetime( $json ) );
+		$this->assertNull( CMB2_Utils::json_to_datetime( $evil_eval ) );
+		$this->assertNull( CMB2_Utils::json_to_datetime( [ $json ] ) );
+	}
+
 }
 
 class Test_CMB2_Utils_WIN extends CMB2_Utils {

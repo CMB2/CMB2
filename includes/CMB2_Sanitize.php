@@ -399,7 +399,7 @@ class CMB2_Sanitize {
 			} else {
 				$datetime->setTimezone( new DateTimeZone( $tzstring ) );
 				$utc_stamp   = date_timestamp_get( $datetime ) - $offset;
-				$this->value = serialize( $datetime );
+				$this->value = json_encode( $datetime );
 			}
 
 			if ( $this->field->group ) {
