@@ -1060,7 +1060,7 @@ class CMB2 extends CMB2_Base {
 		/**
 		 * Filter the object id.
 		 *
-		 * @since  {{next}}
+		 * @since 2.11.0
 		 *
 		 * @param  integer|string $object_id Object ID.
 		 * @param  CMB2           $cmb       This CMB2 object.
@@ -1113,7 +1113,7 @@ class CMB2 extends CMB2_Base {
 		/**
 		 * Filter the metabox object type.
 		 *
-		 * @since {{next}}
+		 * @since 2.11.0
 		 *
 		 * @param string $mb_object_type The metabox object type.
 		 * @param string $found_type     The found object type.
