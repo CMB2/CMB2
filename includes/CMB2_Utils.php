@@ -677,6 +677,7 @@ class CMB2_Utils {
 		$attr_exclude[] = 'js_dependencies';
 
 		$attributes = '';
+		$is_multiple = in_array( 'multiple', $attrs, true );
 		foreach ( $attrs as $attr => $val ) {
 			$excluded = in_array( $attr, (array) $attr_exclude, true );
 			$empty    = false === $val && 'value' !== $attr;
@@ -685,6 +686,7 @@ class CMB2_Utils {
 
 				// if data attribute, use single quote wraps, else double.
 				$quotes = self::is_data_attribute( $attr ) ? "'" : '"';
+				$val = ( $attr === 'name' && substr( $val, -2 ) !== '[]' ) ? $val . '[]' : $val;
 				$attributes .= sprintf( ' %1$s=%3$s%2$s%3$s', $attr, $val, $quotes );
 			}
 		}
