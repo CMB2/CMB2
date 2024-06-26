@@ -931,13 +931,15 @@ class CMB2 extends CMB2_Base {
 	public function save_group_field( $field_group ) {
 		$base_id = $field_group->id();
 
-		if ( ! isset( $this->data_to_save[ $base_id ] ) ) {
+		$saved_value = $field_group->get_root_value_from_data( $this->data_to_save );
+
+		if ( is_null( $saved_value ) ) {
 			return;
 		}
 
 		$old = $field_group->get_data();
 		// Check if group field has sanitization_cb.
-		$group_vals = $field_group->sanitization_cb( $this->data_to_save[ $base_id ] );
+		$group_vals = $field_group->sanitization_cb( $saved_value );
 		$saved      = array();
 
 		$field_group->index = 0;
