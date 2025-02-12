@@ -68,6 +68,8 @@ window.CMB2 = window.CMB2 || {};
 		cmb.makeListSortable();
 		// Make Repeatable fields drag/drop sortable:
 		cmb.makeRepeatableSortable();
+		// Make Repeatable groups drag/drop sortable:
+		cmb.makeRepeatableGroupsSortable();
 
 		$metabox
 			.on( 'change', '.cmb2_upload_file', function() {
@@ -701,6 +703,7 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.afterRowInsert( $newRow );
 		cmb.makeRepeatableSortable( $newRow );
+		cmb.makeRepeatableGroupsSortable( $newRow );
 
 		cmb.triggerElement( $table, { type: 'cmb2_add_row', group: true }, $newRow );
 	};
@@ -1006,6 +1009,40 @@ window.CMB2 = window.CMB2 || {};
 				// See https://api.jqueryui.com/sortable/#option-cancel
 				cancel: 'input,textarea,button,select,option,.CodeMirror'
 			});
+		}
+	};
+
+	cmb.makeRepeatableGroupsSortable = function( $row ) {
+		var $repeatableGroups = ($row || cmb.metabox()).find( '.cmb-repeatable-group.sortable' );
+		if ( $repeatableGroups.length ) {
+			$repeatableGroups.sortable( {
+				items: '.cmb-repeatable-grouping',
+				cursor: 'move',
+				cancel: 'input,textarea,button,select,option,.CodeMirror',
+				stop: function( ev, ui ) {
+					var rows = $( ui.item ).parent().find( '.cmb-repeatable-grouping' );
+					rows.each( function( newIterator ) {
+						var row = $( this );
+						var prevIterator = row.data( 'iterator' );
+						// About to shift - Destroy wysiwyg
+						cmb.triggerElement( row, 'cmb2_shift_rows_start', row, row, row );
+						// Update id and data-iterator
+						row
+							.attr( 'data-iterator', newIterator )
+							.data( 'iterator', newIterator )
+							.attr('id', getRowId( row.attr('id'), newIterator ) )
+							// Update name of each field in each row
+							.find( cmb.repeatEls ).each( function() {
+								cmb.updateNameAttr( $( this ), prevIterator, newIterator );
+							});
+					} );
+					// shift done - Init wysiwyg
+					rows.each( function() {
+						var row = $( this );
+						cmb.triggerElement( ui.item, 'cmb2_shift_rows_complete', row, row, row );
+					} );
+				}
+			} );
 		}
 	};
 
