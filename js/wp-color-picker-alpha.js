@@ -16,11 +16,8 @@
 	};
 
 	// Always try to use the last version of this script.
-	if ( 'wpColorPickerAlpha' in window && 'version' in window.wpColorPickerAlpha ) {
-		var version = parseInt( window.wpColorPickerAlpha.version, 10 );
-		if ( !isNaN( version ) && version >= wpColorPickerAlpha.version ) {
-			return;
-		}
+	if ( window.wpColorPickerAlpha && window.wpColorPickerAlpha.version && window.wpColorPickerAlpha.version >= wpColorPickerAlpha.version ) {
+		return;
 	}
 
 	// Prevent multiple initiations
