@@ -811,11 +811,19 @@ window.CMB2 = window.CMB2 || {};
 		var toIterator   = $goto.attr('data-iterator');
 
 		// Replace name attributes in both groups.
+		$goto.find( cmb.repeatEls ).each( function() {
+			/*
+			 * Use a temporary iterator name to keep input names unique at all times.
+			 * This prevents radio inputs from being unchecked when another checked radio button gets the same name.
+			 * See https://github.com/CMB2/CMB2/issues/1540
+			 */
+			cmb.updateNameAttr( $( this ), toIterator, 'temp' );
+		});
 		$from.find( cmb.repeatEls ).each( function() {
 			cmb.updateNameAttr( $( this ), fromIterator, toIterator );
 		});
 		$goto.find( cmb.repeatEls ).each( function() {
-			cmb.updateNameAttr( $( this ), toIterator, fromIterator );
+			cmb.updateNameAttr( $( this ), 'temp', fromIterator );
 		});
 
 		// Replace titles in both groups.
