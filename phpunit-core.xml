@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         verbose="true"
+>
+	<testsuites>
+		<testsuite name="core">
+			<file>./tests/test-cmb-core.php</file>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist>
+			<directory>includes</directory>
+			<file>init.php</file>
+			<exclude>
+				<directory suffix=".php">includes/shim</directory>
+				<file>example-functions.php</file>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>
