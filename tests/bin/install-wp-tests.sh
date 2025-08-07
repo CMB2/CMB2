@@ -114,7 +114,10 @@ install_db() {
 	local DB_SOCK_OR_PORT=${PARTS[1]};
 	local EXTRA=""
 
-	if ! [ -z $DB_HOSTNAME ] ; then
+	# Handle Local by Flywheel socket paths that start with /
+	if [[ "$DB_HOST" =~ ^/.* ]]; then
+		EXTRA=" --socket=$DB_HOST"
+	elif ! [ -z $DB_HOSTNAME ] ; then
 		if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]\{1,\}$') ]; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
 		elif ! [ -z $DB_SOCK_OR_PORT ] ; then
