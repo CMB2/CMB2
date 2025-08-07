@@ -78,3 +78,7 @@ require $GLOBALS['test_root'] . '/includes/bootstrap.php';
 do_action( 'muplugins_loaded' );
 do_action( 'init' );
 
+// Fire CMB2 specific hooks that tests might expect
+do_action( 'cmb2_init' );
+do_action( 'cmb2_admin_init' );
+
