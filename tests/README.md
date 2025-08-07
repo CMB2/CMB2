@@ -1,11 +1,16 @@
-# CMB Test Suite [![Travis](http://img.shields.io/travis/CMB2/CMB2.svg?style=flat)]()
+# CMB Test Suite
 
 The CMB Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
-Travis-CI Automated Testing
------------------------------
+GitHub Actions Automated Testing
+---------------------------------
 
-The master branch of CMB is automatically tested on [travis-ci.org](http://travis-ci.org). The image above will show you the latest test's output. Travis-CI will also automatically test all new Pull Requests to make sure they will not break our build.
+CMB2 is automatically tested using GitHub Actions on every push and pull request. The test suite runs against multiple PHP versions (7.4-8.3) and WordPress versions to ensure compatibility.
+
+- **PHPUnit Tests**: Comprehensive unit tests for all CMB2 functionality
+- **Cypress Tests**: End-to-end browser testing for UI interactions
+
+You can view the latest test results in the [Actions tab](https://github.com/CMB2/CMB2/actions) of this repository.
 
 Quick Start (For Manual Runs)
 -----------------------------
@@ -15,10 +20,14 @@ Quick Start (For Manual Runs)
 git clone git@github.com:CMB2/CMB2.git ./
 ```
 
-### 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation)
-This might be tricky. We recommend using [homebrew](http://brew.sh/) because it lets you install lots of things very easily.
+### 2. Install dependencies with Composer
+The recommended modern approach is to use Composer to install PHPUnit and other dependencies:
 
-If you use homebrew, you can just run `brew install phpunit`.
+```bash
+composer install
+```
+
+This will install PHPUnit 9.6 and all required dependencies including the Yoast PHPUnit polyfills for compatibility.
 
 ### 3. Initialize local testing environment
 If you haven't already installed the WordPress testing library, we have a helpful script to do so for you.
@@ -42,7 +51,12 @@ bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest
 ### 4. Run the tests manually
 Note: MySQL must be running in order for tests to run.
 ```bash
-phpunit
+vendor/bin/phpunit
+```
+
+Or use the Composer script:
+```bash
+composer test
 ```
 
 ### 5. Bonus Round: Run tests automatically before each commit
