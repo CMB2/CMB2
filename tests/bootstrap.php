@@ -27,14 +27,7 @@ $plugin = dirname( dirname( __FILE__ ) );
 define( 'CMB2_TEST_PLUGIN', $plugin );
 define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );
 
-// PHPUnit polyfills not needed for PHPUnit 8.5.42
-// require_once $plugin . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
-
-if ( ! isset( $GLOBALS['test_root'] ) || ! $GLOBALS['test_root'] ) {
-	echo "Error: WordPress test environment not found. Please run: tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest\n";
-	exit( 1 );
-}
-
+require_once $plugin . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 require_once $GLOBALS['test_root'] . '/includes/functions.php';
 
 /**
@@ -44,9 +37,7 @@ require_once $GLOBALS['test_root'] . '/includes/functions.php';
 function _tests_cmb2_manually_load_plugin() {
 	global $test_root;
 
-	if ( ! defined( 'CMB2_TESTDATA' ) ) {
-		define( 'CMB2_TESTDATA', dirname( __FILE__ ) . '/data' );
-	}
+	define( 'CMB2_TESTDATA', dirname( __FILE__ ) . '/data' );
 	if ( ! defined( 'WP_ADMIN' ) ) {
 		define( 'WP_ADMIN', true );
 	}
@@ -73,12 +64,4 @@ function _tests_cmb2_manually_load_plugin() {
 tests_add_filter( 'muplugins_loaded', '_tests_cmb2_manually_load_plugin' );
 
 require $GLOBALS['test_root'] . '/includes/bootstrap.php';
-
-// Fire WordPress hooks to load CMB2
-do_action( 'muplugins_loaded' );
-do_action( 'init' );
-
-// Fire CMB2 specific hooks that tests might expect
-do_action( 'cmb2_init' );
-do_action( 'cmb2_admin_init' );
 
