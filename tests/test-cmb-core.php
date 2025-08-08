@@ -25,7 +25,7 @@ class Test_CMB2_Exception extends Exception {
 /**
  * @todo Tests for maybe_hook_parameter.
  */
-class CMB2CoreTest extends CMB2TestCase {
+class Test_CMB2_Core extends CMB2TestCase {
 
 	/**
 	 * Set up the test fixture
