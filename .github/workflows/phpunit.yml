@@ -37,8 +37,8 @@ jobs:
         tools: composer, phpunit
         coverage: xdebug
     
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+    - name: Validate composer.json
+      run: composer validate --no-check-lock
     
     - name: Get composer cache directory
       id: composer-cache
@@ -48,11 +48,18 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
+        key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-php${{ matrix.php }}-composer-
+          ${{ runner.os }}-composer-
+    
+    - name: Remove private repositories from composer.json
+      run: |
+        composer config --unset repositories.0 || true
+        composer config --unset require-dev.awesomemotive/am-cli-tools || true
     
     - name: Install PHP dependencies
-      run: composer install --no-progress --prefer-dist --optimize-autoloader
+      run: composer update --no-progress --prefer-dist --optimize-autoloader --no-interaction
     
     - name: Install WordPress test suite
       run: |
