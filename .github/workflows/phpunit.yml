@@ -53,13 +53,8 @@ jobs:
           ${{ runner.os }}-php${{ matrix.php }}-composer-
           ${{ runner.os }}-composer-
     
-    - name: Remove private repositories from composer.json
-      run: |
-        composer config --unset repositories.0 || true
-        composer config --unset require-dev.awesomemotive/am-cli-tools || true
-    
     - name: Install PHP dependencies
-      run: composer update --no-progress --prefer-dist --optimize-autoloader --no-interaction
+      run: composer install --no-progress --prefer-dist --optimize-autoloader --no-interaction
     
     - name: Install WordPress test suite
       run: |
