@@ -22,6 +22,8 @@ CMB2 (Custom Metaboxes 2) is a WordPress metabox, custom fields, and forms libra
 ## Common Commands
 
 ### Testing
+
+#### PHPUnit Tests (Unit & Integration)
 ```bash
 # Run all PHPUnit tests
 vendor/bin/phpunit
@@ -34,9 +36,42 @@ composer test
 
 # Install WordPress test environment
 bash tests/bin/install-wp-tests.sh <db_name> <db_user> <db_pass> [db_host] [wp_version]
+```
 
-# Run Cypress end-to-end tests
+#### End-to-End Tests (Playwright)
+```bash
+# Run all E2E tests (recommended)
+npm run test:e2e
+
+# Run tests with UI (interactive debugging)
+npm run test:e2e:ui
+
+# Run tests in headed mode (visible browser)
+npm run test:e2e:headed
+
+# Debug tests step by step
+npm run test:e2e:debug
+
+# View test report
+npm run test:e2e:report
+
+# Run visual regression tests
+npm run test:visual
+
+# Legacy Cypress tests (deprecated)
 npm run cypress
+```
+
+#### WordPress Environment
+```bash
+# Start WordPress environment
+npm run env:start
+
+# Stop WordPress environment  
+npm run env:stop
+
+# Clean WordPress environment
+npm run env:clean
 ```
 
 ### Development
@@ -92,7 +127,8 @@ The project uses WordPress's standard testing framework and includes:
 - PHPUnit configuration in `phpunit.xml.dist`
 - WordPress test environment setup via `tests/bin/install-wp-tests.sh`
 - Grunt for asset building and task automation
-- Cypress for end-to-end testing
+- Playwright for end-to-end testing (migrated from Cypress for better performance and reliability)
+- Visual regression testing with screenshot comparison
 
 ## Code Standards
 
@@ -110,10 +146,20 @@ The project uses WordPress's standard testing framework and includes:
 
 ## Testing Notes
 
+### PHPUnit Tests
 - WordPress test environment installs to `tests/tmp/wordpress/`
 - Test database is separate from development database
 - Some tests may require specific WordPress versions
 - Ajax and embed tests are excluded by default in Grunt phpunit task
+
+### Playwright E2E Tests
+- Tests are located in `tests/playwright/`
+- Cross-browser testing: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
+- Visual regression testing with screenshot comparison
+- Authentication state is persisted across tests for better performance
+- Docker-free CI implementation eliminates previous reliability issues
+- Tests run in parallel for faster execution
+- Detailed reporting with traces, screenshots, and videos on failure
 
 ## Meta Best Practices
 

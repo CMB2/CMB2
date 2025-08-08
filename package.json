@@ -9,9 +9,18 @@
 	},
 	"scripts": {
 		"env": "wp-env",
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"env:clean": "wp-env clean",
 		"grunt": "node ./node_modules/grunt-cli/bin/grunt",
 		"start": "node ./node_modules/grunt-cli/bin/grunt watch",
 		"watch": "node ./node_modules/grunt-cli/bin/grunt watch",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:headed": "playwright test --headed",
+		"test:e2e:debug": "playwright test --debug",
+		"test:e2e:report": "playwright show-report",
+		"test:visual": "playwright test visual.spec.js",
 		"cypress": "npm run env start && npm run env clean tests && npx cypress run --config video=false",
 		"phptests": "vendor/bin/phpunit"
 	},
@@ -30,6 +39,8 @@
 	},
 	"homepage": "https://cmb2.io",
 	"devDependencies": {
+		"@playwright/test": "^1.40.0",
+		"playwright": "^1.40.0",
 		"@wordpress/env": "^5.5.0",
 		"cypress": "^8.3.0",
 		"grunt": "^1.0.4",
