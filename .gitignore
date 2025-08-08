@@ -66,6 +66,7 @@ ocular.phar
 
 # PHPunit config
 phpunit.xml
+.phpunit.result.cache
 
 # Composer
 vendor
