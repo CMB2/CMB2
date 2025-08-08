@@ -43,7 +43,7 @@ bash tests/bin/install-wp-tests.sh wordpress_test root root "/Users/USERNAME/Lib
 
 Parameters:
 * `wordpress_test` is the name of the test database (**all data will be deleted!**)
-* `root` is the MySQL user name  
+* `root` is the MySQL user name
 * `''` or `root` is the MySQL user password
 * `localhost` or socket path is the MySQL server host
 * `latest` is the WordPress version; could also be `6.4`, `6.3` etc.
