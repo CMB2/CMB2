@@ -118,3 +118,7 @@ The project uses WordPress's standard testing framework and includes:
 ## Meta Best Practices
 
 - Never commit work-planning documents
+
+## Compatibility Considerations
+
+- Always keep in mind that the CMB2 library needs to work on all versions of php from 7.4 to the latest
