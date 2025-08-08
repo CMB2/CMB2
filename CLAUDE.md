@@ -104,7 +104,7 @@ The project uses WordPress's standard testing framework and includes:
 ## Key Files for Understanding
 
 - `example-functions.php` - Shows how to use CMB2 API
-- `includes/CMB2.php` - Main class with core functionality  
+- `includes/CMB2.php` - Main class with core functionality
 - `includes/helper-functions.php` - Global helper functions
 - `includes/CMB2_Field.php` - Field object and rendering logic
 
@@ -114,3 +114,11 @@ The project uses WordPress's standard testing framework and includes:
 - Test database is separate from development database
 - Some tests may require specific WordPress versions
 - Ajax and embed tests are excluded by default in Grunt phpunit task
+
+## Meta Best Practices
+
+- Never commit work-planning documents
+
+## Compatibility Considerations
+
+- Always keep in mind that the CMB2 library needs to work on all versions of php from 7.4 to the latest

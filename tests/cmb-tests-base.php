@@ -11,6 +11,25 @@ abstract class CMB2TestCase extends WP_UnitTestCase {
 
 	public $hooks_to_die = array();
 
+	// Common test properties to prevent PHP 8.3 dynamic property deprecation warnings
+	protected $cmb_id;
+	protected $cmb;
+	protected $post_id;
+	protected $term_id;
+	protected $user_id;
+	protected $comment_id;
+	protected $metabox_array;
+	protected $metabox_array2;
+	protected $user_metabox_array;
+	protected $term_metabox_array;
+	protected $defaults;
+	protected $field_args;
+	protected $field;
+	protected $object_type;
+	protected $object_id;
+	protected $group;
+	protected $json;
+
 	/**
 	 * Set up the test fixture
 	 */
