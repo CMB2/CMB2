@@ -14,6 +14,10 @@ jobs:
       matrix:
         php: ['7.4', '8.0', '8.1', '8.2', '8.3']
         wordpress: ['latest', '6.4', '6.3']
+        exclude:
+          # WordPress 6.3 doesn't support PHP 8.3 (support added in 6.4)
+          - php: '8.3'
+            wordpress: '6.3'
     
     services:
       mysql:
