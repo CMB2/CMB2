@@ -18,6 +18,7 @@
 /**
  * The main CMB2 object for storing box data/properties.
  */
+#[AllowDynamicProperties]
 class CMB2 extends CMB2_Base {
 
 	/**

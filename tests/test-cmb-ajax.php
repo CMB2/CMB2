@@ -15,6 +15,9 @@ require_once( 'cmb-tests-base.php' );
  */
 class Test_CMB2_Ajax extends CMB2TestCase {
 
+	// Ajax-specific test properties
+	protected $oembed_args;
+
 	/**
 	 * Set up the test fixture
 	 */
