@@ -1,11 +1,11 @@
-# CMB Test Suite [![Travis](http://img.shields.io/travis/CMB2/CMB2.svg?style=flat)]()
+# CMB Test Suite [![Tests](https://github.com/CMB2/CMB2/workflows/PHPUnit%20Tests/badge.svg)](https://github.com/CMB2/CMB2/actions)
 
 The CMB Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
-Travis-CI Automated Testing
------------------------------
+GitHub Actions Automated Testing
+---------------------------------
 
-The master branch of CMB is automatically tested on [travis-ci.org](http://travis-ci.org). The image above will show you the latest test's output. Travis-CI will also automatically test all new Pull Requests to make sure they will not break our build.
+The master branch of CMB is automatically tested using GitHub Actions. The badge above will show you the latest test's output. GitHub Actions will also automatically test all new Pull Requests to make sure they will not break our build.
 
 Quick Start (For Manual Runs)
 -----------------------------
