@@ -17,6 +17,11 @@ WP_VERSION=${5-latest}
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
 
+# Ensure trailing slash
+if [[ "${WP_CORE_DIR}" != */ ]]; then
+    WP_CORE_DIR="${WP_CORE_DIR}/"
+fi
+
 download() {
     if [ `which curl` ]; then
         curl -s "$1" > "$2";
@@ -109,7 +114,10 @@ install_db() {
 	local DB_SOCK_OR_PORT=${PARTS[1]};
 	local EXTRA=""
 
-	if ! [ -z $DB_HOSTNAME ] ; then
+	# Handle Local by Flywheel socket paths that start with /
+	if [[ "$DB_HOST" =~ ^/.* ]]; then
+		EXTRA=" --socket=$DB_HOST"
+elif [ -n "$DB_HOSTNAME" ] ; then
 		if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]\{1,\}$') ]; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
 		elif ! [ -z $DB_SOCK_OR_PORT ] ; then

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh run view:*)",
+      "Bash(gh pr:*)",
+      "Bash(vendor/bin/phpunit:*)",
+      "Bash(composer test:*)"
+    ],
+    "deny": []
+  }
+}

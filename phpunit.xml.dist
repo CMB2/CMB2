@@ -1,25 +1,27 @@
-<phpunit
-	bootstrap                   = "tests/bootstrap.php"
-	backupGlobals               = "false"
-	colors                      = "true"
-	convertErrorsToExceptions   = "true"
-	convertNoticesToExceptions  = "true"
-	convertWarningsToExceptions = "true"
-	verbose                     = "true"
-	>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         verbose="true"
+>
 	<testsuites>
-		<testsuite>
-			<directory prefix="test-" suffix=".php">./tests/</directory>
+		<testsuite name="default">
+			<directory suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
+	<coverage processUncoveredFiles="true">
+		<include>
 			<directory>includes</directory>
 			<file>init.php</file>
-			<exclude>
-				<directory suffix=".php">includes/shim</directory>
-				<directory suffix=".php">example-functions.php</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+		</include>
+		<exclude>
+			<directory suffix=".php">includes/shim</directory>
+			<file>example-functions.php</file>
+		</exclude>
+	</coverage>
 </phpunit>

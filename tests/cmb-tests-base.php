@@ -7,9 +7,28 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
-abstract class Test_CMB2 extends WP_UnitTestCase {
+abstract class CMB2TestCase extends WP_UnitTestCase {
 
 	public $hooks_to_die = array();
+
+	// Common test properties to prevent PHP 8.3 dynamic property deprecation warnings
+	protected $cmb_id;
+	protected $cmb;
+	protected $post_id;
+	protected $term_id;
+	protected $user_id;
+	protected $comment_id;
+	protected $metabox_array;
+	protected $metabox_array2;
+	protected $user_metabox_array;
+	protected $term_metabox_array;
+	protected $defaults;
+	protected $field_args;
+	protected $field;
+	protected $object_type;
+	protected $object_id;
+	protected $group;
+	protected $json;
 
 	/**
 	 * Set up the test fixture
@@ -271,17 +290,17 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	// 	return $property->getValue( $object );
 	// }
 
-	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = null ) {
+	public function assertHTMLstringsAreEqual( $expected_string, $string_to_test, $msg = '' ) {
 		$expected_string = $this->normalize_string( $expected_string );
 		$string_to_test = $this->normalize_string( $string_to_test );
 
 		$compare = $this->compare_strings( $expected_string, $string_to_test );
 
 		if ( ! empty( $compare ) ) {
-			$msg .= $compare;
+			$msg = (string) ($msg . $compare);
 		}
 
-		return $this->assertEquals( $expected_string, $string_to_test, $msg );
+		return $this->assertEquals( $expected_string, $string_to_test, (string) $msg );
 	}
 
 	public function assertIsDefined( $definition ) {
@@ -294,7 +313,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	 * @link   https://github.com/woothemes/woocommerce/blob/f5ff10711dc664f1c5ec5277634a5eea2b828765/tests/framework/class-wc-unit-test-case.php
 	 *
 	 */
-	public static function assertNotFalse( $condition, $message = '' ) {
+	public static function assertNotFalse($condition, string $message = ''): void {
 		if ( version_compare( phpversion(), '5.3', '<' ) ) {
 			self::assertThat( $condition, self::logicalNot( self::isFalse() ), $message );
 		} else {
@@ -305,7 +324,7 @@ abstract class Test_CMB2 extends WP_UnitTestCase {
 	/**
 	 * Backport assertContainsOnlyInstancesOf to PHPUnit 3.6.12 which only runs in PHP 5.2
 	 */
-	public static function assertContainsOnlyInstancesOf( $classname, $haystack, $message = '' ) {
+	public static function assertContainsOnlyInstancesOf(string $classname, iterable $haystack, string $message = ''): void {
 		if ( version_compare( phpversion(), '5.3', '<' ) ) {
 			foreach ( $haystack as $to_check ) {
 				self::assertInstanceOf( $classname, $to_check, $message );

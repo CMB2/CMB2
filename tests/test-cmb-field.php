@@ -13,7 +13,7 @@ require_once( 'cmb-tests-base.php' );
 /**
  * @todo Tests for maybe_hook_parameter.
  */
-class Test_CMB2_Field extends Test_CMB2 {
+class Test_CMB2_Field extends CMB2TestCase {
 
 	/**
 	 * Set up the test fixture
@@ -166,21 +166,23 @@ class Test_CMB2_Field extends Test_CMB2 {
 	}
 
 	/**
-	 * @expectedException WPDieException
+	 * Test that saving a field triggers the cmb2_save_field action
 	 */
 	public function test_cmb2_save_field_action() {
 		$field = $this->new_field( $this->field_args );
 
+		$this->expectException(WPDieException::class);
 		$this->hook_to_wp_die( 'cmb2_save_field' );
 		$modified = $field->save_field( 'some value to be modified' );
 	}
 
 	/**
-	 * @expectedException WPDieException
+	 * Test that saving a field triggers the cmb2_save_field_{field_id} action
 	 */
 	public function test_cmb2_save_field_field_id_action() {
 		$field = $this->new_field( $this->field_args );
 
+		$this->expectException(WPDieException::class);
 		$this->hook_to_wp_die( 'cmb2_save_field_test_test' );
 		$modified = $field->save_field( 'some value to be modified' );
 	}

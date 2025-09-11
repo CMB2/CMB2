@@ -10,62 +10,96 @@
 
 require_once( 'cmb-tests-base.php' );
 
-class Test_CMB2_Utils extends Test_CMB2 {
+class Test_CMB2_Utils extends CMB2TestCase {
 
+	/**
+	 * Test cases for empty values
+	 * @var array
+	 */
 	protected $test_empty = array(
-		array(
-			'val' => null,
-			'empty' => true,
-		),
-		array(
-			'val' => false,
-			'empty' => true,
-		),
-		array(
-			'val' => '',
-			'empty' => true,
-		),
-		array(
-			'val' => 0,
-			'empty' => false,
-		),
-		array(
-			'val' => 0.0,
-			'empty' => false,
-		),
-		array(
-			'val' => '0',
-			'empty' => false,
-		),
-		array(
-			'val' => '0.0',
-			'empty' => false,
-		),
-		array(
-			'val' => 1,
-			'empty' => false,
-		),
-		array(
-			'val' => ' ',
-			'empty' => false,
-		),
-		array(
-			'val' => "\n",
-			'empty' => false,
-		),
-		array(
-			'val' => '&nbsp;',
-			'empty' => false,
-		),
-		array(
-			'val' => array(),
-			'empty' => true,
-		),
-		array(
-			'val' => array( 0 ),
-			'empty' => false,
-		),
-	);
+      array(
+         'val' => null,
+         'empty' => true,
+      ),
+      array(
+         'val' => false,
+         'empty' => true,
+      ),
+      array(
+         'val' => '',
+         'empty' => true,
+      ),
+      array(
+         'val' => 0,
+         'empty' => false,
+      ),
+      array(
+         'val' => 0.0,
+         'empty' => false,
+      ),
+      array(
+         'val' => '0',
+         'empty' => false,
+      ),
+      array(
+         'val' => '0.0',
+         'empty' => false,
+      ),
+      array(
+         'val' => 1,
+         'empty' => false,
+      ),
+      array(
+         'val' => ' ',
+         'empty' => false,
+      ),
+      array(
+         'val' => "\n",
+         'empty' => false,
+      ),
+      array(
+         'val' => '&nbsp;',
+         'empty' => false,
+      ),
+      array(
+         'val' => array(),
+         'empty' => true,
+      ),
+      array(
+         'val' => array( 0 ),
+         'empty' => false,
+      ),
+   );
+
+	/**
+	 * Post ID for testing
+	 * @var int
+	 */
+	protected $post_id;
+
+	/**
+	 * Image attachment ID for testing
+	 * @var int
+	 */
+	protected $img_attachment;
+
+	/**
+	 * Image name for testing
+	 * @var string
+	 */
+	protected $img_name;
+
+	/**
+	 * Attachment ID for testing
+	 * @var int
+	 */
+	protected $attachment_id;
+
+	/**
+	 * WP Factory instance
+	 * @var WP_UnitTest_Factory
+	 */
+	protected $factory;
 
 	/**
 	 * Set up the test fixture

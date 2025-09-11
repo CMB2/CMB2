@@ -120,7 +120,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
-	 * @expectedException WPDieException
+	 * Test that reading a box with read permissions callback throws an exception
 	 */
 	public function test_read_box_with_read_permissions_callback() {
 		$rest = new CMB2_REST( new CMB2( array(
@@ -130,6 +130,8 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 			'get_box_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();
+
+		$this->expectException(WPDieException::class);
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__;
 		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
@@ -201,7 +203,7 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
-	 * @expectedException WPDieException
+	 * Test that reading a box field with read permissions callback throws an exception
 	 */
 	public function test_read_box_field_with_read_permissions_callback() {
 		$rest = new CMB2_REST( new CMB2( array(
@@ -211,6 +213,8 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 			'get_field_permissions_check_cb' => 'wp_die',
 		) ) );
 		$rest->universal_hooks();
+
+		$this->expectException(WPDieException::class);
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . __FUNCTION__ . '/fields/rest_test';
 		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );

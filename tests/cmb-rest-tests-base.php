@@ -10,7 +10,12 @@
 
 require_once( 'cmb-tests-base.php' );
 
-abstract class Test_CMB2_Rest_Base extends Test_CMB2 {
+abstract class Test_CMB2_Rest_Base extends CMB2TestCase {
+
+	// REST-specific test properties to prevent PHP 8.3 dynamic property deprecation warnings
+	protected $rest_box;
+	protected $subscriber;
+	protected $administrator;
 
 	/**
 	 * Set up the test fixture

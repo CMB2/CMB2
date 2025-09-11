@@ -11,9 +11,21 @@
 require_once( 'cmb-tests-base.php' );
 
 /**
+ * Custom exception class because PHPunit < 3.7 has the following error:
+ * "InvalidArgumentException: You must not expect the generic exception class."
+ *
+ * @link http://stackoverflow.com/a/10744841
+ */
+class Test_CMB2_Exception extends Exception {
+	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
+		parent::__construct( $message, $code );
+	}
+}
+
+/**
  * @todo Tests for maybe_hook_parameter.
  */
-class Test_CMB2_Core extends Test_CMB2 {
+class Test_CMB2_Core extends CMB2TestCase {
 
 	/**
 	 * Set up the test fixture
@@ -146,18 +158,19 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	/**
-	 * @expectedException WPDieException
+	 * Test that CMB2 throws an exception when initialized without an ID
 	 */
 	public function test_cmb2_die_with_no_id() {
+		$this->expectException(WPDieException::class);
 		$cmb = new CMB2( array() );
 	}
 
 	/**
-	 * @expectedException Test_CMB2_Exception
+	 * Test that setting a protected property throws an exception
 	 */
 	public function test_setting_protected_property() {
+		$this->expectException(Test_CMB2_Exception::class);
 		try {
-			// Fyi you don't need to do an assert test here, as we are only testing the exception, so just make the call
 			$this->cmb->metabox['title'] = 'title';
 		} catch ( Exception $e ) {
 			if ( 'Exception' === get_class( $e ) ) {
@@ -841,12 +854,11 @@ class Test_CMB2_Core extends Test_CMB2 {
 	}
 
 	/**
-	 * @expectedException Test_CMB2_Exception
+	 * Test that calling a non-existent getter property throws an exception
 	 */
 	public function test_invalid_cmb_magic_getter() {
-
 		$cmb = cmb2_get_metabox( 'test' );
-
+		$this->expectException(Test_CMB2_Exception::class);
 		try {
 			// Calling a non-existent getter property should generate an exception
 			$cmb->foo_bar_baz;
@@ -855,16 +867,14 @@ class Test_CMB2_Core extends Test_CMB2 {
 				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
 			}
 		}
-
 	}
 
 	/**
-	 * @expectedException Test_CMB2_Exception
+	 * Test that calling a non-existent method throws an exception
 	 */
 	public function test_invalid_cmb_magic_call() {
-
 		$cmb = cmb2_get_metabox( 'test' );
-
+		$this->expectException(Test_CMB2_Exception::class);
 		try {
 			// Calling a non-existent method should generate an exception
 			$cmb->foo_bar_baz();
@@ -873,7 +883,6 @@ class Test_CMB2_Core extends Test_CMB2 {
 				throw new Test_CMB2_Exception( $e->getMessage(), $e->getCode() );
 			}
 		}
-
 	}
 
 	public function test_overloaded_cmb_method() {
@@ -883,7 +892,7 @@ class Test_CMB2_Core extends Test_CMB2 {
 		add_action( 'cmb2_inherit_fabulous', array( __CLASS__, 'overloading_test' ), 10, 2 );
 
 		$this->assertEquals( 'Fabulous hair', $cmb->fabulous( 'hair' ) );
-		$this->assertObjectHasAttribute( 'fabulous_noun', $cmb );
+		$this->assertObjectHasProperty( 'fabulous_noun', $cmb );
 	}
 
 	public function test_cmb2_props() {
@@ -1060,17 +1069,5 @@ class Test_CMB2_Core extends Test_CMB2 {
 class Test_CMB2_Object extends CMB2 {
 	public function get_metabox_defaults() {
 		return $this->mb_defaults;
-	}
-}
-
-/**
- * Custom exception class because PHPunit < 3.7 has the following error:
- * "InvalidArgumentException: You must not expect the generic exception class."
- *
- * @link http://stackoverflow.com/a/10744841
- */
-class Test_CMB2_Exception extends Exception {
-	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
-		parent::__construct( $message, $code );
 	}
 }

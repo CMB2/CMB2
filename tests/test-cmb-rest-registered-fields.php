@@ -20,6 +20,11 @@ require_once( 'cmb-rest-tests-base.php' );
  */
 class Test_CMB2_REST_Registered_Fields extends Test_CMB2_Rest_Base {
 
+	// Registered fields specific test properties
+	protected $user_box;
+	protected $comment_box;
+	protected $term_box;
+
 	/**
 	 * Set up the test fixture
 	 */

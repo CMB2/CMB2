@@ -13,6 +13,23 @@ require_once( 'test-cmb-types-base.php' );
 class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 	/**
+	 * Properties that were previously being created dynamically
+	 */
+	protected $field_test;
+	protected $text_type_field;
+	protected $options_test;
+	protected $options_cb_test;
+	protected $options_cb_and_array_test;
+	protected $attributes_test;
+	protected $post_id;
+	protected $term;
+	protected $term2;
+	protected $img_name;
+	protected $attachment_id;
+	protected $attachment_id2;
+	protected $cmb_id;
+
+	/**
 	 * Set up the test fixture
 	 */
 	public function set_up() {

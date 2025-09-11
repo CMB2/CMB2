@@ -10,7 +10,85 @@
 
 require_once( 'cmb-tests-base.php' );
 
-abstract class Test_CMB2_Types_Base extends Test_CMB2 {
+abstract class Test_CMB2_Types_Base extends CMB2TestCase {
+
+	/**
+	 * CMB2 ID
+	 * @var string
+	 */
+	protected $cmb_id;
+
+	/**
+	 * Text type field configuration
+	 * @var array
+	 */
+	protected $text_type_field;
+
+	/**
+	 * Field test configuration
+	 * @var array
+	 */
+	protected $field_test;
+
+	/**
+	 * Attributes test configuration
+	 * @var array
+	 */
+	protected $attributes_test;
+
+	/**
+	 * Options test configuration
+	 * @var array
+	 */
+	protected $options_test;
+
+	/**
+	 * Options callback test configuration
+	 * @var array
+	 */
+	protected $options_cb_test;
+
+	/**
+	 * Options callback and array test configuration
+	 * @var array
+	 */
+	protected $options_cb_and_array_test;
+
+	/**
+	 * Post ID for testing
+	 * @var int
+	 */
+	protected $post_id;
+
+	/**
+	 * Term ID for testing
+	 * @var int
+	 */
+	protected $term;
+
+	/**
+	 * Second term ID for testing
+	 * @var int
+	 */
+	protected $term2;
+
+	/**
+	 * Image name for testing
+	 * @var string
+	 */
+	protected $img_name;
+
+	/**
+	 * Attachment ID for testing
+	 * @var int
+	 */
+	protected $attachment_id;
+
+	/**
+	 * Second attachment ID for testing
+	 * @var int
+	 */
+	protected $attachment_id2;
 
 	/**
 	 * Set up the test fixture

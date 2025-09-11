@@ -362,7 +362,7 @@ class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 
 		if ( $term ) {
 			$link = get_edit_term_link( $term->term_id, $taxonomy );
-			echo '<a href="', esc_url( $link ), '">', esc_html( $term->name ), '</a>';
+			echo '<a href="', esc_url( $link ? $link : '' ), '">', esc_html( $term->name ), '</a>';
 		}
 	}
 }
@@ -395,7 +395,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 			$links = array();
 			foreach ( $terms as $term ) {
 				$link = get_edit_term_link( $term->term_id, $taxonomy );
-				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
+				$links[] = '<a href="' . esc_url( $link ? $link : '' ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
 			echo '<div class="cmb2-taxonomy-terms-', esc_attr( sanitize_html_class( $taxonomy ) ), '">';
