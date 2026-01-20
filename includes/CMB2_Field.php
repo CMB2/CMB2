@@ -775,8 +775,8 @@ class CMB2_Field extends CMB2_Base {
 		// Is there another meta key with a timezone stored as its value we should use?
 		elseif ( $this->args( 'timezone_meta_key' ) ) {
 			$value = $this->get_data( $this->args( 'timezone_meta_key' ) );
-		} elseif ( ! empty( get_option( 'timezone_string' ) ) ) {
-			$value = get_option( 'timezone_string' );
+		} else {
+			$value = wp_timezone_string();
 		}
 
 		return $value;
