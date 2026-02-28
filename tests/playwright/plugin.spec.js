@@ -5,58 +5,54 @@ const { test, expect } = require('@playwright/test');
  * Migrated from tests/cypress/integration/activatePlugin.spec.js
  */
 test.describe('CMB2 Plugin', () => {
-  // Use authenticated state for all tests
-  test.use({ storageState: 'tests/playwright/.auth/user.json' });
+  // Auth state is provided by the setup project in playwright.config.js
 
-  test.beforeEach(async ({ page }) => {
-    // Navigate to plugins page before each test
-    await page.goto('/wp-admin/plugins.php');
-    await expect(page).toHaveURL('/wp-admin/plugins.php');
-  });
+  // These tests must run in order (deactivate → activate → verify)
+  test.describe.configure({ mode: 'serial' });
 
   test('Can be deactivated', async ({ page }) => {
+    await page.goto('/wp-admin/plugins.php');
+    await expect(page).toHaveURL(/\/wp-admin\/plugins\.php/);
+
     // Look for the deactivate link for CMB2
     const deactivateLink = page.locator('#deactivate-cmb2');
-    
-    // If CMB2 is active, deactivate it
-    const isActive = await deactivateLink.isVisible({ timeout: 5000 });
-    
+    const isActive = await deactivateLink.isVisible({ timeout: 5000 }).catch(() => false);
+
     if (isActive) {
       await deactivateLink.click();
-      
-      // Wait for page to reload and verify activation link is visible
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
       await expect(page.locator('#activate-cmb2')).toBeVisible();
     } else {
-      // If it's already deactivated, just verify the activate link is visible
+      // Already deactivated
       await expect(page.locator('#activate-cmb2')).toBeVisible();
     }
   });
 
   test('Can be activated', async ({ page }) => {
+    await page.goto('/wp-admin/plugins.php');
+    await expect(page).toHaveURL(/\/wp-admin\/plugins\.php/);
+
     // Look for the activate link for CMB2
     const activateLink = page.locator('#activate-cmb2');
-    
-    // If CMB2 is inactive, activate it
-    const isInactive = await activateLink.isVisible({ timeout: 5000 });
-    
+    const isInactive = await activateLink.isVisible({ timeout: 5000 }).catch(() => false);
+
     if (isInactive) {
       await activateLink.click();
-      
-      // Wait for page to reload and verify deactivation link is visible
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
       await expect(page.locator('#deactivate-cmb2')).toBeVisible();
     } else {
-      // If it's already activated, just verify the deactivate link is visible
+      // Already activated
       await expect(page.locator('#deactivate-cmb2')).toBeVisible();
     }
   });
 
   test('Plugin information is displayed correctly', async ({ page }) => {
-    // Additional test to verify plugin details are shown
+    await page.goto('/wp-admin/plugins.php');
+    await expect(page).toHaveURL(/\/wp-admin\/plugins\.php/);
+
     const pluginRow = page.locator('tr[data-slug="cmb2"]');
     await expect(pluginRow).toBeVisible();
-    
+
     // Check that plugin name and description are present
     await expect(pluginRow.locator('.plugin-title strong')).toContainText('CMB2');
     await expect(pluginRow.locator('.plugin-description')).toBeVisible();

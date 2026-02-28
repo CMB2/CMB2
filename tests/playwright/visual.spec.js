@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  */
 test.describe('CMB2 Visual Regression Tests', () => {
   // Use authenticated state for all tests
-  test.use({ storageState: 'tests/playwright/.auth/user.json' });
+  // Auth state is provided by the setup project in playwright.config.js
 
   test('Admin metabox visual appearance', async ({ page }) => {
     // Navigate to new post page
