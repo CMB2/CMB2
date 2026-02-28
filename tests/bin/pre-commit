@@ -3,7 +3,7 @@
 exec( 'git diff --cached --name-only', $files );
 
 if ( has_file_type( '.js', $files ) ) {
-	exec( 'grunt hint', $output, $return_code );
+	exec( 'npx jshint js/cmb2.js js/cmb2-wysiwyg.js js/cmb2-char-counter.js', $output, $return_code );
 	if ( 0 !== $return_code ) {
 		printf( "%s \n\n", implode( "\n", $output ) );
 		color_msg( "ABORTING COMMIT!\n", 'red' );

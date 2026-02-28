@@ -57,11 +57,12 @@ vendor/bin/phpunit
 ```
 
 ### 5. Bonus Round: Run tests automatically before each commit
-All you need to do is run these two commands, and then prior to accepting any commit grunt will run phpunit.
-If a test fails, the commit will be rejected, giving you the opportunity to fix the problem first.
+You can set up a git pre-commit hook to run PHPUnit before each commit:
 
 ```bash
-npm install
-grunt githooks
+echo '#!/bin/sh
+vendor/bin/phpunit' > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
 ```
-**Note:** You'll need to install [npm](https://www.npmjs.org/) if that's not available. You could also install this via [homebrew](http://brew.sh/) using `brew install npm`.
+
+If a test fails, the commit will be rejected, giving you the opportunity to fix the problem first.

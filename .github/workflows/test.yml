@@ -5,10 +5,27 @@ on: [push, pull_request]
 jobs:
   playwright:
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mysqli, zip, gd
+        tools: composer
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -16,7 +33,18 @@ jobs:
         node-version: '18'
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install PHP dependencies
+      run: composer install --no-progress --prefer-dist --optimize-autoloader --no-interaction
+
+    - name: Install WordPress test environment
+      run: |
+        bash tests/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 latest
+        # Start PHP built-in server for WordPress
+        cd /tmp/wordpress
+        php -S localhost:8889 &
+        sleep 5
+
+    - name: Install Node dependencies
       run: npm install
 
     - name: Install Playwright browsers
@@ -24,6 +52,9 @@ jobs:
 
     - name: Run Playwright tests
       run: npm run test:e2e
+      env:
+        WP_BASE_URL: http://localhost:8889
+        CI: true
 
     - name: Upload test results
       uses: actions/upload-artifact@v4

@@ -57,21 +57,6 @@ npm run test:e2e:report
 
 # Run visual regression tests
 npm run test:visual
-
-# Legacy Cypress tests (deprecated)
-npm run cypress
-```
-
-#### WordPress Environment
-```bash
-# Start WordPress environment
-npm run env:start
-
-# Stop WordPress environment  
-npm run env:stop
-
-# Clean WordPress environment
-npm run env:clean
 ```
 
 ### Development
@@ -80,17 +65,11 @@ npm run env:clean
 npm install
 composer install
 
-# Start development environment
-npm run env start
-
 # Watch for file changes and rebuild assets
 npm run watch
 
-# Build assets
-npm run grunt
-
-# Clean test environment
-npm run env clean tests
+# Full build (CSS + JS)
+npm run build
 ```
 
 ### Code Quality
@@ -101,24 +80,39 @@ vendor/bin/phpcs
 # Fix PHP CodeSniffer issues automatically
 vendor/bin/phpcbf
 
-# JavaScript linting (via Grunt)
-npm run grunt jshint
+# JavaScript linting
+npm run build:js:lint
 ```
 
-### Build & Translation
+### Build
 ```bash
-# Generate .pot file for translations
-npm run grunt makepot
+# Full CSS pipeline (compile SCSS, generate RTL, add banners, minify)
+npm run build:css
 
-# Compile .po files to .mo
-npm run grunt potomo
+# Individual CSS steps
+npm run build:css:compile   # SCSS → CSS
+npm run build:css:rtl       # Generate RTL variants
+npm run build:css:banner    # Add license headers
+npm run build:css:minify    # Generate .min.css files
 
-# Build CSS from Sass
-npm run grunt sass
+# Full JS pipeline (lint + minify)
+npm run build:js
 
-# Minify CSS and JS
-npm run grunt uglify
-npm run grunt cssmin
+# Individual JS steps
+npm run build:js:lint       # JSHint
+npm run build:js:minify     # Concatenate + minify → cmb2.min.js
+```
+
+### Translation (release-time only)
+```bash
+# Generate .pot file
+npm run build:i18n:pot
+
+# Compile .po → .mo (requires system gettext)
+npm run build:i18n:mo
+
+# Both
+npm run build:i18n
 ```
 
 ## Development Environment
@@ -126,7 +120,7 @@ npm run grunt cssmin
 The project uses WordPress's standard testing framework and includes:
 - PHPUnit configuration in `phpunit.xml.dist`
 - WordPress test environment setup via `tests/bin/install-wp-tests.sh`
-- Grunt for asset building and task automation
+- npm scripts for asset building (Sass, RTL, minification)
 - Playwright for end-to-end testing (migrated from Cypress for better performance and reliability)
 - Visual regression testing with screenshot comparison
 
@@ -150,7 +144,7 @@ The project uses WordPress's standard testing framework and includes:
 - WordPress test environment installs to `tests/tmp/wordpress/`
 - Test database is separate from development database
 - Some tests may require specific WordPress versions
-- Ajax and embed tests are excluded by default in Grunt phpunit task
+- Ajax and embed tests are excluded by default
 
 ### Playwright E2E Tests
 - Tests are located in `tests/playwright/`
