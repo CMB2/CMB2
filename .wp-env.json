@@ -3,7 +3,7 @@
 		"tests": {
 			"plugins": [
 				".",
-				"./tests/cypress/support/test-fields.php"
+				"./tests/playwright/fixtures/test-fields.php"
 			]
 		}
 	}

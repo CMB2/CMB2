@@ -27,6 +27,10 @@
 		"test:e2e:debug": "playwright test --debug",
 		"test:e2e:report": "playwright show-report",
 		"test:visual": "playwright test visual.spec.js",
+		"env": "wp-env",
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"env:clean": "wp-env clean",
 		"phptests": "vendor/bin/phpunit"
 	},
 	"repository": {
@@ -45,6 +49,7 @@
 	"homepage": "https://cmb2.io",
 	"devDependencies": {
 		"@playwright/test": "^1.40.0",
+		"@wordpress/env": "^5.5.0",
 		"chokidar-cli": "^3.0.0",
 		"clean-css-cli": "^5.6.3",
 		"jshint": "^2.13.6",
