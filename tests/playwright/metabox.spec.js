@@ -14,6 +14,9 @@ test.describe('CMB2 Meta Boxes', () => {
 
     // Wait for the CMB2 metabox to appear (don't use networkidle — Gutenberg never idles)
     await page.locator('#cmb2_integration_tests_default_closed').waitFor({ state: 'attached', timeout: 15000 });
+
+    // Scroll the metabox into view — in Gutenberg it's below the editor fold
+    await page.locator('#cmb2_integration_tests_default_closed').scrollIntoViewIfNeeded();
   });
 
   test.describe('Default Closed Box', () => {
