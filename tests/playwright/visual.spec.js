@@ -5,8 +5,10 @@ const { test, expect } = require('@playwright/test');
  * Tests the visual appearance of metaboxes and forms
  */
 test.describe('CMB2 Visual Regression Tests', () => {
-  // Use authenticated state for all tests
   // Auth state is provided by the setup project in playwright.config.js
+
+  // Skip in CI — visual baselines are platform-specific and not committed
+  test.skip(!!process.env.CI, 'Visual tests require local baseline screenshots');
 
   test('Admin metabox visual appearance', async ({ page }) => {
     // Navigate to new post page
