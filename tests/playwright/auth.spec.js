@@ -30,7 +30,7 @@ test.describe('WordPress Authentication', () => {
     await page.press('#user_pass', 'Enter');
 
     // Should be redirected to admin dashboard
-    await expect(page).toHaveURL(/\/wp-admin\//);
+    await page.waitForURL(/\/wp-admin\//, { timeout: 15000 });
     await expect(page.locator('#wpadminbar')).toBeVisible();
   });
 

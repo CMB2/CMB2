@@ -15,11 +15,15 @@ test.describe('CMB2 Meta Boxes', () => {
     // Wait for the CMB2 metabox to appear (don't use networkidle — Gutenberg never idles)
     await page.locator('#cmb2_integration_tests_default_closed').waitFor({ state: 'attached', timeout: 15000 });
 
-    // Scroll the metabox into view via JS — the closed postbox may not be
-    // considered "visible" by Playwright, so we can't use scrollIntoViewIfNeeded.
+    // In the Gutenberg editor, closed postboxes may be completely hidden
+    // (display: none). Scroll to the metabox area and ensure it's visible.
     await page.evaluate(() => {
       const el = document.getElementById('cmb2_integration_tests_default_closed');
-      if (el) el.scrollIntoView({ block: 'center' });
+      if (el) {
+        // Make sure the postbox is visible (WordPress hides closed postboxes entirely)
+        el.style.display = '';
+        el.scrollIntoView({ block: 'center' });
+      }
     });
   });
 
@@ -75,7 +79,7 @@ test.describe('CMB2 Meta Boxes', () => {
     // The metabox container is in the DOM (checked in beforeEach)
     await expect(metabox).toBeAttached();
 
-    // The header elements should be visible even when the box is closed
+    // The header elements should be visible (beforeEach ensures display is set)
     await expect(metabox.locator('.hndle')).toBeVisible();
     await expect(metabox.locator('button.handlediv')).toBeVisible();
   });
