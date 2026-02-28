@@ -1,4 +1,4 @@
-const { test as setup, expect } = require('@playwright/test');
+const { test: setup, expect } = require('@playwright/test');
 
 const authFile = 'tests/playwright/.auth/user.json';
 
