@@ -78,3 +78,5 @@ NOTES.md
 
 # Claude
 .claude/settings.local.json
+.claude/skills/.claude/settings.local.json
+.mcp.json
