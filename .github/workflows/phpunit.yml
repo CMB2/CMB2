@@ -1,0 +1,95 @@
+name: PHPUnit Tests
+
+on: 
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        wordpress: ['latest', '6.4', '6.3']
+        exclude:
+          # WordPress 6.3 doesn't support PHP 8.3 (support added in 6.4)
+          - php: '8.3'
+            wordpress: '6.3'
+    
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: mysqli, zip, gd
+        tools: composer, phpunit
+        coverage: xdebug
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y subversion
+    
+    - name: Validate composer.json
+      run: composer validate --no-check-lock
+    
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+    
+    - name: Cache composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-php${{ matrix.php }}-composer-
+          ${{ runner.os }}-composer-
+    
+    - name: Install PHP dependencies
+      run: composer install --no-progress --prefer-dist --optimize-autoloader --no-interaction
+    
+    - name: Install WordPress test suite
+      run: |
+        bash tests/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wordpress }}
+        echo "WP_TESTS_DIR=/tmp/wordpress-tests-lib" >> $GITHUB_ENV
+        echo "WP_CORE_DIR=/tmp/wordpress" >> $GITHUB_ENV
+    
+    - name: Verify WordPress test environment
+      run: |
+        ls -la /tmp/wordpress-tests-lib/
+        ls -la /tmp/wordpress/
+        echo "WP_TESTS_DIR is: $WP_TESTS_DIR"
+        echo "WP_CORE_DIR is: $WP_CORE_DIR"
+    
+    - name: Run PHPUnit tests
+      run: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
+      env:
+        WP_TESTS_DIR: /tmp/wordpress-tests-lib
+        WP_CORE_DIR: /tmp/wordpress
+    
+    - name: Upload coverage reports to Codecov
+      if: matrix.php == '8.1' && matrix.wordpress == 'latest'
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: phpunit
+        name: codecov-umbrella
+        fail_ci_if_error: false

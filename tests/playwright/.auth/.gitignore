@@ -1,0 +1,3 @@
+# Authentication files contain session data
+# Don't commit these to version control
+*.json

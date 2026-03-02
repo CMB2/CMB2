@@ -3,7 +3,7 @@
 exec( 'git diff --cached --name-only', $files );
 
 if ( has_file_type( '.js', $files ) ) {
-	exec( 'grunt hint', $output, $return_code );
+	exec( 'npx jshint js/cmb2.js js/cmb2-wysiwyg.js js/cmb2-char-counter.js', $output, $return_code );
 	if ( 0 !== $return_code ) {
 		printf( "%s \n\n", implode( "\n", $output ) );
 		color_msg( "ABORTING COMMIT!\n", 'red' );
@@ -11,7 +11,7 @@ if ( has_file_type( '.js', $files ) ) {
 	}
 }
 
-if ( has_file_type( '.php', $files ) ) {
+if ( has_file_type( '.php', $files ) && has_source_php( $files ) ) {
 	exec( 'vendor/bin/phpunit', $output, $return_code );
 
 	if ( 0 !== $return_code ) {
@@ -43,6 +43,27 @@ if ( has_file_type( '.php', $files ) ) {
 
 exit( 0 );
 
+
+function has_source_php( $files ) {
+	// Only run phpunit for source PHP files, not test fixtures/configs
+	$skip_dirs = array( 'tests/playwright/', 'tests/cypress/' );
+	foreach ( $files as $file ) {
+		if ( 0 !== strpos( strrev( $file ), strrev( '.php' ) ) ) {
+			continue;
+		}
+		$is_fixture = false;
+		foreach ( $skip_dirs as $dir ) {
+			if ( 0 === strpos( $file, $dir ) ) {
+				$is_fixture = true;
+				break;
+			}
+		}
+		if ( ! $is_fixture ) {
+			return true;
+		}
+	}
+	return false;
+}
 
 function has_file_type( $ext, $files ) {
 	$rev_ext = strrev( $ext );

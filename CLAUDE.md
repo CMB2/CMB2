@@ -22,6 +22,8 @@ CMB2 (Custom Metaboxes 2) is a WordPress metabox, custom fields, and forms libra
 ## Common Commands
 
 ### Testing
+
+#### PHPUnit Tests (Unit & Integration)
 ```bash
 # Run all PHPUnit tests
 vendor/bin/phpunit
@@ -34,9 +36,27 @@ composer test
 
 # Install WordPress test environment
 bash tests/bin/install-wp-tests.sh <db_name> <db_user> <db_pass> [db_host] [wp_version]
+```
 
-# Run Cypress end-to-end tests
-npm run cypress
+#### End-to-End Tests (Playwright)
+```bash
+# Run all E2E tests (recommended)
+npm run test:e2e
+
+# Run tests with UI (interactive debugging)
+npm run test:e2e:ui
+
+# Run tests in headed mode (visible browser)
+npm run test:e2e:headed
+
+# Debug tests step by step
+npm run test:e2e:debug
+
+# View test report
+npm run test:e2e:report
+
+# Run visual regression tests
+npm run test:visual
 ```
 
 ### Development
@@ -45,17 +65,11 @@ npm run cypress
 npm install
 composer install
 
-# Start development environment
-npm run env start
-
 # Watch for file changes and rebuild assets
 npm run watch
 
-# Build assets
-npm run grunt
-
-# Clean test environment
-npm run env clean tests
+# Full build (CSS + JS)
+npm run build
 ```
 
 ### Code Quality
@@ -66,24 +80,39 @@ vendor/bin/phpcs
 # Fix PHP CodeSniffer issues automatically
 vendor/bin/phpcbf
 
-# JavaScript linting (via Grunt)
-npm run grunt jshint
+# JavaScript linting
+npm run build:js:lint
 ```
 
-### Build & Translation
+### Build
 ```bash
-# Generate .pot file for translations
-npm run grunt makepot
+# Full CSS pipeline (compile SCSS, generate RTL, add banners, minify)
+npm run build:css
 
-# Compile .po files to .mo
-npm run grunt potomo
+# Individual CSS steps
+npm run build:css:compile   # SCSS → CSS
+npm run build:css:rtl       # Generate RTL variants
+npm run build:css:banner    # Add license headers
+npm run build:css:minify    # Generate .min.css files
 
-# Build CSS from Sass
-npm run grunt sass
+# Full JS pipeline (lint + minify)
+npm run build:js
 
-# Minify CSS and JS
-npm run grunt uglify
-npm run grunt cssmin
+# Individual JS steps
+npm run build:js:lint       # JSHint
+npm run build:js:minify     # Concatenate + minify → cmb2.min.js
+```
+
+### Translation (release-time only)
+```bash
+# Generate .pot file
+npm run build:i18n:pot
+
+# Compile .po → .mo (requires system gettext)
+npm run build:i18n:mo
+
+# Both
+npm run build:i18n
 ```
 
 ## Development Environment
@@ -91,8 +120,9 @@ npm run grunt cssmin
 The project uses WordPress's standard testing framework and includes:
 - PHPUnit configuration in `phpunit.xml.dist`
 - WordPress test environment setup via `tests/bin/install-wp-tests.sh`
-- Grunt for asset building and task automation
-- Cypress for end-to-end testing
+- npm scripts for asset building (Sass, RTL, minification)
+- Playwright for end-to-end testing (migrated from Cypress for better performance and reliability)
+- Visual regression testing with screenshot comparison
 
 ## Code Standards
 
@@ -104,13 +134,31 @@ The project uses WordPress's standard testing framework and includes:
 ## Key Files for Understanding
 
 - `example-functions.php` - Shows how to use CMB2 API
-- `includes/CMB2.php` - Main class with core functionality  
+- `includes/CMB2.php` - Main class with core functionality
 - `includes/helper-functions.php` - Global helper functions
 - `includes/CMB2_Field.php` - Field object and rendering logic
 
 ## Testing Notes
 
+### PHPUnit Tests
 - WordPress test environment installs to `tests/tmp/wordpress/`
 - Test database is separate from development database
 - Some tests may require specific WordPress versions
-- Ajax and embed tests are excluded by default in Grunt phpunit task
+- Ajax and embed tests are excluded by default
+
+### Playwright E2E Tests
+- Tests are located in `tests/playwright/`
+- Cross-browser testing: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
+- Visual regression testing with screenshot comparison
+- Authentication state is persisted across tests for better performance
+- Docker-free CI implementation eliminates previous reliability issues
+- Tests run in parallel for faster execution
+- Detailed reporting with traces, screenshots, and videos on failure
+
+## Meta Best Practices
+
+- Never commit work-planning documents
+
+## Compatibility Considerations
+
+- Always keep in mind that the CMB2 library needs to work on all versions of php from 7.4 to the latest

@@ -1,10 +1,11 @@
 {
+	"plugins": ["."],
 	"env": {
 		"tests": {
-			"plugins": [
-				".",
-				"./tests/cypress/support/test-fields.php"
-			]
+			"plugins": ["."],
+			"mappings": {
+				"wp-content/mu-plugins/cmb2-test-fields.php": "./tests/playwright/fixtures/test-fields.php"
+			}
 		}
 	}
 }

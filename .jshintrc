@@ -1,0 +1,32 @@
+{
+	"curly": true,
+	"eqeqeq": true,
+	"immed": true,
+	"latedef": true,
+	"newcap": true,
+	"noarg": true,
+	"sub": true,
+	"unused": true,
+	"undef": true,
+	"boss": true,
+	"eqnull": true,
+	"globals": {
+		"exports": true,
+		"module": false
+	},
+	"predef": [
+		"document",
+		"window",
+		"jQuery",
+		"cmb2_l10",
+		"wp",
+		"tinyMCEPreInit",
+		"tinyMCE",
+		"console",
+		"postboxes",
+		"pagenow",
+		"QTags",
+		"quicktags",
+		"_"
+	]
+}
