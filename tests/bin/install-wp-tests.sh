@@ -214,6 +214,9 @@ install_wp() {
 		mkdir -p /tmp/wordpress/tests/data/themedir1/dummy-theme/
 	fi
 
+	# Ensure wp-content/uploads directory exists (required by WordPress test suite)
+	mkdir -p "$WP_CORE_DIR/wp-content/uploads"
+
 }
 
 # Function to download and set up the WordPress PHPUnit test suite
@@ -301,7 +304,7 @@ elif [ -n "$DB_HOSTNAME" ] ; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
 		elif ! [ -z $DB_SOCK_OR_PORT ] ; then
 			EXTRA=" --socket=$DB_SOCK_OR_PORT"
-		elif ! [ -z $DB_HOSTNAME ] ; then
+		elif [ "$DB_HOSTNAME" != "localhost" ] && ! [ -z $DB_HOSTNAME ] ; then
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi
