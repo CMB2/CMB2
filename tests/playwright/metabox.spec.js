@@ -3,28 +3,19 @@ const { test, expect } = require('@playwright/test');
 /**
  * Meta Boxes functionality tests
  * Migrated from tests/cypress/integration/metaBoxes.spec.js
+ *
+ * These tests run against the classic editor (Gutenberg is disabled in the
+ * test-fields.php mu-plugin fixture) so metaboxes render inline.
  */
 test.describe('CMB2 Meta Boxes', () => {
   // Auth state is provided by the setup project in playwright.config.js
 
   test.beforeEach(async ({ page }) => {
-    // Navigate to new post page
     await page.goto('/wp-admin/post-new.php');
     await expect(page).toHaveURL(/\/wp-admin\/post-new\.php/);
 
-    // Wait for the CMB2 metabox to appear (don't use networkidle — Gutenberg never idles)
-    await page.locator('#cmb2_integration_tests_default_closed').waitFor({ state: 'attached', timeout: 15000 });
-
-    // In the Gutenberg editor, closed postboxes may be completely hidden
-    // (display: none). Scroll to the metabox area and ensure it's visible.
-    await page.evaluate(() => {
-      const el = document.getElementById('cmb2_integration_tests_default_closed');
-      if (el) {
-        // Make sure the postbox is visible (WordPress hides closed postboxes entirely)
-        el.style.display = '';
-        el.scrollIntoView({ block: 'center' });
-      }
-    });
+    // In the classic editor, metaboxes render inline and are immediately visible.
+    await page.locator('#cmb2_integration_tests_default_closed').waitFor({ state: 'visible' });
   });
 
   test.describe('Default Closed Box', () => {
@@ -34,31 +25,30 @@ test.describe('CMB2 Meta Boxes', () => {
       const fieldInput = page.locator('#cmb2_integration_tests_field_text');
       const toggleButton = metabox.locator('button.handlediv');
 
-      // Verify metabox title is visible
+      // Box is configured as closed — title visible, field hidden
       await expect(boxTitle).toBeVisible();
-
-      // Initially, the field should not be visible (box is closed by default)
       await expect(fieldInput).not.toBeVisible();
 
-      // Click the toggle button to open the metabox
+      // Open the box via the toggle button
       await toggleButton.click();
-
-      // Now the field should be visible
       await expect(fieldInput).toBeVisible();
 
       // Type a value into the field
       await fieldInput.fill('Test Value');
       await expect(fieldInput).toHaveValue('Test Value');
+
+      // Close again
+      await toggleButton.click();
+      await expect(fieldInput).not.toBeVisible();
     });
 
     test('Can handle multiple field interactions', async ({ page }) => {
       const metabox = page.locator('#cmb2_integration_tests_default_closed');
       const toggleButton = metabox.locator('button.handlediv');
-
-      // Open the metabox
-      await toggleButton.click();
-
       const textField = page.locator('#cmb2_integration_tests_field_text');
+
+      // Open the closed box first
+      await toggleButton.click();
       await expect(textField).toBeVisible();
 
       // Test clearing and refilling the field
@@ -76,10 +66,10 @@ test.describe('CMB2 Meta Boxes', () => {
   test('Should handle metabox visibility states correctly', async ({ page }) => {
     const metabox = page.locator('#cmb2_integration_tests_default_closed');
 
-    // The metabox container is in the DOM (checked in beforeEach)
-    await expect(metabox).toBeAttached();
+    // The metabox container is visible even when closed
+    await expect(metabox).toBeVisible();
 
-    // The header elements should be visible (beforeEach ensures display is set)
+    // The header elements should be visible
     await expect(metabox.locator('.hndle')).toBeVisible();
     await expect(metabox.locator('button.handlediv')).toBeVisible();
   });

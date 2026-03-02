@@ -5,6 +5,10 @@ Plugin Author: CMB2
 Description: Configures test fields for CMB2's internal integration tests.
 */
 
+// Disable Gutenberg block editor for E2E tests — CMB2 metaboxes render
+// reliably in the classic editor without complex panel/scroll handling.
+add_filter( 'use_block_editor_for_post', '__return_false' );
+
 // DRY up the creation of the fields with some type-derived defaults, which can be overridden.
 class CMB2_Integration_Box {
 	protected $box;
