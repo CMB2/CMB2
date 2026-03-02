@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     strategy:
+      fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1', '8.2', '8.3']
         wordpress: ['latest', '6.4', '6.3']

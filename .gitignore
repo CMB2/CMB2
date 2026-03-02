@@ -80,3 +80,4 @@ NOTES.md
 .claude/settings.local.json
 .claude/skills/.claude/settings.local.json
 .mcp.json
+tests/playwright/visual.spec.js-snapshots
