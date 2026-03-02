@@ -266,7 +266,7 @@ install_test_suite() {
 		if git clone --depth 1 --branch "${GITHUB_REF}" https://github.com/WordPress/wordpress-develop.git "$WP_GIT_DIR"; then
 			mkdir -p "$WP_TESTS_DIR/includes"
 			# Copy the contents of the 'includes' directory
-			cp -r "${WP_GIT_DIR}/tests/phpunit/includes/"* "$WP_TESTS_DIR/includes/"
+			cp -r "${WP_GIT_DIR}/tests/phpunit/includes/." "$WP_TESTS_DIR/includes/"
 			rm -rf "$WP_GIT_DIR" # Clean up the temporary cloned repository
 			echo "Successfully copied 'includes' directory via git clone."
 		else
