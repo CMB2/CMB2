@@ -40,9 +40,6 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
@@ -74,7 +71,13 @@ vendor
 # General
 NOTES.md
 
-# Cypress
-/cypress.env.json
-/tests/cypress/videos
-/tests/cypress/screenshots
+# Playwright
+/playwright-report/
+/test-results/
+/tests/playwright/.auth/
+
+# Claude
+.claude/settings.local.json
+.claude/skills/.claude/settings.local.json
+.mcp.json
+tests/playwright/visual.spec.js-snapshots
