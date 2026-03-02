@@ -45,18 +45,10 @@ DB_PASS=$3
 DB_HOST=${4-localhost}
 WP_VERSION=${5-latest} # Default to 'latest' if not specified
 
-# Determine the directory of this script to make relative paths work
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-
-# Define default temporary directory locations relative to the script's parent directory
+# Default temporary directory locations.
 # These can be overridden by setting the environment variables WP_TESTS_DIR or WP_CORE_DIR.
-WP_TESTS_DIR=${WP_TESTS_DIR-${SCRIPT_DIR}/../tmp/wordpress-tests-lib} # WordPress test suite library
-WP_CORE_DIR=${WP_CORE_DIR-${SCRIPT_DIR}/../tmp/wordpress}             # WordPress core installation
-
-# Resolve paths to canonical form (WP 6.9+ rejects paths containing '../')
-mkdir -p "$WP_TESTS_DIR" "$WP_CORE_DIR"
-WP_TESTS_DIR=$(cd "$WP_TESTS_DIR" && pwd)
-WP_CORE_DIR=$(cd "$WP_CORE_DIR" && pwd)
+WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
+WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress}
 
 # Function to check for required command-line utility dependencies
 check_dependencies() {
