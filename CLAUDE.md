@@ -155,6 +155,10 @@ The project uses WordPress's standard testing framework and includes:
 - Tests run in parallel for faster execution
 - Detailed reporting with traces, screenshots, and videos on failure
 
+## Releases
+
+The release process is documented in the `cmb2-release` skill. Run `/cmb2-release` (or `/cmb2-release 2.X.Y` to skip version detection) to walk through it. Source: `.claude/skills/cmb2-release/SKILL.md`. Includes the wp.org SVN deploy, which has no automation.
+
 ## Meta Best Practices
 
 - Never commit work-planning documents
