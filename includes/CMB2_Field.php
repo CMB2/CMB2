@@ -124,6 +124,14 @@ class CMB2_Field extends CMB2_Base {
 	protected $hash_id = '';
 
 	/**
+	 * ID Data.
+	 *
+	 * @var   array
+	 * @since 2.2.x
+	 */
+	protected $id_data = array();
+
+	/**
 	 * Constructs our field object
 	 *
 	 * @since 1.1.0
@@ -146,6 +154,10 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		$this->args = $this->_set_field_defaults( $args['field_args'] );
+
+		// Parse the ID for array keys.
+		$this->id_data['keys'] = preg_split( '/\[/', str_replace( ']', '', $this->group ? $this->group->id( true ) : $this->id( true ) ) );
+		$this->id_data['base'] = array_shift( $this->id_data['keys'] );
 
 		if ( $this->object_id ) {
 			$this->value = $this->get_data();
@@ -288,13 +300,14 @@ class CMB2_Field extends CMB2_Base {
 
 		// If no override, get value normally.
 		if ( 'cmb2_field_no_override_val' === $data ) {
-			$data = 'options-page' === $a['type']
-				? cmb2_options( $a['id'] )->get( $a['field_id'] )
-				: get_metadata( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
+			$data = $this->get_root_value( $a['single'] || $a['repeat'] );
+
+			if ( ! empty( $this->id_data['keys'] ) ) {
+				$data = $this->multidimensional_get( $data, $this->id_data['keys'] );
+			}
 		}
 
 		if ( $this->group ) {
-
 			$data = is_array( $data ) && isset( $data[ $this->group->index ][ $this->args( '_id' ) ] )
 				? $data[ $this->group->index ][ $this->args( '_id' ) ]
 				: false;
@@ -359,23 +372,14 @@ class CMB2_Field extends CMB2_Base {
 			return $override;
 		}
 
-		// Options page handling (or temp data store).
-		if ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
-			return cmb2_options( $a['id'] )->update( $a['field_id'], $a['value'], false, $a['single'] );
-		}
+		if ( empty( $this->id_data['keys'] ) ) {
+			return $this->set_root_value( $a['value'], $a['single'] );
+		} else {
+			$root = $this->get_root_value( $a['single'] );
+			$root = $this->multidimensional_replace( $root, $this->id_data['keys'], $a['value'] );
 
-		// Add metadata if not single.
-		if ( ! $a['single'] ) {
-			return add_metadata( $a['type'], $a['id'], $a['field_id'], $a['value'], false );
+			return $this->set_root_value( $root, $a['single'] );
 		}
-
-		// Delete meta if we have an empty array.
-		if ( is_array( $a['value'] ) && empty( $a['value'] ) ) {
-			return delete_metadata( $a['type'], $a['id'], $a['field_id'], $this->value );
-		}
-
-		// Update metadata.
-		return update_metadata( $a['type'], $a['id'], $a['field_id'], $a['value'] );
 	}
 
 	/**
@@ -434,14 +438,16 @@ class CMB2_Field extends CMB2_Base {
 		// If no override, remove as usual.
 		if ( null !== $override ) {
 			return $override;
-		} // End if.
-		// Option page handling.
-		elseif ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
-			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
 		}
 
-		// Remove metadata.
-		return delete_metadata( $a['type'], $a['id'], $a['field_id'], $old );
+		if ( empty( $this->id_data['keys'] ) ) {
+			return $this->remove_root_value( $old );
+		} else {
+			$root = $this->get_root_value( $a['single'] || $a['repeat'] );
+			$root = $this->multidimensional_remove( $root, $this->id_data['keys'] );
+
+			return $this->set_root_value( $root, $a['single'] || $a['repeat'] );
+		}
 	}
 
 	/**
@@ -515,6 +521,27 @@ class CMB2_Field extends CMB2_Base {
 	}
 
 	/**
+	 * Get root value from an array data.
+	 *
+	 * @since  2.2.x
+	 * @param  array $data The data like $_POST.
+	 * @return mixed
+	 */
+	public function get_root_value_from_data( array $data ) {
+		$id_base = $this->id_data['base'];
+
+		$value = array_key_exists( $id_base, $data )
+			? $data[ $id_base ]
+			: null;
+
+		if ( ! empty( $this->id_data['keys'] ) && is_array( $value ) ) {
+			$value = $this->multidimensional_get( $value, $this->id_data['keys'] );
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Process $_POST data to save this field's value
 	 *
 	 * @since  2.0.3
@@ -524,9 +551,7 @@ class CMB2_Field extends CMB2_Base {
 	public function save_field_from_data( array $data_to_save ) {
 		$this->data_to_save = $data_to_save;
 
-		$meta_value = isset( $this->data_to_save[ $this->id( true ) ] )
-			? $this->data_to_save[ $this->id( true ) ]
-			: null;
+		$meta_value = $this->get_root_value_from_data( $this->data_to_save );
 
 		return $this->save_field( $meta_value );
 	}
@@ -1493,7 +1518,9 @@ class CMB2_Field extends CMB2_Base {
 	 */
 	protected function set_group_sub_field_defaults( $args ) {
 		$args['id']    = $this->group->args( 'id' ) . '_' . $this->group->index . '_' . $args['id'];
-		$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . $args['_name'] . ']';
+
+		$keys = preg_split( '/\[/', str_replace( ']', '', $args['_name'] ) );
+		$args['_name'] = $this->group->args( 'id' ) . '[' . $this->group->index . '][' . implode( '][', $keys ) . ']';
 
 		return $args;
 	}
@@ -1644,6 +1671,211 @@ class CMB2_Field extends CMB2_Base {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Get the root value for a setting, especially for multidimensional ones.
+	 *
+	 * @since  2.2.x
+	 * @return mixed
+	 */
+	protected function get_root_value( $is_single = true ) {
+		$id_base = $this->id_data['base'];
+
+		return 'options-page' === $this->object_type
+			? cmb2_options( $this->object_id )->get( $id_base )
+			: get_metadata( $this->object_type, $this->object_id, $id_base, $is_single );
+	}
+
+	/**
+	 * Set the root value for a setting, especially for multidimensional ones.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param mixed $value Value to set as root of multidimensional setting.
+	 * @return bool Whether the multidimensional root was updated successfully.
+	 */
+	protected function set_root_value( $value, $is_single = true ) {
+		$id_base = $this->id_data['base'];
+
+		// Options page handling (or temp data store).
+		if ( 'options-page' === $this->object_type || empty( $this->object_id ) ) {
+			return cmb2_options( $this->object_id )->update( $id_base, $value, false, $is_single );
+		}
+
+		// Add metadata if not single.
+		if ( ! $is_single ) {
+			return add_metadata( $this->object_type, $this->object_id, $id_base, $value, false );
+		}
+
+		// Delete meta if we have an empty array.
+		if ( is_array( $value ) && empty( $value ) ) {
+			return delete_metadata( $this->object_type, $this->object_id, $id_base, $this->value );
+		}
+
+		// Update metadata.
+		return update_metadata( $this->object_type, $this->object_id, $id_base, $value );
+	}
+
+	/**
+	 * Remove the root value for a setting, especially for multidimensional ones.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param  string $old_value The old value.
+	 * @return bool
+	 */
+	protected function remove_root_value( $old_value = '' ) {
+		$id_base = $this->id_data['base'];
+
+		// Options page handling (or temp data store).
+		if ( 'options-page' === $this->object_type || empty( $this->object_id ) ) {
+			return cmb2_options( $this->object_id )->remove( $id_base );
+		}
+
+		// Remove metadata.
+		return delete_metadata( $this->object_type, $this->object_id, $id_base, $old_value );
+	}
+
+	/**
+	 * Multidimensional helper function.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @param bool $create Default is false.
+	 * @return array|void Keys are 'root', 'node', and 'key'.
+	 */
+	final protected function multidimensional( &$root, $keys, $create = false ) {
+		if ( $create && empty( $root ) ) {
+			$root = array();
+		}
+
+		if ( ! isset( $root ) || empty( $keys ) ) {
+			return;
+		}
+
+		$last = array_pop( $keys );
+		$node = &$root;
+
+		foreach ( $keys as $key ) {
+			if ( $create && ! isset( $node[ $key ] ) ) {
+				$node[ $key ] = array();
+			}
+
+			if ( ! is_array( $node ) || ! isset( $node[ $key ] ) ) {
+				return;
+			}
+
+			$node = &$node[ $key ];
+		}
+
+		if ( $create ) {
+			if ( ! is_array( $node ) ) {
+				// Account for an array overriding a string or object value.
+				$node = array();
+			}
+
+			if ( ! isset( $node[ $last ] ) ) {
+				$node[ $last ] = array();
+			}
+		}
+
+		if ( ! isset( $node[ $last ] ) ) {
+			return;
+		}
+
+		return array(
+			'root' => &$root,
+			'node' => &$node,
+			'key'  => $last,
+		);
+	}
+
+	/**
+	 * Will attempt to remove a specific value in a multidimensional array.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @return mixed
+	 */
+	final protected function multidimensional_remove( $root, $keys ) {
+		if ( empty( $keys ) ) { // If there are no keys, we're replacing the root.
+			return;
+		}
+
+		$result = $this->multidimensional( $root, $keys, true );
+
+		if ( isset( $result ) ) {
+			unset( $result['node'][ $result['key'] ] );
+		}
+
+		return $root;
+	}
+
+	/**
+	 * Will attempt to replace a specific value in a multidimensional array.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @param mixed $value The value to update.
+	 * @return mixed
+	 */
+	final protected function multidimensional_replace( $root, $keys, $value ) {
+		if ( ! isset( $value ) ) {
+			return $root;
+		} elseif ( empty( $keys ) ) { // If there are no keys, we're replacing the root.
+			return $value;
+		}
+
+		$result = $this->multidimensional( $root, $keys, true );
+
+		if ( isset( $result ) ) {
+			$result['node'][ $result['key'] ] = $value;
+		}
+
+		return $root;
+	}
+
+	/**
+	 * Will attempt to fetch a specific value from a multidimensional array.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @param mixed $default A default value which is used as a fallback. Default is null.
+	 * @return mixed The requested value or the default value.
+	 */
+	final protected function multidimensional_get( $root, $keys, $default = null ) {
+		// If there are no keys, test the root.
+		if ( empty( $keys ) ) {
+			return isset( $root ) ? $root : $default;
+		}
+
+		$result = $this->multidimensional( $root, $keys );
+
+		return isset( $result ) ? $result['node'][ $result['key'] ] : $default;
+	}
+
+	/**
+	 * Will attempt to check if a specific value in a multidimensional array is set.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param $root
+	 * @param $keys
+	 * @return bool True if value is set, false if not.
+	 */
+	final protected function multidimensional_isset( $root, $keys ) {
+		$result = $this->multidimensional_get( $root, $keys );
+
+		return isset( $result );
 	}
 
 }
