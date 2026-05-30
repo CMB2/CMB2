@@ -67,6 +67,10 @@ phpunit.xml
 
 # Composer
 vendor
+# Not committed: CI runs `composer install` per PHP version (7.4-latest) so deps
+# resolve per-version. A committed lock pins versions resolved on one PHP and
+# breaks `composer install` on the others (see 8b74309).
+composer.lock
 
 # General
 NOTES.md

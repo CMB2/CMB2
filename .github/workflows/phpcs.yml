@@ -30,12 +30,12 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+        key: ${{ runner.os }}-phpcs-${{ hashFiles('tools/phpcs/composer.json') }}
         restore-keys: |
-          ${{ runner.os }}-composer-
+          ${{ runner.os }}-phpcs-
 
-    - name: Install PHP dependencies
-      run: composer install --no-progress --prefer-dist --optimize-autoloader --no-interaction
+    - name: Install PHPCS tooling
+      run: composer install --working-dir=tools/phpcs --no-progress --prefer-dist --no-interaction
 
     - name: Run PHP CodeSniffer
-      run: vendor/bin/phpcs --standard=.phpcs.xml.dist includes/ init.php
+      run: tools/phpcs/vendor/bin/phpcs --standard=.phpcs.xml.dist includes/ init.php
