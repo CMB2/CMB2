@@ -80,14 +80,15 @@ sniffers that need PHP 8.2+). A root `composer install` auto-installs it on
 PHP 8.2+ (skipped on older PHP and in CI). Requires PHP 8.2+ to run.
 
 ```bash
-# One-time (or after changing tools/phpcs/composer.json); auto-runs on `composer install` on PHP 8.2+
-composer phpcs:install
-
-# Run PHP CodeSniffer (uses .phpcs.xml.dist + the includes/ init.php scope)
+# Run PHP CodeSniffer (uses .phpcs.xml.dist + the includes/ init.php scope).
+# Installs the tools/phpcs toolchain on first use if missing.
 composer phpcs
 
 # Fix auto-fixable PHP CodeSniffer issues
 composer phpcbf
+
+# Force a (re)install of the toolchain, e.g. after editing tools/phpcs/composer.json
+composer phpcs:install
 
 # JavaScript linting
 npm run build:js:lint
