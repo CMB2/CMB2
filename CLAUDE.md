@@ -94,6 +94,19 @@ composer phpcs:install
 npm run build:js:lint
 ```
 
+#### How the PHPCS tooling is wired (and why)
+
+The sniffer toolchain is **deliberately isolated** from the root project. Understand this before touching `composer.json`, `composer.lock`, or the CI workflows:
+
+- **`tools/phpcs/composer.json`** owns all sniffer packages (`squizlabs/php_codesniffer`, `wp-coding-standards/wpcs`, `phpcompatibility/phpcompatibility-wp`, `sirbrillig/phpcs-variable-analysis`, `fig-r/psr2r-sniffer` → which brings Slevomat + Spryker, plus the `dealerdirect` installer). The shared ruleset is the repo-root `.phpcs.xml.dist`.
+- **Root `require-dev` stays `phpunit` + polyfills only.** The PHPUnit CI matrix runs PHP 7.4–8.1, and some sniffers require PHP 8.2+ (`fig-r/psr2r-sniffer` → `spryker/code-sniffer`). If sniffers are in root `require-dev`, `composer install` on the 7.4–8.1 legs cannot resolve and the matrix fails. **Do not add phpcs/sniffer packages to the root `composer.json`.**
+- **No committed `composer.lock`** (it is gitignored). CI runs `composer install` per PHP version so deps resolve per-version; a committed lock pins one PHP's resolution (e.g. `doctrine/instantiator 2.0.0`, php ^8.1) and breaks `composer install` on the others. This was removed in `8b74309` — **do not re-commit a lockfile.**
+- **Three self-installing entry points** (all install the toolchain on demand, PHP 8.2+):
+  - `composer install` → `post-install-cmd`/`post-update-cmd` → `tools/phpcs/maybe-install.php`. Guarded: runs only on **PHP ≥ 8.2 and not in CI** (best-effort; never fails the root install).
+  - `composer phpcs` / `composer phpcbf` → `tools/phpcs/run.php`, which installs if missing then runs, and errors clearly on PHP < 8.2.
+  - `composer phpcs:install` → explicit `composer install --working-dir=tools/phpcs`.
+- **CI wiring:** `.github/workflows/phpcs.yml` runs on **PHP 8.3 only**, installs via `composer install --working-dir=tools/phpcs`, and calls `tools/phpcs/vendor/bin/phpcs` **directly** (never the composer scripts). The PHPUnit matrix never invokes phpcs. There is no standalone WPCS gate beyond this job.
+
 ### Build
 ```bash
 # Full CSS pipeline (compile SCSS, generate RTL, add banners, minify)
