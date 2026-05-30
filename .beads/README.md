@@ -36,7 +36,7 @@ Issues in Beads are:
 - **Git-native**: Stored in Dolt database with version control and branching
 - **AI-friendly**: CLI-first design works perfectly with AI coding agents
 - **Branch-aware**: Issues can follow your branch workflow
-- **Always in sync**: Auto-syncs with your commits
+- **Sync-ready**: Uses Dolt remotes for backup and team sharing
 
 ## Why Beads?
 
@@ -51,7 +51,7 @@ Issues in Beads are:
 - Fast, lightweight, and stays out of your way
 
 🔧 **Git Integration**
-- Automatic sync with git commits
+- Dolt-native sync via bd dolt push / bd dolt pull
 - Branch-aware issue tracking
 - Dolt-native three-way merge resolution
 

@@ -1,4 +1,5 @@
 {
+  "hooks": {},
   "permissions": {
     "allow": [
       "Bash(gh run view:*)",

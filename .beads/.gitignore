@@ -1,6 +1,7 @@
 # Dolt database (managed by Dolt, not git)
 dolt/
-dolt-access.lock
+embeddeddolt/
+proxieddb/
 
 # Runtime files
 bd.sock
@@ -11,9 +12,6 @@ last-touched
 
 # Daemon runtime (lock, log, pid)
 daemon.*
-
-# Interactions log (runtime, not versioned)
-interactions.jsonl
 
 # Push state (runtime, per-machine)
 push-state.json
@@ -26,6 +24,8 @@ push-state.json
 
 # Local version tracking (prevents upgrade notification spam after git ops)
 .local_version
+
+proxied_server_client_info.json
 
 # Worktree redirect file (contains relative path to main repo's .beads/)
 # Must not be committed as paths would be wrong in other clones
@@ -49,6 +49,9 @@ dolt-server.log
 dolt-server.lock
 dolt-server.port
 dolt-server.activity
+
+# Debug-mode pprof artifacts (written when dolt.debug: true in config.yaml)
+dolt-pprof/
 
 # Corrupt backup directories (created by bd doctor --fix recovery)
 *.corrupt.backup/
