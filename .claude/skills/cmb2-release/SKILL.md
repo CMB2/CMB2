@@ -102,9 +102,11 @@ If any fail, stop. Don't release on red.
 
 These are real shell variables. Set them once and reference them as `$NEW`, `$OLD`, etc. throughout the rest of the skill.
 
+`OLD` is what the version strings in the files *currently* say — read it straight from `init.php` (same source as `OLDBOOT`/`OLDPRIO`), not from git tags. The last git tag can disagree with the files: tags carry a `v` prefix the files don't, and on a diverged develop `git describe` returns the latest tag *reachable from HEAD*, which may lag the actual latest release. Matching the files is what makes the Step 1 seds land.
+
 ```bash
-export NEW=2.X.Y                                                        # the new version
-export OLD=$(git describe --tags --abbrev=0)
+export NEW=2.X.Y                                                        # the new version (bare, no "v")
+export OLD=$(grep -oE "const VERSION = '[^']+'" init.php | grep -oE "[0-9][0-9.]*")   # current version in the files
 export NEWBOOT=$(echo "$NEW" | tr -d .)                                 # 2.11.0 → 2110
 export OLDBOOT=$(grep -oE "CMB2_Bootstrap_[0-9]+(_Develop)?" init.php | head -1 | sed 's/CMB2_Bootstrap_//')
 export OLDPRIO=$(grep -oE "PRIORITY = [0-9]+" init.php | grep -oE "[0-9]+")
@@ -113,7 +115,7 @@ export NEWPRIO=$((OLDPRIO - 1))
 echo "NEW=$NEW  OLD=$OLD  NEWBOOT=$NEWBOOT  OLDBOOT=$OLDBOOT  OLDPRIO=$OLDPRIO  NEWPRIO=$NEWPRIO"
 ```
 
-Eyeball the echo before continuing. Empty values mean a grep didn't match — investigate before moving on.
+Eyeball the echo before continuing. Empty values mean a grep didn't match — investigate before moving on. `$OLD` should match what `init.php`, `package.json`, and the CSS banners currently contain.
 
 ## Step 1 — Version bump commit on `develop`
 
@@ -153,7 +155,13 @@ The lockfile has version in two places (top-level and under `packages.""`) — t
 
 ### `CHANGELOG.md`
 
-CMB2 uses an `## Unreleased` placeholder at the top that contributors append bullets to during development. The release **renames that existing `## Unreleased` header** to the new version section, then adds a fresh empty `## Unreleased` above it for the next cycle.
+CMB2 has an `## Unreleased` placeholder at the top. In theory contributors append bullets to it during development; in practice it's often empty (just `*`). **Check it first** — if it's empty or sparse, reconstruct the entries from the commit log since the last release tag (`v$OLD` — the bare file version always corresponds to the last released tag):
+
+```bash
+git log "v$OLD"..HEAD --oneline
+```
+
+Read the actual PRs/commits, group them into Enhancements / Bug Fixes, and write user-facing bullets — don't just paste commit subjects. Then **rename the `## Unreleased` header** to the new version section and add a fresh empty `## Unreleased` above it for the next cycle.
 
 Format (verify against existing entries before writing):
 
@@ -170,7 +178,7 @@ Format (verify against existing entries before writing):
 * Fixed thing. Fixes [#5678](https://github.com/CMB2/CMB2/issues/5678).
 ```
 
-Then a fresh empty `## Unreleased` above it for the next cycle:
+So the top of the file ends up looking like:
 
 ```markdown
 ## Unreleased

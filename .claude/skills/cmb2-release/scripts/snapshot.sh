@@ -5,9 +5,18 @@
 
 set -uo pipefail
 
+# Fetch tags first so "latest tag" reflects the remote, not a stale local view.
+git fetch --tags --quiet origin 2>/dev/null || true
+
 echo "=== Branch & tags ==="
 git branch --show-current
-echo "Latest tag: $(git describe --tags --abbrev=0 2>/dev/null || echo none)"
+# Highest released version overall (sort -V), not `git describe` — on a diverged
+# develop, describe returns the latest tag reachable from HEAD, which can lag.
+HIGHEST=$(git tag -l 'v*' | sort -V | tail -1)
+REACHABLE=$(git describe --tags --abbrev=0 2>/dev/null || echo none)
+echo "Highest tag overall:      ${HIGHEST:-none}"
+echo "Latest reachable from HEAD: $REACHABLE"
+[ "$HIGHEST" != "$REACHABLE" ] && echo "⚠️  HEAD has diverged from the highest tag — verify branch state before releasing."
 echo
 
 echo "=== Working tree ==="
@@ -27,9 +36,8 @@ echo "=== Recent CI runs on develop ==="
 gh run list --branch develop -L 3 2>/dev/null || echo "(gh not available)"
 echo
 
-echo "=== Commits since last tag ==="
-LAST=$(git describe --tags --abbrev=0 2>/dev/null)
-[ -n "$LAST" ] && git log "$LAST"..HEAD --oneline 2>/dev/null | head -30
+echo "=== Commits on HEAD not in the highest tag ($HIGHEST) ==="
+[ -n "$HIGHEST" ] && git log "$HIGHEST"..HEAD --oneline 2>/dev/null | head -30
 echo
 
 echo "=== Current WordPress core version ==="
