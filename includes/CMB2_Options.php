@@ -244,6 +244,7 @@ class CMB2_Option {
 			case 'key':
 				return $this->{$field};
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}

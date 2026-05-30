@@ -421,10 +421,12 @@ abstract class CMB2_Base {
 			switch ( $message ) {
 
 				case self::DEPRECATED_PARAM:
+					// translators: 1: deprecated field parameter name, 2: replacement parameter name.
 					$message = sprintf( __( 'The "%1$s" field parameter has been deprecated in favor of the "%2$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
 				case self::DEPRECATED_CB_PARAM:
+					// translators: 1: deprecated callback parameter name, 2: replacement parameter name.
 					$message = sprintf( __( 'Using the "%1$s" field parameter as a callback has been deprecated in favor of the "%2$s" parameter.', 'cmb2' ), $args[3], $args[4] );
 					break;
 
@@ -455,8 +457,10 @@ abstract class CMB2_Base {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && apply_filters( 'deprecated_argument_trigger_error', true ) ) {
 			if ( function_exists( '__' ) ) {
 				if ( ! is_null( $message ) ) {
+					// translators: 1: function name, 2: version number, 3: additional message.
 					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s! %3$s', 'cmb2' ), $function, $version, $message ) );
 				} else {
+					// translators: 1: function name, 2: version number.
 					trigger_error( sprintf( __( '%1$s was called with a parameter that is <strong>deprecated</strong> since version %2$s with no alternative available.', 'cmb2' ), $function, $version ) );
 				}
 			} else {
@@ -483,6 +487,7 @@ abstract class CMB2_Base {
 				if ( $field === $this->properties_name ) {
 					return $this->{$this->properties_name};
 				}
+				// no break
 			case 'properties':
 				return $this->{$this->properties_name};
 			case 'cmb_id':
@@ -490,6 +495,7 @@ abstract class CMB2_Base {
 			case 'object_type':
 				return $this->{$field};
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}
@@ -508,6 +514,7 @@ abstract class CMB2_Base {
 		$object_class = strtolower( get_class( $this ) );
 
 		if ( ! has_filter( "{$object_class}_inherit_{$method}" ) ) {
+			// translators: 1: class name, 2: method name.
 			throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), get_class( $this ), $method ) );
 		}
 

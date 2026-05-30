@@ -155,6 +155,7 @@ abstract class CMB2_Type_Base {
 			case 'concat_attrs':
 				return call_user_func_array( array( $this->types, $method ), $arguments );
 			default:
+				// translators: 1: class name, 2: method name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s method: %2$s', 'cmb2' ), __CLASS__, $method ) );
 		}
 	}
@@ -171,6 +172,7 @@ abstract class CMB2_Type_Base {
 			case 'field':
 				return $this->types->field;
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}

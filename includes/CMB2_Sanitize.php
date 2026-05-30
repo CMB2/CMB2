@@ -573,7 +573,7 @@ class CMB2_Sanitize {
 		$values_array = $this->value;
 
 		$new_value = array();
-		foreach ( $values_array as $iterator => $this->value ) {
+		foreach ( $values_array as $this->value ) {
 			if ( $this->value ) {
 				$val = $this->$method( true );
 				if ( ! empty( $val ) ) {

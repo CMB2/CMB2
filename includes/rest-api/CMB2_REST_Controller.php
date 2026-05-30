@@ -5,7 +5,7 @@ if ( ! class_exists( 'WP_REST_Controller' ) ) {
 }
 
 /**
- * Creates CMB2 objects/fields endpoint for WordPres REST API.
+ * Creates CMB2 objects/fields endpoint for WordPress REST API.
  * Allows access to fields registered to a specific post type and more.
  *
  * @todo  Add better documentation.

@@ -357,7 +357,7 @@ class CMB2_Types {
 	public function repeatable_rows() {
 		$meta_value = array_filter( (array) $this->field->escaped_value() );
 		// check for default content
-		$default    = $this->field->get_default();
+		$default = $this->field->get_default();
 
 		// check for saved data
 		if ( ! empty( $meta_value ) ) {

@@ -99,7 +99,6 @@ class CMB2_Type_Colorpicker extends CMB2_Type_Text {
 				// Then sanitize to just #.
 				$color = '#';
 			}
-
 		}
 
 		return $color;

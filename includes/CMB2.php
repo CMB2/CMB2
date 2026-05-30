@@ -382,7 +382,7 @@ class CMB2 extends CMB2_Base {
 		foreach ( array_filter( $classes ) as $class ) {
 			foreach ( explode( ' ', $class ) as $_class ) {
 				// Clean up & sanitize.
-				$split[] = sanitize_html_class( strip_tags( $_class ) );
+				$split[] = sanitize_html_class( wp_strip_all_tags( $_class ) );
 			}
 		}
 		$classes = $split;
@@ -540,7 +540,8 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( ! empty( $group_val ) ) {
-			foreach ( $group_val as $group_key => $field_id ) {
+			$group_val_count = count( $group_val );
+			for ( $i = 0; $i < $group_val_count; $i++ ) {
 				$this->render_group_row( $field_group );
 				$field_group->index++;
 			}
@@ -623,7 +624,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 			echo '
-			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
+			<div class="cmbhandle" title="', esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';

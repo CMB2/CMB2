@@ -155,7 +155,6 @@ class CMB2_Field_Display {
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
-					;
 				}
 				echo '</ul>';
 			}
@@ -483,6 +482,7 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 	}
 }
 
+// phpcs:ignore PEAR.NamingConventions.ValidClassName.Invalid -- "oEmbed" is the correct brand casing; renaming this public class is a BC break.
 class CMB2_Display_oEmbed extends CMB2_Field_Display {
 	/**
 	 * Display oembed value.

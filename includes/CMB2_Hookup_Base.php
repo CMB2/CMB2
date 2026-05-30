@@ -41,6 +41,7 @@ abstract class CMB2_Hookup_Base {
 	 * @param  CMB2 $cmb The CMB2 object to hookup.
 	 */
 	public static function maybe_init_and_hookup( CMB2 $cmb ) {
+		// translators: %s: function name.
 		throw new Exception( sprintf( esc_html__( '%1$s should be implemented by the extended class.', 'cmb2' ), __FUNCTION__ ) );
 	}
 
@@ -99,6 +100,7 @@ abstract class CMB2_Hookup_Base {
 			case 'cmb':
 				return $this->{$field};
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}

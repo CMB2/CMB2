@@ -1,6 +1,6 @@
 <?php
 /**
- * CMB2 objects/boxes endpoint for WordPres REST API.
+ * CMB2 objects/boxes endpoint for WordPress REST API.
  * Allows access to boxes configuration data.
  *
  * @todo  Add better documentation.

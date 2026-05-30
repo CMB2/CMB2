@@ -1,6 +1,6 @@
 <?php
 /**
- * CMB2 objects/fields endpoint for WordPres REST API.
+ * CMB2 objects/fields endpoint for WordPress REST API.
  * Allows access to fields registered to a specific box.
  *
  * @todo  Add better documentation.
@@ -381,7 +381,8 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 		);
 
 		// Run this first so the js_dependencies arg is populated.
-		$rendered = ( $cb = $field->maybe_callback( 'render_row_cb' ) )
+		$cb = $field->maybe_callback( 'render_row_cb' );
+		$rendered = $cb
 			// Ok, callback is good, let's run it.
 			? $this->get_cb_results( $cb, $field->args(), $field )
 			: false;
@@ -412,6 +413,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			if ( empty( $value ) || is_scalar( $value ) || is_array( $value ) ) {
 				$field_data[ $key ] = $value;
 			} else {
+				// translators: %s: field key.
 				$field_data[ $key ] = sprintf( __( 'Value Error for %s', 'cmb2' ), $key );
 			}
 		}

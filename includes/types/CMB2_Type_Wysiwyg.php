@@ -83,15 +83,18 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		) );
 
 		// Then replace the special id/value/name with underscore placeholders.
-		$editor = str_replace( array(
-			'cmb2_n_' . $group_id . $field_id,
-			'cmb2_v_' . $group_id . $field_id,
-			'cmb2_i_' . $group_id . $field_id,
+		$editor = str_replace(
+			array(
+				'cmb2_n_' . $group_id . $field_id,
+				'cmb2_v_' . $group_id . $field_id,
+				'cmb2_i_' . $group_id . $field_id,
 			), array(
-			'{{ data.name }}',
-			'{{{ data.value }}}',
-			'{{ data.id }}',
-		), $editor );
+				'{{ data.name }}',
+				'{{{ data.value }}}',
+				'{{ data.id }}',
+			),
+			$editor
+		);
 
 		// And put the editor instance in a JS template wrapper.
 		echo '<script type="text/template" id="tmpl-cmb2-wysiwyg-' . $group_id . '-' . $field_id . '">';

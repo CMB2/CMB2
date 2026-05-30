@@ -41,7 +41,7 @@ function cmb2_autoload_classes( $class_name ) {
 		$path .= '/rest-api';
 	}
 
-	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
+	include_once cmb2_dir( "$path/{$class_name}.php" );
 }
 
 /**
@@ -347,7 +347,6 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
 		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), esc_attr( $args['save_button'] ) );
 	}
-
 }
 
 /**

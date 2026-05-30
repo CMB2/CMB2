@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles hooking CMB2 objects/fields into the WordPres REST API
+ * Handles hooking CMB2 objects/fields into the WordPress REST API
  * which can allow fields to be read and/or updated.
  *
  * @since  2.2.3
@@ -707,10 +707,12 @@ class CMB2_REST extends CMB2_Hookup_Base {
 				if ( isset( $object->ID ) ) {
 					return intval( $object->ID );
 				}
+				// no break
 			case 'comment':
 				if ( isset( $object->comment_ID ) ) {
 					return intval( $object->comment_ID );
 				}
+				// no break
 			case 'term':
 				if ( is_array( $object ) && isset( $object['term_id'] ) ) {
 					return intval( $object['term_id'] );

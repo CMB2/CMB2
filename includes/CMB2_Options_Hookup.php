@@ -222,6 +222,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
+				<?php // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace -- Inline alternative-syntax conditional in template markup; keep on one line. ?>
 				<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
 			<?php endforeach; ?>
 		</h2>
@@ -259,7 +260,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		if ( $tab_group ) {
 			$boxes = CMB2_Boxes::get_by( 'tab_group', $tab_group );
 
-			foreach ( $boxes as $cmb_id => $cmb ) {
+			foreach ( $boxes as $cmb ) {
 				$option_key = $cmb->options_page_keys();
 
 				// Must have an option key, must be an options page box.
@@ -366,6 +367,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 			case 'cmb':
 				return $this->{$field};
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}

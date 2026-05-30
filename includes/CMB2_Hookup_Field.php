@@ -136,9 +136,9 @@ class CMB2_Hookup_Field {
 	 */
 	public function text_datetime_timestamp_timezone_back_compat( $value, $object_id, $meta_key, $single, $meta_type ) {
 		if ( $meta_key === $this->field_id ) {
-			remove_filter( "get_{$meta_type}_metadata", [ $this, __FUNCTION__ ], 10, 5 );
+			remove_filter( "get_{$meta_type}_metadata", array( $this, __FUNCTION__ ), 10, 5 );
 			$value = get_metadata( $meta_type, $object_id, $meta_key, $single );
-			add_filter( "get_{$meta_type}_metadata", [ $this, __FUNCTION__ ], 10, 5 );
+			add_filter( "get_{$meta_type}_metadata", array( $this, __FUNCTION__ ), 10, 5 );
 
 			$value = $this->reserialize_safe_value( $value );
 		}
@@ -159,9 +159,9 @@ class CMB2_Hookup_Field {
 	 * @return mixed                 The updated value.
 	 */
 	public function text_datetime_timestamp_timezone_option_back_compat( $value, $option, $default_value ) {
-		remove_filter( "pre_option_{$option}", [ $this, __FUNCTION__ ], 10, 3 );
+		remove_filter( "pre_option_{$option}", array( $this, __FUNCTION__ ), 10, 3 );
 		$value = get_option( $option, $default_value );
-		add_filter( "pre_option_{$option}", [ $this, __FUNCTION__ ], 10, 3 );
+		add_filter( "pre_option_{$option}", array( $this, __FUNCTION__ ), 10, 3 );
 
 		if ( ! empty( $value ) && is_array( $value ) ) {
 
@@ -189,7 +189,7 @@ class CMB2_Hookup_Field {
 	 */
 	protected function reserialize_safe_value( $value ) {
 		if ( is_array( $value ) ) {
-			return array_map( [ $this, 'reserialize_safe_value' ], $value );
+			return array_map( array( $this, 'reserialize_safe_value' ), $value );
 		}
 
 		$updated_val = CMB2_Utils::get_datetime_from_value( $value );
