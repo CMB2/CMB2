@@ -11,9 +11,17 @@
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>themes/omappv4/src/View/*</exclude-pattern>
 
+	<!-- includes/shim/WP_REST_Controller.php is a verbatim copy of WP core; its i18n is WP's concern, not ours. (PHPCompatibility etc. still apply.) -->
+	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
+		<exclude-pattern>includes/shim/*</exclude-pattern>
+	</rule>
+
 	<rule ref="WordPress-Core">
 		<!-- Allow with or without semicolons. -->
 		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
+
+		<!-- CMB2 keeps a blank line before a class's closing brace; don't strip it. -->
+		<exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody" />
 
 		<!-- Exclude other conflicting rules. -->
 		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned" />
@@ -29,6 +37,22 @@
 		<exclude name="WordPress.NamingConventions.ValidVariableName" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName" />
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+
+		<!-- CMB2 intentionally allows loose comparisons (see WordPress.PHP.StrictComparisons exclude above); silence the Universal equivalent too. -->
+		<exclude name="Universal.Operators.StrictComparisons" />
+
+		<!-- Inline/multiple assignment (e.g. `if ( $x = foo() )`, `$a = $b = ...`) is idiomatic in CMB2; allow it. -->
+		<exclude name="Generic.CodeAnalysis.AssignmentInCondition" />
+		<exclude name="Squiz.PHP.DisallowMultipleAssignments" />
+
+		<!-- CMB2 does not use Yoda conditions. -->
+		<exclude name="WordPress.PHP.YodaConditions" />
+
+		<!-- Params named $object/$default/$echo are public API; renaming would break named args (BC). -->
+		<exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames" />
+
+		<!-- Standalone $x++ vs ++$x is cosmetic on PHP 7.4+; not worth churning working code. -->
+		<exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement" />
 	</rule>
 
 	<!-- Prefer alignment over line length. -->
@@ -125,7 +149,15 @@
 	<rule ref="PSR1.Classes.ClassDeclaration" />
 
 	<!-- Declare symbols or run code, but not both. fig-r/psr2r-sniffer -->
-	<rule ref="PSR1.Files.SideEffects" />
+	<rule ref="PSR1.Files.SideEffects">
+		<!-- Entry/bootstrap and helper files legitimately both declare symbols and run side effects:
+		     init.php is the plugin bootstrap (define class, then initiate()); helper-functions.php
+		     defines helpers and registers a hook; CMB2_REST_Controller.php must require_once the
+		     WP_REST_Controller shim before it can `extends` it. -->
+		<exclude-pattern>init.php</exclude-pattern>
+		<exclude-pattern>includes/helper-functions.php</exclude-pattern>
+		<exclude-pattern>includes/rest-api/CMB2_REST_Controller.php</exclude-pattern>
+	</rule>
 
 	<!-- Namespacing required for functions. fig-r/psr2r-sniffer -->
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration" />
@@ -137,10 +169,8 @@
 
 	<!--- fig-r/psr2r-sniffer -->
 	<rule ref="PSR2R.Namespaces.UnusedUseStatement" />
-	<rule ref="PSR2R.Namespaces.UseInAlphabeticalOrder" />
-
-	<!-- Ban inline assignment in control structures (see note on Yoda Conditions above). fig-r/psr2r-sniffer -->
-	<rule ref="PSR2R.ControlStructures.NoInlineAssignment" />
+	<!-- psr2r's UseInAlphabeticalOrder was dropped in the PHP 7.4-compatible 1.x line; Slevomat (installed transitively) provides the modern equivalent. -->
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
 
 	<!--
 		Disregard WP's class file name rules which says:
@@ -160,22 +190,25 @@
 		<exclude name="Generic.Files.EndFileNoNewline" />
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="Generic.Files.InlineHTML.Found" />
-	</rule>
 
-	<!--
-		Warn about lines longer than 200 chars,
-		and error for lines longer than 200 chars.
-	-->
-	<rule ref="Generic.Files.LineLength">
-		<properties>
-			<property name="lineLimit" value="200" />
-			<property name="absoluteLineLimit" value="200" />
-		</properties>
+		<!-- CMB2 deliberately groups related classes in one file (e.g. CMB2_Field_Display + its 17 type subclasses). -->
+		<exclude name="Generic.Files.OneClassPerFile.MultipleFound" />
+		<exclude name="Generic.Files.OneObjectStructurePerFile.MultipleFound" />
+
+		<!-- CMB2 does not enforce a hard line-length limit. -->
+		<exclude name="Generic.Files.LineLength" />
 	</rule>
 
 	<rule ref="PSR1.Classes.ClassDeclaration">
 		<exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+		<!-- Same convention as Generic.Files.OneClassPerFile above: multiple classes per file are intentional. -->
+		<exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses" />
 	</rule>
 
-	<rule ref="VariableAnalysis"/>
+	<rule ref="VariableAnalysis">
+		<properties>
+			<!-- Unused parameters are usually signature-bound (REST callbacks, hooks, method overrides); flag unused local variables, not params. -->
+			<property name="allowUnusedFunctionParameters" value="true"/>
+		</properties>
+	</rule>
 </ruleset>

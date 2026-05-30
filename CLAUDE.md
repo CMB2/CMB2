@@ -74,11 +74,11 @@ npm run build
 
 ### Code Quality
 ```bash
-# Run PHP CodeSniffer
-vendor/bin/phpcs
+# Run PHP CodeSniffer (auto-uses .phpcs.xml.dist; scope to source with a path)
+vendor/bin/phpcs includes/ init.php
 
-# Fix PHP CodeSniffer issues automatically
-vendor/bin/phpcbf
+# Fix auto-fixable PHP CodeSniffer issues
+vendor/bin/phpcbf includes/ init.php
 
 # JavaScript linting
 npm run build:js:lint
