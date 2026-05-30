@@ -15,6 +15,7 @@
  * @property-read $object_id   Object ID
  * @property-read $object_type Type of object being handled. (e.g., post, user, comment, or term)
  */
+#[AllowDynamicProperties] // phpcs:ignore PHPCompatibility.Attributes.NewAttributes -- Back-compat: allow dynamic props (PHP 8.2+) on this class + subclasses.
 abstract class CMB2_Base {
 
 	/**

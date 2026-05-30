@@ -10,6 +10,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
+#[AllowDynamicProperties] // phpcs:ignore PHPCompatibility.Attributes.NewAttributes -- Back-compat: allow dynamic props (PHP 8.2+) on this class + subclasses.
 abstract class CMB2_Type_Base {
 
 	/**
