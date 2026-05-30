@@ -73,12 +73,21 @@ npm run build
 ```
 
 ### Code Quality
+
+The PHPCS toolchain lives in an isolated `tools/phpcs/composer.json` (kept out of
+the root `require-dev` so the PHP 7.4–8.1 test matrix isn't forced to resolve
+sniffers that need PHP 8.2+). A root `composer install` auto-installs it on
+PHP 8.2+ (skipped on older PHP and in CI). Requires PHP 8.2+ to run.
+
 ```bash
-# Run PHP CodeSniffer (auto-uses .phpcs.xml.dist; scope to source with a path)
-vendor/bin/phpcs includes/ init.php
+# One-time (or after changing tools/phpcs/composer.json); auto-runs on `composer install` on PHP 8.2+
+composer phpcs:install
+
+# Run PHP CodeSniffer (uses .phpcs.xml.dist + the includes/ init.php scope)
+composer phpcs
 
 # Fix auto-fixable PHP CodeSniffer issues
-vendor/bin/phpcbf includes/ init.php
+composer phpcbf
 
 # JavaScript linting
 npm run build:js:lint

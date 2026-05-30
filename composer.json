@@ -34,8 +34,17 @@
 		"yoast/phpunit-polyfills": "^1.1"
 	},
 	"scripts": {
-	  "test": [
-		"vendor/bin/phpunit"
-	  ]
+		"test": [
+			"vendor/bin/phpunit"
+		],
+		"phpcs:install": "@composer install --working-dir=tools/phpcs --no-interaction",
+		"phpcs": "tools/phpcs/vendor/bin/phpcs --standard=.phpcs.xml.dist includes/ init.php",
+		"phpcbf": "tools/phpcs/vendor/bin/phpcbf --standard=.phpcs.xml.dist includes/ init.php",
+		"post-install-cmd": [
+			"@php tools/phpcs/maybe-install.php"
+		],
+		"post-update-cmd": [
+			"@php tools/phpcs/maybe-install.php"
+		]
 	}
 }
