@@ -2,7 +2,7 @@
 
 [![GitHub Actions](https://github.com/CMB2/CMB2/workflows/PHPUnit%20Tests/badge.svg)](https://github.com/CMB2/CMB2/actions)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
+[![Codecov Coverage](https://codecov.io/gh/CMB2/CMB2/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/CMB2/CMB2)
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
 ![CMB2](https://ps.w.org/cmb2/assets/banner-1544x500.png)
