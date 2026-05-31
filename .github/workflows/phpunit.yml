@@ -80,7 +80,7 @@ jobs:
         echo "WP_CORE_DIR is: $WP_CORE_DIR"
     
     - name: Run PHPUnit tests
-      run: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
+      run: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text --coverage-clover coverage.xml
       env:
         WP_TESTS_DIR: /tmp/wordpress-tests-lib
         WP_CORE_DIR: /tmp/wordpress
@@ -89,7 +89,8 @@ jobs:
       if: matrix.php == '8.1' && matrix.wordpress == 'latest'
       uses: codecov/codecov-action@v4
       with:
-        file: ./coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
         flags: phpunit
         name: codecov-umbrella
         fail_ci_if_error: false
