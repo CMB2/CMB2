@@ -109,8 +109,10 @@ tools:
     php_sim: true
     php_pdepend: true
     php_analyzer: true
-    external_code_coverage:
-        timeout: 600    # Timeout in seconds.
+    # No external_code_coverage: nothing in this repo pushes coverage to
+    # Scrutinizer (the phpunit CI uploads clover to Codecov, not via ocular),
+    # so configuring it only made every inspection idle until the timeout
+    # waiting for data that never arrives.
 
 filter:
     excluded_paths:
