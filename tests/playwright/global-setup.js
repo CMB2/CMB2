@@ -14,7 +14,7 @@ async function globalSetup(config) {
   }
   
   // If we're in CI, we may need to wait for WordPress to be available
-  const baseURL = process.env.WP_BASE_URL || 'http://localhost:8889';
+  const baseURL = process.env.WP_BASE_URL || 'http://localhost:2623';
   
   try {
     // Launch browser for setup

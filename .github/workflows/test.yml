@@ -28,7 +28,7 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test --project=chromium
       env:
-        WP_BASE_URL: http://localhost:8889
+        WP_BASE_URL: http://localhost:2623
         SKIP_WP_SERVER: 1
         CI: true
 

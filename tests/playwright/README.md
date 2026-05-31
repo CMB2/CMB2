@@ -50,7 +50,7 @@ npm run test:visual
 
 The main configuration is in `playwright.config.js` at the project root. Key settings:
 
-- **Base URL**: `http://localhost:8889` (configurable via `WP_BASE_URL`)
+- **Base URL**: `http://localhost:2623` (configurable via `WP_BASE_URL`)
 - **Browsers**: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
 - **Parallel Execution**: Enabled by default
 - **Screenshots**: Taken on failure
@@ -90,7 +90,7 @@ Tests use persistent authentication via `auth.setup.js`, which creates a login s
 # WordPress credentials (defaults shown)
 WP_USERNAME=admin
 WP_PASSWORD=password
-WP_BASE_URL=http://localhost:8889
+WP_BASE_URL=http://localhost:2623
 ```
 
 ### Local Development

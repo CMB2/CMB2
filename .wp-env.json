@@ -1,4 +1,6 @@
 {
+	"port": 2622,
+	"testsPort": 2623,
 	"plugins": ["."],
 	"env": {
 		"tests": {

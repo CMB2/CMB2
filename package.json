@@ -31,7 +31,7 @@
 		"env:start": "wp-env start",
 		"env:stop": "wp-env stop",
 		"env:clean": "wp-env clean",
-		"phptests": "wp-env run tests-cli --env-cwd=wp-content/plugins/cmb2 vendor/bin/phpunit"
+		"phptests": "wp-env start && wp-env run tests-cli --env-cwd=wp-content/plugins/cmb2 vendor/bin/phpunit"
 	},
 	"repository": {
 		"type": "git",
