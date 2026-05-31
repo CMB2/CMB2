@@ -127,17 +127,22 @@ checks:
         duplication: true
 
 build:
-    dependencies:
-        # Scrutinizer auto-infers `npm rebuild`/`npm install` just because a
-        # package.json exists, but the analysis node below only runs
-        # php-scrutinizer-run and needs no JS deps. On Scrutinizer's old
-        # toolchain (Node 10 + pre-C++20 g++) that inferred npm install dies
-        # compiling the native `fs-ext-extra-prebuilt` addon (pulled in by
-        # @wordpress/env 11 -> @wp-playground/cli), failing the whole build.
-        # Override with nothing so npm never runs.
-        override: []
     nodes:
         analysis:
+            # Scrutinizer auto-infers `npm rebuild`/`npm install` for this node
+            # just because a package.json exists, but the node only runs
+            # php-scrutinizer-run and needs no JS deps. On Scrutinizer's old
+            # toolchain (Node 10 + pre-C++20 g++) that inferred npm install dies
+            # compiling the native `fs-ext-extra-prebuilt` addon (pulled in by
+            # @wordpress/env 11 -> @wp-playground/cli), failing the whole build.
+            # Override the inferred dependency commands with a no-op so npm
+            # never runs. The override MUST live inside the node (top-level
+            # build.dependencies is ignored for auto-setup nodes), and must be a
+            # real command -- an empty list does not disable inference. See
+            # https://github.com/scrutinizer-ci/scrutinizer/issues/339
+            dependencies:
+                override:
+                    - 'true'
             tests:
                 override:
                     - php-scrutinizer-run
