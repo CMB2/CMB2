@@ -191,7 +191,7 @@ Tone is **contributor-facing** — link PRs/issues, credit authors with `Props`,
 
 ### `readme.txt` (changelog section)
 
-Mirrors `CHANGELOG.md` but one heading level deeper. Append the new entry above the previous one — the wp.org changelog accumulates the full history:
+Mirrors `CHANGELOG.md` but one heading level deeper. Prepend the new entry above the previous one:
 
 ```
 ### $NEW
@@ -202,6 +202,24 @@ Mirrors `CHANGELOG.md` but one heading level deeper. Append the new entry above 
 #### Bug Fixes
 * (same bullets as CHANGELOG.md)
 ```
+
+**⚠️ wp.org caps the `== Changelog ==` section at 5,000 words and silently truncates the overflow.** Unlike `CHANGELOG.md` (which keeps the full history forever), the readme changelog must **not** accumulate unbounded history — past it, wp.org cuts the display and shows an author-only warning on the plugin page: *"The Changelog section is too long and was truncated. A maximum of 5,000 words is supported."* After adding the new entry, measure the section and trim if needed:
+
+```bash
+# word count of the == Changelog == section (stops at the next == Heading ==)
+awk '/^== Changelog ==/{f=1;next} f&&/^== /{exit} f' readme.txt | wc -w
+```
+
+If it's near or over **~4,500 words** (leave margin under the 5,000 cap), delete the oldest version entries and replace them with a pointer to the full history:
+
+```
+For the changelog of versions prior to <oldest-kept-version>, see
+https://github.com/CMB2/CMB2/blob/master/CHANGELOG.md
+```
+
+Nothing is lost — the complete history lives in `CHANGELOG.md` and GitHub Releases. Keeping the most recent ~10–15 versions is plenty. Apply the same trim to a `== Upgrade Notice ==` block if it has grown unbounded too. (This bit 2.12.0: the section had reached ~9,000 words and wp.org truncated it. The trim only needs to happen once when it crosses the cap, then occasionally as it re-accumulates.)
+
+Because wp.org reads this section from **`trunk/readme.txt`** to render the plugin page, a trim only takes effect after the Step 5 SVN deploy — trimming `readme.txt` here in the version-bump commit is what gets it there.
 
 ### `README.md`
 
@@ -219,7 +237,7 @@ grep -l "Version: $OLD" css/*.css   # should print nothing
 
 ### Commit
 
-🛑 **STOP-AND-VALIDATE**: Run `git status` and `git diff --cached`. Show the user the staged diff and confirm before committing. Spot-check: `Bootstrap_$NEWBOOT` appears in `init.php` ~6 times all updated, `PRIORITY = $NEWPRIO` is exactly one less than `$OLDPRIO`, and `readme.txt` "Tested up to" matches current WP.
+🛑 **STOP-AND-VALIDATE**: Run `git status` and `git diff --cached`. Show the user the staged diff and confirm before committing. Spot-check: `Bootstrap_$NEWBOOT` appears in `init.php` ~6 times all updated, `PRIORITY = $NEWPRIO` is exactly one less than `$OLDPRIO`, `readme.txt` "Tested up to" matches current WP, and the `readme.txt` `== Changelog ==` section is under the 5,000-word wp.org cap (see the trim note above).
 
 ```bash
 git add init.php package.json package-lock.json readme.txt CHANGELOG.md README.md css/
