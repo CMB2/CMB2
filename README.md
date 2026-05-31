@@ -1,14 +1,13 @@
 # CMB2
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub Actions](https://github.com/CMB2/CMB2/workflows/PHPUnit%20Tests/badge.svg)](https://github.com/CMB2/CMB2/actions)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
 [![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
-![CMB2](https://plugins.trac.wordpress.org/export/HEAD/cmb2/assets/banner-1544x500.png)
+![CMB2](https://ps.w.org/cmb2/assets/banner-1544x500.png)
 
-**Contributors:**      [jtsternberg](https://github.com/jtsternberg), [webdevstudios](https://github.com/webdevstudios), [zao](https://github.com/zao-web), [humanmade](https://github.com/humanmade)  
+**Contributors:**      [jtsternberg](https://github.com/jtsternberg), [webdevstudios](https://github.com/webdevstudios), [tw2113](https://github.com/tw2113)  
 **Homepage:**          [https://cmb2.io](https://cmb2.io)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
