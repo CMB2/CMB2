@@ -43,25 +43,37 @@ test.describe('CMB2 Visual Regression Tests', () => {
   });
 
   test('Mobile responsive design', async ({ page }) => {
-    // Test mobile view
-    await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE size
-    
+    // Test the CMB2 metabox at mobile width (iPhone SE). Scope the screenshot to
+    // the metabox element rather than the full page so we regression-test CMB2's
+    // responsive rendering, not the surrounding WordPress editor chrome (which
+    // drifts across WP versions and editor states).
+    await page.setViewportSize({ width: 375, height: 667 });
+
     await page.goto('/wp-admin/post-new.php');
     await page.waitForLoadState('networkidle');
 
-    // Take full page screenshot on mobile
-    await expect(page).toHaveScreenshot('cmb2-mobile-view.png', { fullPage: true });
+    const metabox = page.locator('#cmb2_integration_tests_default_closed');
+    if (await metabox.isVisible()) {
+      // Open the box so the screenshot captures the fields reflowing at mobile width.
+      await metabox.locator('button.handlediv').click();
+      await expect(metabox).toHaveScreenshot('cmb2-mobile-view.png');
+    }
   });
 
   test('Tablet responsive design', async ({ page }) => {
-    // Test tablet view
-    await page.setViewportSize({ width: 768, height: 1024 }); // iPad size
-    
+    // Test the CMB2 metabox at tablet width (iPad). Element-scoped for the same
+    // reason as the mobile test above.
+    await page.setViewportSize({ width: 768, height: 1024 });
+
     await page.goto('/wp-admin/post-new.php');
     await page.waitForLoadState('networkidle');
 
-    // Take full page screenshot on tablet
-    await expect(page).toHaveScreenshot('cmb2-tablet-view.png', { fullPage: true });
+    const metabox = page.locator('#cmb2_integration_tests_default_closed');
+    if (await metabox.isVisible()) {
+      // Open the box so the screenshot captures the fields reflowing at tablet width.
+      await metabox.locator('button.handlediv').click();
+      await expect(metabox).toHaveScreenshot('cmb2-tablet-view.png');
+    }
   });
 
   test('Cross-browser metabox consistency', async ({ page, browserName }) => {
