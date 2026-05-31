@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 *
 
+## [2.12.0 - 2026-05-30](https://github.com/CMB2/CMB2/releases/tag/v2.12.0)
+
+### Enhancements
+
+* Confirmed compatibility with PHP 8.2 and 8.3, and tested up to WordPress 7.0.
+* [Development] Migrated end-to-end testing from Cypress to Playwright and replaced Grunt with npm scripts for the asset build pipeline. ([#1550](https://github.com/CMB2/CMB2/pull/1550)).
+* [Development] Moved the local development and test environment to `@wordpress/env` (wp-env) on pinned ports, running both PHPUnit and Playwright through it. ([#1554](https://github.com/CMB2/CMB2/pull/1554), [#1558](https://github.com/CMB2/CMB2/pull/1558)).
+* [Development] Replaced Travis CI with GitHub Actions, added a PHPCompatibility check (PHP 7.4+) and a PHPCS/WPCS lint gate, and overhauled `install-wp-tests.sh` for modern WordPress. ([#1555](https://github.com/CMB2/CMB2/pull/1555)).
+
+### Bug Fixes
+
+* Fixed a PHP 8.1+ deprecation when sanitizing an empty `textarea`-based field (passing `null` to `wp_kses_post()`). Props [@baljindersingh88](https://github.com/baljindersingh88) ([#1537](https://github.com/CMB2/CMB2/pull/1537)).
+* Fixed row iterator value desync between the data attribute and jQuery data when reordering repeatable group rows. Props [@angryaxi](https://github.com/angryaxi) ([#1518](https://github.com/CMB2/CMB2/pull/1518)).
+* Fixed a PHP 8.3 `ltrim()` deprecation in the taxonomy field display.
+* Hardened against PHP 8.2+ dynamic property deprecations by widening `#[AllowDynamicProperties]` to the class roots.
+* Removed a focus-background rule on `.cmb2-wrap` inputs that caused unexpected input styling. Fixes [#1556](https://github.com/CMB2/CMB2/issues/1556)/[wordpress.org/support/topic/weird-checkbox-behaviour-on-wp-7](https://wordpress.org/support/topic/weird-checkbox-behaviour-on-wp-7/) ([#1557](https://github.com/CMB2/CMB2/pull/1557)).
+
 ## [2.11.0 - 2024-04-02](https://github.com/CMB2/CMB2/releases/tag/v2.11.0)
 
 * Officially moved to PHP 7.4+ support!

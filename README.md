@@ -13,8 +13,8 @@
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Requires PHP:**      7.4  
-**Tested up to:**      6.4  
-**Stable tag:**        2.11.0  
+**Tested up to:**      7.0  
+**Stable tag:**        2.12.0  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
