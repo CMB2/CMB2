@@ -40,6 +40,10 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
+# CI-generated PHPUnit coverage reports (uploaded to Codecov, never committed)
+coverage.xml
+coverage.clover
+
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
