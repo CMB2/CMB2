@@ -20,7 +20,7 @@ jobs:
       run: npm install
 
     - name: Start WordPress environment
-      run: npx wp-env start
+      run: npx wp-env start --config .wp-env-tests.json
 
     - name: Install Playwright browsers
       run: npx playwright install --with-deps chromium

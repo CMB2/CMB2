@@ -179,8 +179,9 @@ version floor that local wp-env does not.
 
 ### PHPUnit — local vs CI (they differ)
 
-- **Local, recommended — `npm run phptests`:** runs phpunit inside the wp-env
-  `tests-cli` container. Self-starts the env (`wp-env start && …`), so a cold
+- **Local, recommended — `npm run phptests`:** runs phpunit inside the isolated
+  tests environment's `cli` container (`wp-env run --config .wp-env-tests.json
+  cli …`). Self-starts that env (`npm run env:tests:start && …`), so a cold
   checkout needs only Docker. Runs a **single** PHP (the container's, 8.3) vs WP
   latest. Fast, but does **not** cover the version matrix.
 - **Local, bare — `vendor/bin/phpunit` / `composer test`:** phpunit on your host
@@ -195,10 +196,22 @@ version floor that local wp-env does not.
 
 ### wp-env (local PHPUnit + all Playwright)
 
-- **Ports are pinned in `.wp-env.json`:** dev **2622**, tests **2623** — chosen so
-  `wp-env start` never races for the common 8888/8889 defaults, which collide with
-  other local Docker/OrbStack services. Playwright's `WP_BASE_URL` and CI default
-  to `http://localhost:2623`. Don't reintroduce 8888/8889.
+- **Two separate config files (no `env.tests`):** wp-env v11 deprecated the
+  single-file `env`/`testsPort`/`testsEnvironment` model, so the dev and tests
+  environments now live in distinct files, each with `"testsEnvironment": false`
+  (which silences the deprecation warning and stops wp-env auto-starting a second
+  env). Each `--config` file gets its own isolated Docker stack / work dir /
+  database. The WordPress PHPUnit scaffold (`WP_TESTS_DIR`) now ships in **every**
+  container, so phpunit runs in the tests env's plain `cli` container — there is
+  no longer a `tests-cli` container.
+  - `.wp-env.json` — **dev** playground, port **2622** (`npm run env:start`).
+  - `.wp-env-tests.json` — **isolated tests** env, port **2623**, with the
+    `cmb2-test-fields.php` fixture mapping. Used by Playwright + phptests
+    (`npm run env:tests:start`).
+- **Ports are pinned** to dev **2622** / tests **2623** — chosen so `wp-env start`
+  never races for the common 8888/8889 defaults, which collide with other local
+  Docker/OrbStack services. Playwright's `WP_BASE_URL` and CI default to
+  `http://localhost:2623`. Don't reintroduce 8888/8889.
 - **`install-wp-tests.sh` host gotcha:** the DB-host arg matters. On a machine
   running Docker/OrbStack, a container often squats TCP `127.0.0.1:3306`, so
   passing `127.0.0.1` connects to the *wrong* MySQL and fails with
@@ -210,9 +223,11 @@ version floor that local wp-env does not.
 
 - Tests in `tests/playwright/`; run via `npm run test:e2e` (plus `:ui`,
   `:headed`, `:debug`, `:report`, and `test:visual` for screenshot regression).
-- Runs against wp-env (tests site on **2623**). Auth state is persisted across
-  tests for speed; tests run in parallel. Locally Playwright will start wp-env
-  itself; in CI (`test.yml`) the env is started first and Playwright runs chromium
+- Runs against the isolated tests env (`.wp-env-tests.json`, site on **2623**).
+  Auth state is persisted across tests for speed; tests run in parallel. Locally
+  Playwright starts that env itself (`npm run env:tests:start`); in CI
+  (`test.yml`) the env is started first (`wp-env start --config
+  .wp-env-tests.json`) and Playwright runs chromium
   with `SKIP_WP_SERVER=1`. Traces, screenshots, and videos are captured on failure.
 
 ## Releases

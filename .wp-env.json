@@ -1,13 +1,5 @@
 {
 	"port": 2622,
-	"testsPort": 2623,
 	"plugins": ["."],
-	"env": {
-		"tests": {
-			"plugins": ["."],
-			"mappings": {
-				"wp-content/mu-plugins/cmb2-test-fields.php": "./tests/playwright/fixtures/test-fields.php"
-			}
-		}
-	}
+	"testsEnvironment": false
 }

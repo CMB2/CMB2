@@ -95,17 +95,19 @@ WP_BASE_URL=http://localhost:2623
 
 ### Local Development
 
-For local development with wp-env:
+For local development with wp-env, Playwright runs against the isolated tests
+environment defined in `.wp-env-tests.json` (port 2623); `npm run test:e2e`
+auto-starts it, but you can manage it explicitly:
 
 ```bash
-# Start WordPress environment
-npm run env:start
+# Start the isolated tests WordPress environment (port 2623)
+npm run env:tests:start
 
 # Run tests
 npm run test:e2e
 
-# Stop environment
-npm run env:stop
+# Stop the tests environment
+npm run env:tests:stop
 ```
 
 ### CI Environment
