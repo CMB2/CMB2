@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.11.0 - 2026-02-28
+ * CMB2 - v2.11.0 - 2026-05-31
  * https://cmb2.io
  * Copyright (c) 2026
  * Licensed GPLv2+
@@ -57,10 +57,6 @@
 .cmb2-wrap select {
   font-size: 14px;
   margin-top: 3px;
-}
-.cmb2-wrap input:focus,
-.cmb2-wrap textarea:focus {
-  background: #fffff8;
 }
 .cmb2-wrap input[type=radio] {
   margin: 0 5px 0 0;
