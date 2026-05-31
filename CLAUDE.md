@@ -25,16 +25,18 @@ CMB2 (Custom Metaboxes 2) is a WordPress metabox, custom fields, and forms libra
 
 #### PHPUnit Tests (Unit & Integration)
 ```bash
-# Run all PHPUnit tests
-vendor/bin/phpunit
-
-# Run tests via npm
+# Recommended (local): run PHPUnit inside wp-env. Self-starts the env, so a
+# cold checkout works with only Docker installed. Single PHP (8.3) vs WP latest.
 npm run phptests
 
-# Run tests via Composer
+# Bare phpunit on your host — these do NOT set up WordPress; they require a
+# manually-built WP test env + a reachable MySQL with WP_TESTS_DIR set (see below).
+vendor/bin/phpunit
 composer test
 
-# Install WordPress test environment
+# Build that manual WP test env. The 4th arg is the DB host: prefer a
+# socket-capable `localhost` — a Docker/OrbStack MySQL frequently squats
+# 127.0.0.1:3306 and silently hijacks the connection (see Testing Strategy).
 bash tests/bin/install-wp-tests.sh <db_name> <db_user> <db_pass> [db_host] [wp_version]
 ```
 
@@ -75,7 +77,7 @@ npm run build
 ### Code Quality
 
 The PHPCS toolchain lives in an isolated `tools/phpcs/composer.json` (kept out of
-the root `require-dev` so the PHP 7.4–8.1 test matrix isn't forced to resolve
+the root `require-dev` so the PHP 7.4–8.3 test matrix isn't forced to resolve
 sniffers that need PHP 8.2+). A root `composer install` auto-installs it on
 PHP 8.2+ (skipped on older PHP and in CI). Requires PHP 8.2+ to run.
 
@@ -99,7 +101,7 @@ npm run build:js:lint
 The sniffer toolchain is **deliberately isolated** from the root project. Understand this before touching `composer.json`, `composer.lock`, or the CI workflows:
 
 - **`tools/phpcs/composer.json`** owns all sniffer packages (`squizlabs/php_codesniffer`, `wp-coding-standards/wpcs`, `phpcompatibility/phpcompatibility-wp`, `sirbrillig/phpcs-variable-analysis`, `fig-r/psr2r-sniffer` → which brings Slevomat + Spryker, plus the `dealerdirect` installer). The shared ruleset is the repo-root `.phpcs.xml.dist`.
-- **Root `require-dev` stays `phpunit` + polyfills only.** The PHPUnit CI matrix runs PHP 7.4–8.1, and some sniffers require PHP 8.2+ (`fig-r/psr2r-sniffer` → `spryker/code-sniffer`). If sniffers are in root `require-dev`, `composer install` on the 7.4–8.1 legs cannot resolve and the matrix fails. **Do not add phpcs/sniffer packages to the root `composer.json`.**
+- **Root `require-dev` stays `phpunit` + polyfills only.** The PHPUnit CI matrix spans PHP 7.4–8.3, and some sniffers require PHP 8.2+ (`fig-r/psr2r-sniffer` → `spryker/code-sniffer`). If sniffers are in root `require-dev`, `composer install` on the sub-8.2 legs (7.4/8.0/8.1) cannot resolve and the matrix fails. **Do not add phpcs/sniffer packages to the root `composer.json`.**
 - **No committed `composer.lock`** (it is gitignored). CI runs `composer install` per PHP version so deps resolve per-version; a committed lock pins one PHP's resolution (e.g. `doctrine/instantiator 2.0.0`, php ^8.1) and breaks `composer install` on the others. This was removed in `8b74309` — **do not re-commit a lockfile.**
 - **Three self-installing entry points** (all install the toolchain on demand, PHP 8.2+):
   - `composer install` → `post-install-cmd`/`post-update-cmd` → `tools/phpcs/maybe-install.php`. Guarded: runs only on **PHP ≥ 8.2 and not in CI** (best-effort; never fails the root install).
@@ -161,22 +163,57 @@ The project uses WordPress's standard testing framework and includes:
 - `includes/helper-functions.php` - Global helper functions
 - `includes/CMB2_Field.php` - Field object and rendering logic
 
-## Testing Notes
+## Testing Strategy
 
-### PHPUnit Tests
-- WordPress test environment installs to `tests/tmp/wordpress/`
-- Test database is separate from development database
-- Some tests may require specific WordPress versions
-- Ajax and embed tests are excluded by default
+CMB2 has four test layers, each with its own CI workflow. The most important
+thing to internalize: **local and CI run PHPUnit on different runners**, so
+"passes locally" is necessary but not sufficient — CI exercises the full PHP
+version floor that local wp-env does not.
 
-### Playwright E2E Tests
-- Tests are located in `tests/playwright/`
-- Cross-browser testing: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
-- Visual regression testing with screenshot comparison
-- Authentication state is persisted across tests for better performance
-- Docker-free CI implementation eliminates previous reliability issues
-- Tests run in parallel for faster execution
-- Detailed reporting with traces, screenshots, and videos on failure
+| Layer | Tool | Scope | CI workflow | PHP |
+|---|---|---|---|---|
+| Unit + integration | PHPUnit | PHP logic, field/sanitize/REST behavior against a real WP | `phpunit.yml` | 7.4–8.3 matrix |
+| End-to-end + visual | Playwright | Admin-UI flows + screenshot regression in real browsers | `test.yml` | container (8.3) |
+| Coding standards | PHPCS (WPCS) | Style/sniffs — see [Code Quality](#code-quality) | `phpcs.yml` | 8.3 only |
+| PHP compatibility | PHPCompatibility | 7.4→latest syntax/API compat | `phpcompat.yml` | 8.x action |
+
+### PHPUnit — local vs CI (they differ)
+
+- **Local, recommended — `npm run phptests`:** runs phpunit inside the wp-env
+  `tests-cli` container. Self-starts the env (`wp-env start && …`), so a cold
+  checkout needs only Docker. Runs a **single** PHP (the container's, 8.3) vs WP
+  latest. Fast, but does **not** cover the version matrix.
+- **Local, bare — `vendor/bin/phpunit` / `composer test`:** phpunit on your host
+  with no WordPress set up. Needs a WP test suite (`install-wp-tests.sh`) + a
+  reachable MySQL and `WP_TESTS_DIR`. Only use if you've built that yourself.
+- **CI — `phpunit.yml` (the real matrix):** PHP `7.4, 8.0, 8.1, 8.2, 8.3` ×
+  WordPress `latest, 6.4, 6.3` (excluding 8.3+6.3, since WP 6.3 predates PHP 8.3),
+  via `install-wp-tests.sh` against a MySQL 5.7 service container. **This is what
+  guards the PHP 7.4 floor — local wp-env never sees it.** Coverage uploads to
+  Codecov on the 8.1 + WP-latest leg. Ajax/ms-files/external-http groups are
+  excluded by default.
+
+### wp-env (local PHPUnit + all Playwright)
+
+- **Ports are pinned in `.wp-env.json`:** dev **2622**, tests **2623** — chosen so
+  `wp-env start` never races for the common 8888/8889 defaults, which collide with
+  other local Docker/OrbStack services. Playwright's `WP_BASE_URL` and CI default
+  to `http://localhost:2623`. Don't reintroduce 8888/8889.
+- **`install-wp-tests.sh` host gotcha:** the DB-host arg matters. On a machine
+  running Docker/OrbStack, a container often squats TCP `127.0.0.1:3306`, so
+  passing `127.0.0.1` connects to the *wrong* MySQL and fails with
+  `Access denied for 'root'@'<docker-gateway-ip>'`. Use a socket-capable
+  `localhost`, or a MySQL on a non-3306 port. CI avoids this with a dedicated
+  MySQL service bound to 3306 in an isolated runner.
+
+### Playwright E2E
+
+- Tests in `tests/playwright/`; run via `npm run test:e2e` (plus `:ui`,
+  `:headed`, `:debug`, `:report`, and `test:visual` for screenshot regression).
+- Runs against wp-env (tests site on **2623**). Auth state is persisted across
+  tests for speed; tests run in parallel. Locally Playwright will start wp-env
+  itself; in CI (`test.yml`) the env is started first and Playwright runs chromium
+  with `SKIP_WP_SERVER=1`. Traces, screenshots, and videos are captured on failure.
 
 ## Releases
 
