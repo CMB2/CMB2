@@ -1,0 +1,1 @@
+{"id":"int-f6186c1fddd8774503e521dfa8b8670e","kind":"field_change","created_at":"2026-05-31T00:00:12.920701Z","actor":"Justin Sternberg","issue_id":"cmb2-g75","extra":{"field":"status","new_value":"closed","old_value":"open","reason":"Pinned wp-env to 2622/2623, updated all 8889 refs, self-starting phptests; verified cold start + 214 tests pass"}}
