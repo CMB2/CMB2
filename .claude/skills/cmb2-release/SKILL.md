@@ -223,7 +223,13 @@ Because wp.org reads this section from **`trunk/readme.txt`** to render the plug
 
 ### `README.md`
 
-Search for `$OLD` and bump references (badges, "current version" mentions).
+`README.md` carries the **same header block as `readme.txt`** (`Requires at least`, `Requires PHP`, `Tested up to`, `Stable tag`) plus badges. Keep it in sync with the `readme.txt` edits above — don't just `$OLD`-bump:
+
+- `**Tested up to:** <CURRENT_WP>` — match `readme.txt` (an `$OLD` search will *miss* this; it's the WP version, not the plugin version).
+- `**Stable tag:** $NEW`
+- Search for `$OLD` and bump any remaining references (badges, "current version" mentions).
+
+`README.md` has **no inline changelog** (it just links to `CHANGELOG.md`), so the 5,000-word trim above does not apply here.
 
 ### `css/*.css`
 
