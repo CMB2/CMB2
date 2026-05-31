@@ -152,7 +152,7 @@ FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 * Fixed row iterator value desync between the data attribute and jQuery data when reordering repeatable group rows. Props [@angryaxi](https://github.com/angryaxi) ([#1518](https://github.com/CMB2/CMB2/pull/1518)).
 * Fixed a PHP 8.3 `ltrim()` deprecation in the taxonomy field display.
 * Hardened against PHP 8.2+ dynamic property deprecations by widening `#[AllowDynamicProperties]` to the class roots.
-* Removed a focus-background rule on `.cmb2-wrap` inputs that caused unexpected input styling. Fixes [#1556](https://github.com/CMB2/CMB2/issues/1556) ([#1557](https://github.com/CMB2/CMB2/pull/1557)).
+* Removed a focus-background rule on `.cmb2-wrap` inputs that caused unexpected input styling. Fixes [#1556](https://github.com/CMB2/CMB2/issues/1556)/[wordpress.org/support/topic/weird-checkbox-behaviour-on-wp-7](https://wordpress.org/support/topic/weird-checkbox-behaviour-on-wp-7/) ([#1557](https://github.com/CMB2/CMB2/pull/1557)).
 
 ### 2.11.0
 
