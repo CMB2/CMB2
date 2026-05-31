@@ -72,7 +72,7 @@ module.exports = defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: process.env.SKIP_WP_SERVER ? undefined : {
-    command: process.env.CI ? 'echo "CI environment - server already running"' : 'npm run env:tests:start',
+    command: 'npm run env:tests:start',
     url: process.env.WP_BASE_URL || 'http://localhost:2623',
     reuseExistingServer: !process.env.CI,
     timeout: 180 * 1000,

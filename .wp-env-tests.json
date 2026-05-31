@@ -3,7 +3,8 @@
 	"plugins": ["."],
 	"testsEnvironment": false,
 	"config": {
-		"WP_DEBUG": false,
+		"WP_DEBUG": true,
+		"WP_DEBUG_DISPLAY": false,
 		"SCRIPT_DEBUG": false
 	},
 	"mappings": {
