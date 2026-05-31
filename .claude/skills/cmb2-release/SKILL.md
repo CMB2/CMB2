@@ -221,6 +221,22 @@ Nothing is lost — the complete history lives in `CHANGELOG.md` and GitHub Rele
 
 Because wp.org reads this section from **`trunk/readme.txt`** to render the plugin page, a trim only takes effect after the Step 5 SVN deploy — trimming `readme.txt` here in the version-bump commit is what gets it there.
 
+### `== Upgrade Notice ==` (usually nothing to do)
+
+`readme.txt` has **no `== Upgrade Notice ==` section** — it was removed deliberately. It had been misused as a second, stale copy of the changelog (wrong `### x.y.z` headings, full multi-bullet entries), so wp.org wasn't surfacing it as real upgrade notices anyway. **Default: leave it absent.** Most CMB2 releases don't need one.
+
+Only add it back for a release where users genuinely need a "update now" nudge (security fix, breaking change). When you do, follow the wp.org format exactly — it is **not** a changelog mirror:
+
+```
+== Upgrade Notice ==
+
+= $NEW =
+One or two sentences, ≤300 chars, on why to upgrade. No bullet lists.
+```
+
+- Version keys are `= x.y.z =` (single-equals), **not** `### x.y.z` — wp.org matches the notice to the offered version by parsing those keys, and shows it in the wp-admin update prompt.
+- Keep only the most recent one or two notices; this section is not a running history (that's the Changelog + `CHANGELOG.md`).
+
 ### `README.md`
 
 `README.md` carries the **same header block as `readme.txt`** (`Requires at least`, `Requires PHP`, `Tested up to`, `Stable tag`) plus badges. Keep it in sync with the `readme.txt` edits above — don't just `$OLD`-bump:
