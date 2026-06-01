@@ -143,6 +143,27 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 	}
 
 	/**
+	 * The field_id is reflected into the rel="" attribute of the remove-embed
+	 * link, so it must be escaped with esc_attr() to prevent it breaking out of
+	 * the attribute (XSS / WP Plugin Check violation).
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_get_oembed_escapes_field_id_in_rel_attribute() {
+		$args = $this->oembed_args;
+		$args['field_id'] = 'evil" onmouseover="alert(1)';
+		unset( $args['src'] );
+
+		$actual = cmb2_ajax()->get_oembed( $args );
+
+		// The attribute-breaking value must not be reflected verbatim.
+		$this->assertStringNotContainsString( 'rel="evil" onmouseover="alert(1)"', $actual );
+
+		// It must appear in its escaped form instead.
+		$this->assertStringContainsString( 'rel="' . esc_attr( $args['field_id'] ) . '"', $actual );
+	}
+
+	/**
 	 * @group cmb2-ajax-embed
 	 */
 	public function test_values_cached() {
