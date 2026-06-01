@@ -94,7 +94,7 @@ class CMB2_Ajax {
 			'object_id'   => $_REQUEST['object_id'],
 			'object_type' => isset( $_REQUEST['object_type'] ) ? $_REQUEST['object_type'] : 'post',
 			'oembed_args' => $embed_args,
-			'field_id'    => $_REQUEST['field_id'],
+			'field_id'    => isset( $_REQUEST['field_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['field_id'] ) ) : '',
 		) );
 
 		wp_send_json_success( $html );
@@ -178,7 +178,7 @@ class CMB2_Ajax {
 
 		// Send back our embed.
 		if ( $oembed['embed'] && $oembed['embed'] != $oembed['fallback'] ) {
-			return '<div class="cmb2-oembed embed-status">' . $oembed['embed'] . '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="' . $oembed['args']['field_id'] . '">' . esc_html__( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
+			return '<div class="cmb2-oembed embed-status">' . $oembed['embed'] . '<p class="cmb2-remove-wrapper"><a href="#" class="cmb2-remove-file-button" rel="' . esc_attr( $oembed['args']['field_id'] ) . '">' . esc_html__( 'Remove Embed', 'cmb2' ) . '</a></p></div>';
 		}
 
 		// Otherwise, send back error info that no oEmbeds were found.
