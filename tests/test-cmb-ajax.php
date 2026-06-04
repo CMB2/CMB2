@@ -201,6 +201,46 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 	}
 
 	/**
+	 * A field_id submitted as an array (?field_id[]=x) must be handled safely.
+	 * WordPress's sanitize_text_field() returns '' for array/object input (and
+	 * wp_unslash() is array-safe), so sanitize_text_field( wp_unslash( array ) )
+	 * yields '' with no PHP error — no is_string() guard is required. This locks
+	 * that behavior so the guard is not reintroduced on a false TypeError premise.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_handles_array_field_id() {
+		add_filter( 'wp_doing_ajax', '__return_true' );
+		add_filter( 'wp_die_ajax_handler', array( $this, 'throw_oembed_die_handler' ), 99 );
+
+		$_REQUEST['cmb2_ajax_nonce'] = wp_create_nonce( 'ajax_nonce' );
+		$_REQUEST['oembed_url']      = $this->oembed_args['url'];
+		$_REQUEST['object_id']       = 'options-page-id';
+		$_REQUEST['field_id']        = array( 'unexpected', 'array' ); // The odd input under test.
+
+		$reached_send_json = false;
+		$json              = '';
+
+		ob_start();
+		try {
+			cmb2_ajax()->oembed_handler();
+		} catch ( CMB2_Test_Oembed_Die $e ) {
+			$reached_send_json = true;
+			$json              = ob_get_contents();
+		} finally {
+			ob_end_clean();
+			unset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'], $_REQUEST['object_id'], $_REQUEST['field_id'] );
+		}
+
+		$this->assertTrue( $reached_send_json, 'oembed_handler() should handle an array field_id without a PHP error.' );
+
+		$decoded = json_decode( $json, true );
+		$this->assertTrue( ! empty( $decoded['success'] ), 'Handler should return a successful JSON response.' );
+		// The array field_id collapses to '' and is escaped into an empty rel attribute.
+		$this->assertStringContainsString( 'rel=""', $decoded['data'] );
+	}
+
+	/**
 	 * Returns a wp_die handler (for the wp_die_ajax_handler filter) that throws a
 	 * marker exception, letting the test observe that wp_die() was reached.
 	 */
