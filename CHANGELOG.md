@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-*
+
+### Bug Fixes
+
+* Sanitized the `field_id` input (with an `isset()` guard) and escaped the `rel` attribute in the oEmbed AJAX handler, addressing a reflected XSS vector flagged by WordPress Plugin Check. Props [@thisismyurl](https://github.com/thisismyurl) ([#1559](https://github.com/CMB2/CMB2/pull/1559)).
 
 ## [2.12.0 - 2026-05-30](https://github.com/CMB2/CMB2/releases/tag/v2.12.0)
 
