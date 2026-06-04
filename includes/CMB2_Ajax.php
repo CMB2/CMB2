@@ -91,7 +91,7 @@ class CMB2_Ajax {
 		// Get embed code (or fallback link).
 		$html = $this->get_oembed( array(
 			'url'         => $oembed_url,
-			'object_id'   => $_REQUEST['object_id'],
+			'object_id'   => isset( $_REQUEST['object_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['object_id'] ) ) : '',
 			'object_type' => isset( $_REQUEST['object_type'] ) ? $_REQUEST['object_type'] : 'post',
 			'oembed_args' => $embed_args,
 			'field_id'    => isset( $_REQUEST['field_id'] ) && is_string( $_REQUEST['field_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['field_id'] ) ) : '',

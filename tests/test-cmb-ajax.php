@@ -164,6 +164,53 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 	}
 
 	/**
+	 * oembed_handler() reads $_REQUEST['object_id'] directly. Without an isset()
+	 * guard, a request missing object_id emits an "Undefined array key" warning
+	 * (PHP 8+) — the same class of notice the field_id guard in this PR prevents.
+	 * The handler should reach wp_send_json_success() without a PHP warning.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_tolerates_missing_object_id() {
+		add_filter( 'wp_doing_ajax', '__return_true' );
+		add_filter( 'wp_die_ajax_handler', array( $this, 'throw_oembed_die_handler' ), 99 );
+
+		$_REQUEST['cmb2_ajax_nonce'] = wp_create_nonce( 'ajax_nonce' );
+		$_REQUEST['oembed_url']      = $this->oembed_args['url'];
+		$_REQUEST['field_id']        = 'test_embed';
+		unset( $_REQUEST['object_id'] ); // The param under test is intentionally absent.
+
+		$reached_send_json = false;
+		$json              = '';
+
+		ob_start();
+		try {
+			cmb2_ajax()->oembed_handler();
+		} catch ( CMB2_Test_Oembed_Die $e ) {
+			$reached_send_json = true;
+			$json              = ob_get_contents();
+		} finally {
+			ob_end_clean();
+			unset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'], $_REQUEST['field_id'] );
+		}
+
+		$this->assertTrue( $reached_send_json, 'oembed_handler() should reach wp_send_json_success() without a PHP warning when object_id is missing.' );
+
+		$decoded = json_decode( $json, true );
+		$this->assertTrue( ! empty( $decoded['success'] ), 'Handler should return a successful JSON response.' );
+	}
+
+	/**
+	 * Returns a wp_die handler (for the wp_die_ajax_handler filter) that throws a
+	 * marker exception, letting the test observe that wp_die() was reached.
+	 */
+	public function throw_oembed_die_handler() {
+		return function () {
+			throw new CMB2_Test_Oembed_Die();
+		};
+	}
+
+	/**
 	 * @group cmb2-ajax-embed
 	 */
 	public function test_values_cached() {
@@ -218,3 +265,9 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 	}
 
 }
+
+/**
+ * Marker exception thrown by the test's wp_die handler so a test can assert that
+ * the AJAX handler reached wp_send_json_*() (which terminates via wp_die()).
+ */
+class CMB2_Test_Oembed_Die extends \Exception {}
