@@ -62,7 +62,34 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 	public function tear_down() {
 		delete_option( $this->oembed_args['object_id'] );
 		remove_filter( 'pre_http_request', array( $this, 'mock_oembed_request' ), 10 );
+
+		// Reset the CMB2_Ajax singleton's per-request state so it does not leak
+		// into later tests/classes. get_oembed()/oembed_handler() set ajax_update,
+		// hijack, object_id/type and register the hijack_* metadata filters on the
+		// shared instance; left dirty, they can flip a later network-dependent
+		// oEmbed test onto its fallback path.
+		$this->reset_cmb2_ajax_state();
+
 		parent::tear_down();
+	}
+
+	/**
+	 * Clears the CMB2_Ajax singleton's mutable state and the metadata filters it
+	 * registers, restoring constructor defaults between tests.
+	 */
+	protected function reset_cmb2_ajax_state() {
+		$ajax = cmb2_ajax();
+
+		remove_filter( 'get_post_metadata', array( $ajax, 'hijack_oembed_cache_get' ), 10 );
+		remove_filter( 'update_post_metadata', array( $ajax, 'hijack_oembed_cache_set' ), 10 );
+
+		$reset = Closure::bind( function () {
+			$this->hijack      = false;
+			$this->object_id   = 0;
+			$this->object_type = 'post';
+			$this->ajax_update = false;
+		}, $ajax, CMB2_Ajax::class );
+		$reset();
 	}
 
 	/**
