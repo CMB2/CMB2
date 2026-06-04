@@ -68,7 +68,7 @@ class CMB2_Ajax {
 		}
 
 		// Sanitize our search string.
-		$oembed_string = sanitize_text_field( $_REQUEST['oembed_url'] );
+		$oembed_string = sanitize_text_field( wp_unslash( $_REQUEST['oembed_url'] ) );
 
 		// Send back error if empty.
 		if ( empty( $oembed_string ) ) {
