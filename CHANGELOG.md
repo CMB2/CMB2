@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Sanitized the `field_id` input (with an `isset()` guard) and escaped the `rel` attribute in the oEmbed AJAX handler, addressing a reflected XSS vector flagged by WordPress Plugin Check. Props [@thisismyurl](https://github.com/thisismyurl) ([#1559](https://github.com/CMB2/CMB2/pull/1559)).
-* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl) ([#1560](https://github.com/CMB2/CMB2/pull/1560)).
 
 ## [2.12.0 - 2026-05-30](https://github.com/CMB2/CMB2/releases/tag/v2.12.0)
 
