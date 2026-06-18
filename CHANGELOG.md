@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-*
+
+### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+
 
 ## [2.12.0 - 2026-05-30](https://github.com/CMB2/CMB2/releases/tag/v2.12.0)
 
@@ -14,6 +17,8 @@ All notable changes to this project will be documented in this file.
 * [Development] Replaced Travis CI with GitHub Actions, added a PHPCompatibility check (PHP 7.4+) and a PHPCS/WPCS lint gate, and overhauled `install-wp-tests.sh` for modern WordPress. ([#1555](https://github.com/CMB2/CMB2/pull/1555)).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed a PHP 8.1+ deprecation when sanitizing an empty `textarea`-based field (passing `null` to `wp_kses_post()`). Props [@baljindersingh88](https://github.com/baljindersingh88) ([#1537](https://github.com/CMB2/CMB2/pull/1537)).
 * Fixed row iterator value desync between the data attribute and jQuery data when reordering repeatable group rows. Props [@angryaxi](https://github.com/angryaxi) ([#1518](https://github.com/CMB2/CMB2/pull/1518)).
@@ -37,6 +42,8 @@ All notable changes to this project will be documented in this file.
 * [Development] Added a phpcompatibility action. Props [@jazzsequence](https://github.com/jazzsequence) ([#1499](https://github.com/CMB2/CMB2/pull/1499), [#1500](https://github.com/CMB2/CMB2/pull/1500)).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix some line-height issues with dashicon buttons. Fixes [#1443](
 * Fix issue where image can be attached to wrong group after removing previous group. ([#1473](https://github.com/CMB2/CMB2/pull/1473))
@@ -45,6 +52,8 @@ All notable changes to this project will be documented in this file.
 ## [2.10.1 - 2022-02-22](https://github.com/CMB2/CMB2/releases/tag/v2.10.1)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
 
 
@@ -57,6 +66,8 @@ All notable changes to this project will be documented in this file.
 * Updated various NPM dependencies for security issues.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Update to prevent deprecation notice:`Required parameter $i follows optional parameter $args...`. Props [@carloswph](https://github.com/carloswph) ([#1417](https://github.com/CMB2/CMB2/pull/1417)).
 * Make each date field more resilient to various date/timestamp values passed in (from REST API).
 
@@ -68,6 +79,8 @@ All notable changes to this project will be documented in this file.
 * Add to list of valid image types from `get_allowed_mime_types()`, which makes SVGs more reliable when using the [Safe SVG](https://wordpress.org/plugins/safe-svg/) plugin. Fixes [#1223](https://github.com/CMB2/CMB2/issues/1223).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Fixes PHP warnings on repeatable ColorPicker with an array as default. Props [@rubengc](https://github.com/rubengc) ([#1340](https://github.com/CMB2/CMB2/pull/1340)).
 * Address PHP 7.4, compatibility issues with `func_get_args()`. Fixes [#1389](https://github.com/CMB2/CMB2/issues/1389).
 * Better generated array key for cached fields, fixes issue where wrong field is found. Fixes [#14053](https://github.com/CMB2/CMB2/issues/14053).
@@ -80,6 +93,8 @@ All notable changes to this project will be documented in this file.
 * Add ability to define the page-registration admin menu hook priority for options pages. Fixes [#1380](https://github.com/CMB2/CMB2/issues/1380).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Ensure `enqueue wp-color-picker` is enqueued for color fields. Props [@rubengc](https://github.com/rubengc) ([#1339](https://github.com/CMB2/CMB2/pull/1339)).
 * Fix empty name/id attributes on `'file_list'` buttons. Props [@pgroot91](https://github.com/pgroot91) ([#1347](https://github.com/CMB2/CMB2/pull/1347)).
 * Fix `wysiwyg` field type not working in a group, by ensuring scripts properly enqueued. Props [@yoren](https://github.com/yoren) ([#1361](https://github.com/CMB2/CMB2/pull/1361)).
@@ -116,6 +131,8 @@ All notable changes to this project will be documented in this file.
 
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Fix some issues with Travis. Props [@anhskohbo](https://github.com/anhskohbo) ([#1220](https://github.com/CMB2/CMB2/pull/1220)).
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
 * Various code-formatting and code documentation improvements. Props [@tw2113](https://github.com/tw2113).
@@ -153,6 +170,8 @@ All notable changes to this project will be documented in this file.
 
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
 * Fix `rest_value_cb` registering of filter. Props [@lipemat](https://github.com/lipemat) ([#1212](https://github.com/CMB2/CMB2/pull/1212)).
 * Do not trigger tinyMCE editor save for the activeEditor. Prevents cursor jump in Gutenberg. Fixes [#1202](https://github.com/CMB2/CMB2/issues/1202)
@@ -163,6 +182,8 @@ All notable changes to this project will be documented in this file.
 ## [2.5.1 - 2018-12-10](https://github.com/CMB2/CMB2/releases/tag/v2.5.1)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Fix issue when the `core/editor` object does not exist (is undefined), causing incompatibility issues with Yoast and likely others. Fixes [#1197](https://github.com/CMB2/CMB2/issues/1197)
 
 ## [2.5.0 - 2018-12-08](https://github.com/CMB2/CMB2/releases/tag/v2.5.0)
@@ -179,6 +200,8 @@ All notable changes to this project will be documented in this file.
 * Add `CMB2_Field::get_rest_value()` method for sending value through several filters (`'cmb2_get_rest_value'`, `"cmb2_get_rest_value_{$field_type}"`, `"cmb2_get_rest_value_for_{$field_id}"` ) before sending to REST request.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix the options page errors when using CMB2 in WordPress prior to 4.7. Props [@manzoorwanijk](https://github.com/manzoorwanijk) ([#1166](https://github.com/CMB2/CMB2/pull/1166)).
 * Fix occasonal fatal errors that can occur by using callback functions directly vs `call_user_func`. Props [@manzoorwanijk](https://github.com/manzoorwanijk) ([#1177](https://github.com/CMB2/CMB2/pull/1177)).
@@ -188,6 +211,8 @@ All notable changes to this project will be documented in this file.
 ## [2.4.2 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.2)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Do not enqueue/register WordPress code editor JS if there are no `textarea_code` fields registered on the page. Fixes [#1110](https://github.com/CMB2/CMB2/issues/1110).
 * Do not set repeated `wysiwyg` field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138) (again!).
@@ -195,6 +220,8 @@ All notable changes to this project will be documented in this file.
 ## [2.4.1 - 2018-05-25](https://github.com/CMB2/CMB2/releases/tag/v2.4.1)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Do not set repeated field values to string "false" when boolean false. Fixes [#1138](https://github.com/CMB2/CMB2/issues/1138).
 
@@ -226,6 +253,8 @@ All notable changes to this project will be documented in this file.
 * New `CMB2_Boxes` methods for filtering instances of `CMB2`, `CMB2_Boxes::get_by( $property, $optional_compare )` and `CMB2_Boxes::filter_by( $property, $to_ignore = null )`.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix the `'taxonomy_*'` fields when used for term fields/meta. Save the value to term-meta.
 * Clear the CMB2 fields when a term is added. Fixes [#794](https://github.com/CMB2/CMB2/issues/794).
@@ -241,12 +270,16 @@ All notable changes to this project will be documented in this file.
 * Starting with this release, we are fully switching to the more communicative and standard [Semantic Versioning](https://semver.org/). ([#1061](https://github.com/CMB2/CMB2/issues/1061)).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Update for compatibility with PHP 7.2 (e.g. fixes `Fatal error: Declaration of CMB2_Type_Colorpicker::render() must be compatible with CMB2_Type_Text::render($args = Array)...`). ([#1070](https://github.com/CMB2/CMB2/issues/1070), [#1074](https://github.com/CMB2/CMB2/issues/1074), [#1075](https://github.com/CMB2/CMB2/issues/1075)).
 
 ## [2.2.6.2 - 2017-11-24](https://github.com/CMB2/CMB2/releases/tag/v2.2.6.2)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix another issue (introduced in 2.2.6) with repeatable fields not being able to save additional fields. Props [@anhskohbo](https://github.com/anhskohbo) ([#1059](https://github.com/CMB2/CMB2/pull/1059), [#1058](https://github.com/CMB2/CMB2/issues/1058)).
 * Only dequeue `jw-cmb2-rgba-picker-js` script (and enqueue our `wp-color-picker-alpha`) if it is actually found.
@@ -258,6 +291,8 @@ All notable changes to this project will be documented in this file.
 * Merge in the [CMB2 RGBa Colorpicker](https://github.com/JayWood/CMB2_RGBa_Picker) field type functionality to the CMB2 colopicker field type. Adds the ability to add an alpha (transparency) slider to the colorpicker by adding the `'alpha'` option [to the field options array](https://github.com/CMB2/CMB2/blob/6fce2e7ba8f41345a23bc2064e30433bdb11c16c/example-functions.php#L263-L265). Thank you to [JayWood](https://github.com/JayWood) for his work on his custom field type.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue (introduced in 2.2.6) with complex fields set as repeatable not being able to save additional fields. Fixes [#1054](https://github.com/CMB2/CMB2/issues/1054).
 
@@ -275,6 +310,8 @@ All notable changes to this project will be documented in this file.
 * Updated travis config to Install PHP5.2/5.3 on trusty for unit tests. Stolen from [gutenberg/pull/2049](https://github.com/WordPress/gutenberg/pull/2049). Intended to compensate for Travis removing support for PHP 5.2/5.3.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Ensure `'file'` field type ID is removed from the database if the `'file'` field type's value is empty ([Support thread](https://wordpress.org/support/topic/bug-field-of-type-file-does-not-delete-postmeta-properly/)).
 * Fix JS errors when `user_can_richedit()` is false ("Disable the visual editor when writing" user option is checked, or various unsupported browsers). See [#1031](https://github.com/CMB2/CMB2/pull/1031).
@@ -291,6 +328,8 @@ All notable changes to this project will be documented in this file.
 * Update to instead initate CMB2 hookup via `"cmb2_init_hookup_{$cmb_id}"` hook. Allows plugins to unhook/rehook/etc.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Spelling/Grammar fixes. Props [@garrett-eclipse](https://github.com/garrett-eclipse) ([#1012](https://github.com/CMB2/CMB2/pull/1012)).
 * Fix "PHP Strict Standards: Static function should not be abstract" notice.
@@ -303,6 +342,8 @@ All notable changes to this project will be documented in this file.
 ## [2.2.5.2 - 2017-08-08](https://github.com/CMB2/CMB2/releases/tag/v2.2.5.2)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue in 2.2.5 with non-sortable repeatable groups not having new groups values be emptied on creation/clone. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/page/2/)
 * Fix issue in 2.2.5 with options pages not saving when `'parent_slug'` box property was used. Fixes [#1008](https://github.com/CMB2/CMB2/issues/1008).
@@ -310,6 +351,8 @@ All notable changes to this project will be documented in this file.
 ## [2.2.5.1 - 2017-08-07](https://github.com/CMB2/CMB2/releases/tag/v2.2.5.1)
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue in 2.2.5 which caused empty repeatable groups having the buttons set to have a disabled "Remove Group" button. [Support thread](https://wordpress.org/support/topic/the-default-parameter-dont-work-in-group-fields/)
 
@@ -347,6 +390,8 @@ All notable changes to this project will be documented in this file.
 	* `CMB2::add_fields()`
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Update for `file`/`file_list` fields to properly show a preview for SVG images. Fixes [#874](https://github.com/CMB2/CMB2/pull/874).
 * Fix and standardize inconsistent button classes. Update all buttons to use the `.button-secondary` class instead of the `.button` class. This alleviates some front-end issues for themes which target the `.button` class. _This is a backwards-compatibility break._ If your theme or plugin targets the `.button` class within CMB2, you will need to update to use `.button-secondary`.
@@ -388,6 +433,8 @@ All notable changes to this project will be documented in this file.
 * New `CMB2_Utils` methods, `get_available_image_sizes()` and `get_named_size()`. Props [@Cai333](https://github.com/Cai333).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix datepicker month/year dropdown text color. On windows, the option text was showing as white (invisible). Fixes [#770](https://github.com/CMB2/CMB2/issues/770).
 * Repeatable WYSIWYG no longer breaks if `'quicktags'` param is set to false. Props [@timburden](https://github.com/timburden) ([#797](https://github.com/CMB2/CMB2/pull/797), [#796](https://github.com/CMB2/CMB2/issues/796)).
@@ -409,6 +456,8 @@ All notable changes to this project will be documented in this file.
 * Better styling for disabled group "X" buttons, and add title attr. Fixes [#773](https://github.com/CMB2/CMB2/issues/773).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Use quotes for `label[for=""]` selector. Fixed `Syntax error, unrecognized expression`. Props [@anhskohbo](https://github.com/anhskohbo) ([#789](https://github.com/CMB2/CMB2/pull/789)).
 * Fix `ReferenceError: tinyMCE is not defined` javascript errors (happening when trying to remove a repeatable field/group). Fixes [#790](https://github.com/CMB2/CMB2/issues/790), and [#730](https://github.com/CMB2/CMB2/issues/730).
@@ -446,6 +495,8 @@ All notable changes to this project will be documented in this file.
 ```
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * If custom field types use a method and the Type object has not been instantiated, Try to guess the Type object and instantiate.
 * Normalize WordPress root path (`ABSPATH`) and theme rooth path (`get_theme_root()`). Props [@rianbotha](https://github.com/rianbotha) ([#677](https://github.com/CMB2/CMB2/pull/677), [#676](https://github.com/CMB2/CMB2/pull/676)).
@@ -455,6 +506,8 @@ All notable changes to this project will be documented in this file.
 ## 2.2.2.1 - 2016-06-27
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue that kept CMB2 stylesheet from being enqueued when using the [options-page snippets](https://github.com/CMB2/CMB2-Snippet-Library/tree/master/options-and-settings-pages).
 * Fix issue which caused the CMB2 column display styles to be enqueued in the wrong pages. Now only enqueues on admin pages with columns.
@@ -480,6 +533,8 @@ All notable changes to this project will be documented in this file.
 * Add a `cmb_pre_init` Javascript event to allow overriding CMB2 defaults via JS.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Fix issue with 'default' callback not being applied in all instances. Introduced new `CMB2_Field::get_default()` method, and `'default_cb'` field parameter. Using the `'default'` field parameter with a callback will be deprecated in the next few releases. ([#572](https://github.com/CMB2/CMB2/issues/572)).
 * Be sure to call `CMB2_Field::row_classes()` for group field rows. Also, update CSS to use the "cmb-type-group" classname instead of "cmb-repeat-group-wrap".
 * Introduce new `'text'` and `'text_cb'` field parameters for overriding CMB2 text strings instead of using the `'options'` array. ([#630](https://github.com/CMB2/CMB2/pull/630))
@@ -491,6 +546,8 @@ All notable changes to this project will be documented in this file.
 ## 2.2.1 - 2016-02-29
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixes back-compatibility issue which could allow multiple CMB2 instances to load (causing fatal errors). ([#520](https://github.com/CMB2/CMB2/pull/520))
 
@@ -509,6 +566,8 @@ All notable changes to this project will be documented in this file.
 * Include `.gitattributes` file for excluding development resources when using Composer. Props [@benoitchantre](https://github.com/benoitchantre) ([#575](https://github.com/CMB2/CMB2/pull/575), [#53](https://github.com/CMB2/CMB2/pull/53)).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed issue with `'taxonomy_select'` field type where a term which evaluated falsey would not be displayed properly. Props [adamcapriola](https://github.com/adamcapriola) ([#477](https://github.com/CMB2/CMB2/pull/477)).
 * Fix issue with colorpickers not changing when sorting groups.
@@ -521,6 +580,8 @@ All notable changes to this project will be documented in this file.
 ## 2.1.2 - 2015-10-01
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixes back-compatibility issue when adding fields array to the metabox registration. ([#472](https://github.com/CMB2/CMB2/pull/472))
 
@@ -539,6 +600,8 @@ All notable changes to this project will be documented in this file.
 * `cmb2_get_option` now takes a default fallback value as a third parameter.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Address issue where `'file'` and `'file_list'` field results were getting mixed. Props [augustuswm](https://github.com/augustuswm) ([#382](https://github.com/CMB2/CMB2/pull/382), [#250](https://github.com/CMB2/CMB2/pull/250), [#296](https://github.com/CMB2/CMB2/pull/296)).
 * Fix long-standing issues with radio and multicheck fields in repeatable groups losing their values when new rows are added. ([#341](https://github.com/CMB2/CMB2/pull/341), [#304](https://github.com/CMB2/CMB2/pull/304), [#263](https://github.com/CMB2/CMB2/pull/263), [#246](https://github.com/CMB2/CMB2/pull/246), [#150](https://github.com/CMB2/CMB2/pull/150))
@@ -551,6 +614,8 @@ All notable changes to this project will be documented in this file.
 ## 2.1.0 - 2015-08-05
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix user fields not saving. Props [achavez](https://github.com/achavez), ([#417](https://github.com/CMB2/CMB2/pull/417)).
 
@@ -566,6 +631,8 @@ All notable changes to this project will be documented in this file.
 * New `"cmb2_{$field_id}_is_valid_img_ext"`` filter for determining if a field value has a valid image file-type extension.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * `'multicheck_inline'`, `'taxonomy_radio_inline'`, and `'taxonomy_multicheck_inline'` field types were not outputting anything since it's value was not being returned. Props [ediamin](https://github.com/ediamin), ([#367](https://github.com/CMB2/CMB2/pull/367), ([#405](https://github.com/CMB2/CMB2/pull/405)).
 * `'hidden'` type fields were not honoring the `'show_on_cb'` callback. Props [JPry](https://github.com/JPry), ([commits](https://github.com/CMB2/CMB2/compare/5a4146eec546089fbe1a1c859d680dfda3a86ee2...1ef5ef1e3b2260ab381090c4abe9dc7234cfa0a6)).
@@ -578,6 +645,8 @@ All notable changes to this project will be documented in this file.
 ## 2.0.8 - 2015-06-01
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix color-picker field not enqueueing the colorpicker script. ([#333](https://github.com/CMB2/CMB2/issues/333))
 
@@ -594,6 +663,8 @@ All notable changes to this project will be documented in this file.
 * German translation provided by Friedhelm Jost.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix incorrect repeatable group title number. ([#310](https://github.com/CMB2/CMB2/pull/310))
 * Fix obscure bug which prevented group field arguments from being passed to the sub-fields (like `show_names` and `context`).
@@ -617,6 +688,8 @@ All notable changes to this project will be documented in this file.
 	* an `'enqueue_js'` parameter to explicitly disable the CMB JS enqueue. This is handy if you're not planning on using any of the fields which require JS (like color/date pickers, wysiwyg, file, etc).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue with oembed fields in repeatable groups where changing video changed it for all fields in a group.
 * Fix empty arrays (like in the group field) saving as a value.
@@ -631,6 +704,8 @@ All notable changes to this project will be documented in this file.
 ## 2.0.5 - 2015-03-17
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix grouped fields display (first field was being repeated), broken in 2.0.3.
 
@@ -641,6 +716,8 @@ All notable changes to this project will be documented in this file.
 * `select`, `radio`, `radio_inline` field types now all accept the `'show_option_none'` field parameter. This parameter allows you to set the text to display for showing a 'no selection' option. Default will be `false`, which means a 'none' option will not be added. Set to `true` to use the default text, 'None', or specify another value, i.e. 'No selection'.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix back-compatibility when adding group field sub-fields via old array method (vs using the `CMB2:add_group_field()` method). Thanks to [norcross](https://github.com/norcross) for reporting.
 * Fix occasional jQuery issues with group-field indexes.
@@ -659,6 +736,8 @@ All notable changes to this project will be documented in this file.
 * New `'save_fields'` metabox parameter that can be used to disable (by setting `'save_fields' => false`) the automatic saving of the fields when the form is submitted. These can be useful when you want to handle the saving of the fields yourself, or want to use submitted data for other purposes like generating new posts, or sending emails, etc.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix commented out text_datetime_timestamp_timezone field registration example in `example-functions.php`. Props [cliffordp](https://github.com/cliffordp), ([#203](https://github.com/CMB2/CMB2/pull/203)).
 * Fix sidebar styling for money fields and fields with textareas. ([#234](https://github.com/CMB2/CMB2/issues/234))
@@ -714,6 +793,8 @@ All notable changes to this project will be documented in this file.
 * New hooks, [`cmb2_init`](https://github.com/CMB2/CMB2/wiki/Tips-&-Tricks#using-cmb2-helper-functions-and-cmb2_init) and `cmb2_init_{$cmb_id}`.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * New mechanism to ensure CMB2 only loads the most recent version of CMB2 in your system. This fixes the issue where another bundled version could conflict or take precendent over your up-to-date version.
 * Fix issue with field labels being hidden. Props [mustardBees](https://github.com/mustardBees), ([#48](https://github.com/CMB2/CMB2/pull/48)).
@@ -735,6 +816,8 @@ All notable changes to this project will be documented in this file.
 * Make the list items in the `file_list` field type drag & drop sortable. Props [twoelevenjay](https://github.com/twoelevenjay), ([#603](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/603)).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed typo in closing `</th>` tag. Props [@CivicImages](https://github.com/CivicImages). ([#616](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/616))
 
@@ -750,6 +833,8 @@ All notable changes to this project will be documented in this file.
 * Unit testing (the beginning). Props [@brichards](https://github.com/brichards) and [@camdensegal](https://github.com/camdensegal).
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed issue where remove file button wouldn't clear the url field. ([#514](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/514))
 * `wysiwyg` fields now allow underscores. Fixes some wysiwyg display issues in WordPress 3.8. Props [@lswilson](https://github.com/lswilson). ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/491))
@@ -763,6 +848,8 @@ All notable changes to this project will be documented in this file.
 ## 1.1.3 - 2014-04-07
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
 * Fix repeating fields not working correctly if meta key or prefix contained an integer. ([#503](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/503))
@@ -770,6 +857,8 @@ All notable changes to this project will be documented in this file.
 ## 1.1.2 - 2014-04-05
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`. ([#502](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/502))
 
@@ -777,6 +866,8 @@ All notable changes to this project will be documented in this file.
 ## 1.1.1 - 2014-04-03
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Radio button values were not showing saved value. ([#500](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/500))
 
@@ -797,6 +888,8 @@ All notable changes to this project will be documented in this file.
 * New filter, `cmb_localized_data`, for modifiying localized data passed to the CMB JS.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 * Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees), ([#486](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/486))
 
 
@@ -813,6 +906,8 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * Use `get_the_terms` where possible since the data is cached.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby), ([#465](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/465))
 * Replaced `__DIR__`, as `dirname( __FILE__ )` is easier to maintain back-compatibility.
@@ -835,6 +930,8 @@ It is now passed a null value vs saved value. If null is returned, default sanit
 * New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
 
 ### Bug Fixes
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
+* Escaped `$this->cmb->cmb_id` in the options page form `id` attribute (`CMB2_Options_Hookup::options_page_output()`) and `$table_id` in the repeatable field wrapper `id` and `data-selector` attributes (`CMB2_Types::render_repeatable_field()`) with `esc_attr()`. Props [@thisismyurl](https://github.com/thisismyurl).
 
 * Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos), ([#391](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/391))
 * A few php < 5.3 errors were addressed.
