@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 * Fix issue with date picker formatting. Fixes [#1448](https://github.com/CMB2/CMB2/issues/1448).
 
+
 ## [2.10.0 - 2022-02-15](https://github.com/CMB2/CMB2/releases/tag/v2.10.0)
 
 ### Enhancements
@@ -117,6 +118,7 @@ All notable changes to this project will be documented in this file.
 * Added `CMB2_Utils::concat_attrs()` test for nested arrays as data attributes.
 * Various updates per [VIP feedback](https://github.com/CMB2/CMB2/issues/1260). Props [@kevinlangleyjr](https://github.com/kevinlangleyjr), [@mikeselander](https://github.com/mikeselander) ([#1255](https://github.com/CMB2/CMB2/pull/1255), [#1257](https://github.com/CMB2/CMB2/pull/1257), [#1259](https://github.com/CMB2/CMB2/pull/1259),  [#1261](https://github.com/CMB2/CMB2/pull/1261) [#1262](https://github.com/CMB2/CMB2/pull/1262), and various direct commits. See [#1260](https://github.com/CMB2/CMB2/issues/1260)).
 
+
 ### Bug Fixes
 * Fix some issues with Travis. Props [@anhskohbo](https://github.com/anhskohbo) ([#1220](https://github.com/CMB2/CMB2/pull/1220)).
 * Javascript: Correctly pass the newly created row to the `cmb2_add_row` triggered event.
@@ -140,6 +142,7 @@ All notable changes to this project will be documented in this file.
 * Use `get_user_locale()` in admin area instead of `get_locale()`. Fixes [#1267](https://github.com/CMB2/CMB2/issues/1267).
 * `CMB2::is_box_type()` now also checks for taxonomies if box is registered to "term" object type. This should fix some issues where CMB2 term meta was not showing up in REST API requests to the term endpoints.
 
+
 ## [2.6.0 - 2019-01-18](https://github.com/CMB2/CMB2/releases/tag/v2.6.0)
 
 ### Enhancements
@@ -151,6 +154,7 @@ All notable changes to this project will be documented in this file.
 * Make `CMB2_Option` properties accessible. ([#1052](https://github.com/CMB2/CMB2/issues/1052))
 * New Before/After row hooks: `'cmb2_before_field_row'`, `"cmb2_before_{$field_type}_field_row"`, `"cmb2_after_{$field_type}_field_row"`, `'cmb2_after_field_row'`. Props [@rubengc](https://github.com/rubengc) ([#953](https://github.com/CMB2/CMB2/pull/953)).
 * Introduce three new filters to filter field arguments: `'cmb2_field_defaults'`, `'cmb2_field_arguments_raw'`, `'cmb2_field_arguments'`. Props [@jrfnl](https://github.com/jrfnl) ([#588](https://github.com/CMB2/CMB2/pull/588)).
+
 
 ### Bug Fixes
 * Remove superfluous method definitions. Props [@tnorthcutt](https://github.com/tnorthcutt) ([#1200](https://github.com/CMB2/CMB2/pull/1200)).
@@ -627,6 +631,7 @@ All notable changes to this project will be documented in this file.
 	* @type bool   $repeat   Whether current field is repeatable
 	* @type bool   $single   Whether current field is a single database row
 
+
 ## 2.0.5 - 2015-03-17
 
 ### Bug Fixes
@@ -675,6 +680,7 @@ All notable changes to this project will be documented in this file.
 * New CMB2 method, [`CMB2::remove_field()`](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_%24cmb_id-remove-field.php).
 * New CMB2_Boxes method, [`CMB2_Boxes::remove()`](https://github.com/CMB2/CMB2-Snippet-Library/blob/master/filters-and-actions/cmb2_init_before_hookup-remove-cmb2-metabox.php).
 * When clicking on a file/image in the `file`, or `file_list` type, the media modal will open with that image selected. Props [johnsonpaul1014](https://github.com/johnsonpaul1014), ([#120](https://github.com/CMB2/CMB2/pull/120)).
+
 
 ## 2.0.1 - 2015-02-02
 
@@ -756,6 +762,8 @@ All notable changes to this project will be documented in this file.
 * Fixed error: 'Uninitialized string offset: 0 in cmb_Meta_Box_field.php...`. Props [@DevinWalker](https://github.com/DevinWalker). ([#539](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/539), [#549](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/549)))
 * Fix missing `file` field description. ([#543](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/543), [#547](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/547))
 
+
+
 ## 1.1.3 - 2014-04-07
 
 ### Bug Fixes
@@ -768,6 +776,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 * Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`. ([#502](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/502))
+
 
 ## 1.1.1 - 2014-04-03
 
@@ -793,6 +802,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 * Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees), ([#486](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/486))
+
 
 ## 1.0.2 - 2014-03-03
 

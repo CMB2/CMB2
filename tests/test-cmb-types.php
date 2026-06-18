@@ -115,8 +115,6 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertStringNotContainsString( 'id="field"xss_repeat"', $html );
 	}
 
-
-
 	public function test_field_options_cb() {
 		$cmb   = new CMB2( $this->options_cb_test );
 		$field = cmb2_get_field( $this->options_cb_test['id'], 'options_cb_test_field', $this->post_id );
