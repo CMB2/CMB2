@@ -84,6 +84,39 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	/**
+	 * Verifies that the repeatable-field wrapper's id and data-selector attributes
+	 * are passed through esc_attr() before output.
+	 *
+	 * Without esc_attr(), a field id containing a double-quote would break the HTML
+	 * attribute boundary in the rendered wrapper, producing malformed markup.
+	 *
+	 * @see CMB2_Types::render_repeatable_field()
+	 */
+	public function test_repeatable_field_id_attribute_is_escaped() {
+		$this->field_test['fields'][0]['repeatable'] = true;
+		$cmb   = new CMB2( $this->field_test );
+		$field = cmb2_get_field( $this->field_test['id'], $this->field_test['fields'][0]['id'], $this->post_id );
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+
+		// Override the field id to include a double-quote — esc_attr() encodes it as &quot;.
+		// Without esc_attr() in render_repeatable_field() this would appear raw in the
+		// id/data-selector attribute value and break the HTML attribute boundary.
+		$field->args['id'] = 'field"xss';
+
+		$html             = $this->render_field( $field );
+		$escaped_table_id = esc_attr( 'field"xss_repeat' );  // 'field&quot;xss_repeat'
+
+		// The wrapper id attribute must contain the esc_attr()-encoded value.
+		$this->assertStringContainsString( 'id="' . $escaped_table_id . '"', $html );
+		// The add-row button's data-selector must also use the escaped value.
+		$this->assertStringContainsString( 'data-selector="' . $escaped_table_id . '"', $html );
+		// The raw double-quote MUST NOT appear unescaped inside the attribute value.
+		$this->assertStringNotContainsString( 'id="field"xss_repeat"', $html );
+	}
+
+
+
 	public function test_field_options_cb() {
 		$cmb   = new CMB2( $this->options_cb_test );
 		$field = cmb2_get_field( $this->options_cb_test['id'], 'options_cb_test_field', $this->post_id );
