@@ -335,13 +335,13 @@ class CMB2_Types {
 		$this->_desc( true, true, true );
 		?>
 
-		<div id="<?php echo $table_id; ?>" class="cmb-repeat-table cmb-nested">
+		<div id="<?php echo esc_attr( $table_id ); ?>" class="cmb-repeat-table cmb-nested">
 			<div class="cmb-tbody cmb-field-list">
 				<?php $this->repeatable_rows(); ?>
 			</div>
 		</div>
 		<p class="cmb-add-row">
-			<button type="button" data-selector="<?php echo $table_id; ?>" class="cmb-add-row-button button-secondary"><?php echo esc_html( $this->_text( 'add_row_text', esc_html__( 'Add Row', 'cmb2' ) ) ); ?></button>
+			<button type="button" data-selector="<?php echo esc_attr( $table_id ); ?>" class="cmb-add-row-button button-secondary"><?php echo esc_html( $this->_text( 'add_row_text', esc_html__( 'Add Row', 'cmb2' ) ) ); ?></button>
 		</p>
 
 		<?php
