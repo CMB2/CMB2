@@ -124,7 +124,7 @@ npm run build:css:minify    # Generate .min.css files
 npm run build:js
 
 # Individual JS steps
-npm run build:js:lint       # JSHint
+npm run build:js:lint       # ESLint
 npm run build:js:minify     # Concatenate + minify → cmb2.min.js
 ```
 

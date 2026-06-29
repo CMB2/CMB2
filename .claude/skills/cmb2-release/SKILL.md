@@ -93,7 +93,7 @@ npm install
 composer install
 vendor/bin/phpunit                # or: npm run phptests
 vendor/bin/phpcs                  # PHPCS clean
-npm run build:js:lint             # JSHint clean
+npm run build:js:lint             # ESLint clean
 npm run build                     # CSS+JS build succeeds
 ```
 

@@ -47,7 +47,7 @@ Run individual build tasks as needed:
 
 ### Code Quality
 - PHP follows WordPress Coding Standards (see `.phpcs.xml.dist`)
-- JavaScript linting via JSHint (configured in `.jshintrc`)
+- JavaScript linting via ESLint (configured in `eslint.config.mjs`)
 - **KNOWN ISSUE**: `phpcs` not available by default - install via Composer if needed
 - Always run `npm run build:js:lint` before committing changes
 
@@ -69,7 +69,7 @@ CMB2/
 ├── example-functions.php  # Usage examples
 ├── package.json          # NPM dependencies and build scripts
 ├── composer.json         # PHP dependencies
-└── .jshintrc             # JSHint configuration
+└── eslint.config.mjs     # ESLint configuration
 ```
 
 ### Key Files to Understand
