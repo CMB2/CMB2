@@ -20,15 +20,25 @@ The exclude list matters — wp.org rejects oversized plugins and exposes anythi
 rsync -av --delete \
   --exclude='.git' --exclude='.github' --exclude='.gitignore' \
   --exclude='.gitattributes' --exclude='.editorconfig' \
+  --exclude='.travis.yml' --exclude='.scrutinizer.yml' \
   --exclude='node_modules' --exclude='vendor' \
   --exclude='tests' --exclude='phpunit.xml.dist' --exclude='.phpcs.xml.dist' \
   --exclude='package.json' --exclude='package-lock.json' --exclude='composer.json' --exclude='composer.lock' \
-  --exclude='Gruntfile.js' --exclude='scripts' \
+  --exclude='Gruntfile.js' --exclude='scripts' --exclude='tools' \
+  --exclude='eslint.config.mjs' --exclude='playwright.config.js' \
+  --exclude='.wp-env.json' --exclude='.wp-env-tests.json' \
+  --exclude='apigen' --exclude='Dockunit.json' --exclude='cypress.json' \
   --exclude='*.scss' --exclude='css/sass' \
   --exclude='CLAUDE.md' --exclude='.claude' --exclude='.beads' \
+  --exclude='AGENTS.md' --exclude='.agents' --exclude='.codex' \
   --exclude='.cursorrules' --exclude='.copilot' \
   ./ "$SVN/trunk/"
 ```
+
+This list and the `export-ignore` attributes in the repo-root `.gitattributes`
+must stay in lock-step — the former governs the wp.org SVN deploy, the latter
+governs `git archive` / GitHub release source zips. When you add a dev/tooling
+file or directory to the repo, add it to **both**.
 
 ## 3. Stage adds/removes and tag-copy
 
