@@ -26,6 +26,7 @@ allowed-tools:
   - Bash(git rev-parse*)
   - Bash(gh run*)
   - Bash(gh release*)
+  - Bash(gh workflow*)
   - Bash(npm install*)
   - Bash(npm run*)
   - Bash(composer install*)
@@ -62,8 +63,8 @@ Track progress with TodoWrite (one todo per top-level step). The release has har
 A few things are non-obvious and easy to get wrong:
 
 - **`CMB2_Bootstrap_XXXX` class name** in `init.php` encodes the version (e.g. `CMB2_Bootstrap_2110` for 2.11.0, derived by stripping dots). It's how multiple bundled copies of CMB2 in different plugins/themes negotiate which one wins. If you forget to rename it, two copies of the new version will collide instead of deduping.
-- **`_Develop` suffix on the bootstrap class** between releases. Develop branch always carries `CMB2_Bootstrap_<NEXT>_Develop` — a distinct class name from any released `CMB2_Bootstrap_<N>` so the two can coexist when both are bundled in different plugins/themes. The release flips `_Develop` off; the post-release bump (Step 8) flips it back on for the *next* planned version. (See the PRIORITY note below for the load-order trade-off.)
-- **`const PRIORITY` decrements by 1 each release** (9958 → 9957 → 9956…). Newer versions need to load *before* older ones (lower priority = earlier hook) so the bootstrap can pick the highest version. The decrement happens in the release commit (Step 1). The post-release develop bump (Step 8) does *not* touch PRIORITY — develop ends up at the same priority as the just-released version, and a plugin embedding develop CMB2 alongside another plugin embedding the released CMB2 will tie-break by plugin load order. This is a known trade-off matching 5 of the last 7 CMB2 releases; if it ever becomes a real problem, decrement PRIORITY in Step 8 too.
+- **`_Develop` suffix on the bootstrap class** between releases. Develop branch always carries `CMB2_Bootstrap_<NEXT>_Develop` — a distinct class name from any released `CMB2_Bootstrap_<N>` so the two can coexist when both are bundled in different plugins/themes. The release flips `_Develop` off; the post-release bump (Step 9) flips it back on for the *next* planned version. (See the PRIORITY note below for the load-order trade-off.)
+- **`const PRIORITY` decrements by 1 each release** (9958 → 9957 → 9956…). Newer versions need to load *before* older ones (lower priority = earlier hook) so the bootstrap can pick the highest version. The decrement happens in the release commit (Step 1). The post-release develop bump (Step 9) does *not* touch PRIORITY — develop ends up at the same priority as the just-released version, and a plugin embedding develop CMB2 alongside another plugin embedding the released CMB2 will tie-break by plugin load order. This is a known trade-off matching 5 of the last 7 CMB2 releases; if it ever becomes a real problem, decrement PRIORITY in Step 9 too.
 - **`{{next}}` placeholder** is sprinkled in `@since` docblocks during development so contributors don't have to guess the next version. The release is the moment those get resolved. If you ship with `{{next}}` still in the source, IDEs and docs tools will show literal `{{next}}` to users.
 - **No wp.org automation exists.** GitHub tags do not deploy. You must SVN by hand or the wp.org listing will silently stay on the old version while GitHub shows the new one — confusing for users.
 
@@ -330,7 +331,17 @@ gh release view "v$NEW" --web   # eyeball it
 
 The wiki (`wiki-cmb2/Notable-Changes-in-CMB2.md`) is not auto-updated — update by hand if the release introduces user-facing changes worth highlighting.
 
-## Step 7 — Verify the plane has landed
+## Step 7 — Refresh cmb2.io docs
+
+cmb2.io is a static [VitePress](https://vitepress.dev/) site built from the **CMB2/Wiki** repo. Its index, changelog, and contributing pages are pulled from **this** repo's `README.md`, `CHANGELOG.md`, and `CONTRIBUTING.md` — they do **not** update on the live docs site on their own. Trigger the "Refresh upstream docs" workflow in CMB2/Wiki, which re-fetches those three files from `CMB2/CMB2@develop`, re-applies the build-safe transforms, commits, and auto-deploys cmb2.io:
+
+```bash
+gh workflow run refresh-upstream.yml -R CMB2/Wiki
+```
+
+This keeps cmb2.io's README/changelog/contributing in sync with the release. The workflow reads from `develop`, so it only reflects the release once Step 4 has pushed the version-bump commit (by the time the GitHub release in Step 6 is published, everything user-facing is final). Requires `gh` to be authenticated with access to the **CMB2/Wiki** repo; the dispatch is fire-and-forget — watch it with `gh run list -R CMB2/Wiki --workflow=refresh-upstream.yml` if you want to confirm the deploy.
+
+## Step 8 — Verify the plane has landed
 
 ```bash
 git fetch origin
@@ -347,7 +358,7 @@ curl -sI "https://downloads.wordpress.org/plugin/cmb2.$NEW.zip" | head -1   # 20
 
 If any of those fail, the release isn't done.
 
-## Step 8 — Post-release develop bump
+## Step 9 — Post-release develop bump
 
 Once the release is shipped, `develop` needs to be re-flagged for the next version. The pattern (used since 2.8.0): one commit on `develop` titled exactly **`Add develop suffix to init class`** that touches `init.php` only and renames the bootstrap class from `CMB2_Bootstrap_$NEWBOOT` → `CMB2_Bootstrap_<NEXT>_Develop`.
 
@@ -389,4 +400,4 @@ These aren't blockers but are worth raising with the user once shipped:
 2. **No release script.** Steps 1–4 are mechanical and could be a `bin/release.sh`. The bootstrap class rename + priority decrement are the only non-trivial parts.
 3. **`{{next}}` is fragile.** If a contributor writes `@since 2.12.0` directly in a PR before 2.12.0 is cut, the placeholder grep won't catch it. A pre-release `bd preflight` check could grep for `@since` referencing unreleased versions.
 
-Mention these once after Step 7 verification completes.
+Mention these once after Step 8 verification completes.
