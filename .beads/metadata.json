@@ -1,8 +1,6 @@
 {
   "database": "dolt",
   "backend": "dolt",
-  "dolt_mode": "server",
-  "dolt_server_port": 3308,
-  "dolt_database": "beads_cmb2",
-  "project_id": "0ab5e157-ff0a-4c5d-8948-2d6166a6d85b"
+  "dolt_mode": "embedded",
+  "dolt_database": "cmb2"
 }
