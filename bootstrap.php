@@ -24,6 +24,11 @@ function cmb2_bootstrap() {
 		 * In most cases, this should be used to add metaboxes. See example-functions.php
 		 */
 		do_action( 'cmb2_admin_init' );
+
+		// Inform site owners about the upcoming alignment of options-page REST
+		// read permissions with WordPress core conventions. Hooks admin_notices
+		// (fires after all boxes are registered) and its dismissal AJAX handler.
+		CMB2_Rest_Read_Permissions_Notice::hookup();
 	}
 
 	/**
