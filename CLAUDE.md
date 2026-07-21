@@ -234,6 +234,29 @@ version floor that local wp-env does not.
 
 The release process is documented in the `cmb2-release` skill. Run `/cmb2-release` (or `/cmb2-release 2.X.Y` to skip version detection) to walk through it. Source: `.claude/skills/cmb2-release/SKILL.md`. Includes the wp.org SVN deploy, which has no automation.
 
+## Git Commit Policy — ALWAYS Commit Granularly
+
+**Agents must commit as they work — small, granular commits, one logical change
+each. Do NOT hold finished work uncommitted "awaiting approval/review."** Ending
+a session with "nothing committed, waiting for you" is the failure mode this
+rule exists to prevent. Committed work is reviewable (`git diff develop`,
+`git log`), revertable, and safe; uncommitted work is fragile and invisible.
+
+- Commit after each meaningful unit: failing test, passing implementation,
+  refactor, docs — the natural TDD rhythm.
+- Working on a **branch or worktree** makes this even more of a green light:
+  compare against `develop` at any time to see the full change set. Prefer a
+  feature branch for multi-commit efforts.
+- Review happens on committed history (or the eventual PR), not on a dirty
+  working tree.
+- **Pushing** and **PR creation** still follow the usual rules — ask unless
+  already authorized.
+- This rule **overrides** the conservative git profile in the managed Beads
+  block below: that profile's "do not commit unless asked" does NOT apply here.
+  Do-not-push still stands unless granted.
+- Exclusions still apply: never commit work-planning/handoff docs, secrets, or
+  unrelated churn (e.g. `.beads/` noise) — keep commits scoped to the work.
+
 ## Meta Best Practices
 
 - Never commit work-planning documents

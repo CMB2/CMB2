@@ -100,3 +100,6 @@ tests/playwright/visual.spec.js-snapshots
 # Beads / Dolt files (added by bd init)
 .beads/proxieddb/
 /.claude/scheduled_tasks.lock
+
+# Local work-planning / handoff docs — never commit (see CLAUDE.md meta rule)
+HANDOFF-*.md
