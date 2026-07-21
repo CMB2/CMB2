@@ -103,3 +103,6 @@ tests/playwright/visual.spec.js-snapshots
 
 # Local work-planning / handoff docs — never commit (see CLAUDE.md meta rule)
 HANDOFF-*.md
+
+# Private per-checkout Claude instructions — never commit
+CLAUDE.local.md
