@@ -808,6 +808,24 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	}
 
 	/**
+	 * Determines whether a box is a REST-readable options-page box.
+	 *
+	 * WordPress core exposes object meta reads publicly, but gates settings/options
+	 * reads behind a capability (see WP_REST_Settings_Controller). This helper
+	 * identifies the CMB2 boxes that map to that options/settings category so their
+	 * REST reads can be aligned with the same core convention.
+	 *
+	 * @since  2.12.0
+	 *
+	 * @param  CMB2 $cmb The CMB2 box object to check.
+	 *
+	 * @return bool      Whether the box is an options-page box exposed for REST reads.
+	 */
+	public static function is_options_page_box( CMB2 $cmb ) {
+		return $cmb->is_options_page_mb() && self::is_readable( $cmb->prop( 'show_in_rest' ) );
+	}
+
+	/**
 	 * Checks if given value is readable.
 	 *
 	 * Value is considered readable if it is not empty and if it does not match the editable blacklist.

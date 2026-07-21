@@ -348,6 +348,122 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertEquals( '', $response_data['value'] );
 	}
 
+	/**
+	 * Registers an options-page box (REST-readable) for the read-permission tests.
+	 *
+	 * @return void
+	 */
+	protected function register_options_page_box() {
+		$rest = new CMB2_REST( new CMB2( array(
+			'id'           => 'opts_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'options-page' ),
+			'option_key'   => 'cmb2_rest_options_test',
+			'capability'   => 'manage_options',
+			'fields'       => array(
+				'opts_field' => array(
+					'name' => 'Opts Field',
+					'id'   => 'opts_field',
+					'type' => 'text',
+				),
+			),
+		) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * By default (gate off), an options-page box read stays public, matching
+	 * CMB2's historical REST read behavior.
+	 */
+	public function test_options_page_box_read_public_by_default() {
+		$this->register_options_page_box();
+
+		wp_set_current_user( 0 );
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * When the options-page read gate is enabled, reads of an options-page box are
+	 * aligned with WordPress core's settings convention (gated behind the box
+	 * capability, defaulting to manage_options).
+	 */
+	public function test_options_page_box_read_gated_when_enabled() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * The same options-page read gate applies to field reads on the box.
+	 */
+	public function test_options_page_field_read_gated_when_enabled() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * Non-options-page (post-object) box reads are unaffected by the options-page
+	 * gate, even when it is enabled.
+	 */
+	public function test_post_box_read_unchanged_when_options_page_gate_enabled() {
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * With the options-page read gate enabled, the boxes collection still lists
+	 * public (post-object) boxes but omits gated options-page boxes for users
+	 * lacking the box capability; users with the capability see them listed.
+	 */
+	public function test_boxes_collection_omits_gated_options_page_box() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'test', $box_ids );
+		$this->assertNotContains( 'opts_box', $box_ids );
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'opts_box', $box_ids );
+	}
+
 	protected static function auth_required_code() {
 		return function_exists( 'rest_authorization_required_code' ) ? rest_authorization_required_code() : 403;
 	}
