@@ -23,7 +23,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * @var   string
 	 * @since 2.12.0
 	 */
-	const GUIDE_URL = 'https://github.com/CMB2/CMB2/wiki/REST-API-Read-Permissions';
+	const GUIDE_URL = 'https://cmb2.io/docs/REST-API-Read-Permissions';
 
 	/**
 	 * Option key used to persist notice dismissal.
