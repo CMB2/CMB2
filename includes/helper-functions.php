@@ -130,6 +130,10 @@ function cmb2_do_oembed( $args = array() ) {
 }
 add_action( 'cmb2_do_oembed', 'cmb2_do_oembed' );
 
+// Admin notice for the upcoming alignment of options-page REST read
+// permissions with WordPress core conventions.
+add_action( 'cmb2_admin_init', array( 'CMB2_Rest_Read_Permissions_Notice', 'hookup' ) );
+
 /**
  * A helper function to get an option from a CMB2 options array
  *
