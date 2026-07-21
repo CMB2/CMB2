@@ -234,6 +234,21 @@ version floor that local wp-env does not.
 
 The release process is documented in the `cmb2-release` skill. Run `/cmb2-release` (or `/cmb2-release 2.X.Y` to skip version detection) to walk through it. Source: `.claude/skills/cmb2-release/SKILL.md`. Includes the wp.org SVN deploy, which has no automation.
 
+## Conventions & Blast Radius — READ CONVENTIONS.md FIRST
+
+**Before changing anything under `includes/`, `bootstrap.php`, or `init.php`,
+read `CONVENTIONS.md`** — the compounding knowledge base of CMB2's conventions,
+architectural seams, and back-compat blast radii. Three standing rules:
+
+1. **Consult before coding.** Match the documented seam (e.g. per-box features
+   hook via `cmb2_init_hookup_{$cmb_id}` — see C1), don't invent a parallel one.
+2. **Capture on catch.** When review catches a convention violation or a
+   back-compat near-miss, the fix lands WITH a new/updated CONVENTIONS.md entry
+   on the same branch. Every correction compounds.
+3. **Quote into delegations.** Subagents don't inherit this context — work
+   orders for changes to core files must include the relevant CONVENTIONS.md
+   entries verbatim.
+
 ## Git Commit Policy — ALWAYS Commit Granularly
 
 **Agents must commit as they work — small, granular commits, one logical change
