@@ -21,10 +21,15 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	public function set_up() {
 		parent::set_up();
 		delete_option( CMB2_Rest_Read_Permissions_Notice::DISMISSED_OPTION );
+		CMB2_Rest_Read_Permissions_Notice::reset();
+
+		// The notice now only tracks boxes on the admin side.
+		set_current_screen( 'dashboard' );
 	}
 
 	public function tear_down() {
 		delete_option( CMB2_Rest_Read_Permissions_Notice::DISMISSED_OPTION );
+		CMB2_Rest_Read_Permissions_Notice::reset();
 
 		remove_all_filters( 'cmb2_rest_enforce_options_page_read_permissions' );
 		remove_all_filters( 'cmb2_rest_read_permissions_guide_url' );
@@ -37,12 +42,26 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
+	 * Fires the per-box hookup action so the box is fed into the notice exactly
+	 * as the CMB2 constructor wires it (via `cmb2_init_hookup_{$cmb_id}`).
+	 *
+	 * @param CMB2 $cmb The box to hook up.
+	 *
+	 * @return CMB2
+	 */
+	protected function hookup_box( CMB2 $cmb ) {
+		do_action( "cmb2_init_hookup_{$cmb->cmb_id}", $cmb );
+
+		return $cmb;
+	}
+
+	/**
 	 * Registers a REST-readable options-page box (an affected box).
 	 *
 	 * @return CMB2
 	 */
 	protected function register_options_page_box() {
-		return new CMB2( array(
+		return $this->hookup_box( new CMB2( array(
 			'id'           => 'notice_opts_box',
 			'show_in_rest' => WP_REST_Server::READABLE,
 			'object_types' => array( 'options-page' ),
@@ -55,7 +74,7 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 					'type' => 'text',
 				),
 			),
-		) );
+		) ) );
 	}
 
 	/**
@@ -64,7 +83,7 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	 * @return CMB2
 	 */
 	protected function register_post_box() {
-		return new CMB2( array(
+		return $this->hookup_box( new CMB2( array(
 			'id'           => 'notice_post_box',
 			'show_in_rest' => WP_REST_Server::READABLE,
 			'object_types' => array( 'post' ),
@@ -75,13 +94,45 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 					'type' => 'text',
 				),
 			),
-		) );
+		) ) );
 	}
 
 	public function test_eligible_when_affected_box_registered() {
 		$this->register_options_page_box();
 
 		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	public function test_constructor_wiring_feeds_options_page_box_into_notice() {
+		// A box that has not yet been hooked up should not be tracked.
+		$cmb = new CMB2( array(
+			'id'           => 'notice_wiring_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'options-page' ),
+			'option_key'   => 'cmb2_notice_wiring_test',
+			'capability'   => 'manage_options',
+			'fields'       => array(
+				'wiring_field' => array(
+					'name' => 'Wiring Field',
+					'id'   => 'wiring_field',
+					'type' => 'text',
+				),
+			),
+		) );
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+
+		// Firing the action the CMB2 constructor registered feeds the box in.
+		do_action( "cmb2_init_hookup_{$cmb->cmb_id}", $cmb );
+
+		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	public function test_not_tracked_outside_admin() {
+		set_current_screen( 'front' );
+		$this->register_options_page_box();
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
 	}
 
 	public function test_not_eligible_with_no_boxes() {

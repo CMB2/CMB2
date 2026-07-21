@@ -42,15 +42,54 @@ class CMB2_Rest_Read_Permissions_Notice {
 	const AJAX_ACTION = 'cmb2_dismiss_rest_read_permissions_notice';
 
 	/**
-	 * Registers the notice and its dismissal handler on the admin side.
+	 * Affected (REST-readable options-page) boxes fed in via the per-box hookup,
+	 * keyed by cmb_id.
+	 *
+	 * @var   CMB2[]
+	 * @since 2.12.0
+	 */
+	protected static $tracked_boxes = array();
+
+	/**
+	 * Per-box hookup, matching CMB2's `cmb2_init_hookup_{$cmb_id}` convention
+	 * (see CMB2_Hookup::maybe_init_and_hookup / CMB2_REST::maybe_init_and_hookup).
+	 *
+	 * Tracks each affected box so the notice can consult only the boxes actually
+	 * registered on this request, and registers the admin render + dismissal
+	 * handlers once, when the first affected box is seen.
+	 *
+	 * @since 2.12.0
+	 *
+	 * @param CMB2 $cmb The CMB2 object being hooked up.
+	 *
+	 * @return void
+	 */
+	public static function maybe_init_and_hookup( CMB2 $cmb ) {
+		if ( ! is_admin() || ! CMB2_REST::is_options_page_box( $cmb ) ) {
+			return;
+		}
+
+		$first_box = empty( self::$tracked_boxes );
+
+		self::$tracked_boxes[ $cmb->cmb_id ] = $cmb;
+
+		if ( $first_box ) {
+			add_action( 'admin_notices', array( __CLASS__, 'render' ) );
+			add_action( 'wp_ajax_' . self::AJAX_ACTION, array( __CLASS__, 'ajax_dismiss' ) );
+		}
+	}
+
+	/**
+	 * Resets tracked-box state.
+	 *
+	 * @internal Intended for test isolation.
 	 *
 	 * @since 2.12.0
 	 *
 	 * @return void
 	 */
-	public static function hookup() {
-		add_action( 'admin_notices', array( __CLASS__, 'render' ) );
-		add_action( 'wp_ajax_' . self::AJAX_ACTION, array( __CLASS__, 'ajax_dismiss' ) );
+	public static function reset() {
+		self::$tracked_boxes = array();
 	}
 
 	/**
@@ -94,34 +133,11 @@ class CMB2_Rest_Read_Permissions_Notice {
 	}
 
 	/**
-	 * Collects the registered REST-readable options-page boxes (the affected boxes).
-	 *
-	 * @since 2.12.0
-	 *
-	 * @return CMB2[] Array of affected CMB2 boxes.
-	 */
-	public static function get_affected_boxes() {
-		$affected = array();
-
-		if ( ! class_exists( 'CMB2_Boxes' ) || ! class_exists( 'CMB2_REST' ) ) {
-			return $affected;
-		}
-
-		foreach ( CMB2_Boxes::get_all() as $cmb ) {
-			if ( CMB2_REST::is_options_page_box( $cmb ) ) {
-				$affected[] = $cmb;
-			}
-		}
-
-		return $affected;
-	}
-
-	/**
 	 * Determines whether the notice is eligible to be shown.
 	 *
-	 * Eligible only when the site has at least one affected box whose reads are
-	 * still ungated (the alignment filter is returning its default false), and the
-	 * notice has not already been dismissed.
+	 * Eligible only when at least one tracked affected box (fed in via
+	 * maybe_init_and_hookup) still has ungated reads (the alignment filter is
+	 * returning its default false), and the notice has not already been dismissed.
 	 *
 	 * @since 2.12.0
 	 *
@@ -132,7 +148,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 			return false;
 		}
 
-		foreach ( self::get_affected_boxes() as $cmb ) {
+		foreach ( self::$tracked_boxes as $cmb ) {
 			// If any affected box is still ungated, the owner should be informed.
 			if ( ! apply_filters( 'cmb2_rest_enforce_options_page_read_permissions', false, $cmb ) ) {
 				return true;

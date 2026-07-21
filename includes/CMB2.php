@@ -250,6 +250,9 @@ class CMB2 extends CMB2_Base {
 
 		// Hook in the rest api functionality.
 		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_REST', 'maybe_init_and_hookup' ) );
+
+		// Hook in the notice about the upcoming REST read-permissions alignment.
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_Rest_Read_Permissions_Notice', 'maybe_init_and_hookup' ) );
 	}
 
 	/**
