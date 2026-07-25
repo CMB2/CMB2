@@ -188,6 +188,18 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
+	 * A degenerate empty-string prop is not a declaration — the gate treats it as
+	 * unset, so the notice must too.
+	 */
+	public function test_still_eligible_when_prop_is_empty_string() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => '',
+		) );
+
+		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
 	 * A box with the prop left unset is still eligible, even alongside a box that
 	 * has declared its intent.
 	 */

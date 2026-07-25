@@ -839,7 +839,12 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool      Whether the box declares an explicit read permission.
 	 */
 	public static function has_explicit_rest_read_capability( CMB2 $cmb ) {
-		return null !== $cmb->prop( 'rest_read_capability' );
+		$declared = $cmb->prop( 'rest_read_capability' );
+
+		// Mirrors the values get_rest_read_capability() honors — anything else
+		// (null, '', other types) is treated as unset there, so it isn't a
+		// declaration here either.
+		return false === $declared || true === $declared || ( is_string( $declared ) && '' !== trim( $declared ) );
 	}
 
 	/**
