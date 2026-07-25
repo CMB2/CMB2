@@ -828,9 +828,10 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * Whether a box explicitly declares how its REST reads are permissioned.
 	 *
-	 * A box which sets the `rest_read_capability` property to anything but null
-	 * (false, true, or a capability string) has declared its intent, so CMB2 should
-	 * neither second-guess it via the site-wide alignment filter nor nag about it.
+	 * A box which sets the `rest_read_capability` property to a recognized value
+	 * (true, or a capability string such as `exist`) has declared its intent, so CMB2
+	 * should neither second-guess it via the site-wide alignment filter nor nag about
+	 * it.
 	 *
 	 * @since  2.12.0
 	 *
@@ -842,9 +843,9 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		$declared = $cmb->prop( 'rest_read_capability' );
 
 		// Mirrors the values get_rest_read_capability() honors — anything else
-		// (null, '', other types) is treated as unset there, so it isn't a
+		// (null, false, '', other types) is treated as unset there, so it isn't a
 		// declaration here either.
-		return false === $declared || true === $declared || ( is_string( $declared ) && '' !== trim( $declared ) );
+		return true === $declared || ( is_string( $declared ) && '' !== trim( $declared ) );
 	}
 
 	/**
@@ -853,12 +854,19 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * The box's `rest_read_capability` property is the primary interface, and takes
 	 * precedence over the site-wide filter entirely:
 	 *
-	 * - false   Reads are explicitly public; never gated.
 	 * - true    Reads require the box's `capability` (fallback `manage_options`).
-	 * - string  Reads require the named capability.
+	 * - string  Reads require the named capability. To declare reads public for
+	 *           everyone, use WordPress's `exist` pseudo-capability, which
+	 *           WP_User::has_cap() grants unconditionally to every visitor, logged out
+	 *           included ("Everyone is allowed to exist"). Because it is an explicit
+	 *           declaration, `'exist'` also opts the box out of the site-wide filter
+	 *           and will survive a future change to this property's default.
 	 * - null    (default) CMB2's historical behavior: reads are public, except that
 	 *           options-page boxes are gated by their `capability` when the
 	 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
+	 *
+	 * Any other value (including `false`, whose plain-English reading is ambiguous)
+	 * is treated as unset.
 	 *
 	 * @since  2.12.0
 	 *
@@ -868,10 +876,6 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 */
 	public static function get_rest_read_capability( CMB2 $cmb ) {
 		$declared = $cmb->prop( 'rest_read_capability' );
-
-		if ( false === $declared ) {
-			return null;
-		}
 
 		if ( true === $declared ) {
 			return self::get_box_capability( $cmb );

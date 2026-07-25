@@ -109,7 +109,9 @@ class CMB2 extends CMB2_Base {
 		 * - null    (default) CMB2's historical behavior: reads are public, unless the
 		 *           box is an options page and the site-wide
 		 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
-		 * - false   Reads are explicitly public. The site-wide filter never applies.
+		 * - 'exist' Reads are explicitly public: WordPress grants the 'exist'
+		 *           capability to every visitor, logged out included. The site-wide
+		 *           filter never applies.
 		 * - true    Reads require the box's 'capability' (falling back to 'manage_options').
 		 * - string  Reads require the named capability, e.g. 'edit_posts'.
 		 *
