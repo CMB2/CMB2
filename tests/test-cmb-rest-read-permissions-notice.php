@@ -167,9 +167,10 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
-	 * A box that has already opted its reads into the capability gate needs no nag.
+	 * `true` is the shorthand for "yes, everyone may read this box" — an explicit
+	 * declaration, so its owner needs no nag either.
 	 */
-	public function test_not_eligible_when_box_opts_into_capability_gate() {
+	public function test_not_eligible_when_box_declares_public_reads_via_true() {
 		$this->register_options_page_box( array(
 			'rest_read_capability' => true,
 		) );
@@ -201,16 +202,15 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
-	 * `false` is deliberately not a recognized value for the prop (public reads are
-	 * declared as `'exist'`), so it is treated as unset here exactly as the gate
-	 * treats it — the box is still nag-eligible.
+	 * `false` reads as "no, REST reads of this box are not permitted" — a declaration
+	 * like any other, so the box needs no nag about a future default change.
 	 */
-	public function test_still_eligible_when_prop_is_false() {
+	public function test_not_eligible_when_box_disables_reads() {
 		$this->register_options_page_box( array(
 			'rest_read_capability' => false,
 		) );
 
-		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
 	}
 
 	/**

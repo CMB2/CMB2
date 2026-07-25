@@ -512,53 +512,78 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
-	 * `false` is deliberately not a recognized value for the prop — reading it in
-	 * plain English is ambiguous ("no capability required" vs "no read capability"),
-	 * so it is treated exactly like an unset prop: the site-wide alignment filter
-	 * still gates the box's reads. Declaring public reads is spelled `'exist'`.
+	 * `'rest_read_capability' => false` reads as "no, REST reads of this box are not
+	 * permitted" — for everyone, administrators included. It maps to WordPress's
+	 * `do_not_allow` pseudo-capability, which WP_User::has_cap() denies
+	 * unconditionally.
 	 */
-	public function test_read_capability_prop_false_is_treated_as_unset() {
+	public function test_read_capability_prop_false_disables_reads_for_everyone() {
 		$this->register_options_page_box( array(
 			'rest_read_capability' => false,
 		) );
-		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
 
-		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field',
+		);
 
-		wp_set_current_user( 0 );
-		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
 
-		wp_set_current_user( $this->administrator );
-		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->administrator );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		}
 	}
 
 	/**
-	 * A box declaring `'rest_read_capability' => true` gates reads behind its
-	 * `capability` prop immediately, without the site-wide filter.
+	 * A box with reads disabled also drops out of the boxes collection, even for an
+	 * administrator.
 	 */
-	public function test_read_capability_prop_true_gates_reads_without_filter() {
+	public function test_read_capability_prop_false_omits_box_from_collection() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'test', $box_ids );
+		$this->assertNotContains( 'opts_box', $box_ids );
+	}
+
+	/**
+	 * `'rest_read_capability' => true` reads as "yes, everyone may read this box" — an
+	 * alias of the `exist` capability WordPress grants every visitor. Because it is an
+	 * explicit declaration, the site-wide alignment filter never applies to it.
+	 */
+	public function test_read_capability_prop_true_declares_reads_public() {
 		$this->register_options_page_box( array(
 			'rest_read_capability' => true,
 		) );
-
-		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
 
 		wp_set_current_user( 0 );
-		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
 
-		wp_set_current_user( $this->subscriber );
-		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
 
-		wp_set_current_user( $this->administrator );
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
 		$this->assertRequestResponseStatus( 'GET', $url, 200 );
 	}
 
 	/**
-	 * The `rest_read_capability => true` gate also covers field reads on the box.
+	 * A capability string on the box gates field reads on that box, too.
 	 */
-	public function test_read_capability_prop_true_gates_field_reads_without_filter() {
+	public function test_read_capability_prop_string_gates_field_reads_without_filter() {
 		$this->register_options_page_box( array(
-			'rest_read_capability' => true,
+			'rest_read_capability' => 'manage_options',
 		) );
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
@@ -621,12 +646,152 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
+	 * Registers a box whose `gated_field` carries the given `rest_read_capability`
+	 * declaration, alongside an `open_field` sibling which declares nothing.
+	 *
+	 * @param mixed $field_declaration The field-level `rest_read_capability` value.
+	 * @param array $box_args          Optional box-registration overrides/additions.
+	 *
+	 * @return void
+	 */
+	protected function register_field_cap_box( $field_declaration, $box_args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $box_args, array(
+			'id'           => 'field_cap_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'post' ),
+			'fields'       => array(
+				'gated_field' => array(
+					'name' => 'Gated Field',
+					'id'   => 'gated_field',
+					'type' => 'text',
+					'rest_read_capability' => $field_declaration,
+				),
+				'open_field' => array(
+					'name' => 'Open Field',
+					'id'   => 'open_field',
+					'type' => 'text',
+				),
+			),
+		) ) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * A field naming a capability gates only that field's reads. Its sibling field and
+	 * the box read itself (resolved at box level) are untouched.
+	 */
+	public function test_field_read_capability_prop_string_gates_only_that_field() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+		$box   = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		$this->assertRequestResponseStatus( 'GET', $box, 200 );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+	}
+
+	/**
+	 * The fields collection omits fields the current user cannot read, and lists the
+	 * rest.
+	 */
+	public function test_fields_collection_omits_fields_gated_by_field_prop() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields';
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'open_field', $field_ids );
+		$this->assertNotContains( 'gated_field', $field_ids );
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'gated_field', $field_ids );
+	}
+
+	/**
+	 * A field declaring `false` has its reads disabled for everyone, administrators
+	 * included, and drops out of the fields collection entirely.
+	 */
+	public function test_field_read_capability_prop_false_disables_that_field_for_everyone() {
+		$this->register_field_cap_box( false );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		foreach ( array( 0, $this->subscriber, $this->administrator ) as $user_id ) {
+			wp_set_current_user( $user_id );
+			$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+			$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		}
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields' ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'open_field', $field_ids );
+		$this->assertNotContains( 'gated_field', $field_ids );
+	}
+
+	/**
+	 * A field-level declaration wins over the box's: the box declares its reads public
+	 * (`true`), and the field still requires its named capability.
+	 */
+	public function test_field_read_capability_prop_overrides_public_box_prop() {
+		$this->register_field_cap_box( 'manage_options', array(
+			'rest_read_capability' => true,
+		) );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+		$box   = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		$this->assertRequestResponseStatus( 'GET', $box, 200 );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+	}
+
+	/**
+	 * Without a field-level declaration, a field falls back to the box's — here, reads
+	 * disabled at the box level cover every field on it.
+	 */
+	public function test_field_read_capability_falls_back_to_box_prop() {
+		$this->register_field_cap_box( null, array(
+			'rest_read_capability' => false,
+		) );
+
+		wp_set_current_user( $this->administrator );
+
+		foreach ( array( 'gated_field', 'open_field' ) as $field_id ) {
+			$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/' . $field_id;
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		}
+	}
+
+	/**
 	 * The `cmb2_api_get_box_permissions_check` filter still runs after the
 	 * capability gate and keeps the final say (see CONVENTIONS.md C4).
 	 */
 	public function test_read_capability_prop_still_overridable_by_permissions_filter() {
 		$this->register_options_page_box( array(
-			'rest_read_capability' => true,
+			'rest_read_capability' => 'manage_options',
 		) );
 		add_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
 
