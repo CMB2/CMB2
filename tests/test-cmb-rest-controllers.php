@@ -775,6 +775,29 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
+	 * A box response carries no field configs of its own (get_rest_box() drops them);
+	 * `_embed` pulls them in through the embeddable fields-collection link, which is
+	 * dispatched as its own request and so applies the same per-field resolution.
+	 */
+	public function test_embedded_fields_in_box_response_omit_gated_fields() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box' );
+		$request->set_param( '_embed', 1 );
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( $request );
+		$this->assertEquals( 200, $response->get_status() );
+
+		$data = rest_get_server()->response_to_data( $response, true );
+		$this->assertArrayNotHasKey( 'fields', $data );
+
+		$embedded = $data['_embedded']['https://cmb2.io/fields'][0];
+		$this->assertArrayHasKey( 'open_field', $embedded );
+		$this->assertArrayNotHasKey( 'gated_field', $embedded );
+	}
+
+	/**
 	 * A field declaring `false` has its reads disabled for everyone, administrators
 	 * included, and drops out of the fields collection entirely.
 	 */
