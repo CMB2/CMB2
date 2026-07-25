@@ -704,6 +704,31 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
+	 * A read must not persist its own default answer onto the box as a `*_cb`
+	 * permission parameter.
+	 *
+	 * CMB2::prop() stores a truthy fallback on the box, so handing the current default
+	 * to it as a fallback turns one request's default into the stored answer for every
+	 * later request on that box — which would let a readable field's "allowed" default
+	 * carry over to a field the current user may not read.
+	 */
+	public function test_read_does_not_persist_permission_callback_param_on_box() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$cmb   = CMB2_REST::get_rest_box( 'field_cap_box' )->cmb;
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+
+		$this->assertNull( $cmb->prop( 'get_field_permissions_check_cb' ) );
+
+		// And the gated sibling is still gated after that readable-field request.
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+	}
+
+	/**
 	 * A field naming a capability gates only that field's reads. Its sibling field and
 	 * the box read itself (resolved at box level) are untouched.
 	 */
