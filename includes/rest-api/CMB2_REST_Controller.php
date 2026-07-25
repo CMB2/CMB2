@@ -142,23 +142,25 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Optionally gates a box read behind a capability, aligning with WordPress core.
+	 * Optionally gates a read behind a capability, aligning with WordPress core.
 	 *
 	 * WordPress core exposes object meta reads publicly, but gates settings/options
-	 * reads behind a capability (WP_REST_Settings_Controller). CMB2's per-box
-	 * `rest_read_capability` property is how a box declares which side of that line
-	 * it sits on; see CMB2_REST::get_rest_read_capability() for the full precedence.
-	 * With the property left unset, CMB2 keeps its historical public-read behavior
-	 * unless the box is an options page and the site-wide
+	 * reads behind a capability (WP_REST_Settings_Controller). CMB2's
+	 * `rest_read_capability` property is how a box (or a single field on it) declares
+	 * which side of that line it sits on; see CMB2_REST::get_rest_read_capability() for
+	 * the full precedence. With the property left unset, CMB2 keeps its historical
+	 * public-read behavior unless the box is an options page and the site-wide
 	 * `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
 	 *
 	 * @since  2.12.0
 	 *
-	 * @param  bool $can_access The default access for this read request.
+	 * @param  bool                  $can_access The default access for this read request.
+	 * @param  CMB2_Field|array|null $field      The field being read, when the read is of
+	 *                                           a single field rather than the box.
 	 *
-	 * @return bool             The possibly-adjusted access value.
+	 * @return bool                              The possibly-adjusted access value.
 	 */
-	protected function maybe_gate_read_by_capability( $can_access ) {
+	protected function maybe_gate_read_by_capability( $can_access, $field = null ) {
 		if ( ! $this->rest_box && $this->request->get_param( 'cmb_id' ) ) {
 			$this->rest_box = CMB2_REST::get_rest_box( $this->request->get_param( 'cmb_id' ) );
 		}
@@ -167,7 +169,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 			return $can_access;
 		}
 
-		$capability = CMB2_REST::get_rest_read_capability( $this->rest_box->cmb );
+		$capability = CMB2_REST::get_rest_read_capability( $this->rest_box->cmb, $field );
 
 		if ( null === $capability ) {
 			return $can_access;

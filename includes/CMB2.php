@@ -103,17 +103,22 @@ class CMB2 extends CMB2_Base {
 		'show_in_rest'            => false,
 
 		/*
-		 * Declares how this box's REST API reads are permissioned (only applicable when
+		 * Declares who may read this box via the REST API (only applicable when
 		 * 'show_in_rest' is readable). Accepts:
 		 *
-		 * - null    (default) CMB2's historical behavior: reads are public, unless the
-		 *           box is an options page and the site-wide
-		 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
-		 * - 'exist' Reads are explicitly public: WordPress grants the 'exist'
-		 *           capability to every visitor, logged out included. The site-wide
-		 *           filter never applies.
-		 * - true    Reads require the box's 'capability' (falling back to 'manage_options').
-		 * - string  Reads require the named capability, e.g. 'edit_posts'.
+		 * - false            No one may read it, administrators included.
+		 * - true             Everyone may read it, logged-out visitors included.
+		 * - 'box-capability' Only holders of this box's 'capability' may read it
+		 *                    (falling back to 'manage_options').
+		 * - 'a_capability'   Only holders of the named capability may read it,
+		 *                    e.g. 'edit_posts'.
+		 * - null             (default) CMB2's current behavior: reads are public, unless
+		 *                    the box is an options page and the site-wide
+		 *                    `cmb2_rest_enforce_options_page_read_permissions` filter is
+		 *                    enabled.
+		 *
+		 * The same property may be set on an individual field, where it takes precedence
+		 * over the box's for reads of that field.
 		 *
 		 * The `cmb2_api_get_box_permissions_check`/`cmb2_api_get_field_permissions_check`
 		 * filters still run afterward and have the final say.

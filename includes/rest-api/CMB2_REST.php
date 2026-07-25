@@ -829,9 +829,11 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * Whether a box explicitly declares how its REST reads are permissioned.
 	 *
 	 * A box which sets the `rest_read_capability` property to a recognized value
-	 * (true, or a capability string such as `exist`) has declared its intent, so CMB2
-	 * should neither second-guess it via the site-wide alignment filter nor nag about
-	 * it.
+	 * (`false`, `true`, or a capability string) has declared its intent, so CMB2 should
+	 * neither second-guess it via the site-wide alignment filter nor nag about it.
+	 *
+	 * Only the box property is consulted: a field-level declaration speaks for that
+	 * field, not for the box.
 	 *
 	 * @since  2.12.0
 	 *
@@ -840,44 +842,49 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * @return bool      Whether the box declares an explicit read permission.
 	 */
 	public static function has_explicit_rest_read_capability( CMB2 $cmb ) {
-		$declared = $cmb->prop( 'rest_read_capability' );
-
-		// Mirrors the values get_rest_read_capability() honors — anything else
-		// (null, false, '', other types) is treated as unset there, so it isn't a
-		// declaration here either.
-		return true === $declared || ( is_string( $declared ) && '' !== trim( $declared ) );
+		return null !== self::declared_read_capability( $cmb->prop( 'rest_read_capability' ), $cmb );
 	}
 
 	/**
-	 * Resolves the capability which gates REST reads of the given box, if any.
+	 * Translates a `rest_read_capability` declaration into the capability it requires.
 	 *
-	 * The box's `rest_read_capability` property is the primary interface, and takes
-	 * precedence over the site-wide filter entirely:
+	 * Recognized values, all of which resolve to a capability string so the caller has
+	 * a single kind of answer to act on:
 	 *
-	 * - true    Reads require the box's `capability` (fallback `manage_options`).
-	 * - string  Reads require the named capability. To declare reads public for
-	 *           everyone, use WordPress's `exist` pseudo-capability, which
-	 *           WP_User::has_cap() grants unconditionally to every visitor, logged out
-	 *           included ("Everyone is allowed to exist"). Because it is an explicit
-	 *           declaration, `'exist'` also opts the box out of the site-wide filter
-	 *           and will survive a future change to this property's default.
-	 * - null    (default) CMB2's historical behavior: reads are public, except that
-	 *           options-page boxes are gated by their `capability` when the
-	 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
+	 * - false            Reads are not permitted, for anyone. Maps to WordPress's
+	 *                    `do_not_allow` pseudo-capability, which WP_User::has_cap()
+	 *                    denies unconditionally — administrators included.
+	 * - true             Reads are permitted for everyone. Maps to WordPress's `exist`
+	 *                    pseudo-capability, which WP_User::has_cap() grants
+	 *                    unconditionally to every visitor, logged out included
+	 *                    ("Everyone is allowed to exist").
+	 * - 'box-capability' Reads require the box's own `capability` property (falling
+	 *                    back to `manage_options`). This is a reserved value, not a
+	 *                    real WordPress capability: it is the only spelling of "gate by
+	 *                    this box's capability" which does not duplicate a value that
+	 *                    lives elsewhere and can drift out of sync. On a field, it
+	 *                    means "gate this field by whatever the box's capability is".
+	 * - string           Reads require the named capability, e.g. `edit_posts`. Since
+	 *                    the two booleans are spelled as capabilities, `'exist'` and
+	 *                    `'do_not_allow'` work as literal strings too, with the same
+	 *                    meanings.
 	 *
-	 * Any other value (including `false`, whose plain-English reading is ambiguous)
-	 * is treated as unset.
+	 * Anything else (null, an empty string, other types) is not a declaration.
 	 *
 	 * @since  2.12.0
 	 *
-	 * @param  CMB2 $cmb The CMB2 box object being read.
+	 * @param  mixed $declared The declared value.
+	 * @param  CMB2  $cmb      The CMB2 box object the declaration was made on or within.
 	 *
-	 * @return string|null The capability to require, or null when reads are not gated.
+	 * @return string|null     The capability to require, or null if the value is not a
+	 *                         declaration.
 	 */
-	public static function get_rest_read_capability( CMB2 $cmb ) {
-		$declared = $cmb->prop( 'rest_read_capability' );
+	protected static function declared_read_capability( $declared, CMB2 $cmb ) {
+		if ( is_bool( $declared ) ) {
+			return $declared ? 'exist' : 'do_not_allow';
+		}
 
-		if ( true === $declared ) {
+		if ( 'box-capability' === $declared ) {
 			return self::get_box_capability( $cmb );
 		}
 
@@ -885,7 +892,48 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return $declared;
 		}
 
-		// Property left unset: only options-page boxes, and only when opted in site-wide.
+		return null;
+	}
+
+	/**
+	 * Resolves the capability which gates REST reads of the given box or field, if any.
+	 *
+	 * The `rest_read_capability` property is the primary interface, and takes
+	 * precedence over the site-wide filter entirely. It is resolved in the same
+	 * cascading order as `show_in_rest` (see declare_read_edit_fields()): the field's
+	 * own declaration wins, else the box's, else the default policy.
+	 *
+	 * See declared_read_capability() for the recognized values. With no declaration at
+	 * either level, CMB2's historical behavior applies: reads are public, except that
+	 * options-page box reads are gated by the box `capability` when the
+	 * `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
+	 *
+	 * @since  2.12.0
+	 *
+	 * @param  CMB2                   $cmb   The CMB2 box object being read.
+	 * @param  CMB2_Field|array|null  $field The field being read, when the read is of a
+	 *                                       single field rather than the box itself.
+	 *
+	 * @return string|null The capability to require, or null when reads are not gated.
+	 */
+	public static function get_rest_read_capability( CMB2 $cmb, $field = null ) {
+		$field_args = $field instanceof CMB2_Field ? $field->args() : $field;
+
+		if ( is_array( $field_args ) && isset( $field_args['rest_read_capability'] ) ) {
+			$capability = self::declared_read_capability( $field_args['rest_read_capability'], $cmb );
+
+			if ( null !== $capability ) {
+				return $capability;
+			}
+		}
+
+		$capability = self::declared_read_capability( $cmb->prop( 'rest_read_capability' ), $cmb );
+
+		if ( null !== $capability ) {
+			return $capability;
+		}
+
+		// Declared at neither level: only options-page boxes, and only when opted in site-wide.
 		if ( ! self::is_options_page_box( $cmb ) ) {
 			return null;
 		}
