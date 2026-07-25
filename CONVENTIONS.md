@@ -120,24 +120,30 @@ intent once, in the array where it was registered, and keeps it across a later
 default flip (C3).
 
 **Canonical examples:** `includes/CMB2.php` `$mb_defaults` — `show_in_rest`,
-`capability`, and `rest_read_capability`. The last one is the shape to copy:
-`null` (default) follows the site-wide filter; `true`/a capability string gates
-reads by capability immediately; `'exist'` (the WP pseudo-capability everyone
-holds) declares reads public. Precedence is resolved in one place,
-`CMB2_REST::get_rest_read_capability()`, and consumed by
+`capability`, and `rest_read_capability`. The last one is the shape to copy,
+reading exactly as plain English: `false` = "no" (REST reads disabled for
+everyone, via core's `do_not_allow`); `true` = "yes, everyone" (alias of
+`'exist'`, the capability WP grants every visitor); `'box-capability'` = the
+box's own `capability` prop (the only non-duplicating spelling — naming the cap
+copies a value that lives elsewhere and can drift); any other capability string
+= only its holders; unset = the default policy (and the staged flip, C3). It
+cascades field → box → default like `show_in_rest`. Precedence is resolved in one
+place, `CMB2_REST::get_rest_read_capability()`, and consumed by
 `CMB2_REST_Controller::maybe_gate_read_by_capability()`.
 
 **Value semantics — a prop value must read correctly in plain English.** A
 config value is documentation; if its plain-English reading is ambiguous or
-contradicts its behavior, it's the wrong value. `'rest_read_capability' =>
-false` was rejected for exactly this: it reads "REST read capability? no",
-which parses equally as "no capability required" (public) and "no read
-capability" (reads disabled) — opposite meanings. Booleans only suit props that
-are true feature toggles (`show_in_rest`, `hookup`). When the prop answers a
-question ("which capability?"), every value should be a real answer — and
-prefer WP-canonical vocabulary over invented sentinels: `'exist'` is core's
-"everyone" capability (`WP_User::has_cap()` grants it unconditionally), so
-"public" needs no special-casing at all.
+contradicts its behavior, it's the wrong value. `rest_read_capability` went
+through this exact wringer: `false` originally meant "reads are public (no
+capability required)" — but it *reads* as "REST read capability? no", i.e.
+reads disabled. The fix wasn't banning the boolean; it was making the meaning
+match the reading (`false` now disables reads; `true` now means everyone).
+Corollaries: booleans are fine only when yes/no is the honest answer to the
+prop's name read as a question; when the answer is a *which* (which
+capability?), every value is a real answer; and prefer WP-canonical vocabulary
+over invented sentinels — `'exist'` (granted to everyone) and `do_not_allow`
+(denied to everyone) bound the range, so neither "public" nor "disabled" needs
+special-casing.
 
 **Anti-pattern:** shipping a filter-only interface for per-box behavior. It
 forces every developer to write a callback that re-derives "which box is this?"
