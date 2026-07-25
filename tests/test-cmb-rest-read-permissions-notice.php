@@ -155,11 +155,12 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 
 	/**
 	 * A box that explicitly declares its REST reads public (`rest_read_capability`
-	 * => false) has stated its intent, so its owner needs no nag.
+	 * => 'exist', the capability WordPress grants every visitor) has stated its
+	 * intent, so its owner needs no nag.
 	 */
 	public function test_not_eligible_when_box_declares_public_reads() {
 		$this->register_options_page_box( array(
-			'rest_read_capability' => false,
+			'rest_read_capability' => 'exist',
 		) );
 
 		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
@@ -200,12 +201,25 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
+	 * `false` is deliberately not a recognized value for the prop (public reads are
+	 * declared as `'exist'`), so it is treated as unset here exactly as the gate
+	 * treats it — the box is still nag-eligible.
+	 */
+	public function test_still_eligible_when_prop_is_false() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+
+		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
 	 * A box with the prop left unset is still eligible, even alongside a box that
 	 * has declared its intent.
 	 */
 	public function test_still_eligible_when_another_box_leaves_prop_unset() {
 		$this->register_options_page_box( array(
-			'rest_read_capability' => false,
+			'rest_read_capability' => 'exist',
 		) );
 		$this->hookup_box( new CMB2( array(
 			'id'           => 'notice_opts_box_unset',

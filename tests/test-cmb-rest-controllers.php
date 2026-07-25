@@ -490,13 +490,15 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
-	 * A box declaring `'rest_read_capability' => false` has opted its reads out of
-	 * the gate entirely: reads stay public even when the site-wide alignment filter
-	 * is enabled.
+	 * A box declaring `'rest_read_capability' => 'exist'` has opted its reads out of
+	 * the gate entirely: WordPress grants the `exist` pseudo-capability to every
+	 * visitor (see WP_User::has_cap(), "Everyone is allowed to exist"), so reads stay
+	 * public — even for a logged-out visitor, and even when the site-wide alignment
+	 * filter is enabled.
 	 */
-	public function test_read_capability_prop_false_keeps_reads_public() {
+	public function test_read_capability_prop_exist_keeps_reads_public() {
 		$this->register_options_page_box( array(
-			'rest_read_capability' => false,
+			'rest_read_capability' => 'exist',
 		) );
 		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
 
@@ -506,6 +508,27 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertRequestResponseStatus( 'GET', $url, 200 );
 
 		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * `false` is deliberately not a recognized value for the prop — reading it in
+	 * plain English is ambiguous ("no capability required" vs "no read capability"),
+	 * so it is treated exactly like an unset prop: the site-wide alignment filter
+	 * still gates the box's reads. Declaring public reads is spelled `'exist'`.
+	 */
+	public function test_read_capability_prop_false_is_treated_as_unset() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
 		$this->assertRequestResponseStatus( 'GET', $url, 200 );
 	}
 
