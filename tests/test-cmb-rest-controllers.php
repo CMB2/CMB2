@@ -351,10 +351,12 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	/**
 	 * Registers an options-page box (REST-readable) for the read-permission tests.
 	 *
+	 * @param array $args Optional box-registration overrides/additions.
+	 *
 	 * @return void
 	 */
-	protected function register_options_page_box() {
-		$rest = new CMB2_REST( new CMB2( array(
+	protected function register_options_page_box( $args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $args, array(
 			'id'           => 'opts_box',
 			'show_in_rest' => WP_REST_Server::READABLE,
 			'object_types' => array( 'options-page' ),
@@ -367,7 +369,30 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 					'type' => 'text',
 				),
 			),
-		) ) );
+		) ) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * Registers a post-object box (REST-readable) for the read-permission tests.
+	 *
+	 * @param array $args Optional box-registration overrides/additions.
+	 *
+	 * @return void
+	 */
+	protected function register_post_object_box( $args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $args, array(
+			'id'           => 'post_cap_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'post' ),
+			'fields'       => array(
+				'post_cap_field' => array(
+					'name' => 'Post Cap Field',
+					'id'   => 'post_cap_field',
+					'type' => 'text',
+				),
+			),
+		) ) ) );
 		$rest->universal_hooks();
 	}
 
@@ -462,6 +487,132 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertEquals( 200, $response->get_status() );
 		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
 		$this->assertContains( 'opts_box', $box_ids );
+	}
+
+	/**
+	 * A box declaring `'rest_read_capability' => false` has opted its reads out of
+	 * the gate entirely: reads stay public even when the site-wide alignment filter
+	 * is enabled.
+	 */
+	public function test_read_capability_prop_false_keeps_reads_public() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * A box declaring `'rest_read_capability' => true` gates reads behind its
+	 * `capability` prop immediately, without the site-wide filter.
+	 */
+	public function test_read_capability_prop_true_gates_reads_without_filter() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => true,
+		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * The `rest_read_capability => true` gate also covers field reads on the box.
+	 */
+	public function test_read_capability_prop_true_gates_field_reads_without_filter() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => true,
+		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * A non-options-page box is gateable too, but only by explicitly declaring the
+	 * capability on the box: a capability string gates reads immediately, with the
+	 * site-wide filter left off.
+	 */
+	public function test_read_capability_prop_string_gates_post_object_box_reads() {
+		$this->register_post_object_box( array(
+			'rest_read_capability' => 'edit_posts',
+		) );
+
+		$author = $this->factory->user->create( array(
+			'role' => 'author',
+		) );
+
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box/fields/post_cap_field',
+		);
+
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $author );
+			$this->assertRequestResponseStatus( 'GET', $url, 200 );
+		}
+	}
+
+	/**
+	 * Without the prop, a non-options-page box keeps its public reads even when the
+	 * site-wide options-page filter is enabled (pinned by
+	 * test_post_box_read_unchanged_when_options_page_gate_enabled), and the
+	 * site-wide filter does not gate it either.
+	 */
+	public function test_read_capability_prop_unset_leaves_post_object_box_public() {
+		$this->register_post_object_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box/fields/post_cap_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * The `cmb2_api_get_box_permissions_check` filter still runs after the
+	 * capability gate and keeps the final say (see CONVENTIONS.md C4).
+	 */
+	public function test_read_capability_prop_still_overridable_by_permissions_filter() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => true,
+		) );
+		add_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		remove_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
 	}
 
 	protected static function auth_required_code() {

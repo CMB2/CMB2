@@ -57,10 +57,12 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	/**
 	 * Registers a REST-readable options-page box (an affected box).
 	 *
+	 * @param array $args Optional box-registration overrides/additions.
+	 *
 	 * @return CMB2
 	 */
-	protected function register_options_page_box() {
-		return $this->hookup_box( new CMB2( array(
+	protected function register_options_page_box( $args = array() ) {
+		return $this->hookup_box( new CMB2( wp_parse_args( $args, array(
 			'id'           => 'notice_opts_box',
 			'show_in_rest' => WP_REST_Server::READABLE,
 			'object_types' => array( 'options-page' ),
@@ -73,7 +75,7 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 					'type' => 'text',
 				),
 			),
-		) ) );
+		) ) ) );
 	}
 
 	/**
@@ -149,6 +151,66 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
 
 		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
+	 * A box that explicitly declares its REST reads public (`rest_read_capability`
+	 * => false) has stated its intent, so its owner needs no nag.
+	 */
+	public function test_not_eligible_when_box_declares_public_reads() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
+	 * A box that has already opted its reads into the capability gate needs no nag.
+	 */
+	public function test_not_eligible_when_box_opts_into_capability_gate() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => true,
+		) );
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
+	 * Same for a box naming an explicit capability.
+	 */
+	public function test_not_eligible_when_box_names_a_capability() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'manage_options',
+		) );
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
+	 * A box with the prop left unset is still eligible, even alongside a box that
+	 * has declared its intent.
+	 */
+	public function test_still_eligible_when_another_box_leaves_prop_unset() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+		$this->hookup_box( new CMB2( array(
+			'id'           => 'notice_opts_box_unset',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'options-page' ),
+			'option_key'   => 'cmb2_notice_options_unset_test',
+			'capability'   => 'manage_options',
+			'fields'       => array(
+				'opts_field' => array(
+					'name' => 'Opts Field',
+					'id'   => 'opts_field',
+					'type' => 'text',
+				),
+			),
+		) ) );
+
+		$this->assertTrue( CMB2_Rest_Read_Permissions_Notice::should_show() );
 	}
 
 	public function test_not_eligible_after_dismissal_persists() {
