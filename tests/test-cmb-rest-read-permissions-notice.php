@@ -32,7 +32,6 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 		CMB2_Rest_Read_Permissions_Notice::reset();
 
 		remove_all_filters( 'cmb2_rest_enforce_options_page_read_permissions' );
-		remove_all_filters( 'cmb2_rest_read_permissions_guide_url' );
 
 		foreach ( CMB2_Boxes::get_all() as $box ) {
 			CMB2_Boxes::remove( $box->cmb_id );
@@ -161,22 +160,6 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
 	}
 
-	public function test_guide_url_filterable() {
-		$this->assertSame(
-			CMB2_Rest_Read_Permissions_Notice::GUIDE_URL,
-			CMB2_Rest_Read_Permissions_Notice::guide_url()
-		);
-
-		add_filter( 'cmb2_rest_read_permissions_guide_url', function () {
-			return 'https://example.com/custom-guide';
-		} );
-
-		$this->assertSame(
-			'https://example.com/custom-guide',
-			CMB2_Rest_Read_Permissions_Notice::guide_url()
-		);
-	}
-
 	public function test_render_outputs_copy_when_eligible() {
 		$this->register_options_page_box();
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
@@ -186,7 +169,7 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'Upcoming change to REST API read permissions', $output );
-		$this->assertStringContainsString( CMB2_Rest_Read_Permissions_Notice::guide_url(), $output );
+		$this->assertStringContainsString( CMB2_Rest_Read_Permissions_Notice::GUIDE_URL, $output );
 	}
 
 	public function test_render_outputs_nothing_when_not_eligible() {

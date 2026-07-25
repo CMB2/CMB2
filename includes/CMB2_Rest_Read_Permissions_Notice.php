@@ -93,24 +93,6 @@ class CMB2_Rest_Read_Permissions_Notice {
 	}
 
 	/**
-	 * Returns the (filterable) explainer guide URL.
-	 *
-	 * @since 2.12.0
-	 *
-	 * @return string
-	 */
-	public static function guide_url() {
-		/**
-		 * Filters the URL of the REST read-permissions explainer guide.
-		 *
-		 * @since 2.12.0
-		 *
-		 * @param string $url The guide URL.
-		 */
-		return apply_filters( 'cmb2_rest_read_permissions_guide_url', self::GUIDE_URL );
-	}
-
-	/**
 	 * Whether the notice has been dismissed.
 	 *
 	 * @since 2.12.0
@@ -170,7 +152,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 			return;
 		}
 
-		$guide_url = self::guide_url();
+		$guide_url = self::GUIDE_URL;
 		$nonce     = wp_create_nonce( self::AJAX_ACTION );
 		?>
 		<div class="notice notice-info is-dismissible cmb2-rest-read-permissions-notice" data-cmb2-notice-nonce="<?php echo esc_attr( $nonce ); ?>">
