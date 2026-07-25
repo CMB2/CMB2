@@ -190,6 +190,17 @@ class Test_CMB2_Rest_Read_Permissions_Notice extends CMB2TestCase {
 	}
 
 	/**
+	 * Same for a box deferring to its own `capability` via `'box-capability'`.
+	 */
+	public function test_not_eligible_when_box_defers_to_its_own_capability() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'box-capability',
+		) );
+
+		$this->assertFalse( CMB2_Rest_Read_Permissions_Notice::should_show() );
+	}
+
+	/**
 	 * A degenerate empty-string prop is not a declaration — the gate treats it as
 	 * unset, so the notice must too.
 	 */

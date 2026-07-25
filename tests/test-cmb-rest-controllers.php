@@ -579,6 +579,33 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 	}
 
 	/**
+	 * `'box-capability'` gates reads behind the box's own `capability` property,
+	 * without naming (and so duplicating) it. It is an explicit declaration, so it
+	 * applies with the site-wide filter left off.
+	 */
+	public function test_read_capability_prop_box_capability_gates_by_box_capability() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'box-capability',
+		) );
+
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field',
+		);
+
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->administrator );
+			$this->assertRequestResponseStatus( 'GET', $url, 200 );
+		}
+	}
+
+	/**
 	 * A capability string on the box gates field reads on that box, too.
 	 */
 	public function test_read_capability_prop_string_gates_field_reads_without_filter() {
@@ -766,6 +793,36 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 
 		wp_set_current_user( $this->administrator );
 		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+	}
+
+	/**
+	 * A field declaring `'box-capability'` is gated by the box's `capability`, even
+	 * where the box has declared its own reads public — the field borrows the box's
+	 * capability without restating it.
+	 */
+	public function test_field_read_capability_prop_box_capability_gates_by_box_capability() {
+		$this->register_field_cap_box( 'box-capability', array(
+			'capability'           => 'edit_posts',
+			'rest_read_capability' => true,
+		) );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		$author = $this->factory->user->create( array(
+			'role' => 'author',
+		) );
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $author );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
 	}
 
 	/**
