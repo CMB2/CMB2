@@ -121,10 +121,23 @@ default flip (C3).
 
 **Canonical examples:** `includes/CMB2.php` `$mb_defaults` — `show_in_rest`,
 `capability`, and `rest_read_capability`. The last one is the shape to copy:
-`null` (default) follows the site-wide filter, `false` declares reads public,
-`true`/a capability string gates reads by capability immediately. Precedence is
-resolved in one place, `CMB2_REST::get_rest_read_capability()`, and consumed by
+`null` (default) follows the site-wide filter; `true`/a capability string gates
+reads by capability immediately; `'exist'` (the WP pseudo-capability everyone
+holds) declares reads public. Precedence is resolved in one place,
+`CMB2_REST::get_rest_read_capability()`, and consumed by
 `CMB2_REST_Controller::maybe_gate_read_by_capability()`.
+
+**Value semantics — a prop value must read correctly in plain English.** A
+config value is documentation; if its plain-English reading is ambiguous or
+contradicts its behavior, it's the wrong value. `'rest_read_capability' =>
+false` was rejected for exactly this: it reads "REST read capability? no",
+which parses equally as "no capability required" (public) and "no read
+capability" (reads disabled) — opposite meanings. Booleans only suit props that
+are true feature toggles (`show_in_rest`, `hookup`). When the prop answers a
+question ("which capability?"), every value should be a real answer — and
+prefer WP-canonical vocabulary over invented sentinels: `'exist'` is core's
+"everyone" capability (`WP_User::has_cap()` grants it unconditionally), so
+"public" needs no special-casing at all.
 
 **Anti-pattern:** shipping a filter-only interface for per-box behavior. It
 forces every developer to write a callback that re-derives "which box is this?"
