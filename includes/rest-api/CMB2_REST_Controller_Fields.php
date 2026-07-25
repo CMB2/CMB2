@@ -164,8 +164,8 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check_filter( $can_access = true ) {
-		// Optionally align options-page box reads with WordPress core conventions.
-		$can_access = $this->maybe_gate_options_page_read( $can_access );
+		// Optionally gate the read behind a capability, per the box's declaration.
+		$can_access = $this->maybe_gate_read_by_capability( $can_access );
 
 		/**
 		 * By default, no special permissions needed.

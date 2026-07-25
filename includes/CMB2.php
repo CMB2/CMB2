@@ -101,6 +101,22 @@ class CMB2 extends CMB2_Base {
 		'new_user_section'        => 'add-new-user', // or 'add-existing-user'.
 		'new_term_section'        => true,
 		'show_in_rest'            => false,
+
+		/*
+		 * Declares how this box's REST API reads are permissioned (only applicable when
+		 * 'show_in_rest' is readable). Accepts:
+		 *
+		 * - null    (default) CMB2's historical behavior: reads are public, unless the
+		 *           box is an options page and the site-wide
+		 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
+		 * - false   Reads are explicitly public. The site-wide filter never applies.
+		 * - true    Reads require the box's 'capability' (falling back to 'manage_options').
+		 * - string  Reads require the named capability, e.g. 'edit_posts'.
+		 *
+		 * The `cmb2_api_get_box_permissions_check`/`cmb2_api_get_field_permissions_check`
+		 * filters still run afterward and have the final say.
+		 */
+		'rest_read_capability'    => null,
 		'classes'                 => null, // Optionally add classes to the CMB2 wrapper.
 		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback).
 

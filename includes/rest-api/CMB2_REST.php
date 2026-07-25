@@ -826,6 +826,96 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	}
 
 	/**
+	 * Whether a box explicitly declares how its REST reads are permissioned.
+	 *
+	 * A box which sets the `rest_read_capability` property to anything but null
+	 * (false, true, or a capability string) has declared its intent, so CMB2 should
+	 * neither second-guess it via the site-wide alignment filter nor nag about it.
+	 *
+	 * @since  2.12.0
+	 *
+	 * @param  CMB2 $cmb The CMB2 box object to check.
+	 *
+	 * @return bool      Whether the box declares an explicit read permission.
+	 */
+	public static function has_explicit_rest_read_capability( CMB2 $cmb ) {
+		return null !== $cmb->prop( 'rest_read_capability' );
+	}
+
+	/**
+	 * Resolves the capability which gates REST reads of the given box, if any.
+	 *
+	 * The box's `rest_read_capability` property is the primary interface, and takes
+	 * precedence over the site-wide filter entirely:
+	 *
+	 * - false   Reads are explicitly public; never gated.
+	 * - true    Reads require the box's `capability` (fallback `manage_options`).
+	 * - string  Reads require the named capability.
+	 * - null    (default) CMB2's historical behavior: reads are public, except that
+	 *           options-page boxes are gated by their `capability` when the
+	 *           `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
+	 *
+	 * @since  2.12.0
+	 *
+	 * @param  CMB2 $cmb The CMB2 box object being read.
+	 *
+	 * @return string|null The capability to require, or null when reads are not gated.
+	 */
+	public static function get_rest_read_capability( CMB2 $cmb ) {
+		$declared = $cmb->prop( 'rest_read_capability' );
+
+		if ( false === $declared ) {
+			return null;
+		}
+
+		if ( true === $declared ) {
+			return self::get_box_capability( $cmb );
+		}
+
+		if ( is_string( $declared ) && '' !== trim( $declared ) ) {
+			return $declared;
+		}
+
+		// Property left unset: only options-page boxes, and only when opted in site-wide.
+		if ( ! self::is_options_page_box( $cmb ) ) {
+			return null;
+		}
+
+		/**
+		 * Whether to align options-page box REST reads with WordPress core's
+		 * settings/options convention (reads gated behind a capability).
+		 *
+		 * Defaults to false, preserving CMB2's historical public-read behavior. Only
+		 * consulted for boxes which have not declared a `rest_read_capability`.
+		 *
+		 * @since 2.12.0
+		 *
+		 * @param bool $enforce Whether to gate options-page reads behind a capability.
+		 * @param CMB2 $cmb     The CMB2 box object being read.
+		 */
+		if ( ! apply_filters( 'cmb2_rest_enforce_options_page_read_permissions', false, $cmb ) ) {
+			return null;
+		}
+
+		return self::get_box_capability( $cmb );
+	}
+
+	/**
+	 * The box's `capability` property, falling back to `manage_options`.
+	 *
+	 * @since  2.12.0
+	 *
+	 * @param  CMB2 $cmb The CMB2 box object.
+	 *
+	 * @return string    The capability.
+	 */
+	protected static function get_box_capability( CMB2 $cmb ) {
+		$capability = $cmb->prop( 'capability' );
+
+		return empty( $capability ) ? 'manage_options' : $capability;
+	}
+
+	/**
 	 * Checks if given value is readable.
 	 *
 	 * Value is considered readable if it is not empty and if it does not match the editable blacklist.

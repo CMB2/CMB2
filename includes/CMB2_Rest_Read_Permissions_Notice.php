@@ -58,6 +58,12 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * registered on this request, and registers the admin render + dismissal
 	 * handlers once, when the first affected box is seen.
 	 *
+	 * A box which declares a `rest_read_capability` has stated its intent and will
+	 * not be affected by a future default change, so it is not an affected box at
+	 * all — filtering it out here (rather than in should_show()) keeps "affected"
+	 * defined in one place and leaves should_show() to the single remaining
+	 * question: are any affected boxes still ungated?
+	 *
 	 * @since 2.12.0
 	 *
 	 * @param CMB2 $cmb The CMB2 object being hooked up.
@@ -66,6 +72,10 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 */
 	public static function maybe_init_and_hookup( CMB2 $cmb ) {
 		if ( ! is_admin() || ! CMB2_REST::is_options_page_box( $cmb ) ) {
+			return;
+		}
+
+		if ( CMB2_REST::has_explicit_rest_read_capability( $cmb ) ) {
 			return;
 		}
 
