@@ -107,3 +107,33 @@ routes to, and match filename to class name exactly.
 only; the 7.4 floor is guarded exclusively by the CI matrix (`phpunit.yml`).
 "Passes locally" is necessary, never sufficient. (Tooling details: CLAUDE.md
 "Testing Strategy".)
+
+## C8 — Configuration over code: box props are the primary interface
+
+**Rule:** A new per-box behavior must be reachable as a **box registration
+property**. The registration array is the interface CMB2 developers actually
+use — and the one a bundling theme/plugin can ship per box — so it is the
+primary layer; filters are the secondary, site-wide layer for cross-cutting
+policy. When a behavior has both, the box prop wins outright and the filter
+governs only the boxes that left the prop unset. That way a box declares its
+intent once, in the array where it was registered, and keeps it across a later
+default flip (C3).
+
+**Canonical examples:** `includes/CMB2.php` `$mb_defaults` — `show_in_rest`,
+`capability`, and `rest_read_capability`. The last one is the shape to copy:
+`null` (default) follows the site-wide filter, `false` declares reads public,
+`true`/a capability string gates reads by capability immediately. Precedence is
+resolved in one place, `CMB2_REST::get_rest_read_capability()`, and consumed by
+`CMB2_REST_Controller::maybe_gate_read_by_capability()`.
+
+**Anti-pattern:** shipping a filter-only interface for per-box behavior. It
+forces every developer to write a callback that re-derives "which box is this?"
+from the filter args, cannot be expressed in the registration array a theme or
+plugin already ships, and leaves no way to declare per-box intent — the filter
+answers site-wide, so a site with a single box needing the old behavior has to
+special-case every box by hand.
+
+**Blast radius:** props are public API forever — name them for the behavior,
+not the implementation. Adding one to `$mb_defaults` also changes the array
+pinned by `Test_CMB2_Core::test_defaults_set()`; update that fixture in the same
+commit.
