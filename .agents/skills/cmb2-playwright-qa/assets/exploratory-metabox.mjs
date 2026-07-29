@@ -31,12 +31,18 @@ try {
   });
   await metabox.waitFor({ state: 'visible' });
   await metabox.locator('.hndle').waitFor({ state: 'visible' });
-  await metabox.screenshot({ path: path.join(runDir, 'claim-01-before.png') });
+  await page.screenshot({
+    path: path.join(runDir, 'claim-01-before.png'),
+    fullPage: true,
+  });
 
   await metabox.locator('button.handlediv').click();
   await field.waitFor({ state: 'visible' });
   await field.fill('Exploratory value');
-  await metabox.screenshot({ path: path.join(runDir, 'claim-01-after.png') });
+  await page.screenshot({
+    path: path.join(runDir, 'claim-01-after.png'),
+    fullPage: true,
+  });
 } catch (error) {
   await page.screenshot({
     path: path.join(runDir, 'failure-final-state.png'),
