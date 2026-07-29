@@ -1,5 +1,7 @@
 const { chromium } = require('@playwright/test');
 
+const isEnabled = (value) => ['1', 'true', 'yes'].includes(String(value).toLowerCase());
+
 /**
  * Global setup for Playwright tests
  * Sets up the WordPress environment and handles authentication
@@ -8,7 +10,7 @@ async function globalSetup(config) {
   console.log('Setting up WordPress test environment...');
   
   // Skip WordPress connection check if SKIP_WP_CHECK is set
-  if (process.env.SKIP_WP_CHECK) {
+  if (isEnabled(process.env.SKIP_WP_CHECK)) {
     console.log('Skipping WordPress connection check (SKIP_WP_CHECK=1)');
     return;
   }
