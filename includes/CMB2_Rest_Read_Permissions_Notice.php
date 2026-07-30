@@ -189,11 +189,23 @@ class CMB2_Rest_Read_Permissions_Notice {
 				var body = new URLSearchParams();
 				body.append( 'action', '<?php echo esc_js( self::AJAX_ACTION ); ?>' );
 				body.append( 'nonce', notice.getAttribute( 'data-cmb2-notice-nonce' ) );
+				// keepalive lets the request finish if the user navigates right away;
+				// a dismissal that fails to persist would otherwise be silent.
 				window.fetch( window.ajaxurl, {
 					method: 'POST',
 					credentials: 'same-origin',
+					keepalive: true,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
 					body: body.toString()
+				} ).then( function ( response ) {
+					if ( ! response.ok ) {
+						throw new Error( response.status );
+					}
+					return response.text();
+				} ).catch( function ( err ) {
+					if ( window.console ) {
+						console.warn( 'CMB2: notice dismissal may not have persisted.', err );
+					}
 				} );
 			} );
 		} )();
