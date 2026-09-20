@@ -7,7 +7,7 @@
  * box and the alignment has not already been enabled, so sites that need no
  * action (or that already opted in) are not nagged.
  *
- * @since 2.12.0
+ * @since 2.13.0
  *
  * @category  WordPress_Plugin
  * @package   CMB2
@@ -21,7 +21,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * Default URL for the explainer guide.
 	 *
 	 * @var   string
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 */
 	const GUIDE_URL = 'https://cmb2.io/docs/REST-API-Read-Permissions';
 
@@ -29,7 +29,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * Option key used to persist notice dismissal.
 	 *
 	 * @var   string
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 */
 	const DISMISSED_OPTION = 'cmb2_rest_read_permissions_notice_dismissed';
 
@@ -37,7 +37,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * Nonce/action name used for the dismissal AJAX request.
 	 *
 	 * @var   string
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 */
 	const AJAX_ACTION = 'cmb2_dismiss_rest_read_permissions_notice';
 
@@ -46,7 +46,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * keyed by cmb_id.
 	 *
 	 * @var   CMB2[]
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 */
 	protected static $tracked_boxes = array();
 
@@ -64,7 +64,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * defined in one place and leaves should_show() to the single remaining
 	 * question: are any affected boxes still ungated?
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @param CMB2 $cmb The CMB2 object being hooked up.
 	 *
@@ -94,7 +94,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 *
 	 * @internal Intended for test isolation.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return void
 	 */
@@ -105,7 +105,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	/**
 	 * Whether the notice has been dismissed.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return bool
 	 */
@@ -116,7 +116,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	/**
 	 * Persists dismissal of the notice.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return void
 	 */
@@ -131,7 +131,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	 * maybe_init_and_hookup) still has ungated reads (the alignment filter is
 	 * returning its default false), and the notice has not already been dismissed.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return bool
 	 */
@@ -153,7 +153,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	/**
 	 * Renders the admin notice, when eligible and the user can manage options.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return void
 	 */
@@ -216,7 +216,7 @@ class CMB2_Rest_Read_Permissions_Notice {
 	/**
 	 * AJAX handler that persists dismissal of the notice.
 	 *
-	 * @since 2.12.0
+	 * @since 2.13.0
 	 *
 	 * @return void
 	 */

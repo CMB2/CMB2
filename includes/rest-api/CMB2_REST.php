@@ -815,7 +815,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * identifies the CMB2 boxes that map to that options/settings category so their
 	 * REST reads can be aligned with the same core convention.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  CMB2 $cmb The CMB2 box object to check.
 	 *
@@ -835,7 +835,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * Only the box property is consulted: a field-level declaration speaks for that
 	 * field, not for the box.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  CMB2 $cmb The CMB2 box object to check.
 	 *
@@ -871,7 +871,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 *
 	 * Anything else (null, an empty string, other types) is not a declaration.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  mixed $declared The declared value.
 	 * @param  CMB2  $cmb      The CMB2 box object the declaration was made on or within.
@@ -908,7 +908,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	 * options-page box reads are gated by the box `capability` when the
 	 * `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  CMB2                   $cmb   The CMB2 box object being read.
 	 * @param  CMB2_Field|array|null  $field The field being read, when the read is of a
@@ -945,7 +945,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 		 * Defaults to false, preserving CMB2's historical public-read behavior. Only
 		 * consulted for boxes which have not declared a `rest_read_capability`.
 		 *
-		 * @since 2.12.0
+		 * @since 2.13.0
 		 *
 		 * @param bool $enforce Whether to gate options-page reads behind a capability.
 		 * @param CMB2 $cmb     The CMB2 box object being read.
@@ -960,7 +960,7 @@ class CMB2_REST extends CMB2_Hookup_Base {
 	/**
 	 * The box's `capability` property, falling back to `manage_options`.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  CMB2 $cmb The CMB2 box object.
 	 *

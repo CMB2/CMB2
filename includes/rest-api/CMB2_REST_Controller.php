@@ -152,7 +152,7 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	 * public-read behavior unless the box is an options page and the site-wide
 	 * `cmb2_rest_enforce_options_page_read_permissions` filter is enabled.
 	 *
-	 * @since  2.12.0
+	 * @since  2.13.0
 	 *
 	 * @param  bool                  $can_access The default access for this read request.
 	 * @param  CMB2_Field|array|null $field      The field being read, when the read is of
