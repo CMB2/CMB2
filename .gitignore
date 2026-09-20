@@ -106,3 +106,6 @@ HANDOFF-*.md
 
 # Private per-checkout Claude instructions — never commit
 CLAUDE.local.md
+
+# Local docs, code, etc.
+/local
