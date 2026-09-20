@@ -17,6 +17,9 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 
 	// Ajax-specific test properties
 	protected $oembed_args;
+	protected $subscriber;
+	protected $editor;
+	protected $administrator;
 
 	/**
 	 * Set up the test fixture
@@ -45,6 +48,10 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 				),
 			),
 		), 'options-page-id', 'options-page' );
+
+		$this->subscriber    = $this->factory->user->create( array( 'role' => 'subscriber' ) );
+		$this->editor        = $this->factory->user->create( array( 'role' => 'editor' ) );
+		$this->administrator = $this->factory->user->create( array( 'role' => 'administrator' ) );
 
 		$this->oembed_args = array(
 			'url'         => 'https://www.youtube.com/watch?v=NCXyEKqmWdA',
@@ -240,9 +247,14 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 		add_filter( 'wp_doing_ajax', '__return_true' );
 		add_filter( 'wp_die_ajax_handler', array( $this, 'throw_oembed_die_handler' ), 99 );
 
+		// The box registered in set_up() owns this option key, and its 'capability'
+		// prop is the default `manage_options`.
+		wp_set_current_user( $this->administrator );
+
 		$_REQUEST['cmb2_ajax_nonce'] = wp_create_nonce( 'ajax_nonce' );
 		$_REQUEST['oembed_url']      = $this->oembed_args['url'];
 		$_REQUEST['object_id']       = 'options-page-id';
+		$_REQUEST['object_type']     = 'options-page';
 		$_REQUEST['field_id']        = array( 'unexpected', 'array' ); // The odd input under test.
 
 		$reached_send_json = false;
@@ -256,7 +268,7 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 			$json              = ob_get_contents();
 		} finally {
 			ob_end_clean();
-			unset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'], $_REQUEST['object_id'], $_REQUEST['field_id'] );
+			unset( $_REQUEST['cmb2_ajax_nonce'], $_REQUEST['oembed_url'], $_REQUEST['object_id'], $_REQUEST['object_type'], $_REQUEST['field_id'] );
 		}
 
 		$this->assertTrue( $reached_send_json, 'oembed_handler() should handle an array field_id without a PHP error.' );
@@ -265,6 +277,286 @@ class Test_CMB2_Ajax extends CMB2TestCase {
 		$this->assertTrue( ! empty( $decoded['success'] ), 'Handler should return a successful JSON response.' );
 		// The array field_id collapses to '' and is escaped into an empty rel attribute.
 		$this->assertStringContainsString( 'rel=""', $decoded['data'] );
+	}
+
+	/**
+	 * A successful lookup is cached against the object named in the request, so the
+	 * handler must only accept an object the caller may already edit. A subscriber
+	 * has no edit rights over someone else's post.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_post_target_without_edit_rights() {
+		$post_id = $this->factory->post->create( array( 'post_author' => $this->editor ) );
+
+		wp_set_current_user( $this->subscriber );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $post_id,
+			'object_type' => 'post',
+		) );
+
+		$this->assertFalse( $response['success'], 'A caller without edit rights over the post should not get a success response.' );
+		$this->assertSame( array(), $this->oembed_cache_keys( get_metadata( 'post', $post_id ) ), 'Nothing should have been cached against the post.' );
+	}
+
+	/**
+	 * The legitimate flow: someone editing a post gets the preview, and the result
+	 * is cached against that post.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_serves_post_target_with_edit_rights() {
+		$post_id = $this->factory->post->create( array( 'post_author' => $this->editor ) );
+
+		wp_set_current_user( $this->editor );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $post_id,
+			'object_type' => 'post',
+		) );
+
+		$this->assertTrue( $response['success'], 'The post author should still get the preview.' );
+		$this->assertNotEmpty( $this->oembed_cache_keys( get_metadata( 'post', $post_id ) ), 'The result should be cached against the post.' );
+	}
+
+	/**
+	 * A subscriber may edit their own user, but not another one.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_user_target_without_edit_rights() {
+		wp_set_current_user( $this->subscriber );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $this->editor,
+			'object_type' => 'user',
+		) );
+
+		$this->assertFalse( $response['success'], 'A caller without edit rights over the user should not get a success response.' );
+		$this->assertSame( array(), $this->oembed_cache_keys( get_metadata( 'user', $this->editor ) ), 'Nothing should have been cached against the user.' );
+	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_serves_user_target_with_edit_rights() {
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $this->subscriber,
+			'object_type' => 'user',
+		) );
+
+		$this->assertTrue( $response['success'], 'A caller who may edit the user should still get the preview.' );
+		$this->assertNotEmpty( $this->oembed_cache_keys( get_metadata( 'user', $this->subscriber ) ), 'The result should be cached against the user.' );
+	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_comment_target_without_edit_rights() {
+		$comment_id = $this->factory->comment->create( array(
+			'comment_post_ID' => $this->factory->post->create(),
+		) );
+
+		wp_set_current_user( $this->subscriber );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $comment_id,
+			'object_type' => 'comment',
+		) );
+
+		$this->assertFalse( $response['success'], 'A caller without edit rights over the comment should not get a success response.' );
+		$this->assertSame( array(), $this->oembed_cache_keys( get_metadata( 'comment', $comment_id ) ), 'Nothing should have been cached against the comment.' );
+	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_serves_comment_target_with_edit_rights() {
+		$comment_id = $this->factory->comment->create( array(
+			'comment_post_ID' => $this->factory->post->create(),
+		) );
+
+		wp_set_current_user( $this->editor );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $comment_id,
+			'object_type' => 'comment',
+		) );
+
+		$this->assertTrue( $response['success'], 'A caller who may edit the comment should still get the preview.' );
+		$this->assertNotEmpty( $this->oembed_cache_keys( get_metadata( 'comment', $comment_id ) ), 'The result should be cached against the comment.' );
+	}
+
+	/**
+	 * Term targets follow the taxonomy's own `edit_terms` capability, the same
+	 * check CMB2_Hookup::taxonomy_can_save() makes before writing term meta.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_term_target_without_taxonomy_rights() {
+		$term_id = $this->factory->term->create( array( 'taxonomy' => 'category' ) );
+
+		wp_set_current_user( $this->subscriber );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $term_id,
+			'object_type' => 'term',
+		) );
+
+		$this->assertFalse( $response['success'], 'A caller without the taxonomy capability should not get a success response.' );
+		$this->assertSame( array(), $this->oembed_cache_keys( get_metadata( 'term', $term_id ) ), 'Nothing should have been cached against the term.' );
+	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_serves_term_target_with_taxonomy_rights() {
+		$term_id = $this->factory->term->create( array( 'taxonomy' => 'category' ) );
+
+		wp_set_current_user( $this->editor );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $term_id,
+			'object_type' => 'term',
+		) );
+
+		$this->assertTrue( $response['success'], 'A caller with the taxonomy capability should still get the preview.' );
+		$this->assertNotEmpty( $this->oembed_cache_keys( get_metadata( 'term', $term_id ) ), 'The result should be cached against the term.' );
+	}
+
+	/**
+	 * On an options-page target the object id IS the option name the result is
+	 * cached into, so the gate is the registered box's own 'capability' prop
+	 * (default `manage_options`) — the same value that governs its admin screen.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_options_page_target_without_box_capability() {
+		wp_set_current_user( $this->subscriber );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $this->oembed_args['object_id'],
+			'object_type' => 'options-page',
+		) );
+
+		$this->assertFalse( $response['success'], "A caller without the box's capability should not get a success response." );
+		$this->assertSame( array(), $this->oembed_cache_keys( get_option( $this->oembed_args['object_id'] ) ), 'Nothing should have been cached into the option.' );
+	}
+
+	/**
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_serves_options_page_target_with_box_capability() {
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $this->oembed_args['object_id'],
+			'object_type' => 'options-page',
+		) );
+
+		$this->assertTrue( $response['success'], "A caller holding the box's capability should still get the preview." );
+		$this->assertNotEmpty( $this->oembed_cache_keys( get_option( $this->oembed_args['object_id'] ) ), 'The result should be cached into the option.' );
+	}
+
+	/**
+	 * An options-page object id that no registered box owns has no box capability
+	 * to consult, so it is not a valid target — not even for an administrator.
+	 * This keeps the option name the handler writes to inside the set of option
+	 * keys CMB2 boxes actually declared.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_options_page_target_no_box_declared() {
+		$unowned = 'an-unregistered-option-key';
+
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => $unowned,
+			'object_type' => 'options-page',
+		) );
+
+		$this->assertFalse( $response['success'], 'An option key no box declared should not be an accepted target.' );
+		$this->assertFalse( get_option( $unowned ), 'The option should not have been created.' );
+
+		delete_option( $unowned );
+	}
+
+	/**
+	 * object_type arrives in the request and decides which store the result is
+	 * written to, so a value outside CMB2's core object types is not a target.
+	 *
+	 * @group cmb2-ajax-embed
+	 */
+	public function test_oembed_handler_declines_unrecognized_object_type() {
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->request_oembed_handler( array(
+			'object_id'   => 1,
+			'object_type' => 'not-an-object-type',
+		) );
+
+		$this->assertFalse( $response['success'], 'An unrecognized object_type should not be an accepted target.' );
+	}
+
+	/**
+	 * Runs oembed_handler() with a valid nonce and the given request parameters,
+	 * and returns the decoded JSON response it terminated with.
+	 *
+	 * @param  array $params Request parameters to add to (or override in) the request.
+	 * @return array         The decoded JSON response.
+	 */
+	protected function request_oembed_handler( array $params ) {
+		add_filter( 'wp_doing_ajax', '__return_true' );
+		add_filter( 'wp_die_ajax_handler', array( $this, 'throw_oembed_die_handler' ), 99 );
+
+		$backup   = $_REQUEST;
+		$_REQUEST = array_merge( array(
+			'cmb2_ajax_nonce' => wp_create_nonce( 'ajax_nonce' ),
+			'oembed_url'      => $this->oembed_args['url'],
+			'field_id'        => $this->oembed_args['field_id'],
+		), $params );
+
+		$json = '';
+
+		ob_start();
+		try {
+			cmb2_ajax()->oembed_handler();
+		} catch ( CMB2_Test_Oembed_Die $e ) {
+			$json = ob_get_contents();
+		} finally {
+			ob_end_clean();
+			$_REQUEST = $backup;
+			$this->reset_cmb2_ajax_state();
+		}
+
+		$decoded = json_decode( $json, true );
+
+		$this->assertIsArray( $decoded, 'oembed_handler() should terminate with a JSON response.' );
+
+		return $decoded;
+	}
+
+	/**
+	 * Picks the oEmbed cache keys out of an object's metadata (or an options-page
+	 * option value), so a test can assert whether a cache write happened.
+	 *
+	 * @param  mixed $data Metadata array, option value, or false.
+	 * @return array       The oEmbed cache keys found.
+	 */
+	protected function oembed_cache_keys( $data ) {
+		$found = array();
+
+		foreach ( (array) $data as $key => $unused ) {
+			if ( is_string( $key ) && 0 === strpos( $key, '_oembed_' ) ) {
+				$found[] = $key;
+			}
+		}
+
+		return $found;
 	}
 
 	/**
