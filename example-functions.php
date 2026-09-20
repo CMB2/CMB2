@@ -785,6 +785,10 @@ function yourprefix_register_rest_api_box() {
 		'title'         => esc_html__( 'REST Test Box', 'cmb2' ),
 		'object_types'  => array( 'page' ), // Post type
 		'show_in_rest' => WP_REST_Server::ALLMETHODS, // WP_REST_Server::READABLE|WP_REST_Server::EDITABLE, // Determines which HTTP methods the box is visible in.
+		// Declares who may read this box via the REST API. `false` (no one), `true` (everyone),
+		// 'box-capability' (holders of this box's 'capability'), or any capability string.
+		// See: https://cmb2.io/docs/REST-API-Read-Permissions
+		// 'rest_read_capability' => 'edit_posts',
 		// Optional callback to limit box visibility.
 		// See: https://github.com/CMB2/CMB2/wiki/REST-API#permissions
 		// 'get_box_permissions_check_cb' => 'yourprefix_limit_rest_view_to_logged_in_users',
@@ -803,5 +807,6 @@ function yourprefix_register_rest_api_box() {
 		'id'         => 'yourprefix_rest_editable_text',
 		'type'       => 'text',
 		'show_in_rest' => WP_REST_Server::EDITABLE,// WP_REST_Server::ALLMETHODS|WP_REST_Server::READABLE, // Determines which HTTP methods the field is visible in. Will override the cmb2_box 'show_in_rest' param.
+		// 'rest_read_capability' => true, // Same values as the cmb2_box param, and overrides it for reads of this field.
 	) );
 }
