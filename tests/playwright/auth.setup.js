@@ -11,7 +11,7 @@ setup('authenticate', async ({ page }) => {
   const username = process.env.WP_USERNAME || 'admin';
   const password = process.env.WP_PASSWORD || 'password';
   
-  console.log(`Authenticating as ${username}...`);
+  console.log('Authenticating WordPress user...');
   
   // Navigate to login page
   await page.goto('/wp-admin/');

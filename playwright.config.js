@@ -1,4 +1,14 @@
 const { defineConfig, devices } = require('@playwright/test');
+const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config({
+  path: path.join(__dirname, '.env.local'),
+  override: false,
+  quiet: true,
+});
+
+const isEnabled = (value) => ['1', 'true', 'yes'].includes(String(value).toLowerCase());
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -9,6 +19,8 @@ module.exports = defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Exploratory QA runs are invoked directly and never collected as durable tests. */
+  testIgnore: ['**/.qa/**'],
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Single worker on CI — tests share one WordPress instance so parallel
@@ -37,6 +49,7 @@ module.exports = defineConfig({
     {
       name: 'setup',
       testMatch: /auth\.setup\.js/,
+      testIgnore: /(^|\/)\.qa\//,
     },
 
     {
@@ -46,7 +59,7 @@ module.exports = defineConfig({
         storageState: 'tests/playwright/.auth/user.json',
       },
       dependencies: ['setup'],
-      testIgnore: /auth\.setup\.js/,
+      testIgnore: [/auth\.setup\.js/, /(^|\/)\.qa\//],
     },
 
     {
@@ -56,7 +69,7 @@ module.exports = defineConfig({
         storageState: 'tests/playwright/.auth/user.json',
       },
       dependencies: ['setup'],
-      testIgnore: /auth\.setup\.js/,
+      testIgnore: [/auth\.setup\.js/, /(^|\/)\.qa\//],
     },
 
     {
@@ -66,12 +79,12 @@ module.exports = defineConfig({
         storageState: 'tests/playwright/.auth/user.json',
       },
       dependencies: ['setup'],
-      testIgnore: /auth\.setup\.js/,
+      testIgnore: [/auth\.setup\.js/, /(^|\/)\.qa\//],
     },
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: process.env.SKIP_WP_SERVER ? undefined : {
+  webServer: isEnabled(process.env.SKIP_WP_SERVER) ? undefined : {
     command: 'npm run env:tests:start',
     url: process.env.WP_BASE_URL || 'http://localhost:2623',
     reuseExistingServer: !process.env.CI,
