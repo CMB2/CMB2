@@ -91,6 +91,15 @@ reads mirror the settings screen), and even then behind its own switch.
 **Canonical example:** `includes/CMB2.php` `$mb_defaults['capability']` usage in
 `CMB2_Options_Hookup`.
 
+**Where the semantic does match:** an options-page target's *object id is the
+option name* the data lands in, so "may write this option" and "may use this
+settings screen" are the same question — see
+`CMB2_Ajax::can_cache_for_options_page()`. Note the shape: the box that
+declared the option key is also the only place a capability for it exists, so
+looking the box up both supplies the check and bounds the accepted option keys
+to ones a box declared. An id no box claims has no capability to consult, and
+is therefore not a target.
+
 ## C6 — Autoloader paths are case-sensitive by prefix
 
 **Rule:** `cmb2_autoload_classes()` maps `CMB2_REST`/`CMB2_REST_*` (exact case)
