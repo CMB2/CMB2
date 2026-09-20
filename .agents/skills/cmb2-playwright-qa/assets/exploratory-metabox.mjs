@@ -32,7 +32,7 @@ try {
   await metabox.waitFor({ state: 'visible' });
   await metabox.locator('.hndle').waitFor({ state: 'visible' });
   await page.screenshot({
-    path: path.join(runDir, 'claim-01-before.png'),
+    path: path.join(runDir, 'claim-01-text-field-hidden-before.png'),
     fullPage: true,
   });
 
@@ -40,7 +40,7 @@ try {
   await field.waitFor({ state: 'visible' });
   await field.fill('Exploratory value');
   await page.screenshot({
-    path: path.join(runDir, 'claim-01-after.png'),
+    path: path.join(runDir, 'claim-01-text-field-filled-after.png'),
     fullPage: true,
   });
 } catch (error) {

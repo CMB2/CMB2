@@ -12,6 +12,8 @@ Local-only report. Do not publish or post this report without approval.
 
 ## Claims
 
+One row per claim. Result is `pass`, `fail`, or `skipped` — never blank, and `skipped` always states why.
+
 | Claim | Steps | Result | Evidence |
 | --- | --- | --- | --- |
 | 1 |  | pass | Add verified relative artifact links only. |

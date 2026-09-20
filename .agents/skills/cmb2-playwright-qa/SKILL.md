@@ -9,6 +9,14 @@ Turn each requested behavior into an observable claim. Test only the agreed envi
 
 Read [the environment reference](references/environment.md) before selecting a target. Copy [the report template](assets/qa-report-template.md) into the ignored run directory. For the isolated suite's default metabox, copy [the exploratory script](assets/exploratory-metabox.mjs) and adapt it rather than duplicating authentication code.
 
+## Skip the run when it would prove nothing
+
+A browser run is expensive and its output is only as good as the claim behind it. Route these elsewhere instead:
+
+- **No rendered output** — sanitization, escaping, REST permission callbacks, option read/write paths. These belong in PHPUnit, where the assertion is exact.
+- **A single "does it render?" look** — use the `claude-in-chrome` tools against an already-running site. Do not stand up a Playwright run for one screenshot.
+- **No stated expected behavior** — ask what should and should not appear first. Without that, a screenshot documents the current state rather than proving anything about it.
+
 ## Choose the input mode
 
 Use one of these modes:
@@ -40,9 +48,9 @@ For another target, inspect its box and field IDs first, then wait for the regis
 
 ## Capture evidence and report it honestly
 
-For every claim, capture a before and after screenshot that includes the relevant WordPress and metabox context, not a tight crop with no orientation. Capture a final full relevant page state on every failure before reporting the error, current URL, and unmet locator or assertion.
+For every claim, capture a before and after screenshot that includes the relevant WordPress and metabox context, not a tight crop with no orientation. Name each artifact for the claim it proves, not the page it sits on — `claim-01-notice-absent-before.png`, never `claim-01-before.png`. A bare ordinal makes a reviewer replay the run to learn what they are looking at. Capture a final full relevant page state on every failure before reporting the error, current URL, and unmet locator or assertion.
 
-Keep a local Markdown report in the same run directory. Record environment, steps, claims, pass/fail result, artifact paths, and limitations. Add a Markdown file link only after verifying that its target exists from the report directory; omit unavailable artifacts instead of leaving broken links. Make clear that the report is local and not published.
+Keep a local Markdown report in the same run directory. Record environment, steps, claims, result, artifact paths, and limitations. A claim resolves to exactly one of **pass**, **fail**, or **skipped** — the last always carrying its reason (an infrastructure dependency, preserving the target site's state, coverage that already exists in PHPUnit). A claim that could not be run is not a failure, and burying it is worse than either. Add a Markdown file link only after verifying that its target exists from the report directory; omit unavailable artifacts instead of leaving broken links. Make clear that the report is local and not published.
 
 ## Graduate only durable coverage
 
