@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Enhancements
+
+* [Development] Added a `SECURITY.md` security policy and enabled GitHub private vulnerability reporting, giving researchers a private channel that does not depend on email delivery.
+
 ### Bug Fixes
 
 * Sanitized the `field_id` input (with an `isset()` guard) and escaped the `rel` attribute in the oEmbed AJAX handler, addressing a reflected XSS vector flagged by WordPress Plugin Check. Props [@thisismyurl](https://github.com/thisismyurl) ([#1559](https://github.com/CMB2/CMB2/pull/1559)).
