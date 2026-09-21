@@ -25,6 +25,7 @@
 .copilot              export-ignore
 AGENTS.md             export-ignore
 CLAUDE.md             export-ignore
+CONVENTIONS.md        export-ignore
 
 # Dependencies (installed locally, never shipped)
 node_modules          export-ignore

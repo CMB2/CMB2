@@ -29,7 +29,7 @@ rsync -av --delete \
   --exclude='.wp-env.json' --exclude='.wp-env-tests.json' \
   --exclude='apigen' --exclude='Dockunit.json' --exclude='cypress.json' \
   --exclude='*.scss' --exclude='css/sass' \
-  --exclude='CLAUDE.md' --exclude='.claude' --exclude='.beads' \
+  --exclude='CLAUDE.md' --exclude='CONVENTIONS.md' --exclude='.claude' --exclude='.beads' \
   --exclude='AGENTS.md' --exclude='.agents' --exclude='.codex' \
   --exclude='.cursorrules' --exclude='.copilot' \
   ./ "$SVN/trunk/"
