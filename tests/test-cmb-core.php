@@ -111,6 +111,7 @@ class Test_CMB2_Core extends CMB2TestCase {
 			'fields'           => array(),
 			'hookup'           => true,
 			'show_in_rest'     => false,
+			'rest_read_capability' => null, // Declares how REST reads of this box are permissioned.
 			'save_fields'      => true, // Will not save during hookup if false
 			'closed'           => false, // Default to metabox being closed?
 			'taxonomies'       => array(),

@@ -164,6 +164,17 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check_filter( $can_access = true ) {
+		/*
+		 * Optionally gate the read behind a capability, per the field's declaration,
+		 * falling back to the box's. Passing the field is what makes this per-field:
+		 * the fields collection sets $this->field before each call, so a field the
+		 * current user cannot read is left out of the collection.
+		 */
+		$can_access = $this->maybe_gate_read_by_capability(
+			$can_access,
+			$this->field instanceof CMB2_Field ? $this->field : null
+		);
+
 		/**
 		 * By default, no special permissions needed.
 		 *

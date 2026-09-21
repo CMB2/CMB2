@@ -101,6 +101,29 @@ class CMB2 extends CMB2_Base {
 		'new_user_section'        => 'add-new-user', // or 'add-existing-user'.
 		'new_term_section'        => true,
 		'show_in_rest'            => false,
+
+		/*
+		 * Declares who may read this box via the REST API (only applicable when
+		 * 'show_in_rest' is readable). Accepts:
+		 *
+		 * - false            No one may read it, administrators included.
+		 * - true             Everyone may read it, logged-out visitors included.
+		 * - 'box-capability' Only holders of this box's 'capability' may read it
+		 *                    (falling back to 'manage_options').
+		 * - 'a_capability'   Only holders of the named capability may read it,
+		 *                    e.g. 'edit_posts'.
+		 * - null             (default) CMB2's current behavior: reads are public, unless
+		 *                    the box is an options page and the site-wide
+		 *                    `cmb2_rest_enforce_options_page_read_permissions` filter is
+		 *                    enabled.
+		 *
+		 * The same property may be set on an individual field, where it takes precedence
+		 * over the box's for reads of that field.
+		 *
+		 * The `cmb2_api_get_box_permissions_check`/`cmb2_api_get_field_permissions_check`
+		 * filters still run afterward and have the final say.
+		 */
+		'rest_read_capability'    => null,
 		'classes'                 => null, // Optionally add classes to the CMB2 wrapper.
 		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback).
 
@@ -250,6 +273,9 @@ class CMB2 extends CMB2_Base {
 
 		// Hook in the rest api functionality.
 		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_REST', 'maybe_init_and_hookup' ) );
+
+		// Hook in the notice about the upcoming REST read-permissions alignment.
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_Rest_Read_Permissions_Notice', 'maybe_init_and_hookup' ) );
 	}
 
 	/**

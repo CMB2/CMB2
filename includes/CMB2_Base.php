@@ -347,16 +347,22 @@ abstract class CMB2_Base {
 	/**
 	 * Checks if this object has parameter corresponding to the given filter
 	 * which is callable. If so, it registers the callback, and if not,
-	 * converts the maybe-modified $val to a boolean for return.
+	 * converts the declared parameter to a boolean for return.
 	 *
 	 * The registered handlers will have a parameter name which matches the filter, except:
 	 * - The 'cmb2_api' prefix will be removed
 	 * - A '_cb' suffix will be added (to stay inline with other '*_cb' parameters).
 	 *
+	 * Only a declared parameter is consulted. The caller's default is deliberately not
+	 * passed to prop() as a fallback: prop() stores a truthy fallback on the object, so
+	 * doing that would turn one request's default into a declared parameter for every
+	 * later call — see the `$val` note below.
+	 *
 	 * @since  2.2.3
 	 *
 	 * @param  string $hook_name     The hook name.
-	 * @param  bool   $val           The default value.
+	 * @param  bool   $val           The default value, returned as-is when the parameter
+	 *                               is not declared on this object.
 	 * @param  string $hook_function The hook function. Default: 'add_filter'.
 	 *
 	 * @return null|bool             Null if hook is registered, or bool for value.
@@ -366,11 +372,13 @@ abstract class CMB2_Base {
 		// Remove filter prefix, add param suffix.
 		$parameter = substr( $hook_name, strlen( 'cmb2_api_' ) ) . '_cb';
 
-		return self::maybe_hook(
-			$this->prop( $parameter, $val ),
-			$hook_name,
-			$hook_function
-		);
+		$declared = $this->prop( $parameter );
+
+		if ( null === $declared ) {
+			return $val;
+		}
+
+		return self::maybe_hook( $declared, $hook_name, $hook_function );
 	}
 
 	/**
