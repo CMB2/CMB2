@@ -113,3 +113,6 @@ CLAUDE.local.md
 # Per-checkout WordPress and Playwright QA configuration/artifacts
 .env.local
 /tests/playwright/.qa/
+
+# Environment files — never commit
+.env
