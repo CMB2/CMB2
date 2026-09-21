@@ -59,7 +59,10 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		}
 
 		// Register setting to cmb2 group.
-		register_setting( 'cmb2', $this->option_key );
+		register_setting( 'cmb2', $this->option_key, array(
+			'type'              => 'array',
+			'sanitize_callback' => 'cmb2_sanitize_option_passthrough',
+		) );
 
 		// Handle saving the data.
 		add_action( 'admin_post_' . $this->option_key, array( $this, 'save_options' ) );

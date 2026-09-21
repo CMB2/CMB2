@@ -165,3 +165,36 @@ special-case every box by hand.
 not the implementation. Adding one to `$mb_defaults` also changes the array
 pinned by `Test_CMB2_Core::test_defaults_set()`; update that fixture in the same
 commit.
+
+## C9 — The registered-setting `sanitize_callback` sits on CMB2's own save path
+
+**Rule:** The `sanitize_callback` passed to `register_setting()` must be a
+passthrough. Core attaches it to `sanitize_option_{$option_name}`, which
+`update_option()` fires — so it runs on every CMB2 options-page save, not only
+on settings submitted through core's `options.php`. Real sanitization happens
+earlier and per field type, in `CMB2_Sanitize`, before the option array is
+assembled.
+
+**Consequence:** anything that transforms values in that callback applies one
+field type's rule to every field type at once. A `map_deep( $value,
+'sanitize_text_field' )` there strips HTML from `wysiwyg` fields, collapses
+newlines in `textarea`s, and flattens group/repeatable arrays — silently, on
+save, with no recovery. The callback exists only so wp.org's Plugin Check
+(`PluginCheck.CodeAnalysis.SettingSanitization`) sees one; it is not a
+sanitization seam.
+
+**Canonical example:** `cmb2_sanitize_option_passthrough()` in
+`includes/helper-functions.php`, passed from
+`CMB2_Options_Hookup::hooks()`; the save path it lands in is
+`CMB2_Options_Hookup::save_options()` → `CMB2::save_fields()` →
+`CMB2_Options::set()` → `update_option()`.
+
+**Blast radius:** every options page in every bundling product, and any
+third-party `update_option()` on a CMB2 option key. Requested in
+CMB2/CMB2#1533 with a transforming callback attached; that patch was declined
+for this reason.
+
+**Related:** new `cmb2_*` helpers in `includes/helper-functions.php` are *not*
+wrapped in `function_exists()` — the version election (C3) loads exactly one
+copy of `includes/`. Only the PHP-polyfill functions at the end of that file
+are guarded, because those names can come from elsewhere.
