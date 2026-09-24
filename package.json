@@ -16,6 +16,7 @@
 		"build:js": "npm run build:js:lint && npm run build:js:minify",
 		"build:js:lint": "eslint js/cmb2.js js/cmb2-wysiwyg.js js/cmb2-char-counter.js",
 		"build:js:minify": "terser js/cmb2.js js/cmb2-wysiwyg.js js/cmb2-char-counter.js --compress --no-rename --output js/cmb2.min.js",
+		"build:archive": "bash scripts/archive.sh",
 		"build:i18n": "npm run build:i18n:pot && npm run build:i18n:mo",
 		"build:i18n:pot": "wp-pot --src '**/*.php' --dest-file languages/cmb2.pot --domain cmb2 --package CMB2 --bug-report 'http://wordpress.org/support/plugin/cmb2' --last-translator 'CMB2 Team hello@cmb2.io' --team 'CMB2 Team hello@cmb2.io'",
 		"build:i18n:mo": "for f in languages/*.po; do msgfmt -o \"${f%.po}.mo\" \"$f\"; done",

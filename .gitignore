@@ -116,3 +116,6 @@ CLAUDE.local.md
 
 # Environment files — never commit
 .env
+
+# scripts/archive.sh output
+/archives/
