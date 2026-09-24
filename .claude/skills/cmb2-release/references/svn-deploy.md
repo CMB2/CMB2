@@ -12,47 +12,48 @@ SVN=/tmp/cmb2-svn
 cd "$SVN" && svn up && cd -
 ```
 
-## 2. Sync the GitHub tag's contents into `trunk/`
+## 2. Sync the tagged release into `trunk/`
 
-The exclude list matters — wp.org rejects oversized plugins and exposes anything not excluded:
+Export the **tag** with `git archive`, then mirror that export into trunk. Never
+rsync from the working directory: it also holds untracked and gitignored files
+(`.env.local`, `HANDOFF-*.md`, local build debris) that an exclude list can't
+anticipate, and SVN commits are public and permanent.
+
+`git archive` honors the `export-ignore` attributes in the repo-root
+`.gitattributes`, which makes that file the single list of what does not ship —
+the same list GitHub's release source zips use. When you add a dev/tooling file
+or directory to the repo, mark it `export-ignore` there.
 
 ```bash
-rsync -av --delete \
-  --exclude='.git' --exclude='.github' --exclude='.gitignore' \
-  --exclude='.gitattributes' --exclude='.editorconfig' \
-  --exclude='.travis.yml' --exclude='.scrutinizer.yml' \
-  --exclude='node_modules' --exclude='vendor' \
-  --exclude='tests' --exclude='phpunit.xml.dist' --exclude='.phpcs.xml.dist' \
-  --exclude='package.json' --exclude='package-lock.json' --exclude='composer.json' --exclude='composer.lock' \
-  --exclude='Gruntfile.js' --exclude='scripts' --exclude='tools' \
-  --exclude='eslint.config.mjs' --exclude='playwright.config.js' \
-  --exclude='.wp-env.json' --exclude='.wp-env-tests.json' \
-  --exclude='apigen' --exclude='Dockunit.json' --exclude='cypress.json' \
-  --exclude='*.scss' --exclude='css/sass' \
-  --exclude='CLAUDE.md' --exclude='CONVENTIONS.md' --exclude='.claude' --exclude='.beads' \
-  --exclude='AGENTS.md' --exclude='.agents' --exclude='.codex' \
-  --exclude='.cursorrules' --exclude='.copilot' \
-  ./ "$SVN/trunk/"
-```
+EXPORT=$(mktemp -d)
+git archive "v$NEW" | tar -x -C "$EXPORT"
+ls -a "$EXPORT"                                         # eyeball: no dotfiles/tooling beyond what trunk already ships
 
-This list and the `export-ignore` attributes in the repo-root `.gitattributes`
-must stay in lock-step — the former governs the wp.org SVN deploy, the latter
-governs `git archive` / GitHub release source zips. When you add a dev/tooling
-file or directory to the repo, add it to **both**.
+rsync -a --delete --exclude='.svn' "$EXPORT/" "$SVN/trunk/"
+```
 
 ## 3. Stage adds/removes and tag-copy
 
+Stage removals **before** the tag copy, so the tag doesn't inherit missing files.
+SVN reads `@` in a path as a peg revision (e.g. `cmb2-en@pirate.po`), so every
+path passed to `svn rm` gets a trailing `@`.
+
 ```bash
 cd "$SVN"
-svn status                                              # review additions/deletions
-svn add --force trunk
-svn rm $(svn status trunk | awk '/^!/ {print $2}') 2>/dev/null
+svn add --force -q trunk
+svn status trunk | awk '/^!/ {print $2}' | while read -r f; do svn rm -q "$f@"; done
 svn cp trunk "tags/$NEW"
+svn status                                              # review additions/deletions
+
+diff -rq --exclude=.svn trunk "$EXPORT"  && echo "trunk == v$NEW"
+diff -rq --exclude=.svn trunk "tags/$NEW" && echo "tag == trunk"
 ```
+
+Both `diff`s must print their success line.
 
 ## 4. 🛑 STOP-AND-VALIDATE before `svn ci`
 
-Run `svn status` and `svn diff trunk | head -200`. Show the user the file list and a diff sample. SVN commits are public the moment they land — there's no "force-push" recovery. Confirm before committing.
+Run `svn status` and `svn diff --diff-cmd diff -x -u trunk | head -200` (the built-in diff can print only headers). Show the user the file list and a diff sample. SVN commits are public the moment they land — there's no "force-push" recovery. Confirm before committing.
 
 ## 5. Commit
 

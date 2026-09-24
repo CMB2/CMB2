@@ -255,7 +255,8 @@ Regenerate banners — do not hand-edit:
 ```bash
 npm install   # if needed
 npm run build:css:banner
-grep -l "Version: $OLD" css/*.css   # should print nothing
+npm run build:css:minify   # the .min.css files carry their own banner; build:css:banner doesn't touch them
+grep -l "v$OLD" css/*.css   # should print nothing
 ```
 
 ### Commit

@@ -2,9 +2,9 @@
 #
 # `git archive` (and GitHub's auto-generated release source zips, which honor
 # these attributes) export everything EXCEPT the paths marked export-ignore
-# below. Keep this list in sync with the rsync --exclude list in
-# .claude/skills/cmb2-release/references/svn-deploy.md so the GitHub export and
-# the wordpress.org SVN deploy ship the same files.
+# below. The wordpress.org SVN deploy ships a `git archive` of the release tag
+# (.claude/skills/cmb2-release/references/svn-deploy.md), so this list is the
+# single source of truth for what ships everywhere.
 # Based on https://plugins.trac.wordpress.org/browser/cmb2/trunk
 
 # Version control / CI
