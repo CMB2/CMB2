@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This is the canonical agent-instruction file for this repository. Claude Code
+reads it directly; Codex reads it through the relative `AGENTS.md` symlink.
 
 ## Project Overview
 
@@ -140,6 +141,27 @@ npm run build:i18n:mo
 npm run build:i18n
 ```
 
+## Non-Interactive Shell Commands
+
+Always use non-interactive flags with file operations so an aliased command
+cannot block waiting for confirmation.
+
+```bash
+# Force overwrite without prompting.
+cp -f source dest
+mv -f source dest
+rm -f file
+
+# Recursive operations.
+rm -rf directory
+cp -rf source dest
+```
+
+- `scp`: use `-o BatchMode=yes`
+- `ssh`: use `-o BatchMode=yes`
+- `apt-get`: use `-y`
+- `brew`: use `HOMEBREW_NO_AUTO_UPDATE=1`
+
 ## Development Environment
 
 The project uses WordPress's standard testing framework and includes:
@@ -234,6 +256,19 @@ version floor that local wp-env does not.
 
 The release process is documented in the `cmb2-release` skill. Run `/cmb2-release` (or `/cmb2-release 2.X.Y` to skip version detection) to walk through it. Source: `.claude/skills/cmb2-release/SKILL.md`. Includes the wp.org SVN deploy, which has no automation.
 
+## Shared Claude and Codex Skills
+
+Claude owns the workspace skill sources in `.claude/skills`; Codex discovers
+project skills in `.agents/skills`. `AGENTS.md` is a symlink to this canonical
+file. Keep these symlinks current whenever a skill is added, removed, or
+renamed:
+
+- `.claude/skills/cmb2-playwright-qa` → `.agents/skills/cmb2-playwright-qa`
+- `.agents/skills/changelog-credit` → `.claude/skills/changelog-credit`
+- `.agents/skills/cmb2-local-testing` → `.claude/skills/cmb2-local-testing`
+- `.agents/skills/cmb2-release` → `.claude/skills/cmb2-release`
+- `.agents/skills/review-pr` → `.claude/skills/review-pr`
+
 ## Conventions & Blast Radius — READ CONVENTIONS.md FIRST
 
 **Before changing anything under `includes/`, `bootstrap.php`, or `init.php`,
@@ -299,6 +334,7 @@ bd close <id>         # Complete work
 - Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
 - Run `bd prime` for detailed command reference and session close protocol
 - Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
+- In Codex, use the project `beads` skill at `.agents/skills/beads/SKILL.md`.
 
 **Architecture in one line:** issues live in a local Dolt DB; sync uses `refs/dolt/data` on your git remote; `.beads/issues.jsonl` is a passive export. See https://github.com/gastownhall/beads/blob/main/docs/SYNC_CONCEPTS.md for details and anti-patterns.
 
