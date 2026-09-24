@@ -476,6 +476,10 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 
 		echo '<ul class="cmb2-display-file-list">';
 		foreach ( $this->value as $id => $fullurl ) {
+			if ( ! is_scalar( $fullurl ) ) {
+				continue;
+			}
+
 			echo '<li>', $this->file_output( esc_url_raw( $fullurl ), $id, $type ), '</li>';
 		}
 		echo '</ul>';

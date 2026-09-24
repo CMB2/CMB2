@@ -242,6 +242,19 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		);
 	}
 
+	public function test_file_list_skips_non_scalar_values() {
+		$attach_1_url = get_permalink( $this->attachment_id );
+
+		$this->assertDisplayFieldMatches(
+			'file_list',
+			array(
+				$this->attachment_id  => $attach_1_url,
+				$this->attachment_id2 => array( 'unexpected' ),
+			),
+			'<ul class="cmb2-display-file-list"><li><div class="file-status"><span>File: <strong><a href="' . $attach_1_url . '">' . CMB2_Utils::get_file_name_from_path( $attach_1_url ) . '</a></strong></span></div></li></ul>'
+		);
+	}
+
 	public function test_file() {
 		$images = get_attached_media( 'image', $this->post_id );
 		$attach_1_url = get_permalink( $this->attachment_id );
