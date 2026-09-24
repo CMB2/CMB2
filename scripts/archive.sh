@@ -37,7 +37,8 @@ EOF
 REF=''
 SVN_DIR=''
 ALLOW_DEVELOP=false
-SVN_URL='https://plugins.svn.wordpress.org/cmb2'
+# CMB2_SVN_URL overrides the target, for testing against a local file:// repo.
+SVN_URL="${CMB2_SVN_URL:-https://plugins.svn.wordpress.org/cmb2}"
 
 for arg in "$@"; do
 	case $arg in
@@ -48,6 +49,12 @@ for arg in "$@"; do
 		*) echo "Unknown argument: $arg" >&2; show_help >&2; exit 1 ;;
 	esac
 done
+
+# A develop build must never be staged into the real wp.org working copy.
+if [ -n "$SVN_DIR" ] && [ "$ALLOW_DEVELOP" = true ]; then
+	echo "--svn cannot be combined with --allow-develop." >&2
+	exit 1
+fi
 
 cd "$(dirname "$0")/.."
 ROOT="$PWD"
@@ -72,8 +79,9 @@ echo "Archiving CMB2 $VERSION from $REF ($(git rev-parse --short "$REF"))"
 # under pipefail once grep exits early and git show takes SIGPIPE.
 # Every failure is collected before exiting, so one run shows the whole list.
 ERRORS=()
-check() { if ! eval "$2"; then ERRORS+=( "$1" ); fi; }
+check() { local msg=$1; shift; "$@" || ERRORS+=( "$msg" ); }
 has() { grep -qE "$2" <<< "$1"; }
+same_commit() { [ "$(git rev-parse "$1^{commit}")" = "$(git rev-parse --verify --quiet "$2^{commit}")" ]; }
 
 INIT=$(at_ref init.php)
 PACKAGE=$(at_ref package.json)
@@ -82,35 +90,27 @@ README_MD=$(at_ref README.md)
 CHANGELOG=$(at_ref CHANGELOG.md)
 V_RE=${VERSION//./\\.}
 
-check "init.php Version: header is not $VERSION" \
-	'has "$INIT" "^ \* Version: +$V_RE\$"'
-check "package.json version is not $VERSION" \
-	'has "$PACKAGE" "\"version\": \"$V_RE\""'
-check "readme.txt Stable tag is not $VERSION" \
-	'has "$README_TXT" "^Stable tag: +$V_RE\$"'
-check "README.md Stable tag is not $VERSION" \
-	'has "$README_MD" "^\*\*Stable tag:\*\* +$V_RE( |\$)"'
-check "CHANGELOG.md has no ## [$VERSION - ...] section" \
-	'has "$CHANGELOG" "^## \[$V_RE - "'
-check "readme.txt has no ### $VERSION changelog entry" \
-	'has "$README_TXT" "^### $V_RE\$"'
+check "init.php Version: header is not $VERSION"     has "$INIT"       "^ \* Version: +$V_RE\$"
+check "package.json version is not $VERSION"         has "$PACKAGE"    "\"version\": \"$V_RE\""
+check "readme.txt Stable tag is not $VERSION"        has "$README_TXT" "^Stable tag: +$V_RE\$"
+check "README.md Stable tag is not $VERSION"         has "$README_MD"  "^\*\*Stable tag:\*\* +$V_RE( |\$)"
+check "CHANGELOG.md has no ## [$VERSION - ...] section" has "$CHANGELOG" "^## \[$V_RE - "
+check "readme.txt has no ### $VERSION changelog entry" has "$README_TXT" "^### $V_RE\$"
 
 # Both the expanded and the minified CSS carry a version banner; the minified
 # ones are only rewritten by `npm run build:css:minify`.
 for css in $(git ls-tree --name-only "$REF" css/ | grep -E '\.css$'); do
 	BANNER=$(at_ref "$css" | head -c 300 || true)
-	check "$css banner is not v$VERSION" 'has "$BANNER" "v$V_RE "'
+	check "$css banner is not v$VERSION" has "$BANNER" "v$V_RE "
 done
 
 NEXT_HITS=$(git grep -l '{{next}}' "$REF" -- '*.php' | sed 's/^[^:]*://' || true)
-check "{{next}} placeholders remain: ${NEXT_HITS//$'\n'/ }" '[ -z "$NEXT_HITS" ]'
+check "{{next}} placeholders remain: ${NEXT_HITS//$'\n'/ }" test -z "$NEXT_HITS"
 
 if [ "$ALLOW_DEVELOP" = false ]; then
 	BOOT="CMB2_Bootstrap_${VERSION//./}"
-	check "init.php bootstrap class is not $BOOT (still _Develop?)" \
-		'has "$INIT" "^	class $BOOT \\{"'
-	check "$REF is not the v$VERSION tag" \
-		'[ "$(git rev-parse "$REF^{commit}")" = "$(git rev-parse --verify --quiet "v$VERSION^{commit}")" ]'
+	check "init.php bootstrap class is not $BOOT (still _Develop?)" has "$INIT" "^	class $BOOT \\{"
+	check "$REF is not the v$VERSION tag" same_commit "$REF" "v$VERSION"
 fi
 
 if [ ${#ERRORS[@]} -gt 0 ]; then
@@ -141,6 +141,9 @@ command -v svn > /dev/null || fail "svn is not installed"
 mkdir -p "$(dirname "$SVN_DIR")"
 SVN_DIR="$(cd "$(dirname "$SVN_DIR")" && pwd)/$(basename "$SVN_DIR")"
 [ -d "$SVN_DIR/.svn" ] || svn co -q "$SVN_URL" "$SVN_DIR"
+squash_slashes() { sed -E 's#([^:/])/+#\1/#g' <<< "$1"; }
+WC_URL=$(svn info --show-item url "$SVN_DIR")
+[ "$(squash_slashes "$WC_URL")" = "$(squash_slashes "$SVN_URL")" ] || fail "$SVN_DIR is a checkout of $WC_URL, not $SVN_URL"
 svn up -q "$SVN_DIR"
 
 cd "$SVN_DIR"
