@@ -435,7 +435,7 @@ if ( ! function_exists( 'date_timestamp_get' ) ) {
  * The callback exists so register_setting() has one, which wp.org's Plugin
  * Check requires of every registered setting.
  *
- * @since 2.14.0
+ * @since 2.13.1
  *
  * @param mixed $value The option value, already sanitized per-field.
  *
