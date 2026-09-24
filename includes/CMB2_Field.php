@@ -112,6 +112,7 @@ class CMB2_Field extends CMB2_Base {
 		'after_row',
 		'after_group_row',
 		'after_group',
+		'closed_cb',
 	);
 
 	/**
