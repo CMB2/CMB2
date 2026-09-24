@@ -2,9 +2,10 @@
 #
 # `git archive` (and GitHub's auto-generated release source zips, which honor
 # these attributes) export everything EXCEPT the paths marked export-ignore
-# below. The wordpress.org SVN deploy ships a `git archive` of the release tag
-# (.claude/skills/cmb2-release/references/svn-deploy.md), so this list is the
-# single source of truth for what ships everywhere.
+# below. scripts/archive.sh builds the release zip and the wordpress.org SVN
+# trunk from a `git archive` of the release tag, so this list governs what
+# ships everywhere. (On wp.org, svn:ignore props on trunk also withhold
+# README.md and some *.css.map files.)
 # Based on https://plugins.trac.wordpress.org/browser/cmb2/trunk
 
 # Version control / CI

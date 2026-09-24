@@ -4,64 +4,42 @@ There is **no GitHub Action for this**. It is fully manual. If you don't have cr
 
 This file assumes `$NEW` is exported from the parent SKILL.md's "Lock in the values" step.
 
-## 1. Check out (or update) the SVN working copy
+## 1. Build and stage with `scripts/archive.sh`
 
 ```bash
-SVN=/tmp/cmb2-svn
-[ -d "$SVN" ] || svn co https://plugins.svn.wordpress.org/cmb2 "$SVN"
-cd "$SVN" && svn up && cd -
+scripts/archive.sh --svn=/tmp/cmb2-svn
 ```
 
-## 2. Sync the tagged release into `trunk/`
+It checks out (or updates) the SVN working copy, refuses to run if the working
+copy is dirty or `tags/$NEW` already exists, then:
 
-Export the **tag** with `git archive`, then mirror that export into trunk. Never
-rsync from the working directory: it also holds untracked and gitignored files
-(`.env.local`, `HANDOFF-*.md`, local build debris) that an exclude list can't
-anticipate, and SVN commits are public and permanent.
+- re-runs the release checks against the `v$NEW` tag and builds
+  `archives/cmb2/` from `git archive` (never the working tree, which holds
+  gitignored files like `.env.local`);
+- mirrors that tree into `trunk/`, stages adds and removes (`svn rm` gets a
+  trailing `@`, since SVN parses `@` in a filename as a peg revision), and
+  copies `trunk` to `tags/$NEW`;
+- verifies `trunk` matches the export and the tag matches `trunk`, and lists
+  what the SVN `svn:ignore` props withhold (`README.md` and some `*.css.map`,
+  deliberately kept off wp.org).
 
-`git archive` honors the `export-ignore` attributes in the repo-root
-`.gitattributes`, which makes that file the single list of what does not ship —
-the same list GitHub's release source zips use. When you add a dev/tooling file
-or directory to the repo, mark it `export-ignore` there.
+It never runs `svn ci`. If it fails, fix the cause; don't stage by hand.
+
+What ships is `.gitattributes` `export-ignore` plus those `svn:ignore` props.
+When you add a dev/tooling file or directory to the repo, mark it
+`export-ignore`.
+
+## 2. 🛑 STOP-AND-VALIDATE before `svn ci`
+
+Run `svn status /tmp/cmb2-svn` and `svn diff --diff-cmd diff -x -u /tmp/cmb2-svn/trunk | head -200` (the built-in diff can print only headers). Show the user the file list and a diff sample. SVN commits are public the moment they land — there's no "force-push" recovery. Confirm before committing.
+
+## 3. Commit
 
 ```bash
-EXPORT=$(mktemp -d)
-git archive "v$NEW" | tar -x -C "$EXPORT"
-ls -a "$EXPORT"                                         # eyeball: no dotfiles/tooling beyond what trunk already ships
-
-rsync -a --delete --exclude='.svn' "$EXPORT/" "$SVN/trunk/"
+svn ci /tmp/cmb2-svn -m "Release $NEW" --username <wp-org-username>
 ```
 
-## 3. Stage adds/removes and tag-copy
-
-Stage removals **before** the tag copy, so the tag doesn't inherit missing files.
-SVN reads `@` in a path as a peg revision (e.g. `cmb2-en@pirate.po`), so every
-path passed to `svn rm` gets a trailing `@`.
-
-```bash
-cd "$SVN"
-svn add --force -q trunk
-svn status trunk | awk '/^!/ {print $2}' | while read -r f; do svn rm -q "$f@"; done
-svn cp trunk "tags/$NEW"
-svn status                                              # review additions/deletions
-
-diff -rq --exclude=.svn trunk "$EXPORT"  && echo "trunk == v$NEW"
-diff -rq --exclude=.svn trunk "tags/$NEW" && echo "tag == trunk"
-```
-
-Both `diff`s must print their success line.
-
-## 4. 🛑 STOP-AND-VALIDATE before `svn ci`
-
-Run `svn status` and `svn diff --diff-cmd diff -x -u trunk | head -200` (the built-in diff can print only headers). Show the user the file list and a diff sample. SVN commits are public the moment they land — there's no "force-push" recovery. Confirm before committing.
-
-## 5. Commit
-
-```bash
-svn ci -m "Release $NEW" --username <wp-org-username>
-```
-
-## 6. Verify
+## 4. Verify
 
 After `svn ci`, the wordpress.org listing updates within a few minutes. Verify:
 

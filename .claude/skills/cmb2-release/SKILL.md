@@ -38,6 +38,7 @@ allowed-tools:
   - Bash(echo*)
   - Bash(curl*)
   - Bash(bash*)
+  - Bash(scripts/archive.sh*)
   - Read
   - Edit
   - Write
@@ -301,7 +302,15 @@ You're still on `develop` with Steps 1–3 committed. Tag the latest commit:
 git tag -a "v$NEW" -m "v$NEW"
 ```
 
-🛑 **STOP-AND-VALIDATE**: Show `git log --oneline -5` and `git show v$NEW --stat`. Confirm the tag points to the right commit before pushing. Pushing a tag is hard to undo cleanly.
+Validate and build the release archive from the tag before anything leaves the machine:
+
+```bash
+scripts/archive.sh      # checks v$NEW, then builds archives/cmb2-$NEW.zip
+```
+
+It fails, listing every problem, if any version string (init.php header and `VERSION`, `package.json`, both readmes' Stable tag), changelog heading, CSS banner (expanded *and* `.min.css`) or the bootstrap class doesn't match `$NEW`, if a `{{next}}` placeholder remains, or if the tag isn't `v$NEW`. Fix, re-tag, re-run — don't push past a failure.
+
+🛑 **STOP-AND-VALIDATE**: Show the script output, `git log --oneline -5` and `git show v$NEW --stat`. Confirm the tag points to the right commit before pushing. Pushing a tag is hard to undo cleanly.
 
 ```bash
 git push origin develop
@@ -318,15 +327,15 @@ Per the project's `CLAUDE.md` "Landing the Plane" rule: **work is not done until
 
 ## Step 5 — wordpress.org SVN deploy
 
-This step is fully manual (no GitHub Action exists) and the most error-prone part of the release. Follow [references/svn-deploy.md](references/svn-deploy.md) — it has the exact rsync exclude list, the SVN tag-copy steps, the STOP-AND-VALIDATE gate before `svn ci`, and the post-deploy verification.
+This step is fully manual (no GitHub Action exists) and the most error-prone part of the release. Follow [references/svn-deploy.md](references/svn-deploy.md): `scripts/archive.sh --svn=/tmp/cmb2-svn` stages trunk and the tag, then the STOP-AND-VALIDATE gate before `svn ci`, and the post-deploy verification.
 
 ## Step 6 — GitHub Release
 
-Pull the changelog body straight from `CHANGELOG.md` so the GitHub release page matches what users see in `readme.txt`:
+Pull the changelog body straight from `CHANGELOG.md` so the GitHub release page matches what users see in `readme.txt`, and attach the zip `scripts/archive.sh` built. GitHub's own "Source code" zips unpack to `CMB2-$NEW/`, which WordPress installs as a separate plugin from `cmb2/`; the attached zip unpacks to `cmb2/`, same as wp.org's download.
 
 ```bash
 NOTES=$(awk -v v="## [$NEW" 'index($0, v)==1{flag=1; next} /^## /{flag=0} flag' CHANGELOG.md)
-gh release create "v$NEW" --title "v$NEW" --notes "$NOTES" --target master
+gh release create "v$NEW" "archives/cmb2-$NEW.zip" --title "v$NEW" --notes "$NOTES" --target master
 gh release view "v$NEW" --web   # eyeball it
 ```
 
@@ -401,7 +410,7 @@ git push origin develop
 These aren't blockers but are worth raising with the user once shipped:
 
 1. **No automated wp.org SVN deploy.** Adding `10up/action-wordpress-plugin-deploy` (or similar) as a `release.yml` workflow triggered on tag push would eliminate Step 5 entirely. It's been a long-standing gap; offer to file a `bd` issue for it.
-2. **No release script.** Steps 1–4 are mechanical and could be a `bin/release.sh`. The bootstrap class rename + priority decrement are the only non-trivial parts.
+2. **Step 1 is still hand-run seds.** `scripts/archive.sh` validates the result, but the bump itself (bootstrap rename, priority decrement, version strings, banners) could move into a script too.
 3. **`{{next}}` is fragile.** If a contributor writes `@since 2.12.0` directly in a PR before 2.12.0 is cut, the placeholder grep won't catch it. A pre-release `bd preflight` check could grep for `@since` referencing unreleased versions.
 
 Mention these once after Step 8 verification completes.
