@@ -119,3 +119,6 @@ CLAUDE.local.md
 
 # scripts/archive.sh output
 /archives/
+
+# bd schema-migration gate lock
+/.beads.gate.lock
