@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
-"POT-Creation-Date: 2026-09-20 19:50+0000\n"
+"POT-Creation-Date: 2026-09-24 21:59+0000\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -318,16 +318,16 @@ msgstr ""
 msgid "Click to toggle"
 msgstr ""
 
-#: ../includes/CMB2_Ajax.php:75
+#: ../includes/CMB2_Ajax.php:75, ../includes/CMB2_Ajax.php:99
 msgid "Please Try Again"
 msgstr ""
 
-#: ../includes/CMB2_Ajax.php:181, ../tests/cmb-tests-base.php:72
+#: ../includes/CMB2_Ajax.php:279, ../tests/cmb-tests-base.php:72
 msgid "Remove Embed"
 msgstr ""
 
 #. translators: 1: results for. 2: link to codex.wordpress.org/Embeds
-#: ../includes/CMB2_Ajax.php:189, ../includes/helper-functions.php:107, ../tests/cmb-tests-base.php:90, ../tests/test-cmb-types-display.php:218
+#: ../includes/CMB2_Ajax.php:287, ../includes/helper-functions.php:107, ../tests/cmb-tests-base.php:90, ../tests/test-cmb-types-display.php:218
 msgid "No oEmbed Results Found for %1$s. View more info at %2$s."
 msgstr ""
 
@@ -351,7 +351,7 @@ msgid "%1$s was called with a parameter that is <strong>deprecated</strong> sinc
 msgstr ""
 
 #. translators: 1: class name, 2: property name.
-#: ../includes/CMB2_Base.php:507, ../includes/CMB2_Hookup_Base.php:104, ../includes/CMB2_Options.php:248, ../includes/CMB2_Options_Hookup.php:371, ../includes/types/CMB2_Type_Base.php:176
+#: ../includes/CMB2_Base.php:507, ../includes/CMB2_Hookup_Base.php:104, ../includes/CMB2_Options.php:248, ../includes/CMB2_Options_Hookup.php:374, ../includes/types/CMB2_Type_Base.php:176
 msgid "Invalid %1$s property: %2$s"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgstr ""
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: ../includes/CMB2_Field_Display.php:454, ../includes/CMB2_JS.php:242, ../includes/types/CMB2_Type_File_Base.php:90, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1007
+#: ../includes/CMB2_Field_Display.php:454, ../includes/CMB2_JS.php:242, ../includes/types/CMB2_Type_File_Base.php:90, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1059
 msgid "File:"
 msgstr ""
 
@@ -491,11 +491,11 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: ../includes/CMB2_JS.php:241, ../includes/CMB2_Types.php:408, ../includes/types/CMB2_Type_File_Base.php:95, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:64, ../tests/test-cmb-types.php:72, ../tests/test-cmb-types.php:1007
+#: ../includes/CMB2_JS.php:241, ../includes/CMB2_Types.php:408, ../includes/types/CMB2_Type_File_Base.php:95, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:64, ../tests/test-cmb-types.php:72, ../tests/test-cmb-types.php:1059
 msgid "Remove"
 msgstr ""
 
-#: ../includes/CMB2_JS.php:243, ../includes/types/CMB2_Type_File_Base.php:93, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1007
+#: ../includes/CMB2_JS.php:243, ../includes/types/CMB2_Type_File_Base.php:93, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1059
 msgid "Download"
 msgstr ""
 
@@ -503,11 +503,11 @@ msgstr ""
 msgid "Select / Deselect All"
 msgstr ""
 
-#: ../includes/CMB2_Options_Hookup.php:139
+#: ../includes/CMB2_Options_Hookup.php:142
 msgid "Nothing to update."
 msgstr ""
 
-#: ../includes/CMB2_Options_Hookup.php:143
+#: ../includes/CMB2_Options_Hookup.php:146
 msgid "Settings updated."
 msgstr ""
 
@@ -624,11 +624,11 @@ msgstr ""
 msgid "Your text may be truncated."
 msgstr ""
 
-#: ../includes/types/CMB2_Type_File.php:76, ../tests/test-cmb-types.php:983, ../tests/test-cmb-types.php:1007
+#: ../includes/types/CMB2_Type_File.php:76, ../tests/test-cmb-types.php:1035, ../tests/test-cmb-types.php:1059
 msgid "Add or Upload File"
 msgstr ""
 
-#: ../includes/types/CMB2_Type_File_List.php:41, ../tests/test-cmb-types.php:930, ../tests/test-cmb-types.php:963
+#: ../includes/types/CMB2_Type_File_List.php:42, ../tests/test-cmb-types.php:930, ../tests/test-cmb-types.php:963
 msgid "Add or Upload Files"
 msgstr ""
 
