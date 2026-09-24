@@ -198,3 +198,22 @@ for this reason.
 wrapped in `function_exists()` — the version election (C3) loads exactly one
 copy of `includes/`. Only the PHP-polyfill functions at the end of that file
 are guarded, because those names can come from elsewhere.
+
+## C10 — Escaping-exception types escape values in their final context
+
+**Rule:** A field type listed by `CMB2_Field::escaping_exception()` receives
+its stored value without generic escaping. Its renderer must validate the
+value shape and escape each value for the exact HTML context where it is used.
+`CMB2_Utils::concat_attrs()` only assembles pre-escaped attributes.
+
+**Canonical example:** `CMB2_Type_File_List::render()` validates its positive
+integer attachment IDs, ignores malformed stored entries, runs each URL
+through `CMB2_Sanitize::sanitize_and_secure_url()` (the same sanitizer the
+save path uses, so render and save agree), then applies `esc_attr()` before
+passing it into a hidden input attribute. URL sanitization and attribute
+escaping are separate jobs: `esc_attr()` alone leaves a `javascript:` URL
+intact.
+
+**Blast radius:** escaping an entire structured field before rendering can
+corrupt values needed by type-specific output. Leaving a renderer boundary
+unescaped lets malformed stored values alter the generated markup.

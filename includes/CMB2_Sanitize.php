@@ -97,10 +97,23 @@ class CMB2_Sanitize {
 				break;
 			case 'multicheck':
 			case 'multicheck_inline':
-			case 'file_list':
 			case 'group':
 				// no filtering
 				$sanitized_value = $this->value;
+				break;
+			case 'file_list':
+				$sanitized_value = array();
+				$protocols       = $this->field->args( 'protocols' );
+				foreach ( (array) $this->value as $attachment_id => $url ) {
+					if ( ! is_int( $attachment_id ) || $attachment_id < 1 || ! is_scalar( $url ) ) {
+						continue;
+					}
+
+					$url = self::sanitize_and_secure_url( $url, $protocols, '' );
+					if ( '' !== $url ) {
+						$sanitized_value[ $attachment_id ] = $url;
+					}
+				}
 				break;
 			default:
 				// Handle repeatable fields array

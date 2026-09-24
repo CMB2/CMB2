@@ -17,6 +17,7 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		$meta_value = $field->escaped_value();
 		$name       = $this->_name();
 		$img_size   = $field->args( 'preview_size' );
+		$protocols  = $field->args( 'protocols' );
 		$query_args = $field->args( 'query_args' );
 		$output     = '';
 
@@ -48,9 +49,18 @@ class CMB2_Type_File_List extends CMB2_Type_File_Base {
 		if ( $meta_value && is_array( $meta_value ) ) {
 
 			foreach ( $meta_value as $id => $fullurl ) {
+				if ( ! is_int( $id ) || $id < 1 || ! is_scalar( $fullurl ) ) {
+					continue;
+				}
+
+				$fullurl = CMB2_Sanitize::sanitize_and_secure_url( (string) $fullurl, $protocols, '' );
+				if ( '' === $fullurl ) {
+					continue;
+				}
+
 				$id_input = parent::render( array(
 					'type'    => 'hidden',
-					'value'   => $fullurl,
+					'value'   => esc_attr( $fullurl ),
 					'name'    => $name . '[' . $id . ']',
 					'id'      => 'filelist-' . $id,
 					'data-id' => $id,

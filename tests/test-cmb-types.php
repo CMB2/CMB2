@@ -978,6 +978,58 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
+	public function test_file_list_field_escapes_stored_values_in_attributes() {
+		update_post_meta( $this->post_id, $this->text_type_field['id'], array(
+			'1" data-breakout="1' => 'https://example.org/ignored.pdf',
+			2                     => 'javascript:alert(1)',
+			3                     => '"><img src=x onerror=alert(1)>',
+			0                     => 'https://example.org/ignored-zero.pdf',
+		) );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( 'file_list' ), 'render' ) );
+
+		$this->assertStringNotContainsString( '"><img', $output );
+		$this->assertStringNotContainsString( 'id="filelist-1"', $output );
+		$this->assertStringNotContainsString( 'id="filelist-0"', $output );
+		$this->assertStringNotContainsString( 'id="filelist-2"', $output );
+		$this->assertStringContainsString( 'id="filelist-3"', $output );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_file_list_render_matches_saved_url_scheme() {
+		update_post_meta( $this->post_id, $this->text_type_field['id'], array(
+			2 => 'example.org/file.pdf',
+		) );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( 'file_list' ), 'render' ) );
+
+		$this->assertStringContainsString( 'id="filelist-2" value="https://example.org/file.pdf"', $output );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_file_list_sanitization_enforces_attachment_url_map() {
+		$field = $this->get_field_object( array(
+			'type'      => 'file_list',
+			'protocols' => array( 'https' ),
+		) );
+		$value = array(
+			'1" data-breakout="1' => 'javascript:alert(1)',
+			2                     => 'https://example.org/my%20file.pdf?name=a%2Fb',
+			3                     => 'ftp://example.org/file.pdf',
+			4                     => array( 'unexpected' ),
+			0                     => 'https://example.org/ignored-zero.pdf',
+			'5x'                  => 'https://example.org/ignored-string.pdf',
+			-1                    => 'https://example.org/ignored-negative.pdf',
+		);
+		$sanitizer = new CMB2_Sanitize( $field, $value );
+
+		$this->assertSame( array(
+			2 => 'https://example.org/my%20file.pdf?name=a%2Fb',
+		), $sanitizer->default_sanitization() );
+	}
+
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field-status" class="cmb2-media-status"></div>',
