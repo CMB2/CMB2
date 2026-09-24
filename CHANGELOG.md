@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 
 * Sanitized and escaped `file_list` field values, which were previously stored and rendered verbatim. Array keys must now be positive-integer attachment IDs, and URLs are sanitized with the field's `protocols` on save and on render. Entries with a malformed key (including `0` and positional-list keys) or a URL that sanitizes to empty are dropped the next time the field is saved. Props Ivaylo (via Wordfence).
 * Fixed a PHP 8 `TypeError` when displaying a `file_list` field containing a non-scalar value.
+* Gave the options-page setting CMB2 registers a `sanitize_callback`, which wp.org's Plugin Check requires of every `register_setting()` call. It is a passthrough by design: values are already sanitized per field type before the option is saved. Props [@rubengc](https://github.com/rubengc) ([#1533](https://github.com/CMB2/CMB2/issues/1533)).
+* Removed the `en@pirate` translation files, whose `@` in the filename fails wp.org's plugin submission checks for any plugin bundling CMB2. Props [@rubengc](https://github.com/rubengc) ([#1533](https://github.com/CMB2/CMB2/issues/1533)).
 
 ## [2.13.0 - 2026-09-20](https://github.com/CMB2/CMB2/releases/tag/v2.13.0)
 
