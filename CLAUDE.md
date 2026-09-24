@@ -267,6 +267,7 @@ renamed:
 - `.agents/skills/changelog-credit` → `.claude/skills/changelog-credit`
 - `.agents/skills/cmb2-local-testing` → `.claude/skills/cmb2-local-testing`
 - `.agents/skills/cmb2-release` → `.claude/skills/cmb2-release`
+- `.agents/skills/cmb2-security-fix` → `.claude/skills/cmb2-security-fix`
 - `.agents/skills/review-pr` → `.claude/skills/review-pr`
 
 ## Conventions & Blast Radius — READ CONVENTIONS.md FIRST
