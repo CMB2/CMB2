@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+*
+
+## [2.13.1 - 2026-09-24](https://github.com/CMB2/CMB2/releases/tag/v2.13.1)
+
+### Enhancements
+
+* Tested up to WordPress 7.1.
 
 ### Bug Fixes
 
