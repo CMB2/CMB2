@@ -365,7 +365,10 @@ Once the release is shipped, `develop` needs to be re-flagged for the next versi
 
 This keeps develop's bootstrap class name distinct from any released `CMB2_Bootstrap_<N>` so they coexist cleanly when both are bundled in the same WP install. (PRIORITY stays at the just-released value — see the trade-off note in "Why these steps look the way they do.")
 
-**Skip this step for patch releases.** History (v2.10.1) shows patches don't get a develop bump — the next minor's bump rolls it in. If the user is cutting a patch, ask whether to skip; otherwise default to skipping.
+**For a patch release, restore whatever develop was flagged for before the release.** Check the `OLDBOOT` value locked in pre-flight:
+
+- `OLDBOOT` was a *later* version's `_Develop` class (e.g. `2140_Develop` while cutting 2.13.1): develop was already heading for the next minor, and Step 1 overwrote that. Set `NEXT` to that version and run the rename below, so develop and the just-released patch don't share one class name.
+- `OLDBOOT` was this patch's own `_Develop` class (e.g. `2101_Develop` while cutting 2.10.1): skip the step. Develop keeps the released class name until the next release prep renames it, which is what happened after v2.10.1.
 
 For minor/major releases, ask the user what the next planned version is. Usually the next minor (e.g. after 2.11.0 → 2.12.0). Note that historically the bump skips ahead to the next *minor* even when a patch might come next (after 2.11.0, develop went straight to `2120_Develop`, not `2111_Develop`).
 
