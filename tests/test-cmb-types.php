@@ -416,6 +416,21 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	public function test_textarea_code_sanitization_preserves_valid_code() {
+		$field     = $this->get_field_object( 'textarea_code' );
+		$value     = '<?php echo "&lt;strong&gt;CMB2&lt;/strong&gt;"; ?>';
+		$sanitizer = new CMB2_Sanitize( $field, $value );
+
+		$this->assertSame( '<?php echo "<strong>CMB2</strong>"; ?>', $sanitizer->textarea_code() );
+	}
+
+	public function test_textarea_code_sanitization_rejects_non_scalar_values() {
+		$field     = $this->get_field_object( 'textarea_code' );
+		$sanitizer = new CMB2_Sanitize( $field, array( 'unexpected' ) );
+
+		$this->assertSame( '', $sanitizer->textarea_code() );
+	}
+
 	public function test_wysiwyg_field() {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';

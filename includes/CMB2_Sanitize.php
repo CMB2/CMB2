@@ -461,7 +461,11 @@ class CMB2_Sanitize {
 			return $repeat_value;
 		}
 
-		return htmlspecialchars_decode( stripslashes( $this->value ), ENT_COMPAT );
+		if ( ! is_scalar( $this->value ) ) {
+			return '';
+		}
+
+		return htmlspecialchars_decode( stripslashes( (string) $this->value ), ENT_COMPAT );
 	}
 
 	/**

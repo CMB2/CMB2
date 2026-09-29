@@ -217,3 +217,40 @@ intact.
 **Blast radius:** escaping an entire structured field before rendering can
 corrupt values needed by type-specific output. Leaving a renderer boundary
 unescaped lets malformed stored values alter the generated markup.
+
+## C11 — Default field displays escape stored text at the output boundary
+
+**Rule:** `textarea_code` is a source-code editor, so its save path preserves
+valid PHP, HTML, and JavaScript rather than applying `wp_kses_post()` or a text
+sanitizer that would corrupt the code. `CMB2_Sanitize::textarea_code()` accepts
+scalar input while retaining its historical entity-decoding and slash-removal
+behavior. Default field renderers must escape stored field values for the output
+context, including values loaded directly from metadata or written by custom
+callbacks. This rule applies both to admin columns and to front-end values
+rendered by the default `display_cb`.
+
+**Canonical examples:** `CMB2_Display_Textarea_Code::_display()` applies
+`htmlspecialchars()` with `ENT_SUBSTITUTE` and an explicit UTF-8 charset inside
+a `<pre class="cmb2-code">` wrapper. It double-encodes existing entities so
+users see the original source literally, and substitutes malformed character
+sequences instead of blanking the value. The old `<xmp>` raw-text element
+displayed entities verbatim but let its closing tag break out. The fallback
+`CMB2_Field_Display::_display()` and
+`CMB2_Display_Text_Money::_display()` use `esc_html()` for their plain-text
+values, where WordPress's normal entity handling applies. Literal code needs the
+more specific encoding above so existing entities remain part of the displayed
+source text. Select and multicheck option labels and `show_option_none` come
+from developer-supplied configuration, not stored field values; those labels
+may intentionally contain markup and retain their existing rendering contract.
+
+**Blast radius:** filtering markup on save breaks the field's core purpose and
+silently rewrites code stored by existing integrations. Escaping only on save
+does not protect legacy values or values written directly through metadata APIs.
+The textarea-code column wrapper changed from `xmp.cmb2-code` to
+`pre.cmb2-code`; integrations styling or selecting the old element name must
+update their selector. The default `display_cb` also uses these renderers for
+front-end value output, not only admin columns.
+Custom `display_cb` and `display_class` implementations own their own output
+escaping and are not changed by the default renderer rules above.
+The repository PHPCS rules exclude `WordPress.Security.EscapeOutput`, so these
+renderer boundaries rely on this convention and their regression tests.

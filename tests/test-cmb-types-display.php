@@ -55,6 +55,16 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 		$this->assertDisplayFieldMatches( 'text_money', $value, '$' . $value );
 	}
 
+	public function test_text_money_escapes_stored_value() {
+		$value = '<strong>stored value</strong>';
+		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
+
+		$output = $this->capture_render( array( $this->get_field_object( 'text_money' ), 'render_column' ) );
+
+		$this->assertStringContainsString( '$&lt;strong&gt;stored value&lt;/strong&gt;', $output );
+		$this->assertStringNotContainsString( '<strong>', $output );
+	}
+
 	public function test_textarea() {
 		$value = __FUNCTION__;
 		$this->assertDisplayFieldMatches( 'textarea_small', $value, '<p>' . $value . '</p>' );
@@ -67,7 +77,43 @@ class Test_CMB2_Types_Display extends Test_CMB2_Types_Base {
 
 	public function test_textarea_code() {
 		$value = __FUNCTION__;
-		$this->assertDisplayFieldMatches( 'textarea_code', $value, '<xmp class="cmb2-code">' . $value . '</xmp>' );
+		$this->assertDisplayFieldMatches( 'textarea_code', $value, '<pre class="cmb2-code">' . $value . '</pre>' );
+	}
+
+	public function test_textarea_code_escapes_stored_value() {
+		$payload = '</xmp><b>x</b> &amp; &nbsp; &#039;';
+		update_post_meta( $this->post_id, $this->text_type_field['id'], $payload );
+
+		$output = $this->capture_render( array( $this->get_field_object( 'textarea_code' ), 'render_column' ) );
+
+		$this->assertStringContainsString( '<pre class="cmb2-code">&lt;/xmp&gt;&lt;b&gt;x&lt;/b&gt; &amp;amp; &amp;nbsp; &amp;#039;</pre>', $output );
+		$this->assertStringNotContainsString( '</xmp><b>x</b>', $output );
+		$this->assertStringNotContainsString( '<xmp class="cmb2-code">', $output );
+		$this->assertSame( $payload, html_entity_decode( $this->get_textarea_code_column_contents( $output ), ENT_QUOTES, 'UTF-8' ) );
+	}
+
+	public function test_textarea_code_display_substitutes_invalid_utf8() {
+		$display        = CMB2_Field_Display::get( $this->get_field_object( 'textarea_code' ) );
+		$display->value = "before\xC3\x28after";
+
+		$output = $this->capture_render( array( $display, 'display' ) );
+
+		$this->assertSame( "before\xEF\xBF\xBD(after", html_entity_decode( $this->get_textarea_code_column_contents( $output ), ENT_QUOTES, 'UTF-8' ) );
+	}
+
+	public function test_default_text_display_escapes_stored_value() {
+		$value = '<strong>stored value</strong>';
+		update_post_meta( $this->post_id, $this->text_type_field['id'], $value );
+
+		$output = $this->capture_render( array( $this->get_field_object( 'text' ), 'render_column' ) );
+
+		$this->assertStringContainsString( '&lt;strong&gt;stored value&lt;/strong&gt;', $output );
+		$this->assertStringNotContainsString( '<strong>', $output );
+	}
+
+	private function get_textarea_code_column_contents( $output ) {
+		preg_match( '/<pre class="cmb2-code">(.*?)<\/pre>/s', $output, $matches );
+		return isset( $matches[1] ) ? $matches[1] : '';
 	}
 
 	public function test_wysiwyg() {
