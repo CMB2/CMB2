@@ -315,6 +315,11 @@ a pull request".
   about.
 - **Mentor with specifics.** For newer contributors, name the exact claims that
   weren't checked and say what should replace them. Encourage small PRs.
+- **Sign as the agent, not as Justin.** A review posted from @jtsternberg's
+  account opens with "_Justin's agent here (Claude Code), reviewing on behalf
+  of @jtsternberg._" and closes with the same sign-off. Every inline comment
+  carries it too, since each one notifies on its own. Write in agent voice
+  ("Justin wants…"); never write as Justin in the first person.
 
 ## Git Commit Policy — ALWAYS Commit Granularly
 
