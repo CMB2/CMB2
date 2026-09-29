@@ -285,6 +285,37 @@ architectural seams, and back-compat blast radii. Three standing rules:
    orders for changes to core files must include the relevant CONVENTIONS.md
    entries verbatim.
 
+## Reviewing Pull Requests — Posture
+
+CMB2 runs on hundreds of thousands of sites, often bundled inside other plugins
+and themes, with over a decade of back-compat promises. Review as a skeptic:
+every PR description is a set of claims to check, not a summary to trust. A
+contributor PR is held to the bar in `CONTRIBUTING.md` → "What we expect from
+a pull request".
+
+- **Check the diagnosis against the code.** Trace the stated root cause through
+  the real call path, e.g. `save_fields()` → `process_fields()` →
+  `remove_data()` → `CMB2_Options`. A fix that works for a reason the author
+  didn't state is working by accident, and the real defect is still there.
+- **Run Chesterton's fence on every default or argument the PR changes.**
+  `git log -S`, `git blame`, old issues and PRs. Odd-looking code here usually
+  handles something non-obvious. Example: `CMB2_Options::remove()` defaults to
+  `$resave = false` because callers write once at the end, and the key-less
+  instance is `get_sanitized_values()`'s temporary store.
+- **Blast radius comes from callers, not from diff size.** List every caller of
+  the changed code: options pages, the REST fields controller, the sanitize
+  temporary store, `cmb2_update_option()`. Count database writes and hook
+  firings before and after the change.
+- **Prove the regression test.** Revert the fix and run the test; it has to
+  fail. A test that calls the lower-level method directly proves nothing about
+  the change.
+- **Reproduce before you assert.** Back blocking findings with a probe test run
+  in wp-env (`npm run phptests -- --filter …`). A green suite is not evidence
+  that nothing broke; check whether the suite covers the paths you're worried
+  about.
+- **Mentor with specifics.** For newer contributors, name the exact claims that
+  weren't checked and say what should replace them. Encourage small PRs.
+
 ## Git Commit Policy — ALWAYS Commit Granularly
 
 **Agents must commit as they work — small, granular commits, one logical change
