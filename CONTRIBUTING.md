@@ -37,6 +37,17 @@ All contributions welcome. If you would like to submit a pull request, please fo
 
 **Note:** You may gain more ground and avoid unecessary effort if you first open an issue with the proposed changes, but this step is not necessary.
 
+What we expect from a pull request
+---
+CMB2 runs on hundreds of thousands of WordPress sites, often bundled inside other plugins and themes, and people have relied on it behaving the same way for over a decade. A regression reaches sites whose owners never touched their code and won't connect the breakage to a CMB2 update. So we review for back-compatibility first and correctness second, and we ask the same of you:
+
+1. **Keep PRs small, and remember that a small diff isn't a small change.** A one-line edit in `CMB2_Field` or `CMB2_Options` runs on every save of every box. Before you open the PR, list every caller of the code you changed and what each one expects from it.
+2. **Find out why the code is the way it is before you change it (Chesterton's fence).** Code that looks odd is often handling a case you haven't hit. Check `git log -S`, `git blame`, and old issues and PRs first. See [this checklist](https://github.com/jtsternberg/claude-plugins/blob/main/plugins/thinking-tools/skills/chestertons-fence/SKILL.md).
+3. **Check your diagnosis against the code, not just the bug report.** Anything you state in the PR description as fact (the root cause, "no other behavior changes") should be something you've confirmed in the code.
+4. **Prove your regression test.** It has to go through the path the bug report goes through, and it has to fail with your fix reverted. Say in the PR that you checked this.
+5. **List every behavior change,** including side effects: extra database writes, hooks or filters that fire a different number of times or with different data, and changed return values. If existing sites could notice the difference, it needs a filter or a staged rollout (see `CONVENTIONS.md`, C3).
+6. **Support PHP 7.4 and later.** CI runs the tests on PHP 7.4–8.3.
+
 Translations
 ---
 If you are looking to provide language translation files, Please do so via [WordPress Plugin Translations](https://translate.wordpress.org/projects/wp-plugins/cmb2).
@@ -44,6 +55,8 @@ If you are looking to provide language translation files, Please do so via [Word
 Creating/Running Tests
 ---
 We use PHPUnit and the WordPress test suite for our unit/integration tests.
+
+The quickest way to run them is `npm install && npm run phptests`. It needs only Docker, and it starts a wp-env test environment for you. To set the suite up by hand instead:
 
 1. You can install the WordPress test suite [using the installer](https://github.com/CMB2/CMB2/blob/develop/tests/bin/install-wp-tests.sh#L3): `bash tests/bin/install-wp-tests.sh wordpress_test root ''`. (this will install the test suite in the temp folder on your computer, using a test database with those given credentials)
 1. Install PHPUnit via composer, `composer install`.
