@@ -136,4 +136,56 @@ class Test_CMB2_Options extends CMB2TestCase {
 		$this->assertSame( $val, $new_value );
 	}
 
+	/**
+	 * A field's value must be removable from an options page even when it is the
+	 * only key in the option, i.e. when no other field triggers a save.
+	 *
+	 * Regression test for https://github.com/CMB2/CMB2/issues/1509.
+	 *
+	 * @since 2.13.2
+	 */
+	public function test_cmb2_remove_option_persists_to_db() {
+		$option_key = 'cmb_remove_persist_option';
+		cmb2_options( $option_key )->delete_option();
+
+		// Seed one value, as if the user had saved the field once.
+		cmb2_options( $option_key )->set( array( 'first' => 'foo' ) );
+
+		$this->assertSame( array( 'first' => 'foo' ), get_option( $option_key ) );
+
+		$opts = cmb2_options( $option_key );
+		$opts->remove( 'first', true );
+
+		/*
+		 * remove() must have written the change, not just altered its in-memory
+		 * copy. The stored option is now an empty array rather than false: what
+		 * matters for #1509 is that the 'first' key is gone from the database.
+		 * Reading the option without going through this object proves the write.
+		 */
+		$this->assertArrayNotHasKey( 'first', (array) get_option( $option_key ) );
+		$this->assertSame( array(), cmb2_options( $option_key )->get_options() );
+	}
+
+	/**
+	 * Without the second argument, remove() is expected to stay in memory only:
+	 * the option on disk is untouched. Guards the documented default.
+	 *
+	 * @since 2.13.2
+	 */
+	public function test_cmb2_remove_option_without_resave_stays_in_memory() {
+		$option_key = 'cmb_remove_noresave_option';
+		cmb2_options( $option_key )->delete_option();
+
+		$opts = cmb2_options( $option_key );
+		$opts->set( array( 'first' => 'foo', 'second' => 'bar' ) );
+
+		$opts->remove( 'first' );
+
+		// In-memory copy dropped the key...
+		$this->assertSame( array( 'second' => 'bar' ), $opts->get_options() );
+
+		// ...but the stored option still holds it.
+		$this->assertSame( array( 'first' => 'foo', 'second' => 'bar' ), get_option( $option_key ) );
+	}
+
 }

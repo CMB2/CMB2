@@ -436,7 +436,7 @@ class CMB2_Field extends CMB2_Base {
 			return $override;
 		} elseif ( 'options-page' === $a['type'] || empty( $a['id'] ) ) {
 			// Option page handling.
-			return cmb2_options( $a['id'] )->remove( $a['field_id'] );
+			return cmb2_options( $a['id'] )->remove( $a['field_id'], true );
 		}
 
 		// Remove metadata.
