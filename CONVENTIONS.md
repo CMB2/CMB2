@@ -217,3 +217,24 @@ intact.
 **Blast radius:** escaping an entire structured field before rendering can
 corrupt values needed by type-specific output. Leaving a renderer boundary
 unescaped lets malformed stored values alter the generated markup.
+
+## C11 — A removal that isn't written is not a removal
+
+**Rule:** On the options-page path, a field's value is dropped by
+`CMB2_Options::remove( $field_id, $resave )`, which unsets the key from the
+object's in-memory copy and only calls `set()` — the write — when `$resave` is
+true. Any caller that intends the removal to survive the request must pass it.
+A bare `remove()` is a memory-only edit, and its effect is invisible until some
+*other* write happens to carry the option along.
+
+**Canonical example:** `CMB2_Field::remove_data()` passes `true`; the guard
+against removing the default is in `tests/test-cmb-options.php`
+(`test_cmb2_remove_option_without_resave_stays_in_memory`), which pins the
+memory-only behaviour so the flag cannot be "simplified" away by flipping the
+default.
+
+**Blast radius:** the failure is order-dependent and therefore looks
+intermittent. While any other field on the page still holds a value, that
+field's own `set()` flushes the pending removal too, so the bug is invisible.
+It only surfaces once every field is empty — i.e. precisely when the user is
+trying to clear the last one. See [#1509](https://github.com/CMB2/CMB2/issues/1509).
