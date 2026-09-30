@@ -84,9 +84,24 @@ affected versions, CVSS, researcher name, and any deadline.
 
 ## 4. Close out
 
-- **Wordfence "Submit Patch Details"** (JT submits the form): changeset URL
-  `https://github.com/CMB2/CMB2/commit/<fix-sha>`, the version, "already
-  released to the public" checked, and a one-line note on where the fix lives.
+- **Wordfence "Submit Patch Details"** (JT submits the form): give JT the
+  exact, copy-paste-ready value or selection for **every field shown in the
+  form**, even fields he should leave empty. Use this order and the field
+  labels from the form:
+  - **Changeset URL:** the full
+    `https://github.com/CMB2/CMB2/commit/<fix-sha>` URL, with the actual fix
+    commit SHA filled in. Do not use the release-prep or post-release commit.
+  - **or Upload Patch File:** leave empty when providing the changeset URL;
+    otherwise give the exact ZIP to upload.
+  - **This patch has already been released to the public:** checked only after
+    the fixed version is publicly downloadable; otherwise unchecked.
+  - **Version Number:** the bare released version, e.g. `2.13.2`. The form
+    already supplies the `v` prefix, so do not type it again.
+  - **Notes:** provide the complete text to paste, naming the affected
+    renderer/save path and how the fix closes the reported issue. Do not leave
+    JT to compose the note from a summary.
+  Verify the SHA, release version and public download before giving these
+  values. Present them together in the handoff, not across earlier updates.
 - Confirm how the researcher wants to be credited if the report only gives a
   first name.
 - After the reporter publishes, optionally add the CVE link to the changelog
