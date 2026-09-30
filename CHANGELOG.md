@@ -2,7 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-* Escaped stored values in default field displays, including admin columns and front-end `display_cb` output. This changes stored HTML in default `text` and `text_money` displays to visible text. `textarea_code` source output preserves visible source and now uses `<pre class="cmb2-code">` instead of `<xmp class="cmb2-code">`. Code fields continue to store valid source code unchanged; unexpected non-scalar values are discarded on save to avoid PHP errors.
+*
+
+## [2.13.2 - 2026-09-30](https://github.com/CMB2/CMB2/releases/tag/v2.13.2)
+
+### Bug Fixes
+
+* Escaped stored values in default field displays, including admin columns and front-end `display_cb` output. Stored HTML in default `text` and `text_money` displays now appears as text. `textarea_code` preserves visible source and uses `<pre class="cmb2-code">` in place of `<xmp class="cmb2-code">`; integrations selecting the old element should update their selector. Valid source remains unchanged in storage, while unexpected non-scalar values are discarded on save to avoid PHP errors. Props Kuba (via Wordfence).
 
 ## [2.13.1 - 2026-09-24](https://github.com/CMB2/CMB2/releases/tag/v2.13.1)
 
