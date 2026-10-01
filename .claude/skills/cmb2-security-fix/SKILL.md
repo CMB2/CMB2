@@ -21,7 +21,7 @@ version.**
 
 - *Neutral* means public artifacts describe the change by what it does
   ("Sanitized and escaped `file_list` values"), never as a vulnerability: no
-  CVE id, "vulnerability", "security", "exploit", "XSS", "disclosure",
+  CVE or GHSA id, "vulnerability", "security", "exploit", "XSS", "disclosure",
   "Wordfence" or other reporter-platform names.
 - *Public artifacts* are anything outside beads and JT's email: commit
   messages, branch names, PR titles and bodies, CHANGELOG.md, readme.txt,
@@ -29,8 +29,11 @@ version.**
   unsure, treat it as public.
 - *Plainly* means the release that turns the fix on may say "Security" in the
   readme `== Upgrade Notice ==` and credit "Props <researcher> (via
-  Wordfence)" in the changelog. The CVE link can be added once the reporter
-  publishes.
+  <channel>)" in the changelog, e.g. "(via Wordfence)" or "(via GitHub
+  security advisory)". The CVE link can be added once the CVE is published.
+- A draft GitHub security advisory, its comments and its temporary private
+  fork are private. Publishing the advisory is the plain disclosure, so it
+  waits for the same release.
 - A fix that ships **off by default** (a filter, a staged flip) leaves default
   installs exposed, so it stays neutral until the release that flips the
   default. Which fixes are currently in that state is recorded in beads, never
@@ -46,8 +49,16 @@ relying on that: CMB2/CMB2 is public, and bd's default is to sync there.
 - **Wordfence vendor portal:** report pages need JT logged in. In the browser,
   `read_page` returns the report; `get_page_text` returns only the cookie
   banner.
-- **GitHub private vulnerability reporting** (SECURITY.md routes there), or
-  email to hello@cmb2.io.
+- **GitHub private vulnerability reporting** (SECURITY.md routes there):
+  the advisory arrives in `triage`, with the reporter as a collaborator.
+  SECURITY.md promises acknowledgement in 7 days and an assessment in 14. Its
+  states, private fork, ecosystem, CVE and commands are in
+  [references/github-advisories.md](references/github-advisories.md).
+- **Email** to hello@cmb2.io.
+
+Ask the reporter whether they filed the same issue on another channel
+(Wordfence, Patchstack, WPScan, GitHub). One issue gets one beads issue, one
+fix and one CVE.
 
 Open a beads issue holding the private framing: vector, every write path
 (front-end `cmb2_get_metabox_form()` saves on a valid nonce with no capability
@@ -74,6 +85,8 @@ affected versions, CVSS, researcher name, and any deadline.
 
 1. Squash the fix into **one commit** on develop. Its SHA is the changeset
    URL the reporter asks for. Commit message follows the disclosure rule.
+   When a GitHub advisory's private fork carries the fix, merging it from the
+   advisory is this push: same commit rules, no CI until it lands.
 2. Add the CHANGELOG `## Unreleased` entry, following the disclosure rule for
    the release it will ship in.
 3. Push to develop: `phpunit.yml` runs the full PHP 7.4–8.3 × WP matrix on
@@ -84,7 +97,9 @@ affected versions, CVSS, researcher name, and any deadline.
 
 ## 4. Close out
 
-- **Wordfence "Submit Patch Details"** (JT submits the form): give JT the
+### Wordfence
+
+- **"Submit Patch Details"** (JT submits the form): give JT the
   exact, copy-paste-ready value or selection for **every field shown in the
   form**, even fields he should leave empty. Use this order and the field
   labels from the form:
@@ -102,8 +117,25 @@ affected versions, CVSS, researcher name, and any deadline.
     JT to compose the note from a summary.
   Verify the SHA, release version and public download before giving these
   values. Present them together in the handoff, not across earlier updates.
+
+### GitHub security advisory
+
+JT publishes; give him the values, verified, in one handoff. Details in
+[references/github-advisories.md](references/github-advisories.md).
+
+- **CVE identifier:** the other CNA's CVE if one exists; otherwise confirm the
+  CVE GitHub reserved (requested right after accepting).
+- **Affected products:** Composer / `cmb2/cmb2`, affected versions in Advisory
+  Database syntax, **Patched versions** = the released version.
+- **Description:** complete text to paste (impact, affected path, fixed
+  version, fix commit URL, upgrade advice).
+- **Credits:** the reporter's credit accepted; add others if any.
+- **Publish** only after the wp.org release serves the fixed version.
+
+### Both
+
 - Confirm how the researcher wants to be credited if the report only gives a
   first name.
-- After the reporter publishes, optionally add the CVE link to the changelog
+- After the CVE is published, optionally add the CVE link to the changelog
   entry.
 - Record what was sent and when in the beads issue.
