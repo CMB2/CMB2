@@ -340,14 +340,98 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 
 		} else {
 
-			if ( isset( $this->request['object_id'] ) ) {
-				$this->rest_box->cmb->object_id( sanitize_text_field( $this->request['object_id'] ) );
+			$object_id   = isset( $this->request['object_id'] ) ? sanitize_text_field( $this->request['object_id'] ) : null;
+			$object_type = isset( $this->request['object_type'] ) ? sanitize_text_field( $this->request['object_type'] ) : null;
+
+			$error = $this->validate_request_object( $object_type, $object_id );
+			if ( is_wp_error( $error ) ) {
+				$this->rest_box = $error;
+				return;
 			}
 
-			if ( isset( $this->request['object_type'] ) ) {
-				$this->rest_box->cmb->object_type( sanitize_text_field( $this->request['object_type'] ) );
+			if ( null !== $object_id ) {
+				$this->rest_box->cmb->object_id( $object_id );
+			}
+
+			if ( null !== $object_type ) {
+				$this->rest_box->cmb->object_type( $object_type );
 			}
 		}
+	}
+
+	/**
+	 * Validates the requested object_type/object_id against the box's registration.
+	 *
+	 * The requested object_type selects the storage the box reads from and writes
+	 * to, so it has to be a storage type the box was registered for. For the
+	 * options-page type, the object_id is the option name, so it has to be one of
+	 * the box's own option keys. This is request validation, so it is applied
+	 * regardless of the permissions filters.
+	 *
+	 * @since  2.13.3
+	 *
+	 * @param  string|null $object_type The requested object type, if any.
+	 * @param  string|null $object_id   The requested object id, if any.
+	 *
+	 * @return true|WP_Error            True if valid, or a WP_Error.
+	 */
+	protected function validate_request_object( $object_type, $object_id ) {
+		if ( null === $object_type || '' === $object_type ) {
+			return true;
+		}
+
+		$cmb = $this->rest_box->cmb;
+
+		if ( ! in_array( $object_type, $this->get_box_storage_types( $cmb ), true ) ) {
+			return new WP_Error( 'cmb2_rest_invalid_object_type', __( 'The object_type parameter does not match an object type this box is registered for.', 'cmb2' ), array(
+				'status' => 400,
+			) );
+		}
+
+		if (
+			'options-page' === $object_type
+			&& null !== $object_id
+			&& '' !== $object_id
+			&& ! in_array( $object_id, array_map( 'strval', (array) $cmb->options_page_keys() ), true )
+		) {
+			return new WP_Error( 'cmb2_rest_invalid_object_id', __( 'The object_id parameter does not match an option key this box is registered for.', 'cmb2' ), array(
+				'status' => 400,
+			) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Gets the storage object types for a box's registered object types.
+	 *
+	 * Registered types that are not core object types (post types) store as 'post',
+	 * matching CMB2::mb_object_type().
+	 *
+	 * @since  2.13.3
+	 *
+	 * @param  CMB2 $cmb The box.
+	 *
+	 * @return array     The storage object types.
+	 */
+	protected function get_box_storage_types( CMB2 $cmb ) {
+		$types = array();
+
+		if ( $cmb->is_options_page_mb() ) {
+			$types[] = 'options-page';
+		}
+
+		foreach ( $cmb->box_types( array( 'post' ) ) as $type ) {
+			$types[] = $cmb->is_supported_core_object_type( $type ) ? $type : 'post';
+		}
+
+		// A non-core type from the `cmb2_set_box_object_type` filter is the box's own declaration.
+		$mb_object_type = $cmb->mb_object_type();
+		if ( ! $cmb->is_supported_core_object_type( $mb_object_type ) ) {
+			$types[] = $mb_object_type;
+		}
+
+		return array_unique( $types );
 	}
 
 	/**

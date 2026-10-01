@@ -254,3 +254,46 @@ Custom `display_cb` and `display_class` implementations own their own output
 escaping and are not changed by the default renderer rules above.
 The repository PHPCS rules exclude `WordPress.Security.EscapeOutput`, so these
 renderer boundaries rely on this convention and their regression tests.
+
+## C12 — REST `object_type`/`object_id` are validated against the box's registration
+
+**Rule:** on the CMB2 boxes/fields endpoints, the request's `object_type` and
+`object_id` choose the storage a box reads from and writes to, while the
+permission logic (C4, C5, the options-page read gate) reasons from the box's
+*registered* types. The two must agree, so the request is validated against the
+box before either value is applied:
+
+- `object_type` must be a storage type the box is registered for. Registered
+  types map to storage types the way `CMB2::mb_object_type()` maps them: core
+  object types (`post`, `user`, `comment`, `term`, `options-page`) store as
+  themselves, any other registered type (a post type such as `page`) stores as
+  `post`. An options-page box includes back-compat `show_on` configs
+  (`is_options_page_mb()`).
+- For `options-page`, `object_id` is the option name, so it must be one of the
+  box's own `options_page_keys()` — the same bound as
+  `CMB2_Ajax::can_cache_for_options_page()` (see C5).
+
+A mismatch is a 400 `WP_Error` (`cmb2_rest_invalid_object_type` /
+`cmb2_rest_invalid_object_id`). It is request validation, not a permission, so
+it sits outside the permission filters: a filter returning `true` does not make
+an unregistered target valid. Code acting on the target afterwards (e.g. the
+options-page `set()` in `modify_field_value()`) uses the validated values on the
+box, not the raw request.
+
+**Not staged (C3):** this check is on by default in the release that adds it.
+A mismatched target was never a supported request: permission decisions
+already assumed the registered type, an options-page key outside the box's own
+keys has no capability to consult (C5), and those keys are fixed when the box is
+registered (`init_options_mb()`), so the admin screen and REST always see the
+same keys. No legitimate configuration relies on the old behavior, so there is
+nothing to stage.
+
+**Canonical example:** `CMB2_REST_Controller::initiate_rest_box()` →
+`validate_request_object()` / `get_box_storage_types()`; pinned by the
+`*_object_type_*` and `*_option_key` tests in
+`tests/test-cmb-rest-controllers.php`.
+
+**Blast radius:** every boxes/fields route (box read, fields collection, field
+read/update/delete) passes through `initiate_rest_box()`. The core-route
+`cmb2` field (`CMB2_REST::register_cmb2_fields()`) takes its object type from
+the WordPress route, not the request, and is outside this check.

@@ -908,6 +908,296 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		remove_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
 	}
 
+	/**
+	 * Sends a field request with the given object_type/object_id parameters.
+	 *
+	 * @param string $method   HTTP method.
+	 * @param string $cmb_id   Box id.
+	 * @param string $field_id Field id.
+	 * @param array  $params   Request parameters.
+	 *
+	 * @return WP_REST_Response
+	 */
+	protected function do_field_request( $method, $cmb_id, $field_id, $params ) {
+		$url     = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . $cmb_id . '/fields/' . $field_id;
+		$request = new WP_REST_Request( $method, $url );
+		foreach ( $params as $key => $value ) {
+			$request[ $key ] = $value;
+		}
+
+		return rest_do_request( $request );
+	}
+
+	/**
+	 * A post box only stores post meta, so an update naming another object type is
+	 * rejected, and the named option is left as it was.
+	 */
+	public function test_update_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'keep' => 'me' ) );
+		$editor = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor );
+
+		$response = $this->do_field_request( 'POST', 'test', 'rest_test', array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertSame( array( 'keep' => 'me' ), get_option( 'cmb2_rest_untouched_option' ) );
+
+		foreach ( array( 'user', 'comment', 'term' ) as $object_type ) {
+			$response = $this->do_field_request( 'POST', 'test', 'rest_test', array(
+				'value'       => 'new value',
+				'object_type' => $object_type,
+				'object_id'   => $editor,
+			) );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		}
+		$this->assertEmpty( get_user_meta( $editor, 'rest_test', true ) );
+	}
+
+	/**
+	 * The delete path rejects an undeclared object type the same way.
+	 */
+	public function test_delete_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'rest_test' => 'keep' ) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'DELETE', 'test', 'rest_test', array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertSame( array( 'rest_test' => 'keep' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * The object type check is request validation, not a permission: a permissions
+	 * filter granting access does not make an undeclared object type valid.
+	 */
+	public function test_object_type_check_not_overridden_by_permissions_filters() {
+		update_option( 'cmb2_rest_untouched_option', array( 'keep' => 'me' ) );
+		add_filter( 'cmb2_api_update_field_value_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_delete_field_value_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_get_field_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
+		wp_set_current_user( 0 );
+
+		$params = array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		foreach ( array( 'GET', 'POST', 'DELETE' ) as $method ) {
+			$response = $this->do_field_request( $method, 'test', 'rest_test', $params );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		}
+
+		$this->assertSame( array( 'keep' => 'me' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * Reads of a post box naming the options-page object type are rejected, so
+	 * they cannot serve option values outside the options-page read gate.
+	 */
+	public function test_read_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'rest_test' => 'stored' ) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+		wp_set_current_user( 0 );
+
+		$params = array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		$response = $this->do_field_request( 'GET', 'test', 'rest_test', $params );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields' );
+		$request['object_type'] = 'options-page';
+		$request['object_id']   = 'cmb2_rest_untouched_option';
+		$this->assertResponseStatus( 400, rest_do_request( $request ), 'cmb2_rest_invalid_object_type' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/test' );
+		$request['object_type'] = 'options-page';
+		$request['object_id']   = 'cmb2_rest_untouched_option';
+		$this->assertResponseStatus( 400, rest_do_request( $request ), 'cmb2_rest_invalid_object_type' );
+	}
+
+	/**
+	 * A box declared for a post type stores post meta, so it accepts the 'post'
+	 * object type and rejects the others.
+	 */
+	public function test_post_type_box_accepts_post_object_type() {
+		$this->register_post_object_box( array(
+			'id'           => 'page_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'page' ),
+		) );
+		$page_id = $this->factory->post->create( array( 'post_type' => 'page' ) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'page_box', 'post_cap_field', array(
+			'value'       => 'page value',
+			'object_type' => 'post',
+			'object_id'   => $page_id,
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'page value', get_post_meta( $page_id, 'post_cap_field', true ) );
+
+		$response = $this->do_field_request( 'POST', 'page_box', 'post_cap_field', array(
+			'value'       => 'user value',
+			'object_type' => 'user',
+			'object_id'   => $this->administrator,
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+	}
+
+	/**
+	 * A user box accepts the 'user' object type and rejects 'post'.
+	 */
+	public function test_user_box_rejects_post_object_type() {
+		$this->register_post_object_box( array(
+			'id'           => 'user_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'user' ),
+		) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'user_box', 'post_cap_field', array(
+			'value'       => 'post value',
+			'object_type' => 'post',
+			'object_id'   => $this->post_id,
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertEmpty( get_post_meta( $this->post_id, 'post_cap_field', true ) );
+
+		$response = $this->do_field_request( 'POST', 'user_box', 'post_cap_field', array(
+			'value'       => 'user value',
+			'object_type' => 'user',
+			'object_id'   => $this->administrator,
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'user value', get_user_meta( $this->administrator, 'post_cap_field', true ) );
+	}
+
+	/**
+	 * An options-page box only stores to the option key(s) it declares; any other
+	 * object_id is rejected for reads, updates and deletes.
+	 */
+	public function test_options_page_box_rejects_undeclared_option_key() {
+		$this->register_options_page_box( array(
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+		) );
+		update_option( 'cmb2_rest_untouched_option', array( 'opts_field' => 'keep' ) );
+		wp_set_current_user( $this->administrator );
+
+		$params = array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		foreach ( array( 'GET', 'POST', 'DELETE' ) as $method ) {
+			$response = $this->do_field_request( $method, 'opts_box', 'opts_field', $params );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_id' );
+		}
+
+		$this->assertSame( array( 'opts_field' => 'keep' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * An options-page box still reads and writes its own declared option key.
+	 */
+	public function test_options_page_box_writes_declared_option_key() {
+		$this->register_options_page_box( array(
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+		) );
+		wp_set_current_user( $this->administrator );
+
+		$params = array(
+			'value'       => 'option value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_options_test',
+		);
+
+		$response = $this->do_field_request( 'POST', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'option value', cmb2_options( 'cmb2_rest_options_test' )->get( 'opts_field' ) );
+		$stored = get_option( 'cmb2_rest_options_test' );
+		$this->assertEquals( 'option value', $stored['opts_field'] );
+
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+		$data = $response->get_data();
+		$this->assertEquals( 'option value', $data['value'] );
+	}
+
+	/**
+	 * With the options-page read gate enabled, reads of the box's own option key
+	 * are still gated by the box capability.
+	 */
+	public function test_options_page_read_gate_applies_to_declared_option_key() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$params = array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_options_test',
+		);
+
+		wp_set_current_user( $this->subscriber );
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( self::auth_required_code(), $response, 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+	}
+
+	/**
+	 * A box using the back-compat `show_on` options-page config is an options-page
+	 * box, so it accepts the options-page object type for its own key.
+	 */
+	public function test_old_school_options_page_box_writes_declared_option_key() {
+		$rest = new CMB2_REST( new CMB2( array(
+			'id'           => 'old_opts_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'show_on'      => array(
+				'key'   => 'options-page',
+				'value' => array( 'cmb2_rest_old_options_test' ),
+			),
+			'fields'       => array(
+				'opts_field' => array(
+					'name' => 'Opts Field',
+					'id'   => 'opts_field',
+					'type' => 'text',
+				),
+			),
+		) ) );
+		$rest->universal_hooks();
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'old_opts_box', 'opts_field', array(
+			'value'       => 'old value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_old_options_test',
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$stored = get_option( 'cmb2_rest_old_options_test' );
+		$this->assertEquals( 'old value', $stored['opts_field'] );
+
+		$response = $this->do_field_request( 'POST', 'old_opts_box', 'opts_field', array(
+			'value'       => 'old value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_id' );
+	}
+
 	protected static function auth_required_code() {
 		return function_exists( 'rest_authorization_required_code' ) ? rest_authorization_required_code() : 403;
 	}
