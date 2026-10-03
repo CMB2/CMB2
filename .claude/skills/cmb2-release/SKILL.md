@@ -77,6 +77,25 @@ git checkout develop && git pull --rebase
 
 The snapshot above already shows working tree state, CI status, and commits since the last tag — review it instead of re-running those commands.
 
+### Security work riding this release
+
+The agent cutting the release is often not the one that handled a security
+report, and the release-time and post-release obligations live only in beads:
+
+```bash
+bd list --label security --status open
+bd list --status open | grep -i -E 'cve|ghsa|advisory|wordfence|patchstack|wpscan|security'   # catches unlabeled ones
+```
+
+For each hit, `bd show <id>` and read its notes and comments. Then follow
+`/cmb2-security-fix` §3 (Upgrade Notice, changelog credit, disclosure wording)
+for this release and §4 (reporter close-out) after Step 8. Typical items:
+changelog `Props`, an `== Upgrade Notice ==`, patched/affected version values
+for an advisory, a CVE to request or attach, and replies owed to the reporter,
+WP.org or the CNA. If the version you pick isn't the one a bead assumed (e.g.
+an advisory's patched version), update the bead. Report the open items to JT
+with the release plan; post-release ones go in the Step 8 report.
+
 ### Determine the new version (semver)
 
 If `$ARGUMENTS` was provided, use that. Otherwise classify the commits-since-last-tag from the snapshot:
@@ -367,6 +386,10 @@ curl -sI "https://downloads.wordpress.org/plugin/cmb2.$NEW.zip" | head -1   # 20
 ```
 
 If any of those fail, the release isn't done.
+
+If the pre-flight found security beads, run their `/cmb2-security-fix` §4
+close-out now (the fixed version is live), and comment on each bead with what
+was done and what is still owed.
 
 ## Step 9 — Post-release develop bump
 
