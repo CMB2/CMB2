@@ -118,9 +118,11 @@ is the safer default for state changes.
 gh api 'repos/CMB2/CMB2/security-advisories?state=triage'
 gh api repos/CMB2/CMB2/security-advisories/<GHSA>
 
-# JT only — outward-facing
-#   Accept:  UI "Accept and open as draft"
+# Outward-facing: run only on JT's explicit go for that step
+# Accept (= UI "Accept and open as draft"; sets submission.accepted=true):
+gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA> -f state=draft
 #   Close:   UI "Close security advisory"  (or PATCH state=closed)
+#   Comment to the reporter: UI only, no API endpoint
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/forks   # private fork (async, up to 5 min)
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/cve     # request CVE
 gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA> -f state=published   # or UI "Publish advisory"
