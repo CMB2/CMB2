@@ -108,6 +108,18 @@ rule allows only once the fix is on by default in a released version: publish
 download serving the new version), not after the GitHub release alone. The
 release's changelog credit and the advisory go out the same day.
 
+## Description
+
+The advisory's description starts as the reporter's submission, PoC and
+reproduction steps included, and is published as-is unless edited. Before
+publishing, replace it (UI **Edit advisory**, or `PATCH` with `description`)
+with a maintainer write-up at the disclosure rule's *plainly, not how* level
+(SKILL.md): Impact (class, required role/capability, precondition, impact),
+Patches (version + fix commit URL), Workarounds, Credits. Save the
+reporter's original to the beads issue first; the edit overwrites it. The
+reporter may still publish their own write-up after
+the advisory goes public; that is theirs to decide.
+
 ## Credits
 
 The reporter is auto-credited and accepts in GitHub. Add others (e.g.

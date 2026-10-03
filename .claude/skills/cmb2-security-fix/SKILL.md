@@ -31,6 +31,15 @@ version.**
   readme `== Upgrade Notice ==` and credit "Props <researcher> (via
   <channel>)" in the changelog, e.g. "(via Wordfence)" or "(via GitHub
   security advisory)". The CVE link can be added once the CVE is published.
+- *Plainly* is still not *how to exploit it*. Public disclosure text (the
+  advisory, Upgrade Notice, changelog, CNA notes) states the class, who can
+  exploit it (role or capability), the precondition (e.g. a REST-writable
+  field), the impact at the level of "modify arbitrary options, which can
+  lead to site compromise", affected/patched versions, the fix and any
+  workaround. It leaves out reproduction steps, payloads, request shapes, and
+  the specific targets that turn the bug into something worse (e.g. naming
+  `active_plugins`). Defenders need the first list; only attackers need the
+  second.
 - A draft GitHub security advisory, its comments and its temporary private
   fork are private. Publishing the advisory is the plain disclosure, so it
   waits for the same release.
@@ -130,7 +139,9 @@ JT publishes; give him the values, verified, in one handoff. Details in
 - **Affected products:** Composer / `cmb2/cmb2`, affected versions in Advisory
   Database syntax, **Patched versions** = the released version.
 - **Description:** complete text to paste (impact, affected path, fixed
-  version, fix commit URL, upgrade advice).
+  version, fix commit URL, upgrade advice), at the disclosure rule's
+  *plainly, not how* level. It **replaces** the reporter's text, which
+  usually holds their PoC; publishing without editing it publishes the PoC.
 - **Credits:** the reporter's credit accepted; add others if any.
 - **Publish** only after the wp.org release serves the fixed version.
 
