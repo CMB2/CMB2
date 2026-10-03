@@ -5,7 +5,7 @@ Tags:              metaboxes, forms, fields, options, settings
 Requires at least: 3.8.0
 Requires PHP:      7.4
 Tested up to:      7.1
-Stable tag:        2.13.2
+Stable tag:        2.13.3
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,11 @@ If including the library in your plugin or theme:
 FAQ's usually end up in the [github wiki](https://github.com/CMB2/CMB2/wiki).
 
 == Changelog ==
+
+### 2.13.3
+
+#### Bug Fixes
+* The CMB2 REST boxes/fields endpoints now validate the `object_type` and `object_id` parameters against the box's registered object types. A request naming an object type the box is not registered for (a post-type box stores as `post`), or, for an options-page box, an option key other than the box's own, returns a 400 error instead of reading or writing that object. Stored data is unchanged. Props [@ahanwate](https://github.com/ahanwate) (via GitHub security advisory).
 
 ### 2.13.2
 
@@ -408,8 +413,8 @@ For the changelog of versions prior to 2.3.0, see [CHANGELOG.md](https://github.
 
 == Upgrade Notice ==
 
+= 2.13.3 =
+Security update: CMB2 REST endpoints now reject requests that target an object type or option key a box is not registered for. Update recommended for all sites.
+
 = 2.13.2 =
 Security update: stored values are safely displayed in default field views, including admin columns. Update recommended for all sites.
-
-= 2.13.1 =
-Security hardening: sanitizes and escapes file_list field values. Recommended for all sites.

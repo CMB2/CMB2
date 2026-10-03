@@ -2,10 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+*
+
+## [2.13.3 - 2026-10-03](https://github.com/CMB2/CMB2/releases/tag/v2.13.3)
 
 ### Bug Fixes
 
-* The CMB2 REST boxes/fields endpoints now validate the `object_type` and `object_id` parameters against the box's registered object types. A request naming an object type the box is not registered for (a post-type box stores as `post`), or, for an options-page box, an option key other than the box's own, returns a 400 error instead of reading or writing that object. Stored data is unchanged.
+* The CMB2 REST boxes/fields endpoints now validate the `object_type` and `object_id` parameters against the box's registered object types. A request naming an object type the box is not registered for (a post-type box stores as `post`), or, for an options-page box, an option key other than the box's own, returns a 400 error instead of reading or writing that object. Stored data is unchanged. Props [@ahanwate](https://github.com/ahanwate) (via GitHub security advisory).
 
 ## [2.13.2 - 2026-09-30](https://github.com/CMB2/CMB2/releases/tag/v2.13.2)
 
