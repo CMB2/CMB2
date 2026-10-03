@@ -61,7 +61,8 @@ Ask the reporter whether they filed the same issue on another channel
 fix and one CVE.
 
 Open a beads issue labeled `security` (`bd label add <id> security`; `/cmb2-release`
-looks for it) holding the private framing: vector, every write path
+looks for it; label any child or follow-up bead that owes release-time or
+close-out work too) holding the private framing: vector, every write path
 (front-end `cmb2_get_metabox_form()` saves on a valid nonce with no capability
 check; user-box saves rely on the WordPress profile flow for authorization),
 affected versions, CVSS, researcher name, and any deadline.
