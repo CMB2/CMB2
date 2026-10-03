@@ -2,8 +2,9 @@
 
 How a report filed through GitHub private vulnerability reporting moves from
 intake to publication, and how that maps onto this skill. Outward-facing steps
-(accept, comment, close, request CVE, merge, publish) are JT's; agents read,
-draft text and prepare values.
+(accept, comment, close, request CVE, merge, publish) need JT's explicit go
+for each step; with it, an agent may run them via `gh api`. Without it, agents
+only read, draft text and prepare values.
 
 `<GHSA>` below is the advisory id, e.g. `GHSA-xxxx-xxxx-xxxx`. UI path for
 every step: repo → **Security** tab → **Advisories** → the advisory.
@@ -68,8 +69,14 @@ Packagist as `cmb2/cmb2`, and Composer is supported.
   marked patched) and **Patched versions** set
   to the release. Without a patched version, Dependabot alerts with no safe
   upgrade. ([writing advisories][write], [about][about])
-- Edit products in the UI (**Edit advisory**). A REST `PATCH` replaces the
-  whole `vulnerabilities` array and rejects `wordpress`.
+- Edit products in the UI (**Edit advisory**), or `PATCH` the full
+  `vulnerabilities` array: a `PATCH` that sends `vulnerabilities` replaces the
+  whole array and rejects `wordpress`. A `PATCH` that omits it (e.g. only
+  `state`) leaves the existing entries untouched.
+- The advisory page's "Required advisory information has been provided —
+  you're ready to publish" only means the required fields are non-empty. It
+  shows with a `wordpress`-only product and no patched version, so it is not a
+  check that the advisory is correct.
 - wp.org users are reached through the CVE, which the WordPress
   vulnerability databases (Wordfence, Patchstack, WPScan) ingest from the CVE
   list. Confirm the entry appears there after publishing.
@@ -110,19 +117,21 @@ once accepted and the advisory is published. Changelog credit:
 
 ## Commands
 
-UI-only: comment, merge fork PRs. Everything else has an API form, but the UI
-is the safer default for state changes.
+UI-only: merge fork PRs. Everything else has an API form. Comments use an
+endpoint the REST docs don't list (`GET` verified; `POST` follows the issue-
+comment shape but is unverified, so confirm with a `GET` after the first use).
 
 ```bash
 # Read (safe for agents)
 gh api 'repos/CMB2/CMB2/security-advisories?state=triage'
 gh api repos/CMB2/CMB2/security-advisories/<GHSA>
+gh api repos/CMB2/CMB2/security-advisories/<GHSA>/comments   # undocumented; reporter replies land here
 
 # Outward-facing: run only on JT's explicit go for that step
 # Accept (= UI "Accept and open as draft"; sets submission.accepted=true):
 gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA> -f state=draft
 #   Close:   UI "Close security advisory"  (or PATCH state=closed)
-#   Comment to the reporter: UI only, no API endpoint
+gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/comments -F body=@reply.md   # unverified, see above
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/forks   # private fork (async, up to 5 min)
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/cve     # request CVE
 gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA> -f state=published   # or UI "Publish advisory"
