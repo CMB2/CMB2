@@ -130,9 +130,8 @@ once accepted and the advisory is published. Changelog credit:
 ## Commands
 
 UI-only: merge fork PRs. Everything else has an API form. Comments use an
-endpoint the REST docs don't list. `GET` and `PATCH comments/<id>` are
-verified; `POST` follows the same issue-comment shape but is unverified, so
-confirm with a `GET` after the first use. Pass bodies with `jq -j`/`-F body=@file`
+endpoint the REST docs don't list. `GET`, `POST` and `PATCH comments/<id>`
+are verified. Pass bodies with `jq -j`/`-F body=@file`
 and no trailing newline, or an edit changes the stored body by one byte.
 
 ```bash
@@ -145,7 +144,7 @@ gh api repos/CMB2/CMB2/security-advisories/<GHSA>/comments   # undocumented; rep
 # Accept (= UI "Accept and open as draft"; sets submission.accepted=true):
 gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA> -f state=draft
 #   Close:   UI "Close security advisory"  (or PATCH state=closed)
-gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/comments -F body=@reply.md   # unverified, see above
+gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/comments -F body=@reply.md
 gh api -X PATCH repos/CMB2/CMB2/security-advisories/<GHSA>/comments/<comment-id> -F body=@reply.md   # edit
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/forks   # private fork (async, up to 5 min)
 gh api -X POST repos/CMB2/CMB2/security-advisories/<GHSA>/cve     # request CVE
