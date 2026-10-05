@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ develop, master ]
 
+permissions:
+  contents: read
+
 jobs:
   phpunit:
     runs-on: ubuntu-latest

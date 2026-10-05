@@ -1,5 +1,8 @@
 name: PHP Compatibility
 on: [push]
+permissions:
+  contents: read
+
 jobs:
   phpcompat:
     name: PHP 8.x Compatibility Check
