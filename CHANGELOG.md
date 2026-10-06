@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-*
+
+### Bug Fixes
+
+* Object IDs that CMB2 reads from the request (`user_id`, `c`, `tag_ID` and `post`, used when a box has no object ID set) are now cast to integers, the way WordPress reads them on its own edit screens, and the `oembed` field escapes its `data-objectid` and `data-objecttype` attributes. Core save hooks pass explicit IDs and are unaffected. A front-end `save_fields()` call with no ID now resolves a non-numeric `user_id` to the current user, as core's profile screen does, rather than to a string ID that matched no user. `cmb2_set_object_id` filter callbacks and custom `cmb2_override_meta_*` storage now receive an integer for these keys.
 
 ## [2.13.3 - 2026-10-03](https://github.com/CMB2/CMB2/releases/tag/v2.13.3)
 
