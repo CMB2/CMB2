@@ -297,3 +297,45 @@ nothing to stage.
 read/update/delete) passes through `initiate_rest_box()`. The core-route
 `cmb2` field (`CMB2_REST::register_cmb2_fields()`) takes its object type from
 the WordPress route, not the request, and is outside this check.
+
+## C13 — Object IDs read from the request are integers, as core reads them
+
+**Rule:** when `CMB2::object_id()` has no ID set and falls back to the request,
+it reads `user_id`, `c`, `tag_ID` and `post` as integers, the way WordPress core
+reads the same keys on its own screens (`user-edit.php`/`profile.php`,
+`comment.php` and `term.php` `absint()` them; `post.php` casts with `(int)`). A non-scalar value
+(e.g. edit.php's bulk-action `post[]`) is 0, not `absint()`'s 1. The cast
+happens before the `cmb2_set_object_id` filter, so filter callbacks receive the
+integer. The options-page branch is not cast: its object ID is an option name,
+already bounded to the box's own keys (C5, C12). `CMB2_Hookup::user_new_metabox()`
+applies the same cast to its own `user_id` read.
+
+The request ID also leaves CMB2 as markup: `CMB2_Type_Oembed::render()` writes
+`object_id`/`object_type` into data attributes, and those go through
+`esc_attr()` because `concat_attrs()` assembles pre-escaped values only (C10).
+An ID set by code (the setter, `cmb2_get_metabox_form()`'s argument, or the
+filter) is not cast and can be any string, so the renderer escapes regardless
+of the source cast.
+
+**Not staged (C3):** on by default in the release that adds it. Core renders
+object `absint( $id )` for these keys, and the metadata API `absint()`s every
+object ID before reading, so a non-numeric request ID already loaded the same
+object's data. Keeping the raw string only made CMB2 disagree with the object
+on screen. When the cast yields 0, the fallbacks match core: the user branch
+falls back to the current user (what `profile.php` shows; `user-edit.php` dies
+on 0, and `user-new.php` is excluded), and the post branch stays 0 rather than
+taking the global post.
+
+**Canonical example:** `CMB2::object_id()` → `request_object_id()`; pinned by
+`tests/test-cmb-request-object-id.php`.
+
+**Blast radius:** every admin and front-end render that relies on the request
+fallback — user edit/profile/new-user screens, term edit, and
+`cmb2_get_metabox_form()` called without an object ID. A numeric request ID is
+now an `int` rather than a numeric string; no CMB2 code compares it strictly.
+`absint()` keeps leading digits (`3f2a-uuid` → 3, `abc-slug` → 0). Core meta
+storage is unaffected, since the metadata API already `absint()`s. The affected
+case is custom storage via `cmb2_override_meta_*` callbacks that relied on a
+non-numeric request ID: they now receive the integer core would use, so such
+code should set the object ID explicitly. REST object IDs are a separate path
+(C12).

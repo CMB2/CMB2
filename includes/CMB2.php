@@ -1058,17 +1058,17 @@ class CMB2 extends CMB2_Base {
 		// Try to get our object ID from the global space.
 		switch ( $this->object_type() ) {
 			case 'user':
-				$object_id = isset( $_REQUEST['user_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['user_id'] ) ) : $object_id;
+				$object_id = isset( $_REQUEST['user_id'] ) ? $this->request_object_id( 'user_id' ) : $object_id;
 				$object_id = ! $object_id && 'user-new.php' !== $pagenow && isset( $GLOBALS['user_ID'] ) ? $GLOBALS['user_ID'] : $object_id;
 				break;
 
 			case 'comment':
-				$object_id = isset( $_REQUEST['c'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['c'] ) ) : $object_id;
+				$object_id = isset( $_REQUEST['c'] ) ? $this->request_object_id( 'c' ) : $object_id;
 				$object_id = ! $object_id && isset( $GLOBALS['comments']->comment_ID ) ? $GLOBALS['comments']->comment_ID : $object_id;
 				break;
 
 			case 'term':
-				$object_id = isset( $_REQUEST['tag_ID'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['tag_ID'] ) ) : $object_id;
+				$object_id = isset( $_REQUEST['tag_ID'] ) ? $this->request_object_id( 'tag_ID' ) : $object_id;
 				break;
 
 			case 'options-page':
@@ -1080,7 +1080,7 @@ class CMB2 extends CMB2_Base {
 
 			default:
 				$object_id = isset( $GLOBALS['post']->ID ) ? $GLOBALS['post']->ID : $object_id;
-				$object_id = isset( $_REQUEST['post'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post'] ) ) : $object_id;
+				$object_id = isset( $_REQUEST['post'] ) ? $this->request_object_id( 'post' ) : $object_id;
 				break;
 		}
 
@@ -1098,6 +1098,19 @@ class CMB2 extends CMB2_Base {
 		$this->object_id = ! empty( $object_id ) ? $object_id : 0;
 
 		return $this->object_id;
+	}
+
+	/**
+	 * Get an object ID from the request as an integer, the way WordPress core
+	 * reads the same request keys on its edit screens.
+	 *
+	 * @since  2.13.4
+	 * @param  string $key Request key.
+	 * @return integer     Object ID, or 0.
+	 */
+	private function request_object_id( $key ) {
+		// absint() of an array (e.g. edit.php's bulk-action post[]) would be 1.
+		return is_scalar( $_REQUEST[ $key ] ) ? absint( wp_unslash( $_REQUEST[ $key ] ) ) : 0;
 	}
 
 	/**

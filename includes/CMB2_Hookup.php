@@ -746,7 +746,7 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 	public function user_new_metabox( $section ) {
 		if ( $section === $this->cmb->prop( 'new_user_section' ) ) {
 			$object_id = $this->cmb->object_id();
-			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : $object_id );
+			$this->cmb->object_id( isset( $_REQUEST['user_id'] ) && is_scalar( $_REQUEST['user_id'] ) ? absint( $_REQUEST['user_id'] ) : $object_id );
 			$this->user_metabox();
 		}
 	}

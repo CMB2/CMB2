@@ -31,8 +31,8 @@ class CMB2_Type_Oembed extends CMB2_Type_Text {
 
 		return parent::render( array(
 			'class'           => 'cmb2-oembed regular-text',
-			'data-objectid'   => $field->object_id,
-			'data-objecttype' => $field->object_type,
+			'data-objectid'   => esc_attr( $field->object_id ),
+			'data-objecttype' => esc_attr( $field->object_type ),
 		) )
 		. '<p class="cmb-spinner spinner"></p>'
 		. '<div id="' . $this->_id( '-status' ) . '" class="cmb2-media-status ui-helper-clearfix embed_wrap">' . $oembed . '</div>';
