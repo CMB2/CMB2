@@ -3,9 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Enhancements
+
+* Added the `rest_enforce_user_read_permissions` box property and the `cmb2_rest_enforce_user_read_permissions` filter (off by default). When enabled, REST field reads of a user that core does not show (a user with no published posts, read by someone other than that user or a holder of `edit_user`/`list_users`) are denied. While neither declares an explicit `true` or `false` (the filter defaults to `null`), such a read stays allowed and emits a deprecation notice (an `X-WP-DeprecatedParam` header and a debug-log line when `WP_DEBUG` / `WP_DEBUG_LOG` are on), since the default will change in a future version. Set the property or filter to `false` to keep the current behavior.
+
 ### Bug Fixes
 
 * Object IDs that CMB2 reads from the request (`user_id`, `c`, `tag_ID` and `post`, used when a box has no object ID set) are now cast to integers, the way WordPress reads them on its own edit screens, and the `oembed` field escapes its `data-objectid` and `data-objecttype` attributes. Core save hooks pass explicit IDs and are unaffected. A front-end `save_fields()` call with no ID now resolves a non-numeric `user_id` to the current user, as core's profile screen does, rather than to a string ID that matched no user. `cmb2_set_object_id` filter callbacks and custom `cmb2_override_meta_*` storage now receive an integer for these keys.
+* The CMB2 REST field endpoints (`/cmb2/v1/boxes/{box}/fields` and `/fields/{field}`) now follow WordPress core's REST read permissions for the requested object. Reads of a post in a non-public status (draft, pending, private, future, trash); of a post, or an attachment's parent, whose type is not shown in REST and is not one of the box's own post types; or of a comment core does not show (unapproved, on a post the requester cannot read, or on a password-protected post the requester cannot edit) return a 401/403 unless the requester can read that object. For anonymous requests this matches core's own routes. Published and password-protected posts, terms, options pages and custom object types are unchanged, and the `cmb2_api_get_field_permissions_check` / `cmb2_api_get_fields_permissions_check` filters (and box `*_permissions_check_cb` properties) still have the final say. The fields collection now returns a 401/403 for such an object.
+* A REST field read in the same PHP process as an earlier read of a different object now returns the requested object's value rather than the earlier object's.
 
 ## [2.13.3 - 2026-10-03](https://github.com/CMB2/CMB2/releases/tag/v2.13.3)
 
