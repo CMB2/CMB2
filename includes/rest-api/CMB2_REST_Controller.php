@@ -179,6 +179,264 @@ abstract class CMB2_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * Gates a read of an object's field values by WordPress core's REST read
+	 * permissions for that object.
+	 *
+	 * Core returns object meta publicly, but only for objects its REST controllers
+	 * show to the current user. The object checked is the one the box resolved
+	 * (from `object_id`, or the box's own fallback), so it is the object the fields
+	 * read from. Terms, options pages and non-core object types are not gated here.
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  bool $can_access The default access for this read request.
+	 *
+	 * @return bool             The possibly-adjusted access value.
+	 */
+	protected function maybe_gate_read_by_object( $can_access ) {
+		if ( ! $can_access || ! $this->rest_box || is_wp_error( $this->rest_box ) ) {
+			return $can_access;
+		}
+
+		$cmb = $this->rest_box->cmb;
+
+		// The metadata API reads these types by absint() of the id, so check the same object.
+		$object_id = absint( $cmb->object_id() );
+
+		if ( ! $object_id ) {
+			return $can_access;
+		}
+
+		switch ( $cmb->object_type() ) {
+			case 'post':
+				$post = get_post( $object_id );
+
+				return ! $post || ( $this->can_read_post_type( $post ) && $this->can_read_post( $post ) );
+
+			case 'comment':
+				$comment = get_comment( $object_id );
+
+				return ! $comment || $this->can_read_comment( $comment );
+
+			case 'user':
+				if ( ! get_userdata( $object_id ) || $this->can_read_user( $object_id ) ) {
+					return $can_access;
+				}
+
+				$enforce = $this->enforce_user_read_permissions();
+
+				if ( null === $enforce ) {
+					$this->deprecated_user_read();
+				}
+
+				return ! $enforce;
+		}
+
+		return $can_access;
+	}
+
+	/**
+	 * Whether the post's type allows a REST read of it by the current user.
+	 *
+	 * Core's routes exist only for post types shown in REST. CMB2 boxes are commonly
+	 * registered for post types that are not, so the box's own types are exempt, and
+	 * a requester who can `read_post` passes for any registered type.
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  WP_Post $post The post.
+	 *
+	 * @return bool
+	 */
+	protected function can_read_post_type( WP_Post $post ) {
+		if ( $this->rest_box->cmb->is_box_type( $post->post_type ) ) {
+			return true;
+		}
+
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type ) {
+			return false;
+		}
+
+		return ! empty( $post_type->show_in_rest ) || current_user_can( 'read_post', $post->ID );
+	}
+
+	/**
+	 * Whether WordPress core's REST API shows the post to the current user.
+	 *
+	 * Mirrors WP_REST_Posts_Controller::check_read_permission(), minus its check that
+	 * the post type is shown in REST, which can_read_post_type() handles.
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  WP_Post $post The post.
+	 *
+	 * @return bool
+	 */
+	protected function can_read_post( WP_Post $post ) {
+		if ( 'publish' === $post->post_status || current_user_can( 'read_post', $post->ID ) ) {
+			return true;
+		}
+
+		$post_status_obj = get_post_status_object( $post->post_status );
+		if ( $post_status_obj && $post_status_obj->public ) {
+			return true;
+		}
+
+		if ( 'inherit' === $post->post_status && $post->post_parent > 0 ) {
+			$parent = get_post( $post->post_parent );
+			if ( $parent ) {
+				return $this->can_read_post_type( $parent ) && $this->can_read_post( $parent );
+			}
+		}
+
+		// An inherit post without a parent is treated as published, per get_post_status().
+		return 'inherit' === $post->post_status;
+	}
+
+	/**
+	 * Whether WordPress core's REST API shows the comment to the current user.
+	 *
+	 * Mirrors WP_REST_Comments_Controller::check_read_permission().
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  WP_Comment $comment The comment.
+	 *
+	 * @return bool
+	 */
+	protected function can_read_comment( WP_Comment $comment ) {
+		if ( 'note' !== $comment->comment_type && ! empty( $comment->comment_post_ID ) ) {
+			$post = get_post( $comment->comment_post_ID );
+			if ( $post && 1 === (int) $comment->comment_approved && $this->can_read_comment_post( $post ) ) {
+				return true;
+			}
+		}
+
+		if ( 0 === get_current_user_id() ) {
+			return false;
+		}
+
+		if ( empty( $comment->comment_post_ID ) && ! current_user_can( 'moderate_comments' ) ) {
+			return false;
+		}
+
+		if ( ! empty( $comment->user_id ) && get_current_user_id() === (int) $comment->user_id ) {
+			return true;
+		}
+
+		return current_user_can( 'edit_comment', $comment->comment_ID );
+	}
+
+	/**
+	 * Whether the current user can read comments on the post.
+	 *
+	 * Mirrors WP_REST_Comments_Controller::check_read_post_permission().
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  WP_Post $post The comment's post.
+	 *
+	 * @return bool
+	 */
+	protected function can_read_comment_post( WP_Post $post ) {
+		if ( ! $this->can_read_post_type( $post ) ) {
+			return false;
+		}
+
+		if ( post_password_required( $post ) ) {
+			return current_user_can( 'edit_post', $post->ID );
+		}
+
+		return $this->can_read_post( $post );
+	}
+
+	/**
+	 * Whether WordPress core's REST API shows the user to the current user.
+	 *
+	 * Mirrors WP_REST_Users_Controller::get_item_permissions_check().
+	 *
+	 * @since  2.13.4
+	 *
+	 * @param  int $user_id The user id.
+	 *
+	 * @return bool
+	 */
+	protected function can_read_user( $user_id ) {
+		if (
+			get_current_user_id() === $user_id
+			|| current_user_can( 'edit_user', $user_id )
+			|| current_user_can( 'list_users' )
+		) {
+			return true;
+		}
+
+		return (bool) count_user_posts( $user_id, get_post_types( array( 'show_in_rest' => true ), 'names' ) );
+	}
+
+	/**
+	 * Whether reads of users that core hides are denied, per the box's
+	 * `rest_enforce_user_read_permissions` property, else the site-wide filter.
+	 *
+	 * @since  2.13.4
+	 *
+	 * @return bool|null The declared choice, or null when neither declares one.
+	 */
+	protected function enforce_user_read_permissions() {
+		$cmb      = $this->rest_box->cmb;
+		$declared = $cmb->prop( 'rest_enforce_user_read_permissions' );
+
+		if ( null !== $declared ) {
+			return (bool) $declared;
+		}
+
+		/**
+		 * Whether CMB2 REST field reads of a user follow WordPress core's user read
+		 * permissions: core shows a user only to that user, to holders of
+		 * `edit_user`/`list_users`, or when the user has published posts.
+		 *
+		 * Defaults to null, which reads as false and fires a deprecation notice. Return
+		 * true or false to declare a choice. Only consulted for boxes which have not
+		 * declared a `rest_enforce_user_read_permissions` property.
+		 *
+		 * @since 2.13.4
+		 *
+		 * @param bool|null $enforce Whether to deny reads of users core does not show.
+		 * @param CMB2      $cmb     The CMB2 box object being read.
+		 */
+		$enforce = apply_filters( 'cmb2_rest_enforce_user_read_permissions', null, $cmb );
+
+		return null === $enforce ? null : (bool) $enforce;
+	}
+
+	/**
+	 * Flags a read of a user that core does not show, which the future default denies.
+	 *
+	 * In REST requests core suppresses trigger_error() for deprecations and sends an
+	 * `X-WP-DeprecatedParam` header only when WP_DEBUG is on, so the notice is also
+	 * written to the debug log when that is enabled.
+	 *
+	 * @since  2.13.4
+	 *
+	 * @return void
+	 */
+	protected function deprecated_user_read() {
+		$route   = $this->request->get_route();
+		$version = '2.13.4';
+		$message = __( 'Reading the fields of a user that the WordPress REST API does not show to the current user is deprecated. In a future version, CMB2 will follow WordPress core\'s user read permissions here by default. To keep the current behavior, set the box\'s "rest_enforce_user_read_permissions" property to false, or return false from the "cmb2_rest_enforce_user_read_permissions" filter.', 'cmb2' );
+
+		_deprecated_argument( $route, $version, $message );
+
+		// Core's rest_send_allow_header() re-runs the permission check, so log each route once.
+		static $logged = array();
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG && ! isset( $logged[ $route ] ) ) {
+			$logged[ $route ] = true;
+			error_log( sprintf( 'CMB2: %1$s (since %2$s; %3$s)', $route, $version, $message ) );
+		}
+	}
+
+	/**
 	 * Checks if the CMB2 box has any registered callback parameters for the given filter.
 	 *
 	 * The registered handlers will have a property name which matches the filter, except:

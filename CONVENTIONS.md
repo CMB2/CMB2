@@ -64,22 +64,89 @@ the same release that introduces the switch.
 staged-rollout example: the `cmb2_rest_enforce_options_page_read_permissions`
 filter (default false).
 
-## C4 — REST reads are public by design; permission filters are the escape hatch
+**Exception — not staged when core already denies the read:** a default may
+flip in the release that adds it when WordPress core's own REST API already
+refuses the same read, and the authenticated readers who can legitimately see
+the object still pass. The REST object gate (C4) for non-public post statuses
+and for comments ships on by default under this exception: core returns 401
+for those objects, and editors, authors and preview flows authenticate and
+pass `read_post` / `edit_comment`. The same reasoning is C12's "not staged".
+It does not cover reads core allows in a case CMB2 users rely on, which is why
+the user rule is staged.
+
+## C4 — REST reads are public within core's object visibility; permission filters are the escape hatch
 
 **Rule:** Boxes with `show_in_rest` readable expose reads publicly — this
 mirrors WP core's `show_in_rest` semantics for object meta and is intentional,
-not an oversight. Per-request overrides go through the existing
-`cmb2_api_get_box_permissions_check` / `cmb2_api_get_field_permissions_check`
-filters, which always run last and have final say. New permission logic must
-run *before* them and must not remove them.
+not an oversight. Core's meta is public only for objects its REST controllers
+show to the requester, so CMB2's field reads are public *within core's object
+visibility*: a read of a post, comment or user core hides from the current user
+is denied (`CMB2_REST_Controller::maybe_gate_read_by_object()`). Per-request
+overrides go through the existing `cmb2_api_get_box_permissions_check` /
+`cmb2_api_get_field_permissions_check` / `cmb2_api_get_fields_permissions_check`
+filters, which always run last and have final say: a filter returning `true`
+restores a read the object gate denied. New permission logic must run *before*
+them and must not remove them.
 
-**Canonical example:** `CMB2_REST_Controller_Boxes::get_item_permissions_check_filter()`;
-pinned by tests in `tests/test-cmb-rest-controllers.php`.
+**Object gate shape:**
+
+- The object checked is the one the box resolved after `initiate_rest_box()`
+  (`$cmb->object_id()` / `$cmb->object_type()`), not the raw request, so a read
+  with only `object_id` (the `_rendered` path) or with the box's own fallback
+  id (`$_REQUEST['post']` etc., see C13) is gated on the object the fields
+  actually read. Core types are checked by `absint()` of the id, the way the
+  metadata API reads them.
+- Posts re-implement core's `WP_REST_Posts_Controller::check_read_permission()`
+  status logic (`publish` / `read_post` / public status / `inherit` → parent)
+  rather than calling it: core's method also requires the post type to be shown
+  in REST, and CMB2 boxes commonly live on post types that are not. That type
+  rule applies, to the requested post and to an `inherit` post's parent, only
+  when that post's type is not one of the box's own (`is_box_type()`): it then
+  needs a `show_in_rest` type or `read_post`, and an unregistered type is
+  denied (`can_read_post_type()`). Without it, a box for
+  `post` reads any post id's value for a shared meta key, including posts of a
+  hidden type core's routes never serve. Password-protected posts stay
+  readable, as core returns their meta.
+- Comments mirror `WP_REST_Comments_Controller::check_read_permission()`,
+  including its parent-post rule (`check_read_post_permission()`): the parent's
+  type follows the rule above, and a comment on a password-protected post needs
+  `edit_post` on it;
+  users mirror `WP_REST_Users_Controller::get_item_permissions_check()` (self,
+  `edit_user`, `list_users`, or published posts in REST post types).
+- Terms, options pages (the read gate in C8) and non-core types from
+  `cmb2_set_box_object_type` are not gated: core shows terms publicly, and
+  there is no core rule to mirror for the others.
+- The single-field read gates in `get_item_permissions_check_filter()`, after
+  `maybe_gate_read_by_capability()`. The fields collection gates the object
+  **once**, in `get_items_permissions_check()` before
+  `cmb2_api_get_fields_permissions_check`, so a hidden object is a 401, not
+  `200 {}`, and the collection filter's `true` is not undone per field.
+- The gate is only correct if each field reads the object the gate checked.
+  `CMB2_REST::field_can()` rebuilds a cached `CMB2_Field` whose object differs
+  from the box's, so a second in-process request for another object never
+  serves the first object's value; a single request still builds each field
+  once.
+
+**Staging:** posts and comments are gated by default (see the exception in
+C3). Users follow the `rest_enforce_user_read_permissions` box prop, else the
+`cmb2_rest_enforce_user_read_permissions` filter (default false, C8 shape). A
+user read the future default would deny fires `_deprecated_argument()`
+(the `X-WP-DeprecatedParam` header under `WP_DEBUG`) plus one `error_log()`
+line under `WP_DEBUG_LOG`, only when neither the prop nor the filter declares a
+choice. The filter defaults to `null`, and only an explicit `true`/`false` is a
+choice, so a callback that sets one box and passes its input through for the
+rest leaves the notice on for those other boxes.
+
+**Canonical example:** `CMB2_REST_Controller::maybe_gate_read_by_object()`,
+`CMB2_REST_Controller_Fields::get_item_permissions_check_filter()`; pinned by
+`tests/test-cmb-rest-object-read-permissions.php` and
+`tests/test-cmb-rest-controllers.php`.
 
 **Blast radius:** headless/decoupled front-ends read box data anonymously for
-public display. Tightening reads by default breaks them — hence the staged
-approach in C3, scoped only to options-page boxes (matching core's
-settings-vs-meta distinction).
+public display. Tightening reads beyond core's visibility by default breaks
+them — hence the staged approach in C3, scoped to options-page boxes (matching
+core's settings-vs-meta distinction) and to users with no published posts (the
+"team directory" case).
 
 ## C5 — The `capability` box prop means "who sees the admin screen"
 
@@ -297,6 +364,11 @@ nothing to stage.
 read/update/delete) passes through `initiate_rest_box()`. The core-route
 `cmb2` field (`CMB2_REST::register_cmb2_fields()`) takes its object type from
 the WordPress route, not the request, and is outside this check.
+
+**Related:** C12 binds the request to the box's registered *type*; C4's object
+gate binds the requested *id* to core's object visibility. C12 is request
+validation (400, outside the filters); the object gate is a permission (before
+the filters, which have final say).
 
 ## C13 — Object IDs read from the request are integers, as core reads them
 

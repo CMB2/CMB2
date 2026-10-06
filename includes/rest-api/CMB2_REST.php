@@ -768,7 +768,24 @@ class CMB2_REST extends CMB2_Hookup_Base {
 			return false;
 		}
 
-		return $return_object ? $this->cmb->get_field( $field_id ) : true;
+		if ( ! $return_object ) {
+			return true;
+		}
+
+		$field = $this->cmb->get_field( $field_id );
+
+		// A cached field keeps the object it was built for, so rebuild it once the box points elsewhere.
+		if (
+			$field
+			&& (
+				(string) $field->object_id !== (string) $this->cmb->object_id()
+				|| $field->object_type !== $this->cmb->object_type()
+			)
+		) {
+			$field = $this->cmb->get_field( $field->id(), null, true );
+		}
+
+		return $field;
 	}
 
 	/**

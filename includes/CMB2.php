@@ -124,6 +124,22 @@ class CMB2 extends CMB2_Base {
 		 * filters still run afterward and have the final say.
 		 */
 		'rest_read_capability'    => null,
+
+		/*
+		 * Whether REST field reads of a user follow WordPress core's user read
+		 * permissions: core's REST API shows a user only to that user, to holders of
+		 * 'edit_user' or 'list_users', or when the user has published posts.
+		 *
+		 * - true  Reads of users core does not show are denied.
+		 * - false Reads stay as they are, whatever the default.
+		 * - null  (default) Follows the site-wide `cmb2_rest_enforce_user_read_permissions`
+		 *         filter, which defaults to false. The default changes to true in a
+		 *         future version.
+		 *
+		 * The `cmb2_api_get_field_permissions_check`/`cmb2_api_get_fields_permissions_check`
+		 * filters still run afterward and have the final say.
+		 */
+		'rest_enforce_user_read_permissions' => null,
 		'classes'                 => null, // Optionally add classes to the CMB2 wrapper.
 		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback).
 

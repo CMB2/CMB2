@@ -88,7 +88,9 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 */
 	public function get_items_permissions_check( $request ) {
 		$this->initiate_rest_read_box( $request, 'fields_read' );
-		$can_access = true;
+
+		// Gated once here for the object, so get_items() does not re-gate each field.
+		$can_access = $this->maybe_gate_read_by_object( true );
 
 		/**
 		 * By default, no special permissions needed.
@@ -125,7 +127,7 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			$this->field = $this->rest_box->field_can_read( $field['id'], true );
 
 			// And make sure current user can view this box.
-			if ( $this->field && $this->get_item_permissions_check_filter() ) {
+			if ( $this->field && $this->get_item_permissions_check_filter( true, false ) ) {
 				$fields[ $field['id'] ] = $this->server->response_to_data(
 					$this->prepare_field_response(),
 					isset( $this->request['_embed'] )
@@ -160,10 +162,12 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 	 *
 	 * @since 2.2.3
 	 *
-	 * @param  bool $can_access Whether the current request has access to view the field by default.
+	 * @param  bool $can_access   Whether the current request has access to view the field by default.
+	 * @param  bool $check_object Whether to apply the object read gate. The fields
+	 *                            collection applies it once, before this.
 	 * @return WP_Error|boolean
 	 */
-	public function get_item_permissions_check_filter( $can_access = true ) {
+	public function get_item_permissions_check_filter( $can_access = true, $check_object = true ) {
 		/*
 		 * Optionally gate the read behind a capability, per the field's declaration,
 		 * falling back to the box's. Passing the field is what makes this per-field:
@@ -174,6 +178,10 @@ class CMB2_REST_Controller_Fields extends CMB2_REST_Controller_Boxes {
 			$can_access,
 			$this->field instanceof CMB2_Field ? $this->field : null
 		);
+
+		if ( $check_object ) {
+			$can_access = $this->maybe_gate_read_by_object( $can_access );
+		}
 
 		/**
 		 * By default, no special permissions needed.
