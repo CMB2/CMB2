@@ -24,6 +24,11 @@ every step: repo → **Security** tab → **Advisories** → the advisory.
   see the draft, push to the private fork and open PRs in it. Only admins
   merge, edit credits, close or publish. ([permissions][perms],
   [report privately][report])
+- That write access lets reporters send their own patch as a fork PR. When a
+  fix is already written or underway, the acknowledgement comment says so
+  plainly ("the fix is already committed and will ship in X; no patch needed")
+  so the reporter doesn't duplicate it. "We'll share the commit when it lands"
+  reads as "not started" and invites one.
 - The advisory URL does not change on publish. Published advisories can still
   be edited. ([about][about], [edit][edit])
 
