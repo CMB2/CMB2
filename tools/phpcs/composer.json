@@ -1,0 +1,18 @@
+{
+	"name": "cmb2/phpcs-tools",
+	"description": "Isolated PHP_CodeSniffer toolchain for linting CMB2. Kept out of the root require-dev so the PHPUnit test matrix (PHP 7.4-8.1) is not forced to resolve sniffer packages that require PHP 8.2+ (e.g. spryker/code-sniffer via fig-r/psr2r-sniffer). Installed only by the PHP 8.3 PHPCS CI job.",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"squizlabs/php_codesniffer": "^3.9",
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"sirbrillig/phpcs-variable-analysis": "^2.11",
+		"fig-r/psr2r-sniffer": "^1.5"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}

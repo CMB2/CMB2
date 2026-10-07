@@ -15,6 +15,11 @@ require_once( 'cmb-tests-base.php' );
  */
 class Test_CMB2_Options extends CMB2TestCase {
 
+	// Options-specific test properties
+	protected $option_metabox_array;
+	protected $options_cmb;
+	protected $opt_set;
+
 	/**
 	 * Set up the test fixture
 	 */

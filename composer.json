@@ -31,23 +31,20 @@
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^9.6",
-		"awesomemotive/am-cli-tools": ">=1.3.7",
 		"yoast/phpunit-polyfills": "^1.1"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/awesomemotive/am-cli-tools"
-		}
-	],
 	"scripts": {
-	  "test": [
-		"vendor/bin/phpunit"
-	  ]
-	},
-	"config": {
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
+		"test": [
+			"vendor/bin/phpunit"
+		],
+		"phpcs:install": "@composer install --working-dir=tools/phpcs --no-interaction",
+		"phpcs": "@php tools/phpcs/run.php phpcs",
+		"phpcbf": "@php tools/phpcs/run.php phpcbf",
+		"post-install-cmd": [
+			"@php tools/phpcs/maybe-install.php"
+		],
+		"post-update-cmd": [
+			"@php tools/phpcs/maybe-install.php"
+		]
 	}
 }

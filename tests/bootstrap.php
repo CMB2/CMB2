@@ -23,6 +23,13 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$GLOBALS['test_root'] = '/tmp/wordpress-tests-lib';
 }
 
+// Ensure we have a valid test root directory
+if ( empty( $GLOBALS['test_root'] ) || ! file_exists( $GLOBALS['test_root'] . '/includes/bootstrap.php' ) ) {
+	echo "Error in bootstrap script: WordPress test suite not found.\n";
+	echo "Please run: bash tests/bin/install-wp-tests.sh <db_name> <db_user> <db_pass> [db_host] [wp_version]\n";
+	exit( 1 );
+}
+
 $plugin = dirname( dirname( __FILE__ ) );
 define( 'CMB2_TEST_PLUGIN', $plugin );
 define( 'CMB2_WP_CONTENT', dirname( dirname( $plugin ) ) );

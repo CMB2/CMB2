@@ -1,0 +1,4 @@
+interface:
+  display_name: "CMB2 Playwright QA"
+  short_description: "Capture reproducible CMB2 browser QA evidence"
+  default_prompt: "Use $cmb2-playwright-qa to run a CMB2 browser QA procedure with reproducible evidence."

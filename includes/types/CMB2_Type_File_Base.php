@@ -26,7 +26,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 
 		$allowed = get_allowed_mime_types();
 		if ( ! empty( $allowed ) ) {
-			foreach ( (array) $allowed as $type => $mime) {
+			foreach ( (array) $allowed as $type => $mime ) {
 				if ( 0 === strpos( $mime, 'image/' ) ) {
 					$types = explode( '|', $type );
 					$valid_types = array_merge( $valid_types, $types );
@@ -149,7 +149,7 @@ class CMB2_Type_File_Base extends CMB2_Type_Text {
 	 *      'name'   => (string) e.g. 'thumbnail'
 	 *    )
 	 */
-	static function get_image_size_data( $img_size = '', $fallback = 'thumbnail' ) {
+	public static function get_image_size_data( $img_size = '', $fallback = 'thumbnail' ) {
 		$data = array();
 
 		if ( is_array( $img_size ) ) {

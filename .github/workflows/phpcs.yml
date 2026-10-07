@@ -1,0 +1,44 @@
+name: PHPCS
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+permissions:
+  contents: read
+
+jobs:
+  phpcs:
+    name: PHP CodeSniffer
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        tools: composer
+        coverage: none
+
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache composer dependencies
+      uses: actions/cache@v6
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-phpcs-${{ hashFiles('tools/phpcs/composer.json') }}
+        restore-keys: |
+          ${{ runner.os }}-phpcs-
+
+    - name: Install PHPCS tooling
+      run: composer install --working-dir=tools/phpcs --no-progress --prefer-dist --no-interaction
+
+    - name: Run PHP CodeSniffer
+      run: tools/phpcs/vendor/bin/phpcs --standard=.phpcs.xml.dist includes/ init.php

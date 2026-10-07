@@ -1,0 +1,13 @@
+{
+	"port": 2623,
+	"plugins": ["."],
+	"testsEnvironment": false,
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_DISPLAY": false,
+		"SCRIPT_DEBUG": false
+	},
+	"mappings": {
+		"wp-content/mu-plugins/cmb2-test-fields.php": "./tests/playwright/fixtures/test-fields.php"
+	}
+}

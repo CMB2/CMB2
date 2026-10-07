@@ -59,7 +59,10 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		}
 
 		// Register setting to cmb2 group.
-		register_setting( 'cmb2', $this->option_key );
+		register_setting( 'cmb2', $this->option_key, array(
+			'type'              => 'array',
+			'sanitize_callback' => 'cmb2_sanitize_option_passthrough',
+		) );
 
 		// Handle saving the data.
 		add_action( 'admin_post_' . $this->option_key, array( $this, 'save_options' ) );
@@ -200,7 +203,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 				<h2><?php echo wp_kses_post( $this->cmb->prop( 'title' ) ); ?></h2>
 			<?php endif; ?>
 			<?php $this->options_page_tab_nav_output(); ?>
-			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo $this->cmb->cmb_id; ?>" enctype="multipart/form-data" encoding="multipart/form-data">
+			<form class="cmb-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="POST" id="<?php echo esc_attr( $this->cmb->cmb_id ); ?>" enctype="multipart/form-data" encoding="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $this->option_key ); ?>">
 				<?php $this->options_page_metabox(); ?>
 				<?php submit_button( esc_attr( $this->cmb->prop( 'save_button' ) ), 'primary', 'submit-cmb' ); ?>
@@ -222,6 +225,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		?>
 		<h2 class="nav-tab-wrapper">
 			<?php foreach ( $tabs as $option_key => $tab_title ) : ?>
+				<?php // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace -- Inline alternative-syntax conditional in template markup; keep on one line. ?>
 				<a class="nav-tab<?php if ( self::is_page( $option_key ) ) : ?> nav-tab-active<?php endif; ?>" href="<?php menu_page_url( $option_key ); ?>"><?php echo wp_kses_post( $tab_title ); ?></a>
 			<?php endforeach; ?>
 		</h2>
@@ -259,7 +263,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 		if ( $tab_group ) {
 			$boxes = CMB2_Boxes::get_by( 'tab_group', $tab_group );
 
-			foreach ( $boxes as $cmb_id => $cmb ) {
+			foreach ( $boxes as $cmb ) {
 				$option_key = $cmb->options_page_keys();
 
 				// Must have an option key, must be an options page box.
@@ -366,6 +370,7 @@ class CMB2_Options_Hookup extends CMB2_Hookup {
 			case 'cmb':
 				return $this->{$field};
 			default:
+				// translators: 1: class name, 2: property name.
 				throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'cmb2' ), __CLASS__, $field ) );
 		}
 	}

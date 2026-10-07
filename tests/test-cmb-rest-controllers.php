@@ -348,6 +348,856 @@ class Test_CMB2_REST_Controllers extends Test_CMB2_Rest_Base {
 		$this->assertEquals( '', $response_data['value'] );
 	}
 
+	/**
+	 * Registers an options-page box (REST-readable) for the read-permission tests.
+	 *
+	 * @param array $args Optional box-registration overrides/additions.
+	 *
+	 * @return void
+	 */
+	protected function register_options_page_box( $args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $args, array(
+			'id'           => 'opts_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'options-page' ),
+			'option_key'   => 'cmb2_rest_options_test',
+			'capability'   => 'manage_options',
+			'fields'       => array(
+				'opts_field' => array(
+					'name' => 'Opts Field',
+					'id'   => 'opts_field',
+					'type' => 'text',
+				),
+			),
+		) ) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * Registers a post-object box (REST-readable) for the read-permission tests.
+	 *
+	 * @param array $args Optional box-registration overrides/additions.
+	 *
+	 * @return void
+	 */
+	protected function register_post_object_box( $args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $args, array(
+			'id'           => 'post_cap_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'post' ),
+			'fields'       => array(
+				'post_cap_field' => array(
+					'name' => 'Post Cap Field',
+					'id'   => 'post_cap_field',
+					'type' => 'text',
+				),
+			),
+		) ) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * By default (gate off), an options-page box read stays public, matching
+	 * CMB2's historical REST read behavior.
+	 */
+	public function test_options_page_box_read_public_by_default() {
+		$this->register_options_page_box();
+
+		wp_set_current_user( 0 );
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * When the options-page read gate is enabled, reads of an options-page box are
+	 * aligned with WordPress core's settings convention (gated behind the box
+	 * capability, defaulting to manage_options).
+	 */
+	public function test_options_page_box_read_gated_when_enabled() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * The same options-page read gate applies to field reads on the box.
+	 */
+	public function test_options_page_field_read_gated_when_enabled() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * Non-options-page (post-object) box reads are unaffected by the options-page
+	 * gate, even when it is enabled.
+	 */
+	public function test_post_box_read_unchanged_when_options_page_gate_enabled() {
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields/rest_test';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * With the options-page read gate enabled, the boxes collection still lists
+	 * public (post-object) boxes but omits gated options-page boxes for users
+	 * lacking the box capability; users with the capability see them listed.
+	 */
+	public function test_boxes_collection_omits_gated_options_page_box() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'test', $box_ids );
+		$this->assertNotContains( 'opts_box', $box_ids );
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'opts_box', $box_ids );
+	}
+
+	/**
+	 * A box declaring `'rest_read_capability' => 'exist'` has opted its reads out of
+	 * the gate entirely: WordPress grants the `exist` pseudo-capability to every
+	 * visitor (see WP_User::has_cap(), "Everyone is allowed to exist"), so reads stay
+	 * public — even for a logged-out visitor, and even when the site-wide alignment
+	 * filter is enabled.
+	 */
+	public function test_read_capability_prop_exist_keeps_reads_public() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'exist',
+		) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * `'rest_read_capability' => false` reads as "no, REST reads of this box are not
+	 * permitted" — for everyone, administrators included. It maps to WordPress's
+	 * `do_not_allow` pseudo-capability, which WP_User::has_cap() denies
+	 * unconditionally.
+	 */
+	public function test_read_capability_prop_false_disables_reads_for_everyone() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field',
+		);
+
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->administrator );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		}
+	}
+
+	/**
+	 * A box with reads disabled also drops out of the boxes collection, even for an
+	 * administrator.
+	 */
+	public function test_read_capability_prop_false_omits_box_from_collection() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => false,
+		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes';
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$box_ids = wp_list_pluck( $response->get_data(), 'id' );
+		$this->assertContains( 'test', $box_ids );
+		$this->assertNotContains( 'opts_box', $box_ids );
+	}
+
+	/**
+	 * `'rest_read_capability' => true` reads as "yes, everyone may read this box" — an
+	 * alias of the `exist` capability WordPress grants every visitor. Because it is an
+	 * explicit declaration, the site-wide alignment filter never applies to it.
+	 */
+	public function test_read_capability_prop_true_declares_reads_public() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => true,
+		) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * `'box-capability'` gates reads behind the box's own `capability` property,
+	 * without naming (and so duplicating) it. It is an explicit declaration, so it
+	 * applies with the site-wide filter left off.
+	 */
+	public function test_read_capability_prop_box_capability_gates_by_box_capability() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'box-capability',
+		) );
+
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field',
+		);
+
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->administrator );
+			$this->assertRequestResponseStatus( 'GET', $url, 200 );
+		}
+	}
+
+	/**
+	 * A capability string on the box gates field reads on that box, too.
+	 */
+	public function test_read_capability_prop_string_gates_field_reads_without_filter() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'manage_options',
+		) );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box/fields/opts_field';
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * A non-options-page box is gateable too, but only by explicitly declaring the
+	 * capability on the box: a capability string gates reads immediately, with the
+	 * site-wide filter left off.
+	 */
+	public function test_read_capability_prop_string_gates_post_object_box_reads() {
+		$this->register_post_object_box( array(
+			'rest_read_capability' => 'edit_posts',
+		) );
+
+		$author = $this->factory->user->create( array(
+			'role' => 'author',
+		) );
+
+		$urls = array(
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box',
+			'/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box/fields/post_cap_field',
+		);
+
+		foreach ( $urls as $url ) {
+			wp_set_current_user( 0 );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $this->subscriber );
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+
+			wp_set_current_user( $author );
+			$this->assertRequestResponseStatus( 'GET', $url, 200 );
+		}
+	}
+
+	/**
+	 * Without the prop, a non-options-page box keeps its public reads even when the
+	 * site-wide options-page filter is enabled (pinned by
+	 * test_post_box_read_unchanged_when_options_page_gate_enabled), and the
+	 * site-wide filter does not gate it either.
+	 */
+	public function test_read_capability_prop_unset_leaves_post_object_box_public() {
+		$this->register_post_object_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/post_cap_box/fields/post_cap_field';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+	}
+
+	/**
+	 * Registers a box whose `gated_field` carries the given `rest_read_capability`
+	 * declaration, alongside an `open_field` sibling which declares nothing.
+	 *
+	 * @param mixed $field_declaration The field-level `rest_read_capability` value.
+	 * @param array $box_args          Optional box-registration overrides/additions.
+	 *
+	 * @return void
+	 */
+	protected function register_field_cap_box( $field_declaration, $box_args = array() ) {
+		$rest = new CMB2_REST( new CMB2( wp_parse_args( $box_args, array(
+			'id'           => 'field_cap_box',
+			'show_in_rest' => WP_REST_Server::READABLE,
+			'object_types' => array( 'post' ),
+			'fields'       => array(
+				'gated_field' => array(
+					'name' => 'Gated Field',
+					'id'   => 'gated_field',
+					'type' => 'text',
+					'rest_read_capability' => $field_declaration,
+				),
+				'open_field' => array(
+					'name' => 'Open Field',
+					'id'   => 'open_field',
+					'type' => 'text',
+				),
+			),
+		) ) ) );
+		$rest->universal_hooks();
+	}
+
+	/**
+	 * A read must not persist its own default answer onto the box as a `*_cb`
+	 * permission parameter.
+	 *
+	 * CMB2::prop() stores a truthy fallback on the box, so handing the current default
+	 * to it as a fallback turns one request's default into the stored answer for every
+	 * later request on that box — which would let a readable field's "allowed" default
+	 * carry over to a field the current user may not read.
+	 */
+	public function test_read_does_not_persist_permission_callback_param_on_box() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$cmb   = CMB2_REST::get_rest_box( 'field_cap_box' )->cmb;
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+
+		$this->assertNull( $cmb->prop( 'get_field_permissions_check_cb' ) );
+
+		// And the gated sibling is still gated after that readable-field request.
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+	}
+
+	/**
+	 * A field naming a capability gates only that field's reads. Its sibling field and
+	 * the box read itself (resolved at box level) are untouched.
+	 */
+	public function test_field_read_capability_prop_string_gates_only_that_field() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+		$box   = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		$this->assertRequestResponseStatus( 'GET', $box, 200 );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+	}
+
+	/**
+	 * The fields collection omits fields the current user cannot read, and lists the
+	 * rest.
+	 */
+	public function test_fields_collection_omits_fields_gated_by_field_prop() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields';
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'open_field', $field_ids );
+		$this->assertNotContains( 'gated_field', $field_ids );
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', $url ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'gated_field', $field_ids );
+	}
+
+	/**
+	 * A box response carries no field configs of its own (get_rest_box() drops them);
+	 * `_embed` pulls them in through the embeddable fields-collection link, which is
+	 * dispatched as its own request and so applies the same per-field resolution.
+	 */
+	public function test_embedded_fields_in_box_response_omit_gated_fields() {
+		$this->register_field_cap_box( 'manage_options' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box' );
+		$request->set_param( '_embed', 1 );
+
+		wp_set_current_user( 0 );
+		$response = rest_do_request( $request );
+		$this->assertEquals( 200, $response->get_status() );
+
+		$data = rest_get_server()->response_to_data( $response, true );
+		$this->assertArrayNotHasKey( 'fields', $data );
+
+		$embedded = $data['_embedded']['https://cmb2.io/fields'][0];
+		$this->assertArrayHasKey( 'open_field', $embedded );
+		$this->assertArrayNotHasKey( 'gated_field', $embedded );
+	}
+
+	/**
+	 * A field declaring `false` has its reads disabled for everyone, administrators
+	 * included, and drops out of the fields collection entirely.
+	 */
+	public function test_field_read_capability_prop_false_disables_that_field_for_everyone() {
+		$this->register_field_cap_box( false );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		foreach ( array( 0, $this->subscriber, $this->administrator ) as $user_id ) {
+			wp_set_current_user( $user_id );
+			$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+			$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		}
+
+		wp_set_current_user( $this->administrator );
+		$response = rest_do_request( new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields' ) );
+		$this->assertEquals( 200, $response->get_status() );
+		$field_ids = array_keys( $response->get_data() );
+		$this->assertContains( 'open_field', $field_ids );
+		$this->assertNotContains( 'gated_field', $field_ids );
+	}
+
+	/**
+	 * A field-level declaration wins over the box's: the box declares its reads public
+	 * (`true`), and the field still requires its named capability.
+	 */
+	public function test_field_read_capability_prop_overrides_public_box_prop() {
+		$this->register_field_cap_box( 'manage_options', array(
+			'rest_read_capability' => true,
+		) );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+		$box   = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box';
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+		$this->assertRequestResponseStatus( 'GET', $box, 200 );
+
+		wp_set_current_user( $this->administrator );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+	}
+
+	/**
+	 * A field declaring `'box-capability'` is gated by the box's `capability`, even
+	 * where the box has declared its own reads public — the field borrows the box's
+	 * capability without restating it.
+	 */
+	public function test_field_read_capability_prop_box_capability_gates_by_box_capability() {
+		$this->register_field_cap_box( 'box-capability', array(
+			'capability'           => 'edit_posts',
+			'rest_read_capability' => true,
+		) );
+
+		$gated = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/gated_field';
+		$open  = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/open_field';
+
+		$author = $this->factory->user->create( array(
+			'role' => 'author',
+		) );
+
+		wp_set_current_user( 0 );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+
+		wp_set_current_user( $this->subscriber );
+		$this->assertRequestResponseStatus( 'GET', $gated, self::auth_required_code(), 'rest_forbidden' );
+
+		wp_set_current_user( $author );
+		$this->assertRequestResponseStatus( 'GET', $gated, 200 );
+		$this->assertRequestResponseStatus( 'GET', $open, 200 );
+	}
+
+	/**
+	 * Without a field-level declaration, a field falls back to the box's — here, reads
+	 * disabled at the box level cover every field on it.
+	 */
+	public function test_field_read_capability_falls_back_to_box_prop() {
+		$this->register_field_cap_box( null, array(
+			'rest_read_capability' => false,
+		) );
+
+		wp_set_current_user( $this->administrator );
+
+		foreach ( array( 'gated_field', 'open_field' ) as $field_id ) {
+			$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/field_cap_box/fields/' . $field_id;
+			$this->assertRequestResponseStatus( 'GET', $url, self::auth_required_code(), 'rest_forbidden' );
+		}
+	}
+
+	/**
+	 * The `cmb2_api_get_box_permissions_check` filter still runs after the
+	 * capability gate and keeps the final say (see CONVENTIONS.md C4).
+	 */
+	public function test_read_capability_prop_still_overridable_by_permissions_filter() {
+		$this->register_options_page_box( array(
+			'rest_read_capability' => 'manage_options',
+		) );
+		add_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
+
+		wp_set_current_user( 0 );
+
+		$url = '/' . CMB2_REST::NAME_SPACE . '/boxes/opts_box';
+		$this->assertRequestResponseStatus( 'GET', $url, 200 );
+
+		remove_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
+	}
+
+	/**
+	 * Sends a field request with the given object_type/object_id parameters.
+	 *
+	 * @param string $method   HTTP method.
+	 * @param string $cmb_id   Box id.
+	 * @param string $field_id Field id.
+	 * @param array  $params   Request parameters.
+	 *
+	 * @return WP_REST_Response
+	 */
+	protected function do_field_request( $method, $cmb_id, $field_id, $params ) {
+		$url     = '/' . CMB2_REST::NAME_SPACE . '/boxes/' . $cmb_id . '/fields/' . $field_id;
+		$request = new WP_REST_Request( $method, $url );
+		foreach ( $params as $key => $value ) {
+			$request[ $key ] = $value;
+		}
+
+		return rest_do_request( $request );
+	}
+
+	/**
+	 * A post box only stores post meta, so an update naming another object type is
+	 * rejected, and the named option is left as it was.
+	 */
+	public function test_update_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'keep' => 'me' ) );
+		$editor = $this->factory->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $editor );
+
+		$response = $this->do_field_request( 'POST', 'test', 'rest_test', array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertSame( array( 'keep' => 'me' ), get_option( 'cmb2_rest_untouched_option' ) );
+
+		foreach ( array( 'user', 'comment', 'term' ) as $object_type ) {
+			$response = $this->do_field_request( 'POST', 'test', 'rest_test', array(
+				'value'       => 'new value',
+				'object_type' => $object_type,
+				'object_id'   => $editor,
+			) );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		}
+		$this->assertEmpty( get_user_meta( $editor, 'rest_test', true ) );
+	}
+
+	/**
+	 * The delete path rejects an undeclared object type the same way.
+	 */
+	public function test_delete_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'rest_test' => 'keep' ) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'DELETE', 'test', 'rest_test', array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertSame( array( 'rest_test' => 'keep' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * The object type check is request validation, not a permission: a permissions
+	 * filter granting access does not make an undeclared object type valid.
+	 */
+	public function test_object_type_check_not_overridden_by_permissions_filters() {
+		update_option( 'cmb2_rest_untouched_option', array( 'keep' => 'me' ) );
+		add_filter( 'cmb2_api_update_field_value_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_delete_field_value_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_get_field_permissions_check', '__return_true' );
+		add_filter( 'cmb2_api_get_box_permissions_check', '__return_true' );
+		wp_set_current_user( 0 );
+
+		$params = array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		foreach ( array( 'GET', 'POST', 'DELETE' ) as $method ) {
+			$response = $this->do_field_request( $method, 'test', 'rest_test', $params );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		}
+
+		$this->assertSame( array( 'keep' => 'me' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * Reads of a post box naming the options-page object type are rejected, so
+	 * they cannot serve option values outside the options-page read gate.
+	 */
+	public function test_read_rejects_object_type_not_declared_by_box() {
+		update_option( 'cmb2_rest_untouched_option', array( 'rest_test' => 'stored' ) );
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+		wp_set_current_user( 0 );
+
+		$params = array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		$response = $this->do_field_request( 'GET', 'test', 'rest_test', $params );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/test/fields' );
+		$request['object_type'] = 'options-page';
+		$request['object_id']   = 'cmb2_rest_untouched_option';
+		$this->assertResponseStatus( 400, rest_do_request( $request ), 'cmb2_rest_invalid_object_type' );
+
+		$request = new WP_REST_Request( 'GET', '/' . CMB2_REST::NAME_SPACE . '/boxes/test' );
+		$request['object_type'] = 'options-page';
+		$request['object_id']   = 'cmb2_rest_untouched_option';
+		$this->assertResponseStatus( 400, rest_do_request( $request ), 'cmb2_rest_invalid_object_type' );
+	}
+
+	/**
+	 * A box declared for a post type stores post meta, so it accepts the 'post'
+	 * object type and rejects the others.
+	 */
+	public function test_post_type_box_accepts_post_object_type() {
+		$this->register_post_object_box( array(
+			'id'           => 'page_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'page' ),
+		) );
+		$page_id = $this->factory->post->create( array( 'post_type' => 'page' ) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'page_box', 'post_cap_field', array(
+			'value'       => 'page value',
+			'object_type' => 'post',
+			'object_id'   => $page_id,
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'page value', get_post_meta( $page_id, 'post_cap_field', true ) );
+
+		$response = $this->do_field_request( 'POST', 'page_box', 'post_cap_field', array(
+			'value'       => 'user value',
+			'object_type' => 'user',
+			'object_id'   => $this->administrator,
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+	}
+
+	/**
+	 * A user box accepts the 'user' object type and rejects 'post'.
+	 */
+	public function test_user_box_rejects_post_object_type() {
+		$this->register_post_object_box( array(
+			'id'           => 'user_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'object_types' => array( 'user' ),
+		) );
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'user_box', 'post_cap_field', array(
+			'value'       => 'post value',
+			'object_type' => 'post',
+			'object_id'   => $this->post_id,
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_type' );
+		$this->assertEmpty( get_post_meta( $this->post_id, 'post_cap_field', true ) );
+
+		$response = $this->do_field_request( 'POST', 'user_box', 'post_cap_field', array(
+			'value'       => 'user value',
+			'object_type' => 'user',
+			'object_id'   => $this->administrator,
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'user value', get_user_meta( $this->administrator, 'post_cap_field', true ) );
+	}
+
+	/**
+	 * An options-page box only stores to the option key(s) it declares; any other
+	 * object_id is rejected for reads, updates and deletes.
+	 */
+	public function test_options_page_box_rejects_undeclared_option_key() {
+		$this->register_options_page_box( array(
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+		) );
+		update_option( 'cmb2_rest_untouched_option', array( 'opts_field' => 'keep' ) );
+		wp_set_current_user( $this->administrator );
+
+		$params = array(
+			'value'       => 'new value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		);
+
+		foreach ( array( 'GET', 'POST', 'DELETE' ) as $method ) {
+			$response = $this->do_field_request( $method, 'opts_box', 'opts_field', $params );
+			$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_id' );
+		}
+
+		$this->assertSame( array( 'opts_field' => 'keep' ), get_option( 'cmb2_rest_untouched_option' ) );
+	}
+
+	/**
+	 * An options-page box still reads and writes its own declared option key.
+	 */
+	public function test_options_page_box_writes_declared_option_key() {
+		$this->register_options_page_box( array(
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+		) );
+		wp_set_current_user( $this->administrator );
+
+		$params = array(
+			'value'       => 'option value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_options_test',
+		);
+
+		$response = $this->do_field_request( 'POST', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+		$this->assertEquals( 'option value', cmb2_options( 'cmb2_rest_options_test' )->get( 'opts_field' ) );
+		$stored = get_option( 'cmb2_rest_options_test' );
+		$this->assertEquals( 'option value', $stored['opts_field'] );
+
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+		$data = $response->get_data();
+		$this->assertEquals( 'option value', $data['value'] );
+	}
+
+	/**
+	 * With the options-page read gate enabled, reads of the box's own option key
+	 * are still gated by the box capability.
+	 */
+	public function test_options_page_read_gate_applies_to_declared_option_key() {
+		$this->register_options_page_box();
+		add_filter( 'cmb2_rest_enforce_options_page_read_permissions', '__return_true' );
+
+		$params = array(
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_options_test',
+		);
+
+		wp_set_current_user( $this->subscriber );
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( self::auth_required_code(), $response, 'rest_forbidden' );
+
+		wp_set_current_user( $this->administrator );
+		$response = $this->do_field_request( 'GET', 'opts_box', 'opts_field', $params );
+		$this->assertResponseStatus( 200, $response );
+	}
+
+	/**
+	 * A box using the back-compat `show_on` options-page config is an options-page
+	 * box, so it accepts the options-page object type for its own key.
+	 */
+	public function test_old_school_options_page_box_writes_declared_option_key() {
+		$rest = new CMB2_REST( new CMB2( array(
+			'id'           => 'old_opts_box',
+			'show_in_rest' => WP_REST_Server::ALLMETHODS,
+			'show_on'      => array(
+				'key'   => 'options-page',
+				'value' => array( 'cmb2_rest_old_options_test' ),
+			),
+			'fields'       => array(
+				'opts_field' => array(
+					'name' => 'Opts Field',
+					'id'   => 'opts_field',
+					'type' => 'text',
+				),
+			),
+		) ) );
+		$rest->universal_hooks();
+		wp_set_current_user( $this->administrator );
+
+		$response = $this->do_field_request( 'POST', 'old_opts_box', 'opts_field', array(
+			'value'       => 'old value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_old_options_test',
+		) );
+		$this->assertResponseStatus( 200, $response );
+		$stored = get_option( 'cmb2_rest_old_options_test' );
+		$this->assertEquals( 'old value', $stored['opts_field'] );
+
+		$response = $this->do_field_request( 'POST', 'old_opts_box', 'opts_field', array(
+			'value'       => 'old value',
+			'object_type' => 'options-page',
+			'object_id'   => 'cmb2_rest_untouched_option',
+		) );
+		$this->assertResponseStatus( 400, $response, 'cmb2_rest_invalid_object_id' );
+	}
+
 	protected static function auth_required_code() {
 		return function_exists( 'rest_authorization_required_code' ) ? rest_authorization_required_code() : 403;
 	}

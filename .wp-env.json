@@ -1,10 +1,5 @@
 {
-	"env": {
-		"tests": {
-			"plugins": [
-				".",
-				"./tests/cypress/support/test-fields.php"
-			]
-		}
-	}
+	"port": 2622,
+	"plugins": ["."],
+	"testsEnvironment": false
 }

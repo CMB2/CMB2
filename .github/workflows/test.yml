@@ -2,16 +2,45 @@ name: Test
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
-  cypress:
+  playwright:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
 
-    - name: Install dependencies
-      run: npm i
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '22'
+        cache: 'npm'
 
-    - name: Test
-      run: npm run cypress
+    - name: Install Node dependencies
+      run: npm install
+
+    - name: Start WordPress environment
+      run: npx wp-env start --config .wp-env-tests.json
+
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium
+
+    - name: Run Playwright tests
+      run: npx playwright test --project=chromium
+      env:
+        WP_BASE_URL: http://localhost:2623
+        SKIP_WP_SERVER: 1
+        CI: true
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v7
+      if: failure()
+      with:
+        name: playwright-report
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 30

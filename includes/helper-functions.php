@@ -41,7 +41,7 @@ function cmb2_autoload_classes( $class_name ) {
 		$path .= '/rest-api';
 	}
 
-	include_once( cmb2_dir( "$path/{$class_name}.php" ) );
+	include_once cmb2_dir( "$path/{$class_name}.php" );
 }
 
 /**
@@ -347,7 +347,6 @@ function cmb2_print_metabox_form( $meta_box, $object_id = 0, $args = array() ) {
 	if ( isset( $format_parts[1] ) && $format_parts[1] ) {
 		printf( str_ireplace( '%4$s', '%1$s', $format_parts[1] ), esc_attr( $args['save_button'] ) );
 	}
-
 }
 
 /**
@@ -426,3 +425,22 @@ if ( ! function_exists( 'date_timestamp_get' ) ) {
 		return $date->format( 'U' );
 	}
 }// End if.
+
+/**
+ * Passthrough sanitize_callback for the option CMB2_Options_Hookup registers.
+ *
+ * Deliberately a passthrough. Each value is sanitized by CMB2_Sanitize on the
+ * way in, per field type, before the option array is assembled — re-sanitizing
+ * the assembled array here would apply one field type's rule to all of them.
+ * The callback exists so register_setting() has one, which wp.org's Plugin
+ * Check requires of every registered setting.
+ *
+ * @since 2.13.1
+ *
+ * @param mixed $value The option value, already sanitized per-field.
+ *
+ * @return mixed The unmodified value.
+ */
+function cmb2_sanitize_option_passthrough( $value ) {
+	return $value;
+}

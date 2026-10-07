@@ -10,6 +10,7 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
+#[AllowDynamicProperties] // phpcs:ignore PHPCompatibility.Attributes.NewAttributes -- Back-compat: allow dynamic props (PHP 8.2+) on this class + subclasses.
 class CMB2_Field_Display {
 
 	/**
@@ -154,7 +155,6 @@ class CMB2_Field_Display {
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
-					;
 				}
 				echo '</ul>';
 			}
@@ -169,7 +169,7 @@ class CMB2_Field_Display {
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		print_r( $this->value );
+		echo esc_html( print_r( $this->value, true ) );
 	}
 }
 
@@ -192,7 +192,7 @@ class CMB2_Display_Text_Money extends CMB2_Field_Display {
 	 */
 	protected function _display() {
 		$this->value = $this->value ? $this->value : '0';
-		echo ( ! $this->field->get_param_callback_result( 'before_field' ) ? '$' : ' ' ), $this->value;
+		echo ( ! $this->field->get_param_callback_result( 'before_field' ) ? '$' : ' ' ), esc_html( print_r( $this->value, true ) );
 	}
 }
 
@@ -285,7 +285,8 @@ class CMB2_Display_Textarea_Code extends CMB2_Field_Display {
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		echo '<xmp class="cmb2-code">' . print_r( $this->value, true ) . '</xmp>';
+		// Double-encode entities so the browser displays the stored source literally inside <pre>.
+		echo '<pre class="cmb2-code">', htmlspecialchars( print_r( $this->value, true ), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' ), '</pre>';
 	}
 }
 
@@ -362,7 +363,7 @@ class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 
 		if ( $term ) {
 			$link = get_edit_term_link( $term->term_id, $taxonomy );
-			echo '<a href="', esc_url( $link ), '">', esc_html( $term->name ), '</a>';
+			echo '<a href="', esc_url( $link ? $link : '' ), '">', esc_html( $term->name ), '</a>';
 		}
 	}
 }
@@ -395,7 +396,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 			$links = array();
 			foreach ( $terms as $term ) {
 				$link = get_edit_term_link( $term->term_id, $taxonomy );
-				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
+				$links[] = '<a href="' . esc_url( $link ? $link : '' ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
 			echo '<div class="cmb2-taxonomy-terms-', esc_attr( sanitize_html_class( $taxonomy ) ), '">';
@@ -476,12 +477,17 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 
 		echo '<ul class="cmb2-display-file-list">';
 		foreach ( $this->value as $id => $fullurl ) {
+			if ( ! is_scalar( $fullurl ) ) {
+				continue;
+			}
+
 			echo '<li>', $this->file_output( esc_url_raw( $fullurl ), $id, $type ), '</li>';
 		}
 		echo '</ul>';
 	}
 }
 
+// phpcs:ignore PEAR.NamingConventions.ValidClassName.Invalid -- "oEmbed" is the correct brand casing; renaming this public class is a BC break.
 class CMB2_Display_oEmbed extends CMB2_Field_Display {
 	/**
 	 * Display oembed value.

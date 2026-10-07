@@ -101,6 +101,29 @@ class CMB2 extends CMB2_Base {
 		'new_user_section'        => 'add-new-user', // or 'add-existing-user'.
 		'new_term_section'        => true,
 		'show_in_rest'            => false,
+
+		/*
+		 * Declares who may read this box via the REST API (only applicable when
+		 * 'show_in_rest' is readable). Accepts:
+		 *
+		 * - false            No one may read it, administrators included.
+		 * - true             Everyone may read it, logged-out visitors included.
+		 * - 'box-capability' Only holders of this box's 'capability' may read it
+		 *                    (falling back to 'manage_options').
+		 * - 'a_capability'   Only holders of the named capability may read it,
+		 *                    e.g. 'edit_posts'.
+		 * - null             (default) CMB2's current behavior: reads are public, unless
+		 *                    the box is an options page and the site-wide
+		 *                    `cmb2_rest_enforce_options_page_read_permissions` filter is
+		 *                    enabled.
+		 *
+		 * The same property may be set on an individual field, where it takes precedence
+		 * over the box's for reads of that field.
+		 *
+		 * The `cmb2_api_get_box_permissions_check`/`cmb2_api_get_field_permissions_check`
+		 * filters still run afterward and have the final say.
+		 */
+		'rest_read_capability'    => null,
 		'classes'                 => null, // Optionally add classes to the CMB2 wrapper.
 		'classes_cb'              => '', // Optionally add classes to the CMB2 wrapper (via a callback).
 
@@ -250,6 +273,9 @@ class CMB2 extends CMB2_Base {
 
 		// Hook in the rest api functionality.
 		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_REST', 'maybe_init_and_hookup' ) );
+
+		// Hook in the notice about the upcoming REST read-permissions alignment.
+		add_action( "cmb2_init_hookup_{$this->cmb_id}", array( 'CMB2_Rest_Read_Permissions_Notice', 'maybe_init_and_hookup' ) );
 	}
 
 	/**
@@ -382,7 +408,7 @@ class CMB2 extends CMB2_Base {
 		foreach ( array_filter( $classes ) as $class ) {
 			foreach ( explode( ' ', $class ) as $_class ) {
 				// Clean up & sanitize.
-				$split[] = sanitize_html_class( strip_tags( $_class ) );
+				$split[] = sanitize_html_class( wp_strip_all_tags( $_class ) );
 			}
 		}
 		$classes = $split;
@@ -540,7 +566,8 @@ class CMB2 extends CMB2_Base {
 		}
 
 		if ( ! empty( $group_val ) ) {
-			foreach ( $group_val as $group_key => $field_id ) {
+			$group_val_count = count( $group_val );
+			for ( $i = 0; $i < $group_val_count; $i++ ) {
 				$this->render_group_row( $field_group );
 				$field_group->index++;
 			}
@@ -623,7 +650,7 @@ class CMB2 extends CMB2_Base {
 		}
 
 			echo '
-			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
+			<div class="cmbhandle" title="', esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $field_group->replace_hash( $field_group->options( 'group_title' ) ), '</span></h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';
@@ -1060,7 +1087,7 @@ class CMB2 extends CMB2_Base {
 		/**
 		 * Filter the object id.
 		 *
-		 * @since  {{next}}
+		 * @since 2.11.0
 		 *
 		 * @param  integer|string $object_id Object ID.
 		 * @param  CMB2           $cmb       This CMB2 object.
@@ -1113,7 +1140,7 @@ class CMB2 extends CMB2_Base {
 		/**
 		 * Filter the metabox object type.
 		 *
-		 * @since {{next}}
+		 * @since 2.11.0
 		 *
 		 * @param string $mb_object_type The metabox object type.
 		 * @param string $found_type     The found object type.

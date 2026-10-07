@@ -84,6 +84,37 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	/**
+	 * Verifies that the repeatable-field wrapper's id and data-selector attributes
+	 * are passed through esc_attr() before output.
+	 *
+	 * Without esc_attr(), a field id containing a double-quote would break the HTML
+	 * attribute boundary in the rendered wrapper, producing malformed markup.
+	 *
+	 * @see CMB2_Types::render_repeatable_field()
+	 */
+	public function test_repeatable_field_id_attribute_is_escaped() {
+		$this->field_test['fields'][0]['repeatable'] = true;
+		$cmb   = new CMB2( $this->field_test );
+		$field = cmb2_get_field( $this->field_test['id'], $this->field_test['fields'][0]['id'], $this->post_id );
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+
+		// Override the field id to include a double-quote — esc_attr() encodes it as &quot;.
+		// Without esc_attr() in render_repeatable_field() this would appear raw in the
+		// id/data-selector attribute value and break the HTML attribute boundary.
+		$field->args['id'] = 'field"xss';
+
+		$html             = $this->render_field( $field );
+		$escaped_table_id = esc_attr( 'field"xss_repeat' );  // 'field&quot;xss_repeat'
+
+		// The wrapper id attribute must contain the esc_attr()-encoded value.
+		$this->assertStringContainsString( 'id="' . $escaped_table_id . '"', $html );
+		// The add-row button's data-selector must also use the escaped value.
+		$this->assertStringContainsString( 'data-selector="' . $escaped_table_id . '"', $html );
+		// The raw double-quote MUST NOT appear unescaped inside the attribute value.
+		$this->assertStringNotContainsString( 'id="field"xss_repeat"', $html );
+	}
+
 	public function test_field_options_cb() {
 		$cmb   = new CMB2( $this->options_cb_test );
 		$field = cmb2_get_field( $this->options_cb_test['id'], 'options_cb_test_field', $this->post_id );
@@ -383,6 +414,21 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'<pre><textarea class="' . $classes . '" name="field_test_field" id="field_test_field" cols="60" rows="10" data-hash=\'4lavrjdps2t0\'></textarea></pre><p class="cmb2-metabox-description">This is a description</p>',
 			$this->capture_render( array( $this->get_field_type_object( 'textarea_code' ), 'render' ) )
 		);
+	}
+
+	public function test_textarea_code_sanitization_preserves_valid_code() {
+		$field     = $this->get_field_object( 'textarea_code' );
+		$value     = '<?php echo "&lt;strong&gt;CMB2&lt;/strong&gt;"; ?>';
+		$sanitizer = new CMB2_Sanitize( $field, $value );
+
+		$this->assertSame( '<?php echo "<strong>CMB2</strong>"; ?>', $sanitizer->textarea_code() );
+	}
+
+	public function test_textarea_code_sanitization_rejects_non_scalar_values() {
+		$field     = $this->get_field_object( 'textarea_code' );
+		$sanitizer = new CMB2_Sanitize( $field, array( 'unexpected' ) );
+
+		$this->assertSame( '', $sanitizer->textarea_code() );
 	}
 
 	public function test_wysiwyg_field() {
@@ -964,6 +1010,58 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_file_list_field_escapes_stored_values_in_attributes() {
+		update_post_meta( $this->post_id, $this->text_type_field['id'], array(
+			'1" data-breakout="1' => 'https://example.org/ignored.pdf',
+			2                     => 'javascript:alert(1)',
+			3                     => '"><img src=x onerror=alert(1)>',
+			0                     => 'https://example.org/ignored-zero.pdf',
+		) );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( 'file_list' ), 'render' ) );
+
+		$this->assertStringNotContainsString( '"><img', $output );
+		$this->assertStringNotContainsString( 'id="filelist-1"', $output );
+		$this->assertStringNotContainsString( 'id="filelist-0"', $output );
+		$this->assertStringNotContainsString( 'id="filelist-2"', $output );
+		$this->assertStringContainsString( 'id="filelist-3"', $output );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_file_list_render_matches_saved_url_scheme() {
+		update_post_meta( $this->post_id, $this->text_type_field['id'], array(
+			2 => 'example.org/file.pdf',
+		) );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( 'file_list' ), 'render' ) );
+
+		$this->assertStringContainsString( 'id="filelist-2" value="https://example.org/file.pdf"', $output );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
+	public function test_file_list_sanitization_enforces_attachment_url_map() {
+		$field = $this->get_field_object( array(
+			'type'      => 'file_list',
+			'protocols' => array( 'https' ),
+		) );
+		$value = array(
+			'1" data-breakout="1' => 'javascript:alert(1)',
+			2                     => 'https://example.org/my%20file.pdf?name=a%2Fb',
+			3                     => 'ftp://example.org/file.pdf',
+			4                     => array( 'unexpected' ),
+			0                     => 'https://example.org/ignored-zero.pdf',
+			'5x'                  => 'https://example.org/ignored-string.pdf',
+			-1                    => 'https://example.org/ignored-negative.pdf',
+		);
+		$sanitizer = new CMB2_Sanitize( $field, $value );
+
+		$this->assertSame( array(
+			2 => 'https://example.org/my%20file.pdf?name=a%2Fb',
+		), $sanitizer->default_sanitization() );
 	}
 
 	public function test_file_field() {

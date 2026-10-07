@@ -1,20 +1,19 @@
 # CMB2
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/CMB2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Travis](https://img.shields.io/travis/CMB2/CMB2.svg)](https://travis-ci.org/CMB2/CMB2/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/CMB2/CMB2.svg)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
+[![GitHub Actions](https://github.com/CMB2/CMB2/workflows/PHPUnit%20Tests/badge.svg)](https://github.com/CMB2/CMB2/actions)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/CMB2/CMB2/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/CMB2/CMB2/?branch=develop)
+[![Codecov Coverage](https://codecov.io/gh/CMB2/CMB2/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/CMB2/CMB2)
 [![Project Stats](https://www.openhub.net/p/CMB2/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CMB2)
 
-![CMB2](https://plugins.trac.wordpress.org/export/HEAD/cmb2/assets/banner-1544x500.png)
+![CMB2](https://ps.w.org/cmb2/assets/banner-1544x500.png)
 
-**Contributors:**      [jtsternberg](https://github.com/jtsternberg), [webdevstudios](https://github.com/webdevstudios), [zao](https://github.com/zao-web), [humanmade](https://github.com/humanmade)  
+**Contributors:**      [jtsternberg](https://github.com/jtsternberg), [webdevstudios](https://github.com/webdevstudios), [tw2113](https://github.com/tw2113)  
 **Homepage:**          [https://cmb2.io](https://cmb2.io)  
 **Tags:**              metaboxes, forms, fields, options, settings  
 **Requires at least:** 3.8.0  
 **Requires PHP:**      7.4  
-**Tested up to:**      6.4  
-**Stable tag:**        2.11.0  
+**Tested up to:**      7.1  
+**Stable tag:**        2.13.3
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 

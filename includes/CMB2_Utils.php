@@ -50,7 +50,7 @@ class CMB2_Utils {
 			'post_type'   => 'attachment',
 			'post_status' => 'inherit',
 			'fields'      => 'ids',
-			'meta_query'  => array(
+			'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required to resolve an attachment ID from its file URL; no non-meta alternative.
 				array(
 					'value'   => $file,
 					'compare' => 'LIKE',
@@ -89,6 +89,7 @@ class CMB2_Utils {
 		global $_wp_additional_image_sizes;
 
 		$default_image_sizes = array( 'thumbnail', 'medium', 'large' );
+		$image_sizes         = array();
 		foreach ( $default_image_sizes as $size ) {
 			$image_sizes[ $size ] = array(
 				'height' => intval( get_option( "{$size}_size_h" ) ),
@@ -272,7 +273,7 @@ class CMB2_Utils {
 				$timestamp = round( $timestamp / $divider );
 			}
 		} else {
-			$timestamp = @strtotime( (string) $string );
+			$timestamp = @strtotime( (string) $string ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Intentionally suppress notices on arbitrary input; false return is the error check.
 		}
 
 		return $timestamp;
@@ -286,6 +287,7 @@ class CMB2_Utils {
 	 * @return boolean     Whether value is a valid date
 	 */
 	public static function is_valid_date( $date ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Intentionally suppress notices on arbitrary input; the boolean result is the validity check.
 		return ( is_string( $date ) && @strtotime( $date ) )
 			|| self::is_valid_time_stamp( $date );
 	}

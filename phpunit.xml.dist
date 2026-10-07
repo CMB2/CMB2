@@ -12,6 +12,12 @@
 	<testsuites>
 		<testsuite name="default">
 			<directory suffix=".php">./tests/</directory>
+			<exclude>./tests/cypress</exclude>
+			<exclude>./tests/cypress-archived</exclude>
+			<exclude>./tests/playwright</exclude>
+			<exclude>./tests/bin</exclude>
+			<exclude>./tests/data</exclude>
+			<exclude>./tests/tmp</exclude>
 		</testsuite>
 	</testsuites>
 	<coverage processUncoveredFiles="true">

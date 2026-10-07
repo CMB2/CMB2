@@ -1,5 +1,8 @@
 name: PHP Compatibility
 on: [push]
+permissions:
+  contents: read
+
 jobs:
   phpcompat:
     name: PHP 8.x Compatibility Check
@@ -7,10 +10,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Check PHP Compatibility
         uses: pantheon-systems/phpcompatibility-action@dev
         with:
-          test-versions: '8.0-'
+          test-versions: '7.4-'
           paths: '${{ github.workspace }}/**/*.php'

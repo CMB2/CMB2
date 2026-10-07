@@ -40,8 +40,9 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
+# CI-generated PHPUnit coverage reports (uploaded to Codecov, never committed)
+coverage.xml
+coverage.clover
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
@@ -66,14 +67,58 @@ ocular.phar
 
 # PHPunit config
 phpunit.xml
+.phpunit.result.cache
 
 # Composer
 vendor
+# Not committed: CI runs `composer install` per PHP version (7.4-latest) so deps
+# resolve per-version. A committed lock pins versions resolved on one PHP and
+# breaks `composer install` on the others (see 8b74309).
+composer.lock
 
 # General
 NOTES.md
 
-# Cypress
-/cypress.env.json
-/tests/cypress/videos
-/tests/cypress/screenshots
+# Playwright
+/playwright-report/
+/test-results/
+/tests/playwright/.auth/
+
+# Claude
+.claude/settings.local.json
+.claude/skills/.claude/settings.local.json
+.mcp.json
+tests/playwright/visual.spec.js-snapshots
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
+
+# Beads / Dolt files (added by bd init)
+.beads-credential-key
+
+# Beads / Dolt files (added by bd init)
+.beads/proxieddb/
+/.claude/scheduled_tasks.lock
+
+# Local work-planning / handoff docs — never commit (see CLAUDE.md meta rule)
+HANDOFF-*.md
+
+# Private per-checkout Claude instructions — never commit
+CLAUDE.local.md
+
+# Local docs, code, etc.
+/local
+
+# Per-checkout WordPress and Playwright QA configuration/artifacts
+.env.local
+/tests/playwright/.qa/
+
+# Environment files — never commit
+.env
+
+# scripts/archive.sh output
+/archives/
+
+# bd schema-migration gate lock
+/.beads.gate.lock
