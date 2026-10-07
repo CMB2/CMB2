@@ -571,6 +571,9 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 	}
 
 	public function test_colorpicker_field_alpha_option_renders_v3_attribute() {
+		// Rendering an alpha field registers a script dependency in static state that test_js_dependencies() would otherwise see.
+		$dependencies = Test_CMB2_JS::dependencies();
+
 		$html = $this->capture_render( array(
 			$this->get_field_type_object( array(
 				'type'    => 'colorpicker',
@@ -578,6 +581,8 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			) ),
 			'render',
 		) );
+
+		Test_CMB2_JS::set_dependencies( $dependencies );
 
 		$this->assertStringContainsString( "data-alpha-enabled='true'", $html );
 		$this->assertStringNotContainsString( 'data-alpha=', $html );

@@ -282,4 +282,8 @@ class Test_CMB2_JS extends CMB2_JS {
 	public static function dependencies() {
 		return parent::$dependencies;
 	}
+
+	public static function set_dependencies( array $dependencies ) {
+		parent::$dependencies = $dependencies;
+	}
 }
