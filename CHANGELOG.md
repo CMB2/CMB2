@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Enhancements
 
 * Added the `rest_enforce_user_read_permissions` box property and the `cmb2_rest_enforce_user_read_permissions` filter (off by default). When enabled, REST field reads of a user that core does not show (a user with no published posts, read by someone other than that user or a holder of `edit_user`/`list_users`) are denied. While neither declares an explicit `true` or `false` (the filter defaults to `null`), such a read stays allowed and emits a deprecation notice (an `X-WP-DeprecatedParam` header and a debug-log line when `WP_DEBUG` / `WP_DEBUG_LOG` are on), since the default will change in a future version. Set the property or filter to `false` to keep the current behavior.
+* Updated the alpha color picker script (`wp-color-picker-alpha`) to 3.0.4. Alpha `colorpicker` fields now output `data-alpha-enabled` instead of `data-alpha`; if you set `data-alpha` yourself through a field's `attributes`, rename it to `data-alpha-enabled`. Props [Sajib Talukder (@stalukder03)](https://github.com/stalukder03) ([#1542](https://github.com/CMB2/CMB2/pull/1542)).
 
 ### Bug Fixes
 
