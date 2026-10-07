@@ -579,7 +579,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 			'render',
 		) );
 
-		$this->assertStringContainsString( 'data-alpha-enabled="true"', $html );
+		$this->assertStringContainsString( "data-alpha-enabled='true'", $html );
 		$this->assertStringNotContainsString( 'data-alpha=', $html );
 	}
 
