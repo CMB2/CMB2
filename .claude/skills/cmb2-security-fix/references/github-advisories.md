@@ -134,7 +134,9 @@ once accepted and the advisory is published. Changelog credit:
 
 ## Commands
 
-UI-only: merge fork PRs. Everything else has an API form. Comments use an
+UI-only: merge fork PRs, and comment on them (the API refuses with "forbidden on
+workspace repositories"; closing via `gh pr close` works). Everything else has
+an API form. Comments use an
 endpoint the REST docs don't list. `GET`, `POST` and `PATCH comments/<id>`
 are verified. Pass bodies with `jq -j`/`-F body=@file`
 and no trailing newline, or an edit changes the stored body by one byte.
