@@ -148,7 +148,7 @@ class CMB2_JS {
 		// Only use minified files if SCRIPT_DEBUG is off.
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
-		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
+		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '3.0.4' );
 	}
 
 	/**
