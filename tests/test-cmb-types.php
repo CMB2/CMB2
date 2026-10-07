@@ -524,6 +524,25 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	public function test_colorpicker_field_alpha_option_renders_v3_attribute() {
+		$html = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'    => 'colorpicker',
+				'options' => array( 'alpha' => true ),
+			) ),
+			'render',
+		) );
+
+		$this->assertStringContainsString( 'data-alpha-enabled="true"', $html );
+		$this->assertStringNotContainsString( 'data-alpha=', $html );
+	}
+
+	public function test_colorpicker_field_without_alpha_option_omits_alpha_attributes() {
+		$html = $this->capture_render( array( $this->get_field_type_object( 'colorpicker' ), 'render' ) );
+
+		$this->assertStringNotContainsString( 'data-alpha', $html );
+	}
+
 	public function test_title_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<h5 class="cmb2-metabox-title" id="field-test-field" data-hash=\'4lavrjdps2t0\'>Name</h5><p class="cmb2-metabox-description">This is a description</p>',
