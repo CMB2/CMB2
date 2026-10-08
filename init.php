@@ -20,7 +20,7 @@
  *               Bill Erickson (@billerickson / billerickson.net)
  *               Andrew Norcross (@norcross / andrewnorcross.com)
  *
- * Version:      2.13.3
+ * Version:      2.13.4
  *
  * Text Domain:  cmb2
  * Domain Path:  languages
@@ -53,7 +53,7 @@
  * ***********************************************************************
  */
 
-if ( ! class_exists( 'CMB2_Bootstrap_2140_Develop', false ) ) {
+if ( ! class_exists( 'CMB2_Bootstrap_2134', false ) ) {
 
 	/**
 	 * Handles checking for and loading the newest version of CMB2
@@ -66,7 +66,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_2140_Develop', false ) ) {
 	 * @license   GPL-2.0+
 	 * @link      https://cmb2.io
 	 */
-	class CMB2_Bootstrap_2140_Develop {
+	class CMB2_Bootstrap_2134 {
 
 		/**
 		 * Current version number
@@ -74,7 +74,7 @@ if ( ! class_exists( 'CMB2_Bootstrap_2140_Develop', false ) ) {
 		 * @var   string
 		 * @since 1.0.0
 		 */
-		const VERSION = '2.13.3';
+		const VERSION = '2.13.4';
 
 		/**
 		 * Current version hook priority.
@@ -83,20 +83,20 @@ if ( ! class_exists( 'CMB2_Bootstrap_2140_Develop', false ) ) {
 		 * @var   int
 		 * @since 2.0.0
 		 */
-		const PRIORITY = 9952;
+		const PRIORITY = 9951;
 
 		/**
-		 * Single instance of the CMB2_Bootstrap_2140_Develop object
+		 * Single instance of the CMB2_Bootstrap_2134 object
 		 *
-		 * @var CMB2_Bootstrap_2140_Develop
+		 * @var CMB2_Bootstrap_2134
 		 */
 		public static $single_instance = null;
 
 		/**
-		 * Creates/returns the single instance CMB2_Bootstrap_2140_Develop object
+		 * Creates/returns the single instance CMB2_Bootstrap_2134 object
 		 *
 		 * @since  2.0.0
-		 * @return CMB2_Bootstrap_2140_Develop Single instance object
+		 * @return CMB2_Bootstrap_2134 Single instance object
 		 */
 		public static function initiate() {
 			if ( null === self::$single_instance ) {
@@ -192,6 +192,6 @@ if ( ! class_exists( 'CMB2_Bootstrap_2140_Develop', false ) ) {
 	}
 
 	// Make it so...
-	CMB2_Bootstrap_2140_Develop::initiate();
+	CMB2_Bootstrap_2134::initiate();
 
 }// End if().
