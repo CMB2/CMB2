@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: CMB2 Team hello@cmb2.io\n"
 "Last-Translator: CMB2 Team hello@cmb2.io\n"
-"POT-Creation-Date: 2026-10-03 19:01+0000\n"
+"POT-Creation-Date: 2026-10-08 15:20+0000\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/cmb2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
@@ -310,11 +310,11 @@ msgstr ""
 msgid "Will show in REST API \"editable\" contexts only (`POST` requests)."
 msgstr ""
 
-#: ../archives/cmb2/includes/CMB2.php:230, ../includes/CMB2.php:230
+#: ../archives/cmb2/includes/CMB2.php:230, ../includes/CMB2.php:246
 msgid "Metabox configuration is required to have an ID parameter."
 msgstr ""
 
-#: ../archives/cmb2/includes/CMB2.php:653, ../includes/CMB2.php:653
+#: ../archives/cmb2/includes/CMB2.php:653, ../includes/CMB2.php:669
 msgid "Click to toggle"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgstr ""
 msgid "Sorry, this field does not have a cmb_id specified."
 msgstr ""
 
-#: ../archives/cmb2/includes/CMB2_Field_Display.php:455, ../archives/cmb2/includes/CMB2_JS.php:242, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:90, ../includes/CMB2_Field_Display.php:455, ../includes/CMB2_JS.php:242, ../includes/types/CMB2_Type_File_Base.php:90, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1074
+#: ../archives/cmb2/includes/CMB2_Field_Display.php:455, ../archives/cmb2/includes/CMB2_JS.php:242, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:90, ../includes/CMB2_Field_Display.php:455, ../includes/CMB2_JS.php:242, ../includes/types/CMB2_Type_File_Base.php:90, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1098
 msgid "File:"
 msgstr ""
 
@@ -491,11 +491,11 @@ msgstr ""
 msgid "Remove Image"
 msgstr ""
 
-#: ../archives/cmb2/includes/CMB2_JS.php:241, ../archives/cmb2/includes/CMB2_Types.php:408, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:95, ../includes/CMB2_JS.php:241, ../includes/CMB2_Types.php:408, ../includes/types/CMB2_Type_File_Base.php:95, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:64, ../tests/test-cmb-types.php:72, ../tests/test-cmb-types.php:1074
+#: ../archives/cmb2/includes/CMB2_JS.php:241, ../archives/cmb2/includes/CMB2_Types.php:408, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:95, ../includes/CMB2_JS.php:241, ../includes/CMB2_Types.php:408, ../includes/types/CMB2_Type_File_Base.php:95, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:64, ../tests/test-cmb-types.php:72, ../tests/test-cmb-types.php:1098
 msgid "Remove"
 msgstr ""
 
-#: ../archives/cmb2/includes/CMB2_JS.php:243, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:93, ../includes/CMB2_JS.php:243, ../includes/types/CMB2_Type_File_Base.php:93, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1074
+#: ../archives/cmb2/includes/CMB2_JS.php:243, ../archives/cmb2/includes/types/CMB2_Type_File_Base.php:93, ../includes/CMB2_JS.php:243, ../includes/types/CMB2_Type_File_Base.php:93, ../tests/test-cmb-types-base.php:227, ../tests/test-cmb-types.php:1098
 msgid "Download"
 msgstr ""
 
@@ -539,27 +539,35 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:294, ../includes/rest-api/CMB2_REST_Controller.php:294
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:294, ../includes/rest-api/CMB2_REST_Controller.php:552
 msgid "This box does not have read permissions."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:314, ../includes/rest-api/CMB2_REST_Controller.php:314
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:314, ../includes/rest-api/CMB2_REST_Controller.php:572
 msgid "This box does not have write permissions."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:337, ../includes/rest-api/CMB2_REST_Controller.php:337
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:337, ../includes/rest-api/CMB2_REST_Controller.php:595
 msgid "No box found by that id. A box needs to be registered with the \"show_in_rest\" parameter configured."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:415, ../includes/rest-api/CMB2_REST_Controller.php:499
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:386, ../includes/rest-api/CMB2_REST_Controller.php:644
+msgid "The object_type parameter does not match an object type this box is registered for."
+msgstr ""
+
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:397, ../includes/rest-api/CMB2_REST_Controller.php:655
+msgid "The object_id parameter does not match an option key this box is registered for."
+msgstr ""
+
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:499, ../includes/rest-api/CMB2_REST_Controller.php:757
 msgid "A human-readable description of the object."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:422, ../includes/rest-api/CMB2_REST_Controller.php:506
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:506, ../includes/rest-api/CMB2_REST_Controller.php:764
 msgid "The id for the object."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:429, ../includes/rest-api/CMB2_REST_Controller.php:513
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller.php:513, ../includes/rest-api/CMB2_REST_Controller.php:771
 msgid "The title for the object."
 msgstr ""
 
@@ -587,20 +595,20 @@ msgstr ""
 msgid "To view or modify the field's value, the 'object_id' and 'object_type' arguments are required."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:247, ../includes/rest-api/CMB2_REST_Controller_Fields.php:247, ../tests/test-cmb-rest-controllers.php:251
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:247, ../includes/rest-api/CMB2_REST_Controller_Fields.php:255, ../tests/test-cmb-rest-controllers.php:251
 msgid "CMB2 Field value cannot be updated without the value parameter specified."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:308, ../includes/rest-api/CMB2_REST_Controller_Fields.php:308, ../tests/test-cmb-rest-controllers.php:262, ../tests/test-cmb-rest-controllers.php:273
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:308, ../includes/rest-api/CMB2_REST_Controller_Fields.php:316, ../tests/test-cmb-rest-controllers.php:262, ../tests/test-cmb-rest-controllers.php:273
 msgid "CMB2 Field value cannot be modified without the object_id and object_type parameters specified."
 msgstr ""
 
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:323, ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:352, ../includes/rest-api/CMB2_REST_Controller_Fields.php:323, ../includes/rest-api/CMB2_REST_Controller_Fields.php:352
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:323, ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:352, ../includes/rest-api/CMB2_REST_Controller_Fields.php:331, ../includes/rest-api/CMB2_REST_Controller_Fields.php:360
 msgid "No field found by that id."
 msgstr ""
 
 #. translators: %s: field key.
-#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:428, ../includes/rest-api/CMB2_REST_Controller_Fields.php:428
+#: ../archives/cmb2/includes/rest-api/CMB2_REST_Controller_Fields.php:428, ../includes/rest-api/CMB2_REST_Controller_Fields.php:436
 msgid "Value Error for %s"
 msgstr ""
 
@@ -624,11 +632,11 @@ msgstr ""
 msgid "Your text may be truncated."
 msgstr ""
 
-#: ../archives/cmb2/includes/types/CMB2_Type_File.php:76, ../includes/types/CMB2_Type_File.php:76, ../tests/test-cmb-types.php:1050, ../tests/test-cmb-types.php:1074
+#: ../archives/cmb2/includes/types/CMB2_Type_File.php:76, ../includes/types/CMB2_Type_File.php:76, ../tests/test-cmb-types.php:1074, ../tests/test-cmb-types.php:1098
 msgid "Add or Upload File"
 msgstr ""
 
-#: ../archives/cmb2/includes/types/CMB2_Type_File_List.php:42, ../includes/types/CMB2_Type_File_List.php:42, ../tests/test-cmb-types.php:945, ../tests/test-cmb-types.php:978
+#: ../archives/cmb2/includes/types/CMB2_Type_File_List.php:42, ../includes/types/CMB2_Type_File_List.php:42, ../tests/test-cmb-types.php:969, ../tests/test-cmb-types.php:1002
 msgid "Add or Upload Files"
 msgstr ""
 
@@ -636,10 +644,6 @@ msgstr ""
 msgid "No terms"
 msgstr ""
 
-#: ../includes/rest-api/CMB2_REST_Controller.php:386
-msgid "The object_type parameter does not match an object type this box is registered for."
-msgstr ""
-
-#: ../includes/rest-api/CMB2_REST_Controller.php:397
-msgid "The object_id parameter does not match an option key this box is registered for."
+#: ../includes/rest-api/CMB2_REST_Controller.php:426
+msgid "Reading the fields of a user that the WordPress REST API does not show to the current user is deprecated. In a future version, CMB2 will follow WordPress core's user read permissions here by default. To keep the current behavior, set the box's \"rest_enforce_user_read_permissions\" property to false, or return false from the \"cmb2_rest_enforce_user_read_permissions\" filter."
 msgstr ""
