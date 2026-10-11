@@ -761,12 +761,13 @@ window.CMB2 = window.CMB2 || {};
 			return;
 		}
 
-		var $parent = $this.parents('.cmb-row');
+		var $parent = $this.closest( '.cmb-row' );
 		var $table  = $this.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
 
 		if ( number <= 2 ) {
-			return cmb.resetRow( $parent.find( '.cmb-add-row-button' ), $this );
+			// Only use this field's add button. Group rows are .cmb-row too.
+			return cmb.resetRow( $table.siblings( '.cmb-add-row' ).find( '.cmb-add-row-button' ), $this );
 		}
 
 		if ( $parent.hasClass('empty-row') ) {

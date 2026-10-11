@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-*
+
+### Bug Fixes
+
+* Removing the only row of a repeatable field inside a group no longer adds an empty row to the other repeatable fields in that group and its other entries. Fixes [#1515](https://github.com/CMB2/CMB2/issues/1515). Props [Faisal Ahammad (@faisalahammad)](https://github.com/faisalahammad).
 
 ## [2.13.4 - 2026-10-08](https://github.com/CMB2/CMB2/releases/tag/v2.13.4)
 
