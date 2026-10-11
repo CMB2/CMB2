@@ -526,6 +526,25 @@ class Test_CMB2_Field extends CMB2TestCase {
 		$this->assertNotFalse( $modified );
 	}
 
+	public function test_cmb2_multicheck_field_saves_zero_value() {
+		$field = $this->new_field( array(
+			'id'      => 'test_multicheck_zero',
+			'type'    => 'multicheck',
+			'options' => array( 'Zero', 'One', 'Two' ),
+		) );
+
+		// Check only the option with key 0.
+		$field->save_field( array( '0' ) );
+		$this->assertSame( array( '0' ), get_post_meta( $this->post_id, 'test_multicheck_zero', true ) );
+
+		$field->save_field( array( '0', '2' ) );
+		$this->assertSame( array( '0', '2' ), get_post_meta( $this->post_id, 'test_multicheck_zero', true ) );
+
+		// Unchecking everything should still remove the value.
+		$field->save_field( array() );
+		$this->assertFalse( metadata_exists( 'post', $this->post_id, 'test_multicheck_zero' ) );
+	}
+
 	public function test_cmb2_field_save_slashed() {
 		$args = $this->field_args;
 		$args['save_field'] = true;
