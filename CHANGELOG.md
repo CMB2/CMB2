@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
-*
+
+### Enhancements
+
+* Added a `value_field` field arg for the `taxonomy_*` field types. Set it to `'term_id'` to use term IDs as the field values instead of term slugs. This matters most for `options-page` and `term` boxes, where the value is what gets saved. The default stays `'slug'`, so existing fields are not affected. Fixes [#1517](https://github.com/CMB2/CMB2/issues/1517).
 
 ## [2.13.4 - 2026-10-08](https://github.com/CMB2/CMB2/releases/tag/v2.13.4)
 

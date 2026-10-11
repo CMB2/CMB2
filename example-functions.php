@@ -385,6 +385,7 @@ function yourprefix_register_demo_metabox() {
 		'id'       => 'yourprefix_demo_taxonomy_select',
 		'type'     => 'taxonomy_select', // Or `taxonomy_select_hierarchical`
 		'taxonomy' => 'category', // Taxonomy Slug
+		// 'value_field' => 'term_id', // Use term IDs as the values instead of slugs. A 'default' must then be a term ID too.
 	) );
 
 	$cmb_demo->add_field( array(
