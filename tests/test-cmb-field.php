@@ -299,6 +299,42 @@ class Test_CMB2_Field extends CMB2TestCase {
 
 	}
 
+	public function test_repeatable_field_keeps_zero_value() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_zero',
+			'type'       => 'text',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array( 'a', '0', '', 'b' ) );
+
+		$this->assertSame( array( 'a', '0', 'b' ), $field->get_data() );
+	}
+
+	public function test_repeatable_textarea_code_keeps_zero_value() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_code_zero',
+			'type'       => 'textarea_code',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array( 'a', '0', '', 'b' ) );
+
+		$this->assertSame( array( 'a', '0', 'b' ), $field->get_data() );
+	}
+
+	public function test_repeatable_text_money_formats_zero_value() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_money_zero',
+			'type'       => 'text_money',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array( '1', '0', '', '2' ) );
+
+		$this->assertSame( array( '1.00', '0.00', '2.00' ), $field->get_data() );
+	}
+
 	public function test_set_get_filters() {
 		// Value to set
 		$array_val = array( 'check1', 'check2' );
