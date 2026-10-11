@@ -421,3 +421,33 @@ case is custom storage via `cmb2_override_meta_*` callbacks that relied on a
 non-numeric request ID: they now receive the integer core would use, so such
 code should set the object ID explicitly. REST object IDs are a separate path
 (C12).
+
+## C14 — `0` and `'0'` are field values, not empties
+
+**Rule:** code that decides whether a field value (or an entry of an array
+value) is empty uses `CMB2_Utils::isempty()`, `notempty()` or
+`filter_empty()`, never bare `empty()`, a truthiness check, or a callback-less
+`array_filter()`. Those three treat only `null`, `''`, `false` and `array()` as
+empty, so a user who saves `0` — a text value, a select or multicheck option
+key — keeps it.
+
+**Canonical examples:** `CMB2_Field::save_field()` (`isempty()` decides
+update vs. remove); `CMB2::save_group_field()` (`filter_empty()` on group rows,
+added in `dba5776e` "so group fields can have '0' as a value");
+`CMB2_Field::sanitization_cb()` and `CMB2_Sanitize::_check_repeat()` for
+repeatable fields. `CMB2_Sanitize::_is_empty_array()` follows once the
+multicheck fix for CMB2/CMB2#1535 lands; until then a repeatable field whose
+only entry is `'0'` is still removed there. Pinned by the `*_zero_value` tests
+in `tests/test-cmb-field.php`.
+
+**Not staged (C3):** on by default in the release that fixes it. Dropping `0`
+is silent data loss, non-repeatable fields already keep it, and the group fix
+shipped unstaged in 2.2.2. No configuration relies on a saved `0` vanishing.
+
+**Blast radius:** a kept `0` now reaches the field type's own sanitizer, which
+may map it like any other invalid input: in a repeatable `text_url` it becomes
+the field default (else a `false` entry), in `text_email` an `''` entry, in
+`text_date_timestamp` timestamp `0`; `text_money` formats it as `'0.00'`.
+`colorpicker` and `file_list` still drop it. Custom `sanitization_cb`
+callbacks and `cmb2_sanitize_{$type}` filters now receive `'0'` entries in
+repeatable arrays.
