@@ -42,14 +42,15 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 	}
 
 	protected function list_term_input( $term, $saved_terms ) {
-		$args = array(
-			'value' => $term->slug,
+		$value = $this->get_term_value( $term );
+		$args  = array(
+			'value' => $value,
 			'label' => $term->name,
 			'type'  => 'checkbox',
 			'name'  => $this->_name() . '[]',
 		);
 
-		if ( is_array( $saved_terms ) && in_array( $term->slug, $saved_terms ) ) {
+		if ( is_array( $saved_terms ) && in_array( $value, $saved_terms ) ) {
 			$args['checked'] = 'checked';
 		}
 
@@ -61,7 +62,7 @@ class CMB2_Type_Taxonomy_Multicheck extends CMB2_Type_Taxonomy_Base {
 
 		return is_wp_error( $saved_terms ) || empty( $saved_terms )
 			? $this->field->get_default()
-			: wp_list_pluck( $saved_terms, 'slug' );
+			: wp_list_pluck( $saved_terms, $this->value_field() );
 	}
 
 	protected function get_wrapper_classes() {

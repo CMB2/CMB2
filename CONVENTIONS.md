@@ -411,3 +411,34 @@ case is custom storage via `cmb2_override_meta_*` callbacks that relied on a
 non-numeric request ID: they now receive the integer core would use, so such
 code should set the object ID explicitly. REST object IDs are a separate path
 (C12).
+
+## C14: Taxonomy field values are slugs unless `value_field` says term IDs
+
+**Rule:** `taxonomy_*` field values are term slugs. A field can set
+`'value_field' => 'term_id'` to use term IDs instead; only these two are
+allowed, since `wp_set_object_terms()` takes nothing else. Code that turns a
+term into a field value, or a value back into a term, goes through
+`CMB2_Type_Taxonomy_Base::value_field()`, `get_term_value()` and
+`get_term_by_value()`, never `$term->slug` or `get_term_by( 'slug', ... )`
+directly.
+
+**Back-compat notes (both caught in review):**
+- In slug mode the select keeps its strict `===` compare. A loose compare
+  would make an int default like `2024` select a term whose slug is `"2024"`,
+  which it never did before.
+- In term ID mode a non-numeric saved value still resolves as a slug, so
+  values saved before a field switched modes keep loading. An all-digit slug
+  is read as an ID; that case can't be told apart and is a known limit.
+
+**Saving:** posted IDs are strings, and `wp_set_object_terms()` treats a
+numeric string as a term name and creates a new term. `CMB2_Sanitize::taxonomy()`
+casts them with `absint()` first.
+
+**Not staged (C3):** opt-in field arg, default unchanged.
+
+**Canonical example:** `CMB2_Type_Taxonomy_Base::get_term_by_value()` and
+`CMB2_Sanitize::taxonomy()`; pinned by the `value_field` tests in
+`tests/test-cmb-types.php`.
+
+**Blast radius:** all eight taxonomy types (the hierarchical and inline ones
+inherit), plus the radio and multicheck defaults in `CMB2_Field_Display`.

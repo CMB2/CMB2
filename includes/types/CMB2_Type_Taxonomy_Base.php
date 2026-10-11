@@ -53,7 +53,7 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 		$terms = (array) $this->field->value;
 
 		foreach ( $terms as $index => $term ) {
-			$terms[ $index ] = get_term_by( 'slug', $term, $this->field->args( 'taxonomy' ) );
+			$terms[ $index ] = $this->get_term_by_value( $term );
 		}
 
 		return $terms;
@@ -126,7 +126,51 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
 		return is_wp_error( $saved_terms ) || empty( $saved_terms )
 			? $this->field->get_default()
-			: array_shift( $saved_terms )->slug;
+			: $this->get_term_value( array_shift( $saved_terms ) );
+	}
+
+	/**
+	 * Gets the term property used for the field values, set by the 'value_field' field arg.
+	 *
+	 * @since  2.14.0
+	 * @return string 'term_id' or 'slug'.
+	 */
+	public function value_field() {
+		// Only these two, since wp_set_object_terms() can't take any other term property.
+		return 'term_id' === $this->field->args( 'value_field' ) ? 'term_id' : 'slug';
+	}
+
+	/**
+	 * Gets the field value for a term.
+	 *
+	 * @since  2.14.0
+	 *
+	 * @param  object $term Term object.
+	 *
+	 * @return int|string   Term ID or term slug.
+	 */
+	public function get_term_value( $term ) {
+		return $term->{$this->value_field()};
+	}
+
+	/**
+	 * Gets a term object from a field value.
+	 *
+	 * @since  2.14.0
+	 *
+	 * @param  int|string $value Term ID or term slug.
+	 *
+	 * @return WP_Term|false     Term object, or false if not found.
+	 */
+	public function get_term_by_value( $value ) {
+		$taxonomy = $this->field->args( 'taxonomy' );
+
+		if ( 'term_id' === $this->value_field() && is_numeric( $value ) ) {
+			return get_term_by( 'id', $value, $taxonomy );
+		}
+
+		// Slugs saved before a field switched to term IDs should still resolve.
+		return get_term_by( 'slug', $value, $taxonomy );
 	}
 
 	/**

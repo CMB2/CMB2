@@ -90,10 +90,14 @@ class CMB2_Type_Taxonomy_Select extends CMB2_Type_Taxonomy_Base {
 
 		foreach ( $all_terms as $term ) {
 			$this->current_term = $term;
+			$value = $this->get_term_value( $term );
 			$options .= $this->select_option( array(
 				'label'   => $term->name,
-				'value'   => $term->slug,
-				'checked' => $this->saved_term === $term->slug,
+				'value'   => $value,
+				// Term IDs are ints, but saved and default values can be strings.
+				'checked' => 'term_id' === $this->value_field()
+					? is_scalar( $this->saved_term ) && (string) $this->saved_term === (string) $value
+					: $this->saved_term === $value,
 			) );
 		}
 

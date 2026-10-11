@@ -57,8 +57,9 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 			$option_none_value = apply_filters( "cmb2_taxonomy_radio_{$field_id}_default_value", $option_none_value );
 
 			$options .= $this->list_term_input( (object) array(
-				'slug' => $option_none_value,
-				'name' => $option_none,
+				'slug'    => $option_none_value,
+				'term_id' => $option_none_value,
+				'name'    => $option_none,
 			), $saved_term );
 		}
 
@@ -77,12 +78,13 @@ class CMB2_Type_Taxonomy_Radio extends CMB2_Type_Taxonomy_Base {
 	}
 
 	protected function list_term_input( $term, $saved_term ) {
-		$args = array(
-			'value' => $term->slug,
+		$value = $this->get_term_value( $term );
+		$args  = array(
+			'value' => $value,
 			'label' => $term->name,
 		);
 
-		if ( $saved_term == $term->slug ) {
+		if ( $saved_term == $value ) {
 			$args['checked'] = 'checked';
 		}
 

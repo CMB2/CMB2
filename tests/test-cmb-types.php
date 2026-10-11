@@ -1417,6 +1417,171 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		return 'CMB2_Type_Title';
 	}
 
+	public function test_taxonomy_select_field_value_field_term_id() {
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'        => 'taxonomy_select',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			) ), 'render',
+		) );
+
+		$this->assertMatchesRegularExpression( '/value="' . $this->term . '"\s+selected=\'selected\'/', $output );
+		$this->assertStringContainsString( 'value="' . $this->term2 . '" >', $output );
+		$this->assertStringNotContainsString( 'value="test_category"', $output );
+	}
+
+	public function test_taxonomy_select_hierarchical_field_value_field_term_id() {
+		$terms = $this->get_test_hierarchical_terms();
+		$child = end( $terms );
+		wp_set_object_terms( $this->post_id, $child, 'category' );
+
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'        => 'taxonomy_select_hierarchical',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			) ), 'render',
+		) );
+
+		$this->assertMatchesRegularExpression( '/value="' . $child . '"\s+selected=\'selected\'/', $output );
+		$this->assertStringNotContainsString( 'value="test_category', $output );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+	public function test_taxonomy_select_field_slug_mode_keeps_strict_default_match() {
+		wp_set_object_terms( $this->post_id, array(), 'category' );
+		$this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name'     => '2024',
+		) );
+
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'     => 'taxonomy_select',
+				'taxonomy' => 'category',
+				'default'  => 2024,
+			) ), 'render',
+		) );
+
+		$this->assertDoesNotMatchRegularExpression( '/value="2024"\s+selected/', $output );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+	public function test_taxonomy_radio_field_value_field_term_id() {
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'        => 'taxonomy_radio',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			) ), 'render',
+		) );
+
+		$this->assertStringContainsString( 'value="" data-hash', $output );
+		$this->assertStringContainsString( 'value="' . $this->term . '" checked="checked"', $output );
+		$this->assertStringContainsString( 'value="' . $this->term2 . '" data-hash', $output );
+		$this->assertStringNotContainsString( 'value="test_category"', $output );
+	}
+
+	public function test_taxonomy_multicheck_field_value_field_term_id() {
+		wp_set_post_categories( $this->post_id, array( $this->term, 1 ) );
+
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'        => 'taxonomy_multicheck',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			) ), 'render',
+		) );
+
+		$this->assertStringContainsString( 'value="' . $this->term . '" checked="checked"', $output );
+		$this->assertStringContainsString( 'value="1" checked="checked"', $output );
+		$this->assertStringContainsString( 'value="' . $this->term2 . '" data-hash', $output );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+	public function test_taxonomy_value_field_term_id_saves_post_terms_by_id() {
+		$select = $this->get_field_object( array(
+			'type'        => 'taxonomy_select',
+			'taxonomy'    => 'category',
+			'value_field' => 'term_id',
+		) );
+		$sanitizer = new CMB2_Sanitize( $select, (string) $this->term2 );
+		$this->assertSame( '', $sanitizer->taxonomy() );
+		$this->assertEquals( array( $this->term2 ), wp_get_post_categories( $this->post_id ) );
+
+		$multicheck = $this->get_field_object( array(
+			'type'        => 'taxonomy_multicheck',
+			'taxonomy'    => 'category',
+			'value_field' => 'term_id',
+		) );
+		$sanitizer = new CMB2_Sanitize( $multicheck, array( (string) $this->term, (string) $this->term2 ) );
+		$sanitizer->taxonomy();
+		$this->assertEqualsCanonicalizing( array( $this->term, $this->term2 ), wp_get_post_categories( $this->post_id ) );
+
+		// Posted IDs are strings, and those must not become new terms named after the ID.
+		$this->assertFalse( get_term_by( 'name', (string) $this->term, 'category' ) );
+		$this->assertFalse( get_term_by( 'name', (string) $this->term2, 'category' ) );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+	public function test_taxonomy_value_field_term_id_on_options_page() {
+		$field_args = array(
+			'field_args'  => array(
+				'id'          => 'tax_id_option',
+				'type'        => 'taxonomy_select',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			),
+			'object_id'   => 'tax_id_options',
+			'object_type' => 'options-page',
+		);
+
+		$sanitizer = new CMB2_Sanitize( new CMB2_Field( $field_args ), (string) $this->term2 );
+		$this->assertSame( (string) $this->term2, $sanitizer->taxonomy() );
+
+		cmb2_options( 'tax_id_options' )->update( 'tax_id_option', (string) $this->term2, true );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( new CMB2_Field( $field_args ) ), 'render' ) );
+		$this->assertMatchesRegularExpression( '/value="' . $this->term2 . '"\s+selected=\'selected\'/', $output );
+
+		// A slug saved before the field switched to term IDs still selects its term.
+		cmb2_options( 'tax_id_options' )->update( 'tax_id_option', 'number_2', true );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( new CMB2_Field( $field_args ) ), 'render' ) );
+		$this->assertMatchesRegularExpression( '/value="' . $this->term2 . '"\s+selected=\'selected\'/', $output );
+
+		cmb2_options( 'tax_id_options' )->delete_option();
+	}
+
+	public function test_taxonomy_value_field_term_id_display_default() {
+		wp_set_object_terms( $this->post_id, array(), 'category' );
+
+		$radio = $this->get_field_object( array(
+			'type'        => 'taxonomy_radio',
+			'taxonomy'    => 'category',
+			'value_field' => 'term_id',
+			'default'     => $this->term2,
+		) );
+		$this->assertStringContainsString( '>number_2</a>', $this->capture_render( array( CMB2_Field_Display::get( $radio ), 'display' ) ) );
+
+		$multicheck = $this->get_field_object( array(
+			'type'        => 'taxonomy_multicheck',
+			'taxonomy'    => 'category',
+			'value_field' => 'term_id',
+			'default'     => array( $this->term, $this->term2 ),
+		) );
+		$output = $this->capture_render( array( CMB2_Field_Display::get( $multicheck ), 'display' ) );
+		$this->assertStringContainsString( '>test_category</a>', $output );
+		$this->assertStringContainsString( '>number_2</a>', $output );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
 	protected function get_test_hierarchical_terms() {
 		$terms = array( $this->term, 1 );
 

@@ -356,7 +356,7 @@ class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 		$term     = false;
 
 		if ( is_wp_error( $terms ) || empty( $terms ) && ( $default = $this->field->get_default() ) ) {
-			$term = get_term_by( 'slug', $default, $taxonomy );
+			$term = $type->get_term_by_value( $default );
 		} elseif ( ! empty( $terms ) ) {
 			$term = $terms[ key( $terms ) ];
 		}
@@ -383,11 +383,11 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 		if ( is_wp_error( $terms ) || empty( $terms ) && ( $default = $this->field->get_default() ) ) {
 			$terms = array();
 			if ( is_array( $default ) ) {
-				foreach ( $default as $slug ) {
-					$terms[] = get_term_by( 'slug', $slug, $taxonomy );
+				foreach ( $default as $value ) {
+					$terms[] = $type->get_term_by_value( $value );
 				}
 			} else {
-				$terms[] = get_term_by( 'slug', $default, $taxonomy );
+				$terms[] = $type->get_term_by_value( $default );
 			}
 		}
 

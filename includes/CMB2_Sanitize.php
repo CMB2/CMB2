@@ -152,7 +152,13 @@ class CMB2_Sanitize {
 			if ( in_array( $this->field->object_type, array( 'options-page', 'term' ), true ) ) {
 				$return_values = true;
 			} else {
-				wp_set_object_terms( $this->field->object_id, $this->value, $this->field->args( 'taxonomy' ) );
+				$terms = $this->value;
+				if ( 'term_id' === $this->field->args( 'value_field' ) ) {
+					// Posted IDs are strings, which WP would save as new terms named after the ID.
+					$terms = array_filter( array_map( 'absint', (array) $terms ) );
+				}
+
+				wp_set_object_terms( $this->field->object_id, $terms, $this->field->args( 'taxonomy' ) );
 				$return_values = false;
 			}
 
