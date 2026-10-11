@@ -471,8 +471,8 @@ class CMB2_Field extends CMB2_Base {
 	public function sanitization_cb( $meta_value ) {
 
 		if ( $this->args( 'repeatable' ) && is_array( $meta_value ) ) {
-			// Remove empties.
-			$meta_value = array_filter( $meta_value );
+			// Remove empties, but keep 0/'0'.
+			$meta_value = CMB2_Utils::filter_empty( $meta_value );
 		}
 
 		// Check if the field has a registered validation callback.
