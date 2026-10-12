@@ -1497,9 +1497,11 @@ class CMB2 extends CMB2_Base {
 		if ( $field_group && ( $sub_field_id || 0 === $sub_field_id ) ) {
 
 			// Update the fields array w/ any modified properties inherited from the group field.
-			$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] = $field_args;
+			if ( is_array( $field_args ) ) {
+				$this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ] = $field_args;
+			}
 
-			return $this->get_default_args( $field_args, $field_group );
+			return $this->get_default_args( $this->meta_box['fields'][ $field_id ]['fields'][ $sub_field_id ], $field_group );
 		}
 
 		if ( is_array( $field_args ) ) {

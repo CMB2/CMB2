@@ -698,6 +698,38 @@ class Test_CMB2_Core extends CMB2TestCase {
 		}
 	}
 
+	public function test_get_group_sub_field_by_id() {
+		$cmb = new CMB2( array(
+			'id' => __FUNCTION__,
+			'fields' => array(
+				array(
+					'id'     => 'test_group',
+					'type'   => 'group',
+					'fields' => array(
+						array(
+							'name' => 'Field 1',
+							'id'   => 'first_field',
+							'type' => 'text',
+						),
+					),
+				),
+			),
+		) );
+
+		$group = $cmb->get_field( 'test_group' );
+		$field = $cmb->get_field( 'first_field', $group );
+
+		$this->assertInstanceOf( 'CMB2_Field', $field );
+		$this->assertEquals( 'first_field', $field->id( true ) );
+		$this->assertEquals( 'text', $field->type() );
+		$this->assertEquals( 'Field 1', $field->args( 'name' ) );
+
+		// The registered sub-field config should not be replaced by the ID string.
+		$fields = $cmb->prop( 'fields' );
+		$this->assertIsArray( $fields['test_group']['fields']['first_field'] );
+		$this->assertEquals( 'text', $fields['test_group']['fields']['first_field']['type'] );
+	}
+
 	public function test_remove_group_field() {
 
 		$cmb = $this->get_test2_box();
