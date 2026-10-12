@@ -435,19 +435,33 @@ key — keeps it.
 update vs. remove); `CMB2::save_group_field()` (`filter_empty()` on group rows,
 added in `dba5776e` "so group fields can have '0' as a value");
 `CMB2_Field::sanitization_cb()` and `CMB2_Sanitize::_check_repeat()` for
-repeatable fields. `CMB2_Sanitize::_is_empty_array()` follows once the
-multicheck fix for CMB2/CMB2#1535 lands; until then a repeatable field whose
-only entry is `'0'` is still removed there. Pinned by the `*_zero_value` tests
-in `tests/test-cmb-field.php`.
+repeatable fields; `CMB2_Sanitize::_is_empty_array()`, so a field whose only
+entry is `'0'` is kept whatever the sanitizer (CMB2/CMB2#1535), unless the
+type's own sanitizer drops it (`colorpicker`, `file_list`);
+`CMB2_Types::repeatable_rows()`, so a saved `'0'` row is rendered on the edit
+screen and survives the next save, while its hidden empty-row template is
+rendered `disabled` (`data-cmb2-template`) so a `'0'` template value, such as
+a select's first option key, is never submitted as a row; `CMB2_Sanitize::text_money()`, where a
+scalar `'0'` saves as `'0.00'` like a repeatable entry. Pinned by the
+`*_zero_*` and `*epoch_zero` tests in `tests/test-cmb-field.php`,
+`test_repeatable_field_renders_zero_value_row`,
+`test_repeatable_field_form_save_does_not_add_template_row` and
+`test_text_money_field_value_update` in `tests/test-cmb-types.php`.
 
-**Not staged (C3):** on by default in the release that fixes it. Dropping `0`
-is silent data loss, non-repeatable fields already keep it, and the group fix
-shipped unstaged in 2.2.2. No configuration relies on a saved `0` vanishing.
+**Not staged (C3):** on by default in the release that fixes it, under C3's
+"discards an explicit value" exception. Dropping a `0` the user typed is
+silent data loss, and the group fix for the same bug shipped unstaged in
+2.2.2 (`dba5776e`).
 
 **Blast radius:** a kept `0` now reaches the field type's own sanitizer, which
 may map it like any other invalid input: in a repeatable `text_url` it becomes
 the field default (else a `false` entry), in `text_email` an `''` entry, in
-`text_date_timestamp` timestamp `0`; `text_money` formats it as `'0.00'`.
-`colorpicker` and `file_list` still drop it. Custom `sanitization_cb`
-callbacks and `cmb2_sanitize_{$type}` filters now receive `'0'` entries in
-repeatable arrays.
+`text_date_timestamp` timestamp `0`; `text_money` formats it as `'0.00'`,
+scalar or repeatable (a scalar `'0'` used to be removed). A repeatable
+`text_date_timestamp` / `text_datetime_timestamp` row that is epoch `0` is
+kept on save, but `get_timestamp_format()` still renders `0` as blank, so an
+admin re-save drops it again (not changed here: it affects every date field). `colorpicker`
+and `file_list` still drop it. Custom `sanitization_cb` callbacks and
+`cmb2_sanitize_{$type}` filters now receive `'0'` entries in repeatable
+arrays, and `sanitization_cb => false` stores them. Hook counts and database
+writes per save do not change.
