@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+* Fixed `multicheck` and `multicheck_inline` fields (including inside a group) not saving when the only checked option has the value `0`. Non-repeatable array values that hold only `0` or `'0'`, such as from custom field types, are no longer treated as empty and deleted on save. Such a field now stores `array( '0' )`, so `metadata_exists()` returns true, `cmb2_save_field` reports `updated` instead of `removed`, and a field with a `default` no longer falls back to that default when only `0` is checked. Props [@faisalahammad](https://github.com/faisalahammad). Fixes [#1535](https://github.com/CMB2/CMB2/issues/1535) ([#1572](https://github.com/CMB2/CMB2/pull/1572)).
 * Removing the only row of a repeatable field inside a group no longer adds an empty row to the other repeatable fields in that group and its other entries. Fixes [#1515](https://github.com/CMB2/CMB2/issues/1515). Props [Faisal Ahammad (@faisalahammad)](https://github.com/faisalahammad) ([#1573](https://github.com/CMB2/CMB2/pull/1573)).
 
 ## [2.13.4 - 2026-10-08](https://github.com/CMB2/CMB2/releases/tag/v2.13.4)
