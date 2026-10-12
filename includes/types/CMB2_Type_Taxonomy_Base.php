@@ -136,8 +136,21 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	 * @return string 'term_id' or 'slug'.
 	 */
 	public function value_field() {
+		static $logged = array();
+
+		$value_field = $this->field->args( 'value_field' );
+
 		// Only these two, since wp_set_object_terms() can't take any other term property.
-		return 'term_id' === $this->field->args( 'value_field' ) ? 'term_id' : 'slug';
+		// Logged once per field, as this runs for every term.
+		if ( $value_field && ! in_array( $value_field, array( 'slug', 'term_id' ), true ) ) {
+			$field_id = $this->field->_id( '', false );
+			if ( ! isset( $logged[ $field_id ] ) ) {
+				$logged[ $field_id ] = true;
+				CMB2_Utils::log_if_debug( __METHOD__, __LINE__, "{$this->field->type()} {$field_id} has an unsupported 'value_field', so slugs are used. Only 'slug' and 'term_id' are supported. Got: ", $value_field );
+			}
+		}
+
+		return 'term_id' === $value_field ? 'term_id' : 'slug';
 	}
 
 	/**
@@ -145,12 +158,12 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	 *
 	 * @since  2.14.0
 	 *
-	 * @param  object $term Term object.
+	 * @param  WP_Term|false $term Term object, or false if the term was not found.
 	 *
-	 * @return int|string   Term ID or term slug.
+	 * @return int|string          Term ID or term slug, or '' if there is no term.
 	 */
 	public function get_term_value( $term ) {
-		return $term->{$this->value_field()};
+		return $term ? $term->{$this->value_field()} : '';
 	}
 
 	/**
@@ -165,11 +178,20 @@ abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 	public function get_term_by_value( $value ) {
 		$taxonomy = $this->field->args( 'taxonomy' );
 
-		if ( 'term_id' === $this->value_field() && is_numeric( $value ) ) {
-			return get_term_by( 'id', $value, $taxonomy );
+		if ( 'term_id' === $this->value_field() ) {
+			// Posted values can be anything, and only scalars can be a term ID or slug.
+			if ( ! is_scalar( $value ) ) {
+				return false;
+			}
+
+			// Digits only, not is_numeric(), so slugs like '1e3' or '-1' are not read as IDs.
+			if ( preg_match( '/^\d+$/D', (string) $value ) ) {
+				return get_term_by( 'id', $value, $taxonomy );
+			}
 		}
 
 		// Slugs saved before a field switched to term IDs should still resolve.
+		// An all-digit slug is read as an ID; see CONVENTIONS.md C14.
 		return get_term_by( 'slug', $value, $taxonomy );
 	}
 

@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 
 ### Enhancements
 
-* Added a `value_field` field arg for the `taxonomy_*` field types. Set it to `'term_id'` to use term IDs as the field values instead of term slugs. This matters most for `options-page` and `term` boxes, where the value is what gets saved. The default stays `'slug'`, so existing fields are not affected. Fixes [#1517](https://github.com/CMB2/CMB2/issues/1517).
+* Added a `value_field` field arg for the `taxonomy_*` field types. Set it to `'term_id'` to use term IDs as the field values instead of term slugs. This matters most for `options-page` and `term` boxes, where the value is what gets saved. Only `'slug'` (the default) and `'term_id'` are supported. Fields that don't set it are not affected. Before you switch an existing `options-page` or `term` field to `'term_id'`, convert its saved slugs to term IDs. The field can't do this for you: a saved slug made only of digits is read as a term ID, so it can select the wrong term or none, and a re-save then stores the wrong term or clears the value. Example for an options-page `taxonomy_select` (do the same for each value of a multicheck, or with `get_term_meta()`/`update_term_meta()` for a term box):
+  ```php
+  $options = get_option( 'yourprefix_options' );
+  $term    = get_term_by( 'slug', $options['yourprefix_category'], 'category' );
+  if ( $term ) {
+  	$options['yourprefix_category'] = $term->term_id;
+  	update_option( 'yourprefix_options', $options );
+  }
+  ```
+  Fixes [#1517](https://github.com/CMB2/CMB2/issues/1517).
 
 ## [2.13.4 - 2026-10-08](https://github.com/CMB2/CMB2/releases/tag/v2.13.4)
 

@@ -1582,6 +1582,129 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 	}
 
+	public function test_taxonomy_value_field_term_id_post_box_save_fields() {
+		$cmb = new CMB2( array(
+			'id'           => 'tax_id_post_box',
+			'object_types' => array( 'post' ),
+			'fields'       => array(
+				array(
+					'id'          => 'tax_id_post_field',
+					'type'        => 'taxonomy_select',
+					'taxonomy'    => 'category',
+					'value_field' => 'term_id',
+				),
+			),
+		) );
+
+		$cmb->save_fields( $this->post_id, 'post', array( 'tax_id_post_field' => (string) $this->term2 ) );
+		$this->assertEquals( array( $this->term2 ), wp_get_post_categories( $this->post_id ) );
+
+		// A slug posted to a term ID field (REST client, old form data) sets its term, it does not clear the terms.
+		$cmb->save_fields( $this->post_id, 'post', array( 'tax_id_post_field' => 'test_category' ) );
+		$this->assertEquals( array( $this->term ), wp_get_post_categories( $this->post_id ) );
+
+		// '-1' (the wp_dropdown_categories() "None" value) matches no term, so it must not set term ID 1.
+		$cmb->save_fields( $this->post_id, 'post', array( 'tax_id_post_field' => '-1' ) );
+		$this->assertSame( array(), wp_get_post_categories( $this->post_id ) );
+
+		// A nested array (crafted POST or REST body) matches no term and does not error.
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+		$cmb->save_fields( $this->post_id, 'post', array( 'tax_id_post_field' => array( array( 'test_category' ) ) ) );
+		$this->assertSame( array(), wp_get_post_categories( $this->post_id ) );
+
+		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
+	}
+
+	public function test_taxonomy_value_field_term_id_options_page_save_fields() {
+		$cmb = new CMB2( array(
+			'id'           => 'tax_id_options_box',
+			'object_types' => array( 'options-page' ),
+			'option_key'   => 'tax_id_options_save',
+			'fields'       => array(
+				array(
+					'id'          => 'tax_id_option',
+					'type'        => 'taxonomy_select',
+					'taxonomy'    => 'category',
+					'value_field' => 'term_id',
+				),
+			),
+		) );
+
+		$cmb->save_fields( 'tax_id_options_save', 'options-page', array( 'tax_id_option' => (string) $this->term2 ) );
+		$this->assertSame( (string) $this->term2, cmb2_get_option( 'tax_id_options_save', 'tax_id_option' ) );
+
+		$field  = cmb2_get_field( $cmb, 'tax_id_option', 'tax_id_options_save', 'options-page' );
+		$output = $this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) );
+		$this->assertMatchesRegularExpression( '/value="' . $this->term2 . '"\s+selected=\'selected\'/', $output );
+
+		cmb2_options( 'tax_id_options_save' )->delete_option();
+	}
+
+	/**
+	 * Pins the known limits of switching a field with saved slugs to term IDs (see CONVENTIONS.md C14).
+	 */
+	public function test_taxonomy_value_field_term_id_legacy_digit_slugs() {
+		$field_args = array(
+			'field_args'  => array(
+				'id'          => 'tax_id_option',
+				'type'        => 'taxonomy_select',
+				'taxonomy'    => 'category',
+				'value_field' => 'term_id',
+			),
+			'object_id'   => 'tax_id_options',
+			'object_type' => 'options-page',
+		);
+
+		// An all-digit slug that is also another term's ID selects that other term.
+		$legacy = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name'     => 'Legacy',
+			'slug'     => (string) $this->term2,
+		) );
+		cmb2_options( 'tax_id_options' )->update( 'tax_id_option', (string) $this->term2, true );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( new CMB2_Field( $field_args ) ), 'render' ) );
+		$this->assertMatchesRegularExpression( '/value="' . $this->term2 . '"\s+selected=\'selected\'/', $output );
+		$this->assertDoesNotMatchRegularExpression( '/value="' . $legacy . '"\s+selected/', $output );
+
+		// An all-digit slug that is no term's ID selects nothing, and does not throw a PHP warning.
+		$absent = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name'     => 'Absent',
+			'slug'     => '987654321',
+		) );
+		cmb2_options( 'tax_id_options' )->update( 'tax_id_option', '987654321', true );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( new CMB2_Field( $field_args ) ), 'render' ) );
+		$this->assertDoesNotMatchRegularExpression( '/value="' . $absent . '"\s+selected/', $output );
+
+		// A numeric slug that is not all digits stays a slug.
+		$sci = $this->factory->term->create( array(
+			'taxonomy' => 'category',
+			'name'     => 'Scientific',
+			'slug'     => '1e3',
+		) );
+		cmb2_options( 'tax_id_options' )->update( 'tax_id_option', '1e3', true );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( new CMB2_Field( $field_args ) ), 'render' ) );
+		$this->assertMatchesRegularExpression( '/value="' . $sci . '"\s+selected=\'selected\'/', $output );
+
+		cmb2_options( 'tax_id_options' )->delete_option();
+	}
+
+	public function test_taxonomy_value_field_unsupported_value_uses_slugs() {
+		$output = $this->capture_render( array(
+			$this->get_field_type_object( array(
+				'type'        => 'taxonomy_select',
+				'taxonomy'    => 'category',
+				'value_field' => 'id',
+			) ), 'render',
+		) );
+
+		$this->assertStringContainsString( 'value="test_category"', $output );
+		$this->assertStringNotContainsString( 'value="' . $this->term . '"', $output );
+	}
+
 	protected function get_test_hierarchical_terms() {
 		$terms = array( $this->term, 1 );
 

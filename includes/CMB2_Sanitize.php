@@ -155,7 +155,15 @@ class CMB2_Sanitize {
 				$terms = $this->value;
 				if ( 'term_id' === $this->field->args( 'value_field' ) ) {
 					// Posted IDs are strings, which WP would save as new terms named after the ID.
-					$terms = array_filter( array_map( 'absint', (array) $terms ) );
+					// Resolve each value to a term instead, so a posted slug still sets its term.
+					$type  = new CMB2_Type_Taxonomy_Select( new CMB2_Types( $this->field ) );
+					$terms = array();
+					foreach ( (array) $this->value as $value ) {
+						$term = $type->get_term_by_value( $value );
+						if ( $term ) {
+							$terms[] = (int) $term->term_id;
+						}
+					}
 				}
 
 				wp_set_object_terms( $this->field->object_id, $terms, $this->field->args( 'taxonomy' ) );

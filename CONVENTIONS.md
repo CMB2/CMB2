@@ -412,27 +412,37 @@ non-numeric request ID: they now receive the integer core would use, so such
 code should set the object ID explicitly. REST object IDs are a separate path
 (C12).
 
-## C14: Taxonomy field values are slugs unless `value_field` says term IDs
+## C14 — Taxonomy field values are slugs unless `value_field` says term IDs
 
 **Rule:** `taxonomy_*` field values are term slugs. A field can set
 `'value_field' => 'term_id'` to use term IDs instead; only these two are
-allowed, since `wp_set_object_terms()` takes nothing else. Code that turns a
-term into a field value, or a value back into a term, goes through
+allowed, since `wp_set_object_terms()` takes nothing else. Any other value
+falls back to slugs and is logged with `CMB2_Utils::log_if_debug()`. Code that
+turns a term into a field value, or a value back into a term, goes through
 `CMB2_Type_Taxonomy_Base::value_field()`, `get_term_value()` and
 `get_term_by_value()`, never `$term->slug` or `get_term_by( 'slug', ... )`
 directly.
 
-**Back-compat notes (both caught in review):**
+**Back-compat notes:**
 - In slug mode the select keeps its strict `===` compare. A loose compare
   would make an int default like `2024` select a term whose slug is `"2024"`,
   which it never did before.
-- In term ID mode a non-numeric saved value still resolves as a slug, so
-  values saved before a field switched modes keep loading. An all-digit slug
-  is read as an ID; that case can't be told apart and is a known limit.
+- In term ID mode only an all-digit value is read as an ID. Anything else
+  (including `'1e3'` or `'-1'`) resolves as a slug, so values saved before a
+  field switched modes keep loading.
+- Known limit: an all-digit legacy slug can't be told apart from an ID. If a
+  term has that ID, the field selects that other term; if not, it selects
+  nothing. A re-save then stores the wrong term or clears the value, so stored
+  slugs must be converted to IDs before an existing field switches modes.
+  Pinned by `test_taxonomy_value_field_term_id_legacy_digit_slugs`.
 
-**Saving:** posted IDs are strings, and `wp_set_object_terms()` treats a
-numeric string as a term name and creates a new term. `CMB2_Sanitize::taxonomy()`
-casts them with `absint()` first.
+**Saving:** in term ID mode on post, user and comment boxes,
+`CMB2_Sanitize::taxonomy()` resolves each posted value through `get_term_by_value()` and passes the term
+IDs as ints to `wp_set_object_terms()`. Passing the posted strings would make
+WP treat `"14"` as a term name and create a new term. A value that resolves to
+no term is dropped, so a posted slug still sets its term and `'-1'` never
+becomes term ID 1. The all-digit limit above applies to posted values too.
+Slug mode passes the posted values through unchanged.
 
 **Not staged (C3):** opt-in field arg, default unchanged.
 
