@@ -55,8 +55,14 @@ add_action('plugins_loaded', function () {
 	$group->addField('group', [
 		'repeatable' => true,
 		'fields' => [
-			[ 'id' => 'first', 'name' => 'First', 'type' => 'text', 'repeatable' => true ],
+			[ 'id' => 'first', 'name' => 'First', 'type' => 'text', 'repeatable' => true, 'default' => 'DEF-A' ],
 			[ 'id' => 'second', 'name' => 'Second', 'type' => 'text', 'repeatable' => true ],
 		],
+	]);
+	$group->addField('text', [
+		'id'         => 'top_repeat',
+		'name'       => 'Top Repeat',
+		'repeatable' => true,
+		'default'    => 'TOP-DEF',
 	]);
 });
