@@ -1599,6 +1599,15 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertStringContainsString( '>test_category</a>', $output );
 		$this->assertStringContainsString( '>number_2</a>', $output );
 
+		// A single (non-array) default.
+		$multicheck = $this->get_field_object( array(
+			'type'        => 'taxonomy_multicheck',
+			'taxonomy'    => 'category',
+			'value_field' => 'term_id',
+			'default'     => $this->term2,
+		) );
+		$this->assertStringContainsString( '>number_2</a>', $this->capture_render( array( CMB2_Field_Display::get( $multicheck ), 'display' ) ) );
+
 		wp_set_object_terms( $this->post_id, 'test_category', 'category' );
 	}
 
