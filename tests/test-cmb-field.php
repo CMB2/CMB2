@@ -335,6 +335,79 @@ class Test_CMB2_Field extends CMB2TestCase {
 		$this->assertSame( array( '1.00', '0.00', '2.00' ), $field->get_data() );
 	}
 
+	public function test_repeatable_field_keeps_zero_only_value() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_zero_only',
+			'type'       => 'text',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array( '0' ) );
+
+		$this->assertSame( array( '0' ), $field->get_data() );
+	}
+
+	public function test_repeatable_text_money_empty_rows_are_removed() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_money_empty',
+			'type'       => 'text_money',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array( '', '' ) );
+
+		$this->assertFalse( metadata_exists( 'post', $this->post_id, 'repeatable_money_empty' ) );
+	}
+
+	public function test_repeatable_field_without_sanitization_keeps_zero_value() {
+		$field = $this->new_field( array(
+			'id'              => 'repeatable_zero_no_sanitize',
+			'type'            => 'text',
+			'repeatable'      => true,
+			'sanitization_cb' => false,
+		) );
+
+		$field->save_field( array( 'a', '0', '', 'b' ) );
+
+		$this->assertSame( array( 'a', '0', 'b' ), $field->get_data() );
+	}
+
+	public function test_repeatable_field_sanitization_cb_receives_zero_value() {
+		$received = null;
+		$field    = $this->new_field( array(
+			'id'              => 'repeatable_zero_custom_sanitize',
+			'type'            => 'text',
+			'repeatable'      => true,
+			'sanitization_cb' => function ( $value ) use ( &$received ) {
+				$received = $value;
+				return $value;
+			},
+		) );
+
+		$field->save_field( array( 'a', '0', '', 'b' ) );
+
+		// Empty rows are removed before the callback runs; the 0 row is not.
+		$this->assertSame( array( 0 => 'a', 1 => '0', 3 => 'b' ), $received );
+	}
+
+	public function test_repeatable_text_datetime_timestamp_keeps_epoch_zero() {
+		$field = $this->new_field( array(
+			'id'         => 'repeatable_datetime_epoch',
+			'type'       => 'text_datetime_timestamp',
+			'repeatable' => true,
+		) );
+
+		$field->save_field( array(
+			array( 'date' => '01/01/1970', 'time' => '12:00 AM' ),
+			array( 'date' => '01/02/2020', 'time' => '10:00 AM' ),
+		) );
+
+		$this->assertSame(
+			array( 0, $field->get_timestamp_from_value( '01/02/2020 10:00 AM' ) ),
+			$field->get_data()
+		);
+	}
+
 	public function test_set_get_filters() {
 		// Value to set
 		$array_val = array( 'check1', 'check2' );

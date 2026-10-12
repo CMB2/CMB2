@@ -355,13 +355,14 @@ class CMB2_Types {
 	 * @since  1.1.0
 	 */
 	public function repeatable_rows() {
-		$meta_value = array_filter( (array) $this->field->escaped_value() );
+		// Skip empty rows, but keep 0/'0' rows.
+		$meta_value = CMB2_Utils::filter_empty( (array) $this->field->escaped_value() );
 		// check for default content
 		$default = $this->field->get_default();
 
 		// check for saved data
 		if ( ! empty( $meta_value ) ) {
-			$meta_value = is_array( $meta_value ) ? array_filter( $meta_value ) : $meta_value;
+			$meta_value = is_array( $meta_value ) ? CMB2_Utils::filter_empty( $meta_value ) : $meta_value;
 			$meta_value = ! empty( $meta_value ) ? $meta_value : $default;
 		} else {
 			$meta_value = $default;

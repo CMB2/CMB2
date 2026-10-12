@@ -84,6 +84,20 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
 	}
 
+	public function test_repeatable_field_renders_zero_value_row() {
+		$this->field_test['fields'][0]['repeatable'] = true;
+		$cmb   = new CMB2( $this->field_test );
+		$field = cmb2_get_field( $this->field_test['id'], 'field_test_field', $this->post_id );
+
+		$field->save_field( array( 'a', '0', 'b' ) );
+		$html = $this->render_field( $field );
+
+		// Rows 0-2 are the saved rows. Row 3 is the hidden empty-row template.
+		$this->assertStringContainsString( 'name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value="0"', $html );
+		$this->assertStringContainsString( 'name="field_test_field[2]" id="field_test_field_2" data-iterator="2" value="b"', $html );
+		$this->assertStringContainsString( 'name="field_test_field[3]" id="field_test_field_3" data-iterator="3" value=""', $html );
+	}
+
 	/**
 	 * Verifies that the repeatable-field wrapper's id and data-selector attributes
 	 * are passed through esc_attr() before output.
@@ -393,7 +407,11 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		$field->save_field( '0' );
-		$this->assertEquals( '', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+		$this->assertEquals( '0.00', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		// An empty money field is still removed, not saved as 0.00.
+		$field->save_field( '' );
+		$this->assertFalse( metadata_exists( 'post', $this->post_id, $this->text_type_field['id'] ) );
 
 	}
 

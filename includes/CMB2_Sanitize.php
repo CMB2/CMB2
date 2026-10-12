@@ -256,7 +256,8 @@ class CMB2_Sanitize {
 	 * @return string Empty string or sanitized money value
 	 */
 	public function text_money() {
-		if ( ! $this->value ) {
+		// Keep 0/'0' so it is saved as 0.00, like a repeatable entry.
+		if ( CMB2_Utils::isempty( $this->value ) ) {
 			return '';
 		}
 
