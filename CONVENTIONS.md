@@ -74,6 +74,16 @@ pass `read_post` / `edit_comment`. The same reasoning is C12's "not staged".
 It does not cover reads core allows in a case CMB2 users rely on, which is why
 the user rule is staged.
 
+**Exception — not staged when the old behavior discards an explicit value:** a
+fix that stops CMB2 from dropping a value the user actually submitted (a
+registered option, a typed entry) ships on by default. Staging it would keep a
+data-loss bug as the default; only code that depends on the loss can break.
+The changelog names the observable change — what is now stored, and what
+`metadata_exists()`, save hooks, and `default` fallback now see. Precedent:
+dba5776e (2.2.2, group fields keep `'0'`) and 7e521ed8 (#135, falsey values).
+It does not cover changing how a kept value is *interpreted* — reading a
+stored slug as an ID, say — which is a format change and stays staged.
+
 ## C4 — REST reads are public within core's object visibility; permission filters are the escape hatch
 
 **Rule:** Boxes with `show_in_rest` readable expose reads publicly — this

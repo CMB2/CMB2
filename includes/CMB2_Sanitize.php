@@ -627,7 +627,8 @@ class CMB2_Sanitize {
 	 */
 	public function _is_empty_array( $to_check ) {
 		if ( is_array( $to_check ) ) {
-			$cleaned_up = array_filter( $to_check );
+			// Keep 0 and '0'. They can be real values, like a multicheck option key.
+			$cleaned_up = CMB2_Utils::filter_empty( $to_check );
 			return empty( $cleaned_up );
 		}
 		return false;

@@ -1069,6 +1069,26 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		), $sanitizer->default_sanitization() );
 	}
 
+	public function test_multicheck_sanitization_keeps_zero_value() {
+		$field = $this->get_field_object( array(
+			'type'    => 'multicheck',
+			'options' => array( 'Zero', 'One', 'Two' ),
+		) );
+
+		$sanitizer = new CMB2_Sanitize( $field, array( '0' ) );
+		$this->assertSame( array( '0' ), $sanitizer->default_sanitization() );
+
+		$sanitizer = new CMB2_Sanitize( $field, array( 0 ) );
+		$this->assertSame( array( 0 ), $sanitizer->default_sanitization() );
+
+		// Arrays with no real values should still be treated as empty.
+		$sanitizer = new CMB2_Sanitize( $field, array( '', null, false ) );
+		$this->assertSame( '', $sanitizer->default_sanitization() );
+
+		$sanitizer = new CMB2_Sanitize( $field, array() );
+		$this->assertSame( '', $sanitizer->default_sanitization() );
+	}
+
 	public function test_file_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<input type="text" class="cmb2-upload-file regular-text" name="field_test_field" id="field_test_field" value="" size="45" data-previewsize=\'[199,199]\' data-sizename=\'medium\' data-queryargs=\'\' data-hash=\'4lavrjdps2t0\'/><input class="cmb2-upload-button button-secondary" type="button" value="' . esc_attr__( 'Add or Upload File', 'cmb2' ) . '" /><p class="cmb2-metabox-description">This is a description</p><input type="hidden" class="cmb2-upload-file-id" name="field_test_field_id" id="field_test_field_id" value=""/><div id="field_test_field-status" class="cmb2-media-status"></div>',
