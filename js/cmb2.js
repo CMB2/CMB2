@@ -717,6 +717,8 @@ window.CMB2 = window.CMB2 || {};
 
 		cmb.newRowHousekeeping( $emptyrow ).cleanRow( $emptyrow, prevNum );
 
+		// The template row's inputs are disabled so they are not submitted. Enable them now that the row is real.
+		$row.find( '[data-cmb2-template]' ).prop( 'disabled', false ).removeAttr( 'data-cmb2-template' );
 		$row.removeClass('empty-row hidden').addClass('cmb-repeat-row');
 		$row.after( $emptyrow );
 

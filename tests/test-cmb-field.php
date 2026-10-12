@@ -531,7 +531,7 @@ class Test_CMB2_Field extends CMB2TestCase {
 						</div>
 						<div class="cmb-row empty-row hidden">
 							<div class="cmb-td">
-								<select class="cmb2_select" name="prouct-case-study[1]" id="prouct-case-study_1" data-iterator="1" data-hash=\'6ll8fi7o2du0\'>	<option value="" >None</option>
+								<select class="cmb2_select" name="prouct-case-study[1]" id="prouct-case-study_1" data-iterator="1" data-hash=\'6ll8fi7o2du0\' disabled="disabled" data-cmb2-template=\'1\'>	<option value="" >None</option>
 									<option value="1" >Rad Case Study</option>
 									<option value="2" >Wicked Case Study</option>
 									<option value="3" >Cool Case Study</option>

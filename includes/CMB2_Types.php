@@ -384,10 +384,21 @@ class CMB2_Types {
 			$this->repeat_row();
 		}
 
-		// Then add an empty row
+		// Then add an empty row. Its inputs are disabled so the hidden template is
+		// not saved as a row. JS enables them when the row is added.
+		$attributes = $this->field->args( 'attributes' );
+		if ( empty( $attributes['disabled'] ) ) {
+			$this->field->args['attributes'] = array_merge( (array) $attributes, array(
+				'disabled'           => 'disabled',
+				'data-cmb2-template' => '1',
+			) );
+		}
+
 		$this->field->escaped_value = $default;
 		$this->iterator = $this->iterator ? $this->iterator : 1;
 		$this->repeat_row( 'empty-row hidden' );
+
+		$this->field->args['attributes'] = $attributes;
 	}
 
 	/**
