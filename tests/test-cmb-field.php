@@ -88,13 +88,13 @@ class Test_CMB2_Field extends CMB2TestCase {
 	public function test_cmb2_row_classes_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$classes = $this->field->row_classes();
-		$this->assertHTMLstringsAreEqual( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb classes classes_cb select_all_button multiple repeatable inline on_front show_names save_field date_format time_format description preview_size render_row_cb display_cb label_cb column js_dependencies show_in_rest char_counter char_max char_max_enforce id before_field after_field _id _name has_supporting_data', $classes );
+		$this->assertHTMLstringsAreEqual( 'cmb-type-text cmb2-id-test-test table-layout type name desc before after options options_cb text text_cb attributes protocols default default_cb classes classes_cb select_all_button multiple repeatable inline on_front show_names save_field unique date_format time_format description preview_size render_row_cb display_cb label_cb column js_dependencies show_in_rest char_counter char_max char_max_enforce id before_field after_field _id _name has_supporting_data', $classes );
 	}
 
 	public function test_cmb2_default_field_callback_with_array() {
 		// Add row classes dynamically with a callback that returns an array
 		$default = $this->field->args( 'default' );
-		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, show_in_rest, char_counter, char_max, char_max_enforce, id, before_field, after_field, _id, _name, has_supporting_data', $default );
+		$this->assertHTMLstringsAreEqual( 'type, name, desc, before, after, options, options_cb, text, text_cb, attributes, protocols, default, default_cb, classes, classes_cb, select_all_button, multiple, repeatable, inline, on_front, show_names, save_field, unique, date_format, time_format, description, preview_size, render_row_cb, display_cb, label_cb, column, js_dependencies, show_in_rest, char_counter, char_max, char_max_enforce, id, before_field, after_field, _id, _name, has_supporting_data', $default );
 	}
 
 	/**
@@ -700,6 +700,156 @@ class Test_CMB2_Field extends CMB2TestCase {
 		$this->cmb2_money_field_save_slashed( $field, '444446000.23', "444'446'000.23" );
 
 		$wp_locale->number_format['thousands_sep'] = $thousands_sep;
+	}
+
+	public function test_unique_field_rejects_duplicate_on_each_object_type() {
+		wp_set_current_user( $this->factory->user->create() );
+
+		$cases = array(
+			'post'    => array( $this->post_id, $this->factory->post->create() ),
+			'user'    => array( $this->factory->user->create(), $this->factory->user->create() ),
+			'term'    => array(
+				$this->factory->term->create( array( 'taxonomy' => 'category' ) ),
+				$this->factory->term->create( array( 'taxonomy' => 'category' ) ),
+			),
+			'comment' => array(
+				$this->factory->comment->create( array( 'comment_post_ID' => $this->post_id ) ),
+				$this->factory->comment->create( array( 'comment_post_ID' => $this->post_id ) ),
+			),
+		);
+
+		foreach ( $cases as $type => $ids ) {
+			$this->object_type = $type;
+			$this->object_id   = $ids[0];
+
+			$args           = $this->field_args;
+			$args['id']     = 'unique_' . $type;
+			$args['unique'] = true;
+			$args['name']   = 'Asset tag';
+
+			$first = $this->new_field( $args );
+			$this->assertNotFalse( $first->save_field( 'tag-1' ), $type );
+
+			// Saving the same value again keeps it.
+			$first->save_field( 'tag-1' );
+			$this->assertSame( 'tag-1', get_metadata( $type, $ids[0], 'unique_' . $type, true ), $type );
+
+			$this->object_id = $ids[1];
+			$second          = $this->new_field( $args );
+			$this->assertFalse( $second->save_field( 'tag-1' ), $type );
+			$this->assertFalse( metadata_exists( $type, $ids[1], 'unique_' . $type ), $type );
+
+			$this->assertNotFalse( $second->save_field( 'tag-2' ), $type );
+			$this->assertSame( 'tag-2', get_metadata( $type, $ids[1], 'unique_' . $type, true ), $type );
+		}
+
+		ob_start();
+		CMB2_Hookup::unique_admin_notice();
+		$notice = ob_get_clean();
+
+		$this->assertStringContainsString( 'Asset tag', $notice );
+		$this->assertStringNotContainsString( 'tag-1', $notice );
+
+		ob_start();
+		CMB2_Hookup::unique_admin_notice();
+		$this->assertSame( '', ob_get_clean() );
+	}
+
+	public function test_unique_field_allows_empty_and_blocks_zero() {
+		$args           = $this->field_args;
+		$args['id']     = 'unique_zero';
+		$args['unique'] = true;
+
+		$first = $this->new_field( $args );
+		$this->assertNotFalse( $first->save_field( '0' ) );
+
+		$other_id        = $this->factory->post->create();
+		$this->object_id = $other_id;
+		$second          = $this->new_field( $args );
+
+		$this->assertFalse( $second->save_field( '0' ) );
+		$this->assertFalse( metadata_exists( 'post', $other_id, 'unique_zero' ) );
+		$this->assertSame( '0', get_post_meta( $this->post_id, 'unique_zero', true ) );
+
+		// Empty is not a collision. A blank field is removed.
+		$this->assertFalse( $second->save_field( '' ) );
+		$this->assertFalse( metadata_exists( 'post', $other_id, 'unique_zero' ) );
+
+		$third_id        = $this->factory->post->create();
+		$this->object_id = $third_id;
+		$third           = $this->new_field( $args );
+		$this->assertFalse( $third->save_field( '' ) );
+		$this->assertFalse( metadata_exists( 'post', $third_id, 'unique_zero' ) );
+	}
+
+	public function test_unique_field_ignores_autodraft_and_counts_trash() {
+		$args           = $this->field_args;
+		$args['id']     = 'unique_status';
+		$args['unique'] = true;
+
+		$auto_id = $this->factory->post->create( array( 'post_status' => 'auto-draft' ) );
+		update_post_meta( $auto_id, 'unique_status', '10.0.0.8' );
+
+		$open = $this->new_field( $args );
+		$this->assertNotFalse( $open->save_field( '10.0.0.8' ) );
+		$this->assertSame( '10.0.0.8', get_post_meta( $this->post_id, 'unique_status', true ) );
+
+		$trashed = $this->factory->post->create( array( 'post_status' => 'trash' ) );
+		update_post_meta( $trashed, 'unique_status', '10.0.0.9' );
+
+		$this->assertFalse( $open->save_field( '10.0.0.9' ) );
+		$this->assertSame( '10.0.0.8', get_post_meta( $this->post_id, 'unique_status', true ) );
+	}
+
+	public function test_unique_field_filter_can_allow_a_duplicate() {
+		$args           = $this->field_args;
+		$args['id']     = 'unique_filter';
+		$args['unique'] = true;
+
+		$first = $this->new_field( $args );
+		$first->save_field( 'shared' );
+
+		$other_id        = $this->factory->post->create();
+		$this->object_id = $other_id;
+		$second          = $this->new_field( $args );
+
+		add_filter( 'cmb2_unique_field_is_duplicate', '__return_false' );
+		$this->assertNotFalse( $second->save_field( 'shared' ) );
+		remove_filter( 'cmb2_unique_field_is_duplicate', '__return_false' );
+
+		$this->assertSame( 'shared', get_post_meta( $other_id, 'unique_filter', true ) );
+	}
+
+	public function test_unique_field_skips_repeatable_fields() {
+		$args               = $this->field_args;
+		$args['id']         = 'unique_repeat';
+		$args['unique']     = true;
+		$args['repeatable'] = true;
+
+		$first = $this->new_field( $args );
+		$this->assertNotFalse( $first->save_field( array( 'tag-1' ) ) );
+
+		$other_id        = $this->factory->post->create();
+		$this->object_id = $other_id;
+		$second          = $this->new_field( $args );
+
+		$this->assertNotFalse( $second->save_field( array( 'tag-1' ) ) );
+		$this->assertSame( array( 'tag-1' ), get_post_meta( $other_id, 'unique_repeat', true ) );
+	}
+
+	public function test_field_without_unique_allows_duplicates() {
+		$args       = $this->field_args;
+		$args['id'] = 'not_unique';
+
+		$first = $this->new_field( $args );
+		$first->save_field( '10.0.0.2' );
+
+		$other_id        = $this->factory->post->create();
+		$this->object_id = $other_id;
+		$second          = $this->new_field( $args );
+
+		$this->assertNotFalse( $second->save_field( '10.0.0.2' ) );
+		$this->assertSame( '10.0.0.2', get_post_meta( $other_id, 'not_unique', true ) );
 	}
 
 	protected function cmb2_money_field_save_slashed( $field, $test_val, $expected ) {

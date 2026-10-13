@@ -565,8 +565,16 @@ class CMB2_Field extends CMB2_Base {
 			$action  = 'repeatable';
 
 		} elseif ( ! CMB2_Utils::isempty( $new_value ) && $new_value !== $this->get_data() ) {
-			$updated = $this->update_data( $new_value );
-			$action  = 'updated';
+			if ( $this->unique_value_is_duplicate( $new_value ) ) {
+				// The object row is already saved by the time this runs.
+				$action = 'unique';
+				if ( get_current_user_id() && ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+					CMB2_Hookup::flag_unique_conflict( $this );
+				}
+			} else {
+				$updated = $this->update_data( $new_value );
+				$action  = 'updated';
+			}
 		} elseif ( CMB2_Utils::isempty( $new_value ) ) {
 			$updated = $this->remove_data();
 			$action  = 'removed';
@@ -586,7 +594,7 @@ class CMB2_Field extends CMB2_Base {
 		 *
 		 * @param string            $field_id the current field id paramater.
 		 * @param bool              $updated  Whether the metadata update action occurred.
-		 * @param string            $action   Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param string            $action   Action performed. Could be "repeatable", "updated", "removed", or "unique".
 		 * @param CMB2_Field object $field    This field object
 		 */
 		do_action( 'cmb2_save_field', $field_id, $updated, $action, $this );
@@ -600,12 +608,121 @@ class CMB2_Field extends CMB2_Base {
 		 * @since 2.2.0
 		 *
 		 * @param bool              $updated Whether the metadata update action occurred.
-		 * @param string            $action  Action performed. Could be "repeatable", "updated", or "removed".
+		 * @param string            $action  Action performed. Could be "repeatable", "updated", "removed", or "unique".
 		 * @param CMB2_Field object $field   This field object
 		 */
 		do_action( "cmb2_save_field_{$field_id}", $updated, $action, $this );
 
 		return $updated;
+	}
+
+	/**
+	 * Whether another object already stores this single field value.
+	 *
+	 * Repeatable fields, group sub-fields, and options pages are not checked.
+	 * An empty value is not a collision. The current object is ignored, so
+	 * saving an unchanged value still works. Revisions and auto-drafts are
+	 * ignored. Trashed objects still count.
+	 *
+	 * @since 2.14.0
+	 *
+	 * @param mixed $value Sanitized value about to be saved.
+	 * @return bool
+	 */
+	protected function unique_value_is_duplicate( $value ) {
+		if ( ! $this->args( 'unique' ) || $this->group || $this->args( 'repeatable' ) || $this->args( 'multiple' ) ) {
+			return false;
+		}
+
+		if ( CMB2_Utils::isempty( $value ) || is_array( $value ) || is_object( $value ) ) {
+			return false;
+		}
+
+		$object_id = absint( $this->object_id );
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		$type = $this->object_type;
+		if ( ! in_array( $type, array( 'post', 'user', 'term', 'comment' ), true ) ) {
+			return false;
+		}
+
+		$exists = $this->meta_value_exists_on_other_object( $type, $object_id, (string) $value );
+
+		/**
+		 * Filter whether a unique field value is already stored on another object.
+		 *
+		 * @since 2.14.0
+		 *
+		 * @param bool       $exists Whether another object already has this value.
+		 * @param mixed      $value  Sanitized value about to be saved.
+		 * @param CMB2_Field $field  This field object.
+		 */
+		return (bool) apply_filters( 'cmb2_unique_field_is_duplicate', $exists, $value, $this );
+	}
+
+	/**
+	 * Look up this meta key and value on a different object.
+	 *
+	 * Table names are interpolated because WordPress 3.8 has no %i placeholder.
+	 * The result is not cached: a stale "not found" would store a duplicate.
+	 *
+	 * @since 2.14.0
+	 *
+	 * @param string $type      Object type. post, user, term, or comment.
+	 * @param int    $object_id Current object ID.
+	 * @param string $value     Sanitized value.
+	 * @return bool
+	 */
+	protected function meta_value_exists_on_other_object( $type, $object_id, $value ) {
+		global $wpdb;
+
+		$field_id = $this->id( true );
+		$sql      = '';
+
+		// Table names cannot use a placeholder on WordPress 3.8. Do not cache:
+		// a stale miss would store a duplicate.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		switch ( $type ) {
+			case 'post':
+				$sql = $wpdb->prepare(
+					"SELECT pm.post_id FROM {$wpdb->postmeta} pm INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE pm.meta_key = %s AND pm.meta_value = %s AND pm.post_id != %d AND p.post_status NOT IN ( 'auto-draft', 'inherit' ) LIMIT 1",
+					$field_id,
+					$value,
+					$object_id
+				);
+				break;
+			case 'user':
+				$sql = $wpdb->prepare(
+					"SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = %s AND meta_value = %s AND user_id != %d LIMIT 1",
+					$field_id,
+					$value,
+					$object_id
+				);
+				break;
+			case 'term':
+				$sql = $wpdb->prepare(
+					"SELECT term_id FROM {$wpdb->termmeta} WHERE meta_key = %s AND meta_value = %s AND term_id != %d LIMIT 1",
+					$field_id,
+					$value,
+					$object_id
+				);
+				break;
+			case 'comment':
+				$sql = $wpdb->prepare(
+					"SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s AND comment_id != %d LIMIT 1",
+					$field_id,
+					$value,
+					$object_id
+				);
+				break;
+		}
+
+		$found = ( is_string( $sql ) && '' !== $sql ) ? $wpdb->get_var( $sql ) : null;
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return ! empty( $found );
 	}
 
 	/**
@@ -1530,6 +1647,7 @@ class CMB2_Field extends CMB2_Base {
 			'on_front'          => true,
 			'show_names'        => true,
 			'save_field'        => true, // Will not save if false.
+			'unique'            => false,
 			'date_format'       => 'm\/d\/Y',
 			'time_format'       => 'h:i A',
 			'description'       => isset( $args['desc'] ) ? $args['desc'] : '',

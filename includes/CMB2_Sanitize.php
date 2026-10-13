@@ -571,8 +571,10 @@ class CMB2_Sanitize {
 	 */
 	public function _new_supporting_field( $new_field_id ) {
 		return $this->field->get_field_clone( array(
-			'id' => $new_field_id,
+			'id'              => $new_field_id,
 			'sanitization_cb' => false,
+			// The hidden companion value is not the field marked unique.
+			'unique'          => false,
 		) );
 	}
 

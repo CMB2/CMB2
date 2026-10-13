@@ -467,3 +467,32 @@ and `file_list` still drop it. Custom `sanitization_cb` callbacks and
 `cmb2_sanitize_{$type}` filters now receive `'0'` entries in repeatable
 arrays, and `sanitization_cb => false` stores them. Hook counts and database
 writes per save do not change.
+
+## C15 — `unique` is a field arg checked in `save_field()`, and it does not abort the object save
+
+**Rule:** Uniqueness across objects is the field arg `unique` (default
+`false`). The check lives in `CMB2_Field::save_field()`, after sanitization
+and only when the sanitized value differs from the value already stored on
+this object. A hit skips `update_data()` and sets the `cmb2_save_field` action
+to `unique`. It does not delete the current value, and it does not roll the
+post, user, term, or comment back. `save_post` runs after WordPress has
+written that row.
+
+**Scope:** one meta row on `post`, `user`, `term`, or `comment`. Repeatable
+fields, group sub-fields, multi-value fields, and options pages are not
+checked. Companion values saved beside a field (a file's attachment id, a
+date's UTC stamp) are not checked either. Empty values are not a collision. `0` and `'0'` are (C14). The
+lookup ignores the current object, revisions (`inherit`), and auto-drafts.
+Trash still counts. `cmb2_unique_field_is_duplicate` is the override.
+
+**Notice:** `CMB2_Hookup::flag_unique_conflict()` stores the field label in a
+30-second per-user transient. `unique_admin_notice()` prints it on the next
+admin load and then deletes it. The message names the field only. REST
+requests skip the notice. The meta write is still refused there.
+
+**Canonical example:** `CMB2_Field::unique_value_is_duplicate()` and the
+`unique` key in `get_default_field_args()`.
+
+**Blast radius:** fields that omit `unique` save as before. A field that sets
+it does one extra meta lookup per changed value, and a rejected value leaves
+the previous meta in place while the object save still succeeds.
