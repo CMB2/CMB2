@@ -93,7 +93,7 @@ download() {
     local dest="$2"
     local success=0
 
-    echo "Downloading $url to $dest..."
+    echo "Downloading $url to $dest..." >&2
     if command -v curl >/dev/null 2>&1; then
         # -s: silent, -L: follow redirects, -f: fail silently on server errors (4xx, 5xx)
         if curl -s -L -f "$url" -o "$dest"; then
