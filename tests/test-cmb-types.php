@@ -355,6 +355,27 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		} else {
 			$this->fail( 'Missing char counter wrap markup.' );
 		}
+
+		update_post_meta( $this->post_id, $this->text_type_field['id'], 'ab' );
+
+		$html_with_value = $this->capture_render(
+			array(
+				$this->get_field_type_object(
+					array(
+						'char_counter' => true,
+						'char_max'     => 78,
+						'attributes'   => array(
+							'maxlength' => 78,
+						),
+					)
+				),
+				'render',
+			)
+		);
+
+		$this->assertMatchesRegularExpression( '/style="width:\d+px;"/', $html_with_value );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
 	public function test_hidden_field() {
