@@ -852,6 +852,51 @@ class Test_CMB2_Field extends CMB2TestCase {
 		$this->assertSame( '10.0.0.2', get_post_meta( $other_id, 'not_unique', true ) );
 	}
 
+	public function test_unique_field_skips_values_it_cannot_compare() {
+		$args                    = $this->field_args;
+		$args['id']              = 'unique_skip';
+		$args['unique']          = true;
+		$args['sanitization_cb'] = false;
+
+		$field = $this->new_field( $args );
+		$this->assertFalse( $this->invokeMethod( $field, 'unique_value_is_duplicate', array( 'tag-1' ) ) );
+
+		$this->object_id = 0;
+		$field           = $this->new_field( $args );
+		$this->assertFalse( $this->invokeMethod( $field, 'unique_value_is_duplicate', 'tag-1' ) );
+
+		$this->object_id   = $this->post_id;
+		$this->object_type = 'options-page';
+		$field             = $this->new_field( $args );
+		$this->assertFalse( $this->invokeMethod( $field, 'unique_value_is_duplicate', 'tag-1' ) );
+	}
+
+	public function test_unique_notice_ignores_guests_and_blank_labels() {
+		$args         = $this->field_args;
+		$args['id']   = 'unique_notice_id';
+		$args['name'] = '';
+		$field        = $this->new_field( $args );
+
+		wp_set_current_user( 0 );
+		CMB2_Hookup::flag_unique_conflict( $field );
+
+		ob_start();
+		CMB2_Hookup::unique_admin_notice();
+		$this->assertSame( '', ob_get_clean() );
+
+		$user_id = $this->factory->user->create();
+		wp_set_current_user( $user_id );
+		CMB2_Hookup::flag_unique_conflict( $field );
+		set_transient( 'cmb2_unique_' . $user_id, array( array( 'nope' ), '', 'unique_notice_id' ), 30 );
+
+		ob_start();
+		CMB2_Hookup::unique_admin_notice();
+		$notice = ob_get_clean();
+
+		$this->assertStringContainsString( 'unique_notice_id', $notice );
+		$this->assertStringNotContainsString( 'nope', $notice );
+	}
+
 	protected function cmb2_money_field_save_slashed( $field, $test_val, $expected ) {
 		$field->save_field( $test_val );
 		$this->assertSame( $expected, $field->get_data() );
