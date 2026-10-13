@@ -66,7 +66,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 						</div>
 						<div class="cmb-row empty-row hidden">
 							<div class="cmb-td">
-								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value="" data-hash=\'7pbortq7uk50\'/>
+								<input type="text" class="regular-text" name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value="" data-hash=\'7pbortq7uk50\' disabled="disabled" data-cmb2-template=\'1\'/>
 							</div>
 							<div class="cmb-td cmb-remove-row">
 								<button type="button" class="button-secondary cmb-remove-row-button" title="' . esc_attr__( 'Remove Row', 'cmb2' ) . '">' . esc_html__( 'Remove', 'cmb2' ) . '</button>
@@ -82,6 +82,75 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		';
 
 		$this->assertHTMLstringsAreEqual( $expected_field, $this->render_field( $field ) );
+	}
+
+	public function test_repeatable_field_renders_zero_value_row() {
+		$this->field_test['fields'][0]['repeatable'] = true;
+		$cmb   = new CMB2( $this->field_test );
+		$field = cmb2_get_field( $this->field_test['id'], 'field_test_field', $this->post_id );
+
+		$field->save_field( array( 'a', '0', 'b' ) );
+		$html = $this->render_field( $field );
+
+		// Rows 0-2 are the saved rows. Row 3 is the hidden empty-row template.
+		$this->assertStringContainsString( 'name="field_test_field[1]" id="field_test_field_1" data-iterator="1" value="0"', $html );
+		$this->assertStringContainsString( 'name="field_test_field[2]" id="field_test_field_2" data-iterator="2" value="b"', $html );
+		$this->assertStringContainsString( 'name="field_test_field[3]" id="field_test_field_3" data-iterator="3" value=""', $html );
+	}
+
+	/**
+	 * The hidden empty-row template must not be submitted with the form, or its
+	 * value (a '0' default, or the first select option) is saved as a new row.
+	 */
+	public function test_repeatable_field_form_save_does_not_add_template_row() {
+		$tests = array(
+			array( array( 'type' => 'select', 'options' => array( 'No', 'Yes' ) ), array( '1' ) ),
+			array( array( 'type' => 'select', 'options' => array( 'a' => 'A', 'b' => 'B' ) ), array( 'b' ) ),
+			array( array( 'type' => 'text', 'default' => '0' ), array( 'a' ) ),
+			array( array( 'type' => 'select', 'options' => array( 'No', 'Yes' ), 'attributes' => array( 'disabled' => false ) ), array( '1' ) ),
+		);
+
+		foreach ( $tests as $test ) {
+			list( $args, $saved ) = $test;
+
+			delete_post_meta( $this->post_id, 'field_test_field' );
+			$this->field_test['fields'][0] = array_merge( $this->field_test['fields'][0], $args, array( 'repeatable' => true ) );
+			$cmb   = new CMB2( $this->field_test );
+			$field = cmb2_get_field( $this->field_test['id'], 'field_test_field', $this->post_id );
+
+			$field->save_field( $saved );
+			$field->save_field( $this->posted_values( $this->render_field( $field ), 'field_test_field' ) );
+
+			$this->assertSame( $saved, $field->get_data(), $args['type'] );
+		}
+	}
+
+	/**
+	 * Returns the values a browser would submit for a field's inputs.
+	 *
+	 * @param string $html Rendered field markup.
+	 * @param string $name Field name.
+	 * @return array
+	 */
+	protected function posted_values( $html, $name ) {
+		$doc = new DOMDocument();
+		libxml_use_internal_errors( true );
+		$doc->loadHTML( $html );
+		libxml_clear_errors();
+
+		$xpath  = new DOMXPath( $doc );
+		$values = array();
+		foreach ( $xpath->query( '//*[starts-with(@name, "' . $name . '[") and not(@disabled)]' ) as $el ) {
+			if ( 'select' === $el->nodeName ) {
+				$option   = $xpath->query( './/option[@selected]', $el )->item( 0 );
+				$option   = $option ? $option : $xpath->query( './/option', $el )->item( 0 );
+				$values[] = $option->getAttribute( 'value' );
+			} else {
+				$values[] = $el->getAttribute( 'value' );
+			}
+		}
+
+		return $values;
 	}
 
 	/**
@@ -393,7 +462,11 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		$field->save_field( '0' );
-		$this->assertEquals( '', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+		$this->assertEquals( '0.00', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+
+		// An empty money field is still removed, not saved as 0.00.
+		$field->save_field( '' );
+		$this->assertFalse( metadata_exists( 'post', $this->post_id, $this->text_type_field['id'] ) );
 
 	}
 

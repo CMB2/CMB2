@@ -256,7 +256,8 @@ class CMB2_Sanitize {
 	 * @return string Empty string or sanitized money value
 	 */
 	public function text_money() {
-		if ( ! $this->value ) {
+		// Keep 0/'0' so it is saved as 0.00, like a repeatable entry.
+		if ( CMB2_Utils::isempty( $this->value ) ) {
 			return '';
 		}
 
@@ -272,7 +273,7 @@ class CMB2_Sanitize {
 		// for repeatable.
 		if ( is_array( $this->value ) ) {
 			foreach ( $this->value as $key => $val ) {
-				if ( $val ) {
+				if ( CMB2_Utils::notempty( $val ) ) {
 					$this->value[ $key ] = number_format_i18n( (float) str_ireplace( $search, $replace, $val ), 2 );
 				}
 			}
@@ -591,9 +592,9 @@ class CMB2_Sanitize {
 
 		$new_value = array();
 		foreach ( $values_array as $this->value ) {
-			if ( $this->value ) {
+			if ( CMB2_Utils::notempty( $this->value ) ) {
 				$val = $this->$method( true );
-				if ( ! empty( $val ) ) {
+				if ( CMB2_Utils::notempty( $val ) ) {
 					$new_value[] = $val;
 				}
 			}
