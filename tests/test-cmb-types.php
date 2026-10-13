@@ -375,6 +375,8 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		$this->assertMatchesRegularExpression( '/style="width:\d+px;"/', $html_with_value );
 
+		Test_CMB2_JS::set_dependencies( $dependencies );
+
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
