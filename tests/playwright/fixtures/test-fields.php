@@ -46,4 +46,23 @@ add_action('plugins_loaded', function () {
 		'closed' => true,
 	]);
 	$closed->addField('text');
+
+	$group = new CMB2_Integration_Box([
+		'id'            => $prefix . 'group_repeatable',
+		'title'         => 'Group Repeatable',
+		'object_types'  => [ 'post' ],
+	]);
+	$group->addField('group', [
+		'repeatable' => true,
+		'fields' => [
+			[ 'id' => 'first', 'name' => 'First', 'type' => 'text', 'repeatable' => true, 'default' => 'DEF-A' ],
+			[ 'id' => 'second', 'name' => 'Second', 'type' => 'text', 'repeatable' => true ],
+		],
+	]);
+	$group->addField('text', [
+		'id'         => 'top_repeat',
+		'name'       => 'Top Repeat',
+		'repeatable' => true,
+		'default'    => 'TOP-DEF',
+	]);
 });

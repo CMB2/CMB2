@@ -763,12 +763,21 @@ window.CMB2 = window.CMB2 || {};
 			return;
 		}
 
-		var $parent = $this.parents('.cmb-row');
+		var $parent = $this.closest( '.cmb-row' );
 		var $table  = $this.parents('.cmb-repeat-table');
 		var number  = $table.find('.cmb-row').length;
 
 		if ( number <= 2 ) {
-			return cmb.resetRow( $parent.find( '.cmb-add-row-button' ), $this );
+			// Only use this field's add button. Group rows are .cmb-row too.
+			var tableId = $table.attr( 'id' );
+			var $addBtn = $table.siblings( '.cmb-add-row' ).find( '.cmb-add-row-button' );
+			if ( ! $addBtn.length ) {
+				// Markup was changed, so find the button that targets this table.
+				$addBtn = $( '.cmb-add-row-button' ).filter( function() {
+					return this.getAttribute( 'data-selector' ) === tableId;
+				} ).first();
+			}
+			return cmb.resetRow( $addBtn, $this );
 		}
 
 		if ( $parent.hasClass('empty-row') ) {
@@ -782,6 +791,11 @@ window.CMB2 = window.CMB2 || {};
 	};
 
 	cmb.resetRow = function( $addNewBtn, $removeBtn ) {
+		// Without a usable add button, the remove click would call this again forever.
+		if ( ! $addNewBtn.length || $addNewBtn.prop( 'disabled' ) ) {
+			return;
+		}
+
 		cmb.resetRow.resetting = true;
 		// Click the "add new" button followed by the "remove this" button
 		// in order to reset the repeat row to empty values.
