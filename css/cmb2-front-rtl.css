@@ -1,5 +1,5 @@
 /*!
- * CMB2 - v2.13.4 - 2026-10-08
+ * CMB2 - v2.13.4 - 2026-10-13
  * https://cmb2.io
  * Copyright (c) 2026
  * Licensed GPLv2+
@@ -205,7 +205,7 @@ body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[typ
 
 .cmb-repeat-table {
   background-color: #fafafa;
-  border: 1px solid rgb(225.35, 225.35, 225.35);
+  border: 1px solid rgb(88.3725490196%, 88.3725490196%, 88.3725490196%);
 }
 .cmb-repeat-table .cmb-row.cmb-repeat-row {
   position: relative;
@@ -247,7 +247,7 @@ body.block-editor-page.branch-5-3 .cmb2-wrap .cmb-row .cmb2-radio-list input[typ
   height: 1.6em;
   display: block;
   margin-right: 17px;
-  background-color: rgb(220.25, 220.25, 220.25);
+  background-color: rgb(86.3725490196%, 86.3725490196%, 86.3725490196%);
 }
 .cmb-repeat-table .cmb-remove-row {
   top: 7px;
@@ -1079,12 +1079,15 @@ span.cmb2-metabox-description {
 .cmb2-char-counter-wrap {
   margin: 0.5em 0 1em;
 }
-.cmb2-char-counter-wrap input[type=text] {
+.cmb2-char-counter-wrap .cmb2-char-counter {
+  display: inline-block;
   font-size: 12px;
-  width: 25px;
+  min-width: 25px;
+  text-align: center;
 }
-.cmb2-char-counter-wrap.cmb2-max-exceeded input[type=text] {
-  border-color: #a00 !important;
+.cmb2-char-counter-wrap.cmb2-max-exceeded .cmb2-char-counter {
+  color: #a00;
+  font-weight: 600;
 }
 .cmb2-char-counter-wrap.cmb2-max-exceeded .cmb2-char-max-msg {
   display: inline-block;

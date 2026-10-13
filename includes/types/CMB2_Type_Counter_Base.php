@@ -39,42 +39,41 @@ abstract class CMB2_Type_Counter_Base extends CMB2_Type_Base {
 
 		$type     = (string) $this->field->args( 'char_counter' );
 		$field_id = $this->_id( '', false );
-		$char_max = (int) $this->field->prop( 'char_max' );
-		if ( $char_max ) {
-			$char_max = 'data-max="' . $char_max . '"';
-		}
+		$max      = (int) $this->field->args( 'char_max' );
+		$data_max = $max ? ' data-max="' . esc_attr( (string) $max ) . '"' : '';
 
 		switch ( $type ) {
 			case 'words':
-				$label = $char_max
+				$label = $max
 					? $this->_text( 'words_left_text', esc_html__( 'Words left', 'cmb2' ) )
 					: $this->_text( 'words_text', esc_html__( 'Words', 'cmb2' ) );
 				break;
 			default:
 				$type  = 'characters';
-				$label = $char_max
+				$label = $max
 					? $this->_text( 'characters_left_text', esc_html__( 'Characters left', 'cmb2' ) )
 					: $this->_text( 'characters_text', esc_html__( 'Characters', 'cmb2' ) );
 				break;
 		}
 
-		$msg = $char_max
+		$msg = $max
 			? sprintf( '<span class="cmb2-char-max-msg">%s</span>', $this->_text( 'characters_truncated_text', esc_html__( 'Your text may be truncated.', 'cmb2' ) ) )
 			: '';
 
 		$length = strlen( $val );
 		$width  = $length > 1 ? ( 8 * strlen( (string) $length ) ) + 15 : false;
+		$style  = $width ? sprintf( ' style="width:%dpx;"', $width ) : '';
 
 		$markup .= '<p class="cmb2-char-counter-wrap">';
 		$markup .= sprintf(
-			'<label><span class="cmb2-char-counter-label">%2$s:</span> <input id="%1$s" data-field-id="%3$s" data-counter-type="%4$s" %5$s class="cmb2-char-counter" type="text" value="%6$s" readonly="readonly" style="%7$s"></label>%8$s',
+			'<span class="cmb2-char-counter-label">%2$s:</span> <span id="%1$s" data-field-id="%3$s" data-counter-type="%4$s"%5$s class="cmb2-char-counter" aria-live="polite"%6$s>%7$s</span>%8$s',
 			esc_attr( 'char-counter-' . $field_id ),
 			$label,
 			esc_attr( $field_id ),
-			$type,
-			$char_max,
-			$length,
-			$width ? "width: {$width}px;" : '',
+			esc_attr( $type ),
+			$data_max,
+			$style,
+			esc_html( (string) $length ),
 			$msg
 		);
 		$markup .= '</p>';

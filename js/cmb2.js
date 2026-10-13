@@ -29,7 +29,7 @@ window.CMB2 = window.CMB2 || {};
 	var defaults = {
 		idNumber        : false,
 		repeatEls       : 'input:not([type="button"]),select,textarea,.cmb2-media-status',
-		noEmpty         : 'input:not([type="button"]):not([type="radio"]):not([type="checkbox"]),textarea',
+		noEmpty         : 'input:not([type="button"]):not([type="radio"]):not([type="checkbox"]):not(.cmb2-char-counter),textarea',
 		repeatUpdate    : 'input:not([type="button"]),select,textarea,label',
 		styleBreakPoint : 450,
 		mediaHandlers   : {},

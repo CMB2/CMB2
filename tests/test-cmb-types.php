@@ -318,6 +318,68 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 	}
 
+	/**
+	 * Character counter display must not be a form control that can pollute saved meta (#1450).
+	 */
+	public function test_text_field_char_counter_markup_not_submittable() {
+		// Rendering a char counter registers script dependencies that test_js_dependencies() would otherwise see.
+		$dependencies = Test_CMB2_JS::dependencies();
+
+		$html = $this->capture_render(
+			array(
+				$this->get_field_type_object(
+					array(
+						'char_counter' => true,
+						'char_max'     => 78,
+						'attributes'   => array(
+							'maxlength' => 78,
+						),
+					)
+				),
+				'render',
+			)
+		);
+
+		Test_CMB2_JS::set_dependencies( $dependencies );
+
+		$this->assertStringContainsString( 'name="field_test_field"', $html );
+		$this->assertStringContainsString( 'maxlength="78"', $html );
+		$this->assertStringContainsString( 'value=""', $html );
+		$this->assertStringContainsString( 'class="cmb2-char-counter"', $html );
+		$this->assertStringContainsString( 'id="char-counter-field_test_field"', $html );
+		$this->assertStringContainsString( 'data-max="78"', $html );
+		$this->assertStringNotContainsString( 'class="cmb2-char-counter" type="text"', $html );
+
+		if ( preg_match( '/<p class="cmb2-char-counter-wrap">(.*?)<\/p>/s', $html, $matches ) ) {
+			$this->assertStringNotContainsString( 'name=', $matches[1] );
+		} else {
+			$this->fail( 'Missing char counter wrap markup.' );
+		}
+
+		update_post_meta( $this->post_id, $this->text_type_field['id'], 'ab' );
+
+		$html_with_value = $this->capture_render(
+			array(
+				$this->get_field_type_object(
+					array(
+						'char_counter' => true,
+						'char_max'     => 78,
+						'attributes'   => array(
+							'maxlength' => 78,
+						),
+					)
+				),
+				'render',
+			)
+		);
+
+		$this->assertMatchesRegularExpression( '/style="width:\d+px;"/', $html_with_value );
+
+		Test_CMB2_JS::set_dependencies( $dependencies );
+
+		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
+	}
+
 	public function test_hidden_field() {
 		$this->assertHTMLstringsAreEqual(
 			'<input type="hidden" class="cmb2-hidden" name="field_test_field" id="field_test_field" value="" data-hash=\'4lavrjdps2t0\'/>',

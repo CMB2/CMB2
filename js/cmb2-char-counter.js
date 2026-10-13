@@ -46,7 +46,7 @@ window.CMB2.charcounter = window.CMB2.charcounter || {};
 		instance.$el.parents( '.cmb2-char-counter-wrap' )[ exceeded ? 'addClass' : 'removeClass' ]( 'cmb2-max-exceeded' );
 
 		// Update counter, and update counter input width.
-		instance.$el.val( val ).outerWidth( ( ( 8 * String( val ).length ) + 15 ) + 'px' );
+		instance.$el.text( val ).outerWidth( ( ( 8 * String( val ).length ) + 15 ) + 'px' );
 
 		return count;
 	};

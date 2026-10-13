@@ -93,7 +93,7 @@ download() {
     local dest="$2"
     local success=0
 
-    echo "Downloading $url to $dest..."
+    echo "Downloading $url to $dest..." >&2
     if command -v curl >/dev/null 2>&1; then
         # -s: silent, -L: follow redirects, -f: fail silently on server errors (4xx, 5xx)
         if curl -s -L -f "$url" -o "$dest"; then
@@ -156,15 +156,20 @@ get_latest_wp_version() {
 # Determine the GITHUB_REF (branch or tag) for fetching files from WordPress/wordpress-develop
 # This ref is used for downloading test suite files and wp-tests-config-sample.php.
 if [[ "$WP_VERSION" == "latest" || "$WP_VERSION" == "nightly" || "$WP_VERSION" == "trunk" ]]; then
-	# For 'latest', 'nightly', or 'trunk', use the 'trunk' branch of wordpress-develop
-	GITHUB_REF="trunk"
-	# Fetch the latest stable version number for informational purposes or if needed by other parts of the script.
 	LATEST_STABLE_VERSION=$(get_latest_wp_version)
-	if [[ -z "$LATEST_STABLE_VERSION" ]]; then
+	if [[ "$WP_VERSION" == "latest" ]]; then
+		# Core comes from wordpress.org latest; match the PHPUnit scaffold to that tag, not develop trunk.
+		if [[ -z "$LATEST_STABLE_VERSION" ]]; then
+			echo "Error: Could not determine the latest stable WordPress version from API." >&2
+			exit 1
+		fi
+		GITHUB_REF="$LATEST_STABLE_VERSION"
+		echo "Using GITHUB_REF='$GITHUB_REF' to match wordpress.org latest."
+	elif [[ -z "$LATEST_STABLE_VERSION" ]]; then
 		echo "Warning: Could not determine the latest stable WordPress version from API. Proceeding with GITHUB_REF=trunk."
-		# This is not necessarily fatal if the user explicitly asked for 'latest'/'trunk',
-		# as GITHUB_REF="trunk" is already set for test files.
+		GITHUB_REF="trunk"
 	else
+		GITHUB_REF="trunk"
 		echo "Using GITHUB_REF='trunk'. (Latest stable WordPress version for reference: $LATEST_STABLE_VERSION)"
 	fi
 elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
