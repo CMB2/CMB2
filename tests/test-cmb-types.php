@@ -462,7 +462,7 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 
 		delete_post_meta( $this->post_id, $this->text_type_field['id'] );
 		$field->save_field( '0' );
-		$this->assertEquals( '0.00', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
+		$this->assertEquals( '', get_post_meta( $this->post_id, $this->text_type_field['id'], 1 ) );
 
 		// An empty money field is still removed, not saved as 0.00.
 		$field->save_field( '' );

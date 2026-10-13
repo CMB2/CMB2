@@ -256,8 +256,9 @@ class CMB2_Sanitize {
 	 * @return string Empty string or sanitized money value
 	 */
 	public function text_money() {
-		// Keep 0/'0' so it is saved as 0.00, like a repeatable entry.
-		if ( CMB2_Utils::isempty( $this->value ) ) {
+		// A lone 0 is removed like an empty value, not saved as 0.00 (#457, #577).
+		// Repeatable entries keep 0; see C14.
+		if ( ! $this->value ) {
 			return '';
 		}
 
