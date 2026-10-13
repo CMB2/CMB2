@@ -85,6 +85,7 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 			$this->once( 'admin_enqueue_scripts', array( $this, 'do_scripts' ) );
 
 			$this->maybe_enqueue_column_display_styles();
+			$this->once( 'admin_notices', array( __CLASS__, 'unique_admin_notice' ) );
 
 			switch ( $this->object_type ) {
 				case 'post':
@@ -1059,6 +1060,74 @@ class CMB2_Hookup extends CMB2_Hookup_Base {
 
 		self::register_js();
 		return true;
+	}
+
+	/**
+	 * Remember a unique-field rejection for the current user.
+	 *
+	 * The edit screen redirects after save, so the notice is printed on the
+	 * next admin load. The message names the field only.
+	 *
+	 * @since 2.14.0
+	 *
+	 * @param CMB2_Field $field Field that rejected the value.
+	 * @return void
+	 */
+	public static function flag_unique_conflict( CMB2_Field $field ) {
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return;
+		}
+
+		$name = $field->args( 'name' );
+		if ( ! is_scalar( $name ) || '' === (string) $name ) {
+			$name = $field->id( true );
+		}
+
+		$key   = 'cmb2_unique_' . $user_id;
+		$names = get_transient( $key );
+		if ( ! is_array( $names ) ) {
+			$names = array();
+		}
+
+		$names[] = (string) $name;
+		set_transient( $key, array_values( array_unique( $names ) ), 30 );
+	}
+
+	/**
+	 * Print unique-field errors stored for the current user, then forget them.
+	 *
+	 * @since 2.14.0
+	 *
+	 * @return void
+	 */
+	public static function unique_admin_notice() {
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return;
+		}
+
+		$key   = 'cmb2_unique_' . $user_id;
+		$names = get_transient( $key );
+		if ( ! is_array( $names ) || ! $names ) {
+			return;
+		}
+
+		delete_transient( $key );
+
+		foreach ( $names as $name ) {
+			if ( ! is_scalar( $name ) || '' === (string) $name ) {
+				continue;
+			}
+
+			$message = sprintf(
+				/* translators: %s: field label. */
+				__( 'The %s field was not saved because that value is already in use.', 'cmb2' ),
+				(string) $name
+			);
+
+			echo '<div class="notice notice-error"><p>' . esc_html( $message ) . '</p></div>';
+		}
 	}
 
 }
