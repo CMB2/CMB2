@@ -65,4 +65,17 @@ add_action('plugins_loaded', function () {
 		'repeatable' => true,
 		'default'    => 'TOP-DEF',
 	]);
+
+	// Pages only, so the post screen the visual snapshots cover stays unchanged.
+	$group_wysiwyg = new CMB2_Integration_Box([
+		'id'            => $prefix . 'group_wysiwyg',
+		'title'         => 'Group Wysiwyg',
+		'object_types'  => [ 'page' ],
+	]);
+	$group_wysiwyg->addField('group', [
+		'id'     => 'group_wysiwyg',
+		'fields' => [
+			[ 'id' => 'txt', 'name' => 'Text', 'type' => 'wysiwyg', 'options' => [ 'tinymce' => false ] ],
+		],
+	]);
 });

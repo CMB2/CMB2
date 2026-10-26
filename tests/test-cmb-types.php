@@ -533,6 +533,55 @@ class Test_CMB2_Types extends Test_CMB2_Types_Base {
 		);
 	}
 
+	protected function get_group_wysiwyg_field( $stored ) {
+		$cmb = new_cmb2_box( array(
+			'id'           => 'group_wysiwyg_box',
+			'object_types' => array( 'post' ),
+		) );
+		$group_id = $cmb->add_field( array(
+			'id'   => 'group_wysiwyg',
+			'type' => 'group',
+		) );
+		$sub_field = array(
+			'id'   => 'txt',
+			'type' => 'wysiwyg',
+		);
+		$cmb->add_group_field( $group_id, $sub_field );
+
+		update_post_meta( $this->post_id, 'group_wysiwyg', array( array( 'txt' => $stored ) ) );
+		$cmb->object_id( $this->post_id );
+
+		$group        = $cmb->get_field( 'group_wysiwyg' );
+		$group->index = 0;
+
+		return $cmb->get_field( $sub_field, $group );
+	}
+
+	public function test_group_wysiwyg_placeholder_value_is_textarea_escaped() {
+		// Rendering a grouped wysiwyg registers script dependencies in static state that test_js_dependencies() would otherwise see.
+		$dependencies = Test_CMB2_JS::dependencies();
+
+		$stored = '&lt;/textarea&gt;<b>bold</b></textarea>';
+		$field  = $this->get_group_wysiwyg_field( $stored );
+
+		$output = $this->capture_render( array( $this->get_field_type_object( $field ), 'render' ) );
+
+		Test_CMB2_JS::set_dependencies( $dependencies );
+
+		$this->assertStringContainsString( esc_textarea( $stored ) . '</textarea>', $output );
+		$this->assertStringNotContainsString( '<b>bold</b>', $output );
+	}
+
+	public function test_group_wysiwyg_template_escapes_value_slot() {
+		$field = $this->get_group_wysiwyg_field( 'value' );
+		$type  = new CMB2_Type_Wysiwyg( $this->get_field_type_object( $field ) );
+
+		$template = $this->capture_render( array( $type, 'add_wysiwyg_template_for_group' ) );
+
+		$this->assertStringContainsString( '>{{ data.value }}</textarea>', $template );
+		$this->assertStringNotContainsString( '{{{ data.value }}}', $template );
+	}
+
 	public function test_text_date_timestamp_field_after_value_update() {
 
 		$val_to_update = strtotime( 'today' );

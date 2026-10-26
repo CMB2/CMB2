@@ -467,3 +467,29 @@ and `file_list` still drop it. Custom `sanitization_cb` callbacks and
 `cmb2_sanitize_{$type}` filters now receive `'0'` entries in repeatable
 arrays, and `sanitization_cb => false` stores them. Hook counts and database
 writes per save do not change.
+
+## C15 — `escaped_value()` caches its first result, whatever `$func` asked for
+
+**Rule:** `CMB2_Field::escaped_value( $func )` stores its first result in
+`$field->escaped_value` and returns it on every later call, ignoring the
+`$func` passed. A renderer that calls it with a non-escaping transform (e.g.
+`'stripslashes'`) and then hands the field to another renderer that escapes
+(e.g. `CMB2_Type_Textarea` with `'esc_textarea'`) must reset
+`$field->escaped_value = null` in between. The cache is not keyed by `$func`
+because `CMB2_Types::repeatable_rows()` assigns each row's escaped value to
+that public property directly, and callers outside CMB2 may too.
+
+**Canonical example:** `CMB2_Type_Wysiwyg::render()` reads the value with
+`'stripslashes'` for `wp_editor()` (which escapes its own textarea), then, for
+a field inside a group, resets the cache before `parent::render()` builds the
+placeholder textarea. The group editor template's value slot is the escaped
+`{{ data.value }}`, because `cmb2-wysiwyg.js` reads the placeholder with
+`.val()`, which yields decoded text. Pinned by
+`test_group_wysiwyg_placeholder_value_is_textarea_escaped`,
+`test_group_wysiwyg_template_escapes_value_slot` and
+`tests/playwright/group-wysiwyg.spec.js`.
+
+**Blast radius:** grouped `wysiwyg` content now loads exactly as saved:
+entities such as `&amp;` were decoded on load before (and saved decoded on the
+next save), and a literal `</textarea>` ended the editor. Non-group `wysiwyg`
+fields are unchanged.

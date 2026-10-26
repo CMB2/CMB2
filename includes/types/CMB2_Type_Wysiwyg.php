@@ -45,6 +45,10 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 		// Character counter not currently working for grouped WYSIWYG
 		$this->field->args['char_counter'] = false;
 
+		// escaped_value() caches its first result whatever $func is requested, so drop
+		// the 'stripslashes' value above to let the placeholder apply esc_textarea.
+		$field->escaped_value = null;
+
 		// wysiwyg fields in a group need some special handling.
 		$field->add_js_dependencies( array( 'wp-util', 'cmb2-wysiwyg' ) );
 
@@ -90,7 +94,8 @@ class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 				'cmb2_i_' . $group_id . $field_id,
 			), array(
 				'{{ data.name }}',
-				'{{{ data.value }}}',
+				// The JS reads data.value with .val(), so it holds decoded markup.
+				'{{ data.value }}',
 				'{{ data.id }}',
 			),
 			$editor
