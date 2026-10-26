@@ -156,14 +156,20 @@ get_latest_wp_version() {
 # Determine the GITHUB_REF (branch or tag) for fetching files from WordPress/wordpress-develop
 # This ref is used for downloading test suite files and wp-tests-config-sample.php.
 if [[ "$WP_VERSION" == "latest" || "$WP_VERSION" == "nightly" || "$WP_VERSION" == "trunk" ]]; then
-	# For 'latest', 'nightly', or 'trunk', use the 'trunk' branch of wordpress-develop
+	# Default to the 'trunk' branch of wordpress-develop; 'latest' switches to the stable tag below.
 	GITHUB_REF="trunk"
 	# Fetch the latest stable version number for informational purposes or if needed by other parts of the script.
-	LATEST_STABLE_VERSION=$(get_latest_wp_version)
+	# download() echoes progress to stdout, so keep only the version line.
+	LATEST_STABLE_VERSION=$(get_latest_wp_version | tail -n 1)
 	if [[ -z "$LATEST_STABLE_VERSION" ]]; then
 		echo "Warning: Could not determine the latest stable WordPress version from API. Proceeding with GITHUB_REF=trunk."
 		# This is not necessarily fatal if the user explicitly asked for 'latest'/'trunk',
 		# as GITHUB_REF="trunk" is already set for test files.
+	elif [[ "$WP_VERSION" == "latest" ]]; then
+		# 'latest' installs the stable core archive, so its test suite must come from the
+		# matching tag: trunk's suite can require core APIs a stable release lacks yet.
+		GITHUB_REF="$LATEST_STABLE_VERSION"
+		echo "Using GITHUB_REF='$GITHUB_REF' (latest stable WordPress version)."
 	else
 		echo "Using GITHUB_REF='trunk'. (Latest stable WordPress version for reference: $LATEST_STABLE_VERSION)"
 	fi
