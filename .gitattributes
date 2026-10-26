@@ -46,6 +46,7 @@ eslint.config.mjs     export-ignore
 playwright.config.js  export-ignore
 .wp-env.json          export-ignore
 .wp-env-tests.json    export-ignore
+.env.local.example    export-ignore
 Gruntfile.js          export-ignore
 apigen                export-ignore
 Dockunit.json         export-ignore
