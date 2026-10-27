@@ -432,8 +432,7 @@ git push origin develop
 
 These aren't blockers but are worth raising with the user once shipped:
 
-1. **No automated wp.org SVN deploy.** Adding `10up/action-wordpress-plugin-deploy` (or similar) as a `release.yml` workflow triggered on tag push would eliminate Step 5 entirely. It's been a long-standing gap; offer to file a `bd` issue for it.
-2. **Step 1 is still hand-run seds.** `scripts/archive.sh` validates the result, but the bump itself (bootstrap rename, priority decrement, version strings, banners) could move into a script too.
-3. **`{{next}}` is fragile.** If a contributor writes `@since 2.12.0` directly in a PR before 2.12.0 is cut, the placeholder grep won't catch it. A pre-release `bd preflight` check could grep for `@since` referencing unreleased versions.
+1. **Step 1 is still hand-run seds.** `scripts/archive.sh` validates the result, but the bump itself (bootstrap rename, priority decrement, version strings, banners) could move into a script too.
+2. **`{{next}}` is fragile.** If a contributor writes `@since 2.12.0` directly in a PR before 2.12.0 is cut, the placeholder grep won't catch it. A pre-release `bd preflight` check could grep for `@since` referencing unreleased versions.
 
-Mention these once after Step 8 verification completes.
+Mention these once after Step 8 verification completes. The manual wp.org SVN deploy (Step 5) is the intended process, not a gap; don't propose automating it.
