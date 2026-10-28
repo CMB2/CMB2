@@ -150,5 +150,8 @@ JT publishes; give him the values, verified, in one handoff. Details in
 - Confirm how the researcher wants to be credited if the report only gives a
   first name.
 - After the CVE is published, optionally add the CVE link to the changelog
-  entry.
+  entry. Check publication without a browser or key:
+  `curl -s https://cveawg.mitre.org/api/cve/<CVE-ID> | jq -r .cveMetadata.state`
+  prints `PUBLISHED`. The Wordfence Intelligence API can't replace the portal
+  for intake: it only holds published vulnerabilities and needs an API key.
 - Record what was sent and when in the beads issue.
