@@ -61,6 +61,7 @@ If you are looking to provide language translation files, Please do so via [Word
 
 * [CMB Field Type: Slider](https://github.com/qmatt/cmb2-field-slider) from [mattkrupnik](https://github.com/mattkrupnik/): Adds a jQuery UI Slider field.
 * [WDS CMB2 Date Range Field](https://github.com/CMB2/CMB2-Date-Range-Field) from [dustyf](https://github.com/dustyf) of [WebDevStudios](https://github.com/WebDevStudios): Adds a date range field.
+* [CMB2 Jalali Date](https://github.com/ali-niyazi/cmb2-jalali-date) by [ali-niyazi](https://github.com/ali-niyazi): Adds the `jalali_date_timestamp` field type for Jalali/Persian dates with canonical Unix timestamp storage.
 * [CMB2 Remote Image Select](https://github.com/CMB2/CMB2-Remote-Image-Select-Field) from [JayWood](https://github.com/JayWood) of [WebDevStudios](https://github.com/WebDevStudios): Allows users to enter a URL in a text field and select a single image for use in post meta. Similar to Facebook's featured image selector.
 * [CMB Field Type: Sorter](https://wordpress.org/plugins/cmb-field-type-sorter/): This plugin gives you two CMB field types based on the Sorter script.
 * [CMB Field Type: Tags](https://github.com/florianbeck/cmb2-field-type-tags): WordPress-Tags-like field type for CMB2. _note: this does not set the post tags, but simply provides a unique text input_
