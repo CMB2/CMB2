@@ -52,16 +52,16 @@
 	},
 	"homepage": "https://cmb2.io",
 	"devDependencies": {
-		"@playwright/test": "^1.63.0",
-		"@wordpress/env": "^11.0.0",
+		"@playwright/test": "^1.64.1",
+		"@wordpress/env": "^12.0.0",
 		"chokidar-cli": "^3.0.0",
 		"clean-css-cli": "^5.6.3",
-		"dotenv": "^18.0.5",
-		"eslint": "^10.11.0",
+		"dotenv": "^18.0.9",
+		"eslint": "^10.13.0",
 		"globals": "^17.13.0",
 		"playwright": "^1.40.0",
 		"rtlcss": "^4.3.0",
-		"sass": "^1.105.1",
+		"sass": "^1.107.0",
 		"terser": "^5.51.2",
 		"wp-pot-cli": "^1.5.0"
 	}
