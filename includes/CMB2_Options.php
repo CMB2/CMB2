@@ -48,7 +48,7 @@ class CMB2_Option {
 	 *
 	 * @var array
 	 */
-	protected $options = array();
+	protected $options = null;
 
 	/**
 	 * Current option key
@@ -212,7 +212,7 @@ class CMB2_Option {
 	 * @return mixed          Value set for the option.
 	 */
 	public function get_options( $default = null ) {
-		if ( empty( $this->options ) && ! empty( $this->key ) ) {
+		if ( null === $this->options && ! empty( $this->key ) ) {
 
 			$test_get = apply_filters( "cmb2_override_option_get_{$this->key}", 'cmb2_no_override_option_get', $default, $this );
 
