@@ -101,6 +101,11 @@ access. GitHub cannot assign one if another CNA already covers the issue.
   identifier** field ("I have an existing CVE identifier"); don't request.
 - Otherwise → **Request CVE** soon after accepting, so the id is reserved
   before the release.
+- Request through the UI **Request CVE** button. A `POST …/cve` returns
+  `{}` and logs a "requested a CVE" timeline event, but CVE requests sent
+  that way have sat unassigned for weeks. The button stays visible after a
+  request, so it doesn't show whether one is pending. Track the request by
+  `cve_id`; if it's still null after 72 hours, re-request through the UI.
 - A duplicate report on another channel: one beads issue, one fix, one CVE.
   Tell each channel about the other and which CVE is canonical.
 
