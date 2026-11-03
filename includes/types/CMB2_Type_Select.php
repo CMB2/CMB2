@@ -18,7 +18,7 @@ class CMB2_Type_Select extends CMB2_Type_Multi_Base {
 			'name'    => $this->_name(),
 			'id'      => $this->_id(),
 			'desc'    => $this->_desc( true ),
-			'options' => $this->concat_items(),
+			'options' => $this->concat_items( [ 'flat_options_list' => ! empty( $this->field->args['flat_options_list'] ) ] ),
 		) );
 
 		$attrs = $this->concat_attrs( $a, array( 'desc', 'options' ) );
